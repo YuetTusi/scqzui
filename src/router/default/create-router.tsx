@@ -16,27 +16,23 @@ const createRouter = (api?: RouterAPI) => {
 
 	return (
 		<ConfigProvider locale={localeCN} componentSize="middle">
-			<ThemeProvider theme={{}}>
-				<Router history={history}>
-					<Switch>
-						<Route
-							path="/"
-							exact={true}
-							render={() => {
-								const Next = lazy<FC<any>>(
-									() => import('@/view/default/dashboard')
-								);
-								return (
-									<Suspense fallback={<div>加载中</div>}>
-										<Next />
-									</Suspense>
-								);
-							}}
-						/>
-						<Route component={() => <h1>无此页面</h1>} />
-					</Switch>
-				</Router>
-			</ThemeProvider>
+			<Router history={history}>
+				<Switch>
+					<Route
+						path="/"
+						exact={true}
+						render={() => {
+							const Next = lazy<FC<any>>(() => import('@/view/default/dashboard'));
+							return (
+								<Suspense fallback={<div>加载中</div>}>
+									<Next />
+								</Suspense>
+							);
+						}}
+					/>
+					<Route component={() => <h1>无此页面</h1>} />
+				</Switch>
+			</Router>
 			<GlobalStyle />
 		</ConfigProvider>
 	);

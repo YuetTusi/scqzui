@@ -16,7 +16,15 @@ const GlobalStyle = createGlobalStyle`
         padding:0;
         height: 100%;
         font-size: 1.4rem;
-        background-color: #f6f7f9;
+        background-image: linear-gradient(#232526,#414345);
+    }
+    #root{
+        margin:0;
+        padding:0;
+        width:auto;
+        height:100%;
+        background-color: red;
+        position: relative;
     }
 `;
 
