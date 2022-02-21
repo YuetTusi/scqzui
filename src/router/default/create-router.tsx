@@ -5,6 +5,9 @@ import localeCN from 'antd/es/locale/zh_CN';
 import ConfigProvider from 'antd/lib/config-provider';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '@/styled/global-style';
+import BoardPanel from '@/component/board-panel';
+import Dashboard from '@/view/default/dashboard';
+
 
 /**
  * 路由配置
@@ -16,23 +19,29 @@ const createRouter = (api?: RouterAPI) => {
 
 	return (
 		<ConfigProvider locale={localeCN} componentSize="middle">
-			<Router history={history}>
-				<Switch>
-					<Route
-						path="/"
-						exact={true}
-						render={() => {
-							const Next = lazy<FC<any>>(() => import('@/view/default/dashboard'));
-							return (
-								<Suspense fallback={<div>加载中</div>}>
-									<Next />
-								</Suspense>
-							);
-						}}
-					/>
-					<Route component={() => <h1>无此页面</h1>} />
-				</Switch>
-			</Router>
+			<ThemeProvider theme={{}}>
+				<Router history={history}>
+					<Switch>
+						<Route
+							path="/"
+							exact={true}
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/dashboard')
+								);
+								return (
+									<Suspense fallback={<div>加载中</div>}>
+										<BoardPanel>
+											<Next />
+										</BoardPanel>
+									</Suspense>
+								);
+							}}
+						/>
+						<Route component={() => <h1>无此页面</h1>} />
+					</Switch>
+				</Router>
+			</ThemeProvider>
 			<GlobalStyle />
 		</ConfigProvider>
 	);
