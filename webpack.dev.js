@@ -56,6 +56,10 @@ let config = {
 						}
 					}
 				]
+			},
+			{
+				test: /\.ya?ml$/,
+				use: [{ loader: 'yaml-loader' }]
 			}
 		]
 	},

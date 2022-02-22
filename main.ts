@@ -3,12 +3,42 @@ import {
     app, BrowserWindow, dialog, ipcMain, globalShortcut, Menu,
     OpenDialogReturnValue, SaveDialogReturnValue
 } from 'electron';
+import { helper } from './src/utils/helper';
+import { Conf } from './src/type/model';
 
 const mode = process.env['NODE_ENV'];
 const cwd = process.cwd();
+const appPath = app.getAppPath();
 const { resourcesPath } = process;
 
+const appName = helper.readAppName();
+let httpPort = 9900;
+let config: Conf | null = null;
+let useHardwareAcceleration = false; //是否使用硬件加速
+let existManuJson = false;
 let mainWindow: BrowserWindow | null = null;
+let timerWindow: BrowserWindow | null = null; //计时
+let sqliteWindow: BrowserWindow | null = null; //SQLite查询
+let fetchRecordWindow: BrowserWindow | null = null; //采集记录
+let reportWindow: BrowserWindow | null = null; //报告
+let protocolWindow: BrowserWindow | null = null; //协议阅读
+let fetchProcess = null; //采集进程
+let parseProcess = null; //解析进程
+let yunProcess = null; //云取服务进程
+let appQueryProcess = null; //应用痕迹进程
+let httpServerIsRunning = false; //是否已启动HttpServer
+
+config = helper.readConf();
+useHardwareAcceleration = config?.useHardwareAcceleration ?? !helper.isWin7();
+existManuJson = helper.existManufaturer(mode!, appPath);
+if (config === null) {
+    dialog.showErrorBox('启动失败', '配置文件读取失败, 请联系技术支持');
+    app.exit(0);
+}
+if (!existManuJson) {
+    dialog.showErrorBox('启动失败', 'manufaturer配置读取失败, 请联系技术支持');
+    app.exit(0);
+}
 
 /**
  * 销毁所有窗口
@@ -61,90 +91,71 @@ app.on('window-all-closed', () => {
     app.exit(0);
 });
 
-app.on('ready', () => {
 
-    mainWindow = new BrowserWindow({
-        title: '',
-        width: 1280,
-        height: 768,
-        minWidth: 1280,
-        minHeight: 768,
-        backgroundColor: '#fff',
-        autoHideMenuBar: true,
-        show: true,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
+const instanceLock = app.requestSingleInstanceLock();
+if (!instanceLock) {
+    app.quit();
+} else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+        //单例应用
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) {
+                mainWindow.restore();
+            }
+            mainWindow.focus();
+            mainWindow.show();
         }
     });
 
+    app.on('ready', () => {
 
-
-    mainWindow.webContents.addListener('new-window', (event) => event.preventDefault());
-    mainWindow.webContents.on('did-finish-load', () => {
-    });
-    mainWindow.on('close', (event) => {
-        //关闭事件到mainWindow中去处理
-        event.preventDefault();
-        // if (mainWindow !== null) {
-        //     mainWindow.webContents.send('will-close');
-        // }
-        exitApp(process.platform);
-    });
-
-    if (mode === 'development') {
-        mainWindow.webContents.openDevTools();
-        mainWindow.loadURL('http://localhost:8084/default.html');
-    } else {
-        mainWindow.loadFile(path.join(resourcesPath, 'app.asar.unpacked/dist/renderer/default.html'));
-    }
-    // #生产模式屏蔽快捷键（发布把注释放开）
-    if (mode !== 'development') {
-        // globalShortcut.register('Control+R', () => { });
-        // globalShortcut.register('Control+Shift+R', () => { });
-        // globalShortcut.register('CommandOrControl+Shift+I', () => { });
-    }
-    // mainWindow.removeMenu();
-});
-
-ipcMain.handle('get-path', (event, name: "home" |
-    "desktop" | "documents" | "downloads" |
-    "music" | "pictures" | "videos") => {
-    return app.getPath(name);
-});
-
-ipcMain.handle('select-file', async (event, args) => {
-
-    const val: OpenDialogReturnValue = await dialog
-        .showOpenDialog({
-            title: '选择txt文件',
-            properties: ['openFile'],
-            filters: [{ name: '文本文档', extensions: ['txt'] }]
+        mainWindow = new BrowserWindow({
+            title: appName ?? '北京万盛华通科技有限公司',
+            icon: config?.logo ? path.join(appPath, `../config/${config.logo}`) : undefined,
+            width: config?.windowWidth ?? 1280, //主窗体宽
+            height: config?.windowHeight ?? 800, //主窗体高
+            autoHideMenuBar: true, //隐藏主窗口菜单
+            center: config?.center ?? true, //居中显示
+            minHeight: config?.minHeight ?? 768, //最小高度
+            minWidth: config?.minWidth ?? 960, //最小宽度
+            backgroundColor: '#d3deef',
+            webPreferences: {
+                webSecurity: false,
+                contextIsolation: false,
+                nodeIntegration: true,
+                javascript: true
+            }
         });
 
-    return val;
-});
+        if (mode === 'development') {
+            mainWindow.webContents.openDevTools();
+            mainWindow.loadURL('http://localhost:8084/default.html');
+        } else {
+            if (config!.max <= 2) {
+                //采集路数为2路以下，默认最大化窗口
+                mainWindow.maximize();
+            }
+            mainWindow.loadFile(path.join(resourcesPath, 'app.asar.unpacked/dist/default.html'));
+        }
 
-ipcMain.handle('save-temp-file', async (event, args) => {
-    const val: SaveDialogReturnValue = await dialog
-        .showSaveDialog(mainWindow!, {
-            title: '下载批量查询模板',
-            properties: ['createDirectory'],
-            defaultPath: cwd,
-            filters: [{ name: '模板文件', extensions: ['txt'] }]
+        mainWindow.webContents.on('did-finish-load', async () => {
+            mainWindow!.show();
+            mainWindow!.webContents.send('hardware-acceleration', useHardwareAcceleration); //测试代码，以后会删除
+            // if (timerWindow) {
+            //     timerWindow.reload();
+            // }
         });
-    return val;
-});
 
-ipcMain.handle('select-dir', async (event, args) => {
-    const val: OpenDialogReturnValue = await dialog.showOpenDialog(mainWindow!, {
-        title: '请选择保存位置',
-        properties: ['createDirectory', 'openDirectory'],
-        defaultPath: cwd
+        mainWindow.webContents.addListener('new-window', (event) => event.preventDefault());
+
+        mainWindow.on('close', (event) => {
+            //关闭事件到mainWindow中去处理
+            event.preventDefault();
+            mainWindow!.webContents.send('will-close');
+        });
+
     });
-    return val;
-});
-
+}
 //退出应用
 ipcMain.on('do-close', (event) => {
     //mainWindow通知退出程序
