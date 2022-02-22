@@ -1,10 +1,12 @@
 const { join, resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const theme = require('./theme/cyan.json');
 
 let config = {
 	mode: 'development',
 	entry: {
-		default: join(__dirname, './src/renderer/default/default.tsx')
+		default: join(__dirname, './src/renderer/default/default.ts'),
+		sqlite: join(__dirname, './src/renderer/sqlite/sqlite.js')
 	},
 	output: {
 		filename: '[name].js',
@@ -17,6 +19,7 @@ let config = {
 		},
 		extensions: ['.tsx', '.ts', '.js', '.json']
 	},
+	externals: { sqlite3: 'commonjs sqlite3' },
 	module: {
 		rules: [
 			{
@@ -50,7 +53,7 @@ let config = {
 						loader: 'less-loader',
 						options: {
 							lessOptions: {
-								// modifyVars: theme,
+								modifyVars: theme,
 								javascriptEnabled: true
 							}
 						}
@@ -79,6 +82,11 @@ let config = {
 			template: join(__dirname, './src/renderer/default/default.html'),
 			filename: 'default.html',
 			chunks: ['default']
+		}),
+		new HtmlWebpackPlugin({
+			template: join(__dirname, './src/renderer/sqlite/sqlite.html'),
+			filename: 'sqlite.html',
+			chunks: ['sqlite']
 		})
 	]
 };

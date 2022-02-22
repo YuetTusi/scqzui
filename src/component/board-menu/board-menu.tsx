@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
+import { NavLink } from 'dva/router';
+import { MenuPanel } from './styled/menu-panel';
 import BoardButton from './board-button';
 import { BoardMenuProp } from './prop';
-import { MenuPanel } from './styled/menu-panel';
 
 /**
  * 主屏菜单
@@ -14,7 +15,13 @@ const BoardMenu: FC<BoardMenuProp> = () => {
         <div><BoardButton color="#58B19F">设备取证</BoardButton></div>
         <div><BoardButton color="#3B3B98">数据解析</BoardButton></div>
         <div><BoardButton color="#BDC581">操作日志</BoardButton></div>
-        <div><BoardButton color="#FD7272">软件设置</BoardButton></div>
+        <div>
+            <BoardButton color="#FD7272">
+                <NavLink to={'/settings'} replace={true}>
+                    <span>软件设置</span>
+                </NavLink>
+            </BoardButton>
+        </div>
     </MenuPanel>;
 };
 

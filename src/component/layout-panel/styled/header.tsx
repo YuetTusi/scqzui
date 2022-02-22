@@ -20,8 +20,7 @@ const Header = styled.div`
         padding: 0 14px;
         font-size: 2rem;
     }
-    .header-caption{
-        letter-spacing: 3px;
+    .header-menu-item{
     }
     .header-buttons{
         .anticon{

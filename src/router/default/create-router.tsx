@@ -7,6 +7,7 @@ import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '@/styled/global-style';
 import BoardPanel from '@/component/board-panel';
 import Dashboard from '@/view/default/dashboard';
+import LayoutPanel from '@/component/layout-panel/layout-panel';
 
 
 /**
@@ -36,6 +37,19 @@ const createRouter = (api?: RouterAPI) => {
 										</BoardPanel>
 									</Suspense>
 								);
+							}}
+						/>
+						<Route
+							path="/settings"
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/settings/index')
+								);
+								return <Suspense fallback={<div>加载中</div>}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
 							}}
 						/>
 						<Route component={() => <h1>无此页面</h1>} />

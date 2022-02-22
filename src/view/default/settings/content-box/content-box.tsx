@@ -1,0 +1,28 @@
+import React, { FC } from 'react';
+import { routerRedux, useDispatch } from 'dva';
+import HomeOutlined from '@ant-design/icons/HomeOutlined';
+import Button from 'antd/lib/button';
+import { ScrollBox } from '../styled/sub-layout';
+import { ContentBoxProp } from './prop';
+
+const ContentBox: FC<ContentBoxProp> = ({ title, children }) => {
+
+    const dispatch = useDispatch();
+
+    return <div className="setting-container">
+        <div className="setting-header">
+            <div>{title ?? ''}</div>
+            <div>
+                <Button onClick={() => dispatch(routerRedux.push('/'))} type="primary" size="small">
+                    <HomeOutlined />
+                    <span>返回</span>
+                </Button>
+            </div>
+        </div>
+        <ScrollBox>
+            {children}
+        </ScrollBox>
+    </div>;
+}
+
+export default ContentBox;

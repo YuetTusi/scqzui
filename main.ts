@@ -3,6 +3,8 @@ import {
     app, BrowserWindow, dialog, ipcMain, globalShortcut, Menu,
     OpenDialogReturnValue, SaveDialogReturnValue
 } from 'electron';
+import { WindowsBalloon } from 'node-notifier';
+import log from './src/utils/log';
 import { helper } from './src/utils/helper';
 import { Conf } from './src/type/model';
 
@@ -28,6 +30,11 @@ let yunProcess = null; //云取服务进程
 let appQueryProcess = null; //应用痕迹进程
 let httpServerIsRunning = false; //是否已启动HttpServer
 
+const notifier = new WindowsBalloon({
+    withFallback: false,
+    customPath: undefined
+});
+
 config = helper.readConf();
 useHardwareAcceleration = config?.useHardwareAcceleration ?? !helper.isWin7();
 existManuJson = helper.existManufaturer(mode!, appPath);
@@ -47,6 +54,10 @@ function destroyAllWindow() {
     if (mainWindow !== null) {
         mainWindow.destroy();
         mainWindow = null;
+    }
+    if (sqliteWindow !== null) {
+        sqliteWindow.destroy();
+        sqliteWindow = null;
     }
 }
 
@@ -109,6 +120,22 @@ if (!instanceLock) {
 
     app.on('ready', () => {
 
+        (async () => {
+            if (!httpServerIsRunning) {
+                try {
+                    httpPort = await helper.portStat(config!.httpPort ?? 9900);
+                    //启动HTTP服务
+                    // server.use(api(mainWindow.webContents));
+                    // server.listen(httpPort, () => {
+                    // 	httpServerIsRunning = true;
+                    // 	console.log(`HTTP服务启动在端口${httpPort}`);
+                    // });
+                } catch (error) {
+                    log.error(`HTTP服务启动失败:${error.message}`);
+                }
+            }
+        })();
+
         mainWindow = new BrowserWindow({
             title: appName ?? '北京万盛华通科技有限公司',
             icon: config?.logo ? path.join(appPath, `../config/${config.logo}`) : undefined,
@@ -138,11 +165,11 @@ if (!instanceLock) {
             mainWindow.loadFile(path.join(resourcesPath, 'app.asar.unpacked/dist/default.html'));
         }
 
-        mainWindow.webContents.on('did-finish-load', async () => {
+        mainWindow.webContents.on('did-finish-load', () => {
             mainWindow!.show();
-            mainWindow!.webContents.send('hardware-acceleration', useHardwareAcceleration); //测试代码，以后会删除
-            // if (timerWindow) {
-            //     timerWindow.reload();
+            // if (sqliteWindow) {
+            //     sqliteWindow.loadFile(path.join(__dirname, './renderer/sqlite.html'));
+            //     sqliteWindow.reload();
             // }
         });
 
@@ -160,4 +187,35 @@ if (!instanceLock) {
 ipcMain.on('do-close', (event) => {
     //mainWindow通知退出程序
     exitApp(process.platform);
+});
+
+//执行SQLite查询单位表
+ipcMain.on('query-db', (event, ...args) => {
+    if (sqliteWindow === null) {
+        sqliteWindow = new BrowserWindow({
+            title: 'SQLite',
+            width: 600,
+            height: 400,
+            show: false,
+            webPreferences: {
+                webSecurity: false,
+                contextIsolation: false,
+                nodeIntegration: true,
+                javascript: true
+            }
+        });
+
+        sqliteWindow.loadFile(path.join(__dirname, './renderer/sqlite.html'));
+        sqliteWindow.webContents.once('did-finish-load', () => sqliteWindow!.webContents.send('query-db', args));
+    } else {
+        sqliteWindow.webContents.send('query-db', args);
+    }
+});
+//SQLite查询结果
+ipcMain.on('query-db-result', (event, result) => {
+    mainWindow!.webContents.send('query-db-result', result);
+    if (sqliteWindow !== null) {
+        sqliteWindow.destroy();
+        sqliteWindow = null;
+    }
 });
