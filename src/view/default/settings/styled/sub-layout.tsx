@@ -35,9 +35,15 @@ const ScrollBox = styled.div`
 `;
 
 const MainBox = styled.div`
+    position: absolute;
+    top:0;
+    right: 0;
+    bottom: 10px;
+    left: 0;
     background-color: #202940;
-    border-radius: 3px;
+    border-radius: 2px;
     margin:0 10px;
+    padding: 10px;
 `;
 
 export { SubLayout, ScrollBox, MainBox }
