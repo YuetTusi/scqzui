@@ -6,7 +6,7 @@ let config = {
 	mode: 'development',
 	entry: {
 		default: join(__dirname, './src/renderer/default/default.ts'),
-		sqlite: join(__dirname, './src/renderer/sqlite/sqlite.js')
+		sqlite: join(__dirname, './src/renderer/sqlite/sqlite.ts')
 	},
 	output: {
 		filename: '[name].js',
@@ -73,7 +73,7 @@ let config = {
 		client: {
 			overlay: { errors: true }
 		},
-		port: 8084,
+		port: 8085,
 		open: false,
 		compress: true
 	},

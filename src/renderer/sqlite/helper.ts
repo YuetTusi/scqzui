@@ -1,9 +1,11 @@
+import { Database as DataBase } from "sqlite3";
+
 const path = require('path');
 const { Database } = require('sqlite3').verbose();
 
 const isDev = process.env['NODE_ENV'];
 
-let defaultDatabasePath = null;
+let defaultDatabasePath: string | null = null;
 if (isDev === 'development') {
 	defaultDatabasePath = path.join(process.cwd(), 'data/base.db');
 } else {
@@ -11,9 +13,9 @@ if (isDev === 'development') {
 }
 
 class Helper {
-	_path = null;
+	private _path: string | null = null;
 
-	constructor(dbPath) {
+	constructor(dbPath: string) {
 		this._path = dbPath || defaultDatabasePath;
 	}
 	/**
@@ -22,23 +24,23 @@ class Helper {
 	 * @param {string[]} params 参数
 	 * @returns {Promise<string>}
 	 */
-	execute(sql, params = []) {
-		let db = null;
+	execute(sql: string, params: string[] = []) {
+		let db: DataBase | null = null;
 		return new Promise((resolve, reject) => {
-			db = new Database(this._path, (err) => {
+			db = new Database(this._path, (err: Error) => {
 				if (err) {
 					console.log(`打开数据库失败: ${err.message}`);
 					db = null;
 					reject(err);
 				} else {
-					db.run(sql, params, (err) => {
+					db!.run(sql, params, (err) => {
 						if (err) {
 							reject(err);
 						} else {
 							resolve('success');
 						}
 					});
-					db.close();
+					db!.close();
 				}
 			});
 		});
@@ -49,23 +51,23 @@ class Helper {
 	 * @param {string[]} params 参数
 	 * @returns {Promise<any[]>} 结果集
 	 */
-	query(sql, params = []) {
-		let db = null;
+	query(sql: string, params: string[] = []) {
+		let db: DataBase | null = null;
 		return new Promise((resolve, reject) => {
-			db = new Database(this._path, (err) => {
+			db = new Database(this._path, (err: Error) => {
 				if (err) {
 					console.log(`打开数据库失败: ${err.message}`);
 					db = null;
 					reject(err);
 				} else {
-					db.all(sql, params, (err, rows) => {
+					db!.all(sql, params, (err, rows) => {
 						if (err) {
 							reject(err);
 						} else {
 							resolve(rows);
 						}
 					});
-					db.close();
+					db!.close();
 				}
 			});
 		});
@@ -76,23 +78,23 @@ class Helper {
 	 * @param {string[]} params 参数
 	 * @returns {Promise<any>}
 	 */
-	scalar(sql, params = []) {
-		let db = null;
+	scalar(sql: string, params: string[] = []) {
+		let db: DataBase | null = null;
 		return new Promise((resolve, reject) => {
-			db = new Database(this._path, (err) => {
+			db = new Database(this._path, (err: Error) => {
 				if (err) {
 					console.log(`打开数据库失败: ${err.message}`);
 					db = null;
 					reject(err);
 				} else {
-					db.get(sql, params, (err, row) => {
+					db!.get(sql, params, (err, row) => {
 						if (err) {
 							reject(err);
 						} else {
 							resolve(row);
 						}
 					});
-					db.close();
+					db!.close();
 				}
 			});
 		});

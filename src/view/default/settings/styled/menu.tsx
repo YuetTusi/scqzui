@@ -36,6 +36,15 @@ const MenuPanel = styled.menu`
                     background-color: #41b883;
                     color:#fff;
                 }
+                & > div{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: start;
+                    align-items: center;
+                }
+            }
+            .ico{
+                display: inline-block;
             }
             .name{
                 margin-left: 1rem;

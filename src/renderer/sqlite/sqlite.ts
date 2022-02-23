@@ -1,3 +1,5 @@
+import { IpcRendererEvent } from "electron";
+
 const { ipcRenderer } = require('electron');
 const Helper = require('./helper');
 
@@ -7,7 +9,7 @@ let helper = new Helper();
  * 接收主进程参数
  * @param {any[]} args 参数数组
  */
-ipcRenderer.on('query-db', async (event, args) => {
+ipcRenderer.on('query-db', async (event: IpcRendererEvent, args: [any, number, number]) => {
 	let result = null;
 	try {
 		let [rows, total] = await queryUnit(...args);
@@ -36,7 +38,7 @@ ipcRenderer.on('query-db', async (event, args) => {
  * @param {number} current 当前页（从1开始）
  * @param {number} pageSize 页尺寸
  */
-function queryUnit(keyword, current = 1, pageSize = 10) {
+function queryUnit(keyword: string, current = 1, pageSize = 10) {
 	let pageSql = 'select [PcsID],[PcsName],[PcsCode] from [OrganizationCode]';
 	let totalSql = 'select count(*) as total from [OrganizationCode]';
 	let pageSqlParams = [];

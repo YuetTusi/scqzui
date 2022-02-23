@@ -88,6 +88,13 @@ const GlobalStyle = createGlobalStyle`
         transform: scaleX(1);
     }
 
+    //重写Modal
+    .zero-padding-body {
+        .ant-modal-body {
+            padding: 0 !important;
+        }
+    }
+
 `;
 
 export { GlobalStyle };

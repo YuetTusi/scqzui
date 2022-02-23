@@ -22,6 +22,7 @@ import { Conf } from '@/type/model';
 // import { TableName } from '@src/schema/db/TableName';
 // import CCaseInfo from '@src/schema/CCaseInfo';
 import { LocalStoreKey } from './local-store';
+import { Manufaturer } from '@/schema/manufaturer';
 
 const cwd = process.cwd();//应用的根目录
 const KEY = 'az'; //密钥
@@ -309,26 +310,26 @@ const helper = {
     /**
      * 读取设备软硬件信息
      */
-    // readManufaturer(): Promise<Manufaturer> {
-    //     const jsonPath = process.env['NODE_ENV'] === 'development'
-    //         ? path.join(cwd, './data/manufaturer.json')
-    //         : path.join(cwd, './resources/config/manufaturer.json');
+    readManufaturer(): Promise<Manufaturer> {
+        const jsonPath = process.env['NODE_ENV'] === 'development'
+            ? path.join(cwd, './data/manufaturer.json')
+            : path.join(cwd, './resources/config/manufaturer.json');
 
-    //     return new Promise((resolve, reject) => {
-    //         fs.readFile(jsonPath, { encoding: 'utf8' }, (err, chunk) => {
-    //             if (err) {
-    //                 reject(err);
-    //             } else {
-    //                 try {
-    //                     const data: Manufaturer = JSON.parse(chunk);
-    //                     resolve(data);
-    //                 } catch (error) {
-    //                     reject(error);
-    //                 }
-    //             }
-    //         })
-    //     });
-    // },
+        return new Promise((resolve, reject) => {
+            fs.readFile(jsonPath, { encoding: 'utf8' }, (err, chunk) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    try {
+                        const data: Manufaturer = JSON.parse(chunk);
+                        resolve(data);
+                    } catch (error) {
+                        reject(error);
+                    }
+                }
+            })
+        });
+    },
     /**
      * 读取目录
      * @param filePath 路径
