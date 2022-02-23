@@ -1,5 +1,34 @@
 interface GuideMenuProp { }
 
-interface GuideButtonProp { color: string }
+interface ColorButtonProp {
 
-export { GuideMenuProp, GuideButtonProp };
+    /**
+     * 跳转路径
+     */
+    to: string,
+    /**
+     * 按钮颜色值
+     */
+    color: string,
+    /**
+     * 图标DOM
+     */
+    icon: JSX.Element
+}
+
+interface ImageButtonProp {
+    /**
+     * 跳转路径
+     */
+    to: string,
+    /**
+     * 图标DOM
+     */
+    icon: JSX.Element,
+    /**
+     * 图片路径
+     */
+    src: string
+}
+
+export { GuideMenuProp, ColorButtonProp, ImageButtonProp };

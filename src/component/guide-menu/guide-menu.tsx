@@ -1,8 +1,19 @@
 import React, { FC } from 'react';
-import { NavLink } from 'dva/router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faMobileScreenButton,
+    faScrewdriverWrench,
+    faFileLines,
+    faGears,
+    faBrain,
+    faUserPen
+} from '@fortawesome/free-solid-svg-icons';
 import { MenuPanel } from './styled/menu-panel';
-import BoardButton from './guide-button';
+import ColorButton from './color-button';
+import ImageButton from './image-button';
 import { GuideMenuProp } from './prop';
+import envidence from './image/3.jpg';
+import tool from './image/2.jpg';
 
 /**
  * 主屏菜单
@@ -10,17 +21,25 @@ import { GuideMenuProp } from './prop';
 const GuideMenu: FC<GuideMenuProp> = () => {
 
     return <MenuPanel>
-        <div className="evidence"><BoardButton color="#58B19F">设备取证</BoardButton></div>
-        <div className="case"><BoardButton color="#F97F51">案件管理</BoardButton></div>
-        <div className="tool"><BoardButton color="#1B9CFC">工具箱</BoardButton></div>
-        <div className="parse"><BoardButton color="#3B3B98">数据解析</BoardButton></div>
-        <div className="log"><BoardButton color="#BDC581">操作日志</BoardButton></div>
+        <div className="evidence">
+            <ImageButton to="" icon={<FontAwesomeIcon icon={faMobileScreenButton} />} src={envidence}>设备取证</ImageButton>
+        </div>
+        <div className="case">
+            <ColorButton to="" icon={<FontAwesomeIcon icon={faFileLines} />} color="#1B9CFC">案件管理</ColorButton>
+        </div>
+        <div className="parse">
+            <ColorButton to="" icon={<FontAwesomeIcon icon={faBrain} />} color="#FD7272">数据解析</ColorButton>
+        </div>
+        <div className="tool">
+            <ImageButton to="" icon={<FontAwesomeIcon icon={faScrewdriverWrench} />} src={tool}>工具箱</ImageButton>
+        </div>
+        <div className="log">
+            <ColorButton to="" icon={<FontAwesomeIcon icon={faUserPen} />} color="#58B19F">操作日志</ColorButton>
+        </div>
         <div className="setting">
-            <BoardButton color="#FD7272">
-                <NavLink to={'/settings'} replace={true}>
-                    <span>软件设置</span>
-                </NavLink>
-            </BoardButton>
+            <ColorButton to="/settings" icon={<FontAwesomeIcon icon={faGears} />} color="#82589F">
+                软件设置
+            </ColorButton>
         </div>
     </MenuPanel>;
 };

@@ -15,7 +15,7 @@ const MenuPanel = styled.div`
         grid-row-start: 1;
         grid-row-end:3;
     }
-    .parse{
+    .tool{
         grid-row-start: 1;
         grid-row-end:3;
     }
