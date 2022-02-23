@@ -6,7 +6,6 @@ import immer from 'dva-immer';
 // import 'antd/dist/antd.less';
 import 'antd/dist/antd.dark.less';
 // import 'antd/dist/antd.compact.less';
-// import 'hover.css/css/hover.css';
 import { createRouter } from '@/router/default/create-router';
 
 const port = 65000;

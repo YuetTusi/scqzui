@@ -19,7 +19,7 @@ const Index: FC<{}> = () => <SubLayout>
         </div>
         <ul>
             <li>
-                <NavLink to="/settings" exact={true} replace={true} className="unit">
+                <NavLink to="/settings" exact={true} replace={true} className="hvr-sweep-to-right">
                     <div>
                         <BankOutlined />
                         <span className="name">采集单位</span>
@@ -27,7 +27,7 @@ const Index: FC<{}> = () => <SubLayout>
                 </NavLink>
             </li>
             <li>
-                <NavLink to="/settings/dst-unit" replace={true} className="dst-unit">
+                <NavLink to="/settings/dst-unit" replace={true} className="hvr-sweep-to-right">
                     <div>
                         <BankOutlined />
                         <span className="name">目的检验单位</span>
