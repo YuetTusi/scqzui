@@ -28,10 +28,10 @@ const GlobalStyle = createGlobalStyle`
     }
     ::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        border-radius: 8px;
+        border-radius: 2px;
     }
     ::-webkit-scrollbar-thumb {
-        border-radius: 8px;
+        border-radius: 2px;
         background: #ddd;
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
     }

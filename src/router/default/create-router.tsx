@@ -28,7 +28,7 @@ const createRouter = (api?: RouterAPI) => {
 							exact={true}
 							render={() => {
 								const Next = lazy<FC<any>>(
-									() => import('@/view/default/dashboard')
+									() => import('@/view/default/guide')
 								);
 								return (
 									<Suspense fallback={<div>加载中</div>}>
