@@ -6,8 +6,8 @@ import ConfigProvider from 'antd/lib/config-provider';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '@/styled/global-style';
 import BoardPanel from '@/component/board-panel';
-import Dashboard from '@/view/default/dashboard';
 import LayoutPanel from '@/component/layout-panel/layout-panel';
+import theme from '../../../theme/cyan.json';
 
 
 /**
@@ -20,7 +20,7 @@ const createRouter = (api?: RouterAPI) => {
 
 	return (
 		<ConfigProvider locale={localeCN} componentSize="middle">
-			<ThemeProvider theme={{}}>
+			<ThemeProvider theme={theme}>
 				<Router history={history}>
 					<Switch>
 						<Route

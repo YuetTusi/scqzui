@@ -73,7 +73,7 @@ const LogListBox = styled.div`
 		border-radius: 2px;
 		text-shadow: 1px 1px 1px #222;
 		color: #fff;
-		background-color: #41b883;
+		background-color: ${(props) => props.theme['primary-color']};
 		& > span {
 			margin-left: 1rem;
 		}
@@ -82,7 +82,7 @@ const LogListBox = styled.div`
 		display: inline-block;
 		text-align: right;
 		font-weight: bold;
-		color: #41b883;
+		color: ${(props) => props.theme['primary-color']};
 	}
 	.details {
 		font-family: Arial;
@@ -99,7 +99,7 @@ const LogListBox = styled.div`
 	ul {
 		margin: 5px 12px;
 		padding: 0;
-		border-radius: 3px;
+		border-radius: ${(props) => props.theme['border-radius-base']};
 		border: 1px solid #2a2a2a;
 	}
 	li {

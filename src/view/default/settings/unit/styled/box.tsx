@@ -12,7 +12,7 @@ const UnitNameBox = styled.div`
         em{
             display: block;
             width:560px;
-            color:#41b883;
+            color:${(props) => props.theme['primary-color']};
             font-weight: bold;
             font-style: normal;
             white-space: nowrap;
