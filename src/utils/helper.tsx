@@ -11,18 +11,17 @@ import glob from 'glob';
 import memoize from 'lodash/memoize';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/zh-cn';
-import { exec, execFile, spawn } from 'child_process';
+import { exec, execFile, spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import log from './log';
-import { Conf } from '@/type/model';
-// import { BcpEntity } from '@src/schema/socket/BcpEntity';
-// import { DataMode } from '@src/schema/DataMode';
-// import { Manufaturer } from '@src/schema/socket/Manufaturer';
-// import { AppCategory } from '@src/schema/AppConfig';
-// import { BaseApp } from '@src/schema/socket/BaseApp';
-// import { TableName } from '@src/schema/db/TableName';
-// import CCaseInfo from '@src/schema/CCaseInfo';
+import { Conf } from '../type/model';
+import { BcpEntity } from '../schema/bcp-entity';
+import { DataMode } from '../schema/data-mode';
+import { AppCategory } from '../schema/app-config';
+import { BaseApp } from '../schema/base-app';
+import { TableName } from '../schema/table-name';
+import { CaseInfo } from '../schema/case-info';
+import { Manufaturer } from '../schema/manufaturer';
 import { LocalStoreKey } from './local-store';
-import { Manufaturer } from '@/schema/manufaturer';
 
 const cwd = process.cwd();//应用的根目录
 const KEY = 'az'; //密钥
@@ -175,11 +174,15 @@ const helper = {
      * @param {string} exePath exe所在路径
      * @param {string[]} exeParams 参数
      */
-    runProc(exeName: string, exePath: string, exeParams: string[] = []) {
-        let handle = spawn(exeName, exeParams, {
+    runProc(handle: ChildProcessWithoutNullStreams | null, exeName: string, exePath: string, exeParams: string[] = []) {
+        handle = spawn(exeName, exeParams, {
             cwd: exePath
         });
-        return handle;
+        handle.once('error', () => {
+            console.log(`${exeName}启动失败`);
+            log.error(`${exeName}启动失败,exePath:${exePath}`);
+            handle = null;
+        });
     },
     /**
      * 参数时间是否在现在之后
@@ -476,14 +479,14 @@ const helper = {
     /**
      * 当前模式（标准、点验、警综）
      */
-    // getDataMode(): DataMode {
-    //     let mode = localStorage.getItem(LocalStoreKey.DataMode);
-    //     if (mode === null) {
-    //         return DataMode.Self;
-    //     } else {
-    //         return Number(mode);
-    //     }
-    // },
+    getDataMode(): DataMode {
+        let mode = localStorage.getItem(LocalStoreKey.DataMode);
+        if (mode === null) {
+            return DataMode.Self;
+        } else {
+            return Number(mode);
+        }
+    },
     /**
      * 取磁盘容量信息
      * @param {string} diskName 盘符（如：`C:`）
@@ -518,19 +521,19 @@ const helper = {
      * @param apps AppYaml配置
      * @throws 格式有误抛出TypeError
      */
-    // getAllApps(apps: AppCategory[]): BaseApp[] {
-    //     if (this.isArray(apps)) {
-    //         return apps.reduce((acc: BaseApp[], current: AppCategory) =>
-    //             acc.concat(current.app_list.map(i => ({
-    //                 m_strID: i.app_id,
-    //                 m_strPktlist: i.packages,
-    //                 name: i.name,
-    //                 key: i.key
-    //             }))), []);
-    //     } else {
-    //         throw new TypeError('应用格式错误');
-    //     }
-    // },
+    getAllApps(apps: AppCategory[]): BaseApp[] {
+        if (this.isArray(apps)) {
+            return apps.reduce((acc: BaseApp[], current: AppCategory) =>
+                acc.concat(current.app_list.map(i => ({
+                    m_strID: i.app_id,
+                    m_strPktlist: i.packages,
+                    name: i.name,
+                    key: i.key
+                }))), []);
+        } else {
+            throw new TypeError('应用格式错误');
+        }
+    },
     /**
      * 返回应用id对应的名称
      * @param appData yaml应用数据
@@ -642,6 +645,25 @@ const helper = {
             } catch (error) {
                 return false;
             }
+        }
+    },
+    /**
+     * 写net.json文件
+     * @param cwd 工作目录
+     * @param chunk 数据
+     */
+    async writeNetJson(cwd: string, chunk: any) {
+        const { writeFile } = fs.promises;
+
+        const saveAs =
+            process.env['NODE_ENV'] === 'development'
+                ? path.join(cwd, './data/net.json')
+                : path.join(cwd, './resources/config/net.json');
+
+        try {
+            await writeFile(saveAs, JSON.stringify(chunk), { encoding: 'utf8' });
+        } catch (error) {
+            log.error(`写入net.json失败 @writeNetJson(): ${error.message}`);
         }
     }
 };

@@ -1,4 +1,5 @@
 import path from 'path';
+import { ChildProcessWithoutNullStreams } from 'child_process';
 import {
     app, BrowserWindow, dialog, ipcMain, globalShortcut, Menu,
     OpenDialogReturnValue, SaveDialogReturnValue
@@ -24,10 +25,10 @@ let sqliteWindow: BrowserWindow | null = null; //SQLite查询
 let fetchRecordWindow: BrowserWindow | null = null; //采集记录
 let reportWindow: BrowserWindow | null = null; //报告
 let protocolWindow: BrowserWindow | null = null; //协议阅读
-let fetchProcess = null; //采集进程
-let parseProcess = null; //解析进程
-let yunProcess = null; //云取服务进程
-let appQueryProcess = null; //应用痕迹进程
+let fetchProcess: ChildProcessWithoutNullStreams | null = null; //采集进程
+let parseProcess: ChildProcessWithoutNullStreams | null = null; //解析进程
+let yunProcess: ChildProcessWithoutNullStreams | null = null; //云取服务进程
+let appQueryProcess: ChildProcessWithoutNullStreams | null = null; //应用痕迹进程
 let httpServerIsRunning = false; //是否已启动HttpServer
 
 const notifier = new WindowsBalloon({
@@ -183,6 +184,39 @@ if (!instanceLock) {
 
     });
 }
+
+//启动后台服务（采集，解析，云取证）
+ipcMain.on('run-service', () => {
+    helper.runProc(
+        fetchProcess,
+        config?.fetchExe ?? 'n_fetch.exe',
+        path.join(appPath, '../../../', config?.fetchPath ?? './n_fetch')
+    );
+    helper.runProc(
+        parseProcess,
+        config!.parseExe ?? 'parse.exe',
+        path.join(appPath, '../../../', config?.parsePath ?? './parse')
+    );
+    if (config!.useServerCloud) {
+        //有云取功能，调起云RPC服务
+        helper.runProc(
+            yunProcess,
+            config!.yqExe ?? 'yqRPC.exe',
+            path.join(appPath, '../../../', config?.yqPath ?? './yq'),
+            ['-config', './agent.json', '-log_dir', './log']
+        );
+    }
+    if (config!.useTraceLogin) {
+        //有应用痕迹查询，调起服务
+        helper.runProc(
+            appQueryProcess,
+            config?.appQueryExe ?? 'AppQuery.exe',
+            path.join(appPath, '../../../', config?.appQueryPath ?? './AppQuery')
+        );
+    }
+});
+
+
 //退出应用
 ipcMain.on('do-close', (event) => {
     //mainWindow通知退出程序
@@ -211,6 +245,7 @@ ipcMain.on('query-db', (event, ...args) => {
         sqliteWindow.webContents.send('query-db', args);
     }
 });
+
 //SQLite查询结果
 ipcMain.on('query-db-result', (event, result) => {
     mainWindow!.webContents.send('query-db-result', result);
@@ -219,3 +254,8 @@ ipcMain.on('query-db-result', (event, result) => {
         sqliteWindow = null;
     }
 });
+
+//写net.json
+ipcMain.handle('write-net-json', (event, servicePort: number) =>
+    helper.writeNetJson(cwd, { apiPort: httpPort, servicePort })
+);

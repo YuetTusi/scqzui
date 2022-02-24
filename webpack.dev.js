@@ -17,7 +17,7 @@ let config = {
 		alias: {
 			'@': resolve(__dirname, './src')
 		},
-		extensions: ['.tsx', '.ts', '.js', '.json']
+		extensions: ['.ts', '.tsx', 'yml', 'yaml', '.js', '.json']
 	},
 	externals: { sqlite3: 'commonjs sqlite3' },
 	module: {
@@ -62,6 +62,7 @@ let config = {
 			},
 			{
 				test: /\.ya?ml$/,
+				type: 'json',
 				use: [{ loader: 'yaml-loader' }]
 			}
 		]

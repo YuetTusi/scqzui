@@ -1,6 +1,7 @@
 import Electron from 'electron';
 import { Dispatch } from 'redux';
 import { RouteComponentProps } from 'dva/router';
+import { DeviceStoreState } from '@/model/default/device';
 
 declare global {
 	interface Window {
@@ -26,8 +27,8 @@ interface StoreComponent<MatchParam = any> extends RouteComponentProps<MatchPara
  * Redux状态树
  */
 interface StateTree {
-
-	[modelName: string]: any;
+	device: DeviceStoreState,
+	[modelName: string]: any
 }
 
 /**
@@ -142,6 +143,14 @@ interface Conf {
 	 * 应用痕迹查询exe名称
 	 */
 	appQueryExe: string;
+	/**
+	 * 云取服务名称
+	 */
+	yqExe: string;
+	/**
+	 * 云取服务路径
+	 */
+	yqPath: string;
 }
 
 export { StoreComponent, StateTree, Conf };

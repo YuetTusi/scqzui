@@ -1,9 +1,9 @@
 import { BaseApp } from './base-app';
 
 /**
- * 解析APP
+ * Token云取APP
  */
-class ParseApp extends BaseApp {
+class TokenApp extends BaseApp {
     /**
      * App包名列表
      */
@@ -15,4 +15,4 @@ class ParseApp extends BaseApp {
     }
 }
 
-export { ParseApp };
+export { TokenApp };
