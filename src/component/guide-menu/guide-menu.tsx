@@ -22,22 +22,57 @@ const GuideMenu: FC<GuideMenuProp> = () => {
 
     return <MenuPanel>
         <div className="evidence">
-            <ImageButton to="" icon={<FontAwesomeIcon icon={faMobileScreenButton} />} src={envidence}>设备取证</ImageButton>
+            <ImageButton
+                to="/settings"
+                icon={<FontAwesomeIcon icon={faMobileScreenButton} />}
+                src={envidence}
+                description={<ul>
+                    <li>快速提取多部设备</li>
+                    <li>支持iOS、Android多款型号</li>
+                </ul>}>
+                设备取证
+            </ImageButton>
         </div>
         <div className="case">
-            <ColorButton to="" icon={<FontAwesomeIcon icon={faFileLines} />} color="#1B9CFC">案件管理</ColorButton>
+            <ColorButton
+                to="/settings"
+                icon={<FontAwesomeIcon icon={faFileLines} />}
+                color="#1B9CFC">
+                案件管理
+            </ColorButton>
         </div>
         <div className="parse">
-            <ColorButton to="" icon={<FontAwesomeIcon icon={faBrain} />} color="#FD7272">数据解析</ColorButton>
+            <ColorButton
+                to="/settings"
+                icon={<FontAwesomeIcon icon={faBrain} />}
+                color="#FD7272">
+                数据解析
+            </ColorButton>
         </div>
         <div className="tool">
-            <ImageButton to="" icon={<FontAwesomeIcon icon={faScrewdriverWrench} />} src={tool}>工具箱</ImageButton>
+            <ImageButton
+                to="/settings"
+                icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
+                src={tool}
+                description={<ul>
+                    <li>大佬提供的多种方便工具</li>
+                </ul>}>
+                工具箱
+            </ImageButton>
         </div>
         <div className="log">
-            <ColorButton to="" icon={<FontAwesomeIcon icon={faUserPen} />} color="#58B19F">操作日志</ColorButton>
+            <ColorButton
+                to=""
+                icon={<FontAwesomeIcon icon={faUserPen} />}
+                color="#58B19F">
+                操作日志
+            </ColorButton>
         </div>
         <div className="setting">
-            <ColorButton to="/settings" icon={<FontAwesomeIcon icon={faGears} />} color="#82589F">
+            <ColorButton
+                to="/settings"
+                icon={<FontAwesomeIcon icon={faGears} />}
+                color="#82589F">
                 软件设置
             </ColorButton>
         </div>

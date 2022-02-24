@@ -10,7 +10,7 @@ const Color = styled.div<{ color: string }>`
     width:100%;
     height:100%;
     border-radius: 3px;
-    background-image: linear-gradient(${(props) => props.color ?? '#1B9CFC'},${(props) => color2(props.color).saturate(20).toString()});
+    background-image: linear-gradient(${(props) => props.color ?? '#1B9CFC'},${(props) => color2(props.color).darken(5).toString()});
     display: flex;
     flex-direction: column;
 
@@ -72,6 +72,42 @@ const Image = styled.div`
                 letter-spacing: 2px;
                 padding-left:1rem;
             }
+        }
+
+        &>.desc-mask{
+            position: absolute;
+            background-color:rgba(34,34,34,0.8);
+            color:#fff;
+            top: 0;
+            left:0;
+            right:0;
+            bottom: 0;
+            z-index: 1;
+            box-sizing: border-box;
+            display:none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: hidden;
+
+            &.open{
+                display:flex;
+                animation: show 0.2s linear;
+            }
+        }
+    }
+
+    @keyframes show {
+        from{
+            display:flex;
+            width:0%;
+        }
+        to{ 
+            display:flex;
+            width:100%;
         }
     }
 `;

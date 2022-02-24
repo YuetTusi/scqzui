@@ -28,7 +28,11 @@ interface ImageButtonProp {
     /**
      * 图片路径
      */
-    src: string
+    src: string,
+    /**
+     * 描述
+     */
+    description?: string | JSX.Element
 }
 
 export { GuideMenuProp, ColorButtonProp, ImageButtonProp };
