@@ -4,7 +4,7 @@ import { faBuildingColumns, faRegistered, faCrosshairs } from '@fortawesome/free
 import { helper } from '@/utils/helper';
 import { NavLink, Route } from 'dva/router';
 import { MenuPanel } from './styled/menu';
-import { SubLayout } from './styled/sub-layout';
+import { SettingLayout } from './styled/sub-layout';
 import ContentBox from './content-box';
 import Unit from '@/view/default/settings/unit';
 import DstUnit from '@/view/default/settings/dst-unit';
@@ -15,7 +15,7 @@ import Version from '@/view/default/settings/version';
 /**
  * 设置布局页
  */
-const Index: FC<{}> = () => <SubLayout>
+const Index: FC<{}> = () => <SettingLayout>
     <MenuPanel>
         <div className="sub-title">
             软件设置
@@ -60,6 +60,6 @@ const Index: FC<{}> = () => <SubLayout>
     <Route
         path="/settings/version"
         component={() => <ContentBox title="软件版本"><Version /></ContentBox>} />
-</SubLayout>;
+</SettingLayout>;
 
 export default Index;

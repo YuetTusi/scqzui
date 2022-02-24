@@ -28,7 +28,8 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 src={envidence}
                 description={<ul>
                     <li>1秒极速提取N部设备</li>
-                    <li>快如闪电的取证</li>
+                    <li>还没来得及插入USB，数据已提取</li>
+                    <li>快来成为快如闪电般的男人</li>
                 </ul>}>
                 设备取证
             </ImageButton>

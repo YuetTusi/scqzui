@@ -3,16 +3,16 @@ import styled from 'styled-components';
 /**
  * 设置页左右分栏
  */
-const SettingLayout = styled.div`
+const Layout = styled.div`
 
     width:auto;
     height: 100%;
     display:flex;
     flex-direction: row;
-    .setting-container{
+    .sub-container{
         position: relative;
         flex:1;
-        .setting-header{
+        .sub-header{
             height: 55px;
             display: flex;
             flex-direction: row;
@@ -46,4 +46,4 @@ const MainBox = styled.div`
     padding: 10px;
 `;
 
-export { SettingLayout, ScrollBox, MainBox }
+export { Layout, ScrollBox, MainBox }
