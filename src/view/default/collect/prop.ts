@@ -1,0 +1,3 @@
+interface CollectProp { };
+
+export { CollectProp };

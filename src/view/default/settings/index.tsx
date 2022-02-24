@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuildingColumns, faRegistered, faCrosshairs } from '@fortawesome/free-solid-svg-icons';
-import BankOutlined from '@ant-design/icons/BankOutlined';
-import TagOutlined from '@ant-design/icons/TagOutlined';
 import { helper } from '@/utils/helper';
 import { NavLink, Route } from 'dva/router';
 import { MenuPanel } from './styled/menu';
@@ -12,7 +10,7 @@ import Unit from '@/view/default/settings/unit';
 import DstUnit from '@/view/default/settings/dst-unit';
 import Version from '@/view/default/settings/version';
 
-const { max, useBcp, useTraceLogin } = helper.readConf()!;
+// const { max, useBcp, useTraceLogin } = helper.readConf()!;
 
 /**
  * 设置布局页

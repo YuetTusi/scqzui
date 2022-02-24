@@ -23,7 +23,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
     return <MenuPanel>
         <div className="evidence">
             <ImageButton
-                to="/settings"
+                to="/collect"
                 icon={<FontAwesomeIcon icon={faMobileScreenButton} />}
                 src={envidence}
                 description={<ul>

@@ -40,6 +40,22 @@ const createRouter = (api?: RouterAPI) => {
 							}}
 						/>
 						<Route
+							path="/collect"
+							exact={true}
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/collect')
+								);
+								return (
+									<Suspense fallback={<div>加载中</div>}>
+										<LayoutPanel>
+											<Next />
+										</LayoutPanel>
+									</Suspense>
+								);
+							}}
+						/>
+						<Route
 							path="/settings"
 							render={() => {
 								const Next = lazy<FC<any>>(
