@@ -10,9 +10,13 @@ const Color = styled.div<{ color: string }>`
     width:100%;
     height:100%;
     border-radius: 3px;
-    background-image: linear-gradient(${(props) => props.color ?? '#1B9CFC'},${(props) => color2(props.color).darken(5).toString()});
+    background-image: linear-gradient(${(props) => props.color},${(props) => color2(props.color).darken(3).toString()});
     display: flex;
     flex-direction: column;
+
+    &:hover{
+        background-image: linear-gradient(${(props) => color2(props.color).darken(3).toString()},${(props) => color2(props.color).darken(10).toString()});
+    }
 
     &>a{
         flex: 1;
