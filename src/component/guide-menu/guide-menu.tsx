@@ -27,8 +27,8 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 icon={<FontAwesomeIcon icon={faMobileScreenButton} />}
                 src={envidence}
                 description={<ul>
-                    <li>快速提取多部设备</li>
-                    <li>支持iOS、Android多款型号</li>
+                    <li>1秒极速提取N部设备</li>
+                    <li>快如闪电的取证</li>
                 </ul>}>
                 设备取证
             </ImageButton>

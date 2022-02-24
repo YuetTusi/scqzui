@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import ContentBox from './content-box/content-box';
-import { CollectProp } from './prop';
 import { SubLayout } from './styled/sub-layout';
+import { CollectProp } from './prop';
 
 const Collect: FC<CollectProp> = ({ }) => {
 
