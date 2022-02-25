@@ -6,7 +6,7 @@ const pool = new Map<string, Db>();
 /**
  * 封装NeDB操作
  */
-class Db {
+class Db<T = any> {
     _instance: DataStore<any>;
     _dbpath = '';
     _collection = '';
@@ -27,7 +27,7 @@ class Db {
      * 返回集合中所有文档数据
      */
     all() {
-        return new Promise((resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);
@@ -42,7 +42,7 @@ class Db {
      * @param condition 条件对象（可值查询、正则、条件等）
      */
     find(condition: Record<string, any> | null | undefined, sortField = 'updatedAt', asc = 1) {
-        return new Promise((resolve, reject) => {
+        return new Promise<T[]>((resolve, reject) => {
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);
@@ -50,7 +50,7 @@ class Db {
                 this._instance
                     .find(condition)
                     .sort({ [sortField]: asc })
-                    .exec((err, docs) => {
+                    .exec((err, docs: T[]) => {
                         if (err) {
                             reject(err);
                         } else {
@@ -66,7 +66,7 @@ class Db {
      * @param condition 查询条件
      */
     findOne(condition: Record<string, any> | null | undefined) {
-        return new Promise((resolve, reject) => {
+        return new Promise<T>((resolve, reject) => {
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);
@@ -90,7 +90,7 @@ class Db {
      * @param {1|-1} asc 正序逆序
      */
     findByPage(condition: Record<string, any> | null | undefined, pageIndex = 1, pageSize = 10, sortField = 'updatedAt', asc = 1) {
-        return new Promise((resolve, reject) => {
+        return new Promise<T[]>((resolve, reject) => {
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);
@@ -102,7 +102,7 @@ class Db {
                 cursor
                     .skip((pageIndex - 1) * pageSize)
                     .limit(pageSize)
-                    .exec((err, docs) => {
+                    .exec((err, docs: T[]) => {
                         if (err) {
                             reject(err);
                         } else {
@@ -117,8 +117,8 @@ class Db {
      * @param {any} doc 文档对象
      * @returns {Promise<T>}
      */
-    insert(doc: any) {
-        return new Promise((resolve, reject) => {
+    insert(doc: T) {
+        return new Promise<T>((resolve, reject) => {
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);
@@ -140,7 +140,7 @@ class Db {
      * @returns {Promise<number>}
      */
     remove(condition: Record<string, any> | null | undefined, multi = false): Promise<number> {
-        return new Promise((resolve, reject) => {
+        return new Promise<number>((resolve, reject) => {
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);
@@ -163,7 +163,7 @@ class Db {
      * @returns {Promise<number>} 更新行数
      */
     update(condition: Record<string, any> | null | undefined, newDoc: any, multi = false) {
-        return new Promise((resolve, reject) => {
+        return new Promise<number>((resolve, reject) => {
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);
@@ -183,7 +183,7 @@ class Db {
      * @param {any} condition 条件对象
      */
     count(condition: Record<string, any> | null | undefined) {
-        return new Promise((resolve, reject) => {
+        return new Promise<number>((resolve, reject) => {
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);
@@ -217,19 +217,5 @@ class Db {
     }
 }
 
-/**
- * 得到数据实例
- * @param {string} collection
- */
-function getDb(collection: string) {
-    if (pool.has(collection)) {
-        return pool.get(collection)!;
-    } else {
-        const db = new Db(collection);
-        pool.set(collection, db);
-        return db;
-    }
-}
-
-export { Db, getDb };
+export { Db };
 

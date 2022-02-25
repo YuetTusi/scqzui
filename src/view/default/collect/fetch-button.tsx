@@ -9,7 +9,13 @@ const { Group } = Button;
 /**
  * 按钮区
  */
-const FetchButton: FC<FetchButtonProp> = ({ device, onHelpHandle }) => {
+const FetchButton: FC<FetchButtonProp> = ({
+    device,
+    onHelpHandle,
+    onNormalHandle,
+    onServerCloudHandle,
+    onStopHandle
+}) => {
 
     switch (device.fetchState) {
         case FetchState.NotConnected:
@@ -20,12 +26,12 @@ const FetchButton: FC<FetchButtonProp> = ({ device, onHelpHandle }) => {
         case FetchState.Connected:
         case FetchState.Finished:
             return <Group>
-                <Button onClick={() => { }} style={{ width: '100px' }} type="primary">取证</Button>
-                <Button onClick={() => { }} style={{ width: '100px' }} type="primary">云取证</Button>
+                <Button onClick={() => onNormalHandle(device)} style={{ width: '100px' }} type="primary">取证</Button>
+                <Button onClick={() => onServerCloudHandle(device)} style={{ width: '100px' }} type="primary">云取证</Button>
             </Group>
         case FetchState.Fetching:
             return <Group>
-                <Button onClick={() => { }} type="primary" disabled={device.isStopping}>停止取证</Button>
+                <Button onClick={() => onStopHandle(device)} type="primary" disabled={device.isStopping}>停止取证</Button>
             </Group>;
         default:
             return <Group>

@@ -11,7 +11,6 @@ interface DeviceFrameProp {
 };
 
 interface FetchButtonProp {
-
     /**
      * 设备
      */
@@ -19,7 +18,19 @@ interface FetchButtonProp {
     /**
      * 帮助handle
      */
-    onHelpHandle: (arg0: DeviceSystem) => void
+    onHelpHandle: (arg0: DeviceSystem) => void,
+    /**
+     * 标准取证handle
+     */
+    onNormalHandle: (arg0: DeviceType) => void,
+    /**
+     * 云取证handle
+     */
+    onServerCloudHandle: (arg0: DeviceType) => void,
+    /**
+     * 停止采集handle
+     */
+    onStopHandle: (arg0: DeviceType) => void
 }
 
 interface MobileInfoProp {

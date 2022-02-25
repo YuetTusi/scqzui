@@ -62,7 +62,12 @@ const DeviceFrame: FC<DeviceFrameProp> = ({ onHelpHandle }) => {
                     <div className="fns">
                         <MobileInfo device={item} />
                         <div className="buttons">
-                            <FetchButton device={item} onHelpHandle={onHelpHandle} />
+                            <FetchButton
+                                device={item}
+                                onHelpHandle={onHelpHandle}
+                                onNormalHandle={(data) => console.log(data)}
+                                onStopHandle={(data) => console.log(data)}
+                                onServerCloudHandle={(data) => console.log(data)} />
                         </div>
                     </div>
                 </DeivceBox>

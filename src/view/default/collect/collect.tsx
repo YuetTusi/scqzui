@@ -4,6 +4,8 @@ import AndroidOutlined from '@ant-design/icons/AndroidOutlined';
 import AppleOutlined from '@ant-design/icons/AppleOutlined';
 import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import Button from 'antd/lib/button';
+import { TipType } from '@/schema/tip-type';
+import { ParseState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
@@ -24,32 +26,32 @@ const Collect: FC<CollectProp> = ({ }) => {
     const [usbDebugModalVisible, setUsbDebugModalVisible] = useState<boolean>(false);
     const [helpModalVisible, setHelpModalVisible] = useState<boolean>(false);
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     //mock:
-    //     dispatch({
-    //         type: 'device/setDeviceToList', payload: {
-    //             ...{
-    //                 "fetchState": "Connected",
-    //                 "manufacturer": "HUAWEI",
-    //                 "model": "TAS-AL00",
-    //                 "phoneInfo": [{
-    //                     "name": "厂商", "value": "HUAWEI"
-    //                 }, { "name": "型号", "value": "TAS-AL00" }, {
-    //                     "name": "系统版本", "value": "10"
-    //                 }, {
-    //                     "name": "IMEI", "value": "867099041036009"
-    //                 }],
-    //                 "serial": "JTK0219826000164",
-    //                 "system":
-    //                     "android", "usb": 2
-    //             },
-    //             tipType: TipType.Nothing,
-    //             parseState: ParseState.NotParse,
-    //             isStopping: false
-    //         }
-    //     });
-    // }, []);
+        //mock:
+        dispatch({
+            type: 'device/setDeviceToList', payload: {
+                ...{
+                    "fetchState": "Connected",
+                    "manufacturer": "HUAWEI",
+                    "model": "TAS-AL00",
+                    "phoneInfo": [{
+                        "name": "厂商", "value": "HUAWEI"
+                    }, { "name": "型号", "value": "TAS-AL00" }, {
+                        "name": "系统版本", "value": "10"
+                    }, {
+                        "name": "IMEI", "value": "867099041036009"
+                    }],
+                    "serial": "JTK0219826000164",
+                    "system":
+                        "android", "usb": 2
+                },
+                tipType: TipType.Nothing,
+                parseState: ParseState.NotParse,
+                isStopping: false
+            }
+        });
+    }, []);
 
     /**
      * 设备帮助handle
