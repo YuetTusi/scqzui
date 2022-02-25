@@ -8,3 +8,4 @@ declare module "*.yaml";
 declare module "*.bson";
 declare module "*.json";
 declare module "dva-immer";
+declare module "jquery";

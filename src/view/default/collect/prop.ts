@@ -7,7 +7,11 @@ interface DeviceFrameProp {
     /**
      * 帮助handle
      */
-    onHelpHandle: (arg0: DeviceSystem) => void
+    onHelpHandle: (arg0: DeviceSystem) => void,
+    /**
+     * 标准取证
+     */
+    onNormalHandle: (arg0: DeviceType) => void,
 };
 
 interface FetchButtonProp {

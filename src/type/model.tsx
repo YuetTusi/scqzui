@@ -2,6 +2,7 @@ import Electron from 'electron';
 import { Dispatch } from 'redux';
 import { RouteComponentProps } from 'dva/router';
 import { DeviceStoreState } from '@/model/default/device';
+import { NormalInputModalStoreState } from '@/model/default/normal-input-modal';
 
 declare global {
 	interface Window {
@@ -28,6 +29,7 @@ interface StoreComponent<MatchParam = any> extends RouteComponentProps<MatchPara
  */
 interface StateTree {
 	device: DeviceStoreState,
+	normalInputModal: NormalInputModalStoreState,
 	[modelName: string]: any
 }
 

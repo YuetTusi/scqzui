@@ -14,7 +14,11 @@ import server from '@/utils/tcp-server';
 import { createRouter } from '@/router/default/create-router';
 import receiveModel from '@/model/default/receive';
 import deviceModel from '@/model/default/device';
-
+import normalInputModalModel from '@/model/default/normal-input-modal';
+import 'jquery';
+import '@ztree/ztree_v3/js/jquery.ztree.all.min';
+import '@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css';
+// import '../../styled/ztree-overwrite.less';
 dayjs.locale('zh-cn');
 
 const { tcpPort } = helper.readConf()!;
@@ -47,5 +51,6 @@ app.use({
 });
 app.model(receiveModel);
 app.model(deviceModel);
+app.model(normalInputModalModel);
 app.router(createRouter);
 app.start('#root');

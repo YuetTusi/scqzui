@@ -41,7 +41,10 @@ const MobileIco: FC<{ deviceSystem?: DeviceSystem }> = ({ deviceSystem }) => {
 /**
  * 设备框列表
  */
-const DeviceFrame: FC<DeviceFrameProp> = ({ onHelpHandle }) => {
+const DeviceFrame: FC<DeviceFrameProp> = ({
+    onHelpHandle,
+    onNormalHandle
+}) => {
 
     const { deviceList } = useSelector<StateTree, DeviceStoreState>(state => state.device);
 
@@ -65,7 +68,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({ onHelpHandle }) => {
                             <FetchButton
                                 device={item}
                                 onHelpHandle={onHelpHandle}
-                                onNormalHandle={(data) => console.log(data)}
+                                onNormalHandle={onNormalHandle}
                                 onStopHandle={(data) => console.log(data)}
                                 onServerCloudHandle={(data) => console.log(data)} />
                         </div>
@@ -73,7 +76,6 @@ const DeviceFrame: FC<DeviceFrameProp> = ({ onHelpHandle }) => {
                 </DeivceBox>
             </Ribbon>
         });
-        console.log(list);
         return <>{list}</>
     }
 }

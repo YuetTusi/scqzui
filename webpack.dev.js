@@ -1,4 +1,5 @@
 const { join, resolve } = require('path');
+const { ProvidePlugin } = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const theme = require('./theme/cyan.json');
 
@@ -19,7 +20,9 @@ let config = {
 		},
 		extensions: ['.ts', '.tsx', 'yml', 'yaml', '.js', '.json']
 	},
-	externals: { sqlite3: 'commonjs sqlite3' },
+	externals: {
+		sqlite3: 'commonjs sqlite3'
+	},
 	module: {
 		rules: [
 			{
@@ -79,6 +82,10 @@ let config = {
 		compress: true
 	},
 	plugins: [
+		new ProvidePlugin({
+			$: 'jquery',
+			jQuery: 'jquery'
+		}),
 		new HtmlWebpackPlugin({
 			template: join(__dirname, './src/renderer/default/default.html'),
 			filename: 'default.html',
