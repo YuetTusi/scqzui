@@ -67,7 +67,7 @@ const GlobalStyle = createGlobalStyle`
         left: 0;
         right: 0;
         bottom: 0;
-        background: #41b883;
+        background: #0fb9b1;
         border-radius: 2px;
         -webkit-transform: scaleX(0);
         transform: scaleX(0);

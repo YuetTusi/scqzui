@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import color2 from 'tinycolor2';
 
 const MenuPanel = styled.menu`
     margin:0;
@@ -33,7 +34,7 @@ const MenuPanel = styled.menu`
                 display:block;
                 color:#a9afbbd1;
                 &.active{
-                    background-color: #41b883;
+                    background-color: ${(props) => props.theme['primary-color']};
                     color:#fff;
                 }
                 & > div{

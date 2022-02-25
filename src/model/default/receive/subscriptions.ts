@@ -44,9 +44,9 @@ export default {
                 case CommandType.DeviceIn:
                     console.log(`接收到设备连入:${JSON.stringify(command.msg)}`);
                     logger.info(`设备连入(DeviceIn)：${JSON.stringify(command.msg)}`);
-                    dispatch({ type: 'checkWhenDeviceIn', payload: { usb: command.msg?.usb } });
+                    dispatch({ type: 'device/checkWhenDeviceIn', payload: { usb: command.msg?.usb } });
                     dispatch({
-                        type: 'setDeviceToList', payload: {
+                        type: 'device/setDeviceToList', payload: {
                             ...command.msg,
                             tipType: TipType.Nothing,
                             parseState: ParseState.NotParse,

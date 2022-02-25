@@ -133,7 +133,6 @@ export function fetchProgress({ msg }: Command<FetchProgress>, dispatch: Dispatc
  */
 export function fetchPercent({ msg }: Command<{ usb: number, value: number }>, dispatch: Dispatch<any>) {
     const { usb, value } = msg;
-    console.log(msg);
     dispatch({
         type: 'device/updateProp', payload: {
             usb,

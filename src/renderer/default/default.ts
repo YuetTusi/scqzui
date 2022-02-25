@@ -12,6 +12,7 @@ import log from '@/utils/log';
 import { helper } from '@/utils/helper';
 import server from '@/utils/tcp-server';
 import { createRouter } from '@/router/default/create-router';
+import receiveModel from '@/model/default/receive';
 import deviceModel from '@/model/default/device';
 
 dayjs.locale('zh-cn');
@@ -44,6 +45,7 @@ app.use({
         console.log(`全局异常 @src/index.tsx:${message}`);
     }
 });
+app.model(receiveModel);
 app.model(deviceModel);
 app.router(createRouter);
 app.start('#root');
