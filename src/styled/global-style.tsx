@@ -104,8 +104,9 @@ span.tmpzTreeMove_arrow {
 	.tree-node-tip {
 		& > h6 {
 			font-size: 12px;
-			color: #333;
+			color: #0fb9b1;
 			padding-bottom: 4px;
+			font-weight: bold;
 		}
 		position: absolute;
 		left: 100px;
@@ -121,8 +122,8 @@ span.tmpzTreeMove_arrow {
 			margin-bottom: 2px;
 		}
 		dd {
-			font-weight: bold;
-			color: #fff;
+			font-weight: normal;
+			color: #0fb9b1;
 			padding: 2px 0;
 		}
 	}

@@ -1,3 +1,5 @@
-import DefaultComponent from './app-select-modal';
+import { AppSelectModal } from './app-select-modal';
+import { CloudAppSelectModal } from './cloud-app-select-modal';
 
-export default DefaultComponent;
+export { AppSelectModal, CloudAppSelectModal };
+export default AppSelectModal;

@@ -17,6 +17,7 @@ import {
     humanVerify, saveOrUpdateOfficerFromPlatform, /*traceLogin,*/ limitResult,
     appRecFinish, fetchPercent
 } from './listener';
+import { Db } from '@/utils/db';
 
 const cwd = process.cwd();
 const { Fetch, Parse, Bho, Trace, Error } = SocketType;
@@ -271,8 +272,9 @@ export default {
      */
     saveFetchLog() {
         ipcRenderer.on('save-fetch-log', async (event: IpcRendererEvent, log: FetchLog) => {
+            const db = new Db<FetchLog>(TableName.FetchLog);
             try {
-                await ipcRenderer.invoke('db-insert', TableName.FetchLog, log);
+                await db.insert(log);
             } catch (error) {
                 logger.error(`采集进度入库失败 @model/dashboard/Device/subscriptions/saveFetchLog: ${error.message}`);
             }

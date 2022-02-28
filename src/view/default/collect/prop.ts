@@ -12,6 +12,10 @@ interface DeviceFrameProp {
      * 标准取证
      */
     onNormalHandle: (arg0: DeviceType) => void,
+    /**
+     * 云取证
+     */
+    onServerCloudHandle: (arg0: DeviceType) => void,
 };
 
 interface FetchButtonProp {

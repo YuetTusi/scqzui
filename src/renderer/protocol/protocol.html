@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>协议</title>
+		<style type="text/css">
+			::-webkit-scrollbar {
+				width: 14px;
+				height: 1px;
+			}
+
+			::-webkit-scrollbar-thumb {
+				border-radius: 0;
+				-webkit-box-shadow: none;
+				background: #cccccc;
+			}
+
+			::-webkit-scrollbar-track {
+				-webkit-box-shadow: none;
+				border-radius: 0;
+				background: #eee;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				font-size: 62.5%;
+				width: auto;
+				height: 100%;
+			}
+			.at-panel {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 10px;
+				height: 100%;
+				overflow-y: auto;
+			}
+			h3 {
+				font-size: 2rem;
+				font-weight: bold;
+				font-family: NSimSun;
+				text-align: center;
+			}
+			.article {
+				padding: 10px;
+				line-height: 2rem;
+				font-size: 1.2rem;
+				font-family: NSimSun;
+			}
+			.footer-button {
+				margin-top: 20px;
+				margin-bottom: 20px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			button {
+				cursor: pointer;
+				font-family: 'Microsoft YaHei';
+				color: #fff;
+				background-color: #0fb9b1;
+				border: 1px solid #0a8680;
+				border-radius: 2px;
+				margin-left: 5px;
+				margin-right: 5px;
+				padding: 2px 10px;
+				outline: none;
+			}
+			button:disabled {
+				cursor: not-allowed;
+				background-color: rgb(204, 204, 204);
+				border: 1px solid #00000040;
+				color: #00000040;
+			}
+			button:active {
+				background-color: #0fb9b1;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="at-panel">
+			<h3>云取注意事项</h3>
+			<div class="article">
+				<p>1. 云取时，同手机号码，同种应用当日内只能取一次，多次可能会封号。</p>
+				<p>2. 云取时，不要同时云取多个app，1-2个最好。</p>
+				<p>
+					3.
+					云取时，鼠标指向云取app列表，会显示当前app可获取得数据，以及对手机端应用得影响，请仔细阅读。
+				</p>
+			</div>
+			<div class="footer-button">
+				<button id="btnAgree" disabled="disabled" type="button">已阅读且同意 (3)</button>
+				<button id="btnDisagree" type="button">不同意</button>
+			</div>
+		</div>
+	</body>
+</html>

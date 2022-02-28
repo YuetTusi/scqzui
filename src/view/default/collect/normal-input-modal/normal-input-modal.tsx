@@ -1,5 +1,5 @@
 import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'dva';
+import { useDispatch } from 'dva';
 import { routerRedux } from 'dva/router';
 import round from 'lodash/round';
 import SelectOutlined from '@ant-design/icons/SelectOutlined';
@@ -16,8 +16,6 @@ import Form from 'antd/lib/form';
 import Select from 'antd/lib/select';
 import Modal from 'antd/lib/modal';
 import Tooltip from 'antd/lib/tooltip';
-import { StateTree } from '@/type/model';
-import { NormalInputModalStoreState } from '@/model/default/normal-input-modal';
 import { ITreeNode } from '@/type/ztree';
 import log from '@/utils/log';
 import { helper } from '@/utils/helper';
@@ -29,9 +27,10 @@ import FetchData from '@/schema/fetch-data';
 import { DataMode } from '@/schema/data-mode';
 import { ParseApp } from '@/schema/parse-app';
 import parseApp from '@/config/parse-app.yaml';
-import Instruction from './instruction';
+import Instruction from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
+import { useCaseList } from '@/hook';
 
 const { Item, useForm } = Form;
 
@@ -56,7 +55,7 @@ function filterToParseApp(treeNodes: ITreeNode[]) {
 const NormalInputModal: FC<Prop> = (props) => {
 
     const dispatch = useDispatch();
-    const normalInputModal = useSelector<StateTree, NormalInputModalStoreState>(state => state.normalInputModal);
+    const caseList = useCaseList();
     const [formRef] = useForm<FormValue>();
     const caseId = useRef<string>(''); //案件id
     const spareName = useRef<string>(''); //案件备用名
@@ -74,7 +73,7 @@ const NormalInputModal: FC<Prop> = (props) => {
     const historyDeviceNumber = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER));
 
     useEffect(() => {
-        dispatch({ type: 'normalInputModal/queryCaseList' });
+        // dispatch({ type: 'normalInputModal/queryCaseList' });
     }, []);
 
     useEffect(() => {
@@ -95,7 +94,6 @@ const NormalInputModal: FC<Prop> = (props) => {
      * 绑定案件下拉数据
      */
     const bindCaseSelect = () => {
-        const { caseList } = normalInputModal;
         const { Option } = Select;
         return caseList.map((opt: CaseInfo) => {
             let pos = opt.m_strCaseName.lastIndexOf('\\');

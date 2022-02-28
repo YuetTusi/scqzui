@@ -43,7 +43,8 @@ const MobileIco: FC<{ deviceSystem?: DeviceSystem }> = ({ deviceSystem }) => {
  */
 const DeviceFrame: FC<DeviceFrameProp> = ({
     onHelpHandle,
-    onNormalHandle
+    onNormalHandle,
+    onServerCloudHandle
 }) => {
 
     const { deviceList } = useSelector<StateTree, DeviceStoreState>(state => state.device);
@@ -70,7 +71,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
                                 onHelpHandle={onHelpHandle}
                                 onNormalHandle={onNormalHandle}
                                 onStopHandle={(data) => console.log(data)}
-                                onServerCloudHandle={(data) => console.log(data)} />
+                                onServerCloudHandle={onServerCloudHandle} />
                         </div>
                     </div>
                 </DeivceBox>

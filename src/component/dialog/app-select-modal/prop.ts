@@ -67,11 +67,7 @@ interface CloudAppSelectModalProp {
     /**
      * 确认选择handle
      */
-    okHandle: (data: ITreeNode[]) => void,
-    /**
-     * Dispatch方法
-     */
-    dispatch: Dispatch<any>
+    okHandle: (data: ITreeNode[]) => void
 };
 
 /**

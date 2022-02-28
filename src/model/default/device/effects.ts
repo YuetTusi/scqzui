@@ -29,7 +29,7 @@ import { DeviceSystem } from '@/schema/device-system';
 import { StateTree } from '@/type/model';
 import parseApps from '@/config/parse-app.yaml';
 import { DeviceStoreState } from './index';
-
+import { Db } from '@/utils/db';
 /**
  * 副作用
  */
@@ -38,8 +38,9 @@ export default {
      * 查询案件数据是否为空
      */
     *queryEmptyCase({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+        const db = new Db<CaseInfo>(TableName.Case);
         try {
-            let count: number = yield call([ipcRenderer, 'invoke'], 'db-count', TableName.Case, null);
+            let count: number = yield call([db, 'count'], null);
             yield put({ type: 'setEmptyCase', payload: count === 0 });
         } catch (error) {
             console.log(`查询案件非空失败 @model/dashboard/Device/effects/queryEmptyCase: ${error.message}`);
@@ -52,9 +53,10 @@ export default {
      * @param {DeviceType} payload.data 设备数据
      */
     *saveDeviceToCase({ payload }: AnyAction, { call }: EffectsCommandMap) {
+        const db = new Db<DeviceType>(TableName.Device);
         const { data } = payload as { id: string, data: DeviceType };
         try {
-            yield call([ipcRenderer, 'invoke'], 'db-insert', TableName.Device, {
+            yield call([db, 'insert'], {
                 _id: data._id,
                 id: data.id,
                 caseId: data.caseId,
@@ -109,8 +111,9 @@ export default {
      */
     *updateParseState({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
         const { id, parseState } = payload;
+        const db = new Db<DeviceType>(TableName.Device);
         try {
-            yield call([ipcRenderer, 'invoke'], 'db-update', TableName.Device, { id }, { $set: { parseState } });
+            yield call([db, 'update'], { id }, { $set: { parseState } });
             yield put({
                 type: 'parseLog/queryParseLog', payload: {
                     condition: null,
@@ -148,13 +151,16 @@ export default {
      * @param {ParseEnd} payload 采集结束后ParseEnd数据
      */
     *saveParseLog({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
+        const deviceDb = new Db<DeviceType>(TableName.Device);
+        const caseDb = new Db<DeviceType>(TableName.Case);
+        const parseLogDb = new Db<ParseLogEntity>(TableName.ParseLog);
         const {
             caseId, deviceId, isparseok, parseapps, u64parsestarttime, u64parseendtime
         } = (payload as ParseEnd);
         try {
             let [deviceData, caseData]: [DeviceType, CaseInfo] = yield all([
-                call([ipcRenderer, 'invoke'], 'db-find-one', TableName.Device, { id: deviceId }),
-                call([ipcRenderer, 'invoke'], 'db-find-one', TableName.Case, { _id: caseId })
+                call([deviceDb, 'findOne'], { id: deviceId }),
+                call([caseDb, 'findOne'], { _id: caseId })
             ]);
             let entity = new ParseLogEntity();
             entity.caseName = helper.isNullOrUndefinedOrEmptyString(caseData.spareName) ? caseData.m_strCaseName.split('_')[0] : caseData.spareName;
@@ -166,7 +172,7 @@ export default {
             entity.apps = parseapps;
             entity.startTime = u64parsestarttime === -1 ? undefined : new Date(dayjs.unix(u64parsestarttime).valueOf());
             entity.endTime = u64parseendtime === -1 ? undefined : new Date(dayjs.unix(u64parseendtime).valueOf());
-            yield call([ipcRenderer, 'invoke'], 'db-insert', TableName.ParseLog, entity);
+            yield call([parseLogDb, 'insert'], entity);
             yield put({
                 type: 'parseLog/queryParseLog', payload: {
                     condition: null,
@@ -185,7 +191,7 @@ export default {
      * @param {FetchData} payload.fetchData 为当前采集输入数据
      */
     *startFetch({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
-        // const db: DbInstance<CCaseInfo> = getDb(TableName.Case);
+        const db = new Db<CaseInfo>(TableName.Case);
         let sendCase: GuangZhouCase | null = null;
         const { deviceData, fetchData } = payload as { deviceData: DeviceType, fetchData: FetchData };
         // *再次采集前要把采集记录清除
@@ -252,7 +258,7 @@ export default {
         }
 
         try {
-            const caseData: CaseInfo = yield call([ipcRenderer, 'invoke'], 'db-find-one', TableName.Case, { _id: fetchData.caseId });
+            const caseData: CaseInfo = yield call([db, 'findOne'], { _id: fetchData.caseId });
             const bcp = new BcpEntity();
             if (helper.getDataMode() === DataMode.GuangZhou) {
                 //警综
@@ -422,12 +428,12 @@ export default {
      */
     *startParse({ payload }: AnyAction, { select, call, fork, put }: EffectsCommandMap) {
 
-        // const db: DbInstance<CaseInfo> = getDb(TableName.Case);
+        const db = new Db<CaseInfo>(TableName.Case);
         const device: DeviceStoreState = yield select((state: StateTree) => state.device);
         const current = device.deviceList.find((item) => item?.usb == payload);
 
         try {
-            const caseData: CaseInfo = yield call([ipcRenderer, 'invoke'], 'db-find-one', TableName.Case, { _id: current?.caseId });
+            const caseData: CaseInfo = yield call([db, 'findOne'], { _id: current?.caseId });
             if (current && caseData.m_bIsAutoParse) {
 
                 const useKeyword = localStorage.getItem(LocalStoreKey.UseKeyword) === '1';
@@ -638,20 +644,21 @@ export default {
      */
     *saveOrUpdateOfficer({ payload }: AnyAction, { call, fork }: EffectsCommandMap) {
 
+        const db = new Db<Officer>(TableName.Officer);
         const { no, name } = payload as Officer;
 
         try {
-            const prev: Officer | null = yield call([ipcRenderer, 'invoke'], 'db-find-one', TableName.Officer, { no });
+            const prev: Officer | null = yield call([db, 'findOne'], { no });
             if (prev === null) {
                 //insert
-                yield fork([ipcRenderer, 'invoke'], 'db-insert', TableName.Officer, payload);
+                yield fork([db, 'insert'], payload);
             } else {
                 //update
                 const next = {
                     ...prev,
                     name
                 };
-                yield fork([ipcRenderer, 'invoke'], 'db-update', TableName.Officer, { no }, next);
+                yield fork([db, 'update'], { no }, next);
             }
         } catch (error) {
             logger.error(`保存采集人员失败 @model/dashboard/Device/effects/saveOrUpdateOfficer: ${error.message}`);

@@ -95,4 +95,4 @@ AppSelectModal.defaultProps = {
     okHandle: ([]) => { }
 };
 
-export default AppSelectModal;
+export { AppSelectModal };

@@ -52,13 +52,17 @@ if (!existManuJson) {
  * 销毁所有窗口
  */
 function destroyAllWindow() {
-    if (mainWindow !== null) {
-        mainWindow.destroy();
-        mainWindow = null;
-    }
     if (sqliteWindow !== null) {
         sqliteWindow.destroy();
         sqliteWindow = null;
+    }
+    if (protocolWindow !== null) {
+        protocolWindow.destroy();
+        protocolWindow = null;
+    }
+    if (mainWindow !== null) {
+        mainWindow.destroy();
+        mainWindow = null;
     }
 }
 
@@ -254,6 +258,47 @@ ipcMain.on('query-db-result', (event, result) => {
         sqliteWindow = null;
     }
 });
+
+//显示阅读协议
+ipcMain.on('show-protocol', (event, fetchData) => {
+    event.preventDefault();
+    if (protocolWindow === null) {
+        protocolWindow = new BrowserWindow({
+            width: 800,
+            height: 350,
+            show: true,
+            frame: false,
+            resizable: false,
+            closable: false,
+            alwaysOnTop: true,
+            parent: mainWindow!,
+            modal: true,
+            webPreferences: {
+                contextIsolation: false,
+                nodeIntegration: true,
+                javascript: true
+            }
+        });
+        protocolWindow.loadFile(path.join(__dirname, './renderer/protocol.html'));
+        protocolWindow.webContents.on('did-finish-load', () =>
+            protocolWindow!.webContents.send('show-protocol', fetchData)
+        );
+    } else {
+        protocolWindow.show();
+        protocolWindow.webContents.send('show-protocol', fetchData);
+    }
+});
+
+//阅读协议同意反馈
+ipcMain.on('protocol-read', (event, fetchData, agree) => {
+    mainWindow!.webContents.send('protocol-read', fetchData, agree);
+    if (protocolWindow !== null) {
+        protocolWindow.destroy();
+        protocolWindow = null;
+    }
+});
+
+
 
 //写net.json
 ipcMain.handle('write-net-json', (event, servicePort: number) =>

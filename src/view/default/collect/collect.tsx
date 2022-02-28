@@ -10,19 +10,20 @@ import { ParseState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchData } from '@/schema/fetch-data';
 import { DeviceType } from '@/schema/device-type';
+import { TableName } from '@/schema/table-name';
+import { DataMode } from '@/schema/data-mode';
+import { Db } from '@/utils/db';
+import { LocalStoreKey } from '@/utils/local-store';
+import { helper } from '@/utils/helper';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { AppleCreditModal, UsbDebugModal, HelpModal } from '@/component/dialog';
 import NormalInputModal from './normal-input-modal';
+import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
 import { CollectProp } from './prop';
-import { DataMode } from '@/schema/data-mode';
-import { LocalStoreKey } from '@/utils/local-store';
-import { helper } from '@/utils/helper';
-import { ipcRenderer } from 'electron';
-import { TableName } from '@/schema/table-name';
-import { Db } from '@/utils/db';
+
 
 const { Group } = Button;
 const { useBcp } = helper.readConf()!;
@@ -37,6 +38,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     const [usbDebugModalVisible, setUsbDebugModalVisible] = useState<boolean>(false);
     const [helpModalVisible, setHelpModalVisible] = useState<boolean>(false);
     const [normalInputModal, setNormalInputModal] = useState<boolean>(false);
+    const [serverCloudModalVisible, setServerCloudModalVisible] = useState<boolean>(false);
     const currentDevice = useRef<DeviceType | null>(null);
     const dataMode = useRef<DataMode>(DataMode.Self);
 
@@ -191,11 +193,11 @@ const Collect: FC<CollectProp> = ({ }) => {
      * @param {DeviceType} data 设备数据
      */
     const serverCloudHandle = (data: DeviceType) => {
-        // if (!this.validateBeforeFetch()) {
-        //     return;
-        // }
+        if (!validateBeforeFetch()) {
+            return;
+        }
         currentDevice.current = data; //寄存手机数据，采集时会使用
-        // this.setState({ serverCloudModalVisible: true });
+        setServerCloudModalVisible(true);
     };
 
     /**
@@ -204,6 +206,7 @@ const Collect: FC<CollectProp> = ({ }) => {
      */
     const startFetchHandle = (fetchData: FetchData) => {
         setNormalInputModal(false);
+        setServerCloudModalVisible(false);
         //todo: 关闭另两个输入框
 
         if (fetchData.mode === DataMode.ServerCloud) {
@@ -219,15 +222,13 @@ const Collect: FC<CollectProp> = ({ }) => {
                 }
             });
         }
-
-        console.log(currentDevice.current, fetchData);
-        // dispatch({
-        //     type: 'device/startFetch',
-        //     payload: {
-        //         deviceData: currentDevice.current,
-        //         fetchData
-        //     }
-        // });
+        dispatch({
+            type: 'device/startFetch',
+            payload: {
+                deviceData: currentDevice.current,
+                fetchData
+            }
+        });
     };
 
     return <SubLayout title="设备取证">
@@ -253,6 +254,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                 <DeviceFrame
                     onHelpHandle={onHelpHandle}
                     onNormalHandle={collectHandle}
+                    onServerCloudHandle={serverCloudHandle}
                 />
             </DevicePanel>
         </ContentBox>
@@ -269,6 +271,12 @@ const Collect: FC<CollectProp> = ({ }) => {
             visible={normalInputModal}
             saveHandle={startFetchHandle}
             cancelHandle={() => setNormalInputModal(false)}
+        />
+        <ServerCloudModal
+            visible={serverCloudModalVisible}
+            device={currentDevice.current}
+            saveHandle={startFetchHandle}
+            cancelHandle={() => setServerCloudModalVisible(false)}
         />
     </SubLayout>
 };

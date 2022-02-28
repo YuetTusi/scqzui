@@ -12,9 +12,9 @@ import log from '@/utils/log';
 import { helper } from '@/utils/helper';
 import server from '@/utils/tcp-server';
 import { createRouter } from '@/router/default/create-router';
+import appSetModel from '@/model/default/app-set';
 import receiveModel from '@/model/default/receive';
 import deviceModel from '@/model/default/device';
-import normalInputModalModel from '@/model/default/normal-input-modal';
 import 'jquery';
 import '@ztree/ztree_v3/js/jquery.ztree.all.min';
 import '@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css';
@@ -49,8 +49,8 @@ app.use({
         console.log(`全局异常 @src/index.tsx:${message}`);
     }
 });
+app.model(appSetModel);
 app.model(receiveModel);
 app.model(deviceModel);
-app.model(normalInputModalModel);
 app.router(createRouter);
 app.start('#root');

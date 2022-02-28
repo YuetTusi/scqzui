@@ -27,6 +27,7 @@ import { GuangZhouCase } from '@/schema/platform/guangzhou-case';
 import { HumanVerify } from '@/schema/human-verify';
 import { DataMode } from '@/schema/data-mode';
 import { CloudAppMessages } from '@/schema/cloud-app-messages';
+import { Db } from '@/utils/db';
 // import { LoginState } from '@/model/settings/TraceLogin';
 
 const appPath = process.cwd();
@@ -267,14 +268,16 @@ export function parseCurinfo({ msg }: Command<ParseDetail[]>, dispatch: Dispatch
  */
 export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<any>) {
 
+    const caseDb = new Db<CaseInfo>(TableName.Case);
+    const deviceDb = new Db<DeviceType>(TableName.Device);
     const { caseId, deviceId, isparseok, errmsg } = msg;
 
     console.log('解析结束：', JSON.stringify(msg));
     logger.info(`解析结束(ParseEnd): ${JSON.stringify(msg)}`);
     try {
         let [caseData, deviceData]: [CaseInfo, DeviceType] = await Promise.all([
-            ipcRenderer.invoke('db-find-one', TableName.Case, { _id: caseId }),
-            ipcRenderer.invoke('db-find-one', TableName.Device, { id: deviceId })
+            caseDb.findOne({ _id: caseId }),
+            deviceDb.findOne({ id: deviceId })
         ]);
         if (isparseok && caseData.generateBcp) {
             //# 解析`成功`且`是`自动生成BCP

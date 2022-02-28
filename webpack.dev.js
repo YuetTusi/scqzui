@@ -7,7 +7,8 @@ let config = {
 	mode: 'development',
 	entry: {
 		default: join(__dirname, './src/renderer/default/default.ts'),
-		sqlite: join(__dirname, './src/renderer/sqlite/sqlite.ts')
+		sqlite: join(__dirname, './src/renderer/sqlite/sqlite.ts'),
+		protocol: join(__dirname, './src/renderer/protocol/protocol.ts')
 	},
 	output: {
 		filename: '[name].js',
@@ -95,6 +96,11 @@ let config = {
 			template: join(__dirname, './src/renderer/sqlite/sqlite.html'),
 			filename: 'sqlite.html',
 			chunks: ['sqlite']
+		}),
+		new HtmlWebpackPlugin({
+			template: join(__dirname, './src/renderer/protocol/protocol.html'),
+			filename: 'protocol.html',
+			chunks: ['protocol']
 		})
 	]
 };
