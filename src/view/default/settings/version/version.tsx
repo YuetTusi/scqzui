@@ -13,6 +13,8 @@ import { VersionBox } from './styled/style';
 import LogList from './log-list';
 import logo from './images/icon.png';
 import { LogItem } from './prop';
+import { ipcRenderer } from 'electron';
+import { useDispatch } from 'dva';
 
 const appRootPath = process.cwd();
 const config = helper.readConf();
@@ -28,6 +30,7 @@ const filterString = (src: string) => src.replace(/-/g, '.');
  * 版本信息
  */
 const Version: FC<{}> = () => {
+    const dispatch = useDispatch();
     let [publishModalVisible, setPublishModalVisible] = useState<boolean>(false);
     let [disabled, setDisabled] = useState<boolean>(false);
     let [manu, setManu] = useState<Manufaturer | null>(null);
@@ -86,7 +89,33 @@ const Version: FC<{}> = () => {
                         alt="logo"
                         width={300}
                         height={300}
-                        onDoubleClick={() => console.table(process.versions)}
+                        onDoubleClick={() => {
+                            dispatch({
+                                type: 'device/setDeviceToList', payload: {
+                                    id: '',
+                                    usb: 1,
+                                    tipType: 'nothing',
+                                    fetchPercent: 0,
+                                    fetchState: 'Fetching',
+                                    parseState: 'NotParse',
+                                    manufacturer: 'manufacturer',
+                                    model: 'model',
+                                    system: 'system',
+                                    mobileName: 'mobileName',
+                                    mobileNo: 'mobileNo',
+                                    mobileNumber: '',
+                                    mobileHolder: 'mobileHolder',
+                                    note: 'note',
+                                    isStopping: false,
+                                    caseId: 'caseId',
+                                    serial: serial,
+                                    mode: 'mode',
+                                    phonePath:'',
+                                    cloudAppList: []
+                                }
+                            })
+                            console.table(process.versions);
+                        }}
                     />
                 </div>
                 <div className="info">

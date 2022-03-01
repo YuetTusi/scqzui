@@ -1,8 +1,9 @@
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import React, { FC, MouseEvent, useCallback, useEffect, useState, useRef } from 'react';
+import React, { FC, MouseEvent, useEffect, useState, useRef } from 'react';
 import round from 'lodash/round';
-import { useDispatch } from 'dva';
+import { useDispatch, useSelector } from 'dva';
 import { routerRedux } from 'dva/router';
+import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import PlusSquareOutlined from '@ant-design/icons/PlusSquareOutlined';
@@ -21,8 +22,7 @@ import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
 import Tooltip from 'antd/lib/tooltip';
 import { ITreeNode } from '@/type/ztree';
-import Instruction from '../instruction';
-import { useCaseList, useSubscribe } from '@/hook';
+import { useSubscribe } from '@/hook';
 import log from '@/utils/log';
 import { helper } from '@/utils/helper';
 import { LocalStoreKey } from '@/utils/local-store';
@@ -33,10 +33,12 @@ import { CaseInfo } from '@/schema/case-info';
 import FetchData from '@/schema/fetch-data';
 import { DataMode } from '@/schema/data-mode';
 import { CloudApp } from '@/schema/cloud-app';
-import { FormValue, Prop } from './prop';
+import { StateTree } from '@/type/model';
+import { CaseDataState } from '@/model/default/case-data';
 import PanelHeader from './panel-hader';
+import Instruction from '../instruction';
 import { ServerCloudModalBox } from './styled/style';
-
+import { FormValue, Prop } from './prop';
 
 const { Panel } = Collapse;
 const { Item, useForm } = Form;
@@ -106,7 +108,7 @@ const ServerCloudModal: FC<Prop> = ({
     cancelHandle
 }) => {
     const dispatch = useDispatch();
-    const caseList = useCaseList();
+    const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
     const [formRef] = useForm<FormValue>();
     const [appSelectModalVisible, setAppSelectModalVisible] = useState(false);
     const [selectedApps, setSelectedApps] = useState<CloudApp[]>([]);
@@ -122,6 +124,10 @@ const ServerCloudModal: FC<Prop> = ({
     const historyDeviceHolder = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER));
     const historyDeviceNumber = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER));
     const historyMobileNumber = useRef(UserHistory.get(HistoryKeys.HISTORY_MOBILENUMBER));
+
+    useEffect(() => {
+        dispatch({ type: 'caseData/queryAllCaseData' });
+    }, []);
 
     useEffect(() => {
         historyDeviceName.current = UserHistory.get(HistoryKeys.HISTORY_DEVICENAME);
@@ -156,7 +162,7 @@ const ServerCloudModal: FC<Prop> = ({
      */
     const bindCaseSelect = () => {
         const { Option } = Select;
-        return caseList.map((opt: CaseInfo) => {
+        return allCaseData.map((opt: CaseInfo) => {
             let pos = opt.m_strCaseName.lastIndexOf('\\');
             let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
             let onlyName = opt.m_strCaseName.substring(pos + 1);
@@ -271,7 +277,7 @@ const ServerCloudModal: FC<Prop> = ({
                         ),
                         okText: '是',
                         cancelText: '否',
-                        icon: 'info-circle',
+                        icon: <InfoCircleOutlined />,
                         centered: true
                     });
                 } else {

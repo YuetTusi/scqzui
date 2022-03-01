@@ -16,6 +16,14 @@ interface DeviceFrameProp {
      * 云取证
      */
     onServerCloudHandle: (arg0: DeviceType) => void,
+    /**
+     * 采集记录handle
+     */
+    onRecordHandle: (arg0: DeviceType) => void,
+    /**
+     * 停止handle
+     */
+    onStopHandle: (arg0: DeviceType) => void
 };
 
 interface FetchButtonProp {
@@ -46,6 +54,10 @@ interface MobileInfoProp {
      * 设备
      */
     device: DeviceType,
+    /**
+     * 采集记录查看handle
+     */
+    recordHandle: (arg0: DeviceType) => void
 }
 
 export { CollectProp, DeviceFrameProp, FetchButtonProp, MobileInfoProp };

@@ -60,6 +60,14 @@ function destroyAllWindow() {
         protocolWindow.destroy();
         protocolWindow = null;
     }
+    if (timerWindow !== null) {
+        timerWindow.destroy();
+        timerWindow = null;
+    }
+    if (fetchRecordWindow !== null) {
+        fetchRecordWindow.destroy();
+        fetchRecordWindow = null;
+    }
     if (mainWindow !== null) {
         mainWindow.destroy();
         mainWindow = null;
@@ -141,6 +149,32 @@ if (!instanceLock) {
             }
         })();
 
+        timerWindow = new BrowserWindow({
+            title: '计时服务',
+            width: 600,
+            height: 400,
+            show: false,
+            webPreferences: {
+                // webSecurity: false,
+                // allowRunningInsecureContent: true,
+                contextIsolation: false,
+                nodeIntegration: true,
+                javascript: true
+            }
+        });
+
+        fetchRecordWindow = new BrowserWindow({
+            title: '采集消息',
+            width: 600,
+            height: 400,
+            show: false,
+            webPreferences: {
+                contextIsolation: false,
+                nodeIntegration: true,
+                javascript: true
+            }
+        });
+
         mainWindow = new BrowserWindow({
             title: appName ?? '北京万盛华通科技有限公司',
             icon: config?.logo ? path.join(appPath, `../config/${config.logo}`) : undefined,
@@ -172,10 +206,16 @@ if (!instanceLock) {
 
         mainWindow.webContents.on('did-finish-load', () => {
             mainWindow!.show();
-            // if (sqliteWindow) {
-            //     sqliteWindow.loadFile(path.join(__dirname, './renderer/sqlite.html'));
-            //     sqliteWindow.reload();
-            // }
+            timerWindow!.loadFile(path.join(__dirname, './renderer/timer.html'));
+            if (mode === 'development') {
+                timerWindow!.webContents.openDevTools();
+            }
+            fetchRecordWindow!.loadFile(
+                path.join(__dirname, './renderer/fetch-record.html')
+            );
+            if (mode === 'development') {
+                fetchRecordWindow!.webContents.openDevTools();
+            }
         });
 
         mainWindow.webContents.addListener('new-window', (event) => event.preventDefault());
@@ -185,7 +225,6 @@ if (!instanceLock) {
             event.preventDefault();
             mainWindow!.webContents.send('will-close');
         });
-
     });
 }
 
@@ -289,6 +328,61 @@ ipcMain.on('show-protocol', (event, fetchData) => {
     }
 });
 
+//启动&停止计时
+ipcMain.on('time', (event, usb, isStart) => {
+    console.log(`time事件 - usb:${usb},isStart:${isStart}`);
+    console.log('timerWindow:', timerWindow);
+    if (timerWindow !== null) {
+        timerWindow.webContents.send('time', usb, isStart);
+    }
+});
+//向主窗口发送计时时间
+ipcMain.on('receive-time', (event, usb, timeString) => {
+    // console.log(`${usb}:${timeString}`);
+    if (mainWindow && mainWindow.webContents !== null) {
+        mainWindow.webContents.send('receive-time', usb, timeString);
+    }
+});
+//向主窗口发送采集结束以停止计时
+ipcMain.on('fetch-over', (event, usb) => {
+    if (mainWindow && mainWindow.webContents !== null) {
+        mainWindow.webContents.send('fetch-over', usb);
+    }
+});
+
+//发送进度消息
+ipcMain.on('fetch-progress', (event, arg) => {
+    fetchRecordWindow!.webContents.send('fetch-progress', arg);
+    mainWindow!.webContents.send('fetch-progress', arg);
+});
+//采集完成发送USB号及日志数据
+ipcMain.on('fetch-finish', (event, usb, log) =>
+    fetchRecordWindow!.webContents.send('fetch-finish', usb, log)
+);
+//清除usb序号对应的采集记录
+ipcMain.on('progress-clear', (event, usb) =>
+    fetchRecordWindow!.webContents.send('progress-clear', usb)
+);
+//获取当前USB序号的采集进度数据
+ipcMain.on('get-fetch-progress', (event, usb) => {
+    console.log(`'get-fetch-progress,usb:${usb}`);
+    fetchRecordWindow!.webContents.send('get-fetch-progress', usb);
+});
+//获取当前USB序号最新一条进度消息
+ipcMain.on('get-last-progress', (event, usb) =>
+    fetchRecordWindow!.webContents.send('get-last-progress', usb)
+);
+//消息发回LiveModal以显示采集进度
+ipcMain.on('receive-fetch-progress', (event, fetchRecords) =>
+    mainWindow!.webContents.send('receive-fetch-progress', fetchRecords)
+);
+//消息发回FetchInfo.tsx组件以显示最新一条进度
+ipcMain.on('receive-fetch-last-progress', (event, fetchRecord) =>
+    mainWindow!.webContents.send('receive-fetch-last-progress', fetchRecord)
+);
+//将FetchLog数据发送给入库
+ipcMain.on('save-fetch-log', (event, log) => mainWindow!.webContents.send('save-fetch-log', log));
+
 //阅读协议同意反馈
 ipcMain.on('protocol-read', (event, fetchData, agree) => {
     mainWindow!.webContents.send('protocol-read', fetchData, agree);
@@ -298,9 +392,22 @@ ipcMain.on('protocol-read', (event, fetchData, agree) => {
     }
 });
 
-
-
 //写net.json
 ipcMain.handle('write-net-json', (event, servicePort: number) =>
     helper.writeNetJson(cwd, { apiPort: httpPort, servicePort })
 );
+
+//显示原生系统消息
+ipcMain.on('show-notice', (event, { title, message }) =>
+	notifier.notify({
+		sound: true,
+		type: 'info',
+		title: title || '消息',
+		message: message || '有消息反馈请查阅'
+	})
+);
+
+//显示notification消息,参数为消息文本
+ipcMain.on('show-notification', (event, args) => {
+	mainWindow!.webContents.send('show-notification', args);
+});

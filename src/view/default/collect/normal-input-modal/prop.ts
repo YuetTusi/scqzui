@@ -9,7 +9,7 @@ export interface Prop {
     /**
      * 当前手机设备数据
      */
-    device?: DeviceType;
+    device: DeviceType | null;
     /**
      * 保存回调
      */

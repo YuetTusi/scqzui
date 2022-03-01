@@ -41,7 +41,7 @@ export default {
         const db = new Db<CaseInfo>(TableName.Case);
         try {
             let count: number = yield call([db, 'count'], null);
-            yield put({ type: 'setEmptyCase', payload: count === 0 });
+            yield put({ type: 'device/setEmptyCase', payload: count === 0 });
         } catch (error) {
             console.log(`查询案件非空失败 @model/dashboard/Device/effects/queryEmptyCase: ${error.message}`);
             logger.error(`查询案件非空失败 @model/dashboard/Device/effects/queryEmptyCase: ${error.message}`);
@@ -598,7 +598,7 @@ export default {
                 fetchData.cloudAppList = [];
                 //开始采集
                 yield put({
-                    type: 'startFetch', payload: {
+                    type: 'device/startFetch', payload: {
                         deviceData: device,
                         fetchData
                     }
@@ -626,7 +626,7 @@ export default {
                 fetchData.cloudAppList = [];
                 //开始采集
                 yield put({
-                    type: 'startFetch', payload: {
+                    type: 'device/startFetch', payload: {
                         deviceData: device,
                         fetchData
                     }

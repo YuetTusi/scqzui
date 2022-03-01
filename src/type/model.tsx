@@ -3,6 +3,7 @@ import { Dispatch } from 'redux';
 import { RouteComponentProps } from 'dva/router';
 import { DeviceStoreState } from '@/model/default/device';
 import { AppSetStore } from '@/model/default/app-set';
+import { CaseDataState } from '@/model/default/case-data';
 
 declare global {
 	interface Window {
@@ -30,6 +31,7 @@ interface StoreComponent<MatchParam = any> extends RouteComponentProps<MatchPara
 interface StateTree {
 	appSet: AppSetStore,
 	device: DeviceStoreState,
+	caseData: CaseDataState,
 	[modelName: string]: any
 }
 

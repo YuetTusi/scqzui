@@ -8,7 +8,9 @@ let config = {
 	entry: {
 		default: join(__dirname, './src/renderer/default/default.ts'),
 		sqlite: join(__dirname, './src/renderer/sqlite/sqlite.ts'),
-		protocol: join(__dirname, './src/renderer/protocol/protocol.ts')
+		protocol: join(__dirname, './src/renderer/protocol/protocol.ts'),
+		timer: join(__dirname, './src/renderer/timer/timer.ts'),
+		fetchRecord: join(__dirname, './src/renderer/fetch-record/fetch-record.ts')
 	},
 	output: {
 		filename: '[name].js',
@@ -101,6 +103,16 @@ let config = {
 			template: join(__dirname, './src/renderer/protocol/protocol.html'),
 			filename: 'protocol.html',
 			chunks: ['protocol']
+		}),
+		new HtmlWebpackPlugin({
+			template: join(__dirname, './src/renderer/timer/timer.html'),
+			filename: 'timer.html',
+			chunks: ['timer']
+		}),
+		new HtmlWebpackPlugin({
+			template: join(__dirname, './src/renderer/fetch-record/fetch-record.html'),
+			filename: 'fetch-record.html',
+			chunks: ['fetchRecord']
 		})
 	]
 };

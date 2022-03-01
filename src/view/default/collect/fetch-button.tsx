@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import Button from 'antd/lib/button';
+import Modal from 'antd/lib/modal';
 import { FetchState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchButtonProp } from './prop';
@@ -25,13 +26,25 @@ const FetchButton: FC<FetchButtonProp> = ({
             </Group>;
         case FetchState.Connected:
         case FetchState.Finished:
+        case FetchState.HasError:
             return <Group>
                 <Button onClick={() => onNormalHandle(device)} style={{ width: '100px' }} type="primary">取证</Button>
                 <Button onClick={() => onServerCloudHandle(device)} style={{ width: '100px' }} type="primary">云取证</Button>
             </Group>
         case FetchState.Fetching:
             return <Group>
-                <Button onClick={() => onStopHandle(device)} type="primary" disabled={device.isStopping}>停止取证</Button>
+                <Button onClick={() => {
+                    Modal.confirm({
+                        title: '停止',
+                        content: '确定停止取证？',
+                        okText: '是',
+                        cancelText: '否',
+                        centered: true,
+                        onOk() {
+                            onStopHandle(device);
+                        }
+                    });
+                }} type="primary" disabled={device.isStopping}>停止取证</Button>
             </Group>;
         default:
             return <Group>

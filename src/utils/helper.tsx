@@ -5,7 +5,7 @@ import fs from 'fs';
 import net from 'net';
 import path from 'path';
 import cpy from 'cpy';
-import uuid from 'uuid';
+import { v4 } from 'uuid';
 import yaml from 'js-yaml';
 import glob from 'glob';
 import memoize from 'lodash/memoize';
@@ -270,46 +270,46 @@ const helper = {
      * @param phonePath 手机路径
      * @param bcp BCP对象
      */
-    // writeBcpJson(phonePath: string, bcp: BcpEntity): Promise<void> {
-    //     const target = path.join(phonePath, 'Bcp.json');
-    //     return new Promise((resolve, reject) => {
-    //         fs.writeFile(target, JSON.stringify({
-    //             ...bcp,
-    //             attachment: bcp.attachment ? '1' : '0',
-    //             manufacturer: localStorage.getItem('manufacturer') ?? '',
-    //             security_software_orgcode:
-    //                 localStorage.getItem('security_software_orgcode') ?? '',
-    //             materials_name: localStorage.getItem('materials_name') ?? '',
-    //             materials_model: localStorage.getItem('materials_model') ?? '',
-    //             materials_hardware_version:
-    //                 localStorage.getItem('materials_hardware_version') ?? '',
-    //             materials_software_version:
-    //                 localStorage.getItem('materials_software_version') ?? '',
-    //             materials_serial: localStorage.getItem('materials_serial') ?? '',
-    //             ip_address: localStorage.getItem('ip_address') ?? ''
-    //         }), { encoding: 'utf8' }, (err) => {
-    //             if (err) {
-    //                 reject(err);
-    //             } else {
-    //                 resolve(void 0);
-    //             }
-    //         });
-    //     });
-    // },
+    writeBcpJson(phonePath: string, bcp: BcpEntity): Promise<void> {
+        const target = path.join(phonePath, 'Bcp.json');
+        return new Promise((resolve, reject) => {
+            fs.writeFile(target, JSON.stringify({
+                ...bcp,
+                attachment: bcp.attachment ? '1' : '0',
+                manufacturer: localStorage.getItem('manufacturer') ?? '',
+                security_software_orgcode:
+                    localStorage.getItem('security_software_orgcode') ?? '',
+                materials_name: localStorage.getItem('materials_name') ?? '',
+                materials_model: localStorage.getItem('materials_model') ?? '',
+                materials_hardware_version:
+                    localStorage.getItem('materials_hardware_version') ?? '',
+                materials_software_version:
+                    localStorage.getItem('materials_software_version') ?? '',
+                materials_serial: localStorage.getItem('materials_serial') ?? '',
+                ip_address: localStorage.getItem('ip_address') ?? ''
+            }), { encoding: 'utf8' }, (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(void 0);
+                }
+            });
+        });
+    },
     /**
      * 保存Case.json文件
      * @param saveTo 存储位置
      * @param data 案件数据
      */
-    // writeCaseJson(saveTo: string, data: CCaseInfo) {
-    //     return this.writeJSONfile(path.join(saveTo, 'Case.json'), {
-    //         ...data,
-    //         caseName: helper.isNullOrUndefinedOrEmptyString(data.spareName)
-    //             ? data.m_strCaseName
-    //             : `${data.spareName}_${helper.timestamp()}`,
-    //         checkUnitName: data.m_strCheckUnitName ?? ''
-    //     });
-    // },
+    writeCaseJson(saveTo: string, data: CaseInfo) {
+        return this.writeJSONfile(path.join(saveTo, 'Case.json'), {
+            ...data,
+            caseName: helper.isNullOrUndefinedOrEmptyString(data.spareName)
+                ? data.m_strCaseName
+                : `${data.spareName}_${helper.timestamp()}`,
+            checkUnitName: data.m_strCheckUnitName ?? ''
+        });
+    },
     /**
      * 读取设备软硬件信息
      */
@@ -474,7 +474,7 @@ const helper = {
      * @param len 位数（默认16位）
      */
     newId(len: number = 16) {
-        return uuid.v4().replace(/-/g, '').substring(len);
+        return v4().replace(/-/g, '').substring(len);
     },
     /**
      * 当前模式（标准、点验、警综）

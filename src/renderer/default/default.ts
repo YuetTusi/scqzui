@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import 'dayjs/locale/zh-cn';
 import { createHashHistory as createHistory } from 'history';
 import dva from 'dva';
@@ -15,11 +16,12 @@ import { createRouter } from '@/router/default/create-router';
 import appSetModel from '@/model/default/app-set';
 import receiveModel from '@/model/default/receive';
 import deviceModel from '@/model/default/device';
+import caseDataModel from '@/model/default/case-data';
 import 'jquery';
 import '@ztree/ztree_v3/js/jquery.ztree.all.min';
 import '@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css';
-// import '../../styled/ztree-overwrite.less';
 dayjs.locale('zh-cn');
+dayjs.extend(customParseFormat);
 
 const { tcpPort } = helper.readConf()!;
 const app = dva({ history: createHistory() });
@@ -52,5 +54,6 @@ app.use({
 app.model(appSetModel);
 app.model(receiveModel);
 app.model(deviceModel);
+app.model(caseDataModel);
 app.router(createRouter);
 app.start('#root');

@@ -1,7 +1,8 @@
-import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'dva';
+import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'dva';
 import { routerRedux } from 'dva/router';
 import round from 'lodash/round';
+import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import SelectOutlined from '@ant-design/icons/SelectOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
@@ -26,12 +27,14 @@ import { CaseInfo } from '@/schema/case-info';
 import FetchData from '@/schema/fetch-data';
 import { DataMode } from '@/schema/data-mode';
 import { ParseApp } from '@/schema/parse-app';
+import { StateTree } from '@/type/model';
+import { CaseDataState } from '@/model/default/case-data';
 import parseApp from '@/config/parse-app.yaml';
 import Instruction from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
-import { useCaseList } from '@/hook';
 
+const { Option } = Select;
 const { Item, useForm } = Form;
 
 /**
@@ -52,10 +55,10 @@ function filterToParseApp(treeNodes: ITreeNode[]) {
 /**
  * 采集录入框（标准流程）
  */
-const NormalInputModal: FC<Prop> = (props) => {
+const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }) => {
 
     const dispatch = useDispatch();
-    const caseList = useCaseList();
+    const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
     const [formRef] = useForm<FormValue>();
     const caseId = useRef<string>(''); //案件id
     const spareName = useRef<string>(''); //案件备用名
@@ -73,14 +76,16 @@ const NormalInputModal: FC<Prop> = (props) => {
     const historyDeviceNumber = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER));
 
     useEffect(() => {
-        // dispatch({ type: 'normalInputModal/queryCaseList' });
-    }, []);
+        if (visible) {
+            dispatch({ type: 'caseData/queryAllCaseData' });
+        }
+    }, [visible]);
 
     useEffect(() => {
         historyDeviceName.current = UserHistory.get(HistoryKeys.HISTORY_DEVICENAME);
         historyDeviceHolder.current = UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER);
         historyDeviceNumber.current = UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER);
-    }, [props.visible]);
+    }, [visible]);
 
     /**
      * 跳转到新增案件页
@@ -94,8 +99,7 @@ const NormalInputModal: FC<Prop> = (props) => {
      * 绑定案件下拉数据
      */
     const bindCaseSelect = () => {
-        const { Option } = Select;
-        return caseList.map((opt: CaseInfo) => {
+        return allCaseData.map((opt: CaseInfo) => {
             let pos = opt.m_strCaseName.lastIndexOf('\\');
             let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
             return (
@@ -122,6 +126,7 @@ const NormalInputModal: FC<Prop> = (props) => {
      * 案件下拉Change
      */
     const caseChange = (value: string, option: JSX.Element | JSX.Element[]) => {
+
         caseId.current = (option as JSX.Element).props['data-case-id'] as string;
         spareName.current = (option as JSX.Element).props['data-spare-name'] as string;
         casePath.current = (option as JSX.Element).props['data-case-path'] as string;
@@ -142,7 +147,7 @@ const NormalInputModal: FC<Prop> = (props) => {
         setAppSelectModalVisible(false);
     };
 
-    const resetValue = useCallback(() => {
+    const resetValue = () => {
         caseId.current = ''; //案件id
         spareName.current = ''; //案件备用名
         casePath.current = ''; //案件存储路径
@@ -151,7 +156,8 @@ const NormalInputModal: FC<Prop> = (props) => {
         hasReport.current = false; //是否生成报告
         isAuto.current = false; //是否自动解析
         unitName.current = ''; //检验单位
-    }, []);
+        formRef.resetFields();
+    };
 
     /**
      * 表单提交
@@ -160,7 +166,6 @@ const NormalInputModal: FC<Prop> = (props) => {
         e.preventDefault();
 
         const { validateFields } = formRef;
-        const { saveHandle, device } = props;
 
         try {
             const values = await validateFields();
@@ -180,7 +185,7 @@ const NormalInputModal: FC<Prop> = (props) => {
             entity.handleOfficerNo = values.handleOfficerNo;
             entity.note = values.note ?? '';
             entity.credential = '';
-            entity.serial = props.device?.serial ?? '';
+            entity.serial = device?.serial ?? '';
             entity.mode = DataMode.Self; //标准模式（用户手输取证数据）
             entity.appList = selectedApps.length === 0 ? appList.current : selectedApps; //若未选择解析应用，以案件配置的应用为准
             entity.cloudAppList = [];
@@ -208,7 +213,7 @@ const NormalInputModal: FC<Prop> = (props) => {
                         ),
                         okText: '是',
                         cancelText: '否',
-                        icon: 'info-circle',
+                        icon: <InfoCircleOutlined />,
                         centered: true
                     });
                 } else {
@@ -288,7 +293,7 @@ const NormalInputModal: FC<Prop> = (props) => {
                                     message: '不允许输入斜线字符'
                                 },
                                 { pattern: UnderLine, message: '不允许输入下划线' }]}
-                                initialValue={props.device?.model}
+                                initialValue={device?.model}
                                 label="手机名称"
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}>
@@ -391,11 +396,11 @@ const NormalInputModal: FC<Prop> = (props) => {
     return (
         <>
             <Modal
-                visible={props.visible}
+                visible={visible}
                 onCancel={() => {
                     resetValue();
                     setSelectedApps([]);
-                    props.cancelHandle!();
+                    cancelHandle!();
                 }}
                 footer={[
                     <Button
@@ -403,7 +408,8 @@ const NormalInputModal: FC<Prop> = (props) => {
                         key="B_0"
                         onClick={() => {
                             setSelectedApps([]);
-                            props.cancelHandle!();
+                            resetValue();
+                            cancelHandle!();
                         }}>
                         <CloseCircleOutlined />
                         <span>取消</span>

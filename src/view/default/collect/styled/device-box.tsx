@@ -11,6 +11,7 @@ const DeivceBox = styled.div`
     width:300px;
     height:400px;
     padding: 10px;
+    margin-left: 10px;
     border-radius: 5px;
     /* border-radius:${(props) => props.theme['border-radius-base']}; */
     background-image:linear-gradient(rgba(52,172,224,1),rgba(34,126,165,1));
@@ -24,10 +25,10 @@ const DeivceBox = styled.div`
         background-image:linear-gradient(#2d98da,#056099);
     }
     &.finished{
-        background-image:linear-gradient(#38e3b5,#005e5a);
+        background-image:linear-gradient(#2d98da,#056099);
     }
     &.has-error{
-        background-image:linear-gradient(#eb3b5a,#a1001c);
+        background-image:linear-gradient(#2d98da,#056099);
     }
 
     .ico{
@@ -37,6 +38,10 @@ const DeivceBox = styled.div`
         justify-content:center;
         align-items:center;
         font-size: 8rem;
+
+        .ant-progress-text{
+            color:#fff;
+        }
     }
     .fns{
         flex:5;
@@ -44,9 +49,18 @@ const DeivceBox = styled.div`
         flex-direction: column;
         justify-content:center;
         align-items:center;
+        width: 100%;
         .help{
             &>div{
                 padding:2px 0;
+            }
+            &>.clock{
+                text-align: center;
+            }
+            &>.progress{
+                padding: 10px 5px;
+                color:#fff;
+                font-size: 1.2rem;
             }
             p{
                 color:${(props) => color2(props.theme['link-color']).brighten(20).toString()};
@@ -67,6 +81,8 @@ const DeivceBox = styled.div`
                     padding:2px 0;
                     list-style-type: none;
                     label{
+                        display: inline-block;
+                        width:70px;
                         &:after{
                             content:"："
                         }
@@ -76,6 +92,12 @@ const DeivceBox = styled.div`
                         font-family:"Arial";
                     }
                 }
+            }
+        }
+        .rec-link{
+            text-align: center;
+            a{
+                color:#26e5dc;
             }
         }
         .buttons{

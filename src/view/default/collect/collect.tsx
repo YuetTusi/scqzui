@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'dva';
 import AndroidOutlined from '@ant-design/icons/AndroidOutlined';
@@ -6,24 +7,26 @@ import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import message from 'antd/lib/message';
 import Button from 'antd/lib/button';
 import { TipType } from '@/schema/tip-type';
-import { ParseState } from '@/schema/device-state';
+import { FetchState, ParseState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchData } from '@/schema/fetch-data';
 import { DeviceType } from '@/schema/device-type';
 import { TableName } from '@/schema/table-name';
 import { DataMode } from '@/schema/data-mode';
+import CommandType, { SocketType } from '@/schema/command';
 import { Db } from '@/utils/db';
+import { send } from '@/utils/tcp-server';
 import { LocalStoreKey } from '@/utils/local-store';
 import { helper } from '@/utils/helper';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
+import { LiveModal } from '@/component/dialog/fetch-record-modal';
 import { AppleCreditModal, UsbDebugModal, HelpModal } from '@/component/dialog';
 import NormalInputModal from './normal-input-modal';
 import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
 import { CollectProp } from './prop';
-
 
 const { Group } = Button;
 const { useBcp } = helper.readConf()!;
@@ -39,35 +42,37 @@ const Collect: FC<CollectProp> = ({ }) => {
     const [helpModalVisible, setHelpModalVisible] = useState<boolean>(false);
     const [normalInputModal, setNormalInputModal] = useState<boolean>(false);
     const [serverCloudModalVisible, setServerCloudModalVisible] = useState<boolean>(false);
+    const [liveModalVisible, setLiveModalVisible] = useState<boolean>(false);
     const currentDevice = useRef<DeviceType | null>(null);
     const dataMode = useRef<DataMode>(DataMode.Self);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        //mock:
-        dispatch({
-            type: 'device/setDeviceToList', payload: {
-                ...{
-                    "fetchState": "Connected",
-                    "manufacturer": "HUAWEI",
-                    "model": "TAS-AL00",
-                    "phoneInfo": [{
-                        "name": "厂商", "value": "HUAWEI"
-                    }, { "name": "型号", "value": "TAS-AL00" }, {
-                        "name": "系统版本", "value": "10"
-                    }, {
-                        "name": "IMEI", "value": "867099041036009"
-                    }],
-                    "serial": "JTK0219826000164",
-                    "system":
-                        "android", "usb": 2
-                },
-                tipType: TipType.Nothing,
-                parseState: ParseState.NotParse,
-                isStopping: false
-            }
-        });
-    }, []);
+    //     //mock:
+    //     dispatch({
+    //         type: 'device/setDeviceToList', payload: {
+    //             ...{
+    //                 "fetchState": FetchState.Finished,
+    //                 "manufacturer": "HUAWEI",
+    //                 "model": "TAS-AL00",
+    //                 "phoneInfo": [{
+    //                     "name": "厂商", "value": "HUAWEI"
+    //                 }, { "name": "型号", "value": "TAS-AL00" }, {
+    //                     "name": "系统版本", "value": "10"
+    //                 }, {
+    //                     "name": "IMEI", "value": "867099041036009"
+    //                 }],
+    //                 "serial": "JTK0219826000164",
+    //                 "system":
+    //                     "android", "usb": 2,
+    //                 "fetchPercent": 66
+    //             },
+    //             tipType: TipType.Nothing,
+    //             parseState: ParseState.NotParse,
+    //             isStopping: false
+    //         }
+    //     });
+    // }, []);
 
     useEffect(() => {
         let mode = localStorage.getItem(LocalStoreKey.DataMode);
@@ -121,15 +126,15 @@ const Collect: FC<CollectProp> = ({ }) => {
         if (helper.getUnit() === null) {
             message.info({
                 content: useBcp
-                    ? '未设置采集单位，请在「设置」→「采集单位」中配置'
-                    : '未设置单位，请在「设置」→「单位管理」中配置'
+                    ? '未设置采集单位，请在「软件设置」→「采集单位」中配置'
+                    : '未设置单位，请在「软件设置」→「单位管理」中配置'
             });
             return false;
         }
         if (useBcp && helper.getDstUnit() === null) {
             //军队版本无需验证目的检验单位
             message.info({
-                content: '未设置目的检验单位，请在「设置」→「目的检验单位」中配置'
+                content: '未设置目的检验单位，请在「软件设置」→「目的检验单位」中配置'
             });
             return false;
         }
@@ -231,6 +236,43 @@ const Collect: FC<CollectProp> = ({ }) => {
         });
     };
 
+    /**
+     * 采集记录回调
+     * @param {DeviceType} data
+     */
+    const recordHandle = (data: DeviceType) => {
+        currentDevice.current = data;
+        switch (data.mode) {
+            case DataMode.ServerCloud:
+                // this.setState({ cloudHistoryModalVisible: true });
+                break;
+            default:
+                setLiveModalVisible(true);
+                break;
+        }
+    };
+
+    /**
+     * 停止按钮回调
+     * @param {DeviceType} data
+     */
+    const stopHandle = ({ usb }: DeviceType) => {
+        ipcRenderer.send('time', usb! - 1, false);
+        dispatch({
+            type: 'device/updateProp',
+            payload: {
+                usb,
+                name: 'isStopping',
+                value: true
+            }
+        });
+        send(SocketType.Fetch, {
+            type: SocketType.Fetch,
+            cmd: CommandType.StopFetch,
+            msg: { usb }
+        });
+    };
+
     return <SubLayout title="设备取证">
         <ContentBox>
             <div>
@@ -255,6 +297,8 @@ const Collect: FC<CollectProp> = ({ }) => {
                     onHelpHandle={onHelpHandle}
                     onNormalHandle={collectHandle}
                     onServerCloudHandle={serverCloudHandle}
+                    onRecordHandle={recordHandle}
+                    onStopHandle={stopHandle}
                 />
             </DevicePanel>
         </ContentBox>
@@ -268,6 +312,7 @@ const Collect: FC<CollectProp> = ({ }) => {
             cancelHandle={() => setHelpModalVisible(false)}
         />
         <NormalInputModal
+            device={currentDevice.current}
             visible={normalInputModal}
             saveHandle={startFetchHandle}
             cancelHandle={() => setNormalInputModal(false)}
@@ -277,6 +322,11 @@ const Collect: FC<CollectProp> = ({ }) => {
             device={currentDevice.current}
             saveHandle={startFetchHandle}
             cancelHandle={() => setServerCloudModalVisible(false)}
+        />
+        <LiveModal
+            visible={liveModalVisible}
+            device={currentDevice.current}
+            cancelHandle={() => setLiveModalVisible(false)}
         />
     </SubLayout>
 };

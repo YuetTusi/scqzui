@@ -1,17 +1,14 @@
 import kebabCase from 'lodash/kebabCase';
 import React, { FC } from 'react';
 import { useSelector } from 'dva';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-import { faAndroid, faApple } from '@fortawesome/free-brands-svg-icons';
 import Empty from 'antd/lib/empty';
 import Badge from 'antd/lib/badge';
-import DeviceSystem from '@/schema/device-system';
 import { FetchState } from '@/schema/device-state';
 import { StateTree } from '@/type/model';
 import { DeviceStoreState } from '@/model/default/device';
 import { FetchButton } from './fetch-button';
 import { MobileInfo } from './mobile-info';
+import { MobileIco } from './mobile-ico';
 import { DeivceBox, Nothing } from './styled/device-box';
 import { DeviceFrameProp } from './prop';
 
@@ -24,19 +21,6 @@ const { Ribbon } = Badge;
 const getClassNameByFetchState = (fetchState?: FetchState) =>
     kebabCase(fetchState);
 
-/**
- * 手机图标
- */
-const MobileIco: FC<{ deviceSystem?: DeviceSystem }> = ({ deviceSystem }) => {
-    switch (deviceSystem) {
-        case DeviceSystem.Android:
-            return <FontAwesomeIcon icon={faAndroid} />;
-        case DeviceSystem.IOS:
-            return <FontAwesomeIcon icon={faApple} />;
-        default:
-            return <FontAwesomeIcon icon={faQuestionCircle} />;
-    }
-};
 
 /**
  * 设备框列表
@@ -44,7 +28,9 @@ const MobileIco: FC<{ deviceSystem?: DeviceSystem }> = ({ deviceSystem }) => {
 const DeviceFrame: FC<DeviceFrameProp> = ({
     onHelpHandle,
     onNormalHandle,
-    onServerCloudHandle
+    onServerCloudHandle,
+    onRecordHandle,
+    onStopHandle
 }) => {
 
     const { deviceList } = useSelector<StateTree, DeviceStoreState>(state => state.device);
@@ -61,16 +47,19 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
             return <Ribbon text={`终端#${item.usb ?? ''}`} key={`USB_${item.usb}`}>
                 <DeivceBox className={getClassNameByFetchState(item.fetchState)}>
                     <div className="ico">
-                        <MobileIco deviceSystem={item.system} />
+                        <MobileIco device={item} />
                     </div>
                     <div className="fns">
-                        <MobileInfo device={item} />
+                        <MobileInfo
+                            device={item}
+                            recordHandle={() => onRecordHandle(item)}
+                        />
                         <div className="buttons">
                             <FetchButton
                                 device={item}
                                 onHelpHandle={onHelpHandle}
                                 onNormalHandle={onNormalHandle}
-                                onStopHandle={(data) => console.log(data)}
+                                onStopHandle={onStopHandle}
                                 onServerCloudHandle={onServerCloudHandle} />
                         </div>
                     </div>

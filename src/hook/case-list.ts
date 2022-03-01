@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import log from '@/utils/log';
 import { Db } from '@/utils/db';
 import CaseInfo from '@/schema/case-info';
@@ -9,13 +9,15 @@ import { TableName } from '@/schema/table-name';
  */
 function useCaseList() {
 
+    const db = new Db<CaseInfo>(TableName.Case);
     const [data, setData] = useState<CaseInfo[]>([]);
 
     useEffect(() => {
         (async () => {
-            const db = new Db<CaseInfo>(TableName.Case);
             try {
                 const next = await db.find(null, 'createdAt', -1);
+                console.log('---------next----------')
+                console.log(next);
                 setData(next);
             } catch (error) {
                 log.error(`读取案件列表失败 @hook/useCaseList:${error.message}`);
