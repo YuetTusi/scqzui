@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { faAndroid, faApple } from '@fortawesome/free-brands-svg-icons';
 import { FetchState } from "@/schema/device-state";
+import { helper } from "@/utils/helper";
 
 /**
  * 手机图标
@@ -13,6 +14,10 @@ import { FetchState } from "@/schema/device-state";
  */
 const MobileIco: FC<{ device: DeviceType }> = ({ device }) => {
 
+    if (helper.isNullOrUndefined(device)) {
+        return <FontAwesomeIcon icon={faQuestionCircle} />;
+    }
+    
     const { fetchState, system, fetchPercent } = device;
 
     if (fetchState === FetchState.Fetching) {

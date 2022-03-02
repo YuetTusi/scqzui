@@ -15,13 +15,20 @@ import { TableName } from '@/schema/table-name';
 import { DataMode } from '@/schema/data-mode';
 import CommandType, { SocketType } from '@/schema/command';
 import { Db } from '@/utils/db';
+import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import { LocalStoreKey } from '@/utils/local-store';
-import { helper } from '@/utils/helper';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { LiveModal } from '@/component/dialog/fetch-record-modal';
-import { AppleCreditModal, UsbDebugModal, HelpModal } from '@/component/dialog';
+import {
+    AppleCreditModal,
+    UsbDebugModal,
+    HelpModal,
+    ApplePasswordModal,
+    UMagicCodeModal,
+    GuideModal
+} from '@/component/dialog';
 import NormalInputModal from './normal-input-modal';
 import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
@@ -43,6 +50,9 @@ const Collect: FC<CollectProp> = ({ }) => {
     const [normalInputModal, setNormalInputModal] = useState<boolean>(false);
     const [serverCloudModalVisible, setServerCloudModalVisible] = useState<boolean>(false);
     const [liveModalVisible, setLiveModalVisible] = useState<boolean>(false);
+    const [applePasswordVisible, setApplePasswordVisible] = useState<boolean>(false);
+    const [uMagicCodeModalVisible, setUMagicCodeModalVisible] = useState<boolean>(false);
+    const [guideModalVisible, setGuideModalVisible] = useState<boolean>(false);
     const currentDevice = useRef<DeviceType | null>(null);
     const dataMode = useRef<DataMode>(DataMode.Self);
 
@@ -52,8 +62,33 @@ const Collect: FC<CollectProp> = ({ }) => {
     //     dispatch({
     //         type: 'device/setDeviceToList', payload: {
     //             ...{
-    //                 "fetchState": FetchState.Finished,
-    //                 "manufacturer": "HUAWEI",
+    //                 "fetchState": FetchState.Fetching,
+    //                 "manufacturer": "采集完成",
+    //                 "model": "TAS-AL00",
+    //                 "phoneInfo": [{
+    //                     "name": "厂商", "value": "HUAWEI"
+    //                 }, { "name": "型号", "value": "TAS-AL00" }, {
+    //                     "name": "系统版本", "value": "10"
+    //                 }, {
+    //                     "name": "IMEI", "value": "867099041036009"
+    //                 }],
+    //                 "serial": "JTK0219826000164",
+    //                 "system":"android", 
+    //                 "usb": 5,
+    //                 "fetchPercent": 66
+    //             },
+    //             // tipType: TipType.Flash,
+    //             // tipTitle: '测试',
+    //             // tipYesButton: { name: '是', value: 1, confirm: '真的？' },
+    //             parseState: ParseState.NotParse,
+    //             isStopping: false
+    //         }
+    //     });
+    //     dispatch({
+    //         type: 'device/setDeviceToList', payload: {
+    //             ...{
+    //                 "fetchState": FetchState.Connected,
+    //                 "manufacturer": "已连接",
     //                 "model": "TAS-AL00",
     //                 "phoneInfo": [{
     //                     "name": "厂商", "value": "HUAWEI"
@@ -64,10 +99,12 @@ const Collect: FC<CollectProp> = ({ }) => {
     //                 }],
     //                 "serial": "JTK0219826000164",
     //                 "system":
-    //                     "android", "usb": 2,
+    //                 "android", "usb": 6,
     //                 "fetchPercent": 66
     //             },
-    //             tipType: TipType.Nothing,
+    //             // tipType: TipType.Flash,
+    //             // tipTitle: '测试',
+    //             // tipYesButton: { name: '是', value: 1, confirm: '真的？' },
     //             parseState: ParseState.NotParse,
     //             isStopping: false
     //         }
@@ -273,6 +310,130 @@ const Collect: FC<CollectProp> = ({ }) => {
         });
     };
 
+    /**
+     * 操作消息handle
+     */
+    const tipHandle = (data: DeviceType) => {
+        currentDevice.current = data;
+        switch (data.tipType) {
+            case TipType.Normal:
+            case TipType.Flash:
+                //后台定制弹框
+                setGuideModalVisible(true);
+                break;
+            case TipType.ApplePassword:
+                //iTunes备份密码确认弹框
+                setApplePasswordVisible(true);
+                break;
+            case TipType.CloudCode:
+                //云取证验证码弹框
+                // this.showCloudCodeModal(data);
+                break;
+            case TipType.UMagicCode:
+                //联通验证码弹框
+                setUMagicCodeModalVisible(true);
+                break;
+            default:
+                console.warn('未知TipType', data.tipType);
+                break;
+        }
+    }
+
+    /**
+     * 用户未知密码放弃（type=2）
+     * @param {number} usb USB序号
+     */
+    const applePasswordCancelHandle = (usb?: number) => {
+        send(SocketType.Fetch, {
+            type: SocketType.Fetch,
+            cmd: CommandType.TipReply,
+            msg: {
+                usb,
+                password: '',
+                type: 2,
+                reply: ''
+            }
+        });
+        setApplePasswordVisible(false);
+    };
+    /**
+     * 用户输入密码确认(type=1)
+     * @param {string} password 密码
+     * @param {number} usb USB序号
+     */
+    const applePasswordConfirmHandle = (password: string, usb?: number) => {
+        send(SocketType.Fetch, {
+            type: SocketType.Fetch,
+            cmd: CommandType.TipReply,
+            msg: {
+                usb,
+                password,
+                type: 1,
+                reply: ''
+            }
+        });
+        setApplePasswordVisible(false);
+    };
+    /**
+     * 用户未知密码继续(type=3)
+     * @param {number} usb USB序号
+     */
+    const applePasswordWithoutPasswordHandle = (usb?: number) => {
+        send(SocketType.Fetch, {
+            type: SocketType.Fetch,
+            cmd: CommandType.TipReply,
+            msg: {
+                usb,
+                password: '',
+                type: 3,
+                reply: ''
+            }
+        });
+        setApplePasswordVisible(false);
+    };
+
+    /**
+     * 发送联通验证码
+     * @param usb USB序号
+     * @param code 验证码
+     */
+    const uMagicCodeHandle = (usb: number, code: string) => {
+        send(SocketType.Fetch, {
+            type: SocketType.Fetch,
+            cmd: CommandType.UMagicCodeReply,
+            msg: { usb, code }
+        });
+        console.log({
+            type: SocketType.Fetch,
+            cmd: CommandType.UMagicCodeReply,
+            msg: { usb, code }
+        });
+        setUMagicCodeModalVisible(false);
+    };
+
+    /**
+     * 关闭联通验证码弹框
+     */
+    const uMagicModalCancelHandle = () => setUMagicCodeModalVisible(false);
+
+    /**
+     * 消息框用户反馈
+     */
+    const guideHandle = (value: any, { usb }: DeviceType) => {
+        console.log(`#${usb}终端反馈:${JSON.stringify(value)}`);
+        send(SocketType.Fetch, {
+            type: SocketType.Fetch,
+            cmd: CommandType.TipReply,
+            msg: {
+                usb,
+                reply: value,
+                password: '',
+                type: -1
+            }
+        });
+        setGuideModalVisible(false);
+    };
+
     return <SubLayout title="设备取证">
         <ContentBox>
             <div>
@@ -299,6 +460,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                     onServerCloudHandle={serverCloudHandle}
                     onRecordHandle={recordHandle}
                     onStopHandle={stopHandle}
+                    onTipHandle={tipHandle}
                 />
             </DevicePanel>
         </ContentBox>
@@ -327,6 +489,26 @@ const Collect: FC<CollectProp> = ({ }) => {
             visible={liveModalVisible}
             device={currentDevice.current}
             cancelHandle={() => setLiveModalVisible(false)}
+        />
+        <ApplePasswordModal
+            visible={applePasswordVisible}
+            device={currentDevice.current}
+            cancelHandle={applePasswordCancelHandle}
+            confirmHandle={applePasswordConfirmHandle}
+            withoutPasswordHandle={applePasswordWithoutPasswordHandle}
+            closeHandle={() => setApplePasswordVisible(false)} />
+        <UMagicCodeModal
+            visible={uMagicCodeModalVisible}
+            device={currentDevice.current}
+            okHandle={uMagicCodeHandle}
+            closeHandle={uMagicModalCancelHandle}
+        />
+        <GuideModal
+            visible={guideModalVisible}
+            device={currentDevice.current}
+            yesHandle={guideHandle}
+            noHandle={guideHandle}
+            cancelHandle={() => setGuideModalVisible(false)}
         />
     </SubLayout>
 };

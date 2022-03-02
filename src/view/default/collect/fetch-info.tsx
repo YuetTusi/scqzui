@@ -1,6 +1,7 @@
 import { IpcRendererEvent, ipcRenderer } from 'electron';
-import React, { FC, memo, useEffect, useState } from 'react';
+import React, { FC, memo, MouseEvent, useEffect, useState } from 'react';
 import { useSubscribe } from '@/hook';
+import DeviceType from '@/schema/device-type';
 import { FetchRecord, ProgressType } from '@/schema/fetch-record';
 import { FetchInfoBox } from './styled/fetch-info-box';
 
@@ -8,9 +9,13 @@ const prev = new Map<number, FetchRecord>();
 
 interface FetchInfoProp {
     /**
-     * 设备序号
+     * 设备
      */
-    usb: number;
+    device: DeviceType | null,
+    /**
+     * 采集记录handle
+     */
+    recordHandle: (arg0: DeviceType) => void,
 }
 
 interface EventMessage {
@@ -28,11 +33,11 @@ interface EventMessage {
  * 采集进度消息组件
  * @param props
  */
-const FetchInfo: FC<FetchInfoProp> = memo(({ usb }) => {
+const FetchInfo: FC<FetchInfoProp> = memo(({ device, recordHandle }) => {
     const [data, setData] = useState<FetchRecord>();
 
     useEffect(() => {
-        ipcRenderer.send('get-last-progress', usb);
+        ipcRenderer.send('get-last-progress', device?.usb);
     }, []);
 
     /**
@@ -41,7 +46,7 @@ const FetchInfo: FC<FetchInfoProp> = memo(({ usb }) => {
      * @param arg
      */
     const progressHandle = (event: IpcRendererEvent, arg: EventMessage) => {
-        if (arg.usb === usb) {
+        if (arg.usb === device?.usb) {
             prev.set(arg.usb, arg.fetchRecord);
             setData(arg.fetchRecord);
         }
@@ -60,7 +65,7 @@ const FetchInfo: FC<FetchInfoProp> = memo(({ usb }) => {
      * # 当用户切回采集页面时，组件要立即加载上（最近）一条进度
      */
     const receiveFetchLastProgressHandle = (event: IpcRendererEvent, arg: EventMessage) => {
-        if (arg.usb === usb) {
+        if (arg.usb === device?.usb) {
             prev.set(arg.usb, arg.fetchRecord);
             setData(arg.fetchRecord);
         }
@@ -74,7 +79,7 @@ const FetchInfo: FC<FetchInfoProp> = memo(({ usb }) => {
         if (data) {
             temp = data;
         } else {
-            temp = prev.get(usb);
+            temp = prev.get(device?.usb!);
         }
 
         switch (temp?.type) {
@@ -93,8 +98,17 @@ const FetchInfo: FC<FetchInfoProp> = memo(({ usb }) => {
     useSubscribe('fetch-progress', progressHandle);
     useSubscribe('fetch-over', fetchOverHandle);
 
+    /**
+     * 采集记录Click
+     * @param event 事件对象
+     */
+    const onRecordClick = (event: MouseEvent<HTMLDivElement>) => {
+        event.stopPropagation();
+        recordHandle(device!);
+    }
+
     return (
-        <FetchInfoBox>
+        <FetchInfoBox onClick={onRecordClick}>
             {setColor()}
         </FetchInfoBox>
     );

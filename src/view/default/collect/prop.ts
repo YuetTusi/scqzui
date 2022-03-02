@@ -23,7 +23,11 @@ interface DeviceFrameProp {
     /**
      * 停止handle
      */
-    onStopHandle: (arg0: DeviceType) => void
+    onStopHandle: (arg0: DeviceType) => void,
+    /**
+     * 操作消息handle
+     */
+    onTipHandle: (arg0: DeviceType) => void
 };
 
 interface FetchButtonProp {
@@ -60,4 +64,11 @@ interface MobileInfoProp {
     recordHandle: (arg0: DeviceType) => void
 }
 
-export { CollectProp, DeviceFrameProp, FetchButtonProp, MobileInfoProp };
+interface CaseInfoProp {
+    /**
+     * USB序号
+     */
+    usb: number
+}
+
+export { CollectProp, DeviceFrameProp, FetchButtonProp, MobileInfoProp, CaseInfoProp };

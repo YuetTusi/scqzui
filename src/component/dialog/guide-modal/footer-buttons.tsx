@@ -12,11 +12,11 @@ const FooterButtons: FC<FooterButtonsProp> = (props) => {
 
 	let buttons: JSX.Element[] = [];
 
-	if (!helper.isNullOrUndefined(device.tipNoButton)) {
+	if (!helper.isNullOrUndefined(device?.tipNoButton)) {
 		buttons.push(
 			<Button
 				onClick={() => {
-					if (device.tipNoButton?.confirm) {
+					if (device?.tipNoButton?.confirm) {
 						Modal.confirm({
 							content: device.tipNoButton?.confirm,
 							onOk() {
@@ -27,19 +27,20 @@ const FooterButtons: FC<FooterButtonsProp> = (props) => {
 							centered: true
 						});
 					} else {
-						props.noHandle(device.tipNoButton?.value, device);
+						props.noHandle(device?.tipNoButton?.value, device!);
 					}
 				}}
+				key="NoButton"
 				type="default">
-				{device.tipNoButton?.name}
+				{device?.tipNoButton?.name}
 			</Button>
 		);
 	}
-	if (!helper.isNullOrUndefined(device.tipYesButton)) {
+	if (!helper.isNullOrUndefined(device?.tipYesButton)) {
 		buttons.push(
 			<Button
 				onClick={() => {
-					if (device.tipYesButton?.confirm) {
+					if (device?.tipYesButton?.confirm) {
 						Modal.confirm({
 							content: device.tipYesButton?.confirm,
 							onOk() {
@@ -50,11 +51,12 @@ const FooterButtons: FC<FooterButtonsProp> = (props) => {
 							centered: true
 						});
 					} else {
-						props.yesHandle(device.tipYesButton?.value, device);
+						props.yesHandle(device?.tipYesButton?.value, device!);
 					}
 				}}
+				key="YesButton"
 				type="primary">
-				{device.tipYesButton?.name}
+				{device?.tipYesButton?.name}
 			</Button>
 		);
 	}

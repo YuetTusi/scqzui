@@ -20,6 +20,13 @@ const DevicePanel = styled.div`
     flex-wrap: nowrap;
     padding:20px;
     background-color:#202940;
+
+    & > div{
+        &:first-child{
+            margin-left: 10px;
+        }
+        margin-left: 20px;
+    }
 `;
 
 export { ContentBox, DevicePanel };

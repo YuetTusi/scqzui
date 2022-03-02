@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, MouseEvent } from 'react';
 import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
 import { FetchState } from '@/schema/device-state';
@@ -18,7 +18,25 @@ const FetchButton: FC<FetchButtonProp> = ({
     onStopHandle
 }) => {
 
-    switch (device.fetchState) {
+    /**
+     * 停止取证Click
+     * @param event 事件对象
+     */
+    const onStopClick = (event: MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        Modal.confirm({
+            title: '停止',
+            content: '确定停止取证？',
+            okText: '是',
+            cancelText: '否',
+            centered: true,
+            onOk() {
+                onStopHandle(device);
+            }
+        });
+    }
+
+    switch (device?.fetchState) {
         case FetchState.NotConnected:
             return <Group>
                 <Button onClick={() => onHelpHandle(DeviceSystem.Android)} type="primary">安卓帮助</Button>
@@ -33,18 +51,12 @@ const FetchButton: FC<FetchButtonProp> = ({
             </Group>
         case FetchState.Fetching:
             return <Group>
-                <Button onClick={() => {
-                    Modal.confirm({
-                        title: '停止',
-                        content: '确定停止取证？',
-                        okText: '是',
-                        cancelText: '否',
-                        centered: true,
-                        onOk() {
-                            onStopHandle(device);
-                        }
-                    });
-                }} type="primary" disabled={device.isStopping}>停止取证</Button>
+                <Button
+                    onClick={onStopClick}
+                    type="primary"
+                    disabled={device.isStopping}>
+                    {device.isStopping ? '停止中' : '停止取证'}
+                </Button>
             </Group>;
         default:
             return <Group>

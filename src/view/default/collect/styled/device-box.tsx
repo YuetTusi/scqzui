@@ -11,45 +11,47 @@ const DeivceBox = styled.div`
     width:300px;
     height:400px;
     padding: 10px;
-    margin-left: 10px;
     border-radius: 5px;
-    /* border-radius:${(props) => props.theme['border-radius-base']}; */
-    background-image:linear-gradient(rgba(52,172,224,1),rgba(34,126,165,1));
+    background-color:#056099;
+
     &.not-connected{
-        background-image:linear-gradient(rgba(52,172,224,0.2),rgba(34,126,165,0.2));
+        background-color:rgba(34,126,165,0.2);
     }
     &.connected{
-        background-image:linear-gradient(#2d98da,#056099);
+        background-color:#056099;
     }
     &.fetching{
-        background-image:linear-gradient(#2d98da,#056099);
+        background-color:#056099;
     }
     &.finished{
-        background-image:linear-gradient(#2d98da,#056099);
+        background-color:#056099;
     }
     &.has-error{
-        background-image:linear-gradient(#2d98da,#056099);
+        background-color:#056099;
     }
 
     .ico{
-        flex:4;
+        height: 170px;
+        width:100%;
+        border-bottom: 1px solid #a9afbbd1;
         display:flex;
         flex-direction: column;
         justify-content:center;
         align-items:center;
-        font-size: 8rem;
+        font-size: 10rem;
 
         .ant-progress-text{
             color:#fff;
         }
     }
     .fns{
-        flex:5;
+        flex:1;
         display:flex;
         flex-direction: column;
-        justify-content:center;
+        justify-content:space-around;
         align-items:center;
         width: 100%;
+        padding: 10px 0;
         .help{
             &>div{
                 padding:2px 0;
@@ -103,10 +105,27 @@ const DeivceBox = styled.div`
         .buttons{
             display: flex;
             flex-direction: row;
-            padding-top: 20px;
+            padding-top: 10px;
             &>.ant-btn-group{
                 flex:1;
             }
+        }
+    }
+
+    &.flash {
+        cursor: pointer;
+        animation: flashBg 0.6s ease-out infinite;
+    }
+
+    @keyframes flashBg {
+        0% {
+            background-color:#cc0b15;
+        }
+        50% {
+            background-color: #a3030b;
+        }
+        100% {
+            background-color: #cc0b15;
         }
     }
 `;

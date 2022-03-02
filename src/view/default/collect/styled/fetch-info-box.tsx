@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 const FetchInfoBox = styled.div`
+cursor: pointer;
 font-size: 1.2rem;
 .info-danger {
     color: #dc143c;

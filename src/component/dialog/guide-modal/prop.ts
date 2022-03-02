@@ -1,6 +1,6 @@
 import DeviceType from "@/schema/device-type";
 
-interface Prop {
+interface GuideModalProp {
     /**
      * 是否显示
      */
@@ -8,7 +8,7 @@ interface Prop {
     /**
      * 设备
      */
-    device: DeviceType;
+    device: DeviceType | null;
     /**
      * 是回调
      */
@@ -27,7 +27,7 @@ interface FooterButtonsProp {
     /**
      * 设备
      */
-    device: DeviceType;
+    device: DeviceType | null;
     /**
      * 是回调
      */
@@ -38,4 +38,4 @@ interface FooterButtonsProp {
     noHandle: (value: any, data: DeviceType) => void;
 }
 
-export { Prop, FooterButtonsProp };
+export { GuideModalProp, FooterButtonsProp };
