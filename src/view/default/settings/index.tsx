@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuildingColumns, faRegistered, faCrosshairs } from '@fortawesome/free-solid-svg-icons';
-import { helper } from '@/utils/helper';
 import { NavLink, Route } from 'dva/router';
 import { MenuPanel } from './styled/menu';
 import { SettingLayout } from './styled/sub-layout';

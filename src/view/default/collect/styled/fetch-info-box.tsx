@@ -4,7 +4,7 @@ const FetchInfoBox = styled.div`
 cursor: pointer;
 font-size: 1.2rem;
 .info-danger {
-    color: #dc143c;
+    color: #f5222d;
 }
 
 .info-primary {

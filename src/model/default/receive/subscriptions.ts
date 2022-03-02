@@ -89,7 +89,7 @@ export default {
                 case CommandType.TipClear:
                     console.log(`清理USB-${command.msg.usb}消息`);
                     logger.info(`清理消息(TipClear): USB-${command.msg.usb}`);
-                    dispatch({ type: 'clearTip', payload: command.msg.usb });
+                    dispatch({ type: 'device/clearTip', payload: command.msg.usb });
                     break;
                 case CommandType.SmsMsg:
                     console.log(`云取验证码进度消息-${command.msg.usb}消息`);

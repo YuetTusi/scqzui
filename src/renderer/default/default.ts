@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, IpcRendererEvent } from 'electron';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import 'dayjs/locale/zh-cn';
@@ -6,6 +6,7 @@ import { createHashHistory as createHistory } from 'history';
 import dva from 'dva';
 import immer from 'dva-immer';
 import messageBox from 'antd/lib/message';
+import notification from 'antd/lib/notification';
 // import 'antd/dist/antd.less';
 import 'antd/dist/antd.dark.less';
 // import 'antd/dist/antd.compact.less';
@@ -40,6 +41,37 @@ const app = dva({ history: createHistory() });
         });
     }
 })();
+
+ipcRenderer.on('show-notification', (event: IpcRendererEvent, info: any) => {
+    //显示notification消息
+    let { message, description, type = 'info' } = info;
+    switch (type) {
+        case 'info':
+            notification.info({
+                message,
+                description
+            });
+            break;
+        case 'error':
+            notification.error({
+                message,
+                description
+            });
+            break;
+        case 'success':
+            notification.success({
+                message,
+                description
+            });
+            break;
+        default:
+            notification.info({
+                message,
+                description
+            });
+            break;
+    }
+});
 
 app.use(immer());
 app.use({
