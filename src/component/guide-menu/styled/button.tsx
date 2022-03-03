@@ -80,7 +80,7 @@ const Image = styled.div`
 
         &>.desc-mask{
             position: absolute;
-            background-color:rgba(34,34,34,0.8);
+            background-color:rgba(34,34,34,0.7);
             color:#fff;
             top: 0;
             left:0;
@@ -92,7 +92,6 @@ const Image = styled.div`
             flex-direction: column;
             justify-content: center;
             align-items: center;
-
             white-space: nowrap;
             overflow: hidden;
             text-overflow: hidden;
@@ -108,10 +107,12 @@ const Image = styled.div`
         from{
             display:flex;
             width:0%;
+            opacity: 0%;
         }
         to{ 
             display:flex;
             width:100%;
+            opacity: 100%;
         }
     }
 `;

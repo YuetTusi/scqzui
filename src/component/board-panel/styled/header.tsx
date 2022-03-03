@@ -13,7 +13,7 @@ const Header = styled.div`
     align-items: center;
     font-size: 2rem;
     font-weight: lighter;
-    color:#fff;
+    color:${(props => props.theme['text-color'])};
     height:50px;
 
     &>div{

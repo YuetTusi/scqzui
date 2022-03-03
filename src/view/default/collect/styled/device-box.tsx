@@ -7,7 +7,7 @@ const DeivceBox = styled.div`
     flex-direction: column;
     justify-content:center;
     align-items:center;
-    color:#fff;
+    color:${(props => props.theme['text-color'])};
     width:300px;
     height:400px;
     padding: 10px;
@@ -41,7 +41,7 @@ const DeivceBox = styled.div`
         font-size: 10rem;
 
         .ant-progress-text{
-            color:#fff;
+            color:${(props => props.theme['text-color'])};
         }
     }
     .fns{
@@ -61,7 +61,7 @@ const DeivceBox = styled.div`
             }
             &>.progress{
                 padding: 10px 5px;
-                color:#fff;
+                color:${(props => props.theme['text-color'])};
                 font-size: 1.2rem;
             }
             p{
@@ -136,7 +136,7 @@ const Nothing = styled.div`
     align-items: center;
     width:100%;
     .nothing-desc{
-        color:#ffffffd9;
+        color:${(props => props.theme['text-color'])};
     }
 `;
 

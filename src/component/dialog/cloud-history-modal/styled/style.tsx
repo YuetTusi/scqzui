@@ -36,7 +36,7 @@ export const CloudHistoryModalBox = styled.div`
 
             label {
                 flex: none;
-                color: #fff;
+                color: ${(props => props.theme['text-color'])};
                 align-self: center;
             }
 

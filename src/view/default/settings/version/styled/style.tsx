@@ -72,7 +72,7 @@ const LogListBox = styled.div`
 		margin: 0 10px;
 		border-radius: 2px;
 		text-shadow: 1px 1px 1px #222;
-		color: #fff;
+		color: ${(props => props.theme['text-color'])};
 		background-color: ${(props) => props.theme['primary-color']};
 		& > span {
 			margin-left: 1rem;
@@ -105,7 +105,7 @@ const LogListBox = styled.div`
 	li {
 		list-style-type: none;
 		padding: 5px;
-		color: #fff;
+		color: ${(props => props.theme['text-color'])};
         border-bottom: 1px solid #2a2a2a;
 		/* &:nth-child(2n + 1) {
 			background-color: #181d30;

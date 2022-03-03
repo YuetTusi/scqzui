@@ -50,7 +50,7 @@ export const CloudCodeModalBox = styled.div`
 		display: flex;
 		strong {
 			display: block;
-			color: #fff;
+			color: ${(props => props.theme['text-color'])};
 			font-weight: bold;
 			font-size: 1.2rem;
 			width: 240px;

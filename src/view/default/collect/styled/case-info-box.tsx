@@ -9,7 +9,7 @@ const CaseInfoBox = styled.div`
         align-items: center;
         & > .txt{
             display: inline-block;
-            color:#fff;
+            color:${(props => props.theme['text-color'])};
             width: 90px;
             &:after{
                 content:"："

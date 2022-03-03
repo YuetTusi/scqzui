@@ -7,7 +7,7 @@ const InstructionBox = styled.div`
 		padding-bottom: 0 0 2px 0;
 
 		& > em {
-			color: #fff;
+			color: ${(props => props.theme['text-color'])};
 			font-weight: 600;
 			font-style: normal;
 			text-decoration: none;

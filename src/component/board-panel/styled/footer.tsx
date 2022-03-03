@@ -6,7 +6,7 @@ const Footer = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    color:#fff;
+    color:${(props => props.theme['text-color'])};
     height:50px;
 
     position:absolute;
