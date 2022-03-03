@@ -4,7 +4,7 @@ import styled from 'styled-components';
  * 设置页左右分栏
  */
 const Layout = styled.div`
-
+    position: relative;
     width:auto;
     height: 100%;
     display:flex;

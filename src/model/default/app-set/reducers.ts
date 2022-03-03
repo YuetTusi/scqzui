@@ -4,6 +4,13 @@ import { AppSetStore } from ".";
 
 export default {
     /**
+     * 设置全局读取状态
+     */
+    setReading(state: AppSetStore, { payload }: AnyAction) {
+        state.reading = payload;
+        return state;
+    },
+    /**
      * 设置警综平台数据
      * @param {SendCase | null} payload 平台数据，清空数据传null
      */

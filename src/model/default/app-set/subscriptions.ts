@@ -254,5 +254,13 @@ export default {
         ipcRenderer.on('get-storage', (event: IpcRendererEvent, key: string) => {
             ipcRenderer.send('get-storage', localStorage.getItem(key));
         });
+    },
+    /**
+     * 设置加载状态
+     */
+    setLoading({ dispatch }: SubscriptionAPI) {
+        dispatch({ type: 'setReading', payload: true });
+        setTimeout(() =>
+            dispatch({ type: 'setReading', payload: false }), 1000);
     }
 };

@@ -5,6 +5,7 @@ import localeCN from 'antd/es/locale/zh_CN';
 import ConfigProvider from 'antd/lib/config-provider';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '@/styled/global-style';
+import { LoadView } from '@/component/loading';
 import BoardPanel from '@/component/board-panel';
 import LayoutPanel from '@/component/layout-panel/layout-panel';
 import theme from '../../../theme/cyan.json';
@@ -31,7 +32,7 @@ const createRouter = (api?: RouterAPI) => {
 									() => import('@/view/default/guide')
 								);
 								return (
-									<Suspense fallback={<div>加载中</div>}>
+									<Suspense fallback={<LoadView />}>
 										<BoardPanel>
 											<Next />
 										</BoardPanel>
@@ -47,7 +48,7 @@ const createRouter = (api?: RouterAPI) => {
 									() => import('@/view/default/collect')
 								);
 								return (
-									<Suspense fallback={<div>加载中</div>}>
+									<Suspense fallback={<LoadView />}>
 										<LayoutPanel>
 											<Next />
 										</LayoutPanel>
@@ -61,7 +62,7 @@ const createRouter = (api?: RouterAPI) => {
 								const Next = lazy<FC<any>>(
 									() => import('@/view/default/settings/index')
 								);
-								return <Suspense fallback={<div>加载中</div>}>
+								return <Suspense fallback={<LoadView />}>
 									<LayoutPanel>
 										<Next />
 									</LayoutPanel>

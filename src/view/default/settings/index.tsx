@@ -2,12 +2,13 @@ import React, { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuildingColumns, faRegistered, faCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, Route } from 'dva/router';
-import { MenuPanel } from './styled/menu';
-import { SettingLayout } from './styled/sub-layout';
-import ContentBox from './content-box';
+import Reading from '@/component/loading/reading';
 import Unit from '@/view/default/settings/unit';
 import DstUnit from '@/view/default/settings/dst-unit';
 import Version from '@/view/default/settings/version';
+import { MenuPanel } from './styled/menu';
+import { SettingLayout } from './styled/sub-layout';
+import ContentBox from './content-box';
 
 // const { max, useBcp, useTraceLogin } = helper.readConf()!;
 
@@ -15,6 +16,7 @@ import Version from '@/view/default/settings/version';
  * 设置布局页
  */
 const Index: FC<{}> = () => <SettingLayout>
+    <Reading />
     <MenuPanel>
         <div className="sub-title">
             软件设置

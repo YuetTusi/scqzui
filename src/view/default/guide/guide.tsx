@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useRef } from 'react';
+import Reading from '@/component/loading/reading';
 import BoardMenu from '@/component/guide-menu';
 import { ExtendPanel } from './styled/extend-panel';
 import { GuideBox } from './styled/box';
 
 const Guide: FC<{}> = () => {
-
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const onPanelWheel = (event: WheelEvent) => {
@@ -19,12 +19,10 @@ const Guide: FC<{}> = () => {
         if (scrollRef.current !== null) {
             scrollRef.current.addEventListener('wheel', onPanelWheel);
         }
-
         return () => {
             scrollRef.current?.removeEventListener('wheel', onPanelWheel);
         };
     }, []);
-
 
     return (
         <GuideBox>
@@ -33,6 +31,7 @@ const Guide: FC<{}> = () => {
                     Dashboard
                 </BoardMenu>
             </ExtendPanel>
+            <Reading />
             <div className="fn-hidden"></div>
         </GuideBox>
     );

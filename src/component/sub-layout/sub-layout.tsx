@@ -3,12 +3,14 @@ import { useDispatch, routerRedux } from 'dva';
 import HomeOutlined from '@ant-design/icons/HomeOutlined';
 import Button from 'antd/lib/button';
 import { Layout, ScrollBox } from './styled/layout';
+import Reading from '../loading/reading';
 
 const SubLayout: FC<{ title?: string }> = ({ title, children }) => {
 
     const dispatch = useDispatch();
 
     return <Layout>
+        <Reading />
         <div className="sub-container">
             <div className="sub-header">
                 <div>{title ?? ''}</div>

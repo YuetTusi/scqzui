@@ -9,6 +9,10 @@ import subscriptions from './subscriptions';
 
 interface AppSetStore {
     /**
+     * 全局读取中状态
+     */
+    reading: boolean,
+    /**
      * 接收平台案件数据
      */
     sendCase: GuangZhouCase | null,
@@ -34,6 +38,7 @@ interface AppSetStore {
 let model: Model = {
     namespace: 'appSet',
     state: {
+        reading: false,
         sendCase: null,
         sendOfficer: [],
         alertMessage: [],
