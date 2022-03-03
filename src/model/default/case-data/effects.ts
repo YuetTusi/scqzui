@@ -1,13 +1,13 @@
-
-import { ipcRenderer } from 'electron';
 import { EffectsCommandMap } from "dva";
 import { AnyAction } from 'redux';
+import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Modal from 'antd/lib/modal';
+import { Db } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { CaseInfo } from "@/schema/case-info";
 import { TableName } from "@/schema/table-name";
 import { DeviceType } from "@/schema/device-type";
-import { Db } from '@/utils/db';
+import BcpEntity from '@/schema/bcp-entity';
 
 export default {
     /**
@@ -15,11 +15,12 @@ export default {
      */
     *fetchCaseData({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
         const { current, pageSize = helper.PAGE_SIZE } = payload;
+        const db = new Db<CaseInfo>(TableName.Case);
         yield put({ type: 'setLoading', payload: true });
         try {
             const [result, total]: [CaseInfo[], number] = yield all([
-                call([ipcRenderer, 'invoke'], 'db-find-by-page', TableName.Case, null, current, pageSize, 'createdAt', -1),
-                call([ipcRenderer, 'invoke'], 'db-count', TableName.Case, null)
+                call([db, 'findByPage'], null, current, pageSize, 'createdAt', -1),
+                call([db, 'count'], null)
             ]);
             yield put({ type: 'setCaseData', payload: result });
             yield put({ type: 'setPage', payload: { current, pageSize, total } });
@@ -47,37 +48,41 @@ export default {
      * @param {string} payload.casePath 案件路径
      */
     *deleteCaseData({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
+        const caseDb = new Db<CaseInfo>(TableName.Case);
+        const deviceDb = new Db<DeviceType>(TableName.Device);
+        const checkDb = new Db<BcpEntity>(TableName.CheckData);
+        const bcpDb = new Db<BcpEntity>(TableName.CreateBcpHistory);
         const modal = Modal.info({
             content: '正在删除，可能时间较长，请不要关闭程序',
             okText: '确定',
             maskClosable: false,
-            okButtonProps: { disabled: true, loading: true }
+            okButtonProps: { disabled: true, icon: LoadingOutlined }
         });
         try {
             yield put({ type: 'setLoading', payload: true });
             let success: boolean = yield helper.delDiskFile(payload.casePath);
             if (success) {
                 //# 磁盘文件成功删除后，删掉数据库相关记录
-                let devicesInCase: DeviceType[] = yield call([ipcRenderer, 'invoke'], 'db-find', TableName.Device, { caseId: payload.id });
+                let devicesInCase: DeviceType[] = yield call([deviceDb, 'find'], { caseId: payload.id });
                 yield all([
-                    call([ipcRenderer, 'invoke'], 'db-remove', TableName.Device, { caseId: payload.id }, true),
-                    call([ipcRenderer, 'invoke'], 'db-remove', TableName.Case, { _id: payload.id })
+                    call([deviceDb, 'remove'], { caseId: payload.id }, true),
+                    call([caseDb, 'remove'], { _id: payload.id })
                 ]);
                 //删除掉点验记录 和 BCP历史记录
                 yield all([
-                    call([ipcRenderer, 'invoke'], 'db-remove', TableName.CheckData, { caseId: payload.id }, true),
-                    call([ipcRenderer, 'invoke'], 'db-remove', TableName.CreateBcpHistory, { deviceId: { $in: devicesInCase.map(i => i.id) } }, true)
+                    call([checkDb, 'remove'], { caseId: payload.id }, true),
+                    call([bcpDb, 'remove'], { deviceId: { $in: devicesInCase.map(i => i.id) } }, true)
                 ]);
-                modal.update({ content: '删除成功', okButtonProps: { disabled: false, loading: false } });
+                modal.update({ content: '删除成功', okButtonProps: { disabled: false, icon: 'check-circle' } });
             } else {
-                modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false } });
+                modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false, icon: 'check-circle' } });
             }
             setTimeout(() => {
                 modal.destroy();
             }, 1000);
         } catch (error) {
             console.log(`@modal/CaseData.ts/deleteCaseData: ${error.message}`);
-            modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false } });
+            modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false, icon: 'check-circle' } });
             setTimeout(() => {
                 modal.destroy();
             }, 1000);

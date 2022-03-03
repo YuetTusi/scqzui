@@ -36,7 +36,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
         </div>
         <div className="case">
             <ColorButton
-                to="/settings"
+                to="/case-data"
                 icon={<FontAwesomeIcon icon={faFileLines} />}
                 color="#1B9CFC">
                 案件管理
@@ -44,7 +44,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
         </div>
         <div className="parse">
             <ColorButton
-                to="/settings"
+                to="/parse"
                 icon={<FontAwesomeIcon icon={faBrain} />}
                 color="#FD7272">
                 数据解析
@@ -52,7 +52,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
         </div>
         <div className="tool">
             <ImageButton
-                to="/settings"
+                to="/tool"
                 icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
                 src={tool}
                 description={<ul>
@@ -63,7 +63,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
         </div>
         <div className="log">
             <ColorButton
-                to=""
+                to="/user-log"
                 icon={<FontAwesomeIcon icon={faUserPen} />}
                 color="#58B19F">
                 操作日志

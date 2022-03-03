@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
+import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Modal from 'antd/lib/modal';
 import { LocalStoreKey } from '@/utils/local-store';
 import { helper } from '@/utils/helper';
@@ -57,7 +58,9 @@ export default {
                     content: '正在处理数据，请稍候...',
                     okText: '确定',
                     maskClosable: false,
-                    okButtonProps: { disabled: true, icon: 'loading' }
+                    okButtonProps: {
+                        disabled: true, icon: LoadingOutlined
+                    }
                 });
                 yield fork([db, 'update'],
                     { _id: { $in: updateId } },

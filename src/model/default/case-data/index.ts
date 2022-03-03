@@ -3,7 +3,7 @@ import { Model } from "dva";
 import reducers from './reducers';
 import effects from './effects';
 import { helper } from "@/utils/helper";
-import CaseInfo from "@/schema/case-info";
+import { CaseInfo } from "@/schema/case-info";
 
 /**
  * 仓库Model
@@ -24,7 +24,7 @@ interface CaseDataState {
     /**
      * 案件数据
      */
-    caseData: CaseInfo[];
+    caseData: any[];
     /**
      * 加载中
      */

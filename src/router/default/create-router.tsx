@@ -5,6 +5,7 @@ import localeCN from 'antd/es/locale/zh_CN';
 import ConfigProvider from 'antd/lib/config-provider';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '@/styled/global-style';
+import NotFound from '@/component/not-found/not-found';
 import { LoadView } from '@/component/loading';
 import BoardPanel from '@/component/board-panel';
 import LayoutPanel from '@/component/layout-panel/layout-panel';
@@ -57,6 +58,22 @@ const createRouter = (api?: RouterAPI) => {
 							}}
 						/>
 						<Route
+							path="/case-data"
+							exact={true}
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/case/case-data')
+								);
+								return (
+									<Suspense fallback={<LoadView />}>
+										<LayoutPanel>
+											<Next />
+										</LayoutPanel>
+									</Suspense>
+								);
+							}}
+						/>
+						<Route
 							path="/settings"
 							render={() => {
 								const Next = lazy<FC<any>>(
@@ -69,7 +86,7 @@ const createRouter = (api?: RouterAPI) => {
 								</Suspense>;
 							}}
 						/>
-						<Route component={() => <h1>无此页面</h1>} />
+						<Route component={() => <LayoutPanel><NotFound /></LayoutPanel>} />
 					</Switch>
 				</Router>
 			</ThemeProvider>
