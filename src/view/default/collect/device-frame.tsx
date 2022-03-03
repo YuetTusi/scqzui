@@ -89,7 +89,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
     if (deviceList.every(item => item === undefined)) {
         return <Nothing>
             <Empty
-                description={<span className="nothing-desc">未检测到设备，请插入USB</span>}
+                description={<div className="nothing-desc">尚未检测到设备，请连接USB</div>}
                 image={Empty.PRESENTED_IMAGE_SIMPLE} />
         </Nothing>
     } else {

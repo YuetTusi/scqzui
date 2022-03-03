@@ -12,7 +12,7 @@ import { FetchLog } from '@/schema/fetch-log';
 import CommandType, { SocketType, Command } from '@/schema/command';
 import { ParseState } from '@/schema/device-state';
 import {
-    deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, /*smsMsg,*/
+    deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,
     parseCurinfo, parseEnd,/* backDatapass,*/ saveCaseFromPlatform, /*importErr,*/
     humanVerify, saveOrUpdateOfficerFromPlatform, /*traceLogin,*/ limitResult,
     appRecFinish, fetchPercent
@@ -94,7 +94,7 @@ export default {
                 case CommandType.SmsMsg:
                     console.log(`云取验证码进度消息-${command.msg.usb}消息`);
                     logger.info(`云取验证码进度消息(SmsMsg)-USB${command.msg.usb}`);
-                    // smsMsg(command, dispatch);
+                    smsMsg(command, dispatch);
                     break;
                 case CommandType.HumanVerify:
                     console.log(`图形验证码消息-${command.msg.usb}消息`);

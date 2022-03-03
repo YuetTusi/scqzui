@@ -51,7 +51,7 @@ export default {
             content: '正在删除，可能时间较长，请不要关闭程序',
             okText: '确定',
             maskClosable: false,
-            okButtonProps: { disabled: true, icon: 'loading' }
+            okButtonProps: { disabled: true, loading: true }
         });
         try {
             yield put({ type: 'setLoading', payload: true });
@@ -68,16 +68,16 @@ export default {
                     call([ipcRenderer, 'invoke'], 'db-remove', TableName.CheckData, { caseId: payload.id }, true),
                     call([ipcRenderer, 'invoke'], 'db-remove', TableName.CreateBcpHistory, { deviceId: { $in: devicesInCase.map(i => i.id) } }, true)
                 ]);
-                modal.update({ content: '删除成功', okButtonProps: { disabled: false, icon: 'check-circle' } });
+                modal.update({ content: '删除成功', okButtonProps: { disabled: false, loading: false } });
             } else {
-                modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false, icon: 'check-circle' } });
+                modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false } });
             }
             setTimeout(() => {
                 modal.destroy();
             }, 1000);
         } catch (error) {
             console.log(`@modal/CaseData.ts/deleteCaseData: ${error.message}`);
-            modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false, icon: 'check-circle' } });
+            modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false } });
             setTimeout(() => {
                 modal.destroy();
             }, 1000);

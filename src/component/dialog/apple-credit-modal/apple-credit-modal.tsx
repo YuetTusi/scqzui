@@ -2,6 +2,7 @@ import React, { FC, memo } from 'react';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
+import { Split } from '@/component/style-tool';
 import debugImg from './images/debug.jpg';
 import { AppleCreditBox } from './styled/style';
 
@@ -34,10 +35,11 @@ const AppleCreditModal: FC<Prop> = ({ visible, okHandle }) => {
 			centered={true}
 			maskClosable={false}
 			closable={false}
-			width={500}>
+			width={500}
+			className="zero-padding-body">
 			<AppleCreditBox>
 				<div className="title">信任授权</div>
-				<hr />
+				<Split />
 				<div className="content">
 					<h3>请点击屏幕上的信任按钮</h3>
 					<img src={debugImg} alt="iPhone信任" />

@@ -113,13 +113,7 @@ const ServerCloudModal: FC<Prop> = ({
     const [appSelectModalVisible, setAppSelectModalVisible] = useState(false);
     const [selectedApps, setSelectedApps] = useState<CloudApp[]>([]);
     const [activePanelKey, setActivePanelKey] = useState('0'); //当前
-    const caseId = useRef<string>(''); //案件id
-    const spareName = useRef<string>(''); //案件备用名
-    const casePath = useRef<string>(''); //案件存储路径
-    const sdCard = useRef<boolean>(false); //是否拉取SD卡
-    const hasReport = useRef<boolean>(false); //是否生成报告
-    const isAuto = useRef<boolean>(false); //是否自动解析
-    const unitName = useRef<string>(''); //检验单位
+    const currentCase = useRef<CaseInfo>(); //当前案件数据
     const historyDeviceName = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENAME));
     const historyDeviceHolder = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER));
     const historyDeviceNumber = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER));
@@ -168,15 +162,7 @@ const ServerCloudModal: FC<Prop> = ({
             let onlyName = opt.m_strCaseName.substring(pos + 1);
             return (
                 <Option
-                    value={onlyName}
-                    data-case-id={opt._id}
-                    data-spare-name={opt.spareName}
-                    data-case-path={opt.m_strCasePath}
-                    data-app-list={opt.m_Applist}
-                    data-sdcard={opt.sdCard}
-                    data-has-report={opt.hasReport}
-                    data-is-auto={opt.m_bIsAutoParse}
-                    data-unitname={opt.m_strCheckUnitName}
+                    value={JSON.stringify(opt)}
                     key={opt._id}>
                     {`${name}（${helper
                         .parseDate(tick, 'YYYYMMDDHHmmss')
@@ -190,23 +176,11 @@ const ServerCloudModal: FC<Prop> = ({
      * 案件下拉Change
      */
     const caseChange = (value: string, option: JSX.Element | JSX.Element[]) => {
-        caseId.current = (option as JSX.Element).props['data-case-id'] as string;
-        spareName.current = (option as JSX.Element).props['data-spare-name'] as string;
-        casePath.current = (option as JSX.Element).props['data-case-path'] as string;
-        isAuto.current = (option as JSX.Element).props['data-is-auto'] as boolean;
-        sdCard.current = (option as JSX.Element).props['data-sdcard'] as boolean;
-        hasReport.current = (option as JSX.Element).props['data-has-report'] as boolean;
-        unitName.current = (option as JSX.Element).props['data-unitname'] as string;
+        currentCase.current = JSON.parse(value) as CaseInfo;
     };
 
     const resetValue = () => {
-        caseId.current = ''; //案件id
-        spareName.current = '';
-        casePath.current = ''; //案件存储路径
-        sdCard.current = false; //是否拉取SD卡
-        hasReport.current = false; //是否生成报告
-        isAuto.current = false; //是否自动解析
-        unitName.current = ''; //检验单位
+        currentCase.current = undefined;
         setSelectedApps([]);
         formRef.resetFields();
     };
@@ -234,14 +208,14 @@ const ServerCloudModal: FC<Prop> = ({
                 message.info('请选择云取证App');
             } else {
                 let entity = new FetchData(); //采集数据
-                entity.caseName = values.case;
-                entity.spareName = spareName.current;
-                entity.caseId = caseId.current;
-                entity.casePath = casePath.current;
-                entity.sdCard = sdCard.current ?? false;
-                entity.hasReport = hasReport.current ?? false;
-                entity.isAuto = isAuto.current;
-                entity.unitName = unitName.current;
+                entity.caseName = currentCase.current?.m_strCaseName;
+                entity.spareName = currentCase.current?.spareName;
+                entity.caseId = currentCase.current?._id;
+                entity.casePath = currentCase.current?.m_strCasePath;
+                entity.sdCard = currentCase.current?.sdCard ?? false;
+                entity.hasReport = currentCase.current?.hasReport ?? false;
+                entity.isAuto = currentCase.current?.m_bIsAutoParse;
+                entity.unitName = currentCase.current?.m_strCheckUnitName;
                 entity.mobileNumber = values.mobileNumber;
                 entity.mobileName = `${values.phoneName}_${helper.timestamp(device?.usb)}`;
                 entity.mobileNo = values.deviceNumber ?? '';
@@ -257,7 +231,7 @@ const ServerCloudModal: FC<Prop> = ({
                 entity.cloudTimespan = values.cloudTimespan ?? getTimeFromStorage(LocalStoreKey.CloudTimespan);
                 entity.isAlive = values.isAlive ?? false;
 
-                let disk = casePath.current.substring(0, 2);
+                let disk = currentCase.current!.m_strCasePath.substring(0, 2);
                 const { FreeSpace } = await helper.getDiskInfo(disk, true);
                 if (FreeSpace < 100) {
                     Modal.confirm({

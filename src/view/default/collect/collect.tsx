@@ -27,7 +27,9 @@ import {
     HelpModal,
     ApplePasswordModal,
     UMagicCodeModal,
-    GuideModal
+    GuideModal,
+    CloudCodeModal,
+    CloudHistoryModal
 } from '@/component/dialog';
 import NormalInputModal from './normal-input-modal';
 import ServerCloudModal from './server-cloud-modal';
@@ -53,6 +55,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     const [applePasswordVisible, setApplePasswordVisible] = useState<boolean>(false);
     const [uMagicCodeModalVisible, setUMagicCodeModalVisible] = useState<boolean>(false);
     const [guideModalVisible, setGuideModalVisible] = useState<boolean>(false);
+    const [cloudHistoryModalVisible, setCloudHistoryModalVisible] = useState<boolean>(false);
     const currentDevice = useRef<DeviceType | null>(null);
     const dataMode = useRef<DataMode>(DataMode.Self);
 
@@ -254,6 +257,9 @@ const Collect: FC<CollectProp> = ({ }) => {
         if (fetchData.mode === DataMode.ServerCloud) {
             //#云取证把应用数据赋值给cloudCodeModal模型，以接收验证码详情
             const { usb } = currentDevice.current!;
+            console.clear();
+            console.log('赋值云取应用到cloudCodeModal');
+            console.log(fetchData.cloudAppList);
             dispatch({
                 type: 'cloudCodeModal/setApps',
                 payload: {
@@ -281,7 +287,7 @@ const Collect: FC<CollectProp> = ({ }) => {
         currentDevice.current = data;
         switch (data.mode) {
             case DataMode.ServerCloud:
-                // this.setState({ cloudHistoryModalVisible: true });
+                setCloudHistoryModalVisible(true);
                 break;
             default:
                 setLiveModalVisible(true);
@@ -311,31 +317,54 @@ const Collect: FC<CollectProp> = ({ }) => {
     };
 
     /**
+     * 显示云取证验证码详情框
+     * @param data 当前设备数据
+     */
+    const showCloudCodeModal = ({ usb }: DeviceType) => {
+        //note: Code for test
+        // dispatch({
+        // 	type: 'cloudCodeModal/setApps',
+        // 	payload: {
+        // 		usb: data.usb,
+        // 		mobileHolder: data.mobileHolder,
+        // 		mobileNumber: data.mobileNumber,
+        // 		apps: data.cloudAppList
+        // 	}
+        // });
+        dispatch({
+            type: 'cloudCodeModal/setVisible',
+            payload: { usb, visible: true }
+        });
+    };
+
+    /**
      * 操作消息handle
      */
     const tipHandle = (data: DeviceType) => {
-        currentDevice.current = data;
-        switch (data.tipType) {
-            case TipType.Normal:
-            case TipType.Flash:
-                //后台定制弹框
-                setGuideModalVisible(true);
-                break;
-            case TipType.ApplePassword:
-                //iTunes备份密码确认弹框
-                setApplePasswordVisible(true);
-                break;
-            case TipType.CloudCode:
-                //云取证验证码弹框
-                // this.showCloudCodeModal(data);
-                break;
-            case TipType.UMagicCode:
-                //联通验证码弹框
-                setUMagicCodeModalVisible(true);
-                break;
-            default:
-                console.warn('未知TipType', data.tipType);
-                break;
+        if (data?.fetchState === FetchState.Fetching) {
+            currentDevice.current = data;
+            switch (data.tipType) {
+                case TipType.Normal:
+                case TipType.Flash:
+                    //后台定制弹框
+                    setGuideModalVisible(true);
+                    break;
+                case TipType.ApplePassword:
+                    //iTunes备份密码确认弹框
+                    setApplePasswordVisible(true);
+                    break;
+                case TipType.CloudCode:
+                    //云取证验证码弹框
+                    showCloudCodeModal(data);
+                    break;
+                case TipType.UMagicCode:
+                    //联通验证码弹框
+                    setUMagicCodeModalVisible(true);
+                    break;
+                default:
+                    console.warn('未知TipType', data.tipType);
+                    break;
+            }
         }
     }
 
@@ -434,6 +463,15 @@ const Collect: FC<CollectProp> = ({ }) => {
         setGuideModalVisible(false);
     };
 
+    /**
+     * 关闭短信验证码弹框
+     */
+    const cloudCodeModalCancelHandle = () =>
+        dispatch({
+            type: 'cloudCodeModal/setVisible',
+            payload: { visible: false }
+        });
+
     return <SubLayout title="设备取证">
         <ContentBox>
             <div>
@@ -509,6 +547,15 @@ const Collect: FC<CollectProp> = ({ }) => {
             yesHandle={guideHandle}
             noHandle={guideHandle}
             cancelHandle={() => setGuideModalVisible(false)}
+        />
+        <CloudCodeModal
+            device={currentDevice.current}
+            cancelHandle={cloudCodeModalCancelHandle}
+        />
+        <CloudHistoryModal
+            device={currentDevice.current}
+            visible={cloudHistoryModalVisible}
+            cancelHandle={() => setCloudHistoryModalVisible(false)}
         />
     </SubLayout>
 };

@@ -539,13 +539,13 @@ const helper = {
      * @param appData yaml应用数据
      * @param id 应用id
      */
-    // getAppDesc(appData: AppCategory[], id: string) {
-    //     const { desc } = appData
-    //         .map((i: any) => i.app_list)
-    //         .flat()
-    //         .find((i: any) => i.app_id === id);
-    //     return desc ? desc : id;
-    // },
+    getAppDesc(appData: AppCategory[], id: string) {
+        const { desc } = appData
+            .map((i: any) => i.app_list)
+            .flat()
+            .find((i: any) => i.app_id === id);
+        return desc ? desc : id;
+    },
     /**
      * 验证案件名称是否存在
      * @param {string} caseName 案件名称

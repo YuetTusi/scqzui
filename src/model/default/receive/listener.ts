@@ -26,7 +26,7 @@ import { TableName } from "@/schema/table-name";
 import { GuangZhouCase } from '@/schema/platform/guangzhou-case';
 import { HumanVerify } from '@/schema/human-verify';
 import { DataMode } from '@/schema/data-mode';
-import { CloudAppMessages } from '@/schema/cloud-app-messages';
+import { CaptchaMsg, CloudAppMessages } from '@/schema/cloud-app-messages';
 import { Db } from '@/utils/db';
 // import { LoginState } from '@/model/settings/TraceLogin';
 
@@ -176,22 +176,22 @@ export function tipMsg({ msg }: Command<{
 /**
  * 接收短信云取证验证码详情（单条）
  */
-// export function smsMsg({ msg }: Command<{
-//     usb: number,
-//     appId: string,
-//     disabled: boolean,
-//     message: CaptchaMsg
-// }>, dispatch: Dispatch<any>) {
-//     const { usb, appId, disabled } = msg;
-//     dispatch({
-//         type: 'cloudCodeModal/appendMessage', payload: {
-//             usb,
-//             disabled,
-//             m_strID: appId,
-//             message: { ...msg.message, actionTime: new Date() }
-//         }
-//     });
-// }
+export function smsMsg({ msg }: Command<{
+    usb: number,
+    appId: string,
+    disabled: boolean,
+    message: CaptchaMsg
+}>, dispatch: Dispatch<any>) {
+    const { usb, appId, disabled } = msg;
+    dispatch({
+        type: 'cloudCodeModal/appendMessage', payload: {
+            usb,
+            disabled,
+            m_strID: appId,
+            message: { ...msg.message, actionTime: new Date() }
+        }
+    });
+}
 
 /**
  * 接收图形验证数据（滑块&点选文字）

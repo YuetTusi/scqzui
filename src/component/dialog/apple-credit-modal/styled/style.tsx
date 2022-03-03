@@ -3,12 +3,12 @@ import styled from 'styled-components';
 const AppleCreditBox = styled.div`
     hr {
         border-top   : none;
-        border-bottom: 1px soild #d6d6d6;
+        border-bottom: 1px soild #303030;
     }
 
     .title {
         font-size  : 18px;
-        font-weight: bolder;
+        padding: 20px 10px 10px 20px;
     }
 
     .content {
@@ -16,6 +16,7 @@ const AppleCreditBox = styled.div`
         flex-direction : column;
         justify-content: center;
         align-items    : center;
+        padding: 5px;
 
         h3 {
             color      : ${(props) => props.theme['primary-color']};
@@ -25,7 +26,7 @@ const AppleCreditBox = styled.div`
         img {
             width        : 277px;
             height       : 500px;
-            border       : 1px solid #e8e8e8;
+            border       : 1px solid #303030;
             border-radius: 5px;
             padding      : 5px;
         }

@@ -101,6 +101,14 @@ span.tmpzTreeMove_arrow {
 }
 
 .ztree {
+	li span.button{
+		background-image:url("./images/ztree/zTreeStandard.png") !important;
+	}
+	li a.curSelectedNode{
+		color:#fff;
+		border:1px #0b706c solid;
+		background-color: #0fb9b1;
+	}
 	.tree-node-tip {
 		& > h6 {
 			font-size: 12px;

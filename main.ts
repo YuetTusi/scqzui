@@ -248,6 +248,12 @@ ipcMain.on('run-service', () => {
             path.join(appPath, '../../../', config?.yqPath ?? './yq'),
             ['-config', './agent.json', '-log_dir', './log']
         );
+        // helper.runProc(
+        //     yunProcess,
+        //     config!.yqExe ?? 'yqRPC.exe',
+        //     path.join('D:\\Electronic\\ElectronicForensics\\yq'),
+        //     ['-config', './agent.json', '-log_dir', './log']
+        // );
     }
     if (config!.useTraceLogin) {
         //有应用痕迹查询，调起服务
@@ -330,8 +336,6 @@ ipcMain.on('show-protocol', (event, fetchData) => {
 
 //启动&停止计时
 ipcMain.on('time', (event, usb, isStart) => {
-    console.log(`time事件 - usb:${usb},isStart:${isStart}`);
-    console.log('timerWindow:', timerWindow);
     if (timerWindow !== null) {
         timerWindow.webContents.send('time', usb, isStart);
     }
@@ -365,7 +369,6 @@ ipcMain.on('progress-clear', (event, usb) =>
 );
 //获取当前USB序号的采集进度数据
 ipcMain.on('get-fetch-progress', (event, usb) => {
-    console.log(`'get-fetch-progress,usb:${usb}`);
     fetchRecordWindow!.webContents.send('get-fetch-progress', usb);
 });
 //获取当前USB序号最新一条进度消息
@@ -399,15 +402,15 @@ ipcMain.handle('write-net-json', (event, servicePort: number) =>
 
 //显示原生系统消息
 ipcMain.on('show-notice', (event, { title, message }) =>
-	notifier.notify({
-		sound: true,
-		type: 'info',
-		title: title || '消息',
-		message: message || '有消息反馈请查阅'
-	})
+    notifier.notify({
+        sound: true,
+        type: 'info',
+        title: title || '消息',
+        message: message || '有消息反馈请查阅'
+    })
 );
 
 //显示notification消息,参数为消息文本
 ipcMain.on('show-notification', (event, args) => {
-	mainWindow!.webContents.send('show-notification', args);
+    mainWindow!.webContents.send('show-notification', args);
 });

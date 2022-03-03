@@ -136,7 +136,7 @@ const Nothing = styled.div`
     align-items: center;
     width:100%;
     .nothing-desc{
-        color:#fff;
+        color:#ffffffd9;
     }
 `;
 

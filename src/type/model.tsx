@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'dva/router';
 import { DeviceStoreState } from '@/model/default/device';
 import { AppSetStore } from '@/model/default/app-set';
 import { CaseDataState } from '@/model/default/case-data';
+import { CloudCodeModalStoreState } from '@/model/default/cloud-code-modal';
 
 declare global {
 	interface Window {
@@ -32,6 +33,7 @@ interface StateTree {
 	appSet: AppSetStore,
 	device: DeviceStoreState,
 	caseData: CaseDataState,
+	cloudCodeModal: CloudCodeModalStoreState,
 	[modelName: string]: any
 }
 

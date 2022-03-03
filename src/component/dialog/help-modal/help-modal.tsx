@@ -41,7 +41,8 @@ const HelpModal: FC<Prop> = ({ visible, defaultTab, okHandle }) => (
 		closable={false}
 		destroyOnClose={true}
 		maskClosable={false}
-		centered={true}>
+		centered={true}
+		className="zero-padding-body">
 		<HelpModalBox>
 			<Tabs defaultActiveKey={defaultTab} tabPosition="left">
 				<TabPane tab="小米" key={GuideImage.MiBackup}>

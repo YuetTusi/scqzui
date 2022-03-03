@@ -367,7 +367,7 @@ export default {
                 serial: fetchData.serial,
                 mode: fetchData.mode,
                 phonePath,
-                cloudAppList: deviceData.cloudAppList ?? []
+                cloudAppList: fetchData.cloudAppList ?? []
             }
         });
 
