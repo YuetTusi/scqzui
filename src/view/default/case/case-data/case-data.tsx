@@ -86,7 +86,7 @@ const CaseData: FC<{}> = ({ }) => {
                 </Button> */}
                     <Button
                         type="primary"
-                        onClick={() => dispatch(routerRedux.push('/case/case-add'))}>
+                        onClick={() => dispatch(routerRedux.push('/case-data/add'))}>
                         <PlusCircleOutlined />
                         <span>创建新案件</span>
                     </Button>

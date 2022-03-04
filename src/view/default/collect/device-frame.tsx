@@ -94,36 +94,63 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
         </Nothing>
     } else {
 
-        const list = deviceList.map((item, index) => {
-            if (item === undefined) {
-                return null;
-            } else {
-                return <Ribbon text={getTipTxt(item)} key={`USB_${item?.usb ?? index}`}>
-                    <DeivceBox
-                        onClick={() => onTipHandle(item)}
-                        className={getClassNameByState(item)}>
-                        <div className="ico">
-                            <MobileIco device={item} />
-                        </div>
-                        <div className="fns">
-                            <MobileInfo
-                                device={item}
-                                recordHandle={() => onRecordHandle(item)}
-                            />
-                            <div className="buttons">
-                                <FetchButton
-                                    device={item}
-                                    onHelpHandle={onHelpHandle}
-                                    onNormalHandle={onNormalHandle}
-                                    onStopHandle={onStopHandle}
-                                    onServerCloudHandle={onServerCloudHandle} />
-                            </div>
-                        </div>
-                    </DeivceBox>
-                </Ribbon>
-            }
-        });
-        return <>{list}</>
+        return <>{
+            deviceList.map((item, index) => {
+                if (item === undefined) {
+                    return null;
+                } else {
+                    switch (item.fetchState) {
+                        case FetchState.Fetching:
+                            return <Ribbon text={getTipTxt(item)} key={`USB_${item?.usb ?? index}`}>
+                                <DeivceBox
+                                    onClick={() => onTipHandle(item)}
+                                    className={getClassNameByState(item)}>
+                                    <div className="ico">
+                                        <MobileIco device={item} />
+                                    </div>
+                                    <div className="fns">
+                                        <MobileInfo
+                                            device={item}
+                                            recordHandle={() => onRecordHandle(item)}
+                                        />
+                                        <div className="buttons">
+                                            <FetchButton
+                                                device={item}
+                                                onHelpHandle={onHelpHandle}
+                                                onNormalHandle={onNormalHandle}
+                                                onStopHandle={onStopHandle}
+                                                onServerCloudHandle={onServerCloudHandle} />
+                                        </div>
+                                    </div>
+                                </DeivceBox>
+                            </Ribbon>;
+                        default:
+                            return <Ribbon text={getTipTxt(item)} key={`USB_${item?.usb ?? index}`}>
+                                <DeivceBox
+                                    className={getClassNameByState(item)}>
+                                    <div className="ico">
+                                        <MobileIco device={item} />
+                                    </div>
+                                    <div className="fns">
+                                        <MobileInfo
+                                            device={item}
+                                            recordHandle={() => onRecordHandle(item)}
+                                        />
+                                        <div className="buttons">
+                                            <FetchButton
+                                                device={item}
+                                                onHelpHandle={onHelpHandle}
+                                                onNormalHandle={onNormalHandle}
+                                                onStopHandle={onStopHandle}
+                                                onServerCloudHandle={onServerCloudHandle} />
+                                        </div>
+                                    </div>
+                                </DeivceBox>
+                            </Ribbon>;
+                    }
+                }
+            })
+        }</>
     }
 }
 

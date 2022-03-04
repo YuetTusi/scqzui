@@ -74,6 +74,22 @@ const createRouter = (api?: RouterAPI) => {
 							}}
 						/>
 						<Route
+							path="/case-data/add"
+							exact={true}
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/case/case-add')
+								);
+								return (
+									<Suspense fallback={<LoadView />}>
+										<LayoutPanel>
+											<Next />
+										</LayoutPanel>
+									</Suspense>
+								);
+							}}
+						/>
+						<Route
 							path="/settings"
 							render={() => {
 								const Next = lazy<FC<any>>(

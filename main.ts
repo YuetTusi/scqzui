@@ -395,11 +395,6 @@ ipcMain.on('protocol-read', (event, fetchData, agree) => {
     }
 });
 
-//写net.json
-ipcMain.handle('write-net-json', (event, servicePort: number) =>
-    helper.writeNetJson(cwd, { apiPort: httpPort, servicePort })
-);
-
 //显示原生系统消息
 ipcMain.on('show-notice', (event, { title, message }) =>
     notifier.notify({
@@ -414,3 +409,10 @@ ipcMain.on('show-notice', (event, { title, message }) =>
 ipcMain.on('show-notification', (event, args) => {
     mainWindow!.webContents.send('show-notification', args);
 });
+
+//写net.json
+ipcMain.handle('write-net-json', (event, servicePort: number) =>
+    helper.writeNetJson(cwd, { apiPort: httpPort, servicePort })
+);
+
+ipcMain.handle('open-dialog', (event, options) => dialog.showOpenDialog(options));

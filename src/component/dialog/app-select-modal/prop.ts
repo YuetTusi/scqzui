@@ -19,6 +19,10 @@ interface AppSelectModalProp {
      */
     title?: string,
     /**
+     * 树DOM结点id
+     */
+    treeId?: string,
+    /**
      * App数据
      */
     treeData: AppCategory[],

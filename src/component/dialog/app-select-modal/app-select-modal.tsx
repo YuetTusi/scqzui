@@ -14,6 +14,7 @@ let ztree: any = null;
  * @param props
  */
 const AppSelectModal: FC<AppSelectModalProp> = ({
+    treeId,
     treeData,
     selectedKeys,
     isMulti,
@@ -35,7 +36,7 @@ const AppSelectModal: FC<AppSelectModalProp> = ({
             checkOption.radioType = 'all';
         }
         ztree = ($.fn as any).zTree.init(
-            $('#select-app-tree'),
+            $(`#${treeId}`),
             {
                 check: checkOption,
                 view: {
@@ -79,7 +80,7 @@ const AppSelectModal: FC<AppSelectModalProp> = ({
             <AppSelectModalBox>
                 <div className="tip-msg">{children}</div>
                 <div className="center-box">
-                    <ul className="ztree" id="select-app-tree"></ul>
+                    <ul className="ztree" id={treeId}></ul>
                 </div>
             </AppSelectModalBox>
         </Modal>
@@ -89,6 +90,7 @@ const AppSelectModal: FC<AppSelectModalProp> = ({
 AppSelectModal.defaultProps = {
     visible: false,
     isMulti: true,
+    treeId: 'select-app-tree',
     treeData: [],
     selectedKeys: [],
     closeHandle: () => { },

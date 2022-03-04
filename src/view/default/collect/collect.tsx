@@ -56,63 +56,41 @@ const Collect: FC<CollectProp> = ({ }) => {
     const [uMagicCodeModalVisible, setUMagicCodeModalVisible] = useState<boolean>(false);
     const [guideModalVisible, setGuideModalVisible] = useState<boolean>(false);
     const [cloudHistoryModalVisible, setCloudHistoryModalVisible] = useState<boolean>(false);
+    const devicePanelRef = useRef<HTMLDivElement>(null);
     const currentDevice = useRef<DeviceType | null>(null);
     const dataMode = useRef<DataMode>(DataMode.Self);
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     //mock:
-    //     dispatch({
-    //         type: 'device/setDeviceToList', payload: {
-    //             ...{
-    //                 "fetchState": FetchState.Fetching,
-    //                 "manufacturer": "采集完成",
-    //                 "model": "TAS-AL00",
-    //                 "phoneInfo": [{
-    //                     "name": "厂商", "value": "HUAWEI"
-    //                 }, { "name": "型号", "value": "TAS-AL00" }, {
-    //                     "name": "系统版本", "value": "10"
-    //                 }, {
-    //                     "name": "IMEI", "value": "867099041036009"
-    //                 }],
-    //                 "serial": "JTK0219826000164",
-    //                 "system":"android", 
-    //                 "usb": 5,
-    //                 "fetchPercent": 66
-    //             },
-    //             // tipType: TipType.Flash,
-    //             // tipTitle: '测试',
-    //             // tipYesButton: { name: '是', value: 1, confirm: '真的？' },
-    //             parseState: ParseState.NotParse,
-    //             isStopping: false
-    //         }
-    //     });
-    //     dispatch({
-    //         type: 'device/setDeviceToList', payload: {
-    //             ...{
-    //                 "fetchState": FetchState.Connected,
-    //                 "manufacturer": "已连接",
-    //                 "model": "TAS-AL00",
-    //                 "phoneInfo": [{
-    //                     "name": "厂商", "value": "HUAWEI"
-    //                 }, { "name": "型号", "value": "TAS-AL00" }, {
-    //                     "name": "系统版本", "value": "10"
-    //                 }, {
-    //                     "name": "IMEI", "value": "867099041036009"
-    //                 }],
-    //                 "serial": "JTK0219826000164",
-    //                 "system":
-    //                 "android", "usb": 6,
-    //                 "fetchPercent": 66
-    //             },
-    //             // tipType: TipType.Flash,
-    //             // tipTitle: '测试',
-    //             // tipYesButton: { name: '是', value: 1, confirm: '真的？' },
-    //             parseState: ParseState.NotParse,
-    //             isStopping: false
-    //         }
-    //     });
-    // }, []);
+        let devices: DeviceType[] = [];
+        for (let i = 0; i < 3; i++) {
+            devices.push({
+                ...{
+                    "fetchState": FetchState.Connected,
+                    "manufacturer": "采集完成",
+                    "model": "TAS-AL00",
+                    "phoneInfo": [{
+                        "name": "厂商", "value": "HUAWEI"
+                    }, { "name": "型号", "value": "TAS-AL00" }, {
+                        "name": "系统版本", "value": "10"
+                    }, {
+                        "name": "IMEI", "value": "867099041036009"
+                    }],
+                    "serial": "JTK0219826000164",
+                    "system": "android",
+                    "usb": i + 1,
+                    "fetchPercent": 10 + i
+                },
+                parseState: ParseState.NotParse,
+                isStopping: false
+            } as DeviceType);
+        }
+
+        //mock:
+        dispatch({
+            type: 'device/setDeviceList', payload: devices
+        });
+    }, []);
 
     useEffect(() => {
         let mode = localStorage.getItem(LocalStoreKey.DataMode);
@@ -121,6 +99,28 @@ const Collect: FC<CollectProp> = ({ }) => {
         } else {
             dataMode.current = Number(mode);
         }
+    }, []);
+
+    /**
+     * 面板横向滚动控制
+     */
+    const onDevicePanelWheel = (event: WheelEvent) => {
+        event.preventDefault();
+        const { current } = devicePanelRef;
+        const { deltaY } = event;
+        if (current) {
+            current.scrollLeft += deltaY - 10;
+        }
+    }
+
+    useEffect(() => {
+        const { current } = devicePanelRef;
+        if (current !== null) {
+            current.addEventListener('wheel', onDevicePanelWheel);
+        }
+        return () => {
+            current?.removeEventListener('wheel', onDevicePanelWheel);
+        };
     }, []);
 
     /**
@@ -474,6 +474,7 @@ const Collect: FC<CollectProp> = ({ }) => {
 
     return <SubLayout title="设备取证">
         <ContentBox>
+            <div className="hidden-scroll-bar" />
             <div>
                 <Group>
                     <Button onClick={() => setUsbDebugModalVisible(true)} type="primary">
@@ -491,7 +492,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                 </Group>
             </div>
             <Split />
-            <DevicePanel>
+            <DevicePanel ref={devicePanelRef}>
                 <DeviceFrame
                     onHelpHandle={onHelpHandle}
                     onNormalHandle={collectHandle}

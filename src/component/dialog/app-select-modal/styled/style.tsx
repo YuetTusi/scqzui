@@ -20,13 +20,13 @@ const AppSelectModalBox = styled.div`
         }
         fieldset {
             display: block;
-            border: 1px solid #e8e8e8;
+            border: 1px solid #303030;
             border-radius: 2px;
             legend {
                 width: auto;
                 margin-left: 10px;
                 font-size: 12px;
-                font-weight: bold;
+                font-weight: normal;
             }
             ul {
                 font-size: 12px;
@@ -37,7 +37,7 @@ const AppSelectModalBox = styled.div`
             li {
                 margin: 0 0 0 20px;
                 padding: 0;
-                color: #fff;
+                color:${(props) => props.theme['primary-color']};
                 list-style-type: square;
                 em {
                     font-style: normal;

@@ -1,4 +1,5 @@
 import { ipcRenderer } from 'electron';
+import React from 'react';
 import os from 'os';
 import crypto from 'crypto';
 import fs from 'fs';
@@ -12,6 +13,7 @@ import memoize from 'lodash/memoize';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import { exec, execFile, spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import Select from 'antd/lib/select';
 import log from './log';
 import { Conf } from '../type/model';
 import { BcpEntity } from '../schema/bcp-entity';
@@ -22,6 +24,7 @@ import { TableName } from '../schema/table-name';
 import { CaseInfo } from '../schema/case-info';
 import { Manufaturer } from '../schema/manufaturer';
 import { LocalStoreKey } from './local-store';
+import { Db } from './db';
 
 const cwd = process.cwd();//应用的根目录
 const KEY = 'az'; //密钥
@@ -551,14 +554,15 @@ const helper = {
      * @param {string} caseName 案件名称
      * @returns {CCaseInfo[]} 数组长度>0表示存在
      */
-    // async caseNameExist(caseName: string) {
-    //     try {
-    //         let list = await ipcRenderer.invoke('db-find', TableName.Case, { m_strCaseName: { $regex: new RegExp(`^${caseName}(?=_)`) } });
-    //         return list;
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // },
+    async caseNameExist(caseName: string) {
+        const db = new Db(TableName.Case);
+        try {
+            let list = await db.find({ m_strCaseName: { $regex: new RegExp(`^${caseName}(?=_)`) } });
+            return list;
+        } catch (error) {
+            throw error;
+        }
+    },
     /**
      * 检测端口号
      * @param port 端口号
@@ -665,6 +669,17 @@ const helper = {
         } catch (error) {
             log.error(`写入net.json失败 @writeNetJson(): ${error.message}`);
         }
+    },
+    /**
+     * 数据转为下拉列表Options组件
+     */
+    arrayToOptions(data: Record<string, any>[], nameField: string = 'name', valueField: string = 'value', prefix: string = 'K') {
+        return data.map((item, index) => {
+            return <Select.Option
+                value={item[valueField]} key={`${prefix}${index}_${item[valueField]}`}>
+                {item[nameField]}
+            </Select.Option>
+        })
     }
 };
 
