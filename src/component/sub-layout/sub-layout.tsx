@@ -21,7 +21,7 @@ const SubLayout: FC<{ title?: string }> = ({ title, children }) => {
                         type="primary"
                         size="small">
                         <HomeOutlined />
-                        <span>主页</span>
+                        <span>首页</span>
                     </Button>
                 </div>
             </div>

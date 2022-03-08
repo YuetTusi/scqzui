@@ -80,7 +80,7 @@ const Image = styled.div`
 
         &>.desc-mask{
             position: absolute;
-            background-color:rgba(34,34,34,0.7);
+            background-color:rgba(34,34,34,0.8);
             color:#fff;
             top: 0;
             left:0;
@@ -95,6 +95,17 @@ const Image = styled.div`
             white-space: nowrap;
             overflow: hidden;
             text-overflow: hidden;
+
+            &>ul{
+                margin:0;
+                padding:0;
+            }
+            &>ul>li{
+                margin:0;
+                padding:5px 0;
+                font-size: 1.4rem;
+                font-weight: lighter;
+            }
 
             &.open{
                 display:flex;

@@ -121,7 +121,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
                     <a
                         onClick={(e: MouseEvent<HTMLAnchorElement>) => {
                             e.stopPropagation();
-                            dispatch(routerRedux.push(`/case/case-edit/${record._id!}`));
+                            dispatch(routerRedux.push(`/case-data/edit/${record._id!}`));
                         }}>
                         编辑
                     </a>

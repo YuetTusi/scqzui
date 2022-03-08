@@ -7,6 +7,7 @@ import { CaseDataState } from '@/model/default/case-data';
 import { CloudCodeModalStoreState } from '@/model/default/cloud-code-modal';
 import { OfficerState } from '@/model/default/officer';
 import { CaseAddState } from '@/model/default/case-add';
+import { CaseEditState } from '@/model/default/case-edit';
 
 declare global {
 	interface Window {
@@ -36,6 +37,7 @@ interface StateTree {
 	device: DeviceStoreState,
 	caseData: CaseDataState,
 	caseAdd: CaseAddState,
+	caseEdit: CaseEditState,
 	cloudCodeModal: CloudCodeModalStoreState,
 	officer: OfficerState,
 	[modelName: string]: any
