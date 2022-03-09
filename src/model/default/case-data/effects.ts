@@ -2,6 +2,7 @@ import { EffectsCommandMap } from "dva";
 import { AnyAction } from 'redux';
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Modal from 'antd/lib/modal';
+import log from '@/utils/log';
 import { Db } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { CaseInfo } from "@/schema/case-info";
@@ -25,7 +26,7 @@ export default {
             yield put({ type: 'setCaseData', payload: result });
             yield put({ type: 'setPage', payload: { current, pageSize, total } });
         } catch (error) {
-            console.log(`@modal/CaseData.ts/fetchCaseData: ${error.message}`);
+            log.error(`@model/default/case-data/*fetchCaseData:${error.message}`);
         } finally {
             yield put({ type: 'setLoading', payload: false });
         }
@@ -39,7 +40,7 @@ export default {
             const next: CaseInfo[] = yield call([db, 'find'], null, 'createdAt', -1);
             yield put({ type: 'setAllCaseData', payload: next });
         } catch (error) {
-            console.log(`@modal/CaseData/effects/queryAllCaseData: ${error.message}`);
+            console.log(`@model/default/case-data/*queryAllCaseData: ${error.message}`);
         }
     },
     /**
@@ -81,7 +82,7 @@ export default {
                 modal.destroy();
             }, 1000);
         } catch (error) {
-            console.log(`@modal/CaseData.ts/deleteCaseData: ${error.message}`);
+            console.log(`@model/default/case-data/*deleteCaseData: ${error.message}`);
             modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false } });
             setTimeout(() => {
                 modal.destroy();

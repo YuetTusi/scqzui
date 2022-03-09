@@ -43,7 +43,7 @@ export default {
             message.success('保存成功');
         } catch (error) {
             console.error(`@modal/CaseAdd.ts/saveCase: ${error.message}`);
-            logger.error(`@modal/CaseAdd.ts/saveCase:${error.message}`);
+            logger.error(`@modal/default/case-add/*saveCase:${error.message}`);
             message.error('保存失败');
         } finally {
             yield put({ type: 'setSaving', payload: false });

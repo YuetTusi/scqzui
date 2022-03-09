@@ -39,7 +39,7 @@ export default {
                     caseName: helper.isNullOrUndefinedOrEmptyString(spareName) ? caseName.split('_')[0] : spareName
                 });
             } catch (error) {
-                logger.error(`写入云取证日志失败 @components/CloudCodeModal/effects/saveCloudLog:${error.message}`);
+                logger.error(`写入云取证日志失败 @model/default/cloud-code-modal/*saveCloudLog:${error.message}`);
             }
         } else {
             logger.warn(`未写入云取证日志，设备数据为空 usb:#${usb}`);

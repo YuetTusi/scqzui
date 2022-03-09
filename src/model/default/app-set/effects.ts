@@ -6,13 +6,13 @@ import Modal from 'antd/lib/modal';
 import { LocalStoreKey } from '@/utils/local-store';
 import { helper } from '@/utils/helper';
 import logger from '@/utils/log';
+import { Db } from '@/utils/db';
 import { request } from '@/utils/request';
 import { TableName } from '@/schema/table-name';
 import { DeviceType } from '@/schema/device-type';
 import { ParseState } from '@/schema/device-state';
 import { AppCategory } from '@/schema/app-config';
 import Manufaturer from '@/schema/manufaturer';
-import { Db } from '@/utils/db';
 
 const config = helper.readConf();
 
@@ -67,7 +67,7 @@ export default {
                     { $set: { parseState: payload } }, true);
             }
         } catch (error) {
-            logger.error(`启动应用更新解析状态失败 @modal/dashboard/index.ts/updateAllDeviceParseState: ${error.message}`);
+            logger.error(`启动应用更新解析状态失败 @modal/default/app-set/*updateAllDeviceParseState: ${error.message}`);
         } finally {
             if (msgBox !== null) {
                 msgBox.destroy();
@@ -88,7 +88,7 @@ export default {
                 yield put({ type: 'setCloudAppData', payload: data.fetch });
             }
         } catch (error) {
-            logger.error(`查询云取应用接口失败： @modal/dashboard/index.ts/fetchCloudAppData: ${error.message}`);
+            logger.error(`查询云取应用接口失败 @modal/default/app-set/fetchCloudAppData: ${error.message}`);
         }
     }
 };

@@ -44,7 +44,7 @@ export default {
             yield put({ type: 'device/setEmptyCase', payload: count === 0 });
         } catch (error) {
             console.log(`查询案件非空失败 @model/dashboard/Device/effects/queryEmptyCase: ${error.message}`);
-            logger.error(`查询案件非空失败 @model/dashboard/Device/effects/queryEmptyCase: ${error.message}`);
+            logger.error(`查询案件非空失败 @model/default/device/*queryEmptyCase: ${error.message}`);
         }
     },
     /**
@@ -82,7 +82,7 @@ export default {
                 system: data.system ?? DeviceSystem.Android
             });
         } catch (error) {
-            logger.error(`设备数据入库失败 @model/dashboard/Device/effects/saveDeviceToCase: ${error.message}`);
+            logger.error(`设备数据入库失败 @model/default/device/*saveDeviceToCase: ${error.message}`);
         }
     },
     /**
@@ -122,7 +122,7 @@ export default {
                 }
             });
         } catch (error) {
-            logger.error(`更新解析状态入库失败 @model/dashboard/Device/effects/updateParseState: ${(error as any).message}`);
+            logger.error(`更新解析状态入库失败 @model/default/device/*updateParseState: ${(error as any).message}`);
         }
     },
     /**
@@ -181,8 +181,8 @@ export default {
                 }
             });
         } catch (error) {
-            console.log(`解析日志保存失败 @modal/dashboard/Device/effects/saveParseLog: ${error.message}`);
-            logger.error(`解析日志保存失败 @modal/dashboard/Device/effects/saveParseLog: ${error.message}`);
+            console.log(`解析日志保存失败 @model/default/device/*saveParseLog: ${error.message}`);
+            logger.error(`解析日志保存失败 @model/default/device/*saveParseLog: ${error.message}`);
         }
     },
     /**
@@ -330,7 +330,7 @@ export default {
                 yield fork([helper, 'writeBcpJson'], phonePath, bcp);
             }
         } catch (error) {
-            logger.error(`Bcp.json写入失败 @model/dashboard/Device/effects/startFetch: ${error.message}`);
+            logger.error(`Bcp.json写入失败 @model/default/device/*startFetch: ${error.message}`);
         } finally {
             if (fetchData.mode === DataMode.GuangZhou) {
                 //* 写完Bcp.json清理平台案件，下一次取证前没有推送则不允许采集
@@ -513,7 +513,7 @@ export default {
                 });
             }
         } catch (error) {
-            logger.error(`开始解析失败 @model/dashboard/Device/effects/startParse: ${error.message}`);
+            logger.error(`开始解析失败 @model/default/device/*startParse: ${error.message}`);
         }
     },
     /**
@@ -635,7 +635,7 @@ export default {
 
         } catch (error) {
             message.error(`取证失败: ${error.message}`);
-            logger.error(`警综平台获取数据取证失败 @model/dashboard/Device/effects/saveCaseFromPlatform: ${error.message}`);
+            logger.error(`警综平台获取数据取证失败 @model/default/device/*saveCaseFromPlatform: ${error.message}`);
         }
     },
     /**
@@ -661,7 +661,7 @@ export default {
                 yield fork([db, 'update'], { no }, next);
             }
         } catch (error) {
-            logger.error(`保存采集人员失败 @model/dashboard/Device/effects/saveOrUpdateOfficer: ${error.message}`);
+            logger.error(`保存采集人员失败 @model/default/device/*saveOrUpdateOfficer: ${error.message}`);
         }
     }
 };

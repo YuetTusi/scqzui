@@ -16,7 +16,7 @@ export default {
             let result: Officer[] = yield call([db, 'find'], null);
             yield put({ type: 'setOfficer', payload: [...result] });
         } catch (error) {
-            console.error(`@model/Officer.ts/fetchOfficer: ${error.message}`);
+            console.error(`@model/default/officer/*fetchOfficer: ${error.message}`);
         }
     },
     /**
@@ -30,7 +30,7 @@ export default {
             yield put({ type: 'fetchOfficer' });
             message.success('删除成功');
         } catch (error) {
-            console.info(`@model/Officer.ts/delOfficer: ${error.message}`);
+            console.info(`@model/default/officer/*delOfficer: ${error.message}`);
             message.success('删除失败');
         }
     },
