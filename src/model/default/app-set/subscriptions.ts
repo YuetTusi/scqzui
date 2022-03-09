@@ -106,29 +106,6 @@ export default {
         }
     },
     /**
-     * 启动应用后将采集单位&目的检验单位写入JSON
-     * LEGACY:此方法为兼容旧版而处理,以后可将删除
-     */
-    writeUnitJson() {
-        let jsonSavePath = ''; //JSON文件路径
-        if (process.env['NODE_ENV'] === 'development') {
-            jsonSavePath = path.join(cwd, 'data/unit.json');
-        } else {
-            jsonSavePath = path.join(cwd, 'resources/data/unit.json');
-        }
-        let unitCode = localStorage.getItem(LocalStoreKey.UnitCode);
-        let unitName = localStorage.getItem(LocalStoreKey.UnitName);
-        let dstUnitCode = localStorage.getItem(LocalStoreKey.DstUnitCode);
-        let dstUnitName = localStorage.getItem(LocalStoreKey.DstUnitName);
-        helper.writeJSONfile(jsonSavePath, {
-            customUnit: useBcp ? 0 : 1, //非BCP版本使用自定义单位1
-            unitCode,
-            unitName,
-            dstUnitCode,
-            dstUnitName
-        });
-    },
-    /**
      * 导出报告消息
      */
     reportExportMessage({ dispatch }: SubscriptionAPI) {

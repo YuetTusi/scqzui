@@ -36,6 +36,7 @@ import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
 import { CollectProp } from './prop';
+import { useDstUnit, useUnit } from '@/hook/unit';
 
 const { Group } = Button;
 const { useBcp } = helper.readConf()!;
@@ -56,6 +57,8 @@ const Collect: FC<CollectProp> = ({ }) => {
     const [uMagicCodeModalVisible, setUMagicCodeModalVisible] = useState<boolean>(false);
     const [guideModalVisible, setGuideModalVisible] = useState<boolean>(false);
     const [cloudHistoryModalVisible, setCloudHistoryModalVisible] = useState<boolean>(false);
+    const [unitCode] = useUnit();
+    const [dstUnitCode] = useDstUnit();
     const devicePanelRef = useRef<HTMLDivElement>(null);
     const currentDevice = useRef<DeviceType | null>(null);
     const dataMode = useRef<DataMode>(DataMode.Self);
@@ -163,7 +166,7 @@ const Collect: FC<CollectProp> = ({ }) => {
      * 采集前验证相关设置
      */
     const validateBeforeFetch = () => {
-        if (helper.getUnit() === null) {
+        if (unitCode === undefined) {
             message.info({
                 content: useBcp
                     ? '未设置采集单位，请在「软件设置」→「采集单位」中配置'
@@ -171,7 +174,7 @@ const Collect: FC<CollectProp> = ({ }) => {
             });
             return false;
         }
-        if (useBcp && helper.getDstUnit() === null) {
+        if (useBcp && dstUnitCode === undefined) {
             //军队版本无需验证目的检验单位
             message.info({
                 content: '未设置目的检验单位，请在「软件设置」→「目的检验单位」中配置'

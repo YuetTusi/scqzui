@@ -251,7 +251,7 @@ export default {
             mode: rec.mode ?? DataMode.Self
         });
         if (fetchData.mode === DataMode.GuangZhou) {
-            sendCase = yield select((state: StateTree) => state.dashboard.sendCase);//警综案件数据
+            sendCase = yield select((state: StateTree) => state.appSet.sendCase);//警综案件数据
             rec.handleOfficerNo = sendCase?.ObjectID ?? ''; //#持有人编号从警经综数据接收
             //将警综平台数据写入Platform.json，解析会读取
             yield fork([helper, 'writeJSONfile'], path.join(rec.phonePath, 'Platform.json'), sendCase);
@@ -296,14 +296,17 @@ export default {
                 //LEGACY ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 yield fork([helper, 'writeBcpJson'], phonePath, { ...bcp, ...sendCase });
             } else {
+                const {
+                    collectUnitCode, collectUnitName, dstUnitCode, dstUnitName
+                } = yield select((state: StateTree) => state.organization);
                 //非警综
                 bcp.mobilePath = phonePath;
                 bcp.attachment = caseData.attachment;
                 bcp.checkUnitName = caseData.m_strCheckUnitName ?? '';
-                bcp.unitNo = localStorage.getItem(LocalStoreKey.UnitCode) ?? '';
-                bcp.unitName = localStorage.getItem(LocalStoreKey.UnitName) ?? '';
-                bcp.dstUnitNo = localStorage.getItem(LocalStoreKey.DstUnitCode) ?? '';
-                bcp.dstUnitName = localStorage.getItem(LocalStoreKey.DstUnitName) ?? '';
+                bcp.unitNo = collectUnitCode ?? '';
+                bcp.unitName = collectUnitName ?? '';
+                bcp.dstUnitNo = dstUnitCode ?? '';
+                bcp.dstUnitName = dstUnitName ?? '';
                 bcp.officerNo = caseData.officerNo;
                 bcp.officerName = caseData.officerName;
                 bcp.mobileHolder = fetchData.mobileHolder!;

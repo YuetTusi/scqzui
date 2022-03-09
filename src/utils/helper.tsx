@@ -427,34 +427,6 @@ const helper = {
         return cpy(fileList, destination, options);
     },
     /**
-     * 获取采集单位信息
-     * 未设置返回null
-     * @returns 数组类型，0为单位名称，1为单位编号 如['洋桥派出所','100100203']
-     */
-    getUnit() {
-        let unitName = localStorage.getItem(LocalStoreKey.UnitName);
-        let unitCode = localStorage.getItem(LocalStoreKey.UnitCode);
-        if (unitName === null || unitCode === null) {
-            return null;
-        } else {
-            return [unitName, unitCode];
-        }
-    },
-    /**
-     * 获取目的检验单位信息
-     * 未设置返回null
-     * @returns 数组类型，0为单位名称，1为单位编号 如['洋桥派出所','100100203']
-     */
-    getDstUnit() {
-        let dstUnitName = localStorage.getItem(LocalStoreKey.DstUnitName);
-        let dstUnitCode = localStorage.getItem(LocalStoreKey.DstUnitCode);
-        if (dstUnitName === null || dstUnitCode === null) {
-            return null;
-        } else {
-            return [dstUnitName, dstUnitCode];
-        }
-    },
-    /**
      * 加载线程文件
      * @param workerPath 文件路径
      * @returns Promise<Worker> 返回workerPromise

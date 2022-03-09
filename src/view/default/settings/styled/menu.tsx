@@ -35,7 +35,7 @@ const MenuPanel = styled.menu`
                 color:#a9afbbd1;
                 &.active{
                     background-color: ${(props) => props.theme['primary-color']};
-                    color:${(props => props.theme['text-color'])};
+                    color:#fff;
                 }
                 & > div{
                     display: flex;

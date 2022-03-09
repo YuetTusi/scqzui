@@ -8,6 +8,7 @@ import { CloudCodeModalStoreState } from '@/model/default/cloud-code-modal';
 import { OfficerState } from '@/model/default/officer';
 import { CaseAddState } from '@/model/default/case-add';
 import { CaseEditState } from '@/model/default/case-edit';
+import { Organization } from '@/schema/organization';
 
 declare global {
 	interface Window {
@@ -30,6 +31,7 @@ interface StateTree {
 	caseEdit: CaseEditState,
 	cloudCodeModal: CloudCodeModalStoreState,
 	officer: OfficerState,
+	organization: Organization,
 	[modelName: string]: any
 }
 

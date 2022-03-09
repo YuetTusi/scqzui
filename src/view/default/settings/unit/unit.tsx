@@ -1,7 +1,7 @@
-import { join } from 'path';
 import debounce from 'lodash/debounce';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import React, { FC, useEffect, useRef, useState, MouseEvent } from 'react';
+import { useSelector, useDispatch } from 'dva';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined'
 import SearchOutlined from '@ant-design/icons/SearchOutlined'
 import Button from 'antd/lib/button';
@@ -10,32 +10,25 @@ import Table from 'antd/lib/table';
 import { Key } from 'antd/es/table/interface';
 import message from 'antd/lib/message';
 import { useSubscribe } from '@/hook';
-import { helper } from '@/utils/helper';
-import { LocalStoreKey } from '@/utils/local-store';
+import { StateTree } from '@/type/model';
+import { Organization } from '@/schema/organization';
 import { Split } from '@/component/style-tool';
 import { MainBox } from '../styled/sub-layout';
 import { getColumns } from './columns';
 import { UnitNameBox } from './styled/box';
 import { UnitProp, UnitRecord } from './prop';
 
-
-import log from '@/utils/log';
-
-const config = helper.readConf();
-let jsonSavePath = ''; //JSON文件路径
-if (process.env['NODE_ENV'] === 'development') {
-    jsonSavePath = join(process.cwd(), './data/unit.json');
-} else {
-    jsonSavePath = join(process.cwd(), '../data/unit.json');
-}
-let selectPcsCode: string | null = null;
-let selectPcsName: string | null = null;
+let selectPcsCode: string | undefined = undefined;
+let selectPcsName: string | undefined = undefined;
 
 const Unit: FC<UnitProp> = () => {
 
+    const dispatch = useDispatch();
+    const {
+        collectUnitName,
+        collectUnitCode
+    } = useSelector<StateTree, Organization>(state => state.organization);
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
-    const [currentPcsCode, setCurrentPcsCode] = useState<string | null>(null);
-    const [currentPcsName, setCurrentPcsName] = useState<string | null>(null);
     const [data, setData] = useState<UnitRecord[]>([]);
     const [total, setTotal] = useState<number>(0);
     const [pageIndex, setPageIndex] = useState<number>(1);
@@ -55,10 +48,11 @@ const Unit: FC<UnitProp> = () => {
 
     useEffect(() => {
         queryUnitData(null, 1, 10);
-        setCurrentPcsCode(localStorage.getItem(LocalStoreKey.UnitCode));
-        setCurrentPcsName(localStorage.getItem(LocalStoreKey.UnitName));
     }, []);
 
+    /**
+     * SQLite查询handle
+     */
     const queryDbHandle = (event: IpcRendererEvent, result: Record<string, any>) => {
         setTotal(result.data.total);
         setData(result.data.rows);
@@ -66,32 +60,19 @@ const Unit: FC<UnitProp> = () => {
     }
 
     /**
- * 写入JSON文件
- * @param unitName 采集单位名称
- * @param unitCode 采集单位编号
- */
-    const writeJson = (unitName: string | null, unitCode: string | null) => {
-        let dstUnitCode = localStorage.getItem(LocalStoreKey.DstUnitCode);
-        let dstUnitName = localStorage.getItem(LocalStoreKey.DstUnitName);
-        helper
-            .writeJSONfile(jsonSavePath, {
-                customUnit: config?.useBcp ? 0 : 1, //非BCP版本使用自定义单位1
-                unitName,
-                unitCode,
-                dstUnitName,
-                dstUnitCode
-            })
-            .catch((err) => {
-                log.error(`写入JSON文件失败 @view/default/settings/unit: ${err.message}`);
-            });
-    };
-
+     * 行选择Change
+     * @param selectedRowKeys 行key
+     * @param selectedRows 行数据
+     */
     const rowSelectChange = (selectedRowKeys: Key[], selectedRows: UnitRecord[]) => {
         setSelectedRowKeys(selectedRowKeys);
         selectPcsCode = selectedRows[0].PcsCode;
         selectPcsName = selectedRows[0].PcsName;
     };
 
+    /**
+     * 查询Click
+     */
     const onSearchClick = debounce((event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         if (inputRef.current) {
@@ -99,21 +80,28 @@ const Unit: FC<UnitProp> = () => {
         }
     }, 1500, { leading: true, trailing: false });
 
-    const onSaveClick = (event: MouseEvent<HTMLButtonElement>) => {
+    /**
+     * 保存Click
+     */
+    const onSaveClick = debounce((event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         if (selectedRowKeys.length !== 0) {
-            localStorage.setItem(LocalStoreKey.UnitName, selectPcsName!);
-            localStorage.setItem(LocalStoreKey.UnitCode, selectPcsCode!);
-            message.destroy();
-            message.success('保存成功');
-            setCurrentPcsCode(selectPcsCode);
-            setCurrentPcsName(selectPcsName);
-            writeJson(selectPcsName, selectPcsCode);
+            dispatch({
+                type: 'organization/saveCollectUnit',
+                payload: {
+                    collectUnitCode: selectPcsCode,
+                    collectUnitName: selectPcsName
+                }
+            });
         } else {
             message.info('请选择采集单位');
         }
-    }
+    }, 500, { leading: true, trailing: false });
 
+    /**
+     * 翻页Change
+     * @param pageIndex 当前页
+     */
     const onPageChange = (pageIndex: number) => {
         let value = inputRef.current?.input?.value;
         setSelectedRowKeys([]);
@@ -127,8 +115,8 @@ const Unit: FC<UnitProp> = () => {
         <UnitNameBox>
             <div className="info-bar">
                 <em
-                    title={currentPcsCode ? `单位编号：${currentPcsCode}` : ''}>
-                    {currentPcsName ? currentPcsName : '未设置单位'}
+                    title={collectUnitCode ? `单位编号：${collectUnitCode}` : ''}>
+                    {collectUnitName ? collectUnitName : '未设置单位'}
                 </em>
             </div>
             <div className="btn-box">

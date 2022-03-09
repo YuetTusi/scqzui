@@ -1,7 +1,7 @@
 /**
  * NeDB集合（表名）枚举
  */
- enum TableName {
+enum TableName {
     /**
      * 采集日志表
      */
@@ -42,7 +42,11 @@
      * 痕迹查询用户表
      * 保存登录用户
      */
-    TraceUser = 'trace-user'
+    TraceUser = 'trace-user',
+    /**
+     * 单位配置
+     */
+    Organization = 'organization'
 }
 
 export { TableName };

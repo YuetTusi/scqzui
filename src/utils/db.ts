@@ -27,7 +27,7 @@ class Db<T = any> {
      * 返回集合中所有文档数据
      */
     all() {
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<T[]>((resolve, reject) => {
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);

@@ -11,22 +11,6 @@ enum LocalStoreKey {
      */
     CaseData = 'CASE_DATA',
     /**
-     * 当前采集单位名
-     */
-    UnitName = 'UNIT_NAME',
-    /**
-     * 当前采集单位编号
-     */
-    UnitCode = 'UNIT_CODE',
-    /**
-     * 当前目的检验单位名
-     */
-    DstUnitName = 'DST_UNIT_NAME',
-    /**
-     * 当前目的检验单位编号
-     */
-    DstUnitCode = 'DST_UNIT_CODE',
-    /**
      * 数据模式
      */
     DataMode = 'DataMode',
