@@ -1,7 +1,8 @@
 import { AnyAction } from 'redux';
-import { EffectsCommandMap } from 'dva';
+import { EffectsCommandMap, routerRedux } from 'dva';
 import message from 'antd/lib/message';
 import { Db } from '@/utils/db';
+import log from '@/utils/log';
 import { TableName } from '@/schema/table-name';
 import Officer from '@/schema/officer';
 
@@ -31,6 +32,46 @@ export default {
         } catch (error) {
             console.info(`@model/Officer.ts/delOfficer: ${error.message}`);
             message.success('删除失败');
+        }
+    },
+    /**
+     * 添加
+     * @param {payload} Officer
+     */
+    *insertOfficer({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+        const db = new Db<Officer>(TableName.Officer);
+        try {
+            yield call([db, 'insert'], payload);
+            yield put(routerRedux.push('/settings/officer'));
+            message.success('保存成功');
+        } catch (error) {
+            log.error(`添加采集人员失败 @model/default/officer/*insertOfficer:${error.message}`);
+            console.warn(error);
+            message.warn('保存失败');
+        }
+    },
+    /**
+     * 编辑
+     * @param {payload} Officer
+     */
+    *editOfficer({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+        const db = new Db<Officer>(TableName.Officer);
+        let count = 0;
+        try {
+            const prev: Officer = yield call([db, 'findOne'], { _id: payload._id });
+            if (prev) {
+                const next: Officer = {
+                    ...prev,
+                    ...payload
+                };
+                count = yield call([db, 'update'], { _id: payload._id }, next);
+            }
+            yield put(routerRedux.push('/settings/officer'));
+            message.success('保存成功');
+        } catch (error) {
+            log.error(`编辑采集人员失败 @model/default/officer/*editOfficer:${error.message}`);
+            console.warn(error);
+            message.warn('保存失败');
         }
     }
 };

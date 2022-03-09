@@ -23,7 +23,6 @@ export default {
         yield put({ type: 'setLoading', payload: true });
         try {
             const data: CaseInfo = yield call([db, 'findOne'], { _id: payload });
-            console.log(data);
             yield put({ type: 'setData', payload: data });
         } catch (error) {
             logger.error(`读取案件失败 @model/default/case-edit/*queryById:${error.message}`);
@@ -41,7 +40,8 @@ export default {
         yield put({ type: 'setLoading', payload: true });
         UserHistory.set(HistoryKeys.HISTORY_UNITNAME, payload.m_strCheckUnitName);//将用户输入的单位名称记录到本地存储中，下次输入可读取
         try {
-            yield call([db, 'update'], { _id: payload._id }, payload);
+            const prev: CaseInfo = yield call([db, 'findOne'], { _id: payload._id });
+            yield call([db, 'update'], { _id: payload._id }, { ...payload, m_strCaseName: prev.m_strCaseName });
             yield put({
                 type: 'updateCheckDataFromCase', payload: {
                     caseId: payload._id,

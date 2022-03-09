@@ -213,7 +213,7 @@ const AddForm: FC<FormProp> = ({
                         </Tooltip>
                     </Col>
                     <Col span={3}>
-                        <span>自动生成BCP：</span>
+                        <span>生成BCP：</span>
                         <Checkbox
                             onChange={(event) => {
                                 const { checked } = event.target;

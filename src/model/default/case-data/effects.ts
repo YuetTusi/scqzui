@@ -73,16 +73,16 @@ export default {
                     call([checkDb, 'remove'], { caseId: payload.id }, true),
                     call([bcpDb, 'remove'], { deviceId: { $in: devicesInCase.map(i => i.id) } }, true)
                 ]);
-                modal.update({ content: '删除成功', okButtonProps: { disabled: false, icon: 'check-circle' } });
+                modal.update({ content: '删除成功', okButtonProps: { disabled: false } });
             } else {
-                modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false, icon: 'check-circle' } });
+                modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false } });
             }
             setTimeout(() => {
                 modal.destroy();
             }, 1000);
         } catch (error) {
             console.log(`@modal/CaseData.ts/deleteCaseData: ${error.message}`);
-            modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false, icon: 'check-circle' } });
+            modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false } });
             setTimeout(() => {
                 modal.destroy();
             }, 1000);

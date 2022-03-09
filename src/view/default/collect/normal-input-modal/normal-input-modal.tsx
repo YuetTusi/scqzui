@@ -93,7 +93,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
      */
     const toCaseAddView = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        dispatch(routerRedux.push('/case/case-add?name=case-input'));
+        dispatch(routerRedux.push('/case-data/add?name=case-input'));
     };
 
     /**

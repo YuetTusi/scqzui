@@ -1,8 +1,8 @@
+import dayjs from 'dayjs';
 import path from 'path';
 import { Dispatch } from 'redux';
 import React, { MouseEvent } from 'react';
 import { routerRedux } from 'dva/router';
-import moment from 'moment';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Tag from 'antd/lib/tag';
@@ -65,7 +65,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
                 val ? <Tag color="green">是</Tag> : <Tag color="red">否</Tag>
         },
         {
-            title: '自动生成BCP',
+            title: '生成BCP',
             dataIndex: 'generateBcp',
             key: 'generateBcp',
             width: '80px',
@@ -107,9 +107,9 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             width: '160px',
             align: 'center',
             sorter: (m: DeviceType, n: DeviceType) =>
-                moment(m.createdAt).isAfter(moment(n.createdAt)) ? 1 : -1,
+                dayjs(m.createdAt).isAfter(dayjs(n.createdAt)) ? 1 : -1,
             render: (val: any, record: DeviceType) =>
-                moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss')
+                dayjs(record.createdAt).format('YYYY-MM-DD HH:mm:ss')
         },
         {
             title: '编辑',
@@ -228,14 +228,14 @@ export function getDeviceColumns(
             width: '160px',
             align: 'center',
             sorter(m: DeviceType, n: DeviceType) {
-                let isAfter = moment(m.fetchTime).isAfter(moment(n.fetchTime));
+                let isAfter = dayjs(m.fetchTime).isAfter(dayjs(n.fetchTime));
                 return isAfter ? 1 : -1;
             },
             render(value: Date) {
                 if (helper.isNullOrUndefined(value)) {
                     return helper.EMPTY_STRING;
                 } else {
-                    return moment(value).format('YYYY-MM-DD HH:mm:ss');
+                    return dayjs(value).format('YYYY-MM-DD HH:mm:ss');
                 }
             }
         },
@@ -284,7 +284,7 @@ export function getDeviceColumns(
                                             let next: DeviceType[] = await deviceDb.find({ caseId: record.caseId });
                                             setDataHandle(
                                                 next.sort((m, n) =>
-                                                    moment(m.fetchTime).isBefore(n.fetchTime)
+                                                    dayjs(m.fetchTime).isBefore(n.fetchTime)
                                                         ? 1
                                                         : -1
                                                 )

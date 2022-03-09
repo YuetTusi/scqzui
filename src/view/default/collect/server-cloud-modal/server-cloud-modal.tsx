@@ -149,7 +149,7 @@ const ServerCloudModal: FC<Prop> = ({
      */
     const toCaseAddView = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        dispatch(routerRedux.push('/case/case-add?name=server-cloud-input'));
+        dispatch(routerRedux.push('/case-data/add?name=server-cloud-input'));
     };
 
     /**

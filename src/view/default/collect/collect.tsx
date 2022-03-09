@@ -60,37 +60,37 @@ const Collect: FC<CollectProp> = ({ }) => {
     const currentDevice = useRef<DeviceType | null>(null);
     const dataMode = useRef<DataMode>(DataMode.Self);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        let devices: DeviceType[] = [];
-        for (let i = 0; i < 3; i++) {
-            devices.push({
-                ...{
-                    "fetchState": FetchState.Connected,
-                    "manufacturer": "采集完成",
-                    "model": "TAS-AL00",
-                    "phoneInfo": [{
-                        "name": "厂商", "value": "HUAWEI"
-                    }, { "name": "型号", "value": "TAS-AL00" }, {
-                        "name": "系统版本", "value": "10"
-                    }, {
-                        "name": "IMEI", "value": "867099041036009"
-                    }],
-                    "serial": "JTK0219826000164",
-                    "system": "android",
-                    "usb": i + 1,
-                    "fetchPercent": 10 + i
-                },
-                parseState: ParseState.NotParse,
-                isStopping: false
-            } as DeviceType);
-        }
+    //     let devices: DeviceType[] = [];
+    //     for (let i = 0; i < 3; i++) {
+    //         devices.push({
+    //             ...{
+    //                 "fetchState": FetchState.Connected,
+    //                 "manufacturer": "采集完成",
+    //                 "model": "TAS-AL00",
+    //                 "phoneInfo": [{
+    //                     "name": "厂商", "value": "HUAWEI"
+    //                 }, { "name": "型号", "value": "TAS-AL00" }, {
+    //                     "name": "系统版本", "value": "10"
+    //                 }, {
+    //                     "name": "IMEI", "value": "867099041036009"
+    //                 }],
+    //                 "serial": "JTK0219826000164",
+    //                 "system": "android",
+    //                 "usb": i + 1,
+    //                 "fetchPercent": 10 + i
+    //             },
+    //             parseState: ParseState.NotParse,
+    //             isStopping: false
+    //         } as DeviceType);
+    //     }
 
-        //mock:
-        dispatch({
-            type: 'device/setDeviceList', payload: devices
-        });
-    }, []);
+    //     //mock:
+    //     dispatch({
+    //         type: 'device/setDeviceList', payload: devices
+    //     });
+    // }, []);
 
     useEffect(() => {
         let mode = localStorage.getItem(LocalStoreKey.DataMode);
