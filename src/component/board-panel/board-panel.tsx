@@ -1,14 +1,38 @@
-import React, { FC } from 'react';
-import HomeOutlined from '@ant-design/icons/HomeOutlined';
+import debounce from 'lodash/debounce';
+import { join } from 'path';
+import { shell } from 'electron';
+import React, { FC, MouseEvent } from 'react';
+import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
-import Button from 'antd/lib/button';
+import message from 'antd/lib/message';
+import { BoardMenu } from './board-menu';
 import { Header } from './styled/header';
 import { Center } from './styled/center';
 import { Footer } from './styled/footer';
 import { helper } from '@/utils/helper';
-import { routerRedux, useDispatch } from 'dva';
+import { useDispatch } from 'dva';
 
+const cwd = process.cwd();
 const caption = helper.readAppName();
+
+/**
+ * 打开帮助文档
+ */
+const openHelpDocClick = debounce(async (event: MouseEvent<HTMLSpanElement>) => {
+    event.preventDefault();
+    const url = join(cwd, './data/help/帮助.doc');
+    try {
+        const exist = await helper.existFile(url);
+        if (exist) {
+            await shell.openPath(url);
+        } else {
+            message.destroy();
+            message.info('暂未提供帮助文档');
+        }
+    } catch (error) {
+        console.warn(error);
+    }
+}, 1000, { leading: true, trailing: false });
 
 /**
  * @description 首屏按钮面板
@@ -21,8 +45,8 @@ const BoardPanel: FC<{}> = ({ children }) => {
         <Header>
             <div className="header-caption">{caption ?? ''}</div>
             <div className="header-buttons">
-                <HomeOutlined onClick={() => dispatch(routerRedux.push('/'))} />
-                <MenuOutlined />
+                <QuestionCircleOutlined onClick={openHelpDocClick} title="帮助文档" />
+                <BoardMenu><MenuOutlined /></BoardMenu>
             </div>
         </Header>
         <Center>
