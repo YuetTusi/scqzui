@@ -3,34 +3,31 @@ import React, { FC } from 'react';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
 import Button from 'antd/lib/button';
-import Descriptions from 'antd/lib/descriptions';
-import { DevInfoProp } from './prop';
+import { ClickType, DevInfoProp } from './prop';
 import { InfoBox } from './styled/style';
 import { Split } from '@/component/style-tool';
-import { helper } from '@/utils/helper';
 import DeviceSystem from '@/schema/device-system';
 
 const { Group } = Button;
-const { Item } = Descriptions;
 
 /**
  * 设备信息
  */
-const DevInfo: FC<DevInfoProp> = ({ data }) => {
+const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
 
     return <InfoBox>
         <div className="btn-bar">
             <div>
                 <Group size="small">
-                    <Button type="primary">生成BCP</Button>
-                    <Button type="primary">导出BCP</Button>
-                    <Button type="primary">云点验</Button>
+                    <Button onClick={() => onButtonClick(data, ClickType.GenerateBCP)} type="primary">生成BCP</Button>
+                    <Button onClick={() => onButtonClick(data, ClickType.ExportBCP)} type="primary">导出BCP</Button>
+                    <Button onClick={() => onButtonClick(data, ClickType.CloudSearch)} type="primary">云点验</Button>
                 </Group>
             </div>
             <div>
                 <Group size="small">
-                    <Button type="primary">编辑</Button>
-                    <Button type="primary">删除</Button>
+                    <Button onClick={() => onButtonClick(data, ClickType.Edit)} type="primary">编辑</Button>
+                    <Button onClick={() => onButtonClick(data, ClickType.Delete)} type="primary">删除</Button>
                 </Group>
             </div>
         </div>
@@ -61,6 +58,14 @@ const DevInfo: FC<DevInfoProp> = ({ data }) => {
                     <li>
                         <label htmlFor="span">备注</label>
                         <span>{data.note}</span>
+                    </li>
+                    <li>
+                        <label htmlFor="span">品牌</label>
+                        <span>{data.manufacturer}</span>
+                    </li>
+                    <li>
+                        <label htmlFor="span">型号</label>
+                        <span>{data.model}</span>
                     </li>
                     <li>
                         <label htmlFor="span">序列号</label>

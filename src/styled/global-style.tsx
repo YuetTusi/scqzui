@@ -46,6 +46,10 @@ const GlobalStyle = createGlobalStyle`
         background: #c1c1c1;
     }
 
+	.cloud-color{
+		color:#f9ca24;
+	}
+
     //悬停动画
     /* Sweep To Right */
     .hvr-sweep-to-right {
