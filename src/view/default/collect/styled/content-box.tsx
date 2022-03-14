@@ -18,7 +18,7 @@ const ContentBox = styled.div`
         left: 10px;
         right: 10px;
         bottom: 10px;
-        height: 17px;
+        height: 10px;
         background-color: #202940;
     }
 `;

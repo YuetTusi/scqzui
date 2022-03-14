@@ -1,0 +1,3 @@
+interface CaseListProp { };
+
+export { CaseListProp }

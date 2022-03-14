@@ -106,6 +106,19 @@ const createRouter = (api?: RouterAPI) => {
 							}}
 						/>
 						<Route
+							path="/parse"
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/parse')
+								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
+							}}
+						/>
+						<Route
 							path="/settings"
 							render={() => {
 								const Next = lazy<FC<any>>(

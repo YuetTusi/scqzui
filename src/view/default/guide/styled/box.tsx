@@ -14,7 +14,7 @@ const GuideBox = styled.div`
         left:0;
         right:0;
         bottom:0;
-        height:17px;
+        height:10px;
         background-color: #181d30;
     }
 `;

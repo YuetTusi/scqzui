@@ -1,6 +1,4 @@
 import Electron from 'electron';
-import { Dispatch } from 'redux';
-import { RouteComponentProps } from 'dva/router';
 import { DeviceStoreState } from '@/model/default/device';
 import { AppSetStore } from '@/model/default/app-set';
 import { CaseDataState } from '@/model/default/case-data';
@@ -9,6 +7,8 @@ import { OfficerState } from '@/model/default/officer';
 import { CaseAddState } from '@/model/default/case-add';
 import { CaseEditState } from '@/model/default/case-edit';
 import { Organization } from '@/schema/organization';
+import { ParseCaseState } from '@/model/default/parse-case';
+import { ParseDevState } from '@/model/default/parse-dev';
 
 declare global {
 	interface Window {
@@ -32,6 +32,8 @@ interface StateTree {
 	cloudCodeModal: CloudCodeModalStoreState,
 	officer: OfficerState,
 	organization: Organization,
+	parseCase: ParseCaseState,
+	parseDev: ParseDevState,
 	[modelName: string]: any
 }
 

@@ -66,7 +66,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     // useEffect(() => {
 
     //     let devices: DeviceType[] = [];
-    //     for (let i = 0; i < 3; i++) {
+    //     for (let i = 0; i < 10; i++) {
     //         devices.push({
     //             ...{
     //                 "fetchState": FetchState.Connected,

@@ -194,13 +194,9 @@ if (!instanceLock) {
         });
 
         if (mode === 'development') {
-            mainWindow.webContents.openDevTools();
             mainWindow.loadURL('http://localhost:8085/default.html');
+            mainWindow.webContents.openDevTools();
         } else {
-            if (config!.max <= 2) {
-                //采集路数为2路以下，默认最大化窗口
-                mainWindow.maximize();
-            }
             mainWindow.loadFile(path.join(resourcesPath, 'app.asar.unpacked/dist/default.html'));
         }
 

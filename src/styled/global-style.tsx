@@ -24,7 +24,8 @@ const GlobalStyle = createGlobalStyle`
 
     //Webkit滚动条样式
     ::-webkit-scrollbar {
-        width: 8px;
+        width: 10px;
+		height: 10px;
     }
     ::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
