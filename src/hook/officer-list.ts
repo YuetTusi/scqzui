@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { TableName } from '@/schema/table-name';
 import { Officer } from '@/schema/officer';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 
 function useOfficerList() {
-    const db = new Db<Officer>(TableName.Officer);
+    const db = getDb<Officer>(TableName.Officer);
     const [officer, setOfficer] = useState<Officer[]>([]);
 
     useEffect(() => {

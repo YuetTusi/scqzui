@@ -12,7 +12,7 @@ import { CaseInfo } from '@/schema/case-info';
 import DeviceType from '@/schema/device-type';
 import { helper } from '@/utils/helper';
 import { TableName } from '@/schema/table-name';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 
 type SetDataHandle = (data: DeviceType[]) => void;
 type SetLoadingHandle = (loading: boolean) => void;
@@ -245,8 +245,8 @@ export function getDeviceColumns(
             width: 60,
             align: 'center',
             render: (record: DeviceType) => {
-                const deviceDb = new Db<DeviceType>(TableName.Device);
-                const bcpDb = new Db<DeviceType>(TableName.CreateBcpHistory);
+                const deviceDb = getDb<DeviceType>(TableName.Device);
+                const bcpDb = getDb<DeviceType>(TableName.CreateBcpHistory);
                 return (
                     <a
                         onClick={() => {

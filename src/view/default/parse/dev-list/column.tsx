@@ -1,5 +1,4 @@
 import { join } from 'path';
-import { mkdirSync } from 'fs';
 import dayjs from 'dayjs';
 import classnames from 'classnames';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
@@ -20,7 +19,7 @@ import { LocalStoreKey } from '@/utils/local-store';
 import { TableName } from '@/schema/table-name';
 import CaseInfo from '@/schema/case-info';
 import CommandType, { SocketType } from '@/schema/command';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 
@@ -45,7 +44,7 @@ const isParseDisable = (state: ParseState) => {
  */
 const doParse = async (dispatch: Dispatch, data: DeviceType) => {
 
-    const db = new Db<CaseInfo>(TableName.Case);
+    const db = getDb<CaseInfo>(TableName.Case);
     let useKeyword = localStorage.getItem(LocalStoreKey.UseKeyword) === '1';
     let useDocVerify = localStorage.getItem(LocalStoreKey.UseDocVerify) === '1';
     let caseData: CaseInfo = await db.findOne({

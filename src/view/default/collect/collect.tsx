@@ -6,6 +6,7 @@ import AppleOutlined from '@ant-design/icons/AppleOutlined';
 import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import message from 'antd/lib/message';
 import Button from 'antd/lib/button';
+import { useDstUnit, useUnit } from '@/hook/unit';
 import { TipType } from '@/schema/tip-type';
 import { FetchState, ParseState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
@@ -14,7 +15,7 @@ import { DeviceType } from '@/schema/device-type';
 import { TableName } from '@/schema/table-name';
 import { DataMode } from '@/schema/data-mode';
 import CommandType, { SocketType } from '@/schema/command';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import { LocalStoreKey } from '@/utils/local-store';
@@ -36,7 +37,7 @@ import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
 import { CollectProp } from './prop';
-import { useDstUnit, useUnit } from '@/hook/unit';
+
 
 const { Group } = Button;
 const { useBcp } = helper.readConf()!;
@@ -199,7 +200,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                 break;
             case DataMode.Check:
                 //# 点验版本
-                const fetchData = await new Db<FetchData>(TableName.CheckData)
+                const fetchData = await getDb<FetchData>(TableName.CheckData)
                     .findOne({ serial });
                 if (fetchData === null) {
                     //todo:完成点验功能后打开：

@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import DeviceType from '@/schema/device-type';
 import { TableName } from '@/schema/table-name';
 import { getDeviceColumns } from './column';
@@ -15,7 +15,7 @@ const DeviceTable: FC<DeviceTableProp> = ({ caseId }) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        const db = new Db<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Device);
         (async () => {
             setLoading(true);
             let deviceData = await db.find({ caseId });

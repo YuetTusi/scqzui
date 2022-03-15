@@ -9,7 +9,7 @@ import { Split } from '@/component/style-tool';
 import { EditBox } from './styled/style';
 import { TableName } from '@/schema/table-name';
 import Officer from '@/schema/officer';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import EditForm from './edit-form';
 import policeSvg from './styled/images/police.svg';
 
@@ -29,7 +29,7 @@ const Edit: FC<{}> = () => {
 
         if (id !== '-1') {
             (async () => {
-                const db = new Db<Officer>(TableName.Officer);
+                const db = getDb<Officer>(TableName.Officer);
                 try {
                     const data = await db.findOne({ _id: id });
                     setEditData(data);

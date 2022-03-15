@@ -50,6 +50,10 @@ const GlobalStyle = createGlobalStyle`
 		color:#f9ca24;
 	}
 
+	.ant-empty-description{
+		color:#ffffffd9;
+	}
+
     //悬停动画
     /* Sweep To Right */
     .hvr-sweep-to-right {

@@ -6,7 +6,7 @@ import message from 'antd/lib/message';
 import { TableName } from '@/schema/table-name';
 import { FetchData } from '@/schema/fetch-data';
 import { CaseInfo } from '@/schema/case-info';
-import { Db, getDb } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import logger from '@/utils/log';
 import { helper } from '@/utils/helper';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
@@ -19,7 +19,7 @@ export default {
      */
     *queryById({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
 
-        const db = new Db<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Case);
         yield put({ type: 'setLoading', payload: true });
         try {
             const data: CaseInfo = yield call([db, 'findOne'], { _id: payload });
@@ -35,7 +35,7 @@ export default {
      * @param {CaseInfo} payload 案件
      */
     *saveCase({ payload }: AnyAction, { call, fork, put }: EffectsCommandMap) {
-        const db = new Db<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Case);
         const casePath = join(payload.m_strCasePath, payload.m_strCaseName);
         yield put({ type: 'setLoading', payload: true });
         UserHistory.set(HistoryKeys.HISTORY_UNITNAME, payload.m_strCheckUnitName);//将用户输入的单位名称记录到本地存储中，下次输入可读取

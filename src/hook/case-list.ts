@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import log from '@/utils/log';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import CaseInfo from '@/schema/case-info';
 import { TableName } from '@/schema/table-name';
 
@@ -9,7 +9,7 @@ import { TableName } from '@/schema/table-name';
  */
 function useCaseList() {
 
-    const db = new Db<CaseInfo>(TableName.Case);
+    const db = getDb<CaseInfo>(TableName.Case);
     const [data, setData] = useState<CaseInfo[]>([]);
 
     useEffect(() => {

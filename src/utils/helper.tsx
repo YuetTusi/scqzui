@@ -24,7 +24,7 @@ import { TableName } from '../schema/table-name';
 import { CaseInfo } from '../schema/case-info';
 import { Manufaturer } from '../schema/manufaturer';
 import { LocalStoreKey } from './local-store';
-import { Db } from './db';
+import { getDb } from './db';
 
 const cwd = process.cwd();//应用的根目录
 const KEY = 'az'; //密钥
@@ -527,7 +527,7 @@ const helper = {
      * @returns {CCaseInfo[]} 数组长度>0表示存在
      */
     async caseNameExist(caseName: string) {
-        const db = new Db(TableName.Case);
+        const db = getDb(TableName.Case);
         try {
             let list = await db.find({ m_strCaseName: { $regex: new RegExp(`^${caseName}(?=_)`) } });
             return list;

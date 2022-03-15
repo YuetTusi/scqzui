@@ -5,7 +5,7 @@ import { AnyAction } from 'redux';
 import { routerRedux } from "dva/router";
 import message from "antd/lib/message";
 import logger from '@/utils/log';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import { helper } from "@/utils/helper";
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { TableName } from '@/schema/table-name';
@@ -19,7 +19,7 @@ export default {
      * @param {string} payload.name 
      */
     *saveCase({ payload }: AnyAction, { call, fork, put }: EffectsCommandMap) {
-        const db = new Db<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Case);
         const { entity, name } = payload as { entity: CaseInfo, name: string | null };
         const casePath = path.join(entity.m_strCasePath, entity.m_strCaseName);
         yield put({ type: 'setSaving', payload: true });

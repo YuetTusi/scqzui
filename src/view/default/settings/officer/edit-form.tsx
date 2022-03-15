@@ -6,7 +6,7 @@ import Officer from '@/schema/officer';
 import { TableName } from '@/schema/table-name';
 import { PoliceNo } from '@/utils/regex';
 import { EditFormProp } from './prop';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 
 const { Item } = Form;
 
@@ -25,7 +25,7 @@ const EditForm: FC<EditFormProp> = ({ formRef, data }) => {
      * 校验编号重复
      */
     const isExistNo = throttle(async (rule: any, value: string) => {
-        const db = new Db<Officer>(TableName.Officer);
+        const db = getDb<Officer>(TableName.Officer);
         try {
             let next: Officer[] = await db.find({
                 no: value

@@ -49,6 +49,12 @@ const DevList: FC<DevListProp> = ({ }) => {
         query({}, 1);
     }, [caseId]);
 
+    useEffect(() => {
+        return () => {
+            dispatch({ type: 'parseDev/setCaseId', payload: undefined });
+        }
+    }, []);
+
     /**
      * 翻页Change
      * @param pageIndex 当前页

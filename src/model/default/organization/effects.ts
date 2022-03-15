@@ -2,7 +2,7 @@ import { join } from 'path';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import message from 'antd/lib/message';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import log from '@/utils/log';
 import { TableName } from '@/schema/table-name';
 import { Organization } from '@/schema/organization';
@@ -17,7 +17,7 @@ export default {
      * 查询当前单位设置数据
      */
     *query({ }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = new Db<Organization>(TableName.Organization);
+        const db = getDb<Organization>(TableName.Organization);
         try {
             const next: Organization[] = yield call([db, 'all']);
             if (next.length === 0) {
@@ -65,7 +65,7 @@ export default {
      * @param {string} payload.collectUnitCode 采集单位编号
      */
     *saveCollectUnit({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = new Db<Organization>(TableName.Organization);
+        const db = getDb<Organization>(TableName.Organization);
         const { collectUnitName, collectUnitCode } = payload;
         try {
             const next: Organization[] = yield call([db, 'all']);
@@ -106,7 +106,7 @@ export default {
      * @param {string} payload.dstUnitCode 目的检验单位编号
      */
     * saveDstUnit({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = new Db<Organization>(TableName.Organization);
+        const db = getDb<Organization>(TableName.Organization);
         const { dstUnitName, dstUnitCode } = payload;
         try {
             const next: Organization[] = yield call([db, 'all']);

@@ -27,7 +27,7 @@ import { GuangZhouCase } from '@/schema/platform/guangzhou-case';
 import { HumanVerify } from '@/schema/human-verify';
 import { DataMode } from '@/schema/data-mode';
 import { CaptchaMsg, CloudAppMessages } from '@/schema/cloud-app-messages';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 // import { LoginState } from '@/model/settings/TraceLogin';
 
 const appPath = process.cwd();
@@ -268,8 +268,8 @@ export function parseCurinfo({ msg }: Command<ParseDetail[]>, dispatch: Dispatch
  */
 export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<any>) {
 
-    const caseDb = new Db<CaseInfo>(TableName.Case);
-    const deviceDb = new Db<DeviceType>(TableName.Device);
+    const caseDb = getDb<CaseInfo>(TableName.Case);
+    const deviceDb = getDb<DeviceType>(TableName.Device);
     const { caseId, deviceId, isparseok, errmsg } = msg;
 
     console.log('解析结束：', JSON.stringify(msg));

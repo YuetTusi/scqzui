@@ -5,6 +5,7 @@ import { SubscriptionAPI } from 'dva';
 import Modal from 'antd/lib/modal';
 import { helper } from '@/utils/helper';
 import logger from '@/utils/log';
+import { getDb } from '@/utils/db';
 import server, { send } from '@/utils/tcp-server';
 import TipType from '@/schema/tip-type';
 import { TableName } from '@/schema/table-name';
@@ -17,7 +18,7 @@ import {
     humanVerify, saveOrUpdateOfficerFromPlatform, /*traceLogin,*/ limitResult,
     appRecFinish, fetchPercent
 } from './listener';
-import { Db } from '@/utils/db';
+
 
 const cwd = process.cwd();
 const { Fetch, Parse, Bho, Trace, Error } = SocketType;
@@ -271,7 +272,7 @@ export default {
      */
     saveFetchLog() {
         ipcRenderer.on('save-fetch-log', async (event: IpcRendererEvent, log: FetchLog) => {
-            const db = new Db<FetchLog>(TableName.FetchLog);
+            const db = getDb<FetchLog>(TableName.FetchLog);
             try {
                 await db.insert(log);
             } catch (error) {

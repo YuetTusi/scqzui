@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, routerRedux } from 'dva';
 import message from 'antd/lib/message';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import log from '@/utils/log';
 import { TableName } from '@/schema/table-name';
 import Officer from '@/schema/officer';
@@ -11,7 +11,7 @@ export default {
      * 查询全部检验员
      */
     *fetchOfficer({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = new Db<Officer>(TableName.Officer);
+        const db = getDb<Officer>(TableName.Officer);
         try {
             let result: Officer[] = yield call([db, 'find'], null);
             yield put({ type: 'setOfficer', payload: [...result] });
@@ -24,7 +24,7 @@ export default {
      * @param {string} payload 检验员ID
      */
     *delOfficer({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = new Db<Officer>(TableName.Officer);
+        const db = getDb<Officer>(TableName.Officer);
         try {
             yield call([db, 'remove'], { _id: payload });
             yield put({ type: 'fetchOfficer' });
@@ -39,7 +39,7 @@ export default {
      * @param {payload} Officer
      */
     *insertOfficer({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = new Db<Officer>(TableName.Officer);
+        const db = getDb<Officer>(TableName.Officer);
         try {
             yield call([db, 'insert'], payload);
             yield put(routerRedux.push('/settings/officer'));
@@ -55,7 +55,7 @@ export default {
      * @param {payload} Officer
      */
     *editOfficer({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = new Db<Officer>(TableName.Officer);
+        const db = getDb<Officer>(TableName.Officer);
         let count = 0;
         try {
             const prev: Officer = yield call([db, 'findOne'], { _id: payload._id });

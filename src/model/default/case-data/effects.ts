@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Modal from 'antd/lib/modal';
 import log from '@/utils/log';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { CaseInfo } from "@/schema/case-info";
 import { TableName } from "@/schema/table-name";
@@ -16,7 +16,7 @@ export default {
      */
     *fetchCaseData({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
         const { current, pageSize = helper.PAGE_SIZE } = payload;
-        const db = new Db<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Case);
         yield put({ type: 'setLoading', payload: true });
         try {
             const [result, total]: [CaseInfo[], number] = yield all([
@@ -35,7 +35,7 @@ export default {
      * 查询全部案件
      */
     *queryAllCaseData({ }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = new Db<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Case);
         try {
             const next: CaseInfo[] = yield call([db, 'find'], null, 'createdAt', -1);
             yield put({ type: 'setAllCaseData', payload: next });
@@ -49,10 +49,10 @@ export default {
      * @param {string} payload.casePath 案件路径
      */
     *deleteCaseData({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
-        const caseDb = new Db<CaseInfo>(TableName.Case);
-        const deviceDb = new Db<DeviceType>(TableName.Device);
-        const checkDb = new Db<BcpEntity>(TableName.CheckData);
-        const bcpDb = new Db<BcpEntity>(TableName.CreateBcpHistory);
+        const caseDb = getDb<CaseInfo>(TableName.Case);
+        const deviceDb = getDb<DeviceType>(TableName.Device);
+        const checkDb = getDb<BcpEntity>(TableName.CheckData);
+        const bcpDb = getDb<BcpEntity>(TableName.CreateBcpHistory);
         const modal = Modal.info({
             content: '正在删除，可能时间较长，请不要关闭程序',
             okText: '确定',
