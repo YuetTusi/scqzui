@@ -1,8 +1,9 @@
+import DeviceType from "./device-type";
 
 /**
  * 解析详情（单条）
  */
- interface ParseDetail {
+interface ParseDetail {
     /**
      * 案件id
      */

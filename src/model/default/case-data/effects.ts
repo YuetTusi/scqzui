@@ -72,7 +72,7 @@ export default {
                 //删除掉点验记录 和 BCP历史记录
                 yield all([
                     call([checkDb, 'remove'], { caseId: payload.id }, true),
-                    call([bcpDb, 'remove'], { deviceId: { $in: devicesInCase.map(i => i.id) } }, true)
+                    call([bcpDb, 'remove'], { deviceId: { $in: devicesInCase.map(i => i._id) } }, true)
                 ]);
                 modal.update({ content: '删除成功', okButtonProps: { disabled: false } });
             } else {

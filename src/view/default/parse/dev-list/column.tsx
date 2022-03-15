@@ -1,3 +1,5 @@
+import { join } from 'path';
+import { mkdirSync } from 'fs';
 import dayjs from 'dayjs';
 import classnames from 'classnames';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
@@ -8,12 +10,94 @@ import { Dispatch } from "dva";
 import { ColumnsType, ColumnType } from "antd/lib/table";
 import Button from 'antd/lib/button';
 import Tag from 'antd/lib/tag';
+import Modal from 'antd/lib/modal';
+import message from 'antd/lib/message';
 import DeviceType from "@/schema/device-type";
 import { ParseState } from "@/schema/device-state";
 import DeviceSystem from '@/schema/device-system';
 import { DataMode } from '@/schema/data-mode';
+import { LocalStoreKey } from '@/utils/local-store';
+import { TableName } from '@/schema/table-name';
+import CaseInfo from '@/schema/case-info';
+import CommandType, { SocketType } from '@/schema/command';
+import { Db } from '@/utils/db';
+import { helper } from '@/utils/helper';
+import { send } from '@/utils/tcp-server';
+
 
 const { Group } = Button;
+
+/**
+ * 解析是否为禁用状态
+ */
+const isParseDisable = (state: ParseState) => {
+    if (state === ParseState.Parsing || state === ParseState.Fetching || state === ParseState.Exception) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+/**
+ * 执行解析
+ * @param dispatch Dispatch
+ * @param data 设备数据
+ */
+const doParse = async (dispatch: Dispatch, data: DeviceType) => {
+
+    const db = new Db<CaseInfo>(TableName.Case);
+    let useKeyword = localStorage.getItem(LocalStoreKey.UseKeyword) === '1';
+    let useDocVerify = localStorage.getItem(LocalStoreKey.UseDocVerify) === '1';
+    let caseData: CaseInfo = await db.findOne({
+        _id: data.caseId
+    });
+    let caseJsonPath = join(data.phonePath!, '../../');
+    let caseJsonExist = await helper.existFile(join(caseJsonPath, 'Case.json'));
+
+    if (!caseJsonExist) {
+        await helper.writeCaseJson(caseJsonPath, caseData);
+    }
+
+    send(SocketType.Parse, {
+        type: SocketType.Parse,
+        cmd: CommandType.StartParse,
+        msg: {
+            caseId: data.caseId,
+            deviceId: data._id,
+            phonePath: data.phonePath,
+            hasReport: caseData?.hasReport ?? false,
+            isDel: caseData?.isDel ?? false,
+            isAi: caseData?.isAi ?? false,
+            aiTypes: [
+                caseData.aiThumbnail ? 1 : 0,
+                caseData.aiDoc ? 1 : 0,
+                caseData.aiDrug ? 1 : 0,
+                caseData.aiMoney ? 1 : 0,
+                caseData.aiNude ? 1 : 0,
+                caseData.aiWeapon ? 1 : 0,
+                caseData.aiDress ? 1 : 0,
+                caseData.aiTransport ? 1 : 0,
+                caseData.aiCredential ? 1 : 0,
+                caseData.aiTransfer ? 1 : 0,
+                caseData.aiScreenshot ? 1 : 0
+            ],
+            useKeyword,
+            useDocVerify,
+            dataMode: data.mode ?? DataMode.Self,
+            tokenAppList: caseData.tokenAppList
+                ? caseData.tokenAppList.map((i) => i.m_strID)
+                : []
+        }
+    });
+    dispatch({
+        type: 'parseDev/updateParseState',
+        payload: {
+            id: data._id,
+            parseState: ParseState.Parsing,
+            pageIndex: 1
+        }
+    });
+};
 
 /**
  * 表头定义
@@ -91,13 +175,37 @@ export function getDevColumns(dispatch: Dispatch): ColumnsType<DeviceType> {
             key: '_id',
             align: 'center',
             width: '50px',
-            render: () => {
+            render: (id: string, record) => {
+
                 return <Group size="small">
                     <Button
-                        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                        type="primary"
+                        size="small"
+                        disabled={isParseDisable(record.parseState!)}
+                        onClick={async (event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
-                        }}
-                        type="primary">解析</Button>
+                            let exist = await helper.existFile(record.phonePath!);
+                            if (exist) {
+                                if (record.parseState === ParseState.NotParse) {
+                                    doParse(dispatch, record);
+                                } else {
+                                    Modal.confirm({
+                                        title: '重新解析',
+                                        content: '可能所需时间较长，确定重新解析吗？',
+                                        okText: '是',
+                                        cancelText: '否',
+                                        onOk() {
+                                            doParse(dispatch, record);
+                                        }
+                                    });
+                                }
+                            } else {
+                                message.destroy();
+                                message.warning('取证数据不存在');
+                            }
+                        }}>
+                        解析
+                    </Button>
                     <Button
                         onClick={(event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();

@@ -279,7 +279,7 @@ export function getDeviceColumns(
                                             //NOTE:磁盘文件删除成功后，更新数据库
                                             await Promise.all([
                                                 deviceDb.remove({ _id: record._id }),
-                                                bcpDb.remove({ deviceId: record.id }, true)
+                                                bcpDb.remove({ deviceId: record._id }, true)
                                             ]);
                                             let next: DeviceType[] = await deviceDb.find({ caseId: record.caseId });
                                             setDataHandle(

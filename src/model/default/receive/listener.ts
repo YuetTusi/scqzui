@@ -260,7 +260,7 @@ export function extraMsg({ msg }: Command<{ usb: number, content: string }>, dis
  * 解析详情
  */
 export function parseCurinfo({ msg }: Command<ParseDetail[]>, dispatch: Dispatch<any>) {
-    dispatch({ type: 'progressModal/setInfo', payload: msg });
+    dispatch({ type: 'parsingList/setInfo', payload: msg });
 }
 
 /**
@@ -277,7 +277,7 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
     try {
         let [caseData, deviceData]: [CaseInfo, DeviceType] = await Promise.all([
             caseDb.findOne({ _id: caseId }),
-            deviceDb.findOne({ id: deviceId })
+            deviceDb.findOne({ _id: deviceId })
         ]);
         if (isparseok && caseData.generateBcp) {
             //# 解析`成功`且`是`自动生成BCP
@@ -288,7 +288,13 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
                 cwd: path.join(appPath, '../../../tools/BcpTools')
             });
             proc.once('close', () => {
-                dispatch({ type: "parse/fetchCaseData", payload: { current: 1 } });
+                // dispatch({
+                //     type: 'parseDev/queryDev', payload: {
+                //         condition: null,
+                //         pageIndex: 1,
+                //         pageSize: 5
+                //     }
+                // });
             });
             proc.once('error', (err) => {
                 logger.error(`生成BCP错误 @model/dashboard/Device/listener/parseEnd: ${err.message}`);
@@ -306,11 +312,12 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
     } finally {
         //# 更新解析状态为`完成或失败`状态
         dispatch({
-            type: 'parse/updateParseState', payload: {
+            type: 'parseDev/updateParseState', payload: {
                 id: deviceId,
                 parseState: isparseok ? ParseState.Finished : ParseState.Error
             }
         });
+        dispatch({ type: 'parsingList/removeDevice', payload: deviceId });
     }
 
     //# 保存日志

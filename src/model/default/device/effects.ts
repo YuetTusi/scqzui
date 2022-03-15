@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import message from "antd/lib/message";
 import logger from "@/utils/log";
 import { helper } from '@/utils/helper';
+import { getDb } from '@/utils/db';
 import { caseStore, LocalStoreKey } from "@/utils/local-store";
 import UserHistory, { HistoryKeys } from "@/utils/user-history";
 import { send } from "@/utils/tcp-server";
@@ -29,7 +30,6 @@ import { DeviceSystem } from '@/schema/device-system';
 import { StateTree } from '@/type/model';
 import parseApps from '@/config/parse-app.yaml';
 import { DeviceStoreState } from './index';
-import { Db } from '@/utils/db';
 /**
  * 副作用
  */
@@ -38,7 +38,7 @@ export default {
      * 查询案件数据是否为空
      */
     *queryEmptyCase({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = new Db<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Case);
         try {
             let count: number = yield call([db, 'count'], null);
             yield put({ type: 'device/setEmptyCase', payload: count === 0 });
@@ -53,12 +53,11 @@ export default {
      * @param {DeviceType} payload.data 设备数据
      */
     *saveDeviceToCase({ payload }: AnyAction, { call }: EffectsCommandMap) {
-        const db = new Db<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Device);
         const { data } = payload as { id: string, data: DeviceType };
         try {
             yield call([db, 'insert'], {
                 _id: data._id,
-                id: data.id,
                 caseId: data.caseId,
                 checker: data.checker,
                 checkerNo: data.checkerNo,
@@ -95,10 +94,10 @@ export default {
         const { usb }: { usb: number } = payload;
         const state: DeviceStoreState = yield select((state: StateTree) => state.device);
         const current = state.deviceList[usb - 1]; //当前手机
-        if (current?.fetchState === FetchState.Fetching && !helper.isNullOrUndefinedOrEmptyString(current.id)) {
+        if (current?.fetchState === FetchState.Fetching && !helper.isNullOrUndefinedOrEmptyString(current._id)) {
             yield put({
-                type: 'parse/updateParseState', payload: {
-                    id: current.id,
+                type: 'parseDev/updateParseState', payload: {
+                    id: current._id,
                     parseState: ParseState.Exception
                 }
             });
@@ -111,7 +110,7 @@ export default {
      */
     *updateParseState({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
         const { id, parseState } = payload;
-        const db = new Db<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Device);
         try {
             yield call([db, 'update'], { id }, { $set: { parseState } });
             yield put({
@@ -151,9 +150,9 @@ export default {
      * @param {ParseEnd} payload 采集结束后ParseEnd数据
      */
     *saveParseLog({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
-        const deviceDb = new Db<DeviceType>(TableName.Device);
-        const caseDb = new Db<DeviceType>(TableName.Case);
-        const parseLogDb = new Db<ParseLogEntity>(TableName.ParseLog);
+        const deviceDb = getDb<DeviceType>(TableName.Device);
+        const caseDb = getDb<DeviceType>(TableName.Case);
+        const parseLogDb = getDb<ParseLogEntity>(TableName.ParseLog);
         const {
             caseId, deviceId, isparseok, parseapps, u64parsestarttime, u64parseendtime
         } = (payload as ParseEnd);
@@ -191,7 +190,7 @@ export default {
      * @param {FetchData} payload.fetchData 为当前采集输入数据
      */
     *startFetch({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
-        const db = new Db<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Case);
         let sendCase: GuangZhouCase | null = null;
         const { deviceData, fetchData } = payload as { deviceData: DeviceType, fetchData: FetchData };
         // *再次采集前要把采集记录清除
@@ -232,7 +231,7 @@ export default {
         rec.mode = fetchData.mode;
         rec.fetchTime = new Date(dayjs().add(deviceData.usb!, 's').valueOf());
         rec.phonePath = phonePath;
-        rec.id = helper.newId();
+        rec._id = helper.newId();
         rec.caseId = fetchData.caseId;//所属案件id
         rec.parseState = ParseState.Fetching;
         rec.cloudAppList = fetchData.cloudAppList;
@@ -351,7 +350,7 @@ export default {
         //采集时把必要的数据更新到deviceList中
         yield put({
             type: 'setDeviceToList', payload: {
-                id: rec.id,
+                _id: rec._id,
                 usb: deviceData.usb,
                 tipType: TipType.Nothing,
                 fetchPercent: 0,
@@ -431,7 +430,7 @@ export default {
      */
     *startParse({ payload }: AnyAction, { select, call, fork, put }: EffectsCommandMap) {
 
-        const db = new Db<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Case);
         const device: DeviceStoreState = yield select((state: StateTree) => state.device);
         const current = device.deviceList.find((item) => item?.usb == payload);
 
@@ -445,7 +444,7 @@ export default {
 
                 logger.info(`开始解析(StartParse):${JSON.stringify({
                     caseId: caseData._id,
-                    deviceId: current.id,
+                    deviceId: current._id,
                     phonePath: current.phonePath,
                     dataMode: current.mode ?? DataMode.Self,
                     hasReport: caseData.hasReport ?? false,
@@ -474,7 +473,7 @@ export default {
                     cmd: CommandType.StartParse,
                     msg: {
                         caseId: caseData._id,
-                        deviceId: current.id,
+                        deviceId: current._id,
                         phonePath: current.phonePath,
                         dataMode: current.mode ?? DataMode.Self,
                         hasReport: caseData.hasReport ?? false,
@@ -501,16 +500,16 @@ export default {
 
                 //# 更新数据记录为`解析中`状态
                 yield put({
-                    type: 'parse/updateParseState', payload: {
-                        id: current.id,
+                    type: 'parseDev/updateParseState', payload: {
+                        id: current._id,
                         parseState: ParseState.Parsing
                     }
                 });
             } else {
                 //# 非自动解析案件，把解析状态更新为`未解析`
                 yield put({
-                    type: 'parse/updateParseState', payload: {
-                        id: current!.id,
+                    type: 'parseDev/updateParseState', payload: {
+                        id: current!._id,
                         parseState: ParseState.NotParse
                     }
                 });
@@ -647,7 +646,7 @@ export default {
      */
     *saveOrUpdateOfficer({ payload }: AnyAction, { call, fork }: EffectsCommandMap) {
 
-        const db = new Db<Officer>(TableName.Officer);
+        const db = getDb<Officer>(TableName.Officer);
         const { no, name } = payload as Officer;
 
         try {

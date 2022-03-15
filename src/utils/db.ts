@@ -4,6 +4,20 @@ import DataStore from 'nedb';
 const pool = new Map<string, Db>();
 
 /**
+ * 得到数据实例
+ * @param {string} collection
+ */
+function getDb<T = any>(collection: string) {
+    if (pool.has(collection)) {
+        return pool.get(collection) as Db<T>;
+    } else {
+        const db = new Db<T>(collection);
+        pool.set(collection, db);
+        return db;
+    }
+}
+
+/**
  * 封装NeDB操作
  */
 class Db<T = any> {
@@ -217,5 +231,5 @@ class Db<T = any> {
     }
 }
 
-export { Db };
+export { Db, getDb };
 

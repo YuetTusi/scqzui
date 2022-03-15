@@ -1,5 +1,4 @@
-import { Db } from '@/utils/db';
-import { ipcRenderer } from 'electron';
+import { getDb } from '@/utils/db';
 import { useEffect, useState } from 'react';
 
 /**
@@ -10,7 +9,7 @@ import { useEffect, useState } from 'react';
 function useQueryDb(tableName: string, condition: any = null) {
 
     const [result, setResult] = useState<any>(null);
-    const db = new Db(tableName);
+    const db = getDb(tableName);
 
     useEffect(() => {
         (async function () {

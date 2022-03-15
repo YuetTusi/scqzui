@@ -1,14 +1,13 @@
-import { ipcRenderer } from "electron";
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from "dva";
 import logger from "@/utils/log";
+import { helper } from "@/utils/helper";
+import { getDb } from "@/utils/db";
 import { caseStore } from "@/utils/local-store";
 import { StateTree } from '@/type/model';
 import { TableName } from "@/schema/table-name";
 import DeviceType from "@/schema/device-type";
 import { CloudAppMessages } from "@/schema/cloud-app-messages";
-import { helper } from "@/utils/helper";
-import { Db } from "@/utils/db";
 
 export default {
     /**
@@ -16,7 +15,7 @@ export default {
      * @param {number} payload.usb 序号
      */
     *saveCloudLog({ payload }: AnyAction, { fork, select }: EffectsCommandMap) {
-        const db = new Db(TableName.CloudLog);
+        const db = getDb(TableName.CloudLog);
         const { usb } = payload as { usb: number };
         const { device, cloudCodeModal } = yield select((state: StateTree) => ({
             device: state.device,

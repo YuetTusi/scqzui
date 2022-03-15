@@ -6,7 +6,7 @@ import message from 'antd/lib/message';
 import { TableName } from '@/schema/table-name';
 import { FetchData } from '@/schema/fetch-data';
 import { CaseInfo } from '@/schema/case-info';
-import { Db } from '@/utils/db';
+import { Db, getDb } from '@/utils/db';
 import logger from '@/utils/log';
 import { helper } from '@/utils/helper';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
@@ -75,7 +75,7 @@ export default {
      * @param {ParseApp[]} payload.appList 应用列表
      */
     *updateCheckDataFromCase({ payload }: AnyAction, { call, fork }: EffectsCommandMap) {
-        const db = new Db(TableName.CheckData);
+        const db = getDb(TableName.CheckData);
         const { caseId, sdCard, isAuto, hasReport, appList } = payload;
         try {
             let record: FetchData = yield call([db, 'findOne'], { caseId });

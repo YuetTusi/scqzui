@@ -34,7 +34,7 @@ export const ListBox = styled.div`
         justify-content: flex-start;
         align-items: center;
         flex-wrap: nowrap;
-        overflow-x: auto;
+        overflow-x: scroll;
         padding-top: 10px;
 
         .d-empty{

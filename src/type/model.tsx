@@ -9,6 +9,7 @@ import { CaseEditState } from '@/model/default/case-edit';
 import { Organization } from '@/schema/organization';
 import { ParseCaseState } from '@/model/default/parse-case';
 import { ParseDevState } from '@/model/default/parse-dev';
+import { ParsingListState } from '@/model/default/parsing-list';
 
 declare global {
 	interface Window {
@@ -34,6 +35,7 @@ interface StateTree {
 	organization: Organization,
 	parseCase: ParseCaseState,
 	parseDev: ParseDevState,
+	parsingList: ParsingListState,
 	[modelName: string]: any
 }
 

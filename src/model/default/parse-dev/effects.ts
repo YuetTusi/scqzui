@@ -2,15 +2,16 @@ import { join } from 'path';
 import { mkdirSync } from 'fs';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
+import message from 'antd/lib/message';
+import { StateTree } from '@/type/model';
 import { TableName } from '@/schema/table-name';
 import DeviceType from '@/schema/device-type';
-import { Db } from '@/utils/db';
-import { StateTree } from '@/type/model';
-import logger from '@/utils/log';
-import { ParseState } from '@/schema/device-state';
-import message from 'antd/lib/message';
-import { helper } from '@/utils/helper';
 import { DataMode } from '@/schema/data-mode';
+import { ParseState } from '@/schema/device-state';
+import { getDb } from '@/utils/db';
+import logger from '@/utils/log';
+import { helper } from '@/utils/helper';
+import { ParseDevState } from '.';
 
 export default {
 
@@ -20,7 +21,7 @@ export default {
     *queryDev({ payload }: AnyAction, { all, call, put, select }: EffectsCommandMap) {
 
         const { pageIndex, pageSize, condition } = payload;
-        const db = new Db<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Device);
         const { caseId } = yield select((state: StateTree) => state.parseDev);
 
         yield put({ type: 'setLoading', payload: true });
@@ -60,12 +61,19 @@ export default {
      * @param {ParseState} payload.parseState 解析状态
      * @param {number} payload.pageIndex 当前页
      */
-    *updateParseState({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = new Db<DeviceType>(TableName.Device);
-        const { id, parseState, pageIndex = 1 } = payload as { id: string, parseState: ParseState, pageIndex: number };
+    *updateParseState({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
+        const db = getDb<DeviceType>(TableName.Device);
+        const currentState: ParseDevState = yield select((state: StateTree) => state.parseDev);
+        const { id, parseState, pageIndex } = payload as { id: string, parseState: ParseState, pageIndex: number };
         try {
-            yield call([db, 'update'], { id }, { $set: { parseState } });
-            yield put({ type: "fetchCaseData", payload: { current: pageIndex } });
+            yield call([db, 'update'], { _id: id }, { $set: { parseState } });
+            yield put({
+                type: 'queryDev', payload: {
+                    pageIndex: pageIndex === undefined ? currentState.pageIndex : 1,
+                    pageSize: 5,
+                    condition: null
+                }
+            });
             logger.info(`解析状态更新, deviceId:${id}, 状态:${parseState}`);
             console.log(`解析状态更新，id:${id}，状态:${parseState}`);
         } catch (error) {
@@ -77,7 +85,7 @@ export default {
     * @param {DeviceType} payload 
     */
     *updateDev({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
-        const db = new Db<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Device);
         const { pageIndex, pageSize } = yield select((state: StateTree) => state.parseDev);
         try {
             yield call([db, 'update'], { id: payload.id }, {

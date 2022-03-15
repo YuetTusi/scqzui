@@ -11,10 +11,6 @@ import { CloudApp } from './cloud-app';
  */
 class DeviceType extends BaseEntity {
     /**
-     * 唯一标识uuid
-     */
-    id?: string;
-    /**
      * 所属案件的id
      */
     caseId?: string;

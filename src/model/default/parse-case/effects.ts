@@ -1,7 +1,7 @@
 
 import { EffectsCommandMap } from 'dva';
 import { AnyAction } from 'redux';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import CaseInfo from '@/schema/case-info';
 import { TableName } from '@/schema/table-name';
 
@@ -12,7 +12,7 @@ export default {
      */
     *queryCase({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
         const { pageIndex, pageSize, condition } = payload;
-        const db = new Db<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Case);
 
         yield put({ type: 'setLoading', payload: true });
         try {

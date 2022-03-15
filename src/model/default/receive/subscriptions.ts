@@ -138,7 +138,6 @@ export default {
                     break;
                 case CommandType.ParseCurinfo:
                     //# 解析详情
-                    console.log(command.msg);
                     parseCurinfo(command, dispatch);
                     break;
                 case CommandType.ParseEnd:

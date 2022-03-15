@@ -1,12 +1,11 @@
 import { ipcRenderer } from 'electron';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Modal from 'antd/lib/modal';
 import { LocalStoreKey } from '@/utils/local-store';
 import { helper } from '@/utils/helper';
 import logger from '@/utils/log';
-import { Db } from '@/utils/db';
+import { getDb } from '@/utils/db';
 import { request } from '@/utils/request';
 import { TableName } from '@/schema/table-name';
 import { DeviceType } from '@/schema/device-type';
@@ -43,8 +42,8 @@ export default {
      * @param {ParseState} payload 解析状态
      */
     *updateAllDeviceParseState({ payload }: AnyAction, { call, fork }: EffectsCommandMap) {
+        const db = getDb<DeviceType>(TableName.Device);
         let msgBox: any = null;
-        const db = new Db<DeviceType>(TableName.Device);
         try {
             let data: DeviceType[] = yield call([db, 'all']);
             let updateId: string[] = [];
@@ -59,7 +58,7 @@ export default {
                     okText: '确定',
                     maskClosable: false,
                     okButtonProps: {
-                        disabled: true, icon: LoadingOutlined
+                        disabled: true
                     }
                 });
                 yield fork([db, 'update'],

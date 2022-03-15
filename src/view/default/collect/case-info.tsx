@@ -36,7 +36,7 @@ const CaseInfo: FC<CaseInfoProp> = memo(({ usb }) => {
             <span title={caseName} className="val">{caseName}</span>
         </div>
         <div>
-            <label className="txt">手机持有人</label>
+            <label className="txt">持有人</label>
             <span title={mobileHolder} className="val">{mobileHolder}</span>
         </div>
         {!helper.isNullOrUndefinedOrEmptyString(mobileNo) ? (

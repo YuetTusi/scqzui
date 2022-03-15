@@ -1,43 +1,93 @@
 import React, { FC, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'dva';
 import Empty from 'antd/lib/empty';
 import Progress from 'antd/lib/progress';
+import { StateTree } from '@/type/model';
+import { ParsingListState } from '@/model/default/parsing-list';
+import ParseDetail from '@/schema/parse-detail';
+import DeviceType from '@/schema/device-type';
 import { ListBox } from './styled/style';
 
+/**
+ * 设备进度
+ */
+const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, devices }) => {
 
-const ParsingDev: FC<{}> = () => {
+    const { curinfo, curprogress, deviceId } = info;
+
+    const renderLi = () => {
+        const dev = devices.find(item => item._id === deviceId);
+        return <ul>
+            <li>
+                <label>手机名称</label>
+                <span>{dev?.mobileName === undefined ? '' : dev?.mobileName.split('_')[0]}</span>
+            </li>
+            <li>
+                <label>手机持有人</label>
+                <span>{dev?.mobileHolder ?? ''}</span>
+            </li>
+            <li>
+                <label>编号</label>
+                <span>{dev?.mobileNo ?? ''}</span>
+            </li>
+            <li>
+                <label>备注</label>
+                <span>{dev?.note ?? ''}</span>
+            </li>
+        </ul>;
+    }
+
+    const progFormatter = (percent?: number) => {
+        if (percent === 100) {
+            return <span>完成</span>;
+        } else {
+            return <span>{`${percent}%`}</span>;
+        }
+    };
+
     return <div className="d-item">
         <div className="prog">
-            <Progress percent={33.3} type="circle" status="normal" strokeColor="#26e5dc" />
+            <Progress
+                percent={curprogress}
+                format={progFormatter}
+                type="circle"
+                strokeColor="#26e5dc" />
         </div>
         <div className="info">
             <div className="live">
-                暂无进度消息
+                {curinfo ?? '暂无进度消息'}
             </div>
-            <ul>
-                <li>
-                    <label>手机名称</label>
-                    <span>OnePlusR9</span>
-                </li>
-                <li>
-                    <label>手机持有人</label>
-                    <span>习包</span>
-                </li>
-                <li>
-                    <label>编号</label>
-                    <span>001</span>
-                </li>
-                <li>
-                    <label>备注</label>
-                    <span>001</span>
-                </li>
-            </ul>
+            {renderLi()}
         </div>
     </div>;
 };
 
+/**
+ * 进度列表
+ */
 const ParsingList: FC<{}> = () => {
 
+    const dispatch = useDispatch();
+    const { info, devices } = useSelector<StateTree, ParsingListState>(state => state.parsingList);
     const devRef = useRef<HTMLDivElement>(null);
+
+
+    // useEffect(() => {
+    //     info.forEach(item => {
+    //         const exist = devices.some(dev => item.deviceId === dev._id);
+    //         if (!exist) {
+    //             //若设备列表中没有对应的设备，查库追加到列表中
+    //             dispatch({ type: 'parsingList/queryDev', payload: { deviceId: item.deviceId } });
+    //         }
+    //     });
+    // }, [info]);
+
+    useEffect(() => {
+        return () => {
+            dispatch({ type: 'parsingList/setInfo', payload: [] });
+            dispatch({ type: 'parsingList/setDevice', payload: [] });
+        };
+    }, []);
 
     /**
      * 面板横向滚动控制
@@ -62,24 +112,31 @@ const ParsingList: FC<{}> = () => {
         };
     }, []);
 
+    /**
+     * 渲染解析列表
+     */
+    const renderList = () => {
+
+        if (info && info.length > 0) {
+            return info.map((item) => <ParsingDev
+                info={item}
+                devices={devices}
+                key={`PD_${item.deviceId}`} />);
+        } else {
+            return <div className="d-empty">
+                <Empty
+                    description="暂无解析设备"
+                    image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            </div>
+        }
+    };
+
     return <ListBox>
         <div className="title">
             解析列表
         </div>
         <div ref={devRef} className="dev">
-            {/* <div className="d-empty">
-                <Empty description="暂无解析设备" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            </div> */}
-            <ParsingDev />
-            <ParsingDev />
-            <ParsingDev />
-            <ParsingDev />
-            <ParsingDev />
-            <ParsingDev />
-            <ParsingDev />
-            <ParsingDev />
-            <ParsingDev />
-            <ParsingDev />
+            {renderList()}
         </div>
         <div className="mask-split" />
     </ListBox>;
