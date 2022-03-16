@@ -4,13 +4,14 @@ import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
 import { Key } from 'antd/lib/table/interface';
 import { StateTree } from '@/type/model';
-import { getDevColumns } from './column';
-import { DevListProp } from './prop';
+import { DeviceType } from '@/schema/device-type';
 import { ParseDevState } from '@/model/default/parse-dev';
-import DeviceType from '@/schema/device-type';
+import { OperateDoingState } from '@/model/default/operate-doing';
 import DevInfo from '../dev-info';
 import { ClickType } from '../dev-info/prop';
 import EditDevModal from '../edit-dev-modal';
+import { getDevColumns } from './column';
+import { DevListProp } from './prop';
 
 /**
  * 设备列表
@@ -26,6 +27,7 @@ const DevList: FC<DevListProp> = ({ }) => {
         pageSize,
         total
     } = useSelector<StateTree, ParseDevState>(state => state.parseDev);
+    const operateDoing = useSelector<StateTree, OperateDoingState>(state => state.operateDoing);
     const currentDev = useRef<DeviceType>();
     const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([]);
     const [editDevModalVisbile, setEditDevModalVisible] = useState<boolean>(false);
@@ -37,7 +39,8 @@ const DevList: FC<DevListProp> = ({ }) => {
      */
     const query = (condition: Record<string, any>, pageIndex: number) => {
         dispatch({
-            type: 'parseDev/queryDev', payload: {
+            type: 'parseDev/queryDev',
+            payload: {
                 condition,
                 pageIndex,
                 pageSize: 5
@@ -101,7 +104,7 @@ const DevList: FC<DevListProp> = ({ }) => {
 
     return <>
         <Table<DeviceType>
-            columns={getDevColumns(dispatch)}
+            columns={getDevColumns(dispatch, operateDoing)}
             dataSource={data}
             loading={loading}
             pagination={{

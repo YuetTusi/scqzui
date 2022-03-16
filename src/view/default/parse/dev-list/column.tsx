@@ -1,5 +1,7 @@
 import { join } from 'path';
 import dayjs from 'dayjs';
+import { execFile } from 'child_process';
+import { ipcRenderer } from 'electron';
 import classnames from 'classnames';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
@@ -11,6 +13,7 @@ import Button from 'antd/lib/button';
 import Tag from 'antd/lib/tag';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
+import notification from 'antd/lib/notification';
 import DeviceType from "@/schema/device-type";
 import { ParseState } from "@/schema/device-state";
 import DeviceSystem from '@/schema/device-system';
@@ -22,8 +25,11 @@ import CommandType, { SocketType } from '@/schema/command';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
+import logger from '@/utils/log';
+import { AlartMessageInfo } from '@/component/alert-message/prop';
+import { OperateDoingState } from '@/model/default/operate-doing';
 
-
+const cwd = process.cwd();
 const { Group } = Button;
 
 /**
@@ -99,10 +105,109 @@ const doParse = async (dispatch: Dispatch, data: DeviceType) => {
 };
 
 /**
+ * 调用exe创建报告
+ * @param props 组件属性
+ * @param exePath create_report.exe所在路径
+ * @param device 设备
+ */
+const runCreateReport = async (dispatch: Dispatch, exePath: string, device: DeviceType) => {
+    const {
+        _id, caseId, mobileHolder, mobileName, mobileNo, mode, phonePath, note
+    } = device;
+    const db = getDb<CaseInfo>(TableName.Case);
+    const casePath = join(phonePath!, '../../'); //案件路径
+    const exeCwd = join(cwd, '../tools/CreateReport');
+    const msg = new AlartMessageInfo({
+        id: helper.newId(),
+        msg: `正在生成「${`${mobileHolder}-${mobileName?.split('_')[0]}`}」报告`
+    });
+    message.info('开始生成报告');
+    dispatch({
+        type: 'alartMessage/addAlertMessage',
+        payload: msg
+    }); //显示全局消息
+    dispatch({
+        type: 'operateDoing/addCreatingDeviceId',
+        payload: _id
+    });
+    ipcRenderer.send('show-progress', true);
+    try {
+        const caseJsonPath = join(casePath, 'Case.json');
+        const deviceJsonPath = join(phonePath!, 'Device.json');
+        const [caseJsonExist, deviceJsonExist] = await Promise.all([
+            helper.existFile(caseJsonPath),
+            helper.existFile(deviceJsonPath)
+        ]);
+
+        if (!caseJsonExist) {
+            const caseData: CaseInfo = await db.findOne({
+                _id: caseId
+            });
+            await helper.writeCaseJson(casePath, caseData);
+        }
+        if (!deviceJsonExist) {
+            await helper.writeJSONfile(deviceJsonPath, {
+                mobileHolder: mobileHolder ?? '',
+                mobileNo: mobileNo ?? '',
+                mobileName: mobileName ?? '',
+                note: note ?? '',
+                mode: mode ?? DataMode.Self
+            });
+        }
+    } catch (error) {
+        logger.error(
+            `写入JSON失败 @view/default/parse/dev-list/column: ${error.message}`
+        );
+    }
+
+    const proc = execFile(exePath, [casePath, device.phonePath!], { cwd: exeCwd });
+    proc.once('error', () => {
+        message.destroy();
+        notification.error({
+            type: 'error',
+            message: '报告生成失败',
+            description: `「${mobileHolder}-${mobileName?.split('_')[0]}」报告生成失败`,
+            duration: 0
+        });
+        dispatch({
+            type: 'alartMessage/removeAlertMessage',
+            payload: msg.id
+        });
+        dispatch({
+            type: 'operateDoing/removeCreatingDeviceId',
+            payload: _id
+        });
+        ipcRenderer.send('show-progress', false);
+    });
+    proc.once('exit', () => {
+        message.destroy();
+        notification.success({
+            type: 'success',
+            message: '报告生成成功',
+            description: `「${mobileHolder}-${mobileName?.split('_')[0]}」报告生成成功`,
+            duration: 0
+        });
+        dispatch({
+            type: 'alartMessage/removeAlertMessage',
+            payload: msg.id
+        });
+        dispatch({
+            type: 'operateDoing/removeCreatingDeviceId',
+            payload: _id
+        });
+        ipcRenderer.send('show-progress', false);
+    });
+};
+
+
+/**
  * 表头定义
  * @param dispatch 派发方法
  */
-export function getDevColumns(dispatch: Dispatch): ColumnsType<DeviceType> {
+export function getDevColumns(dispatch: Dispatch, operateDoing: OperateDoingState): ColumnsType<DeviceType> {
+
+    const { creatingDeviceId, exportingDeviceId } = operateDoing;
+
     let columns: ColumnType<DeviceType>[] = [
         {
             title: '状态',
@@ -175,7 +280,6 @@ export function getDevColumns(dispatch: Dispatch): ColumnsType<DeviceType> {
             align: 'center',
             width: '50px',
             render: (id: string, record) => {
-
                 return <Group size="small">
                     <Button
                         type="primary"
@@ -213,7 +317,23 @@ export function getDevColumns(dispatch: Dispatch): ColumnsType<DeviceType> {
                     <Button
                         onClick={(event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
+                            const exe = join(cwd, '../tools/CreateReport/create_report.exe');
+                            Modal.confirm({
+                                title: '生成报告',
+                                content: '可能所需时间较长，确定重新生成报告吗？',
+                                okText: '是',
+                                cancelText: '否',
+                                onOk() {
+                                    runCreateReport(dispatch, exe, record);
+                                }
+                            });
                         }}
+                        disabled={
+                            creatingDeviceId.some((i) => i === record._id) ||
+                            exportingDeviceId.length !== 0 ||
+                            (record.parseState !== ParseState.Finished
+                                && record.parseState !== ParseState.Error)
+                        }
                         type="primary">生成报告</Button>
                     <Button
                         onClick={(event: MouseEvent<HTMLButtonElement>) => {

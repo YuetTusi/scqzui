@@ -406,6 +406,16 @@ ipcMain.on('show-notification', (event, args) => {
     mainWindow!.webContents.send('show-notification', args);
 });
 
+//显示窗口进度
+ipcMain.on('show-progress', (event, show: boolean) => {
+    if (mainWindow !== null) {
+        mainWindow.setProgressBar(show ? 1 : 0, {
+            mode: show ? 'indeterminate' : 'none'
+        });
+    }
+});
+
+
 //写net.json
 ipcMain.handle('write-net-json', (event, servicePort: number) =>
     helper.writeNetJson(cwd, { apiPort: httpPort, servicePort })

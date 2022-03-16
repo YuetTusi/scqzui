@@ -1,6 +1,8 @@
 import Electron from 'electron';
 import { DeviceStoreState } from '@/model/default/device';
 import { AppSetStore } from '@/model/default/app-set';
+import { AlartMessageState } from '@/model/default/alart-message';
+import { OperateDoingState } from '@/model/default/operate-doing';
 import { CaseDataState } from '@/model/default/case-data';
 import { CloudCodeModalStoreState } from '@/model/default/cloud-code-modal';
 import { OfficerState } from '@/model/default/officer';
@@ -26,6 +28,8 @@ declare global {
  */
 interface StateTree {
 	appSet: AppSetStore,
+	alartMessage: AlartMessageState,
+	operateDoing:OperateDoingState,
 	device: DeviceStoreState,
 	caseData: CaseDataState,
 	caseAdd: CaseAddState,

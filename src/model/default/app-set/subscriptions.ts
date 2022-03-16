@@ -13,7 +13,6 @@ import { request } from '@/utils/request';
 import { ParseState } from '@/schema/device-state';
 import { DataMode } from '@/schema/data-mode';
 import { AppCategory } from '@/schema/app-config';
-// import { AlarmMessageInfo } from '@/components/AlarmMessage/componentType';
 
 const cwd = process.cwd();
 const { useBcp, useServerCloud, useTraceLogin, cloudAppMd5, cloudAppUrl } = helper.readConf()!;

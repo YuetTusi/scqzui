@@ -87,13 +87,13 @@ const EditDevModal: FC<EditDevModalProp> = ({
                 ]}
                 name="mobileHolder"
                 label="持有人">
-                <Input />
+                <Input maxLength={20} />
             </Item>
             <Item name="mobileNo" label="手机编号">
-                <Input />
+                <Input maxLength={10} />
             </Item>
             <Item name="note" label="备注">
-                <Input />
+                <Input maxLength={100} />
             </Item>
         </Form>
     </Modal>;

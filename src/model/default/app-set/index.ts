@@ -23,7 +23,7 @@ interface AppSetStore {
     /**
      * 全局警告消息，无消息为空数组
      */
-    // alertMessage: AlarmMessageInfo[],
+    // alertMessage: AlartMessageInfo[],
     alertMessage: any[], //legacy:待还原类型
     /**
      * 云取应用数据

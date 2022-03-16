@@ -4,6 +4,7 @@ import HomeOutlined from '@ant-design/icons/HomeOutlined';
 import Button from 'antd/lib/button';
 import { Layout, ScrollBox } from './styled/layout';
 import Reading from '../loading/reading';
+import AlartMessage from '../alert-message';
 
 const SubLayout: FC<{ title?: string }> = ({ title, children }) => {
 
@@ -11,6 +12,7 @@ const SubLayout: FC<{ title?: string }> = ({ title, children }) => {
 
     return <Layout>
         <Reading />
+        <AlartMessage />
         <div className="sub-container">
             <div className="sub-header">
                 <div>{title ?? ''}</div>

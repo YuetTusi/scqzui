@@ -15,6 +15,8 @@ import { helper } from '@/utils/helper';
 import server from '@/utils/tcp-server';
 import { createRouter } from '@/router/default/create-router';
 import appSetModel from '@/model/default/app-set';
+import alartMessageModel from '@/model/default/alart-message';
+import operateDoingModel from '@/model/default/operate-doing';
 import receiveModel from '@/model/default/receive';
 import deviceModel from '@/model/default/device';
 import caseDataModel from '@/model/default/case-data';
@@ -92,6 +94,8 @@ app.use({
     }
 });
 app.model(appSetModel);
+app.model(alartMessageModel);
+app.model(operateDoingModel);
 app.model(receiveModel);
 app.model(deviceModel);
 app.model(caseDataModel);
