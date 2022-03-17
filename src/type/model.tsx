@@ -12,6 +12,7 @@ import { Organization } from '@/schema/organization';
 import { ParseCaseState } from '@/model/default/parse-case';
 import { ParseDevState } from '@/model/default/parse-dev';
 import { ParsingListState } from '@/model/default/parsing-list';
+import { BatchExportReportModalState } from '@/model/default/batch-export-report-modal';
 
 declare global {
 	interface Window {
@@ -29,7 +30,7 @@ declare global {
 interface StateTree {
 	appSet: AppSetStore,
 	alartMessage: AlartMessageState,
-	operateDoing:OperateDoingState,
+	operateDoing: OperateDoingState,
 	device: DeviceStoreState,
 	caseData: CaseDataState,
 	caseAdd: CaseAddState,
@@ -40,6 +41,7 @@ interface StateTree {
 	parseCase: ParseCaseState,
 	parseDev: ParseDevState,
 	parsingList: ParsingListState,
+	batchExportReportModal: BatchExportReportModalState,
 	[modelName: string]: any
 }
 

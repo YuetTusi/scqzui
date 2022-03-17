@@ -153,7 +153,7 @@ export default {
         // });
         //legacy:待还原上面类型
         ipcRenderer.on('update-export-msg', (event: IpcRendererEvent, args: any) => {
-            dispatch({ type: 'updateAlertMessage', payload: args });
+            dispatch({ type: 'alartMessage/updateAlertMessage', payload: args });
         });
     },
     /**

@@ -6,9 +6,10 @@ import { Key } from 'antd/lib/table/interface';
 import { StateTree } from '@/type/model';
 import { ParseCaseState } from '@/model/default/parse-case';
 import CaseInfo from '@/schema/case-info';
-import { helper } from '@/utils/helper';
+import BatchExportReportModal from '../batch-export-report-modal';
 import { getCaseColumns } from './column';
 import { CaseListProp } from './prop';
+import { OperateDoingState } from '@/model/default/operate-doing';
 
 const CaseList: FC<CaseListProp> = () => {
 
@@ -20,7 +21,11 @@ const CaseList: FC<CaseListProp> = () => {
         pageSize,
         total
     } = useSelector<StateTree, ParseCaseState>(state => state.parseCase);
+    const operateDoing = useSelector<StateTree, OperateDoingState>(state =>
+        state.operateDoing
+    );
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+    const [batchExportReportModalVisible, setBatchExportReportModalVisible] = useState<boolean>(false);
 
     /**
      * 案件查询
@@ -60,32 +65,40 @@ const CaseList: FC<CaseListProp> = () => {
     const onRowSelectChange = (selectedRowKeys: Key[], selectedRows: CaseInfo[]) =>
         setSelectedRowKeys(selectedRowKeys);
 
-    return <Table<CaseInfo>
-        columns={getCaseColumns(dispatch)}
-        dataSource={data}
-        loading={loading}
-        pagination={{
-            current: pageIndex,
-            pageSize,
-            total,
-            onChange: onPageChange
-        }}
-        rowSelection={{
-            type: 'radio',
-            onChange: onRowSelectChange,
-            selectedRowKeys
-        }}
-        onRow={(record) => ({
-            onClick: () => onRowClick(record)
-        })}
-        locale={{
-            emptyText: <Empty
-                description="暂无案件数据"
-                image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        }}
-        rowKey="_id"
-        size="small"
-        style={{ width: '400px' }} />;
+    return <>
+        <Table<CaseInfo>
+            columns={getCaseColumns(dispatch, operateDoing, setBatchExportReportModalVisible)}
+            dataSource={data}
+            loading={loading}
+            pagination={{
+                current: pageIndex,
+                pageSize,
+                total,
+                onChange: onPageChange
+            }}
+            rowSelection={{
+                type: 'radio',
+                onChange: onRowSelectChange,
+                selectedRowKeys
+            }}
+            onRow={(record) => ({
+                onClick: () => onRowClick(record)
+            })}
+            locale={{
+                emptyText: <Empty
+                    description="暂无案件数据"
+                    image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            }}
+            rowKey="_id"
+            size="small"
+            style={{ width: '400px' }} />
+        <BatchExportReportModal
+            visible={batchExportReportModalVisible}
+            cancelHandle={() => {
+                dispatch({ type: 'batchExportReportModal/setDevices', payload: [] });
+                setBatchExportReportModalVisible(false);
+            }} />
+    </>;
 };
 
 export { CaseList };
