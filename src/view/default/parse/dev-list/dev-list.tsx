@@ -1,17 +1,22 @@
+import { join } from 'path';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
 import { Key } from 'antd/lib/table/interface';
+import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { DeviceType } from '@/schema/device-type';
 import { ParseDevState } from '@/model/default/parse-dev';
 import { OperateDoingState } from '@/model/default/operate-doing';
+import { helper } from '@/utils/helper';
 import DevInfo from '../dev-info';
 import { ClickType } from '../dev-info/prop';
 import EditDevModal from '../edit-dev-modal';
+import ExportReportModal from '../export-report-modal';
 import { getDevColumns } from './column';
 import { DevListProp } from './prop';
+
 
 /**
  * 设备列表
@@ -31,6 +36,7 @@ const DevList: FC<DevListProp> = ({ }) => {
     const currentDev = useRef<DeviceType>();
     const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([]);
     const [editDevModalVisbile, setEditDevModalVisible] = useState<boolean>(false);
+    const [exportReportModalVisible, setExportReportModalVisible] = useState<boolean>(false);
 
     /**
      * 查询案件下设备
@@ -102,9 +108,31 @@ const DevList: FC<DevListProp> = ({ }) => {
         setEditDevModalVisible(false);
     };
 
+    /**
+     * 导出报告Click
+     */
+    const exportReportClick = async (data: DeviceType) => {
+
+        const treeJsonPath = join(
+            data.phonePath!,
+            'report/public/data/tree.json'
+        );
+        try {
+            let exist = await helper.existFile(treeJsonPath);
+            if (exist) {
+                currentDev.current = data;
+                setExportReportModalVisible(true);
+            } else {
+                message.info('报告数据不存在，请生成报告');
+            }
+        } catch (error) {
+            message.warning('读取报告数据失败，请重新生成报告');
+        }
+    };
+
     return <>
         <Table<DeviceType>
-            columns={getDevColumns(dispatch, operateDoing)}
+            columns={getDevColumns(dispatch, operateDoing, exportReportClick)}
             dataSource={data}
             loading={loading}
             pagination={{
@@ -135,6 +163,11 @@ const DevList: FC<DevListProp> = ({ }) => {
             onCancelHandle={() => setEditDevModalVisible(false)}
             visible={editDevModalVisbile}
             data={currentDev.current} />
+        <ExportReportModal
+            visible={exportReportModalVisible}
+            data={currentDev.current}
+            closeHandle={() => setExportReportModalVisible(false)}
+        />
     </>;
 };
 

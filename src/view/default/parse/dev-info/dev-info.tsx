@@ -2,13 +2,43 @@ import dayjs from 'dayjs';
 import React, { FC } from 'react';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
+import Badge from 'antd/lib/badge';
 import Button from 'antd/lib/button';
-import { ClickType, DevInfoProp } from './prop';
-import { InfoBox } from './styled/style';
 import { Split } from '@/component/style-tool';
+import { ParseState } from '@/schema/device-state';
 import DeviceSystem from '@/schema/device-system';
+import { InfoBox } from './styled/style';
+import { ClickType, DevInfoProp } from './prop';
 
 const { Group } = Button;
+
+/**
+ * 状态点
+ * @param state 解析状态
+ */
+const StateDot: FC<{ state?: ParseState }> = ({ state }) => {
+    let color = '';
+    switch (state) {
+        case ParseState.Fetching:
+        case ParseState.NotParse:
+            color = '#fff';
+            break;
+        case ParseState.Parsing:
+            color = 'blue';
+            break;
+        case ParseState.Finished:
+            color = 'green';
+            break;
+        case ParseState.Error:
+        case ParseState.Exception:
+            color = 'red'
+            break;
+        default:
+            color = '#fff';
+            break;
+    }
+    return <Badge color={color} style={{ marginLeft: '5px' }} />
+}
 
 /**
  * 设备信息
@@ -46,6 +76,7 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                     <li>
                         <label htmlFor="span">手机名称</label>
                         <span>{data.mobileName === undefined ? '' : data.mobileName?.split('_')[0]}</span>
+                        <StateDot state={data.parseState} />
                     </li>
                     <li>
                         <label htmlFor="span">持有人</label>

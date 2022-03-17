@@ -112,8 +112,8 @@ export default {
             success: boolean, exportCondition: Record<string, any>,
             isBatch: boolean, msgId: string) => {
             const { reportName } = exportCondition;
-            dispatch({ type: 'removeAlertMessage', payload: msgId });
-            dispatch({ type: 'innerPhoneTable/setExportingDeviceId', payload: [] });
+            dispatch({ type: 'alartMessage/removeAlertMessage', payload: msgId });
+            dispatch({ type: 'operateDoing/setExportingDeviceId', payload: [] });
             if (isBatch) {
                 if (success) {
                     notification.success({

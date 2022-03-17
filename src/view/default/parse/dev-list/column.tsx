@@ -1,7 +1,9 @@
+import debounce from 'lodash/debounce';
 import { join } from 'path';
+import { access } from 'fs';
 import dayjs from 'dayjs';
 import { execFile } from 'child_process';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import classnames from 'classnames';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
@@ -42,6 +44,24 @@ const isParseDisable = (state: ParseState) => {
         return false;
     }
 };
+
+/**
+ * 使用系统窗口打开路径
+ */
+const openOnSystemWindow = debounce(
+    (defaultPath: string) => {
+        access(defaultPath, (err) => {
+            if (err) {
+                message.destroy();
+                message.warning('取证数据不存在');
+            } else {
+                shell.showItemInFolder(defaultPath);
+            }
+        });
+    },
+    896,
+    { leading: true, trailing: false }
+);
 
 /**
  * 执行解析
@@ -204,7 +224,10 @@ const runCreateReport = async (dispatch: Dispatch, exePath: string, device: Devi
  * 表头定义
  * @param dispatch 派发方法
  */
-export function getDevColumns(dispatch: Dispatch, operateDoing: OperateDoingState): ColumnsType<DeviceType> {
+export function getDevColumns(
+    dispatch: Dispatch,
+    operateDoing: OperateDoingState,
+    exportReportClick: (data: DeviceType) => void): ColumnsType<DeviceType> {
 
     const { creatingDeviceId, exportingDeviceId } = operateDoing;
 
@@ -238,7 +261,7 @@ export function getDevColumns(dispatch: Dispatch, operateDoing: OperateDoingStat
             title: '手机',
             dataIndex: 'mobileName',
             key: 'mobileName',
-            render: (value: string, { system, mode }: DeviceType) => {
+            render: (value: string, { system, mode, phonePath }: DeviceType) => {
                 return <div>
                     <span>
                         {
@@ -252,11 +275,15 @@ export function getDevColumns(dispatch: Dispatch, operateDoing: OperateDoingStat
                                 : null
                         }
                     </span>
-                    <span
+                    <a
+                        onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                            event.stopPropagation();
+                            openOnSystemWindow(phonePath!);
+                        }}
                         className={classnames({ 'cloud-color': mode === DataMode.ServerCloud })}
                         style={{ marginLeft: '5px' }}>
                         {value.split('_')[0]}
-                    </span>
+                    </a>
                 </div>;
             }
         },
@@ -310,8 +337,21 @@ export function getDevColumns(dispatch: Dispatch, operateDoing: OperateDoingStat
                         解析
                     </Button>
                     <Button
-                        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                        onClick={async (event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
+                            const treeJsonPath = join(
+                                record.phonePath!,
+                                './report/public/data/tree.json'
+                            );
+                            const reportPath = join(record.phonePath!, './report/index.html');
+                            console.log(reportPath);
+                            let exist = await helper.existFile(treeJsonPath);
+                            if (exist) {
+                                shell.openPath(reportPath);
+                            } else {
+                                message.destroy();
+                                message.info('未生成报告，请重新生成报告后进行查看');
+                            }
                         }}
                         type="primary">查看报告</Button>
                     <Button
@@ -338,6 +378,7 @@ export function getDevColumns(dispatch: Dispatch, operateDoing: OperateDoingStat
                     <Button
                         onClick={(event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
+                            exportReportClick(record);
                         }}
                         type="primary">导出报告</Button>
                 </Group>

@@ -2,7 +2,7 @@ import path from 'path';
 import { ChildProcessWithoutNullStreams } from 'child_process';
 import {
     app, BrowserWindow, dialog, ipcMain, globalShortcut, Menu,
-    OpenDialogReturnValue, SaveDialogReturnValue
+    OpenDialogReturnValue, SaveDialogReturnValue, shell
 } from 'electron';
 import { WindowsBalloon } from 'node-notifier';
 import log from './src/utils/log';
@@ -412,6 +412,92 @@ ipcMain.on('show-progress', (event, show: boolean) => {
         mainWindow.setProgressBar(show ? 1 : 0, {
             mode: show ? 'indeterminate' : 'none'
         });
+    }
+});
+
+//导出报告
+ipcMain.on('report-export', (event, exportCondition, treeParams, msgId) => {
+    if (reportWindow === null) {
+        reportWindow = new BrowserWindow({
+            title: '报告导出',
+            width: 800,
+            height: 600,
+            show: false,
+            webPreferences: {
+                contextIsolation: false,
+                nodeIntegration: true,
+                javascript: true
+            }
+        });
+        reportWindow.loadFile(path.join(__dirname, './renderer/report.html'));
+        if (mode === 'development') {
+            reportWindow.webContents.openDevTools();
+        }
+        reportWindow.webContents.once('did-finish-load', () => {
+            if (reportWindow !== null) {
+                reportWindow.webContents.send('report-export', exportCondition, treeParams, msgId);
+            }
+        });
+    } else {
+        reportWindow.webContents.send('report-export', exportCondition, treeParams, msgId);
+    }
+});
+//导出报告（批量）
+ipcMain.on('report-batch-export', (event, batchExportTasks, isAttach, isZip, msgId) => {
+    if (reportWindow === null) {
+        reportWindow = new BrowserWindow({
+            title: '报告导出',
+            width: 800,
+            height: 600,
+            show: false,
+            webPreferences: {
+                contextIsolation: false,
+                nodeIntegration: true,
+                javascript: true
+            }
+        });
+        reportWindow.loadFile(path.join(__dirname, './src/renderer/report/report.html'));
+        reportWindow.webContents.openDevTools();
+        reportWindow.webContents.once('did-finish-load', () => {
+            if (reportWindow !== null) {
+                reportWindow.webContents.send(
+                    'report-batch-export',
+                    batchExportTasks,
+                    isAttach,
+                    isZip,
+                    msgId
+                );
+            }
+        });
+    } else {
+        reportWindow.webContents.send(
+            'report-batch-export',
+            batchExportTasks,
+            isAttach,
+            isZip,
+            msgId
+        );
+    }
+});
+
+ipcMain.on('update-export-msg', (event, args) => {
+    if (mainWindow !== null) {
+        mainWindow.webContents.send('update-export-msg', args)
+    }
+});
+
+//导出报告完成
+ipcMain.on('report-export-finish', (event, success, exportCondition, isBatch, msgId) => {
+    if (reportWindow !== null) {
+        reportWindow.destroy();
+        reportWindow = null;
+    }
+    shell.beep();
+    if (mainWindow !== null) {
+        mainWindow.setProgressBar(0, {
+            mode: 'none'
+        });
+        mainWindow.webContents.send('report-export-finish', success, exportCondition, isBatch, msgId);
     }
 });
 

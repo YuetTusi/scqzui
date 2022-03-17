@@ -10,7 +10,8 @@ let config = {
 		sqlite: join(__dirname, './src/renderer/sqlite/sqlite.ts'),
 		protocol: join(__dirname, './src/renderer/protocol/protocol.ts'),
 		timer: join(__dirname, './src/renderer/timer/timer.ts'),
-		fetchRecord: join(__dirname, './src/renderer/fetch-record/fetch-record.ts')
+		fetchRecord: join(__dirname, './src/renderer/fetch-record/fetch-record.ts'),
+		report: join(__dirname, './src/renderer/report/report.ts')
 	},
 	output: {
 		filename: '[name].js',
@@ -24,7 +25,8 @@ let config = {
 		extensions: ['.ts', '.tsx', 'yml', 'yaml', '.js', '.json']
 	},
 	externals: {
-		sqlite3: 'commonjs sqlite3'
+		sqlite3: 'commonjs sqlite3',
+		archiver: "require('archiver')"
 	},
 	module: {
 		rules: [
@@ -113,6 +115,11 @@ let config = {
 			template: join(__dirname, './src/renderer/fetch-record/fetch-record.html'),
 			filename: 'fetch-record.html',
 			chunks: ['fetchRecord']
+		}),
+		new HtmlWebpackPlugin({
+			template: join(__dirname, './src/renderer/report/report.html'),
+			filename: 'report.html',
+			chunks: ['report']
 		})
 	]
 };
