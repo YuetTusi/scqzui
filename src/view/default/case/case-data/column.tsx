@@ -3,6 +3,8 @@ import path from 'path';
 import { Dispatch } from 'redux';
 import React, { MouseEvent } from 'react';
 import { routerRedux } from 'dva/router';
+import CheckOutlined from '@ant-design/icons/CheckOutlined';
+import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Tag from 'antd/lib/tag';
@@ -44,7 +46,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             width: '80px',
             align: 'center',
             render: (val: boolean) =>
-                val ? <Tag color="green">是</Tag> : <Tag color="red">否</Tag>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
             title: '生成报告',
@@ -53,7 +55,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             width: '80px',
             align: 'center',
             render: (val: boolean) =>
-                val ? <Tag color="green">是</Tag> : <Tag color="red">否</Tag>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
             title: '自动解析',
@@ -62,7 +64,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             width: '80px',
             align: 'center',
             render: (val: boolean) =>
-                val ? <Tag color="green">是</Tag> : <Tag color="red">否</Tag>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
             title: '生成BCP',
@@ -71,7 +73,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             width: '80px',
             align: 'center',
             render: (val: boolean) =>
-                val ? <Tag color="green">是</Tag> : <Tag color="red">否</Tag>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
             title: 'BCP包含附件',
@@ -80,7 +82,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             width: '80px',
             align: 'center',
             render: (val: boolean) =>
-                val ? <Tag color="green">是</Tag> : <Tag color="red">否</Tag>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
             title: '删除原数据',
@@ -89,7 +91,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             width: '80px',
             align: 'center',
             render: (val: boolean) =>
-                val ? <Tag color="green">是</Tag> : <Tag color="red">否</Tag>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
             title: 'AI分析',
@@ -98,7 +100,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             width: '80px',
             align: 'center',
             render: (val: boolean) =>
-                val ? <Tag color="green">是</Tag> : <Tag color="red">否</Tag>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
             title: '创建时间',

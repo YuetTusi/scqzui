@@ -4,12 +4,15 @@ import Button from 'antd/lib/button';
 import CaseInfo from "@/schema/case-info";
 import { ColumnsType, ColumnType } from "antd/lib/table";
 import { OperateDoingState } from '@/model/default/operate-doing';
+import { NoWrapText } from './styled/style';
 
 const { Group } = Button;
 
 /**
  * 表头定义
  * @param dispatch 派发方法
+ * @param operateDoing OperateDoing仓库
+ * @param setBatchExportReportModalVisible 显示/隐藏批量导出handle
  */
 export function getCaseColumns(
     dispatch: Dispatch,
@@ -22,7 +25,8 @@ export function getCaseColumns(
             dataIndex: 'm_strCaseName',
             key: 'm_strCaseName',
             render: (value: string) => {
-                return <div>{value.includes('_') ? value.split('_')[0] : value}</div>;
+                const txt = value.includes('_') ? value.split('_')[0] : value;
+                return <NoWrapText title={txt}>{txt}</NoWrapText>;
             }
         }, {
             title: '批量导出',

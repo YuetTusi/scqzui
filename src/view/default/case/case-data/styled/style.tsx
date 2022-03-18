@@ -49,4 +49,14 @@ export const CaseDataBox = styled.div`
 			margin: 0 !important;
 		}
 	}
+	.yes{
+		font-size:1.8rem;
+		color:#6abe39;
+		vertical-align: middle;
+	}
+	.no{
+		font-size:1.8rem;
+		color:#e84749;
+		vertical-align: middle;
+	}
 `;
