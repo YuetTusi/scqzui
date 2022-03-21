@@ -203,7 +203,7 @@ export function getDeviceColumns(
             }
         },
         {
-            title: '手机持有人',
+            title: '持有人',
             dataIndex: 'mobileHolder',
             key: 'mobileHolder',
             width: '150px'

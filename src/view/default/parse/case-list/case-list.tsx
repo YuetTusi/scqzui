@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'dva';
+import { useDispatch, useLocation, useSelector } from 'dva';
 import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
 import { Key } from 'antd/lib/table/interface';
@@ -14,6 +14,7 @@ import { OperateDoingState } from '@/model/default/operate-doing';
 const CaseList: FC<CaseListProp> = () => {
 
     const dispatch = useDispatch();
+    const { search } = useLocation();
     const {
         loading,
         data,
@@ -40,7 +41,17 @@ const CaseList: FC<CaseListProp> = () => {
     };
 
     useEffect(() => {
-        query({}, 1);
+        //如果有问号参数，则是从BCP页面返回
+        const params = new URLSearchParams(search);
+        const cid = params.get('cid');
+        const casePageIndex = params.get('cp');
+        if (cid) {
+            query({}, Number.parseInt(casePageIndex!));
+            setSelectedRowKeys([cid]);
+            dispatch({ type: 'parseDev/setCaseId', payload: cid });
+        } else {
+            query({}, 1);
+        }
     }, []);
 
     /**

@@ -25,7 +25,7 @@ const ExportReportModal: FC<ExportReportModalProp> = ({ visible, data, closeHand
     const dispatch = useDispatch();
     const [isAttach, setIsAttach] = useState<boolean>(true); //带附件
     const [isZip, setIsZip] = useState<boolean>(false); //压缩
-    const nameInputRef = useRef<Input>(null); //重命名Input引用
+    const nameInputRef = useRef<any>(null); //重命名Input引用
 
     /**
      * 处理树组件数据

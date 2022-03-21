@@ -9,9 +9,21 @@ interface ParseCaseState {
      * 案件数据
      */
     data: CaseInfo[],
+    /**
+     * 读取中
+     */
     loading: boolean,
+    /**
+     * 当前页
+     */
     pageIndex: number,
+    /**
+     * 页尺寸
+     */
     pageSize: number,
+    /**
+     * 总数
+     */
     total: number
 };
 

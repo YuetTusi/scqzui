@@ -1,6 +1,6 @@
 import { join } from 'path';
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'dva';
+import { useDispatch, useSelector, routerRedux, router, useLocation } from 'dva';
 import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
 import { Key } from 'antd/lib/table/interface';
@@ -24,6 +24,7 @@ import { DevListProp } from './prop';
 const DevList: FC<DevListProp> = ({ }) => {
 
     const dispatch = useDispatch();
+    const { search } = useLocation();
     const {
         caseId,
         data,
@@ -55,14 +56,18 @@ const DevList: FC<DevListProp> = ({ }) => {
     }
 
     useEffect(() => {
-        query({}, 1);
-    }, [caseId]);
-
-    useEffect(() => {
         return () => {
             dispatch({ type: 'parseDev/setCaseId', payload: undefined });
         }
     }, []);
+
+    useEffect(() => {
+        const params = new URLSearchParams(search);
+        const did = params.get('did');
+        const dp = params.get('dp');
+        query({}, dp === null ? 1 : Number.parseInt(dp));
+        setExpandedRowKeys(did === null ? [] : [did]);
+    }, [caseId]);
 
     /**
      * 翻页Change
@@ -83,7 +88,7 @@ const DevList: FC<DevListProp> = ({ }) => {
     };
 
     /**
-     * 
+     * 设备信息按钮点击统一处理
      * @param data 设备
      * @param fn 功能枚举
      */
@@ -92,6 +97,9 @@ const DevList: FC<DevListProp> = ({ }) => {
             case ClickType.Edit:
                 currentDev.current = data;
                 setEditDevModalVisible(true);
+                break;
+            case ClickType.GenerateBCP:
+                dispatch({ type: 'parseDev/gotoBcp', payload: { caseId, deviceId: data._id } });
                 break;
             default:
                 console.warn('未知Click类型:', fn);

@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { mkdirSync } from 'fs';
 import { AnyAction } from 'redux';
-import { EffectsCommandMap } from 'dva';
+import { EffectsCommandMap, routerRedux } from 'dva';
 import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { TableName } from '@/schema/table-name';
@@ -118,5 +118,22 @@ export default {
             message.error('保存失败');
             logger.error(`编辑设备数据失败 @model/default/parse-dev/updateDev: ${error.message}`);
         }
+    },
+    /**
+     * 跳转到BCP页
+     * @param {string} caseId 案件id
+     * @param {string} deviceId 设备id
+     */
+    *gotoBcp({ payload }: AnyAction, { select, put }: EffectsCommandMap) {
+
+        const { caseId, deviceId } = payload;
+        const { parseCase, parseDev } = yield select((state: StateTree) => ({
+            parseCase: state.parseCase,
+            parseDev: state.parseDev
+        }));
+
+        yield put(
+            routerRedux.push(
+                `/bcp/${caseId}/${deviceId}?cp=${parseCase.pageIndex}&dp=${parseDev.pageIndex}`));
     }
 };

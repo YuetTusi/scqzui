@@ -6,7 +6,7 @@ import { Organization } from '@/schema/organization';
 /**
  * 获取采集单位名称及编码
  */
-export const useUnit = () => {
+export const useUnit = (): [string | undefined, string | undefined] => {
     const {
         collectUnitCode, collectUnitName
     } = useSelector<StateTree, Organization>(state => state.organization);
@@ -16,7 +16,7 @@ export const useUnit = () => {
 /**
  * 获取目的检验单位名称及编码
  */
-export const useDstUnit = () => {
+export const useDstUnit = (): [string | undefined, string | undefined] => {
     const {
         dstUnitCode, dstUnitName
     } = useSelector<StateTree, Organization>(state => state.organization);

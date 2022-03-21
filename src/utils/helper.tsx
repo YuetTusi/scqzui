@@ -85,6 +85,18 @@ const helper = {
         }
     },
     /**
+     * 返回无时间戳的字串
+     * @param name 原字串
+     * @returns 返回无时间戳的字串
+     */
+    getNameWithoutTime(name: string = '') {
+        if (name.includes('_')) {
+            return name.split('_')[0];
+        } else {
+            return name;
+        }
+    },
+    /**
      * @description 是否是null或undefined
      * @param val 任意值
      */

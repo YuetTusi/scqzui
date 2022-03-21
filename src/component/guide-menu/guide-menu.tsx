@@ -6,7 +6,8 @@ import {
     faFileLines,
     faGears,
     faBrain,
-    faUserPen
+    faUserPen,
+    faFileWaveform
 } from '@fortawesome/free-solid-svg-icons';
 import { MenuPanel } from './styled/menu-panel';
 import ColorButton from './color-button';
@@ -45,7 +46,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
         <div className="parse">
             <ColorButton
                 to="/parse"
-                icon={<FontAwesomeIcon icon={faBrain} />}
+                icon={<FontAwesomeIcon icon={faFileWaveform} />}
                 color="#FD7272">
                 数据解析
             </ColorButton>

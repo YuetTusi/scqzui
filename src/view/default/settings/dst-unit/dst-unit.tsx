@@ -37,7 +37,7 @@ const DstUnit: FC<UnitProp> = () => {
     const [pageIndex, setPageIndex] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const inputRef = useRef<Input>(null);
+    const inputRef = useRef<any>(null);
 
     /**
      * 查询表格数据

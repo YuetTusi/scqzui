@@ -9,4 +9,22 @@ const Split = styled.hr`
     border-bottom: 1px solid #a9afbbd1;
 `;
 
-export { Split };
+const SortPanel = styled.div`
+
+    border: 1px solid #303030;
+    border-radius: 3px;
+
+    &>.caption{
+        color:#fff;
+        font-size: 1.4rem;
+        padding: 5px 10px;
+        border-top-left-radius: 3px;
+        border-top-right-radius:3px;
+        background-color: ${props => props.theme['primary-color']};
+    }
+    &>.content{
+        color:#ffffffd9;
+    }
+`;
+
+export { Split, SortPanel };

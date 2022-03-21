@@ -1,6 +1,7 @@
 
 import { EffectsCommandMap } from 'dva';
 import { AnyAction } from 'redux';
+import log from '@/utils/log';
 import { getDb } from '@/utils/db';
 import CaseInfo from '@/schema/case-info';
 import { TableName } from '@/schema/table-name';
@@ -22,8 +23,9 @@ export default {
             ]);
             yield put({ type: 'setPage', payload: { pageIndex, pageSize, total } });
             yield put({ type: 'setData', payload: next });
+            console.log(next);
         } catch (error) {
-
+            log.error(`查询案件列表失败 @model/default/parse-case/*queryCase:${error.message}`);
         } finally {
             yield put({ type: 'setLoading', payload: false });
         }

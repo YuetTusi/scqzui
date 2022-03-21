@@ -119,6 +119,19 @@ const createRouter = (api?: RouterAPI) => {
 							}}
 						/>
 						<Route
+							path="/bcp/:cid/:did"
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/bcp')
+								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
+							}}
+						/>
+						<Route
 							path="/settings"
 							render={() => {
 								const Next = lazy<FC<any>>(

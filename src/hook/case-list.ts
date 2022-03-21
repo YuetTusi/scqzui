@@ -29,4 +29,30 @@ function useCaseList() {
     return data;
 }
 
-export { useCaseList };
+/**
+ * 读取案件数据
+ * @param caseId 案件id
+ * @returns 若id不存在则返回null
+ */
+function useCase(caseId: string | undefined) {
+
+    const db = getDb<CaseInfo>(TableName.Case);
+    const [data, setData] = useState<CaseInfo | null>(null);
+
+    useEffect(() => {
+        if (caseId !== undefined) {
+            (async () => {
+                try {
+                    const next = await db.findOne({ _id: caseId });
+                    setData(next);
+                } catch (error) {
+                    log.error(`读取案件失败 @hook/useCase(caseId=${caseId}):${error.message}`);
+                }
+            })();
+        }
+    }, [caseId]);
+
+    return data;
+}
+
+export { useCaseList, useCase };

@@ -1,6 +1,7 @@
 const { join, resolve } = require('path');
 const { ProvidePlugin } = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AntdDayjsPlugin = require('antd-dayjs-webpack-plugin');
 const theme = require('./theme/cyan.json');
 
 let config = {
@@ -90,6 +91,9 @@ let config = {
 		new ProvidePlugin({
 			$: 'jquery',
 			jQuery: 'jquery'
+		}),
+		new AntdDayjsPlugin({
+			// plugins: ['localeData']
 		}),
 		new HtmlWebpackPlugin({
 			template: join(__dirname, './src/renderer/default/default.html'),

@@ -23,7 +23,7 @@ import {
 const CodeItem: FC<CodeItemProps> = ({ usb, app, humanVerifyDataHandle, cloudApps }) => {
 
 	const dispatch = useDispatch();
-	const inputRef = useRef<Input | null>(null);
+	const inputRef = useRef<any>(null);
 	const appDesc = helper.getAppDesc(cloudApps, app.m_strID);
 
 	/**
