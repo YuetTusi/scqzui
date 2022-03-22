@@ -51,7 +51,7 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                 <Group size="small">
                     <Button onClick={() => onButtonClick(data, ClickType.GenerateBCP)} type="primary">生成BCP</Button>
                     <Button onClick={() => onButtonClick(data, ClickType.ExportBCP)} type="primary">导出BCP</Button>
-                    <Button onClick={() => onButtonClick(data, ClickType.CloudSearch)} type="primary">云点验</Button>
+                    <Button onClick={() => onButtonClick(data, ClickType.CloudSearch)} disabled={true} type="primary">云点验</Button>
                 </Group>
             </div>
             <div>

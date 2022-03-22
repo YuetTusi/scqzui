@@ -301,41 +301,13 @@ export function getDevColumns(
             render: (value: Date) => dayjs(value).format('YYYY-MM-DD HH:mm:ss')
         },
         {
-            title: '···',
+            title: '报告',
             dataIndex: '_id',
             key: '_id',
             align: 'center',
-            width: '50px',
+            width: '150px',
             render: (id: string, record) => {
                 return <Group size="small">
-                    <Button
-                        type="primary"
-                        size="small"
-                        disabled={isParseDisable(record.parseState!)}
-                        onClick={async (event: MouseEvent<HTMLButtonElement>) => {
-                            event.stopPropagation();
-                            let exist = await helper.existFile(record.phonePath!);
-                            if (exist) {
-                                if (record.parseState === ParseState.NotParse) {
-                                    doParse(dispatch, record);
-                                } else {
-                                    Modal.confirm({
-                                        title: '重新解析',
-                                        content: '可能所需时间较长，确定重新解析吗？',
-                                        okText: '是',
-                                        cancelText: '否',
-                                        onOk() {
-                                            doParse(dispatch, record);
-                                        }
-                                    });
-                                }
-                            } else {
-                                message.destroy();
-                                message.warning('取证数据不存在');
-                            }
-                        }}>
-                        解析
-                    </Button>
                     <Button
                         onClick={async (event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
@@ -353,7 +325,7 @@ export function getDevColumns(
                                 message.info('未生成报告，请重新生成报告后进行查看');
                             }
                         }}
-                        type="primary">查看报告</Button>
+                        type="primary">查看</Button>
                     <Button
                         onClick={(event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
@@ -374,14 +346,51 @@ export function getDevColumns(
                             (record.parseState !== ParseState.Finished
                                 && record.parseState !== ParseState.Error)
                         }
-                        type="primary">生成报告</Button>
+                        type="primary">生成</Button>
                     <Button
                         onClick={(event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
                             exportReportClick(record);
                         }}
-                        type="primary">导出报告</Button>
+                        type="primary">导出</Button>
                 </Group>
+            }
+        },
+        {
+            title: '解析',
+            dataIndex: '_id',
+            key: '_id',
+            align: 'center',
+            width: '60px',
+            render: (id: string, record) => {
+                return <Button
+                    type="primary"
+                    size="small"
+                    disabled={isParseDisable(record.parseState!)}
+                    onClick={async (event: MouseEvent<HTMLButtonElement>) => {
+                        event.stopPropagation();
+                        let exist = await helper.existFile(record.phonePath!);
+                        if (exist) {
+                            if (record.parseState === ParseState.NotParse) {
+                                doParse(dispatch, record);
+                            } else {
+                                Modal.confirm({
+                                    title: '重新解析',
+                                    content: '可能所需时间较长，确定重新解析吗？',
+                                    okText: '是',
+                                    cancelText: '否',
+                                    onOk() {
+                                        doParse(dispatch, record);
+                                    }
+                                });
+                            }
+                        } else {
+                            message.destroy();
+                            message.warning('取证数据不存在');
+                        }
+                    }}>
+                    解析
+                </Button>
             }
         }
     ];

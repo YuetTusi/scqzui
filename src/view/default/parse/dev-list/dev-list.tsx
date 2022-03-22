@@ -1,6 +1,6 @@
 import { join } from 'path';
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector, routerRedux, router, useLocation } from 'dva';
+import { useDispatch, useSelector, useLocation } from 'dva';
 import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
 import { Key } from 'antd/lib/table/interface';
@@ -14,6 +14,7 @@ import DevInfo from '../dev-info';
 import { ClickType } from '../dev-info/prop';
 import EditDevModal from '../edit-dev-modal';
 import ExportReportModal from '../export-report-modal';
+import ExportBcpModal from '../export-bcp-modal';
 import { getDevColumns } from './column';
 import { DevListProp } from './prop';
 
@@ -38,6 +39,7 @@ const DevList: FC<DevListProp> = ({ }) => {
     const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([]);
     const [editDevModalVisbile, setEditDevModalVisible] = useState<boolean>(false);
     const [exportReportModalVisible, setExportReportModalVisible] = useState<boolean>(false);
+    const [exportBcpModalVisible, setExportBcpModalVisible] = useState<boolean>(false);
 
     /**
      * 查询案件下设备
@@ -101,6 +103,11 @@ const DevList: FC<DevListProp> = ({ }) => {
             case ClickType.GenerateBCP:
                 dispatch({ type: 'parseDev/gotoBcp', payload: { caseId, deviceId: data._id } });
                 break;
+            case ClickType.ExportBCP:
+                dispatch({ type: 'exportBcpModal/setIsBatch', payload: false });
+                dispatch({ type: 'exportBcpModal/setExportBcpDevice', payload: data });
+                setExportBcpModalVisible(true);
+                break;
             default:
                 console.warn('未知Click类型:', fn);
                 break;
@@ -120,7 +127,6 @@ const DevList: FC<DevListProp> = ({ }) => {
      * 导出报告Click
      */
     const exportReportClick = async (data: DeviceType) => {
-
         const treeJsonPath = join(
             data.phonePath!,
             'report/public/data/tree.json'
@@ -135,6 +141,24 @@ const DevList: FC<DevListProp> = ({ }) => {
             }
         } catch (error) {
             message.warning('读取报告数据失败，请重新生成报告');
+        }
+    };
+
+    /**
+    * 导出BCP handle
+    * @param bcpList BCP文件列表
+    * @param destination 导出目录
+    */
+    const exportBcpHandle = async (bcpList: string[], destination: string) => {
+        dispatch({ type: 'exportBcpModal/setExporting', payload: true });
+        try {
+            await helper.copyFiles(bcpList, destination);
+            message.success('BCP导出成功');
+        } catch (error) {
+            message.error(`导出失败 ${error.message}`);
+        } finally {
+            dispatch({ type: 'exportBcpModal/setExporting', payload: false });
+            setExportBcpModalVisible(false);
         }
     };
 
@@ -175,6 +199,11 @@ const DevList: FC<DevListProp> = ({ }) => {
             visible={exportReportModalVisible}
             data={currentDev.current}
             closeHandle={() => setExportReportModalVisible(false)}
+        />
+        <ExportBcpModal
+            visible={exportBcpModalVisible}
+            okHandle={exportBcpHandle}
+            cancelHandle={() => setExportBcpModalVisible(false)}
         />
     </>;
 };

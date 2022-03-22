@@ -93,7 +93,7 @@ const Bcp: FC<BcpProp> = () => {
             bcp.remark = currentDev?.note ?? '';
             bcp.attachment = values.attachment;
             bcp.checkUnitName = currentCase?.m_strCheckUnitName ?? '';
-            bcp.unitNo = values.unitCode ?? '';
+            bcp.unitNo = values.unitCode;
             bcp.unitName = unitNameRef.current;
             bcp.dstUnitNo = values.dstUnitCode ?? '';
             bcp.dstUnitName = dstUnitNameRef.current;
@@ -123,6 +123,9 @@ const Bcp: FC<BcpProp> = () => {
             bcp.handleCaseType = values.handleCaseType ?? '';
             bcp.handleCaseName = values.handleCaseName ?? '';
             bcp.handleOfficerNo = values.handleOfficerNo ?? '';
+
+            console.clear();
+            console.log(values);
 
             dispatch({
                 type: 'bcpHistory/saveOrUpdateBcpHistory',
@@ -160,20 +163,20 @@ const Bcp: FC<BcpProp> = () => {
     /**
      * 表单采集单位Change
      */
-    const onUnitChange = ({ label }: { value: string, label: any }) =>
-        unitNameRef.current = label;
+    const onUnitChange = (value: string, name: string) =>
+        unitNameRef.current = name;
 
     /**
      * 表单目的检验单位Change
      */
-    const onDstUnitChange = ({ label }: { value: string, label: any }) =>
-        dstUnitNameRef.current = label;
+    const onDstUnitChange = (value: string, name: string) =>
+        dstUnitNameRef.current = name;
 
     /**
      * 采集人员Change
      */
-    const onOfficerChange = ({ label }: { value: string, label: any }) =>
-        console.log(label);
+    const onOfficerChange = (value: string) =>
+        console.log(value);
     // officerNameRef.current = label;
 
     return <SubLayout title="生成BCP">

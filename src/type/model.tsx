@@ -14,6 +14,7 @@ import { ParseDevState } from '@/model/default/parse-dev';
 import { ParsingListState } from '@/model/default/parsing-list';
 import { BatchExportReportModalState } from '@/model/default/batch-export-report-modal';
 import { BcpHistoryState } from '@/model/default/bcp-history';
+import { ExportBcpModalState } from '@/model/default/export-bcp-modal';
 
 declare global {
 	interface Window {
@@ -44,6 +45,7 @@ interface StateTree {
 	parsingList: ParsingListState,
 	batchExportReportModal: BatchExportReportModalState,
 	bcpHistory: BcpHistoryState,
+	exportBcpModal: ExportBcpModalState,
 	[modelName: string]: any
 }
 

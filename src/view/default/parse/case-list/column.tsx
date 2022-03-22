@@ -1,8 +1,8 @@
 import React, { MouseEvent } from 'react';
 import { Dispatch } from "dva";
+import { ColumnsType, ColumnType } from "antd/lib/table";
 import Button from 'antd/lib/button';
 import CaseInfo from "@/schema/case-info";
-import { ColumnsType, ColumnType } from "antd/lib/table";
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { NoWrapText } from './styled/style';
 
@@ -17,7 +17,8 @@ const { Group } = Button;
 export function getCaseColumns(
     dispatch: Dispatch,
     operateDoing: OperateDoingState,
-    setBatchExportReportModalVisible: (visible: boolean) => void
+    setBatchExportReportModalVisible: (visible: boolean) => void,
+    setExportBcpModalVisible: (visible: boolean) => void
 ): ColumnsType<CaseInfo> {
     let columns: ColumnType<CaseInfo>[] = [
         {
@@ -34,7 +35,7 @@ export function getCaseColumns(
             key: '_id',
             width: 50,
             align: 'center',
-            render: (id: string) => {
+            render: (id: string, record: CaseInfo) => {
                 const { exportingDeviceId } = operateDoing;
                 return <div>
                     <Group size="small">
@@ -51,7 +52,12 @@ export function getCaseColumns(
                             type="primary">
                             报告
                         </Button>
-                        <Button type="primary">BCP</Button>
+                        <Button onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                            event.stopPropagation();
+                            dispatch({ type: 'exportBcpModal/setIsBatch', payload: true });
+                            dispatch({ type: 'exportBcpModal/setExportBcpCase', payload: record });
+                            setExportBcpModalVisible(true);
+                        }} type="primary">BCP</Button>
                     </Group>
                 </div>;
             }

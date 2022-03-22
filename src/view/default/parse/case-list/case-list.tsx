@@ -7,9 +7,13 @@ import { StateTree } from '@/type/model';
 import { ParseCaseState } from '@/model/default/parse-case';
 import CaseInfo from '@/schema/case-info';
 import BatchExportReportModal from '../batch-export-report-modal';
+import ExportBcpModal from '../export-bcp-modal';
 import { getCaseColumns } from './column';
 import { CaseListProp } from './prop';
 import { OperateDoingState } from '@/model/default/operate-doing';
+import message from 'antd/lib/message';
+import { helper } from '@/utils/helper';
+import DeviceType from '@/schema/device-type';
 
 /**
  * 案件表格
@@ -30,6 +34,7 @@ const CaseList: FC<CaseListProp> = () => {
     );
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
     const [batchExportReportModalVisible, setBatchExportReportModalVisible] = useState<boolean>(false);
+    const [exportBcpModalVisible, setExportBcpModalVisible] = useState<boolean>(false);
 
     /**
      * 案件查询
@@ -79,9 +84,28 @@ const CaseList: FC<CaseListProp> = () => {
     const onRowSelectChange = (selectedRowKeys: Key[], selectedRows: CaseInfo[]) =>
         setSelectedRowKeys(selectedRowKeys);
 
+
+    /**
+     * 导出BCP handle
+     * @param bcpList BCP文件列表
+     * @param destination 导出目录
+     */
+    const exportBcpHandle = async (bcpList: string[], destination: string) => {
+        dispatch({ type: 'exportBcpModal/setExporting', payload: true });
+        try {
+            await helper.copyFiles(bcpList, destination);
+            message.success('BCP导出成功');
+        } catch (error) {
+            message.error(`导出失败 ${error.message}`);
+        } finally {
+            dispatch({ type: 'exportBcpModal/setExporting', payload: false });
+            setExportBcpModalVisible(false);
+        }
+    };
+
     return <>
         <Table<CaseInfo>
-            columns={getCaseColumns(dispatch, operateDoing, setBatchExportReportModalVisible)}
+            columns={getCaseColumns(dispatch, operateDoing, setBatchExportReportModalVisible, setExportBcpModalVisible)}
             dataSource={data}
             loading={loading}
             pagination={{
@@ -112,6 +136,11 @@ const CaseList: FC<CaseListProp> = () => {
                 dispatch({ type: 'batchExportReportModal/setDevices', payload: [] });
                 setBatchExportReportModalVisible(false);
             }} />
+        <ExportBcpModal
+            visible={exportBcpModalVisible}
+
+            okHandle={exportBcpHandle}
+            cancelHandle={() => setExportBcpModalVisible(false)} />
     </>;
 };
 

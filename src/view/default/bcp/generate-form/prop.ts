@@ -33,15 +33,15 @@ export interface GenerateFormProp {
     /**
      * 采集单位Change
      */
-    unitChangeHandle: (arg: { value: string, label: any }) => void,
+    unitChangeHandle: (value: string, name: string) => void,
     /**
      * 目的检验单位Change
      */
-    dstUnitChangeHandle: (arg: { value: string, label: any }) => void,
+    dstUnitChangeHandle: (value: string, name: string) => void,
     /**
      * 采集人员Change
      */
-    officerChangeHandle: (arg: { value: string, label: any }) => void
+    officerChangeHandle: (value: string, name: string) => void
 };
 
 /**

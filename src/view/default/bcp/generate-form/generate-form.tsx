@@ -86,8 +86,8 @@ const GenerateForm: FC<GenerateFormProp> = ({
 }) => {
 
     const { setFieldsValue } = formRef;
-    const [unitData, setUnitData] = useState<Organization[]>([]);
-    const [dstUnitData, setDstUnitData] = useState<Organization[]>([]);
+    const [unitData, setUnitData] = useState<any[]>([]);
+    const [dstUnitData, setDstUnitData] = useState<any[]>([]);
     const [bcpRequired, setBcpRequired] = useState<boolean>(false);
     const officerList = useOfficerList();
 
@@ -103,28 +103,58 @@ const GenerateForm: FC<GenerateFormProp> = ({
 
     useEffect(() => {
 
+        // console.log({
+        //     attachment: caseData?.attachment ?? false,
+        //     unitCode: unit[0] ?? '',
+        //     dstUnitCode: dstUnit[0] ?? '',
+        //     officerNo: caseData?.officerNo ?? '',
+        //     mobileHolder: deviceData?.mobileHolder ?? '',
+        //     bcpNo1: getBcpNo1(unit[0]),
+        //     phoneNumber: history?.phoneNumber ?? '',
+        //     handleOfficerNo: history?.handleOfficerNo ?? deviceData?.handleOfficerNo,
+        //     credentialType: history?.credentialType ?? '',
+        //     credentialNo: history?.credentialNo ?? '',
+        //     credentialEffectiveDate: helper.isNullOrUndefinedOrEmptyString(history?.credentialEffectiveDate)
+        //         ? '' : dayjs(history!.credentialEffectiveDate).format('YYYY-MM-DD'),
+        //     credentialExpireDate: helper.isNullOrUndefinedOrEmptyString(history?.credentialExpireDate)
+        //         ? '' : dayjs(history!.credentialExpireDate).format('YYYY-MM-DD'),
+        //     credentialOrg: history?.credentialOrg ?? '',
+        //     credentialAvatar: history?.credentialAvatar ?? '',
+        //     gender: history?.gender ?? '1',
+        //     nation: history?.nation ?? '01',
+        //     birthday: helper.isNullOrUndefinedOrEmptyString(history?.birthday)
+        //         ? '' : dayjs(history!.birthday).format('YYYY-MM-DD'),
+        //     address: history?.address ?? '',
+        //     securityCaseNo: history?.securityCaseNo ?? '',
+        //     securityCaseType: history?.securityCaseType ?? '',
+        //     securityCaseName: history?.securityCaseName ?? '',
+        //     handleCaseNo: history?.handleCaseNo ?? '',
+        //     handleCaseType: history?.handleCaseType ?? '',
+        //     handleCaseName: history?.handleCaseName ?? ''
+        // });
+
         if (caseData !== null && deviceData !== null) {
             setFieldsValue({
-                attachment: caseData.attachment,
+                attachment: caseData?.attachment ?? false,
                 unitCode: unit[0] ?? '',
                 dstUnitCode: dstUnit[0] ?? '',
-                officerNo: caseData.officerNo,
-                mobileHolder: deviceData.mobileHolder,
+                officerNo: caseData?.officerNo ?? '',
+                mobileHolder: deviceData?.mobileHolder ?? '',
                 bcpNo1: getBcpNo1(unit[0]),
                 phoneNumber: history?.phoneNumber ?? '',
-                handleOfficerNo: history?.handleOfficerNo ?? deviceData.handleOfficerNo,
+                handleOfficerNo: history?.handleOfficerNo ?? deviceData?.handleOfficerNo,
                 credentialType: history?.credentialType ?? '',
                 credentialNo: history?.credentialNo ?? '',
                 credentialEffectiveDate: helper.isNullOrUndefinedOrEmptyString(history?.credentialEffectiveDate)
-                    ? '' : dayjs(history!.credentialEffectiveDate).format('YYYY-MM-DD'),
+                    ? '' : dayjs(history!.credentialEffectiveDate),
                 credentialExpireDate: helper.isNullOrUndefinedOrEmptyString(history?.credentialExpireDate)
-                    ? '' : dayjs(history!.credentialExpireDate).format('YYYY-MM-DD'),
+                    ? '' : dayjs(history!.credentialExpireDate),
                 credentialOrg: history?.credentialOrg ?? '',
                 credentialAvatar: history?.credentialAvatar ?? '',
                 gender: history?.gender ?? '1',
                 nation: history?.nation ?? '01',
                 birthday: helper.isNullOrUndefinedOrEmptyString(history?.birthday)
-                    ? '' : dayjs(history!.birthday).format('YYYY-MM-DD'),
+                    ? '' : dayjs(history!.birthday),
                 address: history?.address ?? '',
                 securityCaseNo: history?.securityCaseNo ?? '',
                 securityCaseType: history?.securityCaseType ?? '',
@@ -141,10 +171,20 @@ const GenerateForm: FC<GenerateFormProp> = ({
      */
     const bindUnitOptions = () => {
         const [unitCode, unitName] = unit;
-        let options = helper.arrayToOptions(unitData, 'PcsName', 'PcsID', 'UNIT');
+        let options = unitData.map(
+            (item) => <Option
+                value={item.PcsCode}
+                data-name={item.PcsName}
+                key={`U_${item.PcsID}`}>
+                {item.PcsName}
+            </Option>
+        );
         if (unitCode) {
             options = options.concat(
-                <Option value={unitCode} key={`DST_${unitCode}`}>
+                <Option
+                    value={unitCode}
+                    data-name={unitName}
+                    key={`U_${unitCode}`}>
                     {unitName}
                 </Option>
             );
@@ -157,10 +197,20 @@ const GenerateForm: FC<GenerateFormProp> = ({
      */
     const bindDstUnitOptions = () => {
         const [code, name] = dstUnit;
-        let options = helper.arrayToOptions(dstUnitData, 'PcsName', 'PcsID', 'DST');
+        let options = dstUnitData.map(
+            (item) => <Option
+                value={item.PcsCode}
+                data-name={item.PcsName}
+                key={`DU_${item.PcsID}`}>
+                {item.PcsName}
+            </Option>
+        );
         if (code && name) {
             options = options.concat(
-                <Option value={code} key={`DST_${code}`}>
+                <Option
+                    value={code}
+                    data-name={name}
+                    key={`DU_${code}`}>
                     {name}
                 </Option>
             );
@@ -171,14 +221,17 @@ const GenerateForm: FC<GenerateFormProp> = ({
     /**
      * 采集单位Change
      */
-    const onUnitChange = (data: {
-        value: string;
-        label: any;
-    }) => {
-        const bcpNo1 = getBcpNo1(data.value.toString());
+    const onUnitChange = (value: string, options: any) => {
+        const bcpNo1 = getBcpNo1(value);
         setFieldsValue({ bcpNo1 });
-        unitChangeHandle(data);
+        unitChangeHandle(value, options['data-name']);
     };
+
+    /**
+     * 目的检验单位Change
+     */
+    const onDstUnitChange = (value: string, options: any) =>
+        dstUnitChangeHandle(value, options['data-name']);
 
     return <GenerateFormBox>
         <Form form={formRef} {...formItemLayout}>
@@ -226,7 +279,6 @@ const GenerateForm: FC<GenerateFormProp> = ({
                             }
                             showArrow={false}
                             filterOption={false}
-                            labelInValue={true}
                             onSearch={queryOrgByKeyword}
                             onChange={onUnitChange}
                             style={{ width: '100%' }}>
@@ -257,7 +309,7 @@ const GenerateForm: FC<GenerateFormProp> = ({
                             showArrow={false}
                             filterOption={false}
                             onSearch={queryOrgByKeyword}
-                            onChange={dstUnitChangeHandle}
+                            onChange={onDstUnitChange}
                             style={{ width: '100%' }}>
                             {bindDstUnitOptions()}
                         </Select>
@@ -276,7 +328,7 @@ const GenerateForm: FC<GenerateFormProp> = ({
                         name="officerNo"
                         label="采集人员">
                         <Select
-                            onChange={officerChangeHandle}
+                            // onChange={officerChangeHandle}
                             notFoundContent="暂无数据">
                             {helper.arrayToOptions(officerList, 'name', 'no')}
                         </Select>
