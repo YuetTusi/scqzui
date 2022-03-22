@@ -19,7 +19,7 @@ import { DevListProp } from './prop';
 
 
 /**
- * 设备列表
+ * 设备表格
  */
 const DevList: FC<DevListProp> = ({ }) => {
 

@@ -1,20 +1,25 @@
+import classnames from 'classnames';
 import dayjs from 'dayjs';
 import path from 'path';
 import { Dispatch } from 'redux';
 import React, { MouseEvent } from 'react';
 import { routerRedux } from 'dva/router';
+import AndroidFilled from '@ant-design/icons/AndroidFilled';
+import AppleFilled from '@ant-design/icons/AppleFilled';
+import CloudOutlined from '@ant-design/icons/CloudOutlined';
 import CheckOutlined from '@ant-design/icons/CheckOutlined';
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
-import Tag from 'antd/lib/tag';
 import Modal from 'antd/lib/modal';
 import { ColumnsType, ColumnType } from 'antd/lib/table';
 import { CaseInfo } from '@/schema/case-info';
 import DeviceType from '@/schema/device-type';
-import { helper } from '@/utils/helper';
+import DeviceSystem from '@/schema/device-system';
+import { DataMode } from '@/schema/data-mode';
 import { TableName } from '@/schema/table-name';
 import { getDb } from '@/utils/db';
+import { helper } from '@/utils/helper';
 
 type SetDataHandle = (data: DeviceType[]) => void;
 type SetLoadingHandle = (loading: boolean) => void;
@@ -196,10 +201,28 @@ export function getDeviceColumns(
             title: '手机名称',
             dataIndex: 'mobileName',
             key: 'mobileName',
-            render(value: string, { mode }: DeviceType) {
+            render(value: string, { mode, system }: DeviceType) {
                 const [name] = value.split('_');
-                // return getMobileNameByMode(name, mode!);
-                return name;
+
+                return <span>
+                    <span>
+                        {
+                            system === DeviceSystem.IOS
+                                ? <AppleFilled title="苹果设备" />
+                                : <AndroidFilled style={{ color: '#76c058' }} title="安卓设备" />
+                        }
+                        {
+                            mode === DataMode.ServerCloud
+                                ? <CloudOutlined style={{ marginLeft: '5px' }} title="云取证" className="cloud-color" />
+                                : null
+                        }
+                    </span>
+                    <span
+                        className={classnames({ 'cloud-color': mode === DataMode.ServerCloud })}
+                        style={{ marginLeft: '5px' }}>
+                        {name}
+                    </span>
+                </span>
             }
         },
         {

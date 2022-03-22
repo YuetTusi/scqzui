@@ -16,7 +16,7 @@ const DragBarBox = styled.div`
         flex:1;
         display: flex;
         flex-direction: row;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
         color:#a9afbbd1;
         font-size: 1.2rem;

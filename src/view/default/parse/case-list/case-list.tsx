@@ -11,6 +11,9 @@ import { getCaseColumns } from './column';
 import { CaseListProp } from './prop';
 import { OperateDoingState } from '@/model/default/operate-doing';
 
+/**
+ * 案件表格
+ */
 const CaseList: FC<CaseListProp> = () => {
 
     const dispatch = useDispatch();

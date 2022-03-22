@@ -9,7 +9,7 @@ import DeviceType from '@/schema/device-type';
 import { ListBox } from './styled/style';
 
 /**
- * 设备进度
+ * 正在解析的设备列表
  */
 const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, devices }) => {
 

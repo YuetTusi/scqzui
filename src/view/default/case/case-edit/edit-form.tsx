@@ -71,7 +71,7 @@ const EditForm: FC<FormProp> = ({
                         rules={[{ required: true, message: '请填写案件名称' }]}
                         name="m_strCaseName"
                         label="案件名称"
-                        tooltip="不可修改案件名称">
+                        tooltip="不可修改，请使用「备用案件名称」代替原案件名称">
                         <Input
                             maxLength={30}
                             disabled={true}
@@ -214,7 +214,7 @@ const EditForm: FC<FormProp> = ({
                 </Col>
                 <Col span={3}>
                     <span>删除原数据：</span>
-                    <Tooltip title="解析结束自动删除原始数据，可节省磁盘空间，不可再次执行解析操作">
+                    <Tooltip title="解析结束自动删除原始数据，可节省磁盘空间，不可再次重新解析">
                         <Checkbox onChange={(event) => setIsDel(event.target.checked)} checked={isDel} />
                     </Tooltip>
                 </Col>
