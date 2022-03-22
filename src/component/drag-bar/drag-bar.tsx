@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import React, { FC, memo } from 'react';
 import { useDispatch } from 'dva';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWindowMaximize, faWindowClose, faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
+import { faWindowMaximize, faWindowMinimize, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const DragBarBox = styled.div`
     box-sizing: border-box;
@@ -45,17 +45,19 @@ const DragBarBox = styled.div`
             }
             &:nth-child(2){
                 border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
+                border-bottom-right-radius: 3px;
                 border-right: 1px solid #141414;
+                margin-right: 10px;
                 background-color: #2b3347;
                 &:hover{
                     background-color: #5c6a8f;
                 }
             }
             &:nth-child(3){
-                border-bottom-left-radius: 0;
+                border-bottom-left-radius: 3px;
+                border-bottom-right-radius: 0;
                 padding:0 24px;
-                margin-right: 1px;
+                margin-right: 0;
                 background-color: #e84749;
                 &:hover{
                     background-color: #d70003;
@@ -84,7 +86,7 @@ const DragBar: FC<{}> = memo(({ children }) => {
                 <FontAwesomeIcon icon={faWindowMaximize} />
             </a>
             <a onClick={() => dispatch({ type: 'appSet/fetchingAndParsingState' })} title="退出">
-                <FontAwesomeIcon icon={faWindowClose} />
+                <FontAwesomeIcon icon={faXmark} />
             </a>
         </div>
     </DragBarBox>
