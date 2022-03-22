@@ -188,7 +188,8 @@ if (!instanceLock) {
             center: config?.center ?? true, //居中显示
             minHeight: config?.minHeight ?? 768, //最小高度
             minWidth: config?.minWidth ?? 960, //最小宽度
-            backgroundColor: '#d3deef',
+            frame: false,
+            backgroundColor: '#181d30',
             webPreferences: {
                 webSecurity: false,
                 contextIsolation: false,
@@ -266,6 +267,22 @@ ipcMain.on('run-service', () => {
 ipcMain.on('do-close', (event: IpcMainEvent) => {
     //mainWindow通知退出程序
     exitApp(process.platform);
+});
+
+//最小化窗口
+ipcMain.on('minimize', (event: IpcMainEvent) => {
+    if (mainWindow) {
+        mainWindow.minimize();
+    }
+});
+
+//最大化窗口
+ipcMain.on('maximize', (event: IpcMainEvent) => {
+    if (mainWindow) {
+        mainWindow.isMaximized()
+            ? mainWindow.unmaximize()
+            : mainWindow.maximize();
+    }
 });
 
 //执行SQLite查询单位表

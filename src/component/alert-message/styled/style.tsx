@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const AlartMessageBox = styled.div`
     position: absolute;
-	top: 0px;
-	right: 100px;
+	top: -24px;
+	right: 180px;
 	z-index: 99;
 
 	.alarm-message-bg {

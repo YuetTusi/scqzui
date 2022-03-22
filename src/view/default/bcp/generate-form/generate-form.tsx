@@ -140,12 +140,12 @@ const GenerateForm: FC<GenerateFormProp> = ({
      * 绑定采集单位Options
      */
     const bindUnitOptions = () => {
-        const [unitCode] = unit;
+        const [unitCode, unitName] = unit;
         let options = helper.arrayToOptions(unitData, 'PcsName', 'PcsID', 'UNIT');
         if (unitCode) {
             options = options.concat(
                 <Option value={unitCode} key={`DST_${unitCode}`}>
-                    { }
+                    {unitName}
                 </Option>
             );
         }
@@ -166,6 +166,18 @@ const GenerateForm: FC<GenerateFormProp> = ({
             );
         }
         return options;
+    };
+
+    /**
+     * 采集单位Change
+     */
+    const onUnitChange = (data: {
+        value: string;
+        label: any;
+    }) => {
+        const bcpNo1 = getBcpNo1(data.value.toString());
+        setFieldsValue({ bcpNo1 });
+        unitChangeHandle(data);
     };
 
     return <GenerateFormBox>
@@ -216,7 +228,7 @@ const GenerateForm: FC<GenerateFormProp> = ({
                             filterOption={false}
                             labelInValue={true}
                             onSearch={queryOrgByKeyword}
-                            onChange={unitChangeHandle}
+                            onChange={onUnitChange}
                             style={{ width: '100%' }}>
                             {bindUnitOptions()}
                         </Select>
@@ -290,7 +302,11 @@ const GenerateForm: FC<GenerateFormProp> = ({
                 <Col span={12}>
                     <Item
                         name="bcpNo1"
-                        label="检材编号(编码+日期)">
+                        label="检材编号"
+                        tooltip={<>
+                            <div>单位编号前6位+日期年月</div>
+                            <div>格式举例：110000202101</div>
+                        </>}>
                         <Input maxLength={12} placeholder="12位数字" />
                     </Item>
                 </Col>

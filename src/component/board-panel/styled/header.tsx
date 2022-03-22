@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Header = styled.div`
 
     position:absolute;
-    top:0;
+    top:24px;
     left:0;
     right:0;
 
@@ -21,6 +21,7 @@ const Header = styled.div`
         font-size: 2rem;
     }
     .header-caption{
+        margin-left: 4rem;
         letter-spacing: 3px;
     }
     .header-buttons{

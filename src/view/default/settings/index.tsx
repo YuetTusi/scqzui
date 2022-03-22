@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuildingColumns, faRegistered, faCrosshairs, faUser } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, Route } from 'dva/router';
 import Reading from '@/component/loading/reading';
+import AlartMessage from '@/component/alert-message';
 import Unit from '@/view/default/settings/unit';
 import DstUnit from '@/view/default/settings/dst-unit';
 import Officer from '@/view/default/settings/officer';
@@ -19,6 +20,7 @@ import ContentBox from './content-box';
  */
 const Index: FC<{}> = () => <SettingLayout>
     <Reading />
+    <AlartMessage />
     <MenuPanel>
         <div className="sub-title">
             软件设置

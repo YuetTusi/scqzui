@@ -147,15 +147,13 @@ const Bcp: FC<BcpProp> = () => {
                 message.destroy();
                 message.info('生成完成');
             });
-            process.once('error', () => {
+            process.once('error', (error) => {
                 message.destroy();
-                message.error('生成失败');
+                message.error('生成BCP失败');
+                logger.error(`生成BCP失败：${error}`);
             });
         } catch (error) {
             console.warn(error);
-            message.error('生成BCP失败');
-            console.log('生成BCP失败:', error.message);
-            logger.error(`生成BCP失败：${error.message}`);
         }
     };
 

@@ -23,7 +23,6 @@ export default {
             ]);
             yield put({ type: 'setPage', payload: { pageIndex, pageSize, total } });
             yield put({ type: 'setData', payload: next });
-            console.log(next);
         } catch (error) {
             log.error(`查询案件列表失败 @model/default/parse-case/*queryCase:${error.message}`);
         } finally {

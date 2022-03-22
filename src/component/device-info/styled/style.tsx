@@ -2,10 +2,19 @@ import styled from 'styled-components';
 
 export const DeviceBox = styled.div`
 
+    position:relative;
     padding: 10px;
     margin: 5px;
     border-radius: 3px;
     background-color: #202940;
+
+    &>.loading-mask{
+        position:absolute;
+        left:0;
+        right:0;
+        top:0;
+        bottom:0;
+    }
 
     &>.dev-detail{
         display: flex;

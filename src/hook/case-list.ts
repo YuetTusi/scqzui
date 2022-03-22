@@ -16,8 +16,6 @@ function useCaseList() {
         (async () => {
             try {
                 const next = await db.find(null, 'createdAt', -1);
-                console.log('---------next----------')
-                console.log(next);
                 setData(next);
             } catch (error) {
                 log.error(`读取案件列表失败 @hook/useCaseList:${error.message}`);

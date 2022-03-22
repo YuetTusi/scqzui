@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce';
 import { join } from 'path';
 import { shell } from 'electron';
-import React, { FC, MouseEvent } from 'react';
+import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
 import message from 'antd/lib/message';
@@ -11,6 +11,7 @@ import { Center } from './styled/center';
 import { Footer } from './styled/footer';
 import { helper } from '@/utils/helper';
 import { useDispatch } from 'dva';
+import DragBar from '../drag-bar';
 
 const cwd = process.cwd();
 const caption = helper.readAppName();
@@ -40,8 +41,22 @@ const openHelpDocClick = debounce(async (event: MouseEvent<HTMLSpanElement>) => 
 const BoardPanel: FC<{}> = ({ children }) => {
 
     const dispatch = useDispatch();
+    const [title, setTitle] = useState<string>('');
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const { materials_name, materials_software_version } = await helper.readManufaturer();
+                setTitle(`${materials_name} ${materials_software_version}`);
+            } catch (error) {
+                console.warn(error);
+                setTitle('');
+            }
+        })();
+    }, []);
 
     return <>
+        <DragBar />
         <Header>
             <div className="header-caption">{caption ?? ''}</div>
             <div className="header-buttons">
@@ -61,3 +76,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
 };
 
 export default BoardPanel;
+function setTitle(arg0: string) {
+    throw new Error('Function not implemented.');
+}
+

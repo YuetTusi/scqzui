@@ -5,6 +5,7 @@
 	"repository": "https://github.com/YuetTusi/scqzui.git",
 	"author": "cuiyue <cuiyue.msn@hotmail.com>",
 	"license": "MIT",
+	"description": "FetchUI for market version",
 	"scripts": {
 		"prebuild": "rimraf dist/**/*",
 		"build": "webpack --config webpack.dev.js",
