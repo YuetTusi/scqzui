@@ -201,19 +201,15 @@ if (!instanceLock) {
             mainWindow.loadURL('http://localhost:8085/default.html');
             mainWindow.webContents.openDevTools();
         } else {
-            mainWindow.loadFile(path.join(resourcesPath, 'app.asar.unpacked/dist/default.html'));
+            mainWindow.loadFile(path.join(resourcesPath, 'app.asar.unpacked/dist/renderer/default.html'));
         }
 
         mainWindow.webContents.on('did-finish-load', () => {
             mainWindow!.show();
             timerWindow!.loadFile(path.join(__dirname, './renderer/timer.html'));
+            fetchRecordWindow!.loadFile(path.join(__dirname, './renderer/fetch-record.html'));
             if (mode === 'development') {
                 timerWindow!.webContents.openDevTools();
-            }
-            fetchRecordWindow!.loadFile(
-                path.join(__dirname, './renderer/fetch-record.html')
-            );
-            if (mode === 'development') {
                 fetchRecordWindow!.webContents.openDevTools();
             }
         });
@@ -289,6 +285,9 @@ ipcMain.on('query-db', (event: IpcMainEvent, ...args) => {
         });
 
         sqliteWindow.loadFile(path.join(__dirname, './renderer/sqlite.html'));
+        if (mode === 'development') {
+            sqliteWindow.webContents.openDevTools();
+        }
         sqliteWindow.webContents.once('did-finish-load', () => sqliteWindow!.webContents.send('query-db', args));
     } else {
         sqliteWindow.webContents.send('query-db', args);
@@ -324,7 +323,12 @@ ipcMain.on('show-protocol', (event: IpcMainEvent, fetchData: FetchData) => {
                 javascript: true
             }
         });
-        protocolWindow.loadFile(path.join(__dirname, './renderer/protocol.html'));
+        if (mode === 'development') {
+            protocolWindow.loadFile(path.join(__dirname, './renderer/protocol.html'));
+        } else {
+            protocolWindow.loadFile(path.join(resourcesPath, 'app.asar.unpacked/dist/renderer/protocol.html'));
+        }
+
         protocolWindow.webContents.on('did-finish-load', () =>
             protocolWindow!.webContents.send('show-protocol', fetchData)
         );
@@ -433,6 +437,7 @@ ipcMain.on('report-export', (event: IpcMainEvent, exportCondition: ExportConditi
                 javascript: true
             }
         });
+
         reportWindow.loadFile(path.join(__dirname, './renderer/report.html'));
         if (mode === 'development') {
             reportWindow.webContents.openDevTools();

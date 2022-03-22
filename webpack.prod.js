@@ -2,6 +2,7 @@ const { join, resolve } = require('path');
 const { ProvidePlugin } = require('webpack');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AntdDayjsPlugin = require('antd-dayjs-webpack-plugin');
 const theme = require('./theme/cyan.json');
 
 let config = {
@@ -11,21 +12,20 @@ let config = {
 		sqlite: join(__dirname, './src/renderer/sqlite/sqlite.ts'),
 		protocol: join(__dirname, './src/renderer/protocol/protocol.ts'),
 		timer: join(__dirname, './src/renderer/timer/timer.ts'),
-		fetchRecord: join(__dirname, './src/renderer/fetch-record/fetch-record.ts')
+		fetchRecord: join(__dirname, './src/renderer/fetch-record/fetch-record.ts'),
+		report: join(__dirname, './src/renderer/report/report.ts')
 	},
 	output: {
 		filename: '[name].js',
 		path: join(__dirname, './dist/renderer')
 	},
 	target: 'electron-preload',
-    optimization: {
+	optimization: {
 		minimize: true,
 		minimizer: [
 			new TerserWebpackPlugin({
 				terserOptions: {
-					keep_fnames: false,
-					parallel: true,
-					cache: true
+					keep_fnames: false
 				}
 			})
 		]
@@ -37,7 +37,8 @@ let config = {
 		extensions: ['.ts', '.tsx', 'yml', 'yaml', '.js', '.json']
 	},
 	externals: {
-		sqlite3: 'commonjs sqlite3'
+		sqlite3: 'commonjs sqlite3',
+		archiver: "require('archiver')"
 	},
 	module: {
 		rules: [
@@ -102,6 +103,7 @@ let config = {
 			$: 'jquery',
 			jQuery: 'jquery'
 		}),
+		new AntdDayjsPlugin(),
 		new HtmlWebpackPlugin({
 			template: join(__dirname, './src/renderer/default/default.html'),
 			filename: 'default.html',
@@ -126,6 +128,11 @@ let config = {
 			template: join(__dirname, './src/renderer/fetch-record/fetch-record.html'),
 			filename: 'fetch-record.html',
 			chunks: ['fetchRecord']
+		}),
+		new HtmlWebpackPlugin({
+			template: join(__dirname, './src/renderer/report/report.html'),
+			filename: 'report.html',
+			chunks: ['report']
 		})
 	]
 };
