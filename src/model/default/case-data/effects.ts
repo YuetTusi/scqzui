@@ -57,7 +57,9 @@ export default {
             content: '正在删除，可能时间较长，请不要关闭程序',
             okText: '确定',
             maskClosable: false,
-            okButtonProps: { disabled: true, icon: LoadingOutlined }
+            okButtonProps: {
+                disabled: true
+            }
         });
         try {
             yield put({ type: 'setLoading', payload: true });
@@ -74,16 +76,24 @@ export default {
                     call([checkDb, 'remove'], { caseId: payload.id }, true),
                     call([bcpDb, 'remove'], { deviceId: { $in: devicesInCase.map(i => i._id) } }, true)
                 ]);
-                modal.update({ content: '删除成功', okButtonProps: { disabled: false } });
+                modal.update({
+                    content: '删除成功', okButtonProps: {
+                        disabled: false
+                    }
+                });
             } else {
-                modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false } });
+                modal.update({
+                    title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: {
+                        disabled: false
+                    }
+                });
             }
             setTimeout(() => {
                 modal.destroy();
             }, 1000);
         } catch (error) {
             console.log(`@model/default/case-data/*deleteCaseData: ${error.message}`);
-            modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试', okButtonProps: { disabled: false } });
+            modal.update({ title: '删除失败', content: '可能文件仍被占用，请稍后再试' });
             setTimeout(() => {
                 modal.destroy();
             }, 1000);

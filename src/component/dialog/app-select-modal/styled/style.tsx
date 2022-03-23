@@ -21,7 +21,7 @@ const AppSelectModalBox = styled.div`
         fieldset {
             display: block;
             border: 1px solid #303030;
-            border-radius: 2px;
+            border-radius: ${props => props.theme['border-radius-base']};
             legend {
                 width: auto;
                 margin-left: 10px;

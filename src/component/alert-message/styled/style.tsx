@@ -11,8 +11,8 @@ export const AlartMessageBox = styled.div`
 		justify-content: center;
 		align-items: center;
 		padding: 5px 10px;
-		border-bottom-left-radius: 5px;
-		border-bottom-right-radius: 5px;
+		border-bottom-left-radius: ${props => props.theme['border-radius-base']};;
+		border-bottom-right-radius: ${props => props.theme['border-radius-base']};;
 		background-color: rgba(0, 0, 0, 0.6);
 	}
 

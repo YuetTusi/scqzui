@@ -7,7 +7,7 @@ export const BcpBox = styled.div`
     right:10px;
     bottom:10px;
     overflow-y: auto;
-    border-radius: 3px;
+    border-radius: ${props => props.theme['border-radius-base']};;
     display: flex;
     flex-direction: column;
     background-color: #202940;

@@ -286,8 +286,7 @@ export function getDeviceColumns(
                                         okText: '确定',
                                         maskClosable: false,
                                         okButtonProps: {
-                                            disabled: true,
-                                            icon: <LoadingOutlined />
+                                            disabled: true
                                         }
                                     });
                                     try {
@@ -297,8 +296,7 @@ export function getDeviceColumns(
                                             modal.update({
                                                 content: '删除成功',
                                                 okButtonProps: {
-                                                    disabled: false,
-                                                    icon: <CheckCircleOutlined />
+                                                    disabled: false
                                                 }
                                             });
                                             //NOTE:磁盘文件删除成功后，更新数据库
@@ -319,8 +317,7 @@ export function getDeviceColumns(
                                                 title: '删除失败',
                                                 content: '可能文件仍被占用，请稍后再试',
                                                 okButtonProps: {
-                                                    disabled: false,
-                                                    icon: <CheckCircleOutlined />
+                                                    disabled: false
                                                 }
                                             });
                                         }
@@ -335,8 +332,7 @@ export function getDeviceColumns(
                                             title: '删除失败',
                                             content: '可能文件仍被占用，请稍后再试',
                                             okButtonProps: {
-                                                disabled: false,
-                                                icon: <CheckCircleOutlined />
+                                                disabled: false
                                             }
                                         });
                                         setTimeout(() => {

@@ -70,7 +70,7 @@ const LogListBox = styled.div`
 		font-size: 1.6rem;
 		padding: 5px 12px;
 		margin: 0 10px;
-		border-radius: 2px;
+		border-radius: ${props => props.theme['border-radius-base']};;
 		text-shadow: 1px 1px 1px #222;
 		color: ${(props => props.theme['text-color'])};
 		background-color: ${(props) => props.theme['primary-color']};

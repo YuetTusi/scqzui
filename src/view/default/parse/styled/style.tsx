@@ -7,7 +7,7 @@ export const ParseBox = styled.div`
     right:10px;
     bottom:10px;
     overflow-y: auto;
-    border-radius: 3px;
+    border-radius: ${props => props.theme['border-radius-base']};;
     display: flex;
     flex-direction: column;
     background-color: #202940;
@@ -29,21 +29,21 @@ export const TableBox = styled.div`
         flex:none;
         color:#fff;
         padding: 5px 5px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
+        border-top-left-radius: ${props => props.theme['border-radius-base']};;
+        border-top-right-radius: ${props => props.theme['border-radius-base']};;
         background-color: ${props => props.theme['primary-color']};
     }
     &>.case-list{
         height: 100%;
         background-color: #141414;
         flex:none;
-        border-radius: 3px;
+        border-radius: ${props => props.theme['border-radius-base']};;
     }
     &>.dev-list{
         flex:1;
         height: 100%;
         background-color: #141414;
         margin-left: 10px;
-        border-radius: 3px;
+        border-radius: ${props => props.theme['border-radius-base']};;
     }
 `;

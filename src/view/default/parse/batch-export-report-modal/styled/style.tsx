@@ -5,7 +5,7 @@ export const BatchExportReportModalBox = styled.div`
 	.batch-export-tips {
 		display: block;
 		border: 1px solid #303030;
-		border-radius: 2px;
+		border-radius: ${props => props.theme['border-radius-base']};;
 		margin:0 5px;
 		legend {
 			width: auto;

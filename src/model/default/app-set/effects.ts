@@ -56,10 +56,7 @@ export default {
                 msgBox = Modal.info({
                     content: '正在处理数据，请稍候...',
                     okText: '确定',
-                    maskClosable: false,
-                    okButtonProps: {
-                        disabled: true
-                    }
+                    maskClosable: false
                 });
                 yield fork([db, 'update'],
                     { _id: { $in: updateId } },

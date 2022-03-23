@@ -33,8 +33,8 @@ const DragBarBox = styled.div`
             background-color: #141414;
             color:#fff;
             text-align: center;
-            border-bottom-left-radius: 3px;
-            border-bottom-right-radius: 3px;
+            border-bottom-left-radius: ${props => props.theme['border-radius-base']};;
+            border-bottom-right-radius: ${props => props.theme['border-radius-base']};;
             &:nth-child(1){
                 border-right: 1px solid #141414;
                 border-bottom-right-radius: 0;
@@ -45,7 +45,7 @@ const DragBarBox = styled.div`
             }
             &:nth-child(2){
                 border-bottom-left-radius: 0;
-                border-bottom-right-radius: 3px;
+                border-bottom-right-radius: ${props => props.theme['border-radius-base']};;
                 border-right: 1px solid #141414;
                 margin-right: 10px;
                 background-color: #2b3347;
@@ -54,7 +54,7 @@ const DragBarBox = styled.div`
                 }
             }
             &:nth-child(3){
-                border-bottom-left-radius: 3px;
+                border-bottom-left-radius: ${props => props.theme['border-radius-base']};;
                 border-bottom-right-radius: 0;
                 padding:0 24px;
                 margin-right: 0;

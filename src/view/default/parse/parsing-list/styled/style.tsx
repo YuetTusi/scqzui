@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ListBox = styled.div`
     position: relative;
-    border-radius: 3px;
+    border-radius: ${props => props.theme['border-radius-base']};;
     border:1px solid #303030;
     height: 100%;
     display: flex;
@@ -23,8 +23,8 @@ export const ListBox = styled.div`
         flex:none;
         color:#fff;
         padding: 5px 5px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
+        border-top-left-radius: ${props => props.theme['border-radius-base']};;
+        border-top-right-radius: ${props => props.theme['border-radius-base']};;
         background-color: ${props => props.theme['primary-color']};
     }
     &>.dev{
@@ -50,7 +50,7 @@ export const ListBox = styled.div`
             flex: none;
             width: 240px;
             height: auto;
-            border-radius: 5px;
+            border-radius: ${props => props.theme['border-radius-base']};;
             margin-left: 10px;
             background-color: #056099;
 
@@ -74,7 +74,7 @@ export const ListBox = styled.div`
                     padding: 10px;
                     height: 50px;
                     background-color: #044066;
-                    border-radius: 3px;
+                    border-radius: ${props => props.theme['border-radius-base']};;
 
                     display: flex;
                     flex-direction: row;

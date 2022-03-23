@@ -27,7 +27,7 @@ const AppleCreditBox = styled.div`
             width        : 277px;
             height       : 500px;
             border       : 1px solid #303030;
-            border-radius: 5px;
+            border-radius: ${props => props.theme['border-radius-base']};;
             padding      : 5px;
         }
     }

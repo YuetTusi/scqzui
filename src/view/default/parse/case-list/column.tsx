@@ -33,7 +33,7 @@ export function getCaseColumns(
             title: '批量导出',
             dataIndex: '_id',
             key: '_id',
-            width: 50,
+            width: 90,
             align: 'center',
             render: (id: string, record: CaseInfo) => {
                 const { exportingDeviceId } = operateDoing;

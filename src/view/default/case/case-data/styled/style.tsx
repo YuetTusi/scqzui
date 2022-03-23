@@ -4,43 +4,35 @@ import styled from 'styled-components';
 export const CaseDataBox = styled.div`
 
     height: 100%;
-	// margin: 5px 5px 0 5px;
-	position: relative;
 
 	.case-content {
-		overflow-y: auto;
 		padding: 5px;
+		background-color:#202940;
 		position: absolute;
 		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 50px;
-	}
-
-	.fix-buttons {
-		position: absolute;
-		right: 5px;
-		bottom: 5px;
-		.ant-btn {
-			margin-left: 5px;
-		}
-		.hidden {
-			display: none;
-		}
+		left: 10px;
+		right: 10px;
+		bottom: 10px;
+		border-radius: ${props => props.theme['border-radius-base']};;
 	}
 
 	.search-bar {
 		display: flex;
-		padding: 5px;
-		border-bottom: 1px solid #eeeeee;
+		flex-direction: row;
+		justify-content: flex-end;
+		padding-top: 5px;
+		&>:nth-child(2){
+			margin-left: 5px;
+		}
 	}
 
-	.table-root {
-		height: calc(100% - 40px);
-	}
-
-	.ant-tag {
-		margin-right: 0;
+	.table-panel{
+		position: absolute;
+		top: 62px;
+		left: 5px;
+		right: 5px;
+		bottom: 0px;
+		overflow-y:auto;
 	}
 
 	.inner-device-table{

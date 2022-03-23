@@ -46,7 +46,7 @@ const Version: FC<{}> = () => {
             } else {
                 setManu(null);
             }
-        })()
+        })();
     }, []);
 
     useEffect(() => {
@@ -110,7 +110,7 @@ const Version: FC<{}> = () => {
                                     caseId: 'caseId',
                                     serial: serial,
                                     mode: 'mode',
-                                    phonePath:'',
+                                    phonePath: '',
                                     cloudAppList: []
                                 }
                             })
