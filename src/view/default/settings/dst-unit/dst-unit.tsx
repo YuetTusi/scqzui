@@ -74,6 +74,15 @@ const DstUnit: FC<UnitProp> = () => {
     };
 
     /**
+     * 行Click
+     */
+    const onRowClick = ({ PcsCode, PcsName }: UnitRecord) => {
+        setSelectedRowKeys([PcsCode]);
+        selectPcsCode = PcsCode;
+        selectPcsName = PcsName;
+    };
+
+    /**
      * 查询Click
      */
     const onSearchClick = debounce((event: MouseEvent<HTMLButtonElement>) => {
@@ -89,6 +98,7 @@ const DstUnit: FC<UnitProp> = () => {
     const onSaveClick = debounce((event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         if (selectedRowKeys.length !== 0) {
+            console.log(selectPcsCode, selectPcsName);
             dispatch({
                 type: 'organization/saveDstUnit',
                 payload: {
@@ -149,6 +159,9 @@ const DstUnit: FC<UnitProp> = () => {
             }}
             columns={getColumns()}
             rowKey={(record) => record.PcsCode}
+            onRow={(record) => ({
+                onClick: () => onRowClick(record)
+            })}
             rowSelection={{
                 type: 'radio',
                 onChange: rowSelectChange,

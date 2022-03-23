@@ -107,7 +107,16 @@ const Unit: FC<UnitProp> = () => {
         setSelectedRowKeys([]);
         setPageIndex(pageIndex);
         queryUnitData(value ?? null, pageIndex, 10);
-    }
+    };
+
+    /**
+     * 行Click
+     */
+    const onRowClick = ({ PcsCode, PcsName }: UnitRecord) => {
+        setSelectedRowKeys([PcsCode]);
+        selectPcsCode = PcsCode;
+        selectPcsName = PcsName;
+    };
 
     useSubscribe('query-db-result', queryDbHandle);
 
@@ -145,12 +154,14 @@ const Unit: FC<UnitProp> = () => {
             }}
             columns={getColumns()}
             rowKey={(record) => record.PcsCode}
+            onRow={(record) => ({
+                onClick: () => onRowClick(record)
+            })}
             rowSelection={{
                 type: 'radio',
                 onChange: rowSelectChange,
                 selectedRowKeys: selectedRowKeys
             }}>
-
         </Table>
     </MainBox>;
 }

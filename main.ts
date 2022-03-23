@@ -1,4 +1,4 @@
-import path from 'path';
+import { join } from 'path';
 import { ChildProcessWithoutNullStreams } from 'child_process';
 import {
     app, BrowserWindow, dialog, ipcMain, globalShortcut, Menu,
@@ -91,20 +91,33 @@ function exitApp(platform: string) {
 }
 
 process.on('uncaughtException', (err) => {
-    // log.error(`Process UncaughtException: ${err.stack ?? ''}`);
+    log.error(`UncaughtException in main.ts: ${err.message}`);
     app.exit(1);
 });
 
-app.on('render-process-gone', (event, webContents, { exitCode, reason }) => {
-    // log.error(`Render Process Gone: ${JSON.stringify({
-    //     reason,
-    //     exitCode,
-    //     title: webContents.getTitle(),
-    // })}`);
+app.on('render-process-gone', (event, webContents, { reason }) => {
+    let errMsg: string | null = null;
     switch (reason) {
         case 'crashed':
-            webContents.getTitle();
+            errMsg = '渲染进程崩溃';
             break;
+        case 'oom':
+            errMsg = '渲染进程启动内存不足';
+            break;
+        case 'launch-failed':
+            errMsg = '渲染进程启动失败';
+            break;
+        case 'integrity-failure':
+            errMsg = '渲染进程窗口代码完整性检查失败';
+            break;
+        case 'killed':
+            errMsg = '渲染进程被外部终止';
+            break;
+    }
+    if (errMsg !== null) {
+        log.error(
+            `${errMsg} WebContents:${webContents.getTitle()}, reason:${reason}`
+        );
     }
 });
 
@@ -181,7 +194,7 @@ if (!instanceLock) {
 
         mainWindow = new BrowserWindow({
             title: appName ?? '北京万盛华通科技有限公司',
-            icon: config?.logo ? path.join(appPath, `../config/${config.logo}`) : undefined,
+            icon: config?.logo ? join(appPath, `../config/${config.logo}`) : undefined,
             width: config?.windowWidth ?? 1280, //主窗体宽
             height: config?.windowHeight ?? 800, //主窗体高
             autoHideMenuBar: true, //隐藏主窗口菜单
@@ -202,13 +215,13 @@ if (!instanceLock) {
             mainWindow.loadURL('http://localhost:8085/default.html');
             mainWindow.webContents.openDevTools();
         } else {
-            mainWindow.loadFile(path.join(resourcesPath, 'app.asar.unpacked/dist/renderer/default.html'));
+            mainWindow.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/default.html'));
         }
 
         mainWindow.webContents.on('did-finish-load', () => {
             mainWindow!.show();
-            timerWindow!.loadFile(path.join(__dirname, './renderer/timer.html'));
-            fetchRecordWindow!.loadFile(path.join(__dirname, './renderer/fetch-record.html'));
+            timerWindow!.loadFile(join(__dirname, './renderer/timer.html'));
+            fetchRecordWindow!.loadFile(join(__dirname, './renderer/fetch-record.html'));
             if (mode === 'development') {
                 timerWindow!.webContents.openDevTools();
                 fetchRecordWindow!.webContents.openDevTools();
@@ -230,19 +243,19 @@ ipcMain.on('run-service', () => {
     helper.runProc(
         fetchProcess,
         config?.fetchExe ?? 'n_fetch.exe',
-        path.join(appPath, '../../../', config?.fetchPath ?? './n_fetch')
+        join(appPath, '../../../', config?.fetchPath ?? './n_fetch')
     );
     helper.runProc(
         parseProcess,
         config!.parseExe ?? 'parse.exe',
-        path.join(appPath, '../../../', config?.parsePath ?? './parse')
+        join(appPath, '../../../', config?.parsePath ?? './parse')
     );
     if (config!.useServerCloud) {
         //有云取功能，调起云RPC服务
         helper.runProc(
             yunProcess,
             config!.yqExe ?? 'yqRPC.exe',
-            path.join(appPath, '../../../', config?.yqPath ?? './yq'),
+            join(appPath, '../../../', config?.yqPath ?? './yq'),
             ['-config', './agent.json', '-log_dir', './log']
         );
         // helper.runProc(
@@ -257,7 +270,7 @@ ipcMain.on('run-service', () => {
         helper.runProc(
             appQueryProcess,
             config?.appQueryExe ?? 'AppQuery.exe',
-            path.join(appPath, '../../../', config?.appQueryPath ?? './AppQuery')
+            join(appPath, '../../../', config?.appQueryPath ?? './AppQuery')
         );
     }
 });
@@ -301,7 +314,7 @@ ipcMain.on('query-db', (event: IpcMainEvent, ...args) => {
             }
         });
 
-        sqliteWindow.loadFile(path.join(__dirname, './renderer/sqlite.html'));
+        sqliteWindow.loadFile(join(__dirname, './renderer/sqlite.html'));
         if (mode === 'development') {
             sqliteWindow.webContents.openDevTools();
         }
@@ -341,9 +354,9 @@ ipcMain.on('show-protocol', (event: IpcMainEvent, fetchData: FetchData) => {
             }
         });
         if (mode === 'development') {
-            protocolWindow.loadFile(path.join(__dirname, './renderer/protocol.html'));
+            protocolWindow.loadFile(join(__dirname, './renderer/protocol.html'));
         } else {
-            protocolWindow.loadFile(path.join(resourcesPath, 'app.asar.unpacked/dist/renderer/protocol.html'));
+            protocolWindow.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/protocol.html'));
         }
 
         protocolWindow.webContents.on('did-finish-load', () =>
@@ -363,7 +376,6 @@ ipcMain.on('time', (event: IpcMainEvent, usb: number, isStart: boolean) => {
 });
 //向主窗口发送计时时间
 ipcMain.on('receive-time', (event: IpcMainEvent, usb: number, timeString: string) => {
-    // console.log(`${usb}:${timeString}`);
     if (mainWindow && mainWindow.webContents !== null) {
         mainWindow.webContents.send('receive-time', usb, timeString);
     }
@@ -455,7 +467,7 @@ ipcMain.on('report-export', (event: IpcMainEvent, exportCondition: ExportConditi
             }
         });
 
-        reportWindow.loadFile(path.join(__dirname, './renderer/report.html'));
+        reportWindow.loadFile(join(__dirname, './renderer/report.html'));
         if (mode === 'development') {
             reportWindow.webContents.openDevTools();
         }
@@ -482,7 +494,7 @@ ipcMain.on('report-batch-export', (event: IpcMainEvent, batchExportTasks: BatchE
                 javascript: true
             }
         });
-        reportWindow.loadFile(path.join(__dirname, './renderer/report.html'));
+        reportWindow.loadFile(join(__dirname, './renderer/report.html'));
         reportWindow.webContents.openDevTools();
         reportWindow.webContents.once('did-finish-load', () => {
             if (reportWindow !== null) {

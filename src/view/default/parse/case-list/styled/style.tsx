@@ -7,4 +7,5 @@ export const NoWrapText = styled.span`
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    vertical-align: middle;
 `;
