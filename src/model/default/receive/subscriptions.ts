@@ -256,7 +256,6 @@ export default {
                     content,
                     okText: '重新启动',
                     cancelText: '退出',
-                    icon: 'exclamation-circle',
                     onOk() {
                         ipcRenderer.send('do-relaunch');
                     },
@@ -276,7 +275,7 @@ export default {
             try {
                 await db.insert(log);
             } catch (error) {
-                logger.error(`采集进度入库失败 @model/dashboard/Device/subscriptions/saveFetchLog: ${error.message}`);
+                logger.error(`采集进度入库失败 @model/default/receive/subscriptions/saveFetchLog: ${error.message}`);
             }
         });
     }

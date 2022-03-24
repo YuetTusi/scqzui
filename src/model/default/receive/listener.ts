@@ -76,7 +76,7 @@ export function deviceChange({ msg }: Command<{
             //向FetchInfo组件发送消息，清理上一次缓存消息
             ipcRenderer.send('fetch-over', usb);
             //#记录日志
-            dispatch({ type: 'saveFetchLog', payload: { usb, state: fetchState } });
+            dispatch({ type: 'device/saveFetchLog', payload: { usb, state: fetchState } });
         }
         //发送Windows消息
         ipcRenderer.send('show-notice', {

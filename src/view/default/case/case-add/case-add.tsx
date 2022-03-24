@@ -1,4 +1,4 @@
-import React, { useRef, FC, MouseEvent, useState } from 'react';
+import React, { useRef, FC, MouseEvent, useState, useEffect } from 'react';
 import { useSelector, useLocation, useDispatch } from 'dva';
 import { routerRedux } from 'dva/router';
 import debounce from 'lodash/debounce';
@@ -44,6 +44,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
     const isAi = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
     const tokenAppList = useState<BaseApp[]>([]);
+
     /**
      * 返回Click
      */
@@ -61,7 +62,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
      * 保存案件
      */
     const saveCase = (entity: CaseInfo) => {
-        const params = new URLSearchParams(location.search);
+        const params = new URLSearchParams(search);
         dispatch({
             type: 'caseAdd/saveCase',
             payload: {

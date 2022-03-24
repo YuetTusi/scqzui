@@ -1,5 +1,5 @@
 import { mkdirSync } from 'fs';
-import path from 'path';
+import { join } from 'path';
 import { EffectsCommandMap } from "dva";
 import { AnyAction } from 'redux';
 import { routerRedux } from "dva/router";
@@ -21,7 +21,7 @@ export default {
     *saveCase({ payload }: AnyAction, { call, fork, put }: EffectsCommandMap) {
         const db = getDb<CaseInfo>(TableName.Case);
         const { entity, name } = payload as { entity: CaseInfo, name: string | null };
-        const casePath = path.join(entity.m_strCasePath, entity.m_strCaseName);
+        const casePath = join(entity.m_strCasePath, entity.m_strCaseName);
         yield put({ type: 'setSaving', payload: true });
         //#部分表单域记录历史，下次可快速输入
         UserHistory.set(HistoryKeys.HISTORY_UNITNAME, entity.m_strCheckUnitName);
