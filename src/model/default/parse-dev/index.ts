@@ -28,7 +28,11 @@ interface ParseDevState {
     /**
      * 总数
      */
-    total: number
+    total: number,
+    /**
+     * 展开行key
+     */
+    expandedRowKeys: Array<string | number>
 }
 
 /**
@@ -42,7 +46,8 @@ let model: Model = {
         loading: false,
         total: 0,
         pageIndex: 1,
-        pageSize: helper.PAGE_SIZE
+        pageSize: helper.PAGE_SIZE,
+        expandedRowKeys: []
     },
     reducers,
     effects

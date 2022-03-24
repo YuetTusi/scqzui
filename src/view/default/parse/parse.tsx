@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { useLocation } from 'dva';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import ParsingList from './parsing-list';
@@ -8,9 +7,6 @@ import DevList from './dev-list';
 import { TableBox, ParseBox, ParsingPanel } from './styled/style';
 
 const Parse: FC<{}> = () => {
-
-    // const { search } = useLocation();
-    // const params = new URLSearchParams(search);
 
     return <SubLayout title="数据解析">
         <ParseBox>

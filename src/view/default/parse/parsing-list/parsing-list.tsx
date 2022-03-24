@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, MouseEvent, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Empty from 'antd/lib/empty';
 import Progress from 'antd/lib/progress';
@@ -13,7 +13,18 @@ import { ListBox } from './styled/style';
  */
 const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, devices }) => {
 
-    const { curinfo, curprogress, deviceId } = info;
+    const dispatch = useDispatch();
+    const { curinfo, curprogress, deviceId, caseId } = info;
+
+    /**
+     * 解析中设备Click
+     */
+    const onItemClick = (event: MouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [caseId] });
+        dispatch({ type: 'parseDev/setCaseId', payload: caseId });
+        dispatch({ type: 'parseDev/setExpandedRowKeys', payload: [deviceId] }); //点击自动展开设备表格行
+    };
 
     const renderLi = () => {
         const dev = devices.find(item => item._id === deviceId);
@@ -45,7 +56,7 @@ const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, de
         }
     };
 
-    return <div className="d-item">
+    return <div className="d-item" onClick={onItemClick}>
         <div className="prog">
             <Progress
                 percent={curprogress}

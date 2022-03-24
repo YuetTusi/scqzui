@@ -17,6 +17,9 @@ export default {
 
     /**
      * 查询案件下设备
+     * @param {number} pageIndex 当前页
+     * @param {number} pageSize 页尺寸
+     * @param {any} condition 条件
      */
     *queryDev({ payload }: AnyAction, { all, call, put, select }: EffectsCommandMap) {
 

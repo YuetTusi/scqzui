@@ -31,5 +31,12 @@ export default {
         state.pageSize = payload.pageSize;
         state.total = payload.total;
         return state;
+    },
+    /**
+     * 设置展开行key
+     */
+    setExpandedRowKeys(state: ParseDevState, { payload }: AnyAction) {
+        state.expandedRowKeys = payload;
+        return state;
     }
 };

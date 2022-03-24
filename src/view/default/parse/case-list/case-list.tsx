@@ -27,12 +27,13 @@ const CaseList: FC<CaseListProp> = () => {
         data,
         pageIndex,
         pageSize,
-        total
+        total,
+        selectedRowKeys
     } = useSelector<StateTree, ParseCaseState>(state => state.parseCase);
     const operateDoing = useSelector<StateTree, OperateDoingState>(state =>
         state.operateDoing
     );
-    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+    // const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
     const [batchExportReportModalVisible, setBatchExportReportModalVisible] = useState<boolean>(false);
     const [exportBcpModalVisible, setExportBcpModalVisible] = useState<boolean>(false);
 
@@ -55,10 +56,18 @@ const CaseList: FC<CaseListProp> = () => {
         const casePageIndex = params.get('cp');
         if (cid) {
             query({}, Number.parseInt(casePageIndex!));
-            setSelectedRowKeys([cid]);
+            dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [cid] });
+            // setSelectedRowKeys([cid]);
             dispatch({ type: 'parseDev/setCaseId', payload: cid });
         } else {
             query({}, 1);
+        }
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            //退出清理选中行
+            dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [] });
         }
     }, []);
 
@@ -74,15 +83,15 @@ const CaseList: FC<CaseListProp> = () => {
      * 表格行Click
      */
     const onRowClick = ({ _id }: CaseInfo) => {
-        setSelectedRowKeys([_id!]);
+        dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [_id] });
         dispatch({ type: 'parseDev/setCaseId', payload: _id });
     };
 
     /**
      * 行选择Change
      */
-    const onRowSelectChange = (selectedRowKeys: Key[], selectedRows: CaseInfo[]) =>
-        setSelectedRowKeys(selectedRowKeys);
+    const onRowSelectChange = (selectedRowKeys: Key[]) =>
+        dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [selectedRowKeys] });
 
 
     /**

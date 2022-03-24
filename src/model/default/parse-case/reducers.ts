@@ -25,5 +25,12 @@ export default {
         state.pageSize = payload.pageSize;
         state.total = payload.total;
         return state;
+    },
+    /**
+     * 设置选中行key
+     */
+    setSelectedRowKeys(state: ParseCaseState, { payload }: AnyAction) {
+        state.selectedRowKeys = payload;
+        return state;
     }
 };

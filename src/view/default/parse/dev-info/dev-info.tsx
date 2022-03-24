@@ -4,6 +4,7 @@ import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
 import Badge from 'antd/lib/badge';
 import Button from 'antd/lib/button';
+import { useCase } from '@/hook';
 import { Split } from '@/component/style-tool';
 import { ParseState } from '@/schema/device-state';
 import DeviceSystem from '@/schema/device-system';
@@ -45,6 +46,8 @@ const StateDot: FC<{ state?: ParseState }> = ({ state }) => {
  */
 const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
 
+    const caseData = useCase(data.caseId);
+
     return <InfoBox>
         <div className="btn-bar">
             <div>
@@ -73,6 +76,10 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
             </div>
             <div className="desc">
                 <ul>
+                    <li>
+                        <label htmlFor="span">所属案件</label>
+                        <span>{caseData?.m_strCaseName === undefined ? '' : caseData.m_strCaseName.split('_')[0]}</span>
+                    </li>
                     <li>
                         <label htmlFor="span">手机名称</label>
                         <span>{data.mobileName === undefined ? '' : data.mobileName?.split('_')[0]}</span>

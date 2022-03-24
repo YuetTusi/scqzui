@@ -32,11 +32,12 @@ const DevList: FC<DevListProp> = ({ }) => {
         loading,
         pageIndex,
         pageSize,
-        total
+        total,
+        expandedRowKeys
     } = useSelector<StateTree, ParseDevState>(state => state.parseDev);
     const operateDoing = useSelector<StateTree, OperateDoingState>(state => state.operateDoing);
     const currentDev = useRef<DeviceType>();
-    const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([]);
+    // const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([]);
     const [editDevModalVisbile, setEditDevModalVisible] = useState<boolean>(false);
     const [exportReportModalVisible, setExportReportModalVisible] = useState<boolean>(false);
     const [exportBcpModalVisible, setExportBcpModalVisible] = useState<boolean>(false);
@@ -60,15 +61,14 @@ const DevList: FC<DevListProp> = ({ }) => {
     useEffect(() => {
         return () => {
             dispatch({ type: 'parseDev/setCaseId', payload: undefined });
+            dispatch({ type: 'parseDev/setExpandedRowKeys', payload: [] });
         }
     }, []);
 
     useEffect(() => {
         const params = new URLSearchParams(search);
-        const did = params.get('did');
         const dp = params.get('dp');
         query({}, dp === null ? 1 : Number.parseInt(dp));
-        setExpandedRowKeys(did === null ? [] : [did]);
     }, [caseId]);
 
     /**
@@ -81,13 +81,8 @@ const DevList: FC<DevListProp> = ({ }) => {
     /**
      * 展开行Change
      */
-    const onExpand = (expanded: boolean, { _id }: DeviceType) => {
-        if (expanded) {
-            setExpandedRowKeys([_id!]);
-        } else {
-            setExpandedRowKeys([]);
-        }
-    };
+    const onExpand = (expanded: boolean, { _id }: DeviceType) =>
+        dispatch({ type: 'parseDev/setExpandedRowKeys', payload: expanded ? [_id] : [] });
 
     /**
      * 设备信息按钮点击统一处理
