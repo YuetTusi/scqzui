@@ -225,7 +225,7 @@ export function saveCaseFromPlatform({ msg }: Command<GuangZhouCase>, dispatch: 
             description: `接收到案件：「${msg.CaseName}」，姓名：「${msg.OwnerName}」`,
             duration: 20
         });
-        logger.info(`接收警综平台数据 @model/dashboard/Device/listener/saveCaseFromPlatform：${JSON.stringify(msg)}`);
+        logger.info(`接收警综平台数据 @model/default/receive/listener/saveCaseFromPlatform：${JSON.stringify(msg)}`);
         const officer: Officer = {
             name: msg.OfficerName ?? '',
             no: msg.OfficerID ?? ''
@@ -282,10 +282,10 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
         if (isparseok && caseData.generateBcp) {
             //# 解析`成功`且`是`自动生成BCP
             logger.info(`解析结束开始自动生成BCP, 手机路径：${deviceData.phonePath}`);
-            const bcpExe = path.join(appPath, '../../../tools/BcpTools/BcpGen.exe');
+            const bcpExe = path.join(appPath, '../tools/BcpTools/BcpGen.exe');
             const proc = execFile(bcpExe, [deviceData.phonePath!, caseData.attachment ? '1' : '0'], {
                 windowsHide: true,
-                cwd: path.join(appPath, '../../../tools/BcpTools')
+                cwd: path.join(appPath, '../tools/BcpTools')
             });
             proc.once('close', () => {
                 // dispatch({
@@ -297,7 +297,7 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
                 // });
             });
             proc.once('error', (err) => {
-                logger.error(`生成BCP错误 @model/dashboard/Device/listener/parseEnd: ${err.message}`);
+                logger.error(`生成BCP错误 @model/default/receive/listener/parseEnd: ${err.message}`);
             });
         }
         if (!isparseok && !helper.isNullOrUndefined(errmsg)) {
@@ -308,7 +308,7 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
             });
         }
     } catch (error) {
-        logger.error(`自动生成BCP错误 @model/dashboard/Device/listener/parseEnd: ${error.message}`);
+        logger.error(`自动生成BCP错误 @model/default/receive/listener/parseEnd: ${error.message}`);
     } finally {
         //# 更新解析状态为`完成或失败`状态
         dispatch({

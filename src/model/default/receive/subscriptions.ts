@@ -1,4 +1,4 @@
-import path from 'path';
+import { join } from 'path';
 import { readFileSync } from 'fs';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { SubscriptionAPI } from 'dva';
@@ -218,8 +218,8 @@ export default {
         let disableWarn = false;
         const jsonPath =
             process.env['NODE_ENV'] === 'development'
-                ? path.join(cwd, './data/app.json')
-                : path.join(cwd, './resources/config/app.json');
+                ? join(cwd, './data/app.json')
+                : join(cwd, './resources/config/app.json');
 
         server.on(Error, (port: number, type: string) => {
 

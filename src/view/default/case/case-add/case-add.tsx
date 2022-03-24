@@ -1,31 +1,24 @@
-import React, { useRef, FC, MouseEvent, useState, useEffect } from 'react';
-import { useSelector, useLocation, useDispatch } from 'dva';
+import React, { FC, MouseEvent, useState } from 'react';
+import { useLocation, useDispatch } from 'dva';
 import { routerRedux } from 'dva/router';
 import debounce from 'lodash/debounce';
 import RollbackOutlined from '@ant-design/icons/RollbackOutlined'
 import SaveOutlined from '@ant-design/icons/SaveOutlined'
-import Form from 'antd/lib/form';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import Button from 'antd/lib/button';
-import Select from 'antd/lib/select';
-import Modal from 'antd/lib/modal';
-import { StateTree } from '@/type/model';
+import Form from 'antd/lib/form';
 import { helper } from '@/utils/helper';
-import UserHistory, { HistoryKeys } from '@/utils/user-history';
-import { LocalStoreKey } from '@/utils/local-store';
+import { BaseApp } from '@/schema/base-app';
 import { CaseInfo } from '@/schema/case-info';
 import { ParseApp } from '@/schema/parse-app';
 import { TokenApp } from '@/schema/token-app';
-import { CaseAddProp, FormValue } from './prop';
 import SubLayout from '@/component/sub-layout/sub-layout';
-import { CaseBox } from './styled/styled';
 import { Split } from '@/component/style-tool';
-import { useForm } from 'antd/es/form/Form';
+import { CaseBox } from './styled/styled';
 import AddForm from './add-form';
-import { BaseApp } from '@/schema/base-app';
-
-const { max } = helper.readConf()!;
-const { Option } = Select;
+import { CaseAddProp, FormValue } from './prop';
+// const { max } = helper.readConf()!;
+// const { Option } = Select;
+const { useForm } = Form;
 
 /**
  * 新增案件
