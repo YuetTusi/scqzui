@@ -32,7 +32,7 @@ dayjs.locale('zh-cn');
 
 //封装工具函数
 const helper = {
-    PAGE_SIZE: 20,
+    PAGE_SIZE: 10,
     /**
      * 空串
      */

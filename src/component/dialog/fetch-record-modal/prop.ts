@@ -23,6 +23,25 @@ export interface LiveModalProp {
     cancelHandle?: () => void;
 };
 
+export interface HistoryModalProp {
+    /**
+     * 是否显示
+     */
+    visible: boolean;
+    /**
+     * 标题
+     */
+    title?: string;
+    /**
+     * 数据
+     */
+    data?: FetchRecord[];
+    /**
+     * 取消回调
+     */
+    cancelHandle?: () => void;
+}
+
 export interface EventMessage {
     /**
      * 当前消息所属设备序号

@@ -15,6 +15,7 @@ import { ParsingListState } from '@/model/default/parsing-list';
 import { BatchExportReportModalState } from '@/model/default/batch-export-report-modal';
 import { BcpHistoryState } from '@/model/default/bcp-history';
 import { ExportBcpModalState } from '@/model/default/export-bcp-modal';
+import { FetchLogTableState } from '@/model/default/fetch-log-table';
 
 declare global {
 	interface Window {
@@ -46,6 +47,7 @@ interface StateTree {
 	batchExportReportModal: BatchExportReportModalState,
 	bcpHistory: BcpHistoryState,
 	exportBcpModal: ExportBcpModalState,
+	fetchLogTable: FetchLogTableState,
 	[modelName: string]: any
 }
 

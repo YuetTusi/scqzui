@@ -58,7 +58,7 @@ const DragBarBox = styled.div`
                 border-bottom-right-radius: 0;
                 padding:0 24px;
                 margin-right: 0;
-                background-color: #e84749;
+                background-color: #a61d24;
                 &:hover{
                     background-color: #d70003;
                 }

@@ -114,6 +114,7 @@ const LiveModal: FC<LiveModalProp> = ({ title, device, visible, cancelHandle }) 
             onCancel={cancelHandle}
             title={title}
             width={800}
+            centered={true}
             maskClosable={false}
             className="zero-padding-body">
             <FetchRecordBox>

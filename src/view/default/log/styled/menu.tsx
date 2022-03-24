@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import color2 from 'tinycolor2';
+// import color2 from 'tinycolor2';
 
 const MenuPanel = styled.menu`
     margin:0;
     padding:0 15px;
     width:220px;
     height:100%;
-    /* background-color: rgb(24,29,48,.94); */
     background-color: #202940;
 
     .sub-title{
@@ -34,7 +33,7 @@ const MenuPanel = styled.menu`
                 display:block;
                 color:#a9afbbd1;
                 &.active{
-                    background-color: ${(props) => props.theme['primary-color']};
+                    background-color: ${props => props.theme['primary-color']};
                     color:#fff;
                 }
                 & > div{
@@ -46,6 +45,7 @@ const MenuPanel = styled.menu`
             }
             .ico{
                 display: inline-block;
+                font-size: 1.4rem;
             }
             .name{
                 margin-left: 1rem;

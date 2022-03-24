@@ -144,6 +144,19 @@ const createRouter = (api?: RouterAPI) => {
 								</Suspense>;
 							}}
 						/>
+						<Route
+							path="/log"
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/log/index')
+								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
+							}}
+						/>
 						<Route component={() => <LayoutPanel><NotFound /></LayoutPanel>} />
 					</Switch>
 				</Router>
