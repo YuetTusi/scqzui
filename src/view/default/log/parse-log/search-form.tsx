@@ -14,9 +14,6 @@ const { Item } = Form;
 const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle }) => {
 
 
-    /**
-     * 查询
-     */
     const onSearch = (event: MouseEvent<HTMLButtonElement>) => {
         const { getFieldsValue } = formRef;
         event.preventDefault();
@@ -24,9 +21,6 @@ const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle }
         onSearchHandle(values);
     };
 
-    /**
-     * 删除
-     */
     const onDel = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         onDelHandle();
@@ -34,7 +28,7 @@ const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle }
 
     return <SearchFormBox>
         <Form form={formRef} layout="inline">
-            <Item name="start" label="采集时间 起">
+            <Item name="start" label="解析完成时间 起">
                 <DatePicker
                     showTime={true}
                     placeholder="请选择时间"

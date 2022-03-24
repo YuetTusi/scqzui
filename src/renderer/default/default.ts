@@ -34,6 +34,7 @@ import batchExportReportModalModel from '@/model/default/batch-export-report-mod
 import bcpHistoryModel from '@/model/default/bcp-history';
 import exportBcpModalModel from '@/model/default/export-bcp-modal';
 import fetchLogTableModel from '@/model/default/fetch-log-table';
+import parseLogTableModel from '@/model/default/parse-log-table';
 import 'jquery';
 import '@ztree/ztree_v3/js/jquery.ztree.all.min';
 import '@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css';
@@ -119,5 +120,6 @@ app.model(batchExportReportModalModel);
 app.model(bcpHistoryModel);
 app.model(exportBcpModalModel);
 app.model(fetchLogTableModel);
+app.model(parseLogTableModel);
 app.router(createRouter);
 app.start('#root');

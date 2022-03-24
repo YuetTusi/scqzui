@@ -114,7 +114,7 @@ export default {
         try {
             yield call([db, 'update'], { id }, { $set: { parseState } });
             yield put({
-                type: 'parseLog/queryParseLog', payload: {
+                type: 'parseLogTable/queryParseLog', payload: {
                     condition: null,
                     current: 1,
                     pageSize: 10
@@ -151,32 +151,37 @@ export default {
      */
     *saveParseLog({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
         const deviceDb = getDb<DeviceType>(TableName.Device);
-        const caseDb = getDb<DeviceType>(TableName.Case);
+        const caseDb = getDb<CaseInfo>(TableName.Case);
         const parseLogDb = getDb<ParseLogEntity>(TableName.ParseLog);
         const {
             caseId, deviceId, isparseok, parseapps, u64parsestarttime, u64parseendtime
         } = (payload as ParseEnd);
         try {
             let [deviceData, caseData]: [DeviceType, CaseInfo] = yield all([
-                call([deviceDb, 'findOne'], { id: deviceId }),
+                call([deviceDb, 'findOne'], { _id: deviceId }),
                 call([caseDb, 'findOne'], { _id: caseId })
             ]);
             let entity = new ParseLogEntity();
             entity.caseName = helper.isNullOrUndefinedOrEmptyString(caseData.spareName) ? caseData.m_strCaseName.split('_')[0] : caseData.spareName;
-            entity.mobileName = deviceData?.mobileName;
-            entity.mobileNo = deviceData?.mobileNo;
-            entity.mobileHolder = deviceData?.mobileHolder;
+            entity.mobileName = deviceData?.mobileName ?? '';
+            entity.mobileNo = deviceData?.mobileNo ?? '';
+            entity.mobileHolder = deviceData?.mobileHolder ?? '';
             entity.note = deviceData?.note;
             entity.state = isparseok ? ParseState.Finished : ParseState.Error;
             entity.apps = parseapps;
             entity.startTime = u64parsestarttime === -1 ? undefined : new Date(dayjs.unix(u64parsestarttime).valueOf());
             entity.endTime = u64parseendtime === -1 ? undefined : new Date(dayjs.unix(u64parseendtime).valueOf());
+            console.clear();
+            console.log('写入日志..................');
+            console.log(payload);
+            console.log(deviceData);
+            console.log(entity);
             yield call([parseLogDb, 'insert'], entity);
             yield put({
-                type: 'parseLog/queryParseLog', payload: {
+                type: 'parseLogTable/queryParseLog', payload: {
                     condition: null,
                     current: 1,
-                    pageSize: 10
+                    pageSize: helper.PAGE_SIZE
                 }
             });
         } catch (error) {
