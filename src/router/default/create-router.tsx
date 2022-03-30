@@ -21,7 +21,10 @@ const createRouter = (api?: RouterAPI) => {
 	const { history } = api!;
 
 	return (
-		<ConfigProvider locale={localeCN} autoInsertSpaceInButton={false} componentSize="middle">
+		<ConfigProvider
+			locale={localeCN}
+			autoInsertSpaceInButton={false}
+			componentSize="middle">
 			<ThemeProvider theme={theme}>
 				<Router history={history}>
 					<Switch>

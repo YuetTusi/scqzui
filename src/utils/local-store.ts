@@ -15,14 +15,6 @@ enum LocalStoreKey {
      */
     DataMode = 'DataMode',
     /**
-     * 开启关键词过滤
-     */
-    UseKeyword = 'UseKeyword',
-    /**
-     * 开启文档验证
-     */
-    UseDocVerify = 'UseDocVerify',
-    /**
      * 云取应用超时时间（秒）
      */
     CloudTimeout = 'CloudTimeout',

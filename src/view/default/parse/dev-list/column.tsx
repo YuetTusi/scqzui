@@ -71,8 +71,7 @@ const openOnSystemWindow = debounce(
 const doParse = async (dispatch: Dispatch, data: DeviceType) => {
 
     const db = getDb<CaseInfo>(TableName.Case);
-    let useKeyword = localStorage.getItem(LocalStoreKey.UseKeyword) === '1';
-    let useDocVerify = localStorage.getItem(LocalStoreKey.UseDocVerify) === '1';
+    const appConfig = await helper.readAppJson();
     let caseData: CaseInfo = await db.findOne({
         _id: data.caseId
     });
@@ -106,8 +105,8 @@ const doParse = async (dispatch: Dispatch, data: DeviceType) => {
                 caseData.aiTransfer ? 1 : 0,
                 caseData.aiScreenshot ? 1 : 0
             ],
-            useKeyword,
-            useDocVerify,
+            useKeyword: appConfig?.useKeyword ?? false,
+            useDocVerify: appConfig?.useDocVerify ?? false,
             dataMode: data.mode ?? DataMode.Self,
             tokenAppList: caseData.tokenAppList
                 ? caseData.tokenAppList.map((i) => i.m_strID)

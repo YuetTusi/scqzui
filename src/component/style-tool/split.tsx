@@ -12,18 +12,20 @@ const Split = styled.hr`
 const SortPanel = styled.div`
 
     border: 1px solid #303030;
-    border-radius: ${props => props.theme['border-radius-base']};;
+    border-radius: ${props => props.theme['border-radius-base']};
 
     &>.caption{
         color:#fff;
         font-size: 1.4rem;
         padding: 5px 10px;
-        border-top-left-radius: ${props => props.theme['border-radius-base']};;
-        border-top-right-radius:${props => props.theme['border-radius-base']};;
+        border-top-left-radius: ${props => props.theme['border-radius-base']};
+        border-top-right-radius:${props => props.theme['border-radius-base']};
         background-color: ${props => props.theme['primary-color']};
     }
     &>.content{
         color:#ffffffd9;
+        border-bottom-left-radius: ${props => props.theme['border-radius-base']};
+        border-bottom-right-radius: ${props => props.theme['border-radius-base']};
     }
 `;
 

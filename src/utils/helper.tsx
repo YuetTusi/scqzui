@@ -25,6 +25,7 @@ import { CaseInfo } from '../schema/case-info';
 import { Manufaturer } from '../schema/manufaturer';
 import { LocalStoreKey } from './local-store';
 import { getDb } from './db';
+import { AppJson } from '@/schema/app-json';
 
 const cwd = process.cwd();//应用的根目录
 const KEY = 'az'; //密钥
@@ -664,6 +665,38 @@ const helper = {
                 {item[nameField]}
             </Select.Option>
         })
+    },
+    /**
+     * 读取app.json配置
+     */
+    async readAppJson(): Promise<AppJson | null> {
+        const isDev = process.env['NODE_ENV'] === 'development';
+        const target = isDev
+            ? path.join(cwd, 'data/app.json')
+            : path.join(cwd, 'resources/config/app.json');
+        try {
+            const prev = await fs.promises.readFile(target, { encoding: 'utf8' });
+            return JSON.parse(prev);
+        } catch (error) {
+            log.error(`读取app.json失败：${error.message}`);
+            return null;
+        }
+    },
+    /**
+     * 写入app.json配置
+     */
+    async writeAppJson(data: AppJson): Promise<boolean> {
+        const isDev = process.env['NODE_ENV'] === 'development';
+        const target = isDev
+            ? path.join(cwd, 'data/app.json')
+            : path.join(cwd, 'resources/config/app.json');
+        try {
+            await fs.promises.writeFile(target, JSON.stringify(data), { encoding: 'utf8' });
+            return true;
+        } catch (error) {
+            log.error(`读取app.json失败：${error.message}`);
+            return false;
+        }
     }
 };
 

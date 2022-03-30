@@ -30,24 +30,19 @@ const ParseLog: FC<ParseLogProp> = () => {
      * 查询handle
      * @param values 查询条件
      */
-    const onSearchHandle = (values: FormValue) => {
-        query(values);
-    };
+    const onSearchHandle = (values: FormValue) => query(values);
 
-    const delHandle = (type: DelLogType) => {
-
-        Modal.confirm({
-            onOk() {
-                dispatch({ type: 'parseLogTable/deleteParseLogByTime', payload: type });
-                setDelAskModalVisible(false);
-            },
-            centered: true,
-            okText: '是',
-            cancelText: '否',
-            title: '清理确认',
-            content: '日志删除不可恢复，确认清理日志吗？'
-        });
-    };
+    const delHandle = (type: DelLogType) => Modal.confirm({
+        onOk() {
+            dispatch({ type: 'parseLogTable/deleteParseLogByTime', payload: type });
+            setDelAskModalVisible(false);
+        },
+        centered: true,
+        okText: '是',
+        cancelText: '否',
+        title: '清理确认',
+        content: '日志删除不可恢复，确认清理日志吗？'
+    });
 
     /**
      * 查询

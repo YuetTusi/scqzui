@@ -1,6 +1,9 @@
 import React, { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuildingColumns, faRegistered, faCrosshairs, faUser } from '@fortawesome/free-solid-svg-icons';
+import {
+    faBuildingColumns, faRegistered, faCrosshairs, faUser,
+    faLightbulb
+} from '@fortawesome/free-solid-svg-icons';
 import { NavLink, Route } from 'dva/router';
 import Reading from '@/component/loading/reading';
 import AlartMessage from '@/component/alert-message';
@@ -8,6 +11,7 @@ import Unit from '@/view/default/settings/unit';
 import DstUnit from '@/view/default/settings/dst-unit';
 import Officer from '@/view/default/settings/officer';
 import OfficerEdit from '@/view/default/settings/officer/edit';
+import Keywords from '@/view/default/settings/keywords';
 import Version from '@/view/default/settings/version';
 import { MenuPanel } from './styled/menu';
 import { SettingLayout } from './styled/sub-layout';
@@ -51,6 +55,14 @@ const Index: FC<{}> = () => <SettingLayout>
                 </NavLink>
             </li>
             <li>
+                <NavLink to="/settings/keywords" replace={true} className="hvr-sweep-to-right">
+                    <div>
+                        <span className="ico"><FontAwesomeIcon icon={faLightbulb} /></span>
+                        <span className="name">关键词配置</span>
+                    </div>
+                </NavLink>
+            </li>
+            <li>
                 <NavLink to="/settings/version" replace={true} className="hvr-sweep-to-right">
                     <div>
                         <span className="ico"><FontAwesomeIcon icon={faRegistered} /></span>
@@ -77,6 +89,9 @@ const Index: FC<{}> = () => <SettingLayout>
     <Route
         path="/settings/officer/:id"
         component={() => <ContentBox title="编辑采集人员"><OfficerEdit /></ContentBox>} />
+    <Route
+        path="/settings/keywords"
+        component={() => <ContentBox title="关键词配置"><Keywords /></ContentBox>} />
     <Route
         path="/settings/version"
         component={() => <ContentBox title="软件版本"><Version /></ContentBox>} />

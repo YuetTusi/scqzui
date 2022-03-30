@@ -29,6 +29,7 @@
 		"asar": true,
 		"asarUnpack": [
 			"dist/main.js",
+			"dist/renderer/fonts/**/*",
 			"dist/renderer/images/**/*",
 			"dist/renderer/default.js",
 			"dist/renderer/default.html",
