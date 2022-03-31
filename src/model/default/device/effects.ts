@@ -31,6 +31,7 @@ import { StateTree } from '@/type/model';
 import parseApps from '@/config/parse-app.yaml';
 import { DeviceStoreState } from './index';
 import { AppJson } from '@/schema/app-json';
+import { AppSetStore } from '../app-set';
 /**
  * 副作用
  */
@@ -197,7 +198,6 @@ export default {
      */
     *startFetch({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
         const db = getDb<CaseInfo>(TableName.Case);
-        let sendCase: GuangZhouCase | null = null;
         const { deviceData, fetchData } = payload as { deviceData: DeviceType, fetchData: FetchData };
         // *再次采集前要把采集记录清除
         ipcRenderer.send('progress-clear', deviceData.usb!);
@@ -255,8 +255,9 @@ export default {
             note: rec.note ?? '',
             mode: rec.mode ?? DataMode.Self
         });
+        const { sendCase, dataMode }: AppSetStore = yield select((state: StateTree) => state.appSet);
         if (fetchData.mode === DataMode.GuangZhou) {
-            sendCase = yield select((state: StateTree) => state.appSet.sendCase);//警综案件数据
+            // sendCase = yield select((state: StateTree) => state.appSet.sendCase);//警综案件数据
             rec.handleOfficerNo = sendCase?.ObjectID ?? ''; //#持有人编号从警经综数据接收
             //将警综平台数据写入Platform.json，解析会读取
             yield fork([helper, 'writeJSONfile'], path.join(rec.phonePath, 'Platform.json'), sendCase);
@@ -265,7 +266,7 @@ export default {
         try {
             const caseData: CaseInfo = yield call([db, 'findOne'], { _id: fetchData.caseId });
             const bcp = new BcpEntity();
-            if (helper.getDataMode() === DataMode.GuangZhou) {
+            if (dataMode === DataMode.GuangZhou) {
                 //警综
                 bcp.mobilePath = phonePath;
                 bcp.attachment = caseData.attachment;

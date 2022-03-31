@@ -70,38 +70,23 @@ export default {
         }
     },
     /**
-     * 读取conf配置文件、JSON等，将模式、版本等同步到localStorage中
+     * 读取conf配置文件、JSON等
      */
-    async initConfig() {
-        let checkJsonPath = cwd;//点验JSON文件路径
-        let platformJsonPath = cwd; //平台JSON文件路径
-        if (process.env['NODE_ENV'] === 'development') {
-            checkJsonPath = path.join(cwd, 'data/check.json');
-            platformJsonPath = path.join(cwd, 'data/platform.json');
-        } else {
-            checkJsonPath = path.join(cwd, 'resources/data/check.json');
-            platformJsonPath = path.join(cwd, 'resources/data/platform.json');
-        }
-
+    async initConfig({ dispatch }: SubscriptionAPI) {
         try {
-            const [existCheck, existPlatform] = await Promise.all([helper.existFile(checkJsonPath), helper.existFile(platformJsonPath)]);
-            let mode = DataMode.Self;
-
-            if (existCheck) {
-                let checkJson = await helper.readJSONFile(checkJsonPath);
-                if (checkJson.isCheck) {
-                    mode = DataMode.Check;
-                }
+            const [checkJson, platformJson] = await Promise.all([
+                helper.readCheckJson(),
+                Promise.resolve(null) //TODO:在此读取platform.json文件
+            ]);
+            if (checkJson !== null && checkJson.isCheck) {
+                dispatch({ type: 'setDataMode', payload: DataMode.Check });
+            } else if (platformJson !== null && (platformJson as any).usePlatform) {
+                dispatch({ type: 'setDataMode', payload: DataMode.GuangZhou });
+            } else {
+                dispatch({ type: 'setDataMode', payload: DataMode.Self });
             }
-            if (existPlatform) {
-                let platformJson = await helper.readJSONFile(platformJsonPath);
-                if (platformJson.usePlatform) {
-                    mode = DataMode.GuangZhou;
-                }
-            }
-            localStorage.setItem(LocalStoreKey.DataMode, mode.toString());
         } catch (error) {
-            localStorage.setItem(LocalStoreKey.DataMode, DataMode.Self.toString());
+            dispatch({ type: 'setDataMode', payload: DataMode.Self });
         }
     },
     /**

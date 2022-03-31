@@ -10,6 +10,14 @@ export default {
         return state;
     },
     /**
+     * 设置模式
+     * @param {DataMode} payload 模式枚举 
+     */
+    setDataMode(state: AppSetStore, { payload }: AnyAction) {
+        state.dataMode = payload;
+        return state;
+    },
+    /**
      * 设置警综平台数据
      * @param {SendCase | null} payload 平台数据，清空数据传null
      */

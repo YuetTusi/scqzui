@@ -26,6 +26,7 @@ import { Manufaturer } from '../schema/manufaturer';
 import { LocalStoreKey } from './local-store';
 import { getDb } from './db';
 import { AppJson } from '@/schema/app-json';
+import { CheckJson } from '@/schema/check-json';
 
 const cwd = process.cwd();//应用的根目录
 const KEY = 'az'; //密钥
@@ -465,17 +466,6 @@ const helper = {
         return v4().replace(/-/g, '').substring(len);
     },
     /**
-     * 当前模式（标准、点验、警综）
-     */
-    getDataMode(): DataMode {
-        let mode = localStorage.getItem(LocalStoreKey.DataMode);
-        if (mode === null) {
-            return DataMode.Self;
-        } else {
-            return Number(mode);
-        }
-    },
-    /**
      * 取磁盘容量信息
      * @param {string} diskName 盘符（如：`C:`）
      * @param {boolean} convert2GB 是否转为GB单位
@@ -695,6 +685,38 @@ const helper = {
             return true;
         } catch (error) {
             log.error(`读取app.json失败：${error.message}`);
+            return false;
+        }
+    },
+    /**
+     * 读取check.json配置
+     */
+    async readCheckJson(): Promise<CheckJson | null> {
+        const isDev = process.env['NODE_ENV'] === 'development';
+        const target = isDev
+            ? path.join(cwd, 'data/check.json')
+            : path.join(cwd, 'resources/config/check.json');
+        try {
+            const prev = await fs.promises.readFile(target, { encoding: 'utf8' });
+            return JSON.parse(prev);
+        } catch (error) {
+            log.error(`读取check.json失败：${error.message}`);
+            return null;
+        }
+    },
+    /**
+     * 写入check.json配置
+     */
+    async writeCheckJson(data: CheckJson): Promise<boolean> {
+        const isDev = process.env['NODE_ENV'] === 'development';
+        const target = isDev
+            ? path.join(cwd, 'data/check.json')
+            : path.join(cwd, 'resources/config/check.json');
+        try {
+            await fs.promises.writeFile(target, JSON.stringify(data), { encoding: 'utf8' });
+            return true;
+        } catch (error) {
+            log.error(`读取check.json失败：${error.message}`);
             return false;
         }
     }
