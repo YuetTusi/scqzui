@@ -3,7 +3,6 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector, useLocation } from 'dva';
 import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
-import { Key } from 'antd/lib/table/interface';
 import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { DeviceType } from '@/schema/device-type';

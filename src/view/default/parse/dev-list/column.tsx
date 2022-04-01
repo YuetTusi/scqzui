@@ -7,7 +7,7 @@ import { ipcRenderer, shell } from 'electron';
 import classnames from 'classnames';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
-import CloudOutlined from '@ant-design/icons/CloudOutlined';
+import CloudFilled from '@ant-design/icons/CloudFilled';
 import React, { MouseEvent } from 'react';
 import { Dispatch } from "dva";
 import { ColumnsType, ColumnType } from "antd/lib/table";
@@ -270,7 +270,7 @@ export function getDevColumns(
                         }
                         {
                             mode === DataMode.ServerCloud
-                                ? <CloudOutlined style={{ marginLeft: '5px' }} title="云取证" className="cloud-color" />
+                                ? <CloudFilled style={{ marginLeft: '5px' }} title="云取证" className="cloud-color" />
                                 : null
                         }
                     </span>

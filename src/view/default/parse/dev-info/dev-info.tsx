@@ -19,26 +19,35 @@ const { Group } = Button;
  */
 const StateDot: FC<{ state?: ParseState }> = ({ state }) => {
     let color = '';
+    let text = '';
     switch (state) {
         case ParseState.Fetching:
+            color = '#fff';
+            text = '采集中';
+            break;
         case ParseState.NotParse:
             color = '#fff';
+            text = '未解析';
             break;
         case ParseState.Parsing:
             color = 'blue';
+            text = '解析中';
             break;
         case ParseState.Finished:
             color = 'green';
+            text = '完成';
             break;
         case ParseState.Error:
         case ParseState.Exception:
             color = 'red'
+            text = '异常';
             break;
         default:
             color = '#fff';
+            text = '未知状态';
             break;
     }
-    return <Badge color={color} style={{ marginLeft: '5px' }} />
+    return <Badge color={color} title={text} style={{ marginLeft: '5px' }} />
 }
 
 /**
