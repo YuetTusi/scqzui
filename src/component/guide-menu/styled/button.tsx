@@ -9,7 +9,7 @@ const Color = styled.div<{ color: string }>`
     color:#fff;
     width:100%;
     height:100%;
-    border-radius: 3px;
+    border-radius: ${props => props.theme['border-radius-base']};
     background-image: linear-gradient(${(props) => props.color},${(props) => color2(props.color).darken(3).toString()});
     display: flex;
     flex-direction: column;
@@ -45,12 +45,12 @@ const Image = styled.div`
     color:#fff;
     width:100%;
     height:100%;
-    border-radius: 3px;
+    border-radius: ${props => props.theme['border-radius-base']};
 
     .push-img{
         position: relative;
         display:block;
-        border-radius: 3px;
+        border-radius: ${props => props.theme['border-radius-base']};
         width:100%;
         height:100%;
         background-repeat: no-repeat;

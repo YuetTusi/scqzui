@@ -36,6 +36,7 @@ const DevicePanel = styled.div`
     flex-wrap: nowrap;
     padding:20px;
     background-color:#202940;
+    border-radius: ${props => props.theme['border-radius-base']};
 
     & > div{
         &:first-child{

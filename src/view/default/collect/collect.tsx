@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'dva';
+import { useDispatch, useSelector } from 'dva';
 import AndroidOutlined from '@ant-design/icons/AndroidOutlined';
 import AppleOutlined from '@ant-design/icons/AppleOutlined';
 import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
@@ -18,7 +18,8 @@ import CommandType, { SocketType } from '@/schema/command';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
-import { LocalStoreKey } from '@/utils/local-store';
+import { StateTree } from '@/type/model';
+import { AppSetStore } from '@/model/default/app-set';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { LiveModal } from '@/component/dialog/fetch-record-modal';
@@ -33,6 +34,7 @@ import {
     CloudHistoryModal
 } from '@/component/dialog';
 import NormalInputModal from './normal-input-modal';
+import CheckInputModal from './check-input-modal';
 import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
@@ -57,12 +59,13 @@ const Collect: FC<CollectProp> = ({ }) => {
     const [applePasswordVisible, setApplePasswordVisible] = useState<boolean>(false);
     const [uMagicCodeModalVisible, setUMagicCodeModalVisible] = useState<boolean>(false);
     const [guideModalVisible, setGuideModalVisible] = useState<boolean>(false);
+    const [checkInputModalVisible, setCheckInputModalVisible] = useState<boolean>(false);
     const [cloudHistoryModalVisible, setCloudHistoryModalVisible] = useState<boolean>(false);
+    const { dataMode, sendCase } = useSelector<StateTree, AppSetStore>(state => state.appSet);
     const [unitCode] = useUnit();
     const [dstUnitCode] = useDstUnit();
     const devicePanelRef = useRef<HTMLDivElement>(null);
     const currentDevice = useRef<DeviceType | null>(null);
-    const dataMode = useRef<DataMode>(DataMode.Self);
 
     // useEffect(() => {
 
@@ -96,22 +99,11 @@ const Collect: FC<CollectProp> = ({ }) => {
     //     });
     // }, []);
 
-    useEffect(() => {
-        let mode = localStorage.getItem(LocalStoreKey.DataMode);
-        if (mode === null) {
-            dataMode.current = DataMode.Self;
-        } else {
-            dataMode.current = Number(mode);
-        }
-    }, []);
-
     /**
      * 面板横向滚动控制
      */
-    const onDevicePanelWheel = (event: WheelEvent) => {
-        event.preventDefault();
+    const onDevicePanelWheel = ({ deltaY }: WheelEvent) => {
         const { current } = devicePanelRef;
-        const { deltaY } = event;
         if (current) {
             current.scrollLeft += deltaY - 10;
         }
@@ -150,9 +142,7 @@ const Collect: FC<CollectProp> = ({ }) => {
      * @param data
      */
     const getCaseDataFromGuangZhouPlatform = (data: DeviceType) => {
-        //todo: 待创建保存sendCase的model
-        // const { sendCase } = this.props.dashboard;
-        if (helper.isNullOrUndefined(null)) {
+        if (helper.isNullOrUndefined(sendCase)) {
             message.destroy();
             message.info('未接收警综平台数据');
         } else {
@@ -193,7 +183,7 @@ const Collect: FC<CollectProp> = ({ }) => {
         if (!validateBeforeFetch()) {
             return;
         }
-        switch (dataMode.current) {
+        switch (dataMode) {
             case DataMode.Self:
                 //# 标准版本
                 setNormalInputModal(true);
@@ -204,7 +194,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                     .findOne({ serial });
                 if (fetchData === null) {
                     //todo:完成点验功能后打开：
-                    // this.setState({ checkModalVisible: true });
+                    setCheckInputModalVisible(true);
                 } else {
                     //note:如果数据库中存在此设备，直接走采集流程
                     const [name] = fetchData.mobileName!.split('_');
@@ -226,7 +216,7 @@ const Collect: FC<CollectProp> = ({ }) => {
      */
     const collectHandle = (data: DeviceType) => {
         currentDevice.current = data; //寄存手机数据，采集时会使用
-        switch (dataMode.current) {
+        switch (dataMode) {
             case DataMode.GuangZhou:
                 //#广州警综平台
                 getCaseDataFromGuangZhouPlatform(data);
@@ -476,6 +466,14 @@ const Collect: FC<CollectProp> = ({ }) => {
             payload: { visible: false }
         });
 
+    /**
+     * 点验输入框取消Click
+     */
+    const checkInputModalCancelHandle = () => {
+        currentDevice.current = {};
+        setCheckInputModalVisible(false);
+    };
+
     return <SubLayout title="设备取证">
         <ContentBox>
             <div className="hidden-scroll-bar" />
@@ -552,6 +550,12 @@ const Collect: FC<CollectProp> = ({ }) => {
             yesHandle={guideHandle}
             noHandle={guideHandle}
             cancelHandle={() => setGuideModalVisible(false)}
+        />
+        <CheckInputModal
+            visible={checkInputModalVisible}
+            device={currentDevice.current}
+            saveHandle={startFetchHandle}
+            cancelHandle={checkInputModalCancelHandle}
         />
         <CloudCodeModal
             device={currentDevice.current}

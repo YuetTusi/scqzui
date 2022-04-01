@@ -4,6 +4,7 @@ import { AppSetStore } from '@/model/default/app-set';
 import { AlartMessageState } from '@/model/default/alart-message';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { CaseDataState } from '@/model/default/case-data';
+import { CheckInputModalState } from '@/model/default/check-input-modal';
 import { CloudCodeModalStoreState } from '@/model/default/cloud-code-modal';
 import { OfficerState } from '@/model/default/officer';
 import { CaseAddState } from '@/model/default/case-add';
@@ -40,6 +41,7 @@ interface StateTree {
 	caseData: CaseDataState,
 	caseAdd: CaseAddState,
 	caseEdit: CaseEditState,
+	checkInputModal: CheckInputModalState,
 	cloudCodeModal: CloudCodeModalStoreState,
 	officer: OfficerState,
 	organization: Organization,

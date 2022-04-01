@@ -11,10 +11,6 @@ enum LocalStoreKey {
      */
     CaseData = 'CASE_DATA',
     /**
-     * 数据模式
-     */
-    DataMode = 'DataMode',
-    /**
      * 云取应用超时时间（秒）
      */
     CloudTimeout = 'CloudTimeout',
