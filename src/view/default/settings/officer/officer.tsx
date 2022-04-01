@@ -102,7 +102,7 @@ const Officer: FC<OfficerProp> = () => {
                             onClick={() => dispatch(routerRedux.push('/settings/officer/-1'))}
                             type="primary">
                             <PlusCircleOutlined />
-                            <span>新增</span>
+                            <span>添加</span>
                         </Button>
                     </div>
                 </div>

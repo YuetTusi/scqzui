@@ -30,7 +30,7 @@ const UnitNameBox = styled.div`
             white-space: nowrap;
         }
         &> .ant-btn{
-            margin-left:5px;
+            margin-left:16px;
         }
     }
 `;

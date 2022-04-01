@@ -22,7 +22,7 @@ export const CaseDataBox = styled.div`
 		justify-content: flex-end;
 		padding-top: 5px;
 		&>:nth-child(2){
-			margin-left: 5px;
+			margin-left: 16px;
 		}
 	}
 
