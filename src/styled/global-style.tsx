@@ -53,6 +53,9 @@ const GlobalStyle = createGlobalStyle`
 	.ant-empty-description{
 		color:#ffffffd9;
 	}
+	.ant-modal-mask,.ant-modal-wrap{
+		top:22px;
+	}
 
     //悬停动画
     /* Sweep To Right */

@@ -6,11 +6,9 @@ import React, { MouseEvent } from 'react';
 import { routerRedux } from 'dva/router';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
-import CloudOutlined from '@ant-design/icons/CloudOutlined';
+import CloudFilled from '@ant-design/icons/CloudFilled';
 import CheckOutlined from '@ant-design/icons/CheckOutlined';
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
-import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
-import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Modal from 'antd/lib/modal';
 import { ColumnsType, ColumnType } from 'antd/lib/table';
 import { CaseInfo } from '@/schema/case-info';
@@ -213,7 +211,7 @@ export function getDeviceColumns(
                         }
                         {
                             mode === DataMode.ServerCloud
-                                ? <CloudOutlined style={{ marginLeft: '5px' }} title="云取证" className="cloud-color" />
+                                ? <CloudFilled style={{ marginLeft: '5px' }} title="云取证" className="cloud-color" />
                                 : null
                         }
                     </span>
