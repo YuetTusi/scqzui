@@ -126,14 +126,15 @@ span.tmpzTreeMove_arrow {
 			font-weight: bold;
 		}
 		position: absolute;
-		left: 100px;
+		left: 360px;
 		width: 300px;
 		border: 1px solid #fff;
 		border-radius: 2px;
 		font-size: 1.2rem;
 		white-space: normal;
 		padding: 4px;
-		background-color: fade(#fff, 5%);
+		background-color: #141414;
+		z-index: 10;
 
 		dt {
 			margin-bottom: 2px;
@@ -146,6 +147,26 @@ span.tmpzTreeMove_arrow {
 	}
 
 	li {
+		.ext {
+			display: inline-block;
+			cursor: pointer !important;
+			color: #f9ca24;
+			font-weight: bold;
+			vertical-align: bottom;
+		}
+		.note {
+			display: inline-block;
+			max-width: 500px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-style: normal;
+			font-weight: bold;
+			color: #0fb9b1;
+			vertical-align: middle;
+			& > span {
+				font-weight: normal;
+			}
+		}
 		a {
             color:#ffffffd9;
 			position: relative;

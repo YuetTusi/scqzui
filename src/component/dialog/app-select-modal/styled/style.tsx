@@ -5,7 +5,16 @@ const AppSelectModalBox = styled.div`
     width: auto;
 
     .center-box {
-        height: 380px;
+        height: 420px;
+        overflow: auto;
+        padding-bottom: 20px;
+        .no-data-place {
+            margin-top: 33%;
+        }
+    }
+
+    .cloud-center-box {
+        height: 420px;
         overflow: auto;
         padding-bottom: 20px;
         .no-data-place {

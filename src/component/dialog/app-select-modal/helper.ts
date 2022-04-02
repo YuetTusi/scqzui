@@ -46,18 +46,42 @@ function toAppTreeNode(data: App[], selectedKeys: string[] = []) {
 
     if (data && data.length > 0) {
         nodes = data.map((item) => ({
-            name: item.desc,
+            name: getNodeText(item),
             appName: item.name,
             appDesc: item.desc,
             packages: item.packages,
             appKey: item.key,
             id: item.app_id,
             tips: item.tips,
+            ext: item.ext,
             iconSkin: `app_${item.app_id}`,
             checked: selectedKeys.find(i => i == item.app_id) !== undefined
         }));
     }
     return nodes;
+}
+
+/**
+ * 拼接结点文本DOM
+ */
+function getNodeText(node: App) {
+    const { app_id, desc, tips, ext } = node;
+    let $noteDOM = '';//无痕情况DOM
+    let $paramDOM = '';//参数链接DOM
+
+    if (ext !== undefined && ext.length > 0) {
+        $paramDOM = `<a 
+            title='${desc}参数设置'
+            data-id='${app_id}' 
+            data-desc='${desc}' 
+            data-ext='${JSON.stringify(ext)}' 
+            class='ext'
+        >参数</a>`;
+    }
+    if (tips?.note && tips.note[0] !== '无') {
+        $noteDOM = `<em class="note" title="${desc}"><span>无痕情况:</span>${tips.note.join(',')}</em>`;
+    }
+    return `<span title='${desc}'>${desc}</span>${$paramDOM}${$noteDOM}`;
 }
 
 /**
@@ -92,12 +116,12 @@ function tipsDom(tips: CloudTips) {
 function addHoverDom(treeId: string, treeNode: ITreeNode) {
     let current = $("#" + treeNode.tId + "_a");
     let [noteDom, contentDom] = tipsDom(treeNode.tips);
-    let { scrollTop = 0, scrollHeight = 1 } = $('.center-box')[0];
-    let isAlignTop = scrollHeight - scrollTop > 540;
+    let { scrollTop = 0, scrollHeight = 1 } = $('.cloud-center-box')[0];
+    let isAlignTop = scrollHeight - scrollTop > 500;
     let len = current.find('.tree-node-tip').length;
     if (len > 0 || noteDom === '' && contentDom === '') { return; }
     var appTip = `<div style="${isAlignTop ? 'top:-3px' : 'bottom:0'}" id="app_tip_${treeNode.tId}" class="tree-node-tip">
-        <h6>${treeNode.name}</h6>
+        <h6>${treeNode.appDesc}</h6>
         <dl>${noteDom}${contentDom}</dl>
     </div>`;
     current.append(appTip);

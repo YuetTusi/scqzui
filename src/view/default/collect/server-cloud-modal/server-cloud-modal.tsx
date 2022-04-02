@@ -56,7 +56,8 @@ function filterToParseApp(treeNodes: ITreeNode[]) {
                 new CloudApp({
                     m_strID: node.id,
                     key: node.appKey,
-                    name: node.appDesc
+                    name: node.appDesc,
+                    ext: node.ext
                 })
         );
 }
@@ -266,6 +267,8 @@ const ServerCloudModal: FC<Prop> = ({
             ) {
                 setActivePanelKey('1');
             }
+        } finally {
+            dispatch({ type: 'appSet/clearExtValue' });
         }
     };
 

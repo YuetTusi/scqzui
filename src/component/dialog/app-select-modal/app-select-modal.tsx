@@ -41,6 +41,7 @@ const AppSelectModal: FC<AppSelectModalProp> = ({
                 check: checkOption,
                 view: {
                     showIcon: true,
+                    nameIsHTML: true,
                     addHoverDom,
                     removeHoverDom
                 },
@@ -71,11 +72,11 @@ const AppSelectModal: FC<AppSelectModalProp> = ({
             ]}
             onCancel={closeHandle}
             title={title ?? '选择App'}
+            centered={true}
             forceRender={true}
             maskClosable={false}
             destroyOnClose={true}
             zIndex={1001}
-            style={{ top: 80 }}
             className="zero-padding-body">
             <AppSelectModalBox>
                 <div className="tip-msg">{children}</div>
