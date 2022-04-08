@@ -43,6 +43,8 @@ const notifier = new WindowsBalloon({
 config = helper.readConf();
 useHardwareAcceleration = config?.useHardwareAcceleration ?? !helper.isWin7();
 existManuJson = helper.existManufaturer(mode!, appPath);
+app.commandLine.appendArgument('--ignore-gpu-blacklist');
+
 if (config === null) {
     dialog.showErrorBox('启动失败', '配置文件读取失败, 请联系技术支持');
     app.exit(0);

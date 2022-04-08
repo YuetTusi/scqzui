@@ -18,6 +18,8 @@ import { BcpHistoryState } from '@/model/default/bcp-history';
 import { ExportBcpModalState } from '@/model/default/export-bcp-modal';
 import { FetchLogTableState } from '@/model/default/fetch-log-table';
 import { ParseLogTableState } from '@/model/default/parse-log-table';
+import { CloudLogTableState } from '@/model/default/cloud-log-table';
+import { CloudLogModalState } from '@/model/default/cloud-log-modal';
 import { CheckManageTableState } from '@/model/default/check-manage-table';
 
 declare global {
@@ -54,6 +56,8 @@ interface StateTree {
 	fetchLogTable: FetchLogTableState,
 	parseLogTable: ParseLogTableState,
 	checkManageTable: CheckManageTableState,
+	cloudLogTable: CloudLogTableState,
+	cloudLogModal: CloudLogModalState,
 	[modelName: string]: any
 }
 

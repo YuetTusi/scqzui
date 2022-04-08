@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC } from 'react';
 import { helper } from '@/utils/helper';
 import { caseStore } from '@/utils/local-store';
 import { CaseInfoBox } from './styled/case-info-box';
@@ -7,7 +7,7 @@ import { CaseInfoProp } from './prop';
 /**
  * 案件信息
  */
-const CaseInfo: FC<CaseInfoProp> = memo(({ usb }) => {
+const CaseInfo: FC<CaseInfoProp> = ({ usb }) => {
 
     let caseName = '';
     let mobileHolder = '';
@@ -46,6 +46,6 @@ const CaseInfo: FC<CaseInfoProp> = memo(({ usb }) => {
             </div>
         ) : null}
     </CaseInfoBox>;
-});
+};
 
 export { CaseInfo };

@@ -189,12 +189,12 @@ export default {
                     } else {
                         hide();
                         message.error('云取证应用数据获取失败');
-                        logger.error(`云取证应用数据获取失败 @model/dashboard/subscriptions/validCloudAppMd5: request()查询结果错误 code == 1`);
+                        logger.error(`云取证应用数据获取失败 @model/default/app-set/subscriptions/validCloudAppMd5: request()查询结果错误`);
                     }
                     localStorage.setItem(LocalStoreKey.CloudAppMd5, md5);
                 }
             } catch (error) {
-                logger.error(`云取证应用数据获取失败 @model/dashboard/subscriptions/validCloudAppMd5: ${error.message}`);
+                logger.error(`云取证应用数据获取失败 @model/default/app-set/subscriptions/validCloudAppMd5: ${error.message}`);
                 hide();
                 message.error('云取证应用数据获取失败');
             }

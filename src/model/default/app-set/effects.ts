@@ -11,7 +11,6 @@ import { TableName } from '@/schema/table-name';
 import { DeviceType } from '@/schema/device-type';
 import { ParseState } from '@/schema/device-state';
 import { AppCategory } from '@/schema/app-config';
-import Manufaturer from '@/schema/manufaturer';
 
 const config = helper.readConf();
 
@@ -19,21 +18,19 @@ export default {
     /**
      * 退出前检测采集&解析状态
      */
-    *fetchingAndParsingState({ payload }: AnyAction, { call }: EffectsCommandMap) {
+    *fetchingAndParsingState({ payload }: AnyAction, { }: EffectsCommandMap) {
 
-        const manu: Manufaturer = yield call([helper, 'readManufaturer']);
-
-        let question = `确认退出「${manu.materials_name}」？`;
+        let question = `确认退出吗？`;
         Modal.destroyAll();
         Modal.confirm({
-            title: '退出',
+            title: '退出应用',
             content: question,
             okText: '是',
             cancelText: '否',
             zIndex: 9000,
             onOk() {
-                localStorage.removeItem(LocalStoreKey.CaseData);
                 ipcRenderer.send('do-close', true);
+                localStorage.removeItem(LocalStoreKey.CaseData);
             }
         });
     },
@@ -84,7 +81,7 @@ export default {
                 yield put({ type: 'setCloudAppData', payload: data.fetch });
             }
         } catch (error) {
-            logger.error(`查询云取应用接口失败 @modal/default/app-set/fetchCloudAppData: ${error.message}`);
+            logger.error(`查询云取应用接口失败 @modal/default/app-set/*fetchCloudAppData: ${error.message}`);
         }
     }
 };
