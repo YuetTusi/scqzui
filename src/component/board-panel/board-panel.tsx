@@ -14,7 +14,6 @@ import { useDispatch } from 'dva';
 import DragBar from '../drag-bar';
 
 const cwd = process.cwd();
-const caption = helper.readAppName();
 
 /**
  * 打开帮助文档
@@ -40,7 +39,6 @@ const openHelpDocClick = debounce(async (event: MouseEvent<HTMLSpanElement>) => 
  */
 const BoardPanel: FC<{}> = ({ children }) => {
 
-    const dispatch = useDispatch();
     const [title, setTitle] = useState<string>('');
 
     useEffect(() => {
@@ -58,10 +56,12 @@ const BoardPanel: FC<{}> = ({ children }) => {
     return <>
         <DragBar />
         <Header>
-            <div className="header-caption">{caption ?? ''}</div>
+            <div className="header-caption">{title ?? ''}</div>
             <div className="header-buttons">
                 <QuestionCircleOutlined onClick={openHelpDocClick} title="帮助文档" />
-                <BoardMenu><MenuOutlined /></BoardMenu>
+                <BoardMenu>
+                    <MenuOutlined />
+                </BoardMenu>
             </div>
         </Header>
         <Center>

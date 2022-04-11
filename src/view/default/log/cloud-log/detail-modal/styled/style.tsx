@@ -42,6 +42,7 @@ export const DetailModalBox = styled.div`
 			span {
 				flex: 1;
 				padding-left: 10px;
+				word-break: break-word;
 			}
 
 			&:last-child {

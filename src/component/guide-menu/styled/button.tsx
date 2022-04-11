@@ -7,7 +7,7 @@ import color2 from 'tinycolor2';
 const Color = styled.div<{ color: string }>`
     cursor: pointer;
     color:#fff;
-    width:100%;
+    width:350px;
     height:100%;
     border-radius: ${props => props.theme['border-radius-base']};
     background-image: linear-gradient(${(props) => props.color},${(props) => color2(props.color).darken(3).toString()});

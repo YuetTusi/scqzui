@@ -119,7 +119,7 @@ span.tmpzTreeMove_arrow {
 	li a.curSelectedNode{
 		color:#fff;
 		border:1px #0b706c solid;
-		background-color: #0fb9b1;
+		background-color: #019099;
 	}
 	.tree-node-tip {
 		& > h6 {

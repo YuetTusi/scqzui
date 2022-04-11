@@ -5,7 +5,7 @@ import {
     faScrewdriverWrench,
     faFileLines,
     faGears,
-    faBrain,
+    faBolt,
     faUserPen,
     faFileWaveform
 } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +22,23 @@ import tool from './image/2.jpg';
 const GuideMenu: FC<GuideMenuProp> = () => {
 
     return <MenuPanel>
+        <div>
+            <ColorButton
+                to="/check"
+                icon={<FontAwesomeIcon icon={faBolt} />}
+                color="#ffb142">
+                快速点验
+            </ColorButton>
+        </div>
+        <div className="case">
+            <ColorButton
+                to="/case-data"
+                icon={<FontAwesomeIcon icon={faFileLines} />}
+                color="#1B9CFC">
+                案件管理
+            </ColorButton>
+        </div>
+
         <div className="evidence">
             <ImageButton
                 to="/collect"
@@ -35,14 +52,6 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 设备取证
             </ImageButton>
         </div>
-        <div className="case">
-            <ColorButton
-                to="/case-data"
-                icon={<FontAwesomeIcon icon={faFileLines} />}
-                color="#1B9CFC">
-                案件管理
-            </ColorButton>
-        </div>
         <div className="parse">
             <ColorButton
                 to="/parse"
@@ -51,7 +60,15 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 数据解析
             </ColorButton>
         </div>
-        <div className="tool">
+        <div>
+            <ColorButton
+                to="/check"
+                icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
+                color="#BDC581">
+                工具箱
+            </ColorButton>
+        </div>
+        {/* <div className="tool">
             <ImageButton
                 to="/tool"
                 icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
@@ -61,7 +78,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 </ul>}>
                 工具箱
             </ImageButton>
-        </div>
+        </div> */}
         <div className="log">
             <ColorButton
                 to="/log"
