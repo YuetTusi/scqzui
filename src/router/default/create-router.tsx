@@ -135,6 +135,19 @@ const createRouter = (api?: RouterAPI) => {
 							}}
 						/>
 						<Route
+							path="/trail/:cid/:did"
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/trail')
+								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
+							}}
+						/>
+						<Route
 							path="/settings"
 							render={() => {
 								const Next = lazy<FC<any>>(

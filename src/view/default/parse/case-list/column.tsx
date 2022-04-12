@@ -30,7 +30,7 @@ export function getCaseColumns(
                 return <NoWrapText title={txt}>{txt}</NoWrapText>;
             }
         }, {
-            title: '批量导出',
+            title: '导出',
             dataIndex: '_id',
             key: '_id',
             width: 90,

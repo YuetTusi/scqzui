@@ -116,7 +116,7 @@ export const EditBox = styled.div`
 		bottom:10px;
 		right: 10px;
 		background-color: #141414;
-		border-radius: ${props => props.theme['border-radius-base']};;
+		border-radius: ${props => props.theme['border-radius-base']};
 
 		display: flex;
 		flex-direction: column;

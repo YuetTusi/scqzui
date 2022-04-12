@@ -22,20 +22,20 @@ import tool from './image/2.jpg';
 const GuideMenu: FC<GuideMenuProp> = () => {
 
     return <MenuPanel>
-        <div>
-            <ColorButton
-                to="/check"
-                icon={<FontAwesomeIcon icon={faBolt} />}
-                color="#ffb142">
-                快速点验
-            </ColorButton>
-        </div>
         <div className="case">
             <ColorButton
                 to="/case-data"
                 icon={<FontAwesomeIcon icon={faFileLines} />}
                 color="#1B9CFC">
                 案件管理
+            </ColorButton>
+        </div>
+        <div>
+            <ColorButton
+                to="/check"
+                icon={<FontAwesomeIcon icon={faBolt} />}
+                color="#EAB543">
+                快速点验
             </ColorButton>
         </div>
 

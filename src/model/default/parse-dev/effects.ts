@@ -138,5 +138,22 @@ export default {
         yield put(
             routerRedux.push(
                 `/bcp/${caseId}/${deviceId}?cp=${parseCase.pageIndex}&dp=${parseDev.pageIndex}`));
+    },
+    /**
+     * 跳转到云点验页
+     * @param {string} caseId 案件id
+     * @param {string} deviceId 设备id
+     */
+    *gotoTrail({ payload }: AnyAction, { select, put }: EffectsCommandMap) {
+
+        const { caseId, deviceId } = payload;
+        const { parseCase, parseDev } = yield select((state: StateTree) => ({
+            parseCase: state.parseCase,
+            parseDev: state.parseDev
+        }));
+
+        yield put(
+            routerRedux.push(
+                `/trail/${caseId}/${deviceId}?cp=${parseCase.pageIndex}&dp=${parseDev.pageIndex}`));
     }
 };

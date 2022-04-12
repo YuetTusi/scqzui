@@ -191,10 +191,10 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
                     <div>
                         <ul>
                             <li>
-                                导出目录若存在<em>相同文件会覆盖</em>，请确认
+                                无报告数据请先进行<em>生成报告</em>操作
                             </li>
                             <li>
-                                无报告数据请先进行<em>生成报告</em>操作
+                                导出目录若存在<em>相同文件会覆盖</em>，导出前请确认
                             </li>
                             <li>
                                 请保证磁盘空间充足；数据过大会较慢，导出过程中<em>请勿关闭应用</em>

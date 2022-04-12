@@ -21,12 +21,12 @@ const NotFound: FC<{}> = () => {
     return <NotFoundBox>
         <Result
             title="您访问的功能暂不支持"
-            subTitle="请返回首页"
+            subTitle="请返回主页"
             extra={<Button
                 onClick={() => dispatch(routerRedux.push('/'))}
                 type="primary">
                 <HomeOutlined />
-                <span>首页</span>
+                <span>主页</span>
             </Button>}
         />
     </NotFoundBox>

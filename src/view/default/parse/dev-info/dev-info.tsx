@@ -1,15 +1,19 @@
 import dayjs from 'dayjs';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { useSelector } from 'dva';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
 import Badge from 'antd/lib/badge';
 import Button from 'antd/lib/button';
 import { useCase } from '@/hook';
 import { Split } from '@/component/style-tool';
+import { DeviceType } from '@/schema/device-type';
 import { ParseState } from '@/schema/device-state';
 import DeviceSystem from '@/schema/device-system';
 import { InfoBox } from './styled/style';
 import { ClickType, DevInfoProp } from './prop';
+import { StateTree } from '@/type/model';
+import { LoginState, TraceLoginState } from '@/model/default/trace-login';
 
 const { Group } = Button;
 
@@ -51,6 +55,30 @@ const StateDot: FC<{ state?: ParseState }> = ({ state }) => {
 }
 
 /**
+ * 云点验按钮
+ */
+const CloudSearchButton: FC<{
+    device: DeviceType,
+    onClick: (data: DeviceType, fn: ClickType) => void
+}> = ({ children, device, onClick }) => {
+
+    const [disabled, setDisabled] = useState<boolean>(false);
+    const { loginState } = useSelector<StateTree, TraceLoginState>(state => state.traceLogin);
+
+    useEffect(() => {
+        setDisabled(device.system !== DeviceSystem.Android || loginState !== LoginState.IsLogin);
+    }, [device, loginState]);
+
+    return <Button
+        onClick={() => onClick(device, ClickType.CloudSearch)}
+        // disabled={disabled}
+        disabled={false}
+        type="primary">
+        {children}
+    </Button>
+};
+
+/**
  * 设备信息
  */
 const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
@@ -63,7 +91,7 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                 <Group size="small">
                     <Button onClick={() => onButtonClick(data, ClickType.GenerateBCP)} type="primary">生成BCP</Button>
                     <Button onClick={() => onButtonClick(data, ClickType.ExportBCP)} type="primary">导出BCP</Button>
-                    <Button onClick={() => onButtonClick(data, ClickType.CloudSearch)} disabled={true} type="primary">云点验</Button>
+                    <CloudSearchButton device={data} onClick={onButtonClick}>云点验</CloudSearchButton>
                 </Group>
             </div>
             <div>

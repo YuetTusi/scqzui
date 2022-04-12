@@ -21,6 +21,8 @@ import { ParseLogTableState } from '@/model/default/parse-log-table';
 import { CloudLogTableState } from '@/model/default/cloud-log-table';
 import { CloudLogModalState } from '@/model/default/cloud-log-modal';
 import { CheckManageTableState } from '@/model/default/check-manage-table';
+import { TraceLoginState } from '@/model/default/trace-login';
+import { TrailState } from '@/model/default/trail';
 
 declare global {
 	interface Window {
@@ -58,6 +60,8 @@ interface StateTree {
 	checkManageTable: CheckManageTableState,
 	cloudLogTable: CloudLogTableState,
 	cloudLogModal: CloudLogModalState,
+	traceLogin: TraceLoginState,
+	trail: TrailState,
 	[modelName: string]: any
 }
 

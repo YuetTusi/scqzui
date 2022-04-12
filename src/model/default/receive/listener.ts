@@ -28,6 +28,7 @@ import { HumanVerify } from '@/schema/human-verify';
 import { DataMode } from '@/schema/data-mode';
 import { CaptchaMsg, CloudAppMessages } from '@/schema/cloud-app-messages';
 import { getDb } from '@/utils/db';
+import { LoginState } from '../trace-login';
 // import { LoginState } from '@/model/settings/TraceLogin';
 
 const appPath = process.cwd();
@@ -369,31 +370,31 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
 /**
  * 接收登录结果
  */
-// export function traceLogin({ msg }: Command<{
-//     success: boolean, message: string
-// }>,
-//     dispatch: Dispatch<any>) {
-//     const { success, message } = msg;
-//     if (success) {
-//         dispatch({
-//             type: 'traceLogin/setLoginState',
-//             payload: LoginState.IsLogin
-//         });
-//         dispatch({
-//             type: 'traceLogin/setLoginMessage',
-//             payload: `${message}已登录`
-//         });
-//     } else {
-//         dispatch({
-//             type: 'traceLogin/setLoginState',
-//             payload: LoginState.LoginError
-//         });
-//         dispatch({
-//             type: 'traceLogin/setLoginMessage',
-//             payload: message
-//         });
-//     }
-// }
+export function traceLogin({ msg }: Command<{
+    success: boolean, message: string
+}>,
+    dispatch: Dispatch<any>) {
+    const { success, message } = msg;
+    if (success) {
+        dispatch({
+            type: 'traceLogin/setLoginState',
+            payload: LoginState.IsLogin
+        });
+        dispatch({
+            type: 'traceLogin/setLoginMessage',
+            payload: `${message}已登录`
+        });
+    } else {
+        dispatch({
+            type: 'traceLogin/setLoginState',
+            payload: LoginState.LoginError
+        });
+        dispatch({
+            type: 'traceLogin/setLoginMessage',
+            payload: message
+        });
+    }
+}
 
 /**
  * 接收剩余次数

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faBuildingColumns, faRegistered, faCrosshairs, faUser,
-    faLightbulb, faPenToSquare
+    faLightbulb, faPenToSquare, faKey
 } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, Route } from 'dva/router';
 import Reading from '@/component/loading/reading';
@@ -13,6 +13,7 @@ import Officer from '@/view/default/settings/officer';
 import OfficerEdit from '@/view/default/settings/officer/edit';
 import Keywords from '@/view/default/settings/keywords';
 import CheckManage from '@/view/default/settings/check-manage';
+import TraceLogin from '@/view/default/settings/trace-login';
 import Version from '@/view/default/settings/version';
 import { MenuPanel } from './styled/menu';
 import { SettingLayout } from './styled/sub-layout';
@@ -72,6 +73,14 @@ const Index: FC<{}> = () => <SettingLayout>
                 </NavLink>
             </li>
             <li>
+                <NavLink to="/settings/trace-login" replace={true} className="hvr-sweep-to-right">
+                    <div>
+                        <span className="ico"><FontAwesomeIcon icon={faKey} /></span>
+                        <span className="name">云点验登录</span>
+                    </div>
+                </NavLink>
+            </li>
+            <li>
                 <NavLink to="/settings/version" replace={true} className="hvr-sweep-to-right">
                     <div>
                         <span className="ico"><FontAwesomeIcon icon={faRegistered} /></span>
@@ -104,6 +113,9 @@ const Index: FC<{}> = () => <SettingLayout>
     <Route
         path="/settings/check-manage"
         component={() => <ContentBox title="点验数据管理"><CheckManage /></ContentBox>} />
+    <Route
+        path="/settings/trace-login"
+        component={() => <ContentBox title="云点验登录"><TraceLogin /></ContentBox>} />
     <Route
         path="/settings/version"
         component={() => <ContentBox title="软件版本"><Version /></ContentBox>} />

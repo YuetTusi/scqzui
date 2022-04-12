@@ -15,7 +15,7 @@ const ContentBox: FC<ContentBoxProp> = ({ title, children }) => {
             <div>
                 <Button onClick={() => dispatch(routerRedux.push('/'))} ghost={true} type="primary" size="small">
                     <HomeOutlined />
-                    <span>首页</span>
+                    <span>主页</span>
                 </Button>
             </div>
         </div>

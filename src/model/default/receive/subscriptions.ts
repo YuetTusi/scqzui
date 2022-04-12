@@ -15,7 +15,7 @@ import { ParseState } from '@/schema/device-state';
 import {
     deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,
     parseCurinfo, parseEnd,/* backDatapass,*/ saveCaseFromPlatform, /*importErr,*/
-    humanVerify, saveOrUpdateOfficerFromPlatform, /*traceLogin,*/ limitResult,
+    humanVerify, saveOrUpdateOfficerFromPlatform, traceLogin, limitResult,
     appRecFinish, fetchPercent
 } from './listener';
 
@@ -196,7 +196,7 @@ export default {
                     break;
                 case CommandType.TraceLogin:
                 case CommandType.TraceLoginResult:
-                    // traceLogin(command, dispatch);
+                    traceLogin(command, dispatch);
                     break;
                 case CommandType.LimitResult:
                     limitResult(command, dispatch);

@@ -102,6 +102,9 @@ const DevList: FC<DevListProp> = ({ }) => {
                 dispatch({ type: 'exportBcpModal/setExportBcpDevice', payload: data });
                 setExportBcpModalVisible(true);
                 break;
+            case ClickType.CloudSearch:
+                dispatch({ type: 'parseDev/gotoTrail', payload: { caseId, deviceId: data._id } });
+                break;
             default:
                 console.warn('未知Click类型:', fn);
                 break;
