@@ -2,6 +2,7 @@
 	"primary-color": "#0fb9b1",
 	"link-color": "#0fb9b1",
 	"border-radius-base": "2px",
-	"border-color-base":"#303030",
-	"text-color":"#ffffffd9"
+	"border-color-base": "#303030",
+	"text-color": "#ffffffd9",
+	"error-color": "#db2222"
 }
