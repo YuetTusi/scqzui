@@ -62,7 +62,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
         </div>
         <div>
             <ColorButton
-                to="/check"
+                to="/tool"
                 icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
                 color="#3dc1d3">
                 工具箱

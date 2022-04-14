@@ -151,7 +151,7 @@ const createRouter = (api?: RouterAPI) => {
 							path="/settings"
 							render={() => {
 								const Next = lazy<FC<any>>(
-									() => import('@/view/default/settings/index')
+									() => import('@/view/default/settings')
 								);
 								return <Suspense fallback={<LoadView />}>
 									<LayoutPanel>
@@ -164,7 +164,20 @@ const createRouter = (api?: RouterAPI) => {
 							path="/log"
 							render={() => {
 								const Next = lazy<FC<any>>(
-									() => import('@/view/default/log/index')
+									() => import('@/view/default/log')
+								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
+							}}
+						/>
+						<Route
+							path="/tool"
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/tool')
 								);
 								return <Suspense fallback={<LoadView />}>
 									<LayoutPanel>
