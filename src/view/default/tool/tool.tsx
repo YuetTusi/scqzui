@@ -5,6 +5,7 @@ import { faApple, faAndroid, faItunes, faBlackberry, faAlipay } from '@fortaweso
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { SortBox, ToolBox } from './styled/style';
+import { fakeModal } from './fake-modal';
 import huaweiSvg from './styled/images/huawei.svg';
 import honorSvg from './styled/images/honor.svg';
 import umagicSvg from './styled/images/umagic.svg';
@@ -145,7 +146,7 @@ const Tool: FC<{}> = ({ }) => {
                 <div className="caption">其他品牌取证</div>
                 <Split />
                 <div className="t-row">
-                    <div className="t-button">
+                    <div onClick={() => fakeModal('黑莓')} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faBlackberry} />
                         </div>
@@ -153,7 +154,7 @@ const Tool: FC<{}> = ({ }) => {
                             黑莓
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => fakeModal('塞班')} className="t-button">
                         <div className="ico">
                             <img src={symbianSvg} width="80" height="50" />
                         </div>
@@ -161,7 +162,7 @@ const Tool: FC<{}> = ({ }) => {
                             塞班
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => fakeModal('WindowsMobile')} className="t-button">
                         <div className="ico">
                             <img src={windowsmobileSvg} height="50" />
                         </div>
@@ -169,7 +170,7 @@ const Tool: FC<{}> = ({ }) => {
                             WindowsMobile
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => fakeModal('WindowsPhone')} className="t-button">
                         <div className="ico">
                             <img src={windowsphoneSvg} height="50" />
                         </div>
@@ -177,15 +178,7 @@ const Tool: FC<{}> = ({ }) => {
                             WindowsPhone
                         </div>
                     </div>
-                    <div className="t-button">
-                        <div className="ico">
-                            <img src={badaSvg} width="50" />
-                        </div>
-                        <div className="name">
-                            badaOS
-                        </div>
-                    </div>
-                    <div className="t-button">
+                    <div onClick={() => fakeModal('MeeGo')} className="t-button">
                         <div className="ico">
                             <img src={meegoSvg} width="60" height="50" />
                         </div>
@@ -193,7 +186,15 @@ const Tool: FC<{}> = ({ }) => {
                             MeeGo
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => fakeModal('badaOS')} className="t-button">
+                        <div className="ico">
+                            <img src={badaSvg} width="50" />
+                        </div>
+                        <div className="name">
+                            badaOS
+                        </div>
+                    </div>
+                    <div onClick={() => fakeModal('功能机/山寨机')} className="t-button">
                         <div className="ico">
                             <img src={featurephoneSvg} width="50" />
                         </div>
@@ -217,7 +218,7 @@ const Tool: FC<{}> = ({ }) => {
                     </div>
                     <div className="t-button">
                         <div className="ico">
-                            <FontAwesomeIcon icon={faFileArrowDown} color="#a4b0be" />
+                            <FontAwesomeIcon icon={faFileArrowDown} color="#CAD3C8" />
                         </div>
                         <div className="name">
                             数据导出工具
@@ -233,7 +234,7 @@ const Tool: FC<{}> = ({ }) => {
                     </div>
                     <div className="t-button">
                         <div className="ico">
-                            <FontAwesomeIcon icon={faLockOpen} color="#218c74" />
+                            <FontAwesomeIcon icon={faLockOpen} color="#94c7a7" />
                         </div>
                         <div className="name">
                             华为开机密码破解
@@ -241,7 +242,7 @@ const Tool: FC<{}> = ({ }) => {
                     </div>
                     <div className="t-button">
                         <div className="ico">
-                            <FontAwesomeIcon icon={faUsers} color="#CAD3C8" />
+                            <FontAwesomeIcon icon={faUsers} color="#fa983a" />
                         </div>
                         <div className="name">
                             AI相似人像查看

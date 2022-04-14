@@ -83,7 +83,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
             <ColorButton
                 to="/log"
                 icon={<FontAwesomeIcon icon={faUserPen} />}
-                color="#10ac84">
+                color="#3c6382">
                 操作日志
             </ColorButton>
         </div>
