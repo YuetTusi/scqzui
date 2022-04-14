@@ -14,7 +14,7 @@ export const ToolBox = styled.div`
 
 export const SortBox = styled.div`
 
-    padding: 10px;
+    padding: 10px 10px 0 10px;
     margin-bottom: 10px;
     border-radius: ${props => props.theme['border-radius-base']};
     background-color: #141414;

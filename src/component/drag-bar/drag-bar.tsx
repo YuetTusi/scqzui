@@ -22,6 +22,9 @@ const DragBarBox = styled.div`
         font-size: 1.2rem;
         padding-left: 1rem;
         -webkit-app-region: drag;
+        &>span{
+            text-indent: 5rem;
+        }
     }
     &>.app-buttons{
         position: relative;
