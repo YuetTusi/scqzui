@@ -1,5 +1,5 @@
 import { join } from 'path';
-import React, { FC, useState, useCallback } from 'react';
+import React, { FC, useState, useCallback, useRef, MouseEvent } from 'react';
 import message from 'antd/lib/message';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -10,10 +10,11 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
-import { SortBox, ToolBox } from './styled/style';
 import { helper } from '@/utils/helper';
 import AlipayOrderModal from './alipay-order-modal';
+import CrackModal from './crack-modal';
 import { AiSimilarModal, fakeModal } from './fake-modal';
+import { SortBox, ToolBox } from './styled/style';
 import huaweiSvg from './styled/images/huawei.svg';
 import honorSvg from './styled/images/honor.svg';
 import umagicSvg from './styled/images/umagic.svg';
@@ -26,6 +27,7 @@ import windowsphoneSvg from './styled/images/windowsphone.svg';
 import badaSvg from './styled/images/bada.svg';
 import featurephoneSvg from './styled/images/featurephone.svg';
 import meegoSvg from './styled/images/meego.svg';
+import { CrackTypes } from './crack-modal/prop';
 import { ExeType, ToolProp } from './prop';
 
 const cwd = process.cwd();
@@ -35,8 +37,10 @@ const cwd = process.cwd();
  */
 const Tool: FC<ToolProp> = () => {
 
+    const currentCrackType = useRef(CrackTypes.VivoAppLock);
     const [alipayOrderModalVisible, setAlipayOrderModalVisible] = useState<boolean>(false);
     const [aiSimilarModalVisible, setAiSimilarModalVisible] = useState<boolean>(false);
+    const [crackModalVisible, setCrackModalVisible] = useState<boolean>(false);
 
     /**
      * 支付宝云取取消handle
@@ -59,6 +63,16 @@ const Tool: FC<ToolProp> = () => {
             });
         setAlipayOrderModalVisible(false);
     }, [alipayOrderModalVisible]);
+
+    /**
+     * 应用锁破解按钮Click
+     * @param event 事件对象
+     * @param type 破解类型
+     */
+    const crackLiClick = (event: MouseEvent<HTMLDivElement>, type: CrackTypes) => {
+        currentCrackType.current = type;
+        setCrackModalVisible(true);
+    };
 
     /**
      * 运行exe
@@ -187,7 +201,11 @@ const Tool: FC<ToolProp> = () => {
                 <div className="caption">应用锁破解</div>
                 <Split />
                 <div className="t-row">
-                    <div className="t-button">
+                    <div
+                        onClick={(event: MouseEvent<HTMLDivElement>) =>
+                            crackLiClick(event, CrackTypes.VivoAppLock)
+                        }
+                        className="t-button">
                         <div className="ico">
                             <img src={vivoSvg} height="50" />
                         </div>
@@ -195,7 +213,11 @@ const Tool: FC<ToolProp> = () => {
                             VIVO应用锁
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div
+                        onClick={(event: MouseEvent<HTMLDivElement>) =>
+                            crackLiClick(event, CrackTypes.OppoAppLock)
+                        }
+                        className="t-button">
                         <div className="ico">
                             <img src={oppoSvg} height="50" />
                         </div>
@@ -203,7 +225,11 @@ const Tool: FC<ToolProp> = () => {
                             OPPO应用锁
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div
+                        onClick={(event: MouseEvent<HTMLDivElement>) =>
+                            crackLiClick(event, CrackTypes.OppoMoveLock)
+                        }
+                        className="t-button">
                         <div className="ico">
                             <img src={oppoSvg} height="50" />
                         </div>
@@ -329,6 +355,10 @@ const Tool: FC<ToolProp> = () => {
         <AiSimilarModal
             visible={aiSimilarModalVisible}
             closeHandle={() => setAiSimilarModalVisible(false)} />
+        <CrackModal
+            visible={crackModalVisible}
+            type={currentCrackType.current}
+            cancelHandle={() => setCrackModalVisible(false)} />
     </SubLayout>
 };
 

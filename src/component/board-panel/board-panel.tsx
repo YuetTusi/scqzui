@@ -5,15 +5,21 @@ import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
 import message from 'antd/lib/message';
+import { helper } from '@/utils/helper';
 import { BoardMenu } from './board-menu';
 import { Header } from './styled/header';
 import { Center } from './styled/center';
 import { Footer } from './styled/footer';
-import { helper } from '@/utils/helper';
-import { useDispatch } from 'dva';
+// import { useDispatch } from 'dva';
 import DragBar from '../drag-bar';
 
 const cwd = process.cwd();
+
+/**
+ * 过滤-字符
+ */
+const filterCharactor = (text?: string) =>
+    text === undefined ? '' : text.replaceAll('-', '.');
 
 /**
  * 打开帮助文档
@@ -45,7 +51,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
         (async () => {
             try {
                 const { materials_name, materials_software_version } = await helper.readManufaturer();
-                setTitle(`${materials_name} ${materials_software_version}`);
+                setTitle(`${materials_name} ${filterCharactor(materials_software_version)}`);
             } catch (error) {
                 console.warn(error);
                 setTitle('');
