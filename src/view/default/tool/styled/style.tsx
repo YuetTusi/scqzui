@@ -46,7 +46,7 @@ export const SortBox = styled.div`
         &:hover{
             transition: .2s;
             transform: scale(1.05);
-            box-shadow:0px 0px 5px 1px ${props => props.theme['primary-color']};
+            box-shadow:0px 0px 9px 1px ${props => props.theme['primary-color']};
             border:1px solid ${props => props.theme['primary-color']};
             background-color: #141414;
             &>.name{

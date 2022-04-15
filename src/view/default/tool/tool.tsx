@@ -1,10 +1,18 @@
-import React, { FC } from 'react';
+import { join } from 'path';
+import React, { FC, useState, useCallback } from 'react';
+import message from 'antd/lib/message';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSquarePhone, faFileArrowDown, faLockOpen, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { faApple, faAndroid, faItunes, faBlackberry, faAlipay } from '@fortawesome/free-brands-svg-icons';
+import {
+    faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers
+} from '@fortawesome/free-solid-svg-icons';
+import {
+    faApple, faAndroid, faItunes, faBlackberry, faAlipay
+} from '@fortawesome/free-brands-svg-icons';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { SortBox, ToolBox } from './styled/style';
+import { helper } from '@/utils/helper';
+import AlipayOrderModal from './alipay-order-modal';
 import { fakeModal } from './fake-modal';
 import huaweiSvg from './styled/images/huawei.svg';
 import honorSvg from './styled/images/honor.svg';
@@ -19,10 +27,36 @@ import badaSvg from './styled/images/bada.svg';
 import featurephoneSvg from './styled/images/featurephone.svg';
 import meegoSvg from './styled/images/meego.svg';
 
+const cwd = process.cwd();
+
 /**
  * 工具箱
  */
-const Tool: FC<{}> = ({ }) => {
+const Tool: FC<{}> = () => {
+
+    const [alipayOrderModalVisible, setAlipayOrderModalVisible] = useState<boolean>(false);
+
+    /**
+     * 支付宝云取取消handle
+     */
+    const alipayOrderModalCancelHandle = useCallback(() => {
+        setAlipayOrderModalVisible(false);
+    }, [alipayOrderModalVisible]);
+
+    /**
+     * 支付宝云取确定handle
+     */
+    const alipayOrderModalSaveHandle = useCallback((data: { savePath: string }) => {
+        message.info('正在启动云取程序...请稍后');
+        helper
+            .runExe(join(cwd, '../tools/yuntools/alipay_yun.exe'), [data.savePath])
+            .then(() => message.destroy())
+            .catch((err) => {
+                message.destroy();
+                message.error(`启动云取程序失败: ${err.message}`);
+            });
+        setAlipayOrderModalVisible(false);
+    }, [alipayOrderModalVisible]);
 
     return <SubLayout title="工具箱">
         <ToolBox>
@@ -208,7 +242,7 @@ const Tool: FC<{}> = ({ }) => {
                 <div className="caption">其他功能</div>
                 <Split />
                 <div className="t-row">
-                    <div className="t-button">
+                    <div onClick={() => setAlipayOrderModalVisible(true)} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faAlipay} color="#1477fe" />
                         </div>
@@ -234,7 +268,7 @@ const Tool: FC<{}> = ({ }) => {
                     </div>
                     <div className="t-button">
                         <div className="ico">
-                            <FontAwesomeIcon icon={faLockOpen} color="#94c7a7" />
+                            <FontAwesomeIcon icon={faUnlockKeyhole} color="#94c7a7" />
                         </div>
                         <div className="name">
                             华为开机密码破解
@@ -251,6 +285,10 @@ const Tool: FC<{}> = ({ }) => {
                 </div>
             </SortBox>
         </ToolBox>
+        <AlipayOrderModal
+            visible={alipayOrderModalVisible}
+            cancelHandle={alipayOrderModalCancelHandle}
+            saveHandle={alipayOrderModalSaveHandle} />
     </SubLayout>
 };
 
