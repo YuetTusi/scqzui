@@ -13,7 +13,7 @@ import { Split } from '@/component/style-tool';
 import { SortBox, ToolBox } from './styled/style';
 import { helper } from '@/utils/helper';
 import AlipayOrderModal from './alipay-order-modal';
-import { fakeModal } from './fake-modal';
+import { AiSimilarModal, fakeModal } from './fake-modal';
 import huaweiSvg from './styled/images/huawei.svg';
 import honorSvg from './styled/images/honor.svg';
 import umagicSvg from './styled/images/umagic.svg';
@@ -26,15 +26,17 @@ import windowsphoneSvg from './styled/images/windowsphone.svg';
 import badaSvg from './styled/images/bada.svg';
 import featurephoneSvg from './styled/images/featurephone.svg';
 import meegoSvg from './styled/images/meego.svg';
+import { ExeType, ToolProp } from './prop';
 
 const cwd = process.cwd();
 
 /**
  * 工具箱
  */
-const Tool: FC<{}> = () => {
+const Tool: FC<ToolProp> = () => {
 
     const [alipayOrderModalVisible, setAlipayOrderModalVisible] = useState<boolean>(false);
+    const [aiSimilarModalVisible, setAiSimilarModalVisible] = useState<boolean>(false);
 
     /**
      * 支付宝云取取消handle
@@ -57,6 +59,41 @@ const Tool: FC<{}> = () => {
             });
         setAlipayOrderModalVisible(false);
     }, [alipayOrderModalVisible]);
+
+    /**
+     * 运行exe
+     */
+    const runExeHandle = (type: ExeType) => {
+        let exePath: string | null = null;
+        const hide = message.loading('正在启动工具，请稍等...', 0);
+        switch (type) {
+            case ExeType.ChatDownload:
+                exePath = join(cwd, '../tools/export_chat/export_chat.exe');
+                break;
+            case ExeType.CallRecord:
+                exePath = join(cwd, '../tools/ExportTool/ExportTool.exe');
+                break;
+            case ExeType.HuaweiPassword:
+                exePath = join(cwd, '../tools/Defender/defender.exe');
+                break;
+            default:
+                console.log(`未知type:${type}`);
+                break;
+        }
+        if (exePath) {
+            helper
+                .runExe(exePath)
+                .then(() => {
+                    hide();
+                })
+                .catch((errMsg: string) => {
+                    console.log(errMsg);
+                    hide();
+                    message.destroy();
+                    message.error('启动失败');
+                });
+        }
+    };
 
     return <SubLayout title="工具箱">
         <ToolBox>
@@ -250,7 +287,7 @@ const Tool: FC<{}> = () => {
                             支付宝账单云取
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => runExeHandle(ExeType.ChatDownload)} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faFileArrowDown} color="#CAD3C8" />
                         </div>
@@ -258,7 +295,7 @@ const Tool: FC<{}> = () => {
                             数据导出工具
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => runExeHandle(ExeType.CallRecord)} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faSquarePhone} color="#706fd3" />
                         </div>
@@ -266,7 +303,7 @@ const Tool: FC<{}> = () => {
                             通话记录导出工具
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => runExeHandle(ExeType.HuaweiPassword)} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faUnlockKeyhole} color="#94c7a7" />
                         </div>
@@ -274,7 +311,7 @@ const Tool: FC<{}> = () => {
                             华为开机密码破解
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => setAiSimilarModalVisible(true)} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faUsers} color="#fa983a" />
                         </div>
@@ -289,6 +326,9 @@ const Tool: FC<{}> = () => {
             visible={alipayOrderModalVisible}
             cancelHandle={alipayOrderModalCancelHandle}
             saveHandle={alipayOrderModalSaveHandle} />
+        <AiSimilarModal
+            visible={aiSimilarModalVisible}
+            closeHandle={() => setAiSimilarModalVisible(false)} />
     </SubLayout>
 };
 
