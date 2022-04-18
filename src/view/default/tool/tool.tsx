@@ -9,6 +9,7 @@ import {
 import {
     faApple, faAndroid, faItunes, faBlackberry, faAlipay
 } from '@fortawesome/free-brands-svg-icons';
+import Auth from '@/component/auth';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { helper } from '@/utils/helper';
@@ -34,6 +35,7 @@ import { CrackTypes } from './crack-modal/prop';
 import { ExeType, ToolProp } from './prop';
 
 const cwd = process.cwd();
+const { useFakeButton } = helper.readConf()!;
 
 /**
  * 工具箱
@@ -254,68 +256,70 @@ const Tool: FC<ToolProp> = () => {
                     </div>
                 </div>
             </SortBox>
-            <SortBox>
-                <div className="caption">其他品牌取证</div>
-                <Split />
-                <div className="t-row">
-                    <div onClick={() => fakeModal('黑莓')} className="t-button">
-                        <div className="ico">
-                            <FontAwesomeIcon icon={faBlackberry} />
+            <Auth deny={useFakeButton}>
+                <SortBox>
+                    <div className="caption">其他品牌取证</div>
+                    <Split />
+                    <div className="t-row">
+                        <div onClick={() => fakeModal('黑莓')} className="t-button">
+                            <div className="ico">
+                                <FontAwesomeIcon icon={faBlackberry} />
+                            </div>
+                            <div className="name">
+                                黑莓
+                            </div>
                         </div>
-                        <div className="name">
-                            黑莓
+                        <div onClick={() => fakeModal('塞班')} className="t-button">
+                            <div className="ico">
+                                <img src={symbianSvg} width="80" height="50" />
+                            </div>
+                            <div className="name">
+                                塞班
+                            </div>
+                        </div>
+                        <div onClick={() => fakeModal('WindowsMobile')} className="t-button">
+                            <div className="ico">
+                                <img src={windowsmobileSvg} height="50" />
+                            </div>
+                            <div className="name">
+                                WindowsMobile
+                            </div>
+                        </div>
+                        <div onClick={() => fakeModal('WindowsPhone')} className="t-button">
+                            <div className="ico">
+                                <img src={windowsphoneSvg} height="50" />
+                            </div>
+                            <div className="name">
+                                WindowsPhone
+                            </div>
+                        </div>
+                        <div onClick={() => fakeModal('MeeGo')} className="t-button">
+                            <div className="ico">
+                                <img src={meegoSvg} width="60" height="50" />
+                            </div>
+                            <div className="name">
+                                MeeGo
+                            </div>
+                        </div>
+                        <div onClick={() => fakeModal('badaOS')} className="t-button">
+                            <div className="ico">
+                                <img src={badaSvg} width="50" />
+                            </div>
+                            <div className="name">
+                                badaOS
+                            </div>
+                        </div>
+                        <div onClick={() => fakeModal('功能机/山寨机')} className="t-button">
+                            <div className="ico">
+                                <img src={featurephoneSvg} width="50" />
+                            </div>
+                            <div className="name">
+                                功能机/山寨机
+                            </div>
                         </div>
                     </div>
-                    <div onClick={() => fakeModal('塞班')} className="t-button">
-                        <div className="ico">
-                            <img src={symbianSvg} width="80" height="50" />
-                        </div>
-                        <div className="name">
-                            塞班
-                        </div>
-                    </div>
-                    <div onClick={() => fakeModal('WindowsMobile')} className="t-button">
-                        <div className="ico">
-                            <img src={windowsmobileSvg} height="50" />
-                        </div>
-                        <div className="name">
-                            WindowsMobile
-                        </div>
-                    </div>
-                    <div onClick={() => fakeModal('WindowsPhone')} className="t-button">
-                        <div className="ico">
-                            <img src={windowsphoneSvg} height="50" />
-                        </div>
-                        <div className="name">
-                            WindowsPhone
-                        </div>
-                    </div>
-                    <div onClick={() => fakeModal('MeeGo')} className="t-button">
-                        <div className="ico">
-                            <img src={meegoSvg} width="60" height="50" />
-                        </div>
-                        <div className="name">
-                            MeeGo
-                        </div>
-                    </div>
-                    <div onClick={() => fakeModal('badaOS')} className="t-button">
-                        <div className="ico">
-                            <img src={badaSvg} width="50" />
-                        </div>
-                        <div className="name">
-                            badaOS
-                        </div>
-                    </div>
-                    <div onClick={() => fakeModal('功能机/山寨机')} className="t-button">
-                        <div className="ico">
-                            <img src={featurephoneSvg} width="50" />
-                        </div>
-                        <div className="name">
-                            功能机/山寨机
-                        </div>
-                    </div>
-                </div>
-            </SortBox>
+                </SortBox>
+            </Auth>
             <SortBox>
                 <div className="caption">其他功能</div>
                 <Split />
