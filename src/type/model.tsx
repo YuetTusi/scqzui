@@ -23,6 +23,7 @@ import { CloudLogModalState } from '@/model/default/cloud-log-modal';
 import { CheckManageTableState } from '@/model/default/check-manage-table';
 import { TraceLoginState } from '@/model/default/trace-login';
 import { TrailState } from '@/model/default/trail';
+import { ImportDataModalState } from '@/model/default/import-data-modal';
 import { CrackModalState } from '@/model/default/crack-modal';
 
 declare global {
@@ -63,6 +64,7 @@ interface StateTree {
 	cloudLogModal: CloudLogModalState,
 	traceLogin: TraceLoginState,
 	trail: TrailState,
+	importDataModal: ImportDataModalState,
 	crackModal: CrackModalState,
 	[modelName: string]: any
 }

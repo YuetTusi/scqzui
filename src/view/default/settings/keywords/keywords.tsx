@@ -15,15 +15,14 @@ import Empty from 'antd/lib/empty';
 import Switch from 'antd/lib/switch';
 import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
+import { useAppConfig } from '@/hook';
+import { AppJson } from '@/schema/app-json';
 import { Split } from '@/component/style-tool';
 import { SortPanel } from '@/component/style-tool/split';
-import { LocalStoreKey } from '@/utils/local-store';
 import { helper } from '@/utils/helper';
 import { MainBox } from '../styled/sub-layout';
 import { ExcelList, FormBox } from './styled/style';
 import { KeywordsProp } from './prop';
-import { useAppConfig } from '@/hook/app-config';
-import { AppJson } from '@/schema/app-json';
 
 
 const cwd = process.cwd();

@@ -1,5 +1,6 @@
 import { join } from 'path';
 import React, { FC, useState, useCallback, useRef, MouseEvent } from 'react';
+import { useDispatch } from 'dva';
 import message from 'antd/lib/message';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -12,9 +13,11 @@ import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { helper } from '@/utils/helper';
 import AlipayOrderModal from './alipay-order-modal';
+import ImportDataModal from './import-data-modal';
 import CrackModal from './crack-modal';
 import { AiSimilarModal, fakeModal } from './fake-modal';
 import { SortBox, ToolBox } from './styled/style';
+import { ImportTypes } from '@/schema/import-type';
 import huaweiSvg from './styled/images/huawei.svg';
 import honorSvg from './styled/images/honor.svg';
 import umagicSvg from './styled/images/umagic.svg';
@@ -37,6 +40,7 @@ const cwd = process.cwd();
  */
 const Tool: FC<ToolProp> = () => {
 
+    const dispatch = useDispatch();
     const currentCrackType = useRef(CrackTypes.VivoAppLock);
     const [alipayOrderModalVisible, setAlipayOrderModalVisible] = useState<boolean>(false);
     const [aiSimilarModalVisible, setAiSimilarModalVisible] = useState<boolean>(false);
@@ -72,6 +76,17 @@ const Tool: FC<ToolProp> = () => {
     const crackLiClick = (event: MouseEvent<HTMLDivElement>, type: CrackTypes) => {
         currentCrackType.current = type;
         setCrackModalVisible(true);
+    };
+
+    /**
+     * 导入按钮click
+     * @param type 类型
+     * @param title 标题
+     */
+    const onImportClick = (type: ImportTypes, title: string) => {
+        dispatch({ type: 'importDataModal/setTitle', payload: title });
+        dispatch({ type: 'importDataModal/setImportType', payload: type });
+        dispatch({ type: 'importDataModal/setVisible', payload: true });
     };
 
     /**
@@ -115,7 +130,7 @@ const Tool: FC<ToolProp> = () => {
                 <div className="caption">导入第三方数据</div>
                 <Split />
                 <div className="t-row">
-                    <div className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.IOS, '导入数据（iTunes备份）')} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faItunes} color="#ed2139" />
                         </div>
@@ -123,7 +138,7 @@ const Tool: FC<ToolProp> = () => {
                             苹果iTunes备份
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.IOSMirror, '导入数据（苹果镜像）')} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faApple} />
                         </div>
@@ -131,7 +146,7 @@ const Tool: FC<ToolProp> = () => {
                             苹果镜像导入
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.Hisuite, '导入数据（华为备份）')} className="t-button">
                         <div className="ico">
                             <img src={huaweiSvg} height="50" />
                         </div>
@@ -139,7 +154,7 @@ const Tool: FC<ToolProp> = () => {
                             华为备份
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.HuaweiOTG, '导入数据（华为OTG备份）')} className="t-button">
                         <div className="ico">
                             <img src={huaweiSvg} width="50" height="50" />
                         </div>
@@ -147,7 +162,7 @@ const Tool: FC<ToolProp> = () => {
                             华为OTG备份
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.Hisuite, '导入数据（荣耀备份）')} className="t-button">
                         <div className="ico">
                             <img src={honorSvg} width="60" height="50" />
                         </div>
@@ -155,7 +170,7 @@ const Tool: FC<ToolProp> = () => {
                             荣耀备份
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.Hisuite, '导入数据（联通备份）')} className="t-button">
                         <div className="ico">
                             <img src={umagicSvg} height="50" />
                         </div>
@@ -163,7 +178,7 @@ const Tool: FC<ToolProp> = () => {
                             联通备份
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.VivoPcBackup, '导入数据（VIVO PC备份）')} className="t-button">
                         <div className="ico">
                             <img src={vivoSvg} height="50" />
                         </div>
@@ -171,7 +186,7 @@ const Tool: FC<ToolProp> = () => {
                             VIVO PC备份
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.OppoBackup, '导入数据（OPPO自备份）')} className="t-button">
                         <div className="ico">
                             <img src={oppoSvg} height="50" />
                         </div>
@@ -179,7 +194,7 @@ const Tool: FC<ToolProp> = () => {
                             OPPO自备份
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.XiaomiBackup, '导入数据（小米自备份）')} className="t-button">
                         <div className="ico">
                             <img src={miSvg} height="50" />
                         </div>
@@ -187,7 +202,7 @@ const Tool: FC<ToolProp> = () => {
                             小米自备份
                         </div>
                     </div>
-                    <div className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.AndroidData, '导入数据（安卓数据）')} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faAndroid} color="#a6ce3a" />
                         </div>
@@ -348,6 +363,7 @@ const Tool: FC<ToolProp> = () => {
                 </div>
             </SortBox>
         </ToolBox>
+        <ImportDataModal />
         <AlipayOrderModal
             visible={alipayOrderModalVisible}
             cancelHandle={alipayOrderModalCancelHandle}

@@ -5,6 +5,7 @@ import { useCaseList, useCase } from './case-list';
 import { useDevice } from './device-list';
 import { useOfficerList } from './officer-list';
 import { useUnit, useDstUnit } from './unit';
+import { useAppConfig } from './app-config';
 
 export {
     useAppSerial,
@@ -15,5 +16,6 @@ export {
     useDevice,
     useOfficerList,
     useUnit,
-    useDstUnit
+    useDstUnit,
+    useAppConfig
 };
