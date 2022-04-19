@@ -122,6 +122,7 @@ const EditModal: FC<EditModalProp> = ({
         centered={true}
         maskClosable={false}
         destroyOnClose={true}
+        forceRender={true}
     >
         <Form form={formRef} {...formItemLayout}>
             <Item

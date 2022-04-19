@@ -174,8 +174,6 @@ if (!instanceLock) {
             height: 400,
             show: false,
             webPreferences: {
-                // webSecurity: false,
-                // allowRunningInsecureContent: true,
                 contextIsolation: false,
                 nodeIntegration: true,
                 javascript: true
@@ -482,6 +480,7 @@ ipcMain.on('report-export', (event: IpcMainEvent, exportCondition: ExportConditi
         reportWindow.webContents.send('report-export', exportCondition, treeParams, msgId);
     }
 });
+
 //导出报告（批量）
 ipcMain.on('report-batch-export', (event: IpcMainEvent, batchExportTasks: BatchExportTask[], isAttach: boolean, isZip: boolean, msgId: string) => {
     if (reportWindow === null) {
@@ -541,6 +540,12 @@ ipcMain.on('report-export-finish', (event: IpcMainEvent, success: boolean, expor
     }
 });
 
+//打开开发者工具
+ipcMain.on('dev-tool', () => {
+    if (mainWindow !== null) {
+        mainWindow.webContents.openDevTools();
+    }
+});
 
 //写net.json
 ipcMain.handle('write-net-json', (event, servicePort: number) =>

@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce';
 import { join } from 'path';
-import { shell } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
@@ -69,6 +69,9 @@ const BoardPanel: FC<{}> = ({ children }) => {
         switch (type) {
             case BoardMenuAction.Manufaturer:
                 setSofthardwareModalVisible(true);
+                break;
+            case BoardMenuAction.DevTool:
+                ipcRenderer.send('dev-tool');
                 break;
             default:
                 break;

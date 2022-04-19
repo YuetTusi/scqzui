@@ -116,33 +116,36 @@ const TraceLogin: FC<TraceLoginProp> = () => {
 
     return <MainBox>
         <StateBar>
-            <Alert
-                message={loginMessage}
-                type={getLoginState(loginState)}
-                showIcon={true}
-            />
-            <Statistic title="剩余次数" value={limitCount} />
+            <span />
+            <Button
+                onClick={onLoginSubmit}
+                disabled={
+                    loginState === LoginState.Busy ||
+                    loginState === LoginState.IsLogin
+                }
+                type="primary">
+                {loginState === LoginState.Busy ? <LoadingOutlined /> : <KeyOutlined />}
+                <span>登录</span>
+            </Button>
         </StateBar>
         <Split />
         <FormBox>
+            <StateBar>
+                <Alert
+                    message={loginMessage}
+                    type={getLoginState(loginState)}
+                    showIcon={true}
+                />
+                <Statistic title="剩余次数" value={limitCount} />
+            </StateBar>
+            <Split />
             <LoginForm loginState={loginState} formRef={formRef} />
-            <Row>
-                <Col span={24}>
+            <Row justify="end">
+                <Col>
                     <div className="remember-box">
-                        <Button
-                            onClick={onLoginSubmit}
-                            disabled={
-                                loginState === LoginState.Busy ||
-                                loginState === LoginState.IsLogin
-                            }
-                            type="primary">
-                            {loginState === LoginState.Busy ? <LoadingOutlined /> : <KeyOutlined />}
-                            <span>登录</span>
-                        </Button>
                         <Checkbox
                             checked={rememberMe}
-                            onChange={onRememberChange}
-                            style={{ marginLeft: '22px' }}>
+                            onChange={onRememberChange}>
                             <span>保持登录状态</span>
                         </Checkbox>
                     </div>

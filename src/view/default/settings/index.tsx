@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faBuildingColumns, faRegistered, faCrosshairs, faUser,
+    faBuilding, faRegistered, faBuildingColumns, faUser,
     faLightbulb, faPenToSquare, faKey, faFileArrowUp
 } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, Route } from 'dva/router';
@@ -36,7 +36,7 @@ const Index: FC<{}> = () => <SettingLayout>
             <li>
                 <NavLink to="/settings" exact={true} replace={true} className="hvr-sweep-to-right">
                     <div>
-                        <span className="ico"><FontAwesomeIcon icon={faBuildingColumns} /></span>
+                        <span className="ico"><FontAwesomeIcon icon={faBuilding} /></span>
                         <span className="name">采集单位</span>
                     </div>
                 </NavLink>
@@ -44,7 +44,7 @@ const Index: FC<{}> = () => <SettingLayout>
             <li>
                 <NavLink to="/settings/dst-unit" replace={true} className="hvr-sweep-to-right">
                     <div>
-                        <span className="ico"><FontAwesomeIcon icon={faCrosshairs} /></span>
+                        <span className="ico"><FontAwesomeIcon icon={faBuildingColumns} /></span>
                         <span className="name">目的检验单位</span>
                     </div>
                 </NavLink>

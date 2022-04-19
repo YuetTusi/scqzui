@@ -113,6 +113,7 @@ const SofthardwareModal: FC<SofthardwareModalProp> = ({ visible, closeHandle }) 
         title="软硬件信息配置"
         width={650}
         centered={true}
+        forceRender={true}
         maskClosable={false}
         destroyOnClose={true}>
         <Form form={formRef} layout="horizontal" {...formItemLayout}>

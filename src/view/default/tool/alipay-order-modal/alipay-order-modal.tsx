@@ -54,6 +54,7 @@ const AlipayOrderModal: FC<AlipayOrderModalProp> = memo(({
         centered={true}
         maskClosable={false}
         destroyOnClose={true}
+        forceRender={true}
     >
         <Space direction="vertical">
             <TipFieldSet>

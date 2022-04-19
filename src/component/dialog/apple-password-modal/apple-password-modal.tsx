@@ -46,6 +46,7 @@ const ApplePasswordModal: FC<ApplePasswordModalProp> = ({
 			title="iTunes备份密码确认"
 			centered={true}
 			destroyOnClose={true}
+			forceRender={true}
 			maskClosable={false}
 			closable={true}>
 			<ApplePasswordModalBox>

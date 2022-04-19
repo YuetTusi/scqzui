@@ -76,6 +76,7 @@ const AiSimilarModal: FC<{
             centered={true}
             maskClosable={false}
             destroyOnClose={true}
+            forceRender={true}
             title="AI相似人像查看">
             <Form form={formRef} layout="vertical">
                 <Item

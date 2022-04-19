@@ -9,7 +9,7 @@ export const StateBar = styled.div`
 `;
 
 export const FormBox = styled.div`
-    padding: 20px;
+    padding: 10px 10px;
     background-color: #141414;
     border-radius: ${props => props.theme['border-radius-base']};
 `;

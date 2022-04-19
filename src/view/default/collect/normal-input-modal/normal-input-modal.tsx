@@ -432,6 +432,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                 width={1000}
                 maskClosable={false}
                 destroyOnClose={true}
+                forceRender={true}
                 centered={true}>
                 <NormalInputModalBox>{renderForm()}</NormalInputModalBox>
             </Modal>

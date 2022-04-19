@@ -62,6 +62,7 @@ const CloudCodeModal: FC<Prop> = ({ cancelHandle }) => {
 			width={800}
 			title={`${mobileHolder}（${mobileNumber}）`}
 			destroyOnClose={true}
+			forceRender={true}
 			maskClosable={false}
 			className="zero-padding-body">
 			<CloudCodeModalBox>

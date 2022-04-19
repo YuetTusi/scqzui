@@ -76,6 +76,7 @@ const ImportDataModal: FC<ImportModalProp> = () => {
         visible={visible}
         centered={true}
         destroyOnClose={true}
+        forceRender={true}
         maskClosable={false}>
         <ImportForm
             formRef={formRef}

@@ -598,6 +598,7 @@ const ServerCloudModal: FC<Prop> = ({
                 width={1000}
                 maskClosable={false}
                 destroyOnClose={true}
+                forceRender={true}
                 centered={true}>
                 <ServerCloudModalBox>{renderForm()}</ServerCloudModalBox>
             </Modal>
