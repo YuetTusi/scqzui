@@ -6,10 +6,11 @@ import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
 import message from 'antd/lib/message';
 import { helper } from '@/utils/helper';
-import { BoardMenu } from './board-menu';
+import { BoardMenu, BoardMenuAction } from './board-menu';
 import { Header } from './styled/header';
 import { Center } from './styled/center';
 import { Footer } from './styled/footer';
+import SofthardwareModal from '../softhardware-modal';
 // import { useDispatch } from 'dva';
 import DragBar from '../drag-bar';
 
@@ -46,6 +47,7 @@ const openHelpDocClick = debounce(async (event: MouseEvent<HTMLSpanElement>) => 
 const BoardPanel: FC<{}> = ({ children }) => {
 
     const [title, setTitle] = useState<string>('');
+    const [softhardwareModalVisible, setSofthardwareModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
@@ -59,13 +61,27 @@ const BoardPanel: FC<{}> = ({ children }) => {
         })();
     }, []);
 
+    /**
+     * 菜单项Click
+     * @param type 类型
+     */
+    const onItemClick = (type: BoardMenuAction) => {
+        switch (type) {
+            case BoardMenuAction.Manufaturer:
+                setSofthardwareModalVisible(true);
+                break;
+            default:
+                break;
+        }
+    };
+
     return <>
         <DragBar />
         <Header>
             <div className="header-caption">{title ?? ''}</div>
             <div className="header-buttons">
                 <QuestionCircleOutlined onClick={openHelpDocClick} title="帮助文档" />
-                <BoardMenu>
+                <BoardMenu onItemClick={onItemClick}>
                     <MenuOutlined />
                 </BoardMenu>
             </div>
@@ -78,11 +94,10 @@ const BoardPanel: FC<{}> = ({ children }) => {
                 Copyright © 2022 北京万盛华通科技有限公司
             </div>
         </Footer>
+        <SofthardwareModal
+            visible={softhardwareModalVisible}
+            closeHandle={() => setSofthardwareModalVisible(false)} />
     </>
 };
 
 export default BoardPanel;
-function setTitle(arg0: string) {
-    throw new Error('Function not implemented.');
-}
-

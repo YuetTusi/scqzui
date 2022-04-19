@@ -2,6 +2,7 @@ import { mkdirSync } from 'fs';
 import { join } from 'path';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
+import message from 'antd/lib/message';
 import DeviceType from '@/schema/device-type';
 import logger from '@/utils/log';
 import { getDb } from '@/utils/db';
@@ -23,7 +24,7 @@ export default {
       * @param {boolean} payload.useKeyword 开启关键字验证
       * @param {boolean} payload.useDocVerify 开启文档验证
       */
-    *saveImportDeviceToCase({ payload }: AnyAction, { all, call, fork }: EffectsCommandMap) {
+    *saveImportDeviceToCase({ payload }: AnyAction, { call, fork, put }: EffectsCommandMap) {
 
         const { formValue, importType, useDocVerify, useKeyword } = payload as {
             formValue: FormValue, importType: ImportTypes, useKeyword: boolean, useDocVerify: boolean
@@ -162,8 +163,11 @@ export default {
                     useDocVerify
                 }
             })}`);
+            yield put({ type: 'setVisible', payload: false });
+            message.info('数据已导入，请在「数据解析」页面查看进度');
         } catch (error) {
             logger.error(`设备数据入库失败 @model/default/import-data-modal/*saveImportDeviceToCase: ${error.message}`);
+            message.warn('导入失败，请正确选择数据目录');
         }
     }
 };

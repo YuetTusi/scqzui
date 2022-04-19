@@ -6,6 +6,7 @@ import { useDevice } from './device-list';
 import { useOfficerList } from './officer-list';
 import { useUnit, useDstUnit } from './unit';
 import { useAppConfig } from './app-config';
+import { useManufacturer } from './manufacturer';
 
 export {
     useAppSerial,
@@ -17,5 +18,6 @@ export {
     useOfficerList,
     useUnit,
     useDstUnit,
-    useAppConfig
+    useAppConfig,
+    useManufacturer
 };
