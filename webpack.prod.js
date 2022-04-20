@@ -103,7 +103,7 @@ let config = {
 			$: 'jquery',
 			jQuery: 'jquery'
 		}),
-		new AntdDayjsPlugin(),
+		new AntdDayjsPlugin(['customParseFormat', 'localeData', 'weekday']),
 		new HtmlWebpackPlugin({
 			template: join(__dirname, './src/renderer/default/default.html'),
 			filename: 'default.html',

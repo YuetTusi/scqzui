@@ -16,7 +16,7 @@ import {
     deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,
     parseCurinfo, parseEnd,/* backDatapass,*/ saveCaseFromPlatform, /*importErr,*/
     humanVerify, saveOrUpdateOfficerFromPlatform, traceLogin, limitResult,
-    appRecFinish, fetchPercent
+    appRecFinish, fetchPercent, importErr
 } from './listener';
 
 
@@ -151,7 +151,7 @@ export default {
                     break;
                 case CommandType.ImportErr:
                     //# 导入第三方数据失败
-                    // importErr(command, dispatch);
+                    importErr(command, dispatch);
                     break;
                 default:
                     console.log('未知命令:', command.cmd);

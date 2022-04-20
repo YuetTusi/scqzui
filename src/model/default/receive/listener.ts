@@ -347,25 +347,30 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
 /**
  * 导入第三方数据失败
  */
-// export function importErr({ msg }: Command<DeviceParam>, dispatch: Dispatch<any>) {
+export function importErr({ msg }: Command<{
+    caseId: string,
+    deviceId: string,
+    mobileName: string,
+    msg: string
+}>, dispatch: Dispatch) {
 
-//     ipcRenderer.invoke('db-find-one',
-//         TableName.Device, {
-//         id: msg.deviceId
-//     }).then((data: DeviceType) => {
-//         const [mobileName] = data.mobileName!.split('_');
-//         Modal.error({
-//             title: `「${mobileName}」导入数据失败`,
-//             content: msg.msg,
-//             okText: '确定'
-//         });
-//     }).catch((err: Error) => {
-//         Modal.error({
-//             content: `第三方数据导入失败`,
-//             okText: '确定'
-//         });
-//     });
-// }
+    const db = getDb<DeviceType>(TableName.Device);
+
+    db.findOne({ _id: msg.deviceId })
+        .then((data) => {
+            const [mobileName] = data.mobileName!.split('_');
+            Modal.error({
+                title: `「${mobileName}」导入数据失败`,
+                content: msg.msg,
+                okText: '确定'
+            });
+        }).catch(() => {
+            Modal.error({
+                title: `第三方数据导入失败`,
+                okText: '确定'
+            });
+        });
+}
 
 /**
  * 接收登录结果

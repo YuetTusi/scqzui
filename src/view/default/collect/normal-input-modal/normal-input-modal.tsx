@@ -327,7 +327,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                         message: '不允许输入斜线字符'
                                     }
                                 ]}
-                                label="手机持有人"
+                                label="持有人"
                                 labelCol={{ span: 6 }}
                                 wrapperCol={{ span: 14 }}>
                                 <AutoComplete

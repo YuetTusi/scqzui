@@ -34,7 +34,7 @@ const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, de
                 <span>{dev?.mobileName === undefined ? '' : dev?.mobileName.split('_')[0]}</span>
             </li>
             <li>
-                <label>手机持有人</label>
+                <label>持有人</label>
                 <span>{dev?.mobileHolder ?? ''}</span>
             </li>
             <li>

@@ -194,7 +194,7 @@ const ImportForm: FC<ImportFormProp> = ({
                         }
                     ]}
                     name="mobileHolder"
-                    label="手机持有人"
+                    label="持有人"
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}>
                     <Input placeholder="持有人姓名" maxLength={20} />

@@ -396,7 +396,7 @@ const ServerCloudModal: FC<Prop> = ({
                                     }
                                 ]}
                                 name="user"
-                                label="手机持有人"
+                                label="持有人"
                                 labelCol={{ span: 6 }}
                                 wrapperCol={{ span: 14 }}>
                                 <AutoComplete

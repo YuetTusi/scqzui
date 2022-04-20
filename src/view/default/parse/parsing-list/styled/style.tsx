@@ -99,7 +99,12 @@ export const ListBox = styled.div`
                         width: 70px;
                     }
                     span{
+                        display: inline-block;
                         font-weight: bold;
+                        max-width: 150px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
                     }
                 }
             }
