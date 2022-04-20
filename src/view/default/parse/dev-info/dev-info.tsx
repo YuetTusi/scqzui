@@ -18,6 +18,47 @@ import { LoginState, TraceLoginState } from '@/model/default/trace-login';
 const { Group } = Button;
 
 /**
+ * 功能按钮禁用状态
+ * 除`解析完成`都是禁用状态
+ * @param parseState 解析状态
+ */
+const fnButtonDisable = (parseState?: ParseState) => {
+    switch (parseState) {
+        case ParseState.Fetching:
+        case ParseState.NotParse:
+        case ParseState.Exception:
+        case ParseState.Parsing:
+        case ParseState.Error:
+            return true
+        case ParseState.Finished:
+            return false;
+        default:
+            return true;
+    }
+};
+
+/**
+ * 删除按钮禁用状态
+ * @param parseState 解析状态
+ */
+const delButtonDisable = (parseState?: ParseState) => {
+    switch (parseState) {
+        case ParseState.Fetching:
+        case ParseState.Exception:
+        case ParseState.Parsing:
+        case ParseState.Error:
+            return true
+        case ParseState.Error:
+        case ParseState.Exception:
+        case ParseState.NotParse:
+        case ParseState.Finished:
+            return false;
+        default:
+            return true;
+    }
+};
+
+/**
  * 状态点
  * @param state 解析状态
  */
@@ -71,8 +112,7 @@ const CloudSearchButton: FC<{
 
     return <Button
         onClick={() => onClick(device, ClickType.CloudSearch)}
-        // disabled={disabled}
-        disabled={false}
+        disabled={disabled}
         type="primary">
         {children}
     </Button>
@@ -83,21 +123,41 @@ const CloudSearchButton: FC<{
  */
 const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
 
-    const caseData = useCase(data.caseId);
+    const { caseId, parseState } = data;
+    const caseData = useCase(caseId);
 
     return <InfoBox>
         <div className="btn-bar">
             <div>
                 <Group size="small">
-                    <Button onClick={() => onButtonClick(data, ClickType.GenerateBCP)} type="primary">生成BCP</Button>
-                    <Button onClick={() => onButtonClick(data, ClickType.ExportBCP)} type="primary">导出BCP</Button>
-                    <CloudSearchButton device={data} onClick={onButtonClick}>云点验</CloudSearchButton>
+                    <Button
+                        onClick={() => onButtonClick(data, ClickType.GenerateBCP)}
+                        disabled={fnButtonDisable(parseState)}
+                        type="primary">
+                        生成BCP
+                    </Button>
+                    <Button
+                        onClick={() => onButtonClick(data, ClickType.ExportBCP)}
+                        disabled={fnButtonDisable(parseState)}
+                        type="primary">
+                        导出BCP
+                    </Button>
+                    {/* <CloudSearchButton device={data} onClick={onButtonClick}>云点验</CloudSearchButton> */}
                 </Group>
             </div>
             <div>
                 <Group size="small">
-                    <Button onClick={() => onButtonClick(data, ClickType.Edit)} type="primary">编辑</Button>
-                    <Button onClick={() => onButtonClick(data, ClickType.Delete)} type="primary">删除</Button>
+                    <Button
+                        onClick={() => onButtonClick(data, ClickType.Edit)}
+                        type="primary">
+                        编辑
+                    </Button>
+                    <Button
+                        onClick={() => onButtonClick(data, ClickType.Delete)}
+                        disabled={delButtonDisable(parseState)}
+                        type="primary">
+                        删除
+                    </Button>
                 </Group>
             </div>
         </div>

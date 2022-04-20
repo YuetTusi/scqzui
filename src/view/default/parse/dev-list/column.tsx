@@ -20,7 +20,6 @@ import DeviceType from "@/schema/device-type";
 import { ParseState } from "@/schema/device-state";
 import DeviceSystem from '@/schema/device-system';
 import { DataMode } from '@/schema/data-mode';
-import { LocalStoreKey } from '@/utils/local-store';
 import { TableName } from '@/schema/table-name';
 import CaseInfo from '@/schema/case-info';
 import CommandType, { SocketType } from '@/schema/command';
@@ -37,11 +36,14 @@ const { Group } = Button;
 /**
  * 解析是否为禁用状态
  */
-const isParseDisable = (state: ParseState) => {
-    if (state === ParseState.Parsing || state === ParseState.Fetching || state === ParseState.Exception) {
-        return true;
-    } else {
-        return false;
+const parseButtonDisable = (state: ParseState) => {
+    switch (state) {
+        case ParseState.Parsing:
+        case ParseState.Fetching:
+        case ParseState.Exception:
+            return true;
+        default:
+            return false;
     }
 };
 
@@ -365,7 +367,7 @@ export function getDevColumns(
                 return <Button
                     type="primary"
                     size="small"
-                    disabled={isParseDisable(record.parseState!)}
+                    disabled={parseButtonDisable(record.parseState!)}
                     onClick={async (event: MouseEvent<HTMLButtonElement>) => {
                         event.stopPropagation();
                         let exist = await helper.existFile(record.phonePath!);

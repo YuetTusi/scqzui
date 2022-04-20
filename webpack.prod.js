@@ -87,17 +87,6 @@ let config = {
 			}
 		]
 	},
-	devServer: {
-		static: {
-			directory: join(__dirname, './dist')
-		},
-		client: {
-			overlay: { errors: true }
-		},
-		port: 8085,
-		open: false,
-		compress: true
-	},
 	plugins: [
 		new ProvidePlugin({
 			$: 'jquery',

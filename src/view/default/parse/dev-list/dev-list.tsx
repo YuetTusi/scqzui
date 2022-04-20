@@ -134,7 +134,8 @@ const DevList: FC<DevListProp> = ({ }) => {
                 currentDev.current = data;
                 setExportReportModalVisible(true);
             } else {
-                message.info('报告数据不存在，请生成报告');
+                message.destroy();
+                message.info('无报告数据，请解析完成后生成报告');
             }
         } catch (error) {
             message.warning('读取报告数据失败，请重新生成报告');

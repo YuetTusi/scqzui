@@ -24,7 +24,7 @@ const LayoutPanel: FC<{}> = ({ children }) => {
 
     return <>
         <DragBar>
-            {title}
+            {(title ?? '').replace(/\-/g, '.')}
         </DragBar>
         <Center>
             {children}

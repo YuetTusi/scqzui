@@ -52,23 +52,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 设备取证
             </ImageButton>
         </div>
-        <div className="parse">
-            <ColorButton
-                to="/parse"
-                icon={<FontAwesomeIcon icon={faFileWaveform} />}
-                color="#FD7272">
-                数据解析
-            </ColorButton>
-        </div>
-        <div>
-            <ColorButton
-                to="/tool"
-                icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
-                color="#3dc1d3">
-                工具箱
-            </ColorButton>
-        </div>
-        {/* <div className="tool">
+        <div className="tool">
             <ImageButton
                 to="/tool"
                 icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
@@ -78,13 +62,37 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 </ul>}>
                 工具箱
             </ImageButton>
-        </div> */}
+        </div>
+        <div className="parse">
+            <ColorButton
+                to="/parse"
+                icon={<FontAwesomeIcon icon={faFileWaveform} />}
+                color="#FD7272">
+                数据解析
+            </ColorButton>
+        </div>
         <div className="log">
             <ColorButton
                 to="/log"
                 icon={<FontAwesomeIcon icon={faUserPen} />}
                 color="#3c6382">
                 操作日志
+            </ColorButton>
+        </div>
+        {/* <div>
+            <ColorButton
+                to="/tool"
+                icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
+                color="#3dc1d3">
+                工具箱
+            </ColorButton>
+        </div> */}
+        <div className="setting">
+            <ColorButton
+                to="/settings"
+                icon={<FontAwesomeIcon icon={faGears} />}
+                color="#82589F">
+                软件设置
             </ColorButton>
         </div>
         <div className="setting">

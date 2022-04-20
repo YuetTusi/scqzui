@@ -57,7 +57,7 @@ let model: Model = {
     state: {
         limitCount: 0,
         loginState: LoginState.NotLogin,
-        loginMessage: '尚未登录',
+        loginMessage: '未登录',
         username: undefined,
         password: undefined,
         remember: false
