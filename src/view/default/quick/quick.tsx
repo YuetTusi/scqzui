@@ -10,6 +10,9 @@ import { QuickBox } from './styled/style';
 import EventList from './quick-event-list';
 import EditQuickEventModal from './edit-quick-event-modal';
 
+/**
+ * 快速点验
+ */
 const Quick: FC<{}> = () => {
 
     const dispatch = useDispatch();

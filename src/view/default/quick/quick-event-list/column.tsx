@@ -1,7 +1,8 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import { Dispatch } from "dva";
 import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined'
 import { ColumnsType } from "antd/lib/table";
+import Modal from 'antd/lib/modal';
 import { QuickEvent } from "@/schema/quick-event";
 
 const getColumns = (dispatch: Dispatch): ColumnsType<QuickEvent> => {
@@ -41,12 +42,24 @@ const getColumns = (dispatch: Dispatch): ColumnsType<QuickEvent> => {
         },
         {
             title: '删除',
-            dataIndex: 'del',
+            dataIndex: '_id',
             key: 'del',
             width: 50,
             align: 'center',
-            render(value: string) {
-                return <a>删除</a>
+            render(value: string, { eventName }) {
+                return <a onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                    const [name] = eventName.split('_');
+                    e.preventDefault();
+                    Modal.confirm({
+                        onOk() {
+                            dispatch({ type: 'quickEventList/del', payload: value });
+                        },
+                        title: '删除点验案件',
+                        content: `确认删除「${name}」？`,
+                        okText: '是',
+                        cancelText: '否'
+                    });
+                }}>删除</a>
             }
         }
     ];

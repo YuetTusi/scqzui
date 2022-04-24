@@ -10,9 +10,8 @@ import Input from 'antd/lib/input';
 import InputNumber from 'antd/lib/input-number';
 import Form, { RuleObject } from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
-import { QuickEvent } from '@/schema/quick-event';
-import { useOsPath } from '@/hook/os-path';
 import { StateTree } from '@/type/model';
+import { QuickEvent } from '@/schema/quick-event';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
 import { helper } from '@/utils/helper';
 
@@ -33,7 +32,6 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         data
     } = useSelector<StateTree, EditQuickEventModalState>(state => state.editQuickEventModal);
     const [formRef] = useForm<QuickEvent>();
-    const docPath = useOsPath('documents');
 
     useEffect(() => {
         const { setFieldsValue } = formRef;
@@ -42,10 +40,6 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
             setFieldsValue({ ...data, eventName });
         }
     }, [data]);
-
-    useEffect(() => {
-        formRef.setFieldsValue({ eventPath: docPath });
-    }, [docPath]);
 
     useEffect(() => {
         if (!visible) {
@@ -109,8 +103,6 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
     };
 
     const ruleToValid = async (rule: RuleObject, value: any) => {
-        console.log(rule);
-        console.log(value);
         const from = formRef.getFieldValue('ruleFrom');
         if (from >= value) {
             throw new Error('请大于起始时段');
@@ -136,7 +128,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         ]}
         onCancel={onCancel}
         visible={visible}
-        title="编辑点验案件"
+        title={helper.isNullOrUndefined(data?._id) ? '添加点验案件' : '编辑点验案件'}
         width={600}
         centered={true}
         maskClosable={false}
@@ -149,16 +141,17 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
                     { required: true, message: '请填写案件名称' }
                 ]}
                 label="案件名称"
-                name="eventName">
-                <Input />
+                name="eventName"
+                tooltip={helper.isNullOrUndefined(data?._id) ? undefined : "不可修改案件名称"}>
+                <Input disabled={!helper.isNullOrUndefined(data?._id)} />
             </Item>
             <Item
                 rules={[
                     { required: true, message: '请选择存储位置' }
                 ]}
-                initialValue={docPath}
                 label="存储位置"
-                name="eventPath">
+                name="eventPath"
+                tooltip={helper.isNullOrUndefined(data?._id) ? undefined : "不可修改存储位置"}>
                 <Input
                     onClick={onDirSelect}
                     disabled={!helper.isNullOrUndefined(data?._id)}
