@@ -1,19 +1,20 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, Key, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Table from 'antd/lib/table';
-import { EventListProp } from './prop';
 import { StateTree } from '@/type/model';
+import { helper } from '@/utils/helper';
 import { QuickEventListState } from '@/model/default/quick-event-list';
 import { QuickEvent } from '@/schema/quick-event';
 import { getColumns } from './column';
-import { helper } from '@/utils/helper';
+import { EventListProp } from './prop';
 
 /**
  * 快速点验案件表格
  */
-const QuickEventList: FC<EventListProp> = () => {
+const QuickEventList: FC<EventListProp> = ({ qrcodeHandle }) => {
 
     const dispatch = useDispatch();
+    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
     const {
         data,
         total,
@@ -42,6 +43,15 @@ const QuickEventList: FC<EventListProp> = () => {
         query(pageIndex, pageSize);
     };
 
+    /**
+     * 行Change
+     * @param keys 
+     */
+    const onRowSelectChange = (keys: Key[]) => {
+        console.log(keys);
+        setSelectedRowKeys(keys);
+    };
+
     return <Table<QuickEvent>
         pagination={
             {
@@ -51,7 +61,15 @@ const QuickEventList: FC<EventListProp> = () => {
                 total,
             }
         }
-        columns={getColumns(dispatch)}
+        columns={getColumns(dispatch, qrcodeHandle)}
+        onRow={({ _id }) => ({
+            onClick: () => setSelectedRowKeys([_id!])
+        })}
+        rowSelection={{
+            type: 'radio',
+            selectedRowKeys,
+            onChange: onRowSelectChange,
+        }}
         dataSource={data}
         loading={loading}
         rowKey="_id"

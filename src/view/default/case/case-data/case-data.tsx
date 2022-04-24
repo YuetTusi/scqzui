@@ -60,6 +60,7 @@ const CaseData: FC<{}> = ({ }) => {
             content: '正在导入案件及检材，请稍后...',
             okText: '确定',
             maskClosable: false,
+            centered: true,
             okButtonProps: { disabled: true }
         });
 
@@ -114,6 +115,7 @@ const CaseData: FC<{}> = ({ }) => {
             content: '正在导入检材，请稍后...',
             okText: '确定',
             maskClosable: false,
+            centered: true,
             okButtonProps: { disabled: true }
         });
         const caseJsonPath = join(deviceJsonPath, '../../../Case.json');

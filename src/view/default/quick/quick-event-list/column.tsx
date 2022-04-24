@@ -1,11 +1,18 @@
+import { join } from 'path';
+import { shell } from 'electron';
 import React, { MouseEvent } from "react";
 import { Dispatch } from "dva";
 import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined'
 import { ColumnsType } from "antd/lib/table";
 import Modal from 'antd/lib/modal';
+import message from 'antd/lib/message';
+import { helper } from '@/utils/helper';
 import { QuickEvent } from "@/schema/quick-event";
+import { NowrapText } from './styled/style';
 
-const getColumns = (dispatch: Dispatch): ColumnsType<QuickEvent> => {
+const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEvent> => {
+
+    const [qrcodeHandle] = handles;
 
     return [
         {
@@ -14,17 +21,33 @@ const getColumns = (dispatch: Dispatch): ColumnsType<QuickEvent> => {
             key: 'qr',
             width: 20,
             align: 'center',
-            render(value: string) {
-                return <QrcodeOutlined className="primary-color" title="扫码点验" />
+            render(value: string, record) {
+                return <QrcodeOutlined
+                    onClick={(e: MouseEvent<HTMLSpanElement>) => {
+                        e.stopPropagation();
+                        qrcodeHandle(record);
+                    }}
+                    className="primary-color"
+                    title="扫码点验" />
             }
         },
         {
             title: '案件名称',
             dataIndex: 'eventName',
             key: 'eventName',
-            render(value: string) {
+            render(value: string, { eventPath, eventName }) {
                 const [name] = value.split('_');
-                return <span>{name}</span>
+                return <NowrapText onClick={async (e: MouseEvent<HTMLAnchorElement>) => {
+                    e.stopPropagation();
+                    const p = join(eventPath, eventName);
+                    const exist = await helper.existFile(p);
+                    if (exist) {
+                        shell.showItemInFolder(join(eventPath, eventName));
+                    } else {
+                        message.destroy();
+                        message.info('点验数据不存在');
+                    }
+                }}>{name}</NowrapText>
             }
         },
         {

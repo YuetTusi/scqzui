@@ -8,6 +8,7 @@ import { SearchFormBox } from '../styled/search-form';
 import { SearchFormProp } from './prop';
 
 const { Item } = Form;
+const Datepicker = DatePicker as any;
 /**
  * 查询表单
  */
@@ -35,13 +36,13 @@ const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle }
     return <SearchFormBox>
         <Form form={formRef} layout="inline">
             <Item name="start" label="采集时间 起">
-                <DatePicker
+                <Datepicker
                     showTime={true}
                     placeholder="请选择时间"
                 />
             </Item>
             <Item name="end" label="止">
-                <DatePicker
+                <Datepicker
                     showTime={true}
                     placeholder="请选择时间"
                 />

@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
 import os from 'os';
+import { execSync } from 'child_process';
 import crypto from 'crypto';
 import fs from 'fs';
 import net from 'net';
@@ -719,6 +720,17 @@ const helper = {
             log.error(`读取check.json失败：${error.message}`);
             return false;
         }
+    },
+    /**
+     * 判断有无IP地址存在
+     */
+    hasIP(ip: string): boolean {
+        const command = 'ipconfig';
+        const result = execSync(command, {
+            windowsHide: true,
+            encoding: 'utf-8'
+        });
+        return result.includes(ip);
     }
 };
 

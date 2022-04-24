@@ -57,6 +57,7 @@ export default {
             content: '正在删除，可能时间较长，请不要关闭程序',
             okText: '确定',
             maskClosable: false,
+            centered: true,
             okButtonProps: {
                 disabled: true
             }

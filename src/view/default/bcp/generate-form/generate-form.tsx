@@ -1,9 +1,9 @@
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import classnames from 'classnames';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import { ipcRenderer, IpcRendererEvent, OpenDialogReturnValue } from 'electron';
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Empty from 'antd/lib/empty';
@@ -13,10 +13,9 @@ import Switch from 'antd/lib/switch';
 import Form from 'antd/lib/form';
 import Radio from 'antd/lib/radio';
 import Select from 'antd/lib/select';
-import { useSubscribe, useOfficerList, useUnit, useDstUnit, useCase, useDevice } from '@/hook';
+import { useSubscribe, useOfficerList } from '@/hook';
 import { helper } from '@/utils/helper';
 import { No } from '@/utils/regex';
-import { Organization } from '@/schema/organization';
 import { certificateType } from '@/schema/certificate-type';
 import { ethnicity } from '@/schema/ethnicity';
 import { sexCode } from '@/schema/sex-code';
@@ -29,6 +28,7 @@ import { GenerateFormProp } from './prop';
 const { Item } = Form;
 const { Group } = Radio;
 const { Option } = Select;
+const Datepicker = DatePicker as any;
 
 const formItemLayout = {
     labelCol: { span: 8 },
@@ -455,14 +455,14 @@ const GenerateForm: FC<GenerateFormProp> = ({
                     <Item
                         name="credentialEffectiveDate"
                         label="证件生效日期">
-                        <DatePicker style={{ width: '100%' }} />
+                        <Datepicker style={{ width: '100%' }} />
                     </Item>
                 </Col>
                 <Col span={12}>
                     <Item
                         name="credentialExpireDate"
                         label="证件失效日期">
-                        <DatePicker style={{ width: '100%' }} />
+                        <Datepicker style={{ width: '100%' }} />
                     </Item>
                 </Col>
             </Row>
@@ -507,7 +507,7 @@ const GenerateForm: FC<GenerateFormProp> = ({
                     <Item
                         name="birthday"
                         label="出生日期">
-                        <DatePicker
+                        <Datepicker
                             disabledDate={(current: any) => {
                                 if (current) {
                                     return current > dayjs().endOf('day');

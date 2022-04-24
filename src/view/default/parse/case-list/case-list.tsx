@@ -147,7 +147,6 @@ const CaseList: FC<CaseListProp> = () => {
             }} />
         <ExportBcpModal
             visible={exportBcpModalVisible}
-
             okHandle={exportBcpHandle}
             cancelHandle={() => setExportBcpModalVisible(false)} />
     </>;
