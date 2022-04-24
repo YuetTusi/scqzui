@@ -25,6 +25,8 @@ import { TraceLoginState } from '@/model/default/trace-login';
 import { TrailState } from '@/model/default/trail';
 import { ImportDataModalState } from '@/model/default/import-data-modal';
 import { CrackModalState } from '@/model/default/crack-modal';
+import { QuickEventListState } from '@/model/default/quick-event-list';
+import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
 
 declare global {
 	interface Window {
@@ -66,6 +68,8 @@ interface StateTree {
 	trail: TrailState,
 	importDataModal: ImportDataModalState,
 	crackModal: CrackModalState,
+	quickEventList: QuickEventListState,
+	editQuickEventModal: EditQuickEventModalState,
 	[modelName: string]: any
 }
 

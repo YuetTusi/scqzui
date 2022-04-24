@@ -46,6 +46,9 @@ const GlobalStyle = createGlobalStyle`
         background: #c1c1c1;
     }
 
+	.primary-color{
+		color:#0fb9b1;
+	}
 	.cloud-color{
 		color:#f9ca24;
 	}

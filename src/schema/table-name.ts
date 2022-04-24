@@ -46,7 +46,11 @@ enum TableName {
     /**
      * 单位配置
      */
-    Organization = 'organization'
+    Organization = 'organization',
+    /**
+     * 快速点验事件
+     */
+    QuickEvent = 'quick-event'
 }
 
 export { TableName };

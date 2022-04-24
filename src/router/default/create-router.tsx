@@ -61,6 +61,21 @@ const createRouter = (api?: RouterAPI) => {
 							}}
 						/>
 						<Route
+							path="/quick"
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/quick')
+								);
+								return (
+									<Suspense fallback={<LoadView />}>
+										<LayoutPanel>
+											<Next />
+										</LayoutPanel>
+									</Suspense>
+								);
+							}}
+						/>
+						<Route
 							path="/case-data"
 							exact={true}
 							render={() => {

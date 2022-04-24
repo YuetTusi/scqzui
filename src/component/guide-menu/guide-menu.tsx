@@ -32,7 +32,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
         </div>
         <div>
             <ColorButton
-                to="/check"
+                to="/quick"
                 icon={<FontAwesomeIcon icon={faBolt} />}
                 color="#EAB543">
                 快速点验
