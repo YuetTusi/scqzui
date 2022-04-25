@@ -7,6 +7,7 @@ import { useOfficerList } from './officer-list';
 import { useUnit, useDstUnit } from './unit';
 import { useAppConfig } from './app-config';
 import { useManufacturer } from './manufacturer';
+import { useQuickEvent } from './quick-event';
 
 export {
     useAppSerial,
@@ -19,5 +20,6 @@ export {
     useUnit,
     useDstUnit,
     useAppConfig,
-    useManufacturer
+    useManufacturer,
+    useQuickEvent
 };

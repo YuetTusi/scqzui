@@ -12,7 +12,7 @@ import { NowrapText } from './styled/style';
 
 const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEvent> => {
 
-    const [qrcodeHandle] = handles;
+    const [qrcodeHandle, detailHandle] = handles;
 
     return [
         {
@@ -35,19 +35,14 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
             title: '案件名称',
             dataIndex: 'eventName',
             key: 'eventName',
-            render(value: string, { eventPath, eventName }) {
+            render(value: string, record) {
                 const [name] = value.split('_');
                 return <NowrapText onClick={async (e: MouseEvent<HTMLAnchorElement>) => {
                     e.stopPropagation();
-                    const p = join(eventPath, eventName);
-                    const exist = await helper.existFile(p);
-                    if (exist) {
-                        shell.showItemInFolder(join(eventPath, eventName));
-                    } else {
-                        message.destroy();
-                        message.info('点验数据不存在');
-                    }
-                }}>{name}</NowrapText>
+                    detailHandle(record);
+                }}>
+                    {name}
+                </NowrapText>
             }
         },
         {

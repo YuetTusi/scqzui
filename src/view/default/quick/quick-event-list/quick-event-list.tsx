@@ -7,11 +7,12 @@ import { QuickEventListState } from '@/model/default/quick-event-list';
 import { QuickEvent } from '@/schema/quick-event';
 import { getColumns } from './column';
 import { EventListProp } from './prop';
+import { CaseListBox } from './styled/style';
 
 /**
  * 快速点验案件表格
  */
-const QuickEventList: FC<EventListProp> = ({ qrcodeHandle }) => {
+const QuickEventList: FC<EventListProp> = ({ qrcodeHandle, detailHandle }) => {
 
     const dispatch = useDispatch();
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
@@ -48,32 +49,34 @@ const QuickEventList: FC<EventListProp> = ({ qrcodeHandle }) => {
      * @param keys 
      */
     const onRowSelectChange = (keys: Key[]) => {
-        console.log(keys);
         setSelectedRowKeys(keys);
     };
 
-    return <Table<QuickEvent>
-        pagination={
-            {
-                onChange: onPageChange,
-                current: pageIndex,
-                pageSize,
-                total,
+    return <CaseListBox>
+        <Table<QuickEvent>
+            pagination={
+                {
+                    onChange: onPageChange,
+                    current: pageIndex,
+                    pageSize,
+                    total,
+                }
             }
-        }
-        columns={getColumns(dispatch, qrcodeHandle)}
-        onRow={({ _id }) => ({
-            onClick: () => setSelectedRowKeys([_id!])
-        })}
-        rowSelection={{
-            type: 'radio',
-            selectedRowKeys,
-            onChange: onRowSelectChange,
-        }}
-        dataSource={data}
-        loading={loading}
-        rowKey="_id"
-    />
+            columns={getColumns(dispatch, qrcodeHandle, detailHandle)}
+            onRow={({ _id }) => ({
+                onClick: () => setSelectedRowKeys([_id!])
+            })}
+            rowSelection={{
+                type: 'radio',
+                selectedRowKeys,
+                onChange: onRowSelectChange,
+            }}
+            dataSource={data}
+            loading={loading}
+            rowKey="_id"
+            size="small"
+        />
+    </CaseListBox>
 };
 
 export default QuickEventList;
