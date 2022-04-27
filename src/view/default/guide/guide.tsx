@@ -32,7 +32,6 @@ const Guide: FC<{}> = () => {
                 </BoardMenu>
             </ExtendPanel>
             <Reading />
-            <div className="fn-hidden"></div>
         </GuideBox>
     );
 };

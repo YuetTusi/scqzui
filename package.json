@@ -104,6 +104,7 @@
 		"css-loader": "^6.6.0",
 		"dva": "^2.6.0-beta.22",
 		"dva-immer": "^1.0.0",
+		"echarts": "^5.3.2",
 		"electron": "^17.0.1",
 		"electron-builder": "^22.14.13",
 		"ftp": "^0.3.10",

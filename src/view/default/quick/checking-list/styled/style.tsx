@@ -7,17 +7,6 @@ export const ListBox = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    &>.mask-split{
-        display: block;
-        position: absolute;
-        height: 10px;
-        z-index: 1;
-        /* border-top:1px solid #a9afbbd1; */
-        background-color: #202940;
-        left:0;
-        right:0;
-        bottom:0;
-    }
 
     &>.title{
         flex:none;

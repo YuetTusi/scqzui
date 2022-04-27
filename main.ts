@@ -199,7 +199,7 @@ if (!instanceLock) {
             height: config?.windowHeight ?? 800, //主窗体高
             autoHideMenuBar: true, //隐藏主窗口菜单
             center: config?.center ?? true, //居中显示
-            minHeight: config?.minHeight ?? 768, //最小高度
+            minHeight: config?.minHeight ?? 900, //最小高度
             minWidth: config?.minWidth ?? 960, //最小宽度
             frame: false,
             backgroundColor: '#181d30',

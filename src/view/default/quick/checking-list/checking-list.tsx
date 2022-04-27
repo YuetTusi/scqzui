@@ -154,7 +154,6 @@ const CheckingList: FC<{}> = () => {
         <div ref={devRef} className="dev">
             {renderList()}
         </div>
-        <div className="mask-split" />
     </ListBox>;
 }
 

@@ -3,14 +3,6 @@ import { TrailState } from ".";
 
 export default {
     /**
- * 设置案件数据
- * @param {CCaseInfo} payload
- */
-    setCaseData(state: TrailState, { payload }: AnyAction) {
-        state.caseData = payload;
-        return state;
-    },
-    /**
      * 设置设备数据
      * @param {DeviceType} payload
      */

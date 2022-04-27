@@ -11,4 +11,5 @@ export const ReadingBox = styled.div`
     background-color: rgba(20,20,20,0.8);
     justify-content: center;
     align-items: center;
+    cursor: wait;
 `;

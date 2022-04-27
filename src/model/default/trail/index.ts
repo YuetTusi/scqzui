@@ -1,15 +1,10 @@
 import { Model } from 'dva';
 import reducers from './reducers';
 import effects from './effects';
-import { CaseInfo } from "@/schema/case-info";
 import { DeviceType } from "@/schema/device-type";
 import { InstallApp } from "@/schema/install-app";
 
 interface TrailState {
-    /**
-     * 案件
-     */
-    caseData: CaseInfo | null,
     /**
      * 设备
      */
@@ -27,7 +22,6 @@ interface TrailState {
 let model: Model = {
     namespace: 'trail',
     state: {
-        caseData: null,
         deviceData: null,
         installData: null,
         loading: false

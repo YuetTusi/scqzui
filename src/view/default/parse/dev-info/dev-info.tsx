@@ -10,10 +10,10 @@ import { Split } from '@/component/style-tool';
 import { DeviceType } from '@/schema/device-type';
 import { ParseState } from '@/schema/device-state';
 import DeviceSystem from '@/schema/device-system';
-import { InfoBox } from './styled/style';
-import { ClickType, DevInfoProp } from './prop';
 import { StateTree } from '@/type/model';
 import { LoginState, TraceLoginState } from '@/model/default/trace-login';
+import { InfoBox } from './styled/style';
+import { ClickType, DevInfoProp } from './prop';
 
 const { Group } = Button;
 
@@ -142,7 +142,11 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                         type="primary">
                         导出BCP
                     </Button>
-                    {/* <CloudSearchButton device={data} onClick={onButtonClick}>云点验</CloudSearchButton> */}
+                    <CloudSearchButton
+                        device={data}
+                        onClick={() => onButtonClick(data, ClickType.CloudSearch)}>
+                        云点验
+                    </CloudSearchButton>
                 </Group>
             </div>
             <div>

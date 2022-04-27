@@ -127,7 +127,8 @@ const ExportBcpModal: FC<ExportBcpModalProp> = ({ visible, okHandle, cancelHandl
         (async () => {
             if (visible) {
                 const treeNodes = await toTreeData(isBatch, exportBcpCase, exportBcpDevice);
-                setIsEmpty(treeNodes.children!.length === 0);
+                console.log(treeNodes);
+                setIsEmpty(treeNodes.children === undefined || treeNodes.children!.length === 0);
 
                 ztree = ($.fn as any).zTree.init(
                     $('#bcp-tree'),

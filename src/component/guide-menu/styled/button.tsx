@@ -80,7 +80,7 @@ const Image = styled.div`
 
         &>.desc-mask{
             position: absolute;
-            background-color:rgba(34,34,34,0.8);
+            background-color:rgba(34,34,34,0.9);
             color:#fff;
             top: 0;
             left:0;

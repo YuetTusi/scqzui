@@ -19,7 +19,10 @@ const GlobalStyle = createGlobalStyle`
 		width:auto;
 		height: 100%;
         background-color: #181d30;
-		/* background-image: linear-gradient(to right,#181d30,#181d30); */
+		/* background-image: url(${require('./images/bg.jpg')});
+		background-repeat: no-repeat;
+		background-size: cover; */
+		/* background-image: linear-gradient(to right,#181d30,#222739); */
 	}
 
     //Webkit滚动条样式
@@ -27,6 +30,10 @@ const GlobalStyle = createGlobalStyle`
         width: 10px;
 		height: 10px;
     }
+	::-webkit-scrollbar:horizontal{
+		width: 0;
+		height: 0;
+	}
     ::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
         border-radius: 2px;
