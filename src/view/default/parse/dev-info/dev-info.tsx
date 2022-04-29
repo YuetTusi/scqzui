@@ -6,6 +6,8 @@ import AppleFilled from '@ant-design/icons/AppleFilled';
 import Badge from 'antd/lib/badge';
 import Button from 'antd/lib/button';
 import { useCase } from '@/hook';
+import { helper } from '@/utils/helper';
+import Auth from '@/component/auth';
 import { Split } from '@/component/style-tool';
 import { DeviceType } from '@/schema/device-type';
 import { ParseState } from '@/schema/device-state';
@@ -16,6 +18,7 @@ import { InfoBox } from './styled/style';
 import { ClickType, DevInfoProp } from './prop';
 
 const { Group } = Button;
+const { useBcp, useTraceLogin } = helper.readConf()!;
 
 /**
  * 功能按钮禁用状态
@@ -130,23 +133,27 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
         <div className="btn-bar">
             <div>
                 <Group size="small">
-                    <Button
-                        onClick={() => onButtonClick(data, ClickType.GenerateBCP)}
-                        disabled={fnButtonDisable(parseState)}
-                        type="primary">
-                        生成BCP
-                    </Button>
-                    <Button
-                        onClick={() => onButtonClick(data, ClickType.ExportBCP)}
-                        disabled={fnButtonDisable(parseState)}
-                        type="primary">
-                        导出BCP
-                    </Button>
-                    <CloudSearchButton
-                        device={data}
-                        onClick={() => onButtonClick(data, ClickType.CloudSearch)}>
-                        云点验
-                    </CloudSearchButton>
+                    <Auth deny={!useBcp}>
+                        <Button
+                            onClick={() => onButtonClick(data, ClickType.GenerateBCP)}
+                            disabled={fnButtonDisable(parseState)}
+                            type="primary">
+                            生成BCP
+                        </Button>
+                        <Button
+                            onClick={() => onButtonClick(data, ClickType.ExportBCP)}
+                            disabled={fnButtonDisable(parseState)}
+                            type="primary">
+                            导出BCP
+                        </Button>
+                    </Auth>
+                    <Auth deny={!useTraceLogin}>
+                        <CloudSearchButton
+                            device={data}
+                            onClick={() => onButtonClick(data, ClickType.CloudSearch)}>
+                            云点验
+                        </CloudSearchButton>
+                    </Auth>
                 </Group>
             </div>
             <div>

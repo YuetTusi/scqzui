@@ -2,11 +2,14 @@ import React, { MouseEvent } from 'react';
 import { Dispatch } from "dva";
 import { ColumnsType, ColumnType } from "antd/lib/table";
 import Button from 'antd/lib/button';
+import { helper } from '@/utils/helper';
+import Auth from '@/component/auth';
 import CaseInfo from "@/schema/case-info";
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { NoWrapText } from './styled/style';
 
 const { Group } = Button;
+const { useBcp } = helper.readConf()!;
 
 /**
  * 表头定义
@@ -33,7 +36,7 @@ export function getCaseColumns(
             title: '导出',
             dataIndex: '_id',
             key: '_id',
-            width: 90,
+            width: 60,
             align: 'center',
             render: (id: string, record: CaseInfo) => {
                 const { exportingDeviceId } = operateDoing;
@@ -52,12 +55,17 @@ export function getCaseColumns(
                             type="primary">
                             报告
                         </Button>
-                        <Button onClick={(event: MouseEvent<HTMLButtonElement>) => {
-                            event.stopPropagation();
-                            dispatch({ type: 'exportBcpModal/setIsBatch', payload: true });
-                            dispatch({ type: 'exportBcpModal/setExportBcpCase', payload: record });
-                            setExportBcpModalVisible(true);
-                        }} type="primary">BCP</Button>
+                        <Auth deny={!useBcp}>
+                            <Button onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                                event.stopPropagation();
+                                dispatch({ type: 'exportBcpModal/setIsBatch', payload: true });
+                                dispatch({ type: 'exportBcpModal/setExportBcpCase', payload: record });
+                                setExportBcpModalVisible(true);
+                            }} type="primary">
+                                BCP
+                            </Button>
+                        </Auth>
+
                     </Group>
                 </div>;
             }

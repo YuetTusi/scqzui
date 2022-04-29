@@ -33,6 +33,10 @@ const cwd = process.cwd();//应用的根目录
 const KEY = 'az'; //密钥
 dayjs.locale('zh-cn');
 
+export const PAGE_SIZE = 10;
+export const CLOUD_TIMEOUT = 3600;
+export const CLOUD_TIMESPAN = 4;
+
 //封装工具函数
 const helper = {
     PAGE_SIZE: 10,

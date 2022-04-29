@@ -11,7 +11,7 @@ const UnitNameBox = styled.div`
         flex:1;
         em{
             display: block;
-            width:560px;
+            width:550px;
             color:${(props) => props.theme['primary-color']};
             font-weight: bold;
             font-style: normal;

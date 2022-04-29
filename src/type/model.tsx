@@ -110,6 +110,22 @@ interface Conf {
 	 */
 	useTraceLogin: boolean;
 	/**
+	 * 案件文案（默认`案件`）
+	 */
+	caseText: string;
+	/**
+	 * 采集文案（默认`取证`）
+	 */
+	fetchText: string;
+	/**
+	 * 设备文案（默认`设备`）
+	 */
+	devText: string;
+	/**
+	 * 解析文案（默认`解析`）
+	 */
+	parseText: string;
+	/**
 	 * 云取应用HTTP接口地址
 	 */
 	cloudAppUrl: string;

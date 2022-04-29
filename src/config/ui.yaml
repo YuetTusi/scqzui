@@ -1,14 +1,17 @@
 max: 8
 useFetch: true
 useServerCloud: true
-useBcp: true
+useBcp: false
 useToolBox: true
-useFakeButton: false
-useAi: true
-useTraceLogin: true
+useFakeButton: true
+useAi: false
+useTraceLogin: false
+caseText: 案件
+fetchText: 取证
+devText: 设备
+parseText: 解析
 cloudAppUrl: http://139.9.112.8:9699/test_app
 cloudAppMd5: http://139.9.112.8:9699/test_md5
-# useHardwareAcceleration: true
 logo: logo.png
 windowHeight: 1024
 windowWidth: 1460

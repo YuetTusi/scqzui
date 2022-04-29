@@ -1,21 +1,13 @@
 import React, { FC } from 'react';
-import { AuthBox } from './styled/style';
-
-type LayoutType = 'block' | 'inline-block' | 'inline'
-    | 'flex' | 'inline-flex' | 'grid' | 'inline-grid'
-    | 'table' | 'inline-table' | 'list-item';
 
 /**
  * 鉴权显示
  */
-const Auth: FC<{
-    deny: boolean,
-    layout?: LayoutType
-}> = ({ deny, layout, children }) => {
+const Auth: FC<{ deny: boolean }> = ({ deny, children }) =>
+    deny ? null : <>{children}</>;
 
-    return <AuthBox deny={deny} layout={layout}>
-        {children}
-    </AuthBox >;
-};
+Auth.defaultProps = {
+    deny: false
+}
 
 export default Auth;

@@ -2,6 +2,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import CloudSyncOutlined from '@ant-design/icons/CloudSyncOutlined';
 import FileSyncOutlined from '@ant-design/icons/FileSyncOutlined';
 import AppstoreOutlined from '@ant-design/icons/AppstoreOutlined';
+import AutoComplete from 'antd/lib/auto-complete';
 import Col from 'antd/lib/col';
 import Row from 'antd/lib/row';
 import Empty from 'antd/lib/empty';
@@ -9,24 +10,21 @@ import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
 import Select from 'antd/lib/select';
 import Switch from 'antd/lib/switch';
-import { caseType } from '@/schema/case-type';
-import CaseInfo from '@/schema/case-info';
-import { ParseApp } from '@/schema/parse-app';
-import { getCaseName } from './case-edit';
 import Input from 'antd/lib/input';
-import { FormBox } from './styled/styled';
-import { AllowCaseName } from '@/utils/regex';
-import AutoComplete from 'antd/lib/auto-complete';
+import Checkbox from 'antd/lib/checkbox';
+import Tooltip from 'antd/lib/tooltip';
+import { useOfficerList } from '@/hook';
 import { helper } from '@/utils/helper';
+import { AllowCaseName } from '@/utils/regex';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
+import { caseType } from '@/schema/case-type';
+import Auth from '@/component/auth';
+import { Split } from '@/component/style-tool';
 import { AppSelectModal } from '@/component/dialog';
 import parseApp from '@/config/parse-app.yaml';
 import tokenApp from '@/config/token-app.yaml';
+import { FormBox } from './styled/styled';
 import { filterToParseApp } from '../helper';
-import { Split } from '@/component/style-tool';
-import { useOfficerList } from '@/hook/officer-list';
-import Checkbox from 'antd/lib/checkbox';
-import Tooltip from 'antd/lib/tooltip';
 import { FormProp } from './prop';
 
 const { useBcp, useAi } = helper.readConf()!;
@@ -190,38 +188,42 @@ const EditForm: FC<FormProp> = ({
                             checked={autoParse} />
                     </Tooltip>
                 </Col>
-                <Col span={3}>
-                    <span>生成BCP：</span>
-                    <Checkbox
-                        onChange={(event) => {
-                            const { checked } = event.target;
-                            if (!checked) {
-                                setAttachment(false);
-                            }
-                            setGenerateBcp(event.target.checked);
-                        }}
-                        checked={generateBcp}
-                        disabled={!autoParse}
-                    />
-                </Col>
-                <Col span={3}>
-                    <span>BCP包含附件：</span>
-                    <Checkbox
-                        onChange={(event) => setAttachment(event.target.checked)}
-                        checked={attachment}
-                        disabled={!generateBcp}
-                    />
-                </Col>
+                <Auth deny={!useBcp}>
+                    <Col span={3}>
+                        <span>生成BCP：</span>
+                        <Checkbox
+                            onChange={(event) => {
+                                const { checked } = event.target;
+                                if (!checked) {
+                                    setAttachment(false);
+                                }
+                                setGenerateBcp(event.target.checked);
+                            }}
+                            checked={generateBcp}
+                            disabled={!autoParse}
+                        />
+                    </Col>
+                    <Col span={3}>
+                        <span>BCP包含附件：</span>
+                        <Checkbox
+                            onChange={(event) => setAttachment(event.target.checked)}
+                            checked={attachment}
+                            disabled={!generateBcp}
+                        />
+                    </Col>
+                </Auth>
                 <Col span={3}>
                     <span>删除原数据：</span>
                     <Tooltip title="解析结束自动删除原始数据，可节省磁盘空间，不可再次重新解析">
                         <Checkbox onChange={(event) => setIsDel(event.target.checked)} checked={isDel} />
                     </Tooltip>
                 </Col>
-                <Col span={3}>
-                    <span>AI分析：</span>
-                    <Checkbox onChange={(event) => setIsAi(event.target.checked)} checked={isAi} />
-                </Col>
+                <Auth deny={!useAi}>
+                    <Col span={3}>
+                        <span>AI分析：</span>
+                        <Checkbox onChange={(event) => setIsAi(event.target.checked)} checked={isAi} />
+                    </Col>
+                </Auth>
             </Row>
             <div
                 className="cate"

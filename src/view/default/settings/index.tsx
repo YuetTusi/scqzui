@@ -5,6 +5,8 @@ import {
     faLightbulb, faPenToSquare, faKey, faFileArrowUp
 } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, Route } from 'dva/router';
+import { helper } from '@/utils/helper';
+import Auth from '@/component/auth';
 import Reading from '@/component/loading/reading';
 import AlartMessage from '@/component/alert-message';
 import Unit from '@/view/default/settings/unit';
@@ -20,7 +22,7 @@ import { MenuPanel } from './styled/menu';
 import { SettingLayout } from './styled/sub-layout';
 import ContentBox from './content-box';
 
-// const { max, useBcp, useTraceLogin } = helper.readConf()!;
+const { useTraceLogin } = helper.readConf()!;
 
 /**
  * 设置布局页
@@ -73,14 +75,16 @@ const Index: FC<{}> = () => <SettingLayout>
                     </div>
                 </NavLink>
             </li>
-            <li>
-                <NavLink to="/settings/trace-login" replace={true} className="hvr-sweep-to-right">
-                    <div>
-                        <span className="ico"><FontAwesomeIcon icon={faKey} /></span>
-                        <span className="name">云点验登录</span>
-                    </div>
-                </NavLink>
-            </li>
+            <Auth deny={!useTraceLogin}>
+                <li>
+                    <NavLink to="/settings/trace-login" replace={true} className="hvr-sweep-to-right">
+                        <div>
+                            <span className="ico"><FontAwesomeIcon icon={faKey} /></span>
+                            <span className="name">云点验登录</span>
+                        </div>
+                    </NavLink>
+                </li>
+            </Auth>
             <li>
                 <NavLink to="/settings/ftp" replace={true} className="hvr-sweep-to-right">
                     <div>

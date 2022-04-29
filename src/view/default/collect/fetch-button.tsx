@@ -1,11 +1,14 @@
 import React, { FC, MouseEvent } from 'react';
 import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
+import { helper } from '@/utils/helper';
+import Auth from '@/component/auth';
 import { FetchState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchButtonProp } from './prop';
 
 const { Group } = Button;
+const { useFetch, useServerCloud } = helper.readConf()!;
 
 /**
  * 按钮区
@@ -46,8 +49,12 @@ const FetchButton: FC<FetchButtonProp> = ({
         case FetchState.Finished:
         case FetchState.HasError:
             return <Group>
-                <Button onClick={() => onNormalHandle(device)} style={{ width: '100px' }} type="primary">取证</Button>
-                <Button onClick={() => onServerCloudHandle(device)} style={{ width: '100px' }} type="primary">云取证</Button>
+                <Auth deny={!useFetch}>
+                    <Button onClick={() => onNormalHandle(device)} style={{ width: '100px' }} type="primary">取证</Button>
+                </Auth>
+                <Auth deny={!useServerCloud}>
+                    <Button onClick={() => onServerCloudHandle(device)} style={{ width: '100px' }} type="primary">云取证</Button>
+                </Auth>
             </Group>
         case FetchState.Fetching:
             return <Group>
@@ -60,8 +67,12 @@ const FetchButton: FC<FetchButtonProp> = ({
             </Group>;
         default:
             return <Group>
-                <Button type="primary" style={{ width: '100px' }} disabled={true}>取证</Button>
-                <Button type="primary" style={{ width: '100px' }} disabled={true}>云取证</Button>
+                <Auth deny={!useFetch}>
+                    <Button type="primary" style={{ width: '100px' }} disabled={true}>取证</Button>
+                </Auth>
+                <Auth deny={!useServerCloud}>
+                    <Button type="primary" style={{ width: '100px' }} disabled={true}>云取证</Button>
+                </Auth>
             </Group>;
     }
 };
