@@ -34,23 +34,14 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 案件管理
             </ColorButton>
         </div>
-        <div className="parse">
-            <ColorButton
-                to="/parse"
-                icon={<FontAwesomeIcon icon={faFileWaveform} />}
-                color="#FD7272">
-                数据解析
-            </ColorButton>
-        </div>
-        {/* <div>
+        <div>
             <ColorButton
                 to="/quick"
                 icon={<FontAwesomeIcon icon={faBolt} />}
                 color="#EAB543">
                 快速点验
             </ColorButton>
-        </div> */}
-
+        </div>
         <div className="evidence">
             <ImageButton
                 to="/collect"
@@ -64,7 +55,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 设备取证
             </ImageButton>
         </div>
-        <Auth deny={!useToolBox}>
+        {/* <Auth deny={!useToolBox}>
             <div className="tool">
                 <ImageButton
                     to="/tool"
@@ -76,7 +67,15 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                     工具箱
                 </ImageButton>
             </div>
-        </Auth>
+        </Auth> */}
+        <div className="parse">
+            <ColorButton
+                to="/parse"
+                icon={<FontAwesomeIcon icon={faFileWaveform} />}
+                color="#FD7272">
+                数据解析
+            </ColorButton>
+        </div>
         <div className="log">
             <ColorButton
                 to="/log"
@@ -85,14 +84,17 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 操作日志
             </ColorButton>
         </div>
-        {/* <div>
-            <ColorButton
-                to="/tool"
-                icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
-                color="#3dc1d3">
-                工具箱
-            </ColorButton>
-        </div> */}
+        <Auth deny={!useToolBox}>
+            <div>
+                <ColorButton
+                    to="/tool"
+                    icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
+                    color="#3dc1d3">
+                    工具箱
+                </ColorButton>
+            </div>
+        </Auth>
+
         <div className="setting">
             <ColorButton
                 to="/settings"

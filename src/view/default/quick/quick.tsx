@@ -132,6 +132,7 @@ const Quick: FC<{}> = () => {
             cancelHandle={() => setEventDescVisible(false)}
             visible={eventDescVisible}
             id={detailId}
+            ip={ip}
         />
     </SubLayout>;
 }

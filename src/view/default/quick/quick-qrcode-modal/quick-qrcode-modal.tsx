@@ -22,7 +22,7 @@ const QuickQRCodeModal: FC<QuickQRcodeModalProp> = ({
             console.log(ip);
             (async () => {
                 try {
-                    const target = document.getElementById('qrcode');
+                    const target = document.getElementById('downApk');
                     await QRCode.toCanvas(target, `http://${ip}:9900/check`, {
                         width: 320,
                         margin: 2,
@@ -58,7 +58,7 @@ const QuickQRCodeModal: FC<QuickQRcodeModalProp> = ({
         title="扫码点验">
         <QuickQRCodeModalBox>
             <p>将设备连接至采集盒子或者无线热点后，打开浏览器扫码下载</p>
-            <canvas width="320" height="320" id="qrcode" />
+            <canvas width="320" height="320" id="downApk" />
         </QuickQRCodeModalBox>
     </Modal>
 };
