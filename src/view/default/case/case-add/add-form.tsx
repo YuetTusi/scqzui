@@ -16,13 +16,14 @@ import Select from 'antd/lib/select';
 import Tooltip from 'antd/lib/tooltip';
 import Col from 'antd/lib/col';
 import Row from 'antd/lib/row';
+import { useOfficerList } from '@/hook';
 import { helper } from '@/utils/helper';
 import { AllowCaseName } from '@/utils/regex';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { caseType } from '@/schema/case-type';
-import { useOfficerList } from '@/hook/officer-list';
 import parseAppData from '@/config/parse-app.yaml';
 import tokenAppData from '@/config/token-app.yaml';
+import Auth from '@/component/auth';
 import { Split } from '@/component/style-tool';
 import { AppSelectModal } from '@/component/dialog';
 import { filterToParseApp } from '../helper';
@@ -212,38 +213,42 @@ const AddForm: FC<FormProp> = ({
                                 checked={autoParse} />
                         </Tooltip>
                     </Col>
-                    <Col span={3}>
-                        <span>生成BCP：</span>
-                        <Checkbox
-                            onChange={(event) => {
-                                const { checked } = event.target;
-                                if (!checked) {
-                                    setAttachment(false);
-                                }
-                                setGenerateBcp(event.target.checked);
-                            }}
-                            checked={generateBcp}
-                            disabled={!autoParse}
-                        />
-                    </Col>
-                    <Col span={3}>
-                        <span>BCP包含附件：</span>
-                        <Checkbox
-                            onChange={(event) => setAttachment(event.target.checked)}
-                            checked={attachment}
-                            disabled={!generateBcp}
-                        />
-                    </Col>
+                    <Auth deny={!useBcp}>
+                        <Col span={3}>
+                            <span>生成BCP：</span>
+                            <Checkbox
+                                onChange={(event) => {
+                                    const { checked } = event.target;
+                                    if (!checked) {
+                                        setAttachment(false);
+                                    }
+                                    setGenerateBcp(event.target.checked);
+                                }}
+                                checked={generateBcp}
+                                disabled={!autoParse}
+                            />
+                        </Col>
+                        <Col span={3}>
+                            <span>BCP包含附件：</span>
+                            <Checkbox
+                                onChange={(event) => setAttachment(event.target.checked)}
+                                checked={attachment}
+                                disabled={!generateBcp}
+                            />
+                        </Col>
+                    </Auth>
                     <Col span={3}>
                         <span>删除原数据：</span>
                         <Tooltip title="解析结束自动删除原始数据，可节省磁盘空间，不可再次重新解析">
                             <Checkbox onChange={(event) => setIsDel(event.target.checked)} checked={isDel} />
                         </Tooltip>
                     </Col>
-                    <Col span={3}>
-                        <span>AI分析：</span>
-                        <Checkbox onChange={(event) => setIsAi(event.target.checked)} checked={isAi} />
-                    </Col>
+                    <Auth deny={!useAi}>
+                        <Col span={3}>
+                            <span>AI分析：</span>
+                            <Checkbox onChange={(event) => setIsAi(event.target.checked)} checked={isAi} />
+                        </Col>
+                    </Auth>
                 </Row>
                 <div
                     className="cate"
