@@ -5,6 +5,9 @@ import {
     OpenDialogReturnValue, SaveDialogReturnValue, shell, IpcMainEvent
 } from 'electron';
 import { WindowsBalloon } from 'node-notifier';
+import cors from 'cors';
+import express from 'express';
+import { api } from './src/http/api';
 import log from './src/utils/log';
 import { helper } from './src/utils/helper';
 import { Conf } from './src/type/model';
@@ -16,6 +19,7 @@ import FetchData from '@/schema/fetch-data';
 const mode = process.env['NODE_ENV'];
 const cwd = process.cwd();
 const appPath = app.getAppPath();
+const server = express();
 const { resourcesPath } = process;
 
 const appName = helper.readAppName();
@@ -40,10 +44,21 @@ const notifier = new WindowsBalloon({
     customPath: undefined
 });
 
+//# 配置Http服务器相关
+server.use(express.json());
+server.use(express.urlencoded());
+server.use(
+    cors({
+        origin: '*',
+        methods: ['GET', 'POST'],
+        optionsSuccessStatus: 200
+    })
+);
+
 config = helper.readConf();
 useHardwareAcceleration = config?.useHardwareAcceleration ?? !helper.isWin7();
 existManuJson = helper.existManufaturer(mode!, appPath);
-app.commandLine.appendArgument('--ignore-gpu-blacklist');
+// app.commandLine.appendArgument('--ignore-gpu-blacklist');
 
 if (config === null) {
     dialog.showErrorBox('启动失败', '配置文件读取失败, 请联系技术支持');
@@ -152,22 +167,6 @@ if (!instanceLock) {
 
     app.on('ready', () => {
 
-        (async () => {
-            if (!httpServerIsRunning) {
-                try {
-                    httpPort = await helper.portStat(config!.httpPort ?? 9900);
-                    //启动HTTP服务
-                    // server.use(api(mainWindow.webContents));
-                    // server.listen(httpPort, () => {
-                    // 	httpServerIsRunning = true;
-                    // 	console.log(`HTTP服务启动在端口${httpPort}`);
-                    // });
-                } catch (error) {
-                    log.error(`HTTP服务启动失败:${error.message}`);
-                }
-            }
-        })();
-
         timerWindow = new BrowserWindow({
             title: '计时服务',
             width: 600,
@@ -235,6 +234,23 @@ if (!instanceLock) {
             event.preventDefault();
             mainWindow!.webContents.send('will-close');
         });
+
+        (async () => {
+            if (!httpServerIsRunning && mainWindow !== null) {
+                try {
+                    httpPort = await helper.portStat(config!.httpPort ?? 9900);
+                    //启动HTTP服务
+                    server.use(api(mainWindow.webContents));
+                    server.listen(httpPort, () => {
+                        httpServerIsRunning = true;
+                        console.log(`HTTP服务启动在端口${httpPort}`);
+                        log.info(`HTTP服务启动在端口${httpPort}`);
+                    });
+                } catch (error) {
+                    log.error(`HTTP服务启动失败:${error.message}`);
+                }
+            }
+        })();
     });
 }
 

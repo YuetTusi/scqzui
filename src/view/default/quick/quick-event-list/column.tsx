@@ -48,7 +48,8 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
             width: 50,
             align: 'center',
             render(value: string, record) {
-                return <a onClick={() => {
+                return <a onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                    e.stopPropagation();
                     dispatch({ type: 'editQuickEventModal/setData', payload: record });
                     dispatch({ type: 'editQuickEventModal/setVisible', payload: true });
                 }}>编辑</a>
@@ -62,8 +63,8 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
             align: 'center',
             render(value: string, { eventName }) {
                 return <a onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                    e.stopPropagation();
                     const [name] = eventName.split('_');
-                    e.preventDefault();
                     Modal.confirm({
                         onOk() {
                             dispatch({ type: 'quickEventList/del', payload: value });
