@@ -55,7 +55,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 设备取证
             </ImageButton>
         </div>
-        {/* <Auth deny={!useToolBox}>
+        <Auth deny={!useToolBox}>
             <div className="tool">
                 <ImageButton
                     to="/tool"
@@ -67,7 +67,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                     工具箱
                 </ImageButton>
             </div>
-        </Auth> */}
+        </Auth>
         <div className="parse">
             <ColorButton
                 to="/parse"

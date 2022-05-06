@@ -1,12 +1,8 @@
-import { join } from 'path';
-import { shell } from 'electron';
 import React, { MouseEvent } from "react";
 import { Dispatch } from "dva";
 import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined'
 import { ColumnsType } from "antd/lib/table";
 import Modal from 'antd/lib/modal';
-import message from 'antd/lib/message';
-import { helper } from '@/utils/helper';
 import { QuickEvent } from "@/schema/quick-event";
 import { NowrapText } from './styled/style';
 
@@ -75,7 +71,8 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                         title: '删除点验案件',
                         content: `确认删除「${name}」？`,
                         okText: '是',
-                        cancelText: '否'
+                        cancelText: '否',
+                        centered: true
                     });
                 }}>删除</a>
             }

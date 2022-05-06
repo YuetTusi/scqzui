@@ -29,7 +29,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
             (async () => {
                 try {
                     const target = document.getElementById('qrcode');
-                    await QRCode.toCanvas(target, `http://www.baidu.com/`, {
+                    await QRCode.toCanvas(target, `http://${ip}:9900/check`, {
                         width: 240,
                         margin: 2,
                         color: {

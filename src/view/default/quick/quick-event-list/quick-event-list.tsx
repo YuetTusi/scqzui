@@ -5,9 +5,9 @@ import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import { QuickEventListState } from '@/model/default/quick-event-list';
 import { QuickEvent } from '@/schema/quick-event';
+import { CaseListBox } from './styled/style';
 import { getColumns } from './column';
 import { EventListProp } from './prop';
-import { CaseListBox } from './styled/style';
 
 /**
  * 快速点验案件表格
@@ -45,11 +45,12 @@ const QuickEventList: FC<EventListProp> = ({ qrcodeHandle, detailHandle }) => {
     };
 
     /**
-     * 行Change
-     * @param keys 
+     * 行Click
+     * @param id id
      */
-    const onRowSelectChange = (keys: Key[]) => {
-        setSelectedRowKeys(keys);
+    const onRowClick = (id: string) => {
+        dispatch({ type: 'quickRecordList/setEventId', payload: id })
+        setSelectedRowKeys([id]);
     };
 
     return <CaseListBox>
@@ -64,12 +65,11 @@ const QuickEventList: FC<EventListProp> = ({ qrcodeHandle, detailHandle }) => {
             }
             columns={getColumns(dispatch, qrcodeHandle, detailHandle)}
             onRow={({ _id }) => ({
-                onClick: () => setSelectedRowKeys([_id!])
+                onClick: () => onRowClick(_id!)
             })}
             rowSelection={{
                 type: 'radio',
-                selectedRowKeys,
-                onChange: onRowSelectChange,
+                selectedRowKeys
             }}
             dataSource={data}
             loading={loading}

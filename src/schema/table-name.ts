@@ -50,7 +50,11 @@ enum TableName {
     /**
      * 快速点验事件
      */
-    QuickEvent = 'quick-event'
+    QuickEvent = 'quick-event',
+    /**
+     * 快速点验手机记录
+     */
+    QuickRecord = 'quick-record',
 }
 
 export { TableName };

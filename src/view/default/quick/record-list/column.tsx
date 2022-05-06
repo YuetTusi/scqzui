@@ -16,7 +16,7 @@ import Tag from 'antd/lib/tag';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import notification from 'antd/lib/notification';
-import DeviceType from "@/schema/device-type";
+import { QuickRecord } from "@/schema/quick-record";
 import { ParseState } from "@/schema/device-state";
 import DeviceSystem from '@/schema/device-system';
 import { DataMode } from '@/schema/data-mode';
@@ -70,7 +70,7 @@ const openOnSystemWindow = debounce(
  * @param dispatch Dispatch
  * @param data 设备数据
  */
-const doParse = async (dispatch: Dispatch, data: DeviceType) => {
+const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
 
     const db = getDb<CaseInfo>(TableName.Case);
     const appConfig = await helper.readAppJson();
@@ -131,7 +131,7 @@ const doParse = async (dispatch: Dispatch, data: DeviceType) => {
  * @param exePath create_report.exe所在路径
  * @param device 设备
  */
-const runCreateReport = async (dispatch: Dispatch, exePath: string, device: DeviceType) => {
+const runCreateReport = async (dispatch: Dispatch, exePath: string, device: QuickRecord) => {
     const {
         _id, caseId, mobileHolder, mobileName, mobileNo, mode, phonePath, note
     } = device;
@@ -225,14 +225,14 @@ const runCreateReport = async (dispatch: Dispatch, exePath: string, device: Devi
  * 表头定义
  * @param dispatch 派发方法
  */
-export function getDevColumns(
+export function getColumns(
     dispatch: Dispatch,
     operateDoing: OperateDoingState,
-    exportReportClick: (data: DeviceType) => void): ColumnsType<DeviceType> {
+    exportReportClick: (data: QuickRecord) => void): ColumnsType<QuickRecord> {
 
     const { creatingDeviceId, exportingDeviceId } = operateDoing;
 
-    let columns: ColumnType<DeviceType>[] = [
+    let columns: ColumnType<QuickRecord>[] = [
         {
             title: '状态',
             dataIndex: 'parseState',
@@ -262,7 +262,7 @@ export function getDevColumns(
             title: '手机',
             dataIndex: 'mobileName',
             key: 'mobileName',
-            render: (value: string, { system, mode, phonePath }: DeviceType) => {
+            render: (value: string, { system, mode, phonePath }: QuickRecord) => {
                 return <div>
                     <span>
                         {
@@ -294,7 +294,7 @@ export function getDevColumns(
             key: 'mobileHolder'
         },
         {
-            title: '取证时间',
+            title: '点验时间',
             dataIndex: 'createdAt',
             key: 'createdAt',
             align: 'center',

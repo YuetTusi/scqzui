@@ -27,6 +27,7 @@ import { ImportDataModalState } from '@/model/default/import-data-modal';
 import { CrackModalState } from '@/model/default/crack-modal';
 import { QuickEventListState } from '@/model/default/quick-event-list';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
+import { QuickRecordListState } from '@/model/default/quick-record-list';
 
 declare global {
 	interface Window {
@@ -70,6 +71,7 @@ interface StateTree {
 	crackModal: CrackModalState,
 	quickEventList: QuickEventListState,
 	editQuickEventModal: EditQuickEventModalState,
+	quickRecordList: QuickRecordListState,
 	[modelName: string]: any
 }
 

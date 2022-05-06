@@ -172,11 +172,6 @@ const DevList: FC<DevListProp> = ({ }) => {
                 total,
                 showSizeChanger: false
             }}
-            locale={{
-                emptyText: <Empty
-                    description="暂无设备数据"
-                    image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            }}
             expandable={{
                 expandedRowRender: (record) => <DevInfo
                     data={record}

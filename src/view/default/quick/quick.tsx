@@ -7,13 +7,14 @@ import Modal from 'antd/lib/modal';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { helper } from '@/utils/helper';
+import { QuickEvent } from '@/schema/quick-event';
 import { CheckingPanel, QuickBox, TableBox } from './styled/style';
 import EventList from './quick-event-list';
 import EditQuickEventModal from './edit-quick-event-modal';
 import QuickQRCodeModal from './quick-qrcode-modal';
 import EventDescModal from './event-desc-modal';
 import CheckingList from './checking-list';
-import { QuickEvent } from '@/schema/quick-event';
+import RecordList from './record-list';
 
 /**
  * 快速点验
@@ -77,8 +78,27 @@ const Quick: FC<{}> = () => {
      * 详情handle
      */
     const detailHandle = debounce(({ _id }: QuickEvent) => {
-        setDetailId(_id!);
-        setEventDescVisible(true);
+
+        let hasHotSpot = helper.hasIP('192.168.137.1');
+        let hasRouter = helper.hasIP('192.168.50.99');
+        if (portOccupy.current) {
+            Modal.warn({
+                title: '端口占用',
+                content: `点验端口已被其他服务占用，请检查`,
+                okText: '确定',
+                centered: true
+            });
+        } else if (!hasHotSpot && !hasRouter) {
+            Modal.warn({
+                title: '生成二维码失败',
+                content: '未检测到热点或路由器，请连接采集盒子或者打开电脑上的移动热点',
+                okText: '确定',
+                centered: true
+            });
+        } else {
+            setDetailId(_id!);
+            setEventDescVisible(true);
+        }
     }, 500, { leading: true, trailing: false });
 
     /**
@@ -118,7 +138,7 @@ const Quick: FC<{}> = () => {
                         设备
                     </div>
                     <div>
-                        Device
+                        <RecordList />
                     </div>
                 </div>
             </TableBox>
