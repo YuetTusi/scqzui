@@ -6,13 +6,14 @@ import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
 import message from 'antd/lib/message';
 import { helper } from '@/utils/helper';
-import { BoardMenu, BoardMenuAction } from './board-menu';
 import { Header } from './styled/header';
 import { Center } from './styled/center';
 import { Footer } from './styled/footer';
+import DragBar from '../drag-bar';
+import { BoardMenu, BoardMenuAction } from './board-menu';
 import SofthardwareModal from '../softhardware-modal';
 // import { useDispatch } from 'dva';
-import DragBar from '../drag-bar';
+import InputHistoryModal from '../input-history-modal';
 
 const cwd = process.cwd();
 
@@ -48,6 +49,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
 
     const [title, setTitle] = useState<string>('');
     const [softhardwareModalVisible, setSofthardwareModalVisible] = useState<boolean>(false);
+    const [inputHistoryModalVisbile, setInputHistoryModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
@@ -67,6 +69,9 @@ const BoardPanel: FC<{}> = ({ children }) => {
      */
     const onItemClick = (type: BoardMenuAction) => {
         switch (type) {
+            case BoardMenuAction.HistoryClear:
+                setInputHistoryModalVisible(true);
+                break;
             case BoardMenuAction.Manufaturer:
                 setSofthardwareModalVisible(true);
                 break;
@@ -100,6 +105,9 @@ const BoardPanel: FC<{}> = ({ children }) => {
         <SofthardwareModal
             visible={softhardwareModalVisible}
             closeHandle={() => setSofthardwareModalVisible(false)} />
+        <InputHistoryModal
+            visible={inputHistoryModalVisbile}
+            closeHandle={() => setInputHistoryModalVisible(false)} />
     </>
 };
 
