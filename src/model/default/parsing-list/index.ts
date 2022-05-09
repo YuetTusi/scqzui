@@ -1,9 +1,9 @@
-import ParseDetail from '@/schema/parse-detail';
 import { Model } from 'dva';
+import DeviceType from '@/schema/device-type';
+import ParseDetail from '@/schema/parse-detail';
 import reducers from './reducers';
 import effects from './effects';
 import subscriptions from './subscriptions';
-import DeviceType from '@/schema/device-type';
 
 interface ParsingListState {
     /**

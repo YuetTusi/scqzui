@@ -16,5 +16,12 @@ export default {
     setLoading(state: QuickEventListState, { payload }: AnyAction) {
         state.loading = payload;
         return state;
+    },
+    /**
+     * 设置选中行
+     */
+    setSelectedRowKeys(state: QuickEventListState, { payload }: AnyAction) {
+        state.selectedRowKeys = payload;
+        return state;
     }
 };

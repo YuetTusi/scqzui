@@ -24,9 +24,16 @@ interface QuickEventListState {
     /**
      * 读取中
      */
-    loading: boolean
+    loading: boolean,
+    /**
+     * 选中的行key
+     */
+    selectedRowKeys: Array<string | number>
 };
 
+/**
+ * 快速点验案件列表
+ */
 let model: Model = {
 
     namespace: 'quickEventList',
@@ -35,7 +42,8 @@ let model: Model = {
         pageIndex: 1,
         pageSize: helper.PAGE_SIZE,
         total: 0,
-        loading: false
+        loading: false,
+        selectedRowKeys: []
     },
     reducers,
     effects

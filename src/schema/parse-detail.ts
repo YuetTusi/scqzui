@@ -1,4 +1,14 @@
-import DeviceType from "./device-type";
+enum ParseCategory {
+
+    /**
+     * 标准取证
+     */
+    Normal,
+    /**
+     * 快速点验
+     */
+    Quick
+}
 
 /**
  * 解析详情（单条）
@@ -19,7 +29,12 @@ interface ParseDetail {
     /**
      * 进度百分比
      */
-    curprogress: number
+    curprogress: number,
+    /**
+     * 解析进度分类
+     */
+    category: ParseCategory
 }
 
+export { ParseCategory, ParseDetail };
 export default ParseDetail;

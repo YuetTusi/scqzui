@@ -3,15 +3,16 @@ import { useDispatch, useSelector } from 'dva';
 import Empty from 'antd/lib/empty';
 import Progress from 'antd/lib/progress';
 import { StateTree } from '@/type/model';
-import { ParsingListState } from '@/model/default/parsing-list';
+import { CheckingListState } from '@/model/default/checking-list';
 import ParseDetail from '@/schema/parse-detail';
-import DeviceType from '@/schema/device-type';
 import { ListBox } from './styled/style';
+import { QuickRecord } from '@/schema/quick-record';
+
 
 /**
  * 正在解析的设备列表
  */
-const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, devices }) => {
+const CheckingRec: FC<{ info: ParseDetail, records: QuickRecord[] }> = ({ info, records }) => {
 
     const dispatch = useDispatch();
     const { curinfo, curprogress, deviceId, caseId } = info;
@@ -21,13 +22,14 @@ const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, de
      */
     const onItemClick = (event: MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
-        dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [caseId] });
-        dispatch({ type: 'parseDev/setCaseId', payload: caseId });
-        dispatch({ type: 'parseDev/setExpandedRowKeys', payload: [deviceId] }); //点击自动展开设备表格行
+        //todo: 此处需将rowKey同步到model中
+        dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [caseId] });
+        dispatch({ type: 'quickRecordList/setEventId', payload: caseId });
+        dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [deviceId] }); //点击自动展开设备表格行
     };
 
     const renderLi = () => {
-        const dev = devices.find(item => item._id === deviceId);
+        const dev = records.find(item => item._id === deviceId);
         return <ul>
             <li>
                 <label>手机名称</label>
@@ -79,24 +81,24 @@ const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, de
 const CheckingList: FC<{}> = () => {
 
     const dispatch = useDispatch();
-    // const { info, devices } = useSelector<StateTree, ParsingListState>(state => state.parsingList);
+    const { info, records } = useSelector<StateTree, CheckingListState>(state => state.checkingList);
     const devRef = useRef<HTMLDivElement>(null);
 
 
-    // useEffect(() => {
-    //     info.forEach(item => {
-    //         const exist = devices.some(dev => item.deviceId === dev._id);
-    //         if (!exist) {
-    //             //如果列表中没有对应的设备，查库追加到列表中
-    //             dispatch({ type: 'parsingList/queryDev', payload: { deviceId: item.deviceId } });
-    //         }
-    //     });
-    // }, [info]);
+    useEffect(() => {
+        info.forEach(item => {
+            const exist = records.some(rec => item.deviceId === rec._id);
+            if (!exist) {
+                //如果列表中没有对应的设备，查库追加到列表中
+                dispatch({ type: 'checkingList/queryRecord', payload: { deviceId: item.deviceId } });
+            }
+        });
+    }, [info]);
 
     useEffect(() => {
         return () => {
-            // dispatch({ type: 'parsingList/setInfo', payload: [] });
-            // dispatch({ type: 'parsingList/setDevice', payload: [] });
+            dispatch({ type: 'checkingList/setInfo', payload: [] });
+            dispatch({ type: 'checkingList/setRecord', payload: [] });
         };
     }, []);
 
@@ -128,23 +130,18 @@ const CheckingList: FC<{}> = () => {
      */
     const renderList = () => {
 
-        // if (info && info.length > 0) {
-        //     return info.map((item) => <ParsingDev
-        //         info={item}
-        //         devices={devices}
-        //         key={`PD_${item.deviceId}`} />);
-        // } else {
-        //     return <div className="d-empty">
-        //         <Empty
-        //             description="暂无解析设备"
-        //             image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        //     </div>
-        // }
-        return <div className="d-empty">
-            <Empty
-                description="暂无点验设备"
-                image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        </div>;
+        if (info && info.length > 0) {
+            return info.map((item) => <CheckingRec
+                info={item}
+                records={records}
+                key={`PD_${item.deviceId}`} />);
+        } else {
+            return <div className="d-empty">
+                <Empty
+                    description="暂无点验设备"
+                    image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            </div>
+        }
     };
 
     return <ListBox>

@@ -29,5 +29,12 @@ export default {
     setLoading(state: QuickRecordListState, { payload }: AnyAction) {
         state.loading = payload;
         return state;
+    },
+    /**
+     * 设置展开行key
+     */
+    setExpandedRowKeys(state: QuickRecordListState, { payload }: AnyAction) {
+        state.expandedRowKeys = payload;
+        return state;
     }
 }

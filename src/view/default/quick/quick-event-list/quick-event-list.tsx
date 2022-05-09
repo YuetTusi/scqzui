@@ -15,17 +15,24 @@ import { EventListProp } from './prop';
 const QuickEventList: FC<EventListProp> = ({ qrcodeHandle, detailHandle }) => {
 
     const dispatch = useDispatch();
-    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
     const {
         data,
         total,
         pageIndex,
         pageSize,
-        loading
+        loading,
+        selectedRowKeys
     } = useSelector<StateTree, QuickEventListState>(state => state.quickEventList);
 
     useEffect(() => {
         query(1, helper.PAGE_SIZE);
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            //退出清理选中行
+            dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [] });
+        }
     }, []);
 
     const query = (pageIndex: number, pageSize: number) =>
@@ -49,8 +56,8 @@ const QuickEventList: FC<EventListProp> = ({ qrcodeHandle, detailHandle }) => {
      * @param id id
      */
     const onRowClick = (id: string) => {
-        dispatch({ type: 'quickRecordList/setEventId', payload: id })
-        setSelectedRowKeys([id]);
+        dispatch({ type: 'quickRecordList/setEventId', payload: id });
+        dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [id] });
     };
 
     return <CaseListBox>

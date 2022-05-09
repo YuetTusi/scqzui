@@ -30,7 +30,11 @@ interface QuickRecordListState {
     /**
      * 读取中
      */
-    loading: boolean
+    loading: boolean,
+    /**
+     * 展开行key
+     */
+    expandedRowKeys: Array<string | number>
 };
 
 let model: Model = {
@@ -41,7 +45,8 @@ let model: Model = {
         pageIndex: 1,
         pageSize: PAGE_SIZE,
         total: 0,
-        loading: false
+        loading: false,
+        expandedRowKeys: []
     },
     reducers,
     effects

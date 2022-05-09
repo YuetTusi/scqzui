@@ -1,5 +1,6 @@
 import path from 'path';
 import { execFile } from 'child_process';
+import groupBy from 'lodash/groupBy';
 import { Dispatch } from "dva";
 import { ipcRenderer } from "electron";
 import Modal from 'antd/lib/modal';
@@ -18,7 +19,7 @@ import { FetchState, ParseState } from "@/schema/device-state";
 import { FetchProgress } from "@/schema/fetch-record";
 import GuideImage from "@/schema/guide-image";
 import TipType, { ReturnButton } from "@/schema/tip-type";
-import ParseDetail from "@/schema/parse-detail";
+import ParseDetail, { ParseCategory } from "@/schema/parse-detail";
 import { ParseEnd } from "@/schema/parse-log";
 import { CaseInfo } from "@/schema/case-info";
 import { Officer } from '@/schema/officer';
@@ -261,7 +262,10 @@ export function extraMsg({ msg }: Command<{ usb: number, content: string }>, dis
  * 解析详情
  */
 export function parseCurinfo({ msg }: Command<ParseDetail[]>, dispatch: Dispatch<any>) {
-    dispatch({ type: 'parsingList/setInfo', payload: msg });
+    const grp = groupBy(msg, (item) => item.category);
+    //按category分组，将`标准取证`和`快速点验`详情分别派发到对应的model中
+    dispatch({ type: 'parsingList/setInfo', payload: grp[ParseCategory.Normal] });
+    dispatch({ type: 'checkingList/setInfo', payload: grp[ParseCategory.Quick] });
 }
 
 /**
