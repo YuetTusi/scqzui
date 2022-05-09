@@ -24,7 +24,8 @@ import DeviceSystem from '@/schema/device-system';
 import { DataMode } from '@/schema/data-mode';
 import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
-import CaseInfo from '@/schema/case-info';
+import { CaseInfo } from '@/schema/case-info';
+import { ParseCategory } from '@/schema/parse-detail';
 import CommandType, { SocketType } from '@/schema/command';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
@@ -94,6 +95,7 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
             msg: {
                 caseId: data.caseId,
                 deviceId: data._id,
+                category: ParseCategory.Quick,
                 phonePath: data.phonePath,
                 hasReport: true,
                 isDel: false,
@@ -313,7 +315,6 @@ export function getColumns(
                                 './report/public/data/tree.json'
                             );
                             const reportPath = join(record.phonePath!, './report/index.html');
-                            console.log(reportPath);
                             let exist = await helper.existFile(treeJsonPath);
                             if (exist) {
                                 shell.openPath(reportPath);

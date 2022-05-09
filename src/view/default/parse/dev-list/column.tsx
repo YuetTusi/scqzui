@@ -16,19 +16,20 @@ import Tag from 'antd/lib/tag';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import notification from 'antd/lib/notification';
+import { AlartMessageInfo } from '@/component/alert-message/prop';
+import { OperateDoingState } from '@/model/default/operate-doing';
 import DeviceType from "@/schema/device-type";
 import { ParseState } from "@/schema/device-state";
 import DeviceSystem from '@/schema/device-system';
 import { DataMode } from '@/schema/data-mode';
 import { TableName } from '@/schema/table-name';
 import CaseInfo from '@/schema/case-info';
+import { ParseCategory } from '@/schema/parse-detail';
 import CommandType, { SocketType } from '@/schema/command';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import logger from '@/utils/log';
-import { AlartMessageInfo } from '@/component/alert-message/prop';
-import { OperateDoingState } from '@/model/default/operate-doing';
 
 const cwd = process.cwd();
 const { Group } = Button;
@@ -90,6 +91,7 @@ const doParse = async (dispatch: Dispatch, data: DeviceType) => {
         msg: {
             caseId: data.caseId,
             deviceId: data._id,
+            category: ParseCategory.Normal,
             phonePath: data.phonePath,
             hasReport: caseData?.hasReport ?? false,
             isDel: caseData?.isDel ?? false,

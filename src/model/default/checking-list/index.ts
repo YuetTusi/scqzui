@@ -27,17 +27,17 @@ let model: Model = {
     namespace: 'checkingList',
     state: {
         info: [
-            {
-                caseId: '4vU515iZ6pCrhQTo',
-                deviceId: 'a9ad2ce72395bec8',
-                curinfo: '正在解析微信数据',
-                curprogress: 33
-            }, {
-                caseId: '4vU515iZ6pCrhQTo',
-                deviceId: 'aeea2d452a85be4e',
-                curinfo: '正在分析数据库',
-                curprogress: 66
-            }
+            // {
+            //     caseId: '4vU515iZ6pCrhQTo',
+            //     deviceId: 'a9ad2ce72395bec8',
+            //     curinfo: '正在解析微信数据',
+            //     curprogress: 33
+            // }, {
+            //     caseId: '4vU515iZ6pCrhQTo',
+            //     deviceId: 'aeea2d452a85be4e',
+            //     curinfo: '正在分析数据库',
+            //     curprogress: 66
+            // }
         ],
         records: []
     },

@@ -158,6 +158,7 @@ const Collect: FC<CollectProp> = ({ }) => {
      */
     const validateBeforeFetch = () => {
         if (unitCode === undefined) {
+            message.destroy();
             message.info({
                 content: useBcp
                     ? '未设置采集单位，请在「软件设置」→「采集单位」中配置'
@@ -167,6 +168,7 @@ const Collect: FC<CollectProp> = ({ }) => {
         }
         if (useBcp && dstUnitCode === undefined) {
             //军队版本无需验证目的检验单位
+            message.destroy();
             message.info({
                 content: '未设置目的检验单位，请在「软件设置」→「目的检验单位」中配置'
             });

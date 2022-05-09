@@ -114,10 +114,12 @@ function api(webContents: WebContents) {
                         }
                     ]);
                 }, [])
-                .map(({ _id, eventName, eventPath, devices }) => ({
-                    id: _id,
+                .map(({ _id, eventName, eventPath, devices, ruleFrom, ruleTo }) => ({
+                    _id,
                     m_strCaseName: eventName,
                     m_strCasePath: eventPath,
+                    ruleFrom,
+                    ruleTo,
                     devices
                 }));
             res.json(next)

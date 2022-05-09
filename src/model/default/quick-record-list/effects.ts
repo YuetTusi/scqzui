@@ -12,6 +12,7 @@ import { QuickRecord } from "@/schema/quick-record";
 import { TableName } from "@/schema/table-name";
 import { DataMode } from '@/schema/data-mode';
 import { QuickRecordListState } from ".";
+import { DeviceSystem } from '@/schema/device-system';
 
 export default {
 
@@ -176,6 +177,43 @@ export default {
             });
         } catch (error) {
             log.error(`更新解析状态入库失败 @model/default/quick-record-list/*updateParseState: ${error.message}`);
+        }
+    },
+    /**
+     * 保存手机数据到快速点验案件下
+     * @param {string} payload.id 快速点验案件id
+     * @param {DeviceType} payload.data 设备数据
+     */
+    *saveToEvent({ payload }: AnyAction, { call }: EffectsCommandMap) {
+        const db = getDb<QuickRecord>(TableName.QuickRecord);
+        const { data } = payload as { id: string, data: QuickRecord };
+        try {
+            yield call([db, 'insert'], {
+                _id: data._id,
+                caseId: data.caseId, //点验案件id
+                checker: data.checker,
+                checkerNo: data.checkerNo,
+                fetchState: data.fetchState,
+                parseState: data.parseState,
+                fetchTime: data.fetchTime,
+                fetchType: data.fetchType,
+                manufacturer: data.manufacturer,
+                mobileHolder: data.mobileHolder,
+                mobileName: data.mobileName,
+                mobileNo: data.mobileNo,
+                mobileNumber: data.mobileNumber,
+                mode: data.mode ?? DataMode.Self,
+                cloudAppList: data.cloudAppList ?? [],
+                model: data.model,
+                handleOfficerNo: data.handleOfficerNo ?? '',
+                note: data.note,
+                parseTime: data.parseTime,
+                phonePath: data.phonePath,
+                serial: data.serial,
+                system: data.system ?? DeviceSystem.Android
+            });
+        } catch (error) {
+            log.error(`快速点验设备数据入库失败 @model/default/quick-record-list/*saveToEvent: ${error.message}`);
         }
     }
 }

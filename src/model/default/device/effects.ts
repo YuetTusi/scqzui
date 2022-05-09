@@ -27,10 +27,11 @@ import { ParseApp } from '@/schema/parse-app';
 import { BcpEntity } from '@/schema/bcp-entity';
 import { GuangZhouCase } from '@/schema/platform/guangzhou-case';
 import { DeviceSystem } from '@/schema/device-system';
+import { AppJson } from '@/schema/app-json';
+import { ParseCategory } from '@/schema/parse-detail';
 import { StateTree } from '@/type/model';
 import parseApps from '@/config/parse-app.yaml';
 import { DeviceStoreState } from './index';
-import { AppJson } from '@/schema/app-json';
 import { AppSetStore } from '../app-set';
 /**
  * 副作用
@@ -450,6 +451,7 @@ export default {
                 logger.info(`开始解析(StartParse):${JSON.stringify({
                     caseId: caseData._id,
                     deviceId: current._id,
+                    category: ParseCategory.Normal,
                     phonePath: current.phonePath,
                     dataMode: current.mode ?? DataMode.Self,
                     hasReport: caseData.hasReport ?? false,
@@ -479,6 +481,7 @@ export default {
                     msg: {
                         caseId: caseData._id,
                         deviceId: current._id,
+                        category: ParseCategory.Normal,
                         phonePath: current.phonePath,
                         dataMode: current.mode ?? DataMode.Self,
                         hasReport: caseData.hasReport ?? false,

@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { readFileSync } from 'fs';
+import { readFileSync, mkdirSync } from 'fs';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { SubscriptionAPI } from 'dva';
 import Modal from 'antd/lib/modal';
@@ -10,15 +10,18 @@ import server, { send } from '@/utils/tcp-server';
 import TipType from '@/schema/tip-type';
 import { TableName } from '@/schema/table-name';
 import { FetchLog } from '@/schema/fetch-log';
+import { QuickRecord } from '@/schema/quick-record';
 import CommandType, { SocketType, Command } from '@/schema/command';
 import { ParseState } from '@/schema/device-state';
+import { DataMode } from '@/schema/data-mode';
+import { DeviceSystem } from '@/schema/device-system';
+import { ParseCategory } from '@/schema/parse-detail';
 import {
     deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,
     parseCurinfo, parseEnd,/* backDatapass,*/ saveCaseFromPlatform, /*importErr,*/
     humanVerify, saveOrUpdateOfficerFromPlatform, traceLogin, limitResult,
     appRecFinish, fetchPercent, importErr
 } from './listener';
-
 
 const cwd = process.cwd();
 const { Fetch, Parse, Bho, Trace, Error } = SocketType;
@@ -208,6 +211,77 @@ export default {
                     console.log('未知命令:', command);
                     break;
             }
+        });
+    },
+    /**
+     * 接收快速点验消息
+     */
+    receiveCheck({ dispatch }: SubscriptionAPI) {
+        ipcRenderer.on('check-parse', async (event: IpcRendererEvent, args: Record<string, any>) => {
+
+            ipcRenderer.send('show-notice', {
+                message: `「${args.mobileName ?? ''}」点验结束，开始解析数据`
+            });
+
+            //NOTE:将设备数据入库
+            let next = new QuickRecord();
+            next.mobileHolder = args.mobileHolder ?? '';
+            next.phonePath = args.phonePath ?? '';
+            next.caseId = args.caseId ?? '';//所属案件id
+            next.mobileNo = args.mobileNo ?? '';
+            next.mobileName = `${args.mobileName ?? 'DEV'}_${helper.timestamp()}`;
+            next.parseState = ParseState.Parsing;
+            next.mode = DataMode.Check;
+            next.fetchTime = new Date();
+            next._id = helper.newId();
+            next.mobileNumber = '';
+            next.handleOfficerNo = '';
+            next.note = '';
+            next.cloudAppList = [];
+            next.system = DeviceSystem.Android;
+
+            let exist: boolean = await helper.existFile(next.phonePath!);
+            if (!exist) {
+                //手机路径不存在，创建之
+                mkdirSync(next.phonePath!, { recursive: true });
+            }
+            //将设备信息写入Device.json
+            await helper.writeJSONfile(join(next.phonePath!, 'Device.json'), {
+                mobileHolder: next.mobileHolder ?? '',
+                mobileNo: next.mobileNo ?? '',
+                mobileName: next.mobileName ?? '',
+                note: next.note ?? '',
+                mode: next.mode ?? DataMode.Self
+            });
+
+            dispatch({
+                type: 'quickRecordList/saveToEvent', payload: {
+                    id: next.caseId,
+                    data: next
+                }
+            });
+
+            logger.warn(`开始解析快速点验设备 ${JSON.stringify(next)}`);
+
+            //# 通知parse开始解析
+            send(SocketType.Parse, {
+                type: SocketType.Parse,
+                cmd: CommandType.StartParse,
+                msg: {
+                    caseId: next.caseId,
+                    deviceId: next._id,
+                    category: ParseCategory.Quick,
+                    phonePath: next.phonePath,
+                    dataMode: DataMode.Check,
+                    hasReport: true,
+                    isDel: false,
+                    isAi: false,
+                    aiTypes: Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                    useKeyword: true,
+                    useDocVerify: false,
+                    tokenAppList: []
+                }
+            });
         });
     },
     /**

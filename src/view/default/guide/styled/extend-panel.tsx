@@ -5,7 +5,7 @@ const ExtendPanel = styled.div`
     top:0;
     left:0;
     bottom:0;
-    right:5px;
+    right:20px;
     overflow-x: scroll;
 
     //内层隐藏滚动条
