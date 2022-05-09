@@ -1,11 +1,11 @@
 max: 8
 useFetch: true
 useServerCloud: true
-useBcp: false
+useBcp: true
 useToolBox: true
 useFakeButton: true
-useAi: false
-useTraceLogin: false
+useAi: true
+useTraceLogin: true
 caseText: 案件
 fetchText: 取证
 devText: 设备

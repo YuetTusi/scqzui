@@ -1,16 +1,20 @@
+import { join } from 'path';
 import React, { FC, useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Table from 'antd/lib/table';
+import Modal from 'antd/lib/modal';
+import message from 'antd/lib/message';
 import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { QuickRecordListState } from '@/model/default/quick-record-list';
 import { QuickRecord } from '@/schema/quick-record';
-import { getColumns } from './column';
-import { RecordListProp } from './prop';
 import RecordInfo from '../record-info';
 import { ClickType } from '../record-info/prop';
 import EditEventRecModal from '../edit-event-rec-modal';
+import ExportReportModal from '../export-report-modal';
+import { getColumns } from './column';
+import { RecordListProp } from './prop';
 
 /**
  * 快速点验设备列表
@@ -30,6 +34,7 @@ const RecordList: FC<RecordListProp> = () => {
     } = useSelector<StateTree, QuickRecordListState>(state => state.quickRecordList);
     const currentRec = useRef<QuickRecord>();
     const [editRecModalVisbile, setEditRecModalVisbile] = useState<boolean>(false);
+    const [exportReportModalVisible, setExportReportModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         query({ eventId }, pageIndex, 5);
@@ -39,6 +44,7 @@ const RecordList: FC<RecordListProp> = () => {
     useEffect(() => {
         return () => {
             dispatch({ type: 'quickRecordList/setEventId', payload: undefined });
+            dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [] });
         };
     }, []);
 
@@ -68,6 +74,20 @@ const RecordList: FC<RecordListProp> = () => {
                 currentRec.current = data;
                 setEditRecModalVisbile(true);
                 break;
+            case ClickType.Delete:
+                const [name] = data.mobileName!.split('_');
+                Modal.confirm({
+                    onOk() {
+                        dispatch({ type: 'quickRecordList/delRec', payload: data });
+                    },
+                    title: '删除设备',
+                    content: `确认删除「${name}」数据？`,
+                    okText: '是',
+                    cancelText: '否',
+                    centered: true,
+                    zIndex: 1031
+                });
+                break;
             default:
                 console.warn('未知Click类型:', fn);
                 break;
@@ -94,6 +114,28 @@ const RecordList: FC<RecordListProp> = () => {
         setEditRecModalVisbile(false);
     };
 
+    /**
+     * 导出报告Click
+     */
+    const exportReportClick = async (data: QuickRecord) => {
+        const treeJsonPath = join(
+            data.phonePath!,
+            'report/public/data/tree.json'
+        );
+        try {
+            let exist = await helper.existFile(treeJsonPath);
+            if (exist) {
+                currentRec.current = data;
+                setExportReportModalVisible(true);
+            } else {
+                message.destroy();
+                message.info('无报告数据，请解析完成后生成报告');
+            }
+        } catch (error) {
+            message.warning('读取报告数据失败，请重新生成报告');
+        }
+    };
+
     return <>
         <Table<QuickRecord>
             pagination={{
@@ -110,7 +152,7 @@ const RecordList: FC<RecordListProp> = () => {
                 onExpand,
                 expandRowByClick: true
             }}
-            columns={getColumns(dispatch, operateDoing, () => { })}
+            columns={getColumns(dispatch, operateDoing, exportReportClick)}
             rowKey="_id"
             size="small"
             dataSource={data}
@@ -120,6 +162,11 @@ const RecordList: FC<RecordListProp> = () => {
             onCancelHandle={() => setEditRecModalVisbile(false)}
             visible={editRecModalVisbile}
             data={currentRec.current} />
+        <ExportReportModal
+            visible={exportReportModalVisible}
+            data={currentRec.current}
+            closeHandle={() => setExportReportModalVisible(false)}
+        />
     </>
 };
 

@@ -2,6 +2,7 @@ import { mkdirSync } from 'fs';
 import { join } from 'path';
 import { AnyAction } from "redux";
 import { EffectsCommandMap } from 'dva';
+import Modal from 'antd/lib/modal';
 import message from "antd/lib/message";
 import { helper } from "@/utils/helper";
 import { getDb } from "@/utils/db";
@@ -63,7 +64,6 @@ export default {
         const db = getDb<QuickRecord>(TableName.QuickRecord);
         const { pageIndex, pageSize } = yield select((state: StateTree) => state.quickRecordList);
 
-        console.log(payload);
         try {
             yield call([db, 'update'], { _id: payload._id }, {
                 $set: {
@@ -96,4 +96,86 @@ export default {
             log.error(`编辑设备数据失败 @model/default/quick-record-list/*updateRec: ${error.message}`);
         }
     },
+    /**
+     * 删除设备
+     * @param {DeviceType} payload
+     */
+    *delRec({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+        const { _id, phonePath } = payload as QuickRecord;
+        const db = getDb<QuickRecord>(TableName.QuickRecord);
+        const handle = Modal.info({
+            title: '正在删除',
+            content: '正在删除数据，请不要关闭应用',
+            okText: '确定',
+            centered: true,
+            okButtonProps: {
+                disabled: true
+            }
+        });
+        try {
+            let success: boolean = yield helper.delDiskFile(phonePath!);
+            if (success) {
+                handle.update({
+                    content: '删除成功',
+                    okButtonProps: { disabled: false }
+                });
+                //NOTE:磁盘文件删除成功后，删除设备及BCP历史记录
+                yield call([db, 'remove'], { _id });
+                yield put({
+                    type: 'query', payload: {
+                        pageIndex: 1,
+                        pageSize: 5,
+                        condition: null
+                    }
+                });
+                yield put({ type: 'setExpandedRowKeys', payload: [] });
+            } else {
+                handle.update({
+                    title: '删除失败',
+                    content: '可能文件仍被占用，请稍后再试',
+                    okButtonProps: { disabled: false }
+                });
+            }
+            setTimeout(() => {
+                handle.destroy();
+            }, 1000);
+        } catch (error) {
+            log.error(`删除快速点验设备失败 @model/default/quick-record-list/*delRec: ${error.message}`);
+            handle.update({
+                title: '删除失败',
+                content: '可能文件仍被占用，请稍后再试',
+                okButtonProps: { disabled: false }
+            });
+            setTimeout(() => {
+                handle.destroy();
+            }, 1000);
+        }
+    },
+    /**
+     * 更新数据库中设备解析状态
+     * @param {string} payload.id 设备id
+     * @param {ParseState} payload.parseState 解析状态
+     */
+    *updateParseState({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
+        const { _id, parseState } = payload;
+        const db = getDb<QuickRecord>(TableName.QuickRecord);
+        const { pageIndex, pageSize }: QuickRecordListState = yield select((state: StateTree) => state.quickRecordList);
+        try {
+            yield call([db, 'update'], { _id }, { $set: { parseState } });
+            yield put({
+                type: 'parseLogTable/queryParseLog', payload: {
+                    condition: null,
+                    current: 1,
+                    pageSize: helper.PAGE_SIZE
+                }
+            });
+            yield put({
+                type: 'query', payload: {
+                    pageIndex, pageSize
+                }
+            });
+        } catch (error) {
+            log.error(`更新解析状态入库失败 @model/default/quick-record-list/*updateParseState: ${error.message}`);
+        }
+    }
 }

@@ -1,8 +1,8 @@
 import { join } from 'path';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector, useLocation } from 'dva';
-import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
+import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { DeviceType } from '@/schema/device-type';
@@ -93,6 +93,20 @@ const DevList: FC<DevListProp> = ({ }) => {
             case ClickType.Edit:
                 currentDev.current = data;
                 setEditDevModalVisible(true);
+                break;
+            case ClickType.Delete:
+                const [name] = data.mobileName!.split('_');
+                Modal.confirm({
+                    onOk() {
+                        dispatch({ type: 'parseDev/delDev', payload: data });
+                    },
+                    title: '删除设备',
+                    content: `确认删除「${name}」数据？`,
+                    okText: '是',
+                    cancelText: '否',
+                    centered: true,
+                    zIndex: 1031
+                });
                 break;
             case ClickType.GenerateBCP:
                 dispatch({ type: 'parseDev/gotoBcp', payload: { caseId, deviceId: data._id } });

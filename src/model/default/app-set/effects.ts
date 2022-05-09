@@ -11,6 +11,7 @@ import { TableName } from '@/schema/table-name';
 import { DeviceType } from '@/schema/device-type';
 import { ParseState } from '@/schema/device-state';
 import { AppCategory } from '@/schema/app-config';
+import { QuickRecord } from '@/schema/quick-record';
 
 const config = helper.readConf();
 
@@ -39,26 +40,39 @@ export default {
      * 将案件下所有设备为`解析中`和`采集中`更新为新状态
      * @param {ParseState} payload 解析状态
      */
-    *updateAllDeviceParseState({ payload }: AnyAction, { call, fork }: EffectsCommandMap) {
-        const db = getDb<DeviceType>(TableName.Device);
+    *updateAllDeviceParseState({ payload }: AnyAction, { all, call, fork }: EffectsCommandMap) {
+        const deviceDb = getDb<DeviceType>(TableName.Device);
+        const recDb = getDb<QuickRecord>(TableName.QuickRecord);
         let msgBox: any = null;
         try {
-            let data: DeviceType[] = yield call([db, 'all']);
-            let updateId: string[] = [];
-            for (let i = 0; i < data.length; i++) {
-                if (data[i].parseState === ParseState.Fetching || data[i].parseState === ParseState.Parsing) {
-                    updateId.push(data[i]._id!);
+            const [deviceData, recData]: [DeviceType[], QuickRecord[]] = yield all([
+                call([deviceDb, 'all']),
+                call([recDb, 'all'])
+            ]);
+            let devUpdateId: string[] = [];
+            let recUpdateId: string[] = [];
+            for (let i = 0; i < deviceData.length; i++) {
+                if (deviceData[i].parseState === ParseState.Fetching || deviceData[i].parseState === ParseState.Parsing) {
+                    devUpdateId.push(deviceData[i]._id!);
                 }
             }
-            if (updateId.length > 0) {
+            for (let i = 0; i < recData.length; i++) {
+                if (recData[i].parseState === ParseState.Fetching || recData[i].parseState === ParseState.Parsing) {
+                    recUpdateId.push(recData[i]._id!);
+                }
+            }
+            if (devUpdateId.length > 0 || recUpdateId.length > 0) {
                 msgBox = Modal.info({
                     content: '正在处理数据，请稍候...',
                     okText: '确定',
                     maskClosable: false,
                     centered: true
                 });
-                yield fork([db, 'update'],
-                    { _id: { $in: updateId } },
+                yield fork([deviceDb, 'update'],
+                    { _id: { $in: devUpdateId } },
+                    { $set: { parseState: payload } }, true);
+                yield fork([recDb, 'update'],
+                    { _id: { $in: recUpdateId } },
                     { $set: { parseState: payload } }, true);
             }
         } catch (error) {

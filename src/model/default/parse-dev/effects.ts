@@ -2,12 +2,14 @@ import { join } from 'path';
 import { mkdirSync } from 'fs';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, routerRedux } from 'dva';
+import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { TableName } from '@/schema/table-name';
 import DeviceType from '@/schema/device-type';
 import { DataMode } from '@/schema/data-mode';
 import { ParseState } from '@/schema/device-state';
+import BcpEntity from '@/schema/bcp-entity';
 import { getDb } from '@/utils/db';
 import logger from '@/utils/log';
 import { helper } from '@/utils/helper';
@@ -91,7 +93,7 @@ export default {
         const db = getDb<DeviceType>(TableName.Device);
         const { pageIndex, pageSize } = yield select((state: StateTree) => state.parseDev);
         try {
-            yield call([db, 'update'], { id: payload.id }, {
+            yield call([db, 'update'], { _id: payload._id }, {
                 $set: {
                     mobileHolder: payload.mobileHolder,
                     mobileNo: payload.mobileNo,
@@ -120,6 +122,65 @@ export default {
         } catch (error) {
             message.error('保存失败');
             logger.error(`编辑设备数据失败 @model/default/parse-dev/updateDev: ${error.message}`);
+        }
+    },
+    /**
+     * 删除设备
+     * @param {DeviceType} payload
+     */
+    *delDev({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
+        const { _id, phonePath } = payload as DeviceType;
+        const deviceDb = getDb<DeviceType>(TableName.Device);
+        const bcpHistoryDb = getDb<BcpEntity>(TableName.CreateBcpHistory);
+        const handle = Modal.info({
+            title: '正在删除',
+            content: '正在删除数据，请不要关闭应用',
+            okText: '确定',
+            centered: true,
+            okButtonProps: {
+                disabled: true
+            }
+        });
+        try {
+            let success: boolean = yield helper.delDiskFile(phonePath!);
+            if (success) {
+                handle.update({
+                    content: '删除成功',
+                    okButtonProps: { disabled: false }
+                });
+                //NOTE:磁盘文件删除成功后，删除设备及BCP历史记录
+                yield all([
+                    call([deviceDb, 'remove'], { _id }),
+                    call([bcpHistoryDb, 'remove'], { deviceId: _id }, true)
+                ]);
+                yield put({
+                    type: 'queryDev', payload: {
+                        pageIndex: 1,
+                        pageSize: 5,
+                        condition: null
+                    }
+                });
+                yield put({ type: 'setExpandedRowKeys', payload: [] });
+            } else {
+                handle.update({
+                    title: '删除失败',
+                    content: '可能文件仍被占用，请稍后再试',
+                    okButtonProps: { disabled: false }
+                });
+            }
+            setTimeout(() => {
+                handle.destroy();
+            }, 1000);
+        } catch (error) {
+            logger.error(`删除设备失败 @model/default/parse-dev/*delDev: ${error.message}`);
+            handle.update({
+                title: '删除失败',
+                content: '可能文件仍被占用，请稍后再试',
+                okButtonProps: { disabled: false }
+            });
+            setTimeout(() => {
+                handle.destroy();
+            }, 1000);
         }
     },
     /**

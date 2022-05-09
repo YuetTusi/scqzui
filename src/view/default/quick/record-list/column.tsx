@@ -16,19 +16,20 @@ import Tag from 'antd/lib/tag';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import notification from 'antd/lib/notification';
+import { AlartMessageInfo } from '@/component/alert-message/prop';
+import { OperateDoingState } from '@/model/default/operate-doing';
 import { QuickRecord } from "@/schema/quick-record";
 import { ParseState } from "@/schema/device-state";
 import DeviceSystem from '@/schema/device-system';
 import { DataMode } from '@/schema/data-mode';
 import { TableName } from '@/schema/table-name';
+import { QuickEvent } from '@/schema/quick-event';
 import CaseInfo from '@/schema/case-info';
 import CommandType, { SocketType } from '@/schema/command';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import logger from '@/utils/log';
-import { AlartMessageInfo } from '@/component/alert-message/prop';
-import { OperateDoingState } from '@/model/default/operate-doing';
 
 const cwd = process.cwd();
 const { Group } = Button;
@@ -72,57 +73,49 @@ const openOnSystemWindow = debounce(
  */
 const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
 
-    const db = getDb<CaseInfo>(TableName.Case);
-    const appConfig = await helper.readAppJson();
-    let caseData: CaseInfo = await db.findOne({
-        _id: data.caseId
-    });
-    let caseJsonPath = join(data.phonePath!, '../../');
-    let caseJsonExist = await helper.existFile(join(caseJsonPath, 'Case.json'));
+    const db = getDb<QuickEvent>(TableName.QuickEvent);
+    try {
+        const appConfig = await helper.readAppJson();
+        let eventData: QuickEvent = await db.findOne({
+            _id: data.caseId
+        });
+        let caseJsonPath = join(data.phonePath!, '../../');
+        let caseJsonExist = await helper.existFile(join(caseJsonPath, 'Case.json'));
 
-    if (!caseJsonExist) {
-        await helper.writeCaseJson(caseJsonPath, caseData);
+        if (!caseJsonExist) {
+            const caseData = new CaseInfo();
+            caseData.m_strCaseName = eventData.eventName;
+            caseData.m_strCasePath = eventData.eventPath;
+            await helper.writeCaseJson(caseJsonPath, caseData);
+        }
+        send(SocketType.Parse, {
+            type: SocketType.Parse,
+            cmd: CommandType.StartParse,
+            msg: {
+                caseId: data.caseId,
+                deviceId: data._id,
+                phonePath: data.phonePath,
+                hasReport: true,
+                isDel: false,
+                isAi: false,
+                aiTypes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                useKeyword: appConfig?.useKeyword ?? false,
+                useDocVerify: appConfig?.useDocVerify ?? false,
+                dataMode: DataMode.Self,
+                tokenAppList: []
+            }
+        });
+        dispatch({
+            type: 'quickRecordList/updateParseState',
+            payload: {
+                _id: data._id,
+                parseState: ParseState.Parsing,
+                pageIndex: 1
+            }
+        });
+    } catch (error) {
+        logger.error(`解析快速点验设备失败 @view/default/quick/record-list/column:${error.message}`);
     }
-
-    send(SocketType.Parse, {
-        type: SocketType.Parse,
-        cmd: CommandType.StartParse,
-        msg: {
-            caseId: data.caseId,
-            deviceId: data._id,
-            phonePath: data.phonePath,
-            hasReport: caseData?.hasReport ?? false,
-            isDel: caseData?.isDel ?? false,
-            isAi: caseData?.isAi ?? false,
-            aiTypes: [
-                caseData.aiThumbnail ? 1 : 0,
-                caseData.aiDoc ? 1 : 0,
-                caseData.aiDrug ? 1 : 0,
-                caseData.aiMoney ? 1 : 0,
-                caseData.aiNude ? 1 : 0,
-                caseData.aiWeapon ? 1 : 0,
-                caseData.aiDress ? 1 : 0,
-                caseData.aiTransport ? 1 : 0,
-                caseData.aiCredential ? 1 : 0,
-                caseData.aiTransfer ? 1 : 0,
-                caseData.aiScreenshot ? 1 : 0
-            ],
-            useKeyword: appConfig?.useKeyword ?? false,
-            useDocVerify: appConfig?.useDocVerify ?? false,
-            dataMode: data.mode ?? DataMode.Self,
-            tokenAppList: caseData.tokenAppList
-                ? caseData.tokenAppList.map((i) => i.m_strID)
-                : []
-        }
-    });
-    dispatch({
-        type: 'parseDev/updateParseState',
-        payload: {
-            id: data._id,
-            parseState: ParseState.Parsing,
-            pageIndex: 1
-        }
-    });
 };
 
 /**
@@ -135,7 +128,7 @@ const runCreateReport = async (dispatch: Dispatch, exePath: string, device: Quic
     const {
         _id, caseId, mobileHolder, mobileName, mobileNo, mode, phonePath, note
     } = device;
-    const db = getDb<CaseInfo>(TableName.Case);
+    const db = getDb<QuickEvent>(TableName.QuickEvent);
     const casePath = join(phonePath!, '../../'); //案件路径
     const exeCwd = join(cwd, '../tools/CreateReport');
     const msg = new AlartMessageInfo({
@@ -161,9 +154,12 @@ const runCreateReport = async (dispatch: Dispatch, exePath: string, device: Quic
         ]);
 
         if (!caseJsonExist) {
-            const caseData: CaseInfo = await db.findOne({
+            const eventData: QuickEvent = await db.findOne({
                 _id: caseId
             });
+            const caseData = new CaseInfo();
+            caseData.m_strCaseName = eventData.eventName;
+            caseData.m_strCasePath = eventData.eventPath;
             await helper.writeCaseJson(casePath, caseData);
         }
         if (!deviceJsonExist) {
@@ -177,7 +173,7 @@ const runCreateReport = async (dispatch: Dispatch, exePath: string, device: Quic
         }
     } catch (error) {
         logger.error(
-            `写入JSON失败 @view/default/parse/dev-list/column: ${error.message}`
+            `写入JSON失败 @view/default/quick/record-list/column: ${error.message}`
         );
     }
 
