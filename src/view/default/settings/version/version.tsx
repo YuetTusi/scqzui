@@ -13,8 +13,7 @@ import { VersionBox } from './styled/style';
 import LogList from './log-list';
 import logo from './images/icon.png';
 import { LogItem } from './prop';
-import { ipcRenderer } from 'electron';
-import { useDispatch } from 'dva';
+// import { useDispatch } from 'dva';
 
 const appRootPath = process.cwd();
 const config = helper.readConf();
@@ -30,7 +29,7 @@ const filterString = (src: string) => src.replace(/-/g, '.');
  * 版本信息
  */
 const Version: FC<{}> = () => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     let [publishModalVisible, setPublishModalVisible] = useState<boolean>(false);
     let [disabled, setDisabled] = useState<boolean>(false);
     let [manu, setManu] = useState<Manufaturer | null>(null);
@@ -90,30 +89,6 @@ const Version: FC<{}> = () => {
                         width={300}
                         height={300}
                         onDoubleClick={() => {
-                            dispatch({
-                                type: 'device/setDeviceToList', payload: {
-                                    id: '',
-                                    usb: 1,
-                                    tipType: 'nothing',
-                                    fetchPercent: 0,
-                                    fetchState: 'Fetching',
-                                    parseState: 'NotParse',
-                                    manufacturer: 'manufacturer',
-                                    model: 'model',
-                                    system: 'system',
-                                    mobileName: 'mobileName',
-                                    mobileNo: 'mobileNo',
-                                    mobileNumber: '',
-                                    mobileHolder: 'mobileHolder',
-                                    note: 'note',
-                                    isStopping: false,
-                                    caseId: 'caseId',
-                                    serial: serial,
-                                    mode: 'mode',
-                                    phonePath: '',
-                                    cloudAppList: []
-                                }
-                            })
                             console.table(process.versions);
                         }}
                     />
@@ -121,25 +96,27 @@ const Version: FC<{}> = () => {
                 <div className="info">
                     <div>
                         <label>产品名称</label>
-                        <span>{data?.materials_name ?? ''}</span>
+                        <span className="text">{data?.materials_name ?? ''}</span>
                     </div>
                     <div>
                         <label>产品型号</label>
-                        <span>{data?.materials_model ?? ''}</span>
+                        <span className="text">{data?.materials_model ?? ''}</span>
                     </div>
                     <div>
                         <label>开发方</label>
-                        <span>{data?.manufacturer ?? ''}</span>
+                        <span className="text">{data?.manufacturer ?? ''}</span>
                     </div>
                     <div>
                         <label>序列号</label>
-                        <QuickCopy desc="拷贝序列号">
-                            <span style={{ userSelect: 'text' }}>{serial}</span>
-                        </QuickCopy>
+                        <span className="text">
+                            <QuickCopy desc="拷贝序列号">
+                                <span style={{ paddingRight: '40px' }}>{serial}</span>
+                            </QuickCopy>
+                        </span>
                     </div>
                     <div>
-                        <label>软件版本</label>
-                        <span>
+                        <label>当前版本</label>
+                        <span className="text">
                             {helper.isNullOrUndefinedOrEmptyString(data?.materials_software_version)
                                 ? 'v0.0.1'
                                 : filterString(data?.materials_software_version!)}
@@ -147,7 +124,7 @@ const Version: FC<{}> = () => {
                     </div>
                     <div style={{ padding: 0 }}>
                         <label>发行日志</label>
-                        <span>
+                        <span className="text">
                             <Button
                                 type="link"
                                 disabled={disabled}

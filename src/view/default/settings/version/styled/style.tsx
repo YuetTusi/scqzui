@@ -15,36 +15,23 @@ const VersionBox = styled.div`
 	}
 
 	.info {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		font-size: 1.4rem;
-		/* color: @base-font-color; */
-		font-family: 'Arial';
-		width: 420px;
-		height: 300px;
-		margin-left: 30px;
+		width: 450px;
+		margin-left: 20px;
 
 		label {
 			display: inline-block;
-			width: 75px;
-			text-align: justify;
+			white-space: nowrap;
+			width: 60px;
+			text-align: left;
 			text-align-last: justify;
-			/* color: @base-font-color; */
-
-			&:after {
-				content: '：';
-			}
+		}
+		.text{
+			padding-left: 10px;
+			color:${props => props.theme['primary-color']};
 		}
 
 		div {
-			width: 100%;
 			padding: 5px 0;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
 		}
 
 		ul {
