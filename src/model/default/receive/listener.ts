@@ -262,7 +262,6 @@ export function extraMsg({ msg }: Command<{ usb: number, content: string }>, dis
  */
 export function parseCurinfo({ msg }: Command<ParseDetail[]>, dispatch: Dispatch<any>) {
 
-    console.log(msg);
     const grp = groupBy(msg, (item) => item.category);
     //按category分组，将`标准取证`和`快速点验`详情分别派发到对应的model中
     dispatch({ type: 'parsingList/setInfo', payload: grp[ParseCategory.Normal] ?? [] }); //标准
@@ -293,15 +292,15 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
                 windowsHide: true,
                 cwd: path.join(appPath, '../tools/BcpTools')
             });
-            proc.once('close', () => {
-                // dispatch({
-                //     type: 'parseDev/queryDev', payload: {
-                //         condition: null,
-                //         pageIndex: 1,
-                //         pageSize: 5
-                //     }
-                // });
-            });
+            // proc.once('close', () => {
+            //     dispatch({
+            //         type: 'parseDev/queryDev', payload: {
+            //             condition: null,
+            //             pageIndex: 1,
+            //             pageSize: 5
+            //         }
+            //     });
+            // });
             proc.once('error', (err) => {
                 logger.error(`生成BCP错误 @model/default/receive/listener/parseEnd: ${err.message}`);
             });

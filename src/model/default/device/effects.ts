@@ -174,11 +174,6 @@ export default {
             entity.apps = parseapps;
             entity.startTime = u64parsestarttime === -1 ? undefined : new Date(dayjs.unix(u64parsestarttime).valueOf());
             entity.endTime = u64parseendtime === -1 ? undefined : new Date(dayjs.unix(u64parseendtime).valueOf());
-            console.clear();
-            console.log('写入日志..................');
-            console.log(payload);
-            console.log(deviceData);
-            console.log(entity);
             yield call([parseLogDb, 'insert'], entity);
             yield put({
                 type: 'parseLogTable/queryParseLog', payload: {
