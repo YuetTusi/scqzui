@@ -114,17 +114,20 @@ function tipsDom(tips: CloudTips) {
  * @param treeNode 节点
  */
 function addHoverDom(treeId: string, treeNode: ITreeNode) {
-    let current = $("#" + treeNode.tId + "_a");
-    let [noteDom, contentDom] = tipsDom(treeNode.tips);
-    let { scrollTop = 0, scrollHeight = 1 } = $('.cloud-center-box')[0];
-    let isAlignTop = scrollHeight - scrollTop > 500;
-    let len = current.find('.tree-node-tip').length;
-    if (len > 0 || noteDom === '' && contentDom === '') { return; }
-    var appTip = `<div style="${isAlignTop ? 'top:-3px' : 'bottom:0'}" id="app_tip_${treeNode.tId}" class="tree-node-tip">
-        <h6>${treeNode.appDesc}</h6>
-        <dl>${noteDom}${contentDom}</dl>
-    </div>`;
-    current.append(appTip);
+
+    if ($('.cloud-center-box').length !== 0) {
+        let current = $("#" + treeNode.tId + "_a");
+        let [noteDom, contentDom] = tipsDom(treeNode.tips);
+        let { scrollTop = 0, scrollHeight = 1 } = $('.cloud-center-box')[0];
+        let isAlignTop = scrollHeight - scrollTop > 500;
+        let len = current.find('.tree-node-tip').length;
+        if (len > 0 || noteDom === '' && contentDom === '') { return; }
+        var appTip = `<div style="${isAlignTop ? 'top:-3px' : 'bottom:0'}" id="app_tip_${treeNode.tId}" class="tree-node-tip">
+            <h6>${treeNode.appDesc}</h6>
+            <dl>${noteDom}${contentDom}</dl>
+        </div>`;
+        current.append(appTip);
+    }
 };
 
 /**
