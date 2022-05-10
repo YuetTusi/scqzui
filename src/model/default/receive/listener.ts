@@ -7,11 +7,12 @@ import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import notification from 'antd/lib/notification';
 import logger from "@/utils/log";
+import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
-import { caseStore } from "@/utils/local-store";
 import { send } from '@/utils/tcp-server';
-// import { inputPassword } from '@src/components/feedback';
-// import { DeviceParam } from '@src/components/feedback/InputPassword/componentTypes';
+import { caseStore } from "@/utils/local-store";
+import inputPassword from '@/component/dialog/input-password';
+import { DatapassParam } from '@/component/dialog/input-password/prop';
 // import { CaptchaMsg } from '@src/components/guide/CloudCodeModal/CloudCodeModalType';
 import CommandType, { Command, SocketType } from "@/schema/command";
 import DeviceType from "@/schema/device-type";
@@ -28,9 +29,7 @@ import { GuangZhouCase } from '@/schema/platform/guangzhou-case';
 import { HumanVerify } from '@/schema/human-verify';
 import { DataMode } from '@/schema/data-mode';
 import { CaptchaMsg, CloudAppMessages } from '@/schema/cloud-app-messages';
-import { getDb } from '@/utils/db';
 import { LoginState } from '../trace-login';
-// import { LoginState } from '@/model/settings/TraceLogin';
 
 const appPath = process.cwd();
 
@@ -262,10 +261,12 @@ export function extraMsg({ msg }: Command<{ usb: number, content: string }>, dis
  * 解析详情
  */
 export function parseCurinfo({ msg }: Command<ParseDetail[]>, dispatch: Dispatch<any>) {
+
+    console.log(msg);
     const grp = groupBy(msg, (item) => item.category);
     //按category分组，将`标准取证`和`快速点验`详情分别派发到对应的model中
-    dispatch({ type: 'parsingList/setInfo', payload: grp[ParseCategory.Normal] });
-    dispatch({ type: 'checkingList/setInfo', payload: grp[ParseCategory.Quick] });
+    dispatch({ type: 'parsingList/setInfo', payload: grp[ParseCategory.Normal] ?? [] }); //标准
+    dispatch({ type: 'checkingList/setInfo', payload: grp[ParseCategory.Quick] ?? [] }); //快点
 }
 
 /**
@@ -332,21 +333,21 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
 /**
  * 提示用户输入密码
  */
-// export function backDatapass({ msg }: Command<DeviceParam>, dispatch: Dispatch<any>) {
+export function backDatapass({ msg }: Command<DatapassParam>, dispatch: Dispatch<any>) {
 
-//     inputPassword(msg, (params: any, forget: boolean, password: string) => {
+    inputPassword(msg, (params: any, forget: boolean, password?: string) => {
 
-//         send(SocketType.Parse, {
-//             type: SocketType.Parse,
-//             cmd: CommandType.ConfirmDatapass,
-//             msg: {
-//                 forget,
-//                 password,
-//                 ...params
-//             }
-//         });
-//     });
-// }
+        send(SocketType.Parse, {
+            type: SocketType.Parse,
+            cmd: CommandType.ConfirmDatapass,
+            msg: {
+                forget,
+                password,
+                ...params
+            }
+        });
+    });
+}
 
 /**
  * 导入第三方数据失败

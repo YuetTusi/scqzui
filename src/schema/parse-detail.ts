@@ -31,7 +31,7 @@ interface ParseDetail {
      */
     curprogress: number,
     /**
-     * 解析进度分类
+     * 解析详情分类
      */
     category: ParseCategory
 }

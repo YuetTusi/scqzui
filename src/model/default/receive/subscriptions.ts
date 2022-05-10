@@ -18,9 +18,9 @@ import { DeviceSystem } from '@/schema/device-system';
 import { ParseCategory } from '@/schema/parse-detail';
 import {
     deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,
-    parseCurinfo, parseEnd,/* backDatapass,*/ saveCaseFromPlatform, /*importErr,*/
+    parseCurinfo, parseEnd, saveCaseFromPlatform, /*importErr,*/
     humanVerify, saveOrUpdateOfficerFromPlatform, traceLogin, limitResult,
-    appRecFinish, fetchPercent, importErr
+    appRecFinish, fetchPercent, importErr, backDatapass
 } from './listener';
 
 const cwd = process.cwd();
@@ -150,7 +150,7 @@ export default {
                     break;
                 case CommandType.BackDatapass:
                     //# 输入备份密码
-                    // backDatapass(command, dispatch);
+                    backDatapass(command, dispatch);
                     break;
                 case CommandType.ImportErr:
                     //# 导入第三方数据失败
