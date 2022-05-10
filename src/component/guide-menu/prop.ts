@@ -24,7 +24,7 @@ interface ImageButtonProp {
     /**
      * 图标DOM
      */
-    icon: JSX.Element,
+    icon?: JSX.Element,
     /**
      * 图片路径
      */

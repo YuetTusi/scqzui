@@ -78,7 +78,7 @@ const InputHistoryModal: FC<InputHistoryModalProp> = ({
         destroyOnClose={true}
         centered={true}
         maskClosable={false}
-        width={1000}>
+        width={1080}>
 
         <Row gutter={10}>
             <Col flex={1}>

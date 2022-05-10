@@ -23,6 +23,9 @@ const ImageButton: FC<ImageButtonProp> = ({ to, icon, src, description, children
         maskRef.current!.classList.remove('open');
     };
 
+    /**
+     * 文案遮罩层
+     */
     const renderDescMask = () => {
         if (description === undefined) {
             return null;

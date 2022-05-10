@@ -8,23 +8,22 @@ import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
 
 export default {
-
     /**
      * 点验案件保存
      */
     *saveOrUpdate({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
 
-        /**
-         * todo: 待完成编辑功能
-         */
         const db = getDb<QuickEvent>(TableName.QuickEvent);
-        const targetPath = join(payload.eventPath, payload.eventName);
+        const { _id, eventName, eventPath } = payload as QuickEvent;
+        const targetPath = join(eventPath, eventName);
         try {
-            if (helper.isNullOrUndefined(payload._id)) {
+            if (helper.isNullOrUndefined(_id)) {
                 yield helper.mkDir(targetPath);
                 yield call([db, 'insert'], payload);
+                message.success('保存成功，请点击案件名称扫码点验');
             } else {
-                yield call([db, 'update'], { _id: payload._id }, payload);
+                yield call([db, 'update'], { _id }, payload);
+                message.success('保存成功');
             }
             yield helper.writeJSONfile(join(targetPath, 'Case.json'), {
                 "m_strCaseName": payload.eventName,
@@ -59,7 +58,6 @@ export default {
                 "caseName": payload.eventName,
                 "checkUnitName": ""
             });
-            message.success('保存成功');
             yield put({ type: 'setData', payload: undefined });
             yield put({
                 type: 'quickEventList/query', payload: {

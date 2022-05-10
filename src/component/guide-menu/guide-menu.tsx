@@ -45,7 +45,6 @@ const GuideMenu: FC<GuideMenuProp> = () => {
         <div className="evidence">
             <ImageButton
                 to="/collect"
-                icon={<FontAwesomeIcon icon={faMobileScreenButton} />}
                 src={envidence}
                 description={<ul>
                     <li>1秒极速提取N部设备</li>
@@ -59,7 +58,6 @@ const GuideMenu: FC<GuideMenuProp> = () => {
             <div className="tool">
                 <ImageButton
                     to="/tool"
-                    icon={<FontAwesomeIcon icon={faScrewdriverWrench} />}
                     src={tool}
                     description={<ul>
                         <li>大佬提供的多种方便工具</li>

@@ -89,7 +89,6 @@ export default {
             }
 
         } catch (error) {
-            console.warn(error);
             log.error(`删除快速点验记录失败 @model/default/quick-event-list/*del:${error.message}`);
             modal.update({
                 title: '删除失败',

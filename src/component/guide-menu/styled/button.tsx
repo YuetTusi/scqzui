@@ -10,18 +10,13 @@ const Color = styled.div<{ color: string }>`
     width:350px;
     height:100%;
     border-radius: ${props => props.theme['border-radius-base']};
-    background-image: linear-gradient(
-        ${props => props.color},
-        ${props => color2(props.color).darken(3).toString()}
-    );
+    background-color: ${props => props.color};
     display: flex;
     flex-direction: column;
+    transition: .2s;
 
     &:hover{
-        background-image: linear-gradient(
-            ${props => color2(props.color).darken(3).toString()},
-            ${props => color2(props.color).darken(10).toString()}
-        );
+        background-color: ${props => color2(props.color).darken(7).toString()};
     }
 
     &>a{
@@ -65,7 +60,7 @@ const Image = styled.div`
 
         &>a{
             position: absolute;
-            bottom:30px;
+            bottom:20px;
             left:0;
             right:0;
             display: flex;

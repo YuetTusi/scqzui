@@ -1,7 +1,8 @@
-import debounce from 'lodash/debounce';
 import { join } from 'path';
+import debounce from 'lodash/debounce';
 import { ipcRenderer, shell } from 'electron';
 import React, { FC, MouseEvent, useEffect, useState } from 'react';
+// import { useDispatch } from 'dva';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
 import message from 'antd/lib/message';
@@ -12,7 +13,6 @@ import { Footer } from './styled/footer';
 import DragBar from '../drag-bar';
 import { BoardMenu, BoardMenuAction } from './board-menu';
 import SofthardwareModal from '../softhardware-modal';
-// import { useDispatch } from 'dva';
 import InputHistoryModal from '../input-history-modal';
 
 const cwd = process.cwd();
@@ -31,10 +31,11 @@ const openHelpDocClick = debounce(async (event: MouseEvent<HTMLSpanElement>) => 
     const url = join(cwd, './data/help/帮助.doc');
     try {
         const exist = await helper.existFile(url);
+        message.destroy();
         if (exist) {
+            message.info('正在打开帮助文档...');
             await shell.openPath(url);
         } else {
-            message.destroy();
             message.info('暂未提供帮助文档');
         }
     } catch (error) {
