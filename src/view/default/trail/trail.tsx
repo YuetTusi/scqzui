@@ -161,7 +161,6 @@ const Trail: FC<{}> = () => {
                     );
                 },
                 onCancel() {
-                    dispatch({ type: 'appSet/setReading', payload: true });
                     dispatch({
                         type: 'trail/readHistoryAppJson',
                         payload: join(

@@ -131,6 +131,10 @@ const ServerCloudModal: FC<Prop> = ({
         historyMobileNumber.current = UserHistory.get(HistoryKeys.HISTORY_MOBILENUMBER);
     }, [visible]);
 
+    useEffect(() => {
+        formRef.setFieldsValue({ phoneName: device?.model ?? '' });
+    }, [device]);
+
     useSubscribe(
         'protocol-read',
         (event: IpcRendererEvent, fetchData: FetchData, agree: boolean) => {

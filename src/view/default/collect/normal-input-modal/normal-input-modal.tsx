@@ -88,6 +88,10 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
         historyDeviceNumber.current = UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER);
     }, [visible]);
 
+    useEffect(() => {
+        formRef.setFieldsValue({ phoneName: device?.model ?? '' });
+    }, [device]);
+
     /**
      * 跳转到新增案件页
      */
@@ -297,7 +301,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                     message: '不允许输入斜线字符'
                                 },
                                 { pattern: UnderLine, message: '不允许输入下划线' }]}
-                                initialValue={device?.model}
                                 label="手机名称"
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}>
