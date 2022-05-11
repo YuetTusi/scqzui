@@ -91,6 +91,8 @@ export default {
                     type: 'query',
                     payload: { pageIndex: 1, pageSize: helper.PAGE_SIZE }
                 });
+                yield put({ type: 'quickRecordList/setEventId', payload: payload });
+                yield put({ type: 'quickRecordList/query', payload: { pageIndex: 1, pageSize: 5 } });
             }
 
         } catch (error) {

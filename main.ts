@@ -277,12 +277,6 @@ ipcMain.on('run-service', () => {
             join(appPath, '../../../', config?.yqPath ?? './yq'),
             ['-config', './agent.json', '-log_dir', './log']
         );
-        // helper.runProc(
-        //     yunProcess,
-        //     config!.yqExe ?? 'yqRPC.exe',
-        //     path.join('D:\\Electronic\\ElectronicForensics\\yq'),
-        //     ['-config', './agent.json', '-log_dir', './log']
-        // );
     }
     if (config!.useTraceLogin) {
         //有应用痕迹查询，调起服务
