@@ -150,6 +150,7 @@ function api(webContents: WebContents) {
         try {
             const { size } = await stat(target);
             res.setHeader('Content-Length', size);
+            log.info(`下载点验APK附件(${target}), 附件大小:${size}`);
         } catch (error) {
             log.error(`HTTP读取点验附件APK失败 @http/api(/check/:cid): ${error.message}`);
         } finally {

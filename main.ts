@@ -37,6 +37,7 @@ let fetchProcess: ChildProcessWithoutNullStreams | null = null; //采集进程
 let parseProcess: ChildProcessWithoutNullStreams | null = null; //解析进程
 let yunProcess: ChildProcessWithoutNullStreams | null = null; //云取服务进程
 let appQueryProcess: ChildProcessWithoutNullStreams | null = null; //应用痕迹进程
+let quickFetchProcess: ChildProcessWithoutNullStreams | null = null; //快速点验进程
 let httpServerIsRunning = false; //是否已启动HttpServer
 
 const notifier = new WindowsBalloon({
@@ -46,7 +47,6 @@ const notifier = new WindowsBalloon({
 
 //# 配置Http服务器相关
 server.use(express.json());
-server.use(express.urlencoded());
 server.use(
     cors({
         origin: '*',
@@ -73,6 +73,9 @@ if (!existManuJson) {
  * 销毁所有窗口
  */
 function destroyAllWindow() {
+    if (quickFetchProcess !== null) {
+        quickFetchProcess.kill();	//杀掉快速点验进程
+    }
     if (sqliteWindow !== null) {
         sqliteWindow.destroy();
         sqliteWindow = null;
@@ -287,6 +290,14 @@ ipcMain.on('run-service', () => {
             appQueryProcess,
             config?.appQueryExe ?? 'AppQuery.exe',
             join(appPath, '../../../', config?.appQueryPath ?? './AppQuery')
+        );
+    }
+    if (config!.useQuickFetch) {
+        //有快速点验功能，调起服务
+        helper.runProc(
+            quickFetchProcess,
+            config?.quickFetchExe ?? 'QuickFetchServer.exe',
+            join(appPath, '../../../', config?.quickFetchPath ?? './QuickFetch')
         );
     }
 });

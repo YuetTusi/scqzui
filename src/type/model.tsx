@@ -114,6 +114,10 @@ interface Conf {
 	 */
 	useTraceLogin: boolean;
 	/**
+	 * 是否启用快速点验
+	 */
+	useQuickFetch: boolean;
+	/**
 	 * 案件文案（默认`案件`）
 	 */
 	caseText: string;
@@ -213,6 +217,14 @@ interface Conf {
 	 * 云取服务路径
 	 */
 	yqPath: string;
+	/**
+	 * 快速点验服务路径
+	 */
+	quickFetchPath: string;
+	/**
+	 * 快速点验服务名称
+	 */
+	quickFetchExe: string;
 }
 
 export { StateTree, Conf };

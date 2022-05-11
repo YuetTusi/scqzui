@@ -43,15 +43,21 @@ export const EventDescBox = styled.div`
             }
             li{
                 margin:0;
-                padding: 4px 0;
+                padding: 5px 0;
                 list-style-type: none;
                 label{
                     display: inline-block;
                     width: 100px;
+                    vertical-align: middle;
                 }
                 span{
                     display: inline-block;
-                    color:${props => props.theme['primary-color']};
+                    width: 390px;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    vertical-align: middle;
+                    color: ${props => props.theme['primary-color']};
                 }
             }
         }

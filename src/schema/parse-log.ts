@@ -1,5 +1,6 @@
 import { BaseEntity } from "./base-entity";
 import { ParseState } from "./device-state";
+import { ParseCategory } from "./parse-detail";
 
 /**
  * 解析App
@@ -47,6 +48,10 @@ interface ParseEnd {
      * 错误消息
      */
     errmsg?: string;
+    /**
+     * 分类
+     */
+    category: ParseCategory;
 }
 
 /**

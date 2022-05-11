@@ -11,8 +11,8 @@ import { StateTree } from "@/type/model";
 import { QuickRecord } from "@/schema/quick-record";
 import { TableName } from "@/schema/table-name";
 import { DataMode } from '@/schema/data-mode';
-import { QuickRecordListState } from ".";
 import { DeviceSystem } from '@/schema/device-system';
+import { QuickRecordListState } from ".";
 
 export default {
 
@@ -158,11 +158,11 @@ export default {
      * @param {ParseState} payload.parseState 解析状态
      */
     *updateParseState({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
-        const { _id, parseState } = payload;
+        const { id, parseState } = payload;
         const db = getDb<QuickRecord>(TableName.QuickRecord);
         const { pageIndex, pageSize }: QuickRecordListState = yield select((state: StateTree) => state.quickRecordList);
         try {
-            yield call([db, 'update'], { _id }, { $set: { parseState } });
+            yield call([db, 'update'], { _id: id }, { $set: { parseState } });
             yield put({
                 type: 'parseLogTable/queryParseLog', payload: {
                     condition: null,
@@ -182,11 +182,11 @@ export default {
     /**
      * 保存手机数据到快速点验案件下
      * @param {string} payload.id 快速点验案件id
-     * @param {DeviceType} payload.data 设备数据
+     * @param {QuickRecord} payload.data 设备数据
      */
-    *saveToEvent({ payload }: AnyAction, { call }: EffectsCommandMap) {
+    *saveToEvent({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
         const db = getDb<QuickRecord>(TableName.QuickRecord);
-        const { data } = payload as { id: string, data: QuickRecord };
+        const { id, data } = payload as { id: string, data: QuickRecord };
         try {
             yield call([db, 'insert'], {
                 _id: data._id,
@@ -212,6 +212,8 @@ export default {
                 serial: data.serial,
                 system: data.system ?? DeviceSystem.Android
             });
+            yield put({ type: 'setEventId', payload: id });
+            yield put({ type: 'query', payload: { pageIndex: 1, pageSize: 5 } });
         } catch (error) {
             log.error(`快速点验设备数据入库失败 @model/default/quick-record-list/*saveToEvent: ${error.message}`);
         }

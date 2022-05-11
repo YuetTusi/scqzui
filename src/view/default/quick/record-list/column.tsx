@@ -110,7 +110,7 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
         dispatch({
             type: 'quickRecordList/updateParseState',
             payload: {
-                _id: data._id,
+                id: data._id,
                 parseState: ParseState.Parsing,
                 pageIndex: 1
             }

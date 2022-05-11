@@ -21,6 +21,13 @@ const ContentBox = styled.div`
         height: 10px;
         background-color: #202940;
     }
+
+    & > .button-bar{
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
 `;
 
 const DevicePanel = styled.div`

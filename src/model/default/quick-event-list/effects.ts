@@ -7,6 +7,7 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
+import { QuickRecord } from '@/schema/quick-record';
 
 export default {
 
@@ -40,11 +41,12 @@ export default {
         }
     },
     /**
-     * 删除快速点验
+     * 删除快速点验案件
      */
-    *del({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *del({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
 
-        const db = getDb<QuickEvent>(TableName.QuickEvent);
+        const eventDb = getDb<QuickEvent>(TableName.QuickEvent);
+        const recDb = getDb<QuickRecord>(TableName.QuickRecord);
 
         yield put({ type: 'setLoading', payload: true });
         const modal = Modal.info({
@@ -57,7 +59,7 @@ export default {
             }
         });
         try {
-            const next: QuickEvent | null = yield db.findOne({ _id: payload });
+            const next: QuickEvent | null = yield eventDb.findOne({ _id: payload });
             if (next === null) {
                 modal.update({
                     title: '删除失败',
@@ -67,10 +69,13 @@ export default {
                     }
                 });
             } else {
-                const { eventName, eventPath } = next;
+                const { _id, eventName, eventPath } = next;
                 let success: boolean = yield helper.delDiskFile(join(eventPath, eventName));
                 if (success) {
-                    yield call([db, 'remove'], { _id: payload });
+                    yield all([
+                        call([recDb, 'remove'], { caseId: _id }, true),
+                        call([eventDb, 'remove'], { _id: payload })
+                    ]);
                 }
                 modal.update({
                     title: '删除成功',

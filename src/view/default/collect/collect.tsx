@@ -1,6 +1,8 @@
 import { ipcRenderer } from 'electron';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileWaveform } from '@fortawesome/free-solid-svg-icons';
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'dva';
+import { routerRedux, useDispatch, useSelector } from 'dva';
 import AndroidOutlined from '@ant-design/icons/AndroidOutlined';
 import AppleOutlined from '@ant-design/icons/AppleOutlined';
 import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
@@ -115,7 +117,7 @@ const Collect: FC<CollectProp> = ({ }) => {
             current.addEventListener('wheel', onDevicePanelWheel);
         }
         return () => {
-            current?.removeEventListener('wheel', onDevicePanelWheel);
+            current!.removeEventListener('wheel', onDevicePanelWheel);
         };
     }, []);
 
@@ -479,7 +481,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     return <SubLayout title="设备取证">
         <ContentBox>
             <div className="hidden-scroll-bar" />
-            <div>
+            <div className="button-bar">
                 <Group>
                     <Button onClick={() => setUsbDebugModalVisible(true)} type="primary">
                         <AndroidOutlined />
@@ -494,6 +496,12 @@ const Collect: FC<CollectProp> = ({ }) => {
                         <span>操作帮助</span>
                     </Button>
                 </Group>
+                <Button onClick={() => dispatch(routerRedux.push('/parse'))} type="primary">
+                    <FontAwesomeIcon
+                        icon={faFileWaveform}
+                        style={{ marginRight: '10px' }} />
+                    <span>数据解析</span>
+                </Button>
             </div>
             <Split />
             <DevicePanel ref={devicePanelRef}>

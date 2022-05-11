@@ -23,11 +23,11 @@ const QuickQRCodeModal: FC<QuickQRcodeModalProp> = ({
             (async () => {
                 try {
                     const target = document.getElementById('downApk');
-                    await QRCode.toCanvas(target, `http://${ip}:9900/check`, {
+                    await QRCode.toCanvas(target, `http://${ip}:9900/check/-1`, {
                         width: 320,
                         margin: 2,
                         color: {
-                            light: '#141414',
+                            light: '#181d30',
                             dark: '#ffffffd9'
                         }
                     });

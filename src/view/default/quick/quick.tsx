@@ -70,6 +70,7 @@ const Quick: FC<{}> = () => {
                 centered: true
             });
         } else {
+            setIp(hasHotSpot ? '192.168.137.1' : '192.168.50.99');
             setQuickQRCodeModalVisble(true);
         }
     }, 500, { leading: true, trailing: false });
@@ -96,6 +97,7 @@ const Quick: FC<{}> = () => {
                 centered: true
             });
         } else {
+            setIp(hasHotSpot ? '192.168.137.1' : '192.168.50.99');
             setDetailId(_id!);
             setEventDescVisible(true);
         }

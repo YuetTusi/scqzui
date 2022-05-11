@@ -29,11 +29,11 @@ const EventDescModal: FC<EventDescModalProp> = ({
             (async () => {
                 try {
                     const target = document.getElementById('qrcode');
-                    await QRCode.toCanvas(target, `http://${ip}:9900/check`, {
+                    await QRCode.toCanvas(target, `http://${ip}:9900/check/${id}`, {
                         width: 240,
                         margin: 2,
                         color: {
-                            light: '#141414',
+                            light: '#181d30',
                             dark: '#ffffffd9'
                         }
                     });
@@ -73,16 +73,20 @@ const EventDescModal: FC<EventDescModalProp> = ({
                 <span>{data.eventName.split('_')[0]}</span>
             </li>
             <li>
-                <label>存储路径</label>
+                <label>存储位置</label>
                 <span>{data.eventPath}</span>
             </li>
             <li>
                 <label>违规时段</label>
-                <span>{data.ruleFrom} ~ {data.ruleTo}</span>
+                <span>{data.ruleFrom} 时 ~ {data.ruleTo} 时</span>
             </li>
             <li>
-                <label>案件名称</label>
-                <span>{dayjs(data.createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
+                <label>创建时间</label>
+                <span>{dayjs(data.createdAt).format('YYYY年MM月DD日 HH:mm:ss')}</span>
+            </li>
+            <li>
+                <label>IP地址</label>
+                <span>{ip ?? ''}</span>
             </li>
         </ul>;
     }
@@ -104,12 +108,12 @@ const EventDescModal: FC<EventDescModalProp> = ({
         maskClosable={false}
         destroyOnClose={false}
         width={850}
-        title="点验案件详情"
+        title="快速点验"
     >
         <EventDescBox>
             <div className="qr">
                 <div className="ibox">
-                    <div className="caption">请打开浏览器扫码下载APK</div>
+                    <div className="caption">请用手机浏览器扫码点验</div>
                 </div>
                 <div className="content">
                     <canvas width="240" height="240" id="qrcode" />
@@ -119,7 +123,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
             <div className="desc">
                 <div className="ibox">
                     <div className="caption">
-                        案件
+                        案件信息
                     </div>
                     <div className="content">
                         {renderEvent(data)}

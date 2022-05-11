@@ -5,10 +5,11 @@ import { EffectsCommandMap } from "dva";
 import { AnyAction } from 'redux';
 import dayjs from 'dayjs';
 import message from "antd/lib/message";
+import { StateTree } from '@/type/model';
 import logger from "@/utils/log";
 import { helper } from '@/utils/helper';
 import { getDb } from '@/utils/db';
-import { caseStore, LocalStoreKey } from "@/utils/local-store";
+import { caseStore } from "@/utils/local-store";
 import UserHistory, { HistoryKeys } from "@/utils/user-history";
 import { send } from "@/utils/tcp-server";
 import { TableName } from "@/schema/table-name";
@@ -29,7 +30,8 @@ import { GuangZhouCase } from '@/schema/platform/guangzhou-case';
 import { DeviceSystem } from '@/schema/device-system';
 import { AppJson } from '@/schema/app-json';
 import { ParseCategory } from '@/schema/parse-detail';
-import { StateTree } from '@/type/model';
+import { QuickRecord } from '@/schema/quick-record';
+import { QuickEvent } from '@/schema/quick-event';
 import parseApps from '@/config/parse-app.yaml';
 import { DeviceStoreState } from './index';
 import { AppSetStore } from '../app-set';
@@ -185,6 +187,45 @@ export default {
         } catch (error) {
             console.log(`解析日志保存失败 @model/default/device/*saveParseLog: ${error.message}`);
             logger.error(`解析日志保存失败 @model/default/device/*saveParseLog: ${error.message}`);
+        }
+    },
+    /**
+     * 保存快速点验日志
+     * @param {ParseEnd} payload 采集结束后ParseEnd数据
+     */
+    *saveQuickLog({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
+        const recDb = getDb<QuickRecord>(TableName.QuickRecord);
+        const eventDb = getDb<QuickEvent>(TableName.QuickEvent);
+        const parseLogDb = getDb<ParseLogEntity>(TableName.ParseLog);
+        const {
+            caseId, deviceId, isparseok, parseapps, u64parsestarttime, u64parseendtime
+        } = (payload as ParseEnd);
+        try {
+            let [recData, eventData]: [QuickRecord, QuickEvent] = yield all([
+                call([recDb, 'findOne'], { _id: deviceId }),
+                call([eventDb, 'findOne'], { _id: caseId })
+            ]);
+            let entity = new ParseLogEntity();
+            entity.caseName = helper.isNullOrUndefinedOrEmptyString(eventData.eventName) ? `DEV_${helper.timestamp()}` : eventData.eventName;
+            entity.mobileName = recData?.mobileName ?? '';
+            entity.mobileNo = recData?.mobileNo ?? '';
+            entity.mobileHolder = recData?.mobileHolder ?? '';
+            entity.note = recData?.note;
+            entity.state = isparseok ? ParseState.Finished : ParseState.Error;
+            entity.apps = parseapps;
+            entity.startTime = u64parsestarttime === -1 ? undefined : new Date(dayjs.unix(u64parsestarttime).valueOf());
+            entity.endTime = u64parseendtime === -1 ? undefined : new Date(dayjs.unix(u64parseendtime).valueOf());
+            yield call([parseLogDb, 'insert'], entity);
+            yield put({
+                type: 'parseLogTable/queryParseLog', payload: {
+                    condition: null,
+                    current: 1,
+                    pageSize: helper.PAGE_SIZE
+                }
+            });
+        } catch (error) {
+            console.log(`解析日志保存失败 @model/default/device/*saveParseQuickLog: ${error.message}`);
+            logger.error(`解析日志保存失败 @model/default/device/*saveParseQuickLog: ${error.message}`);
         }
     },
     /**

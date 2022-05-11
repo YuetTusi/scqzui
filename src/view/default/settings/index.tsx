@@ -71,7 +71,7 @@ const Index: FC<{}> = () => <SettingLayout>
                 <NavLink to="/settings/check-manage" replace={true} className="hvr-sweep-to-right">
                     <div>
                         <span className="ico"><FontAwesomeIcon icon={faPenToSquare} /></span>
-                        <span className="name">点验数据管理</span>
+                        <span className="name">点验记录管理</span>
                     </div>
                 </NavLink>
             </li>
@@ -125,7 +125,7 @@ const Index: FC<{}> = () => <SettingLayout>
         component={() => <ContentBox title="关键词配置"><Keywords /></ContentBox>} />
     <Route
         path="/settings/check-manage"
-        component={() => <ContentBox title="点验数据管理"><CheckManage /></ContentBox>} />
+        component={() => <ContentBox title="点验记录管理"><CheckManage /></ContentBox>} />
     <Route
         path="/settings/trace-login"
         component={() => <ContentBox title="云点验登录"><TraceLogin /></ContentBox>} />

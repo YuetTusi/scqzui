@@ -25,7 +25,7 @@ import { CheckJson } from '@/schema/check-json';
 const cwd = process.cwd();
 const { useForm } = Form;
 /**
- * 点验数据管理
+ * 点验记录管理
  */
 const CheckManage: FC<CheckManageProp> = () => {
 

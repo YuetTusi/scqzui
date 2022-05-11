@@ -220,20 +220,20 @@ export default {
         ipcRenderer.on('check-parse', async (event: IpcRendererEvent, args: Record<string, any>) => {
 
             ipcRenderer.send('show-notice', {
-                message: `「${args.mobileName ?? ''}」点验结束，开始解析数据`
+                message: `「${args.mobileName ?? '未知设备'}」采集结束，开始解析点验数据`
             });
 
             //NOTE:将设备数据入库
             let next = new QuickRecord();
+            next._id = helper.newId();
             next.mobileHolder = args.mobileHolder ?? '';
             next.phonePath = args.phonePath ?? '';
             next.caseId = args.caseId ?? '';//所属案件id
             next.mobileNo = args.mobileNo ?? '';
-            next.mobileName = `${args.mobileName ?? 'DEV'}_${helper.timestamp()}`;
+            next.mobileName = `${args.mobileName ?? 'unknow'}_${helper.timestamp()}`;
             next.parseState = ParseState.Parsing;
             next.mode = DataMode.Check;
             next.fetchTime = new Date();
-            next._id = helper.newId();
             next.mobileNumber = '';
             next.handleOfficerNo = '';
             next.note = '';
@@ -260,6 +260,8 @@ export default {
                     data: next
                 }
             });
+            dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [next.caseId] });//选中案件
+            dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [next._id] });//展开点验设备
 
             logger.warn(`开始解析快速点验设备 ${JSON.stringify(next)}`);
 

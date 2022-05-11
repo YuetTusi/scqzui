@@ -275,58 +275,70 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
 
     const caseDb = getDb<CaseInfo>(TableName.Case);
     const deviceDb = getDb<DeviceType>(TableName.Device);
-    const { caseId, deviceId, isparseok, errmsg } = msg;
+    const { caseId, deviceId, isparseok, errmsg, category } = msg;
 
     console.log('解析结束：', JSON.stringify(msg));
     logger.info(`解析结束(ParseEnd): ${JSON.stringify(msg)}`);
-    try {
-        let [caseData, deviceData]: [CaseInfo, DeviceType] = await Promise.all([
-            caseDb.findOne({ _id: caseId }),
-            deviceDb.findOne({ _id: deviceId })
-        ]);
-        if (isparseok && caseData.generateBcp) {
-            //# 解析`成功`且`是`自动生成BCP
-            logger.info(`解析结束开始自动生成BCP, 手机路径：${deviceData.phonePath}`);
-            const bcpExe = path.join(appPath, '../tools/BcpTools/BcpGen.exe');
-            const proc = execFile(bcpExe, [deviceData.phonePath!, caseData.attachment ? '1' : '0'], {
-                windowsHide: true,
-                cwd: path.join(appPath, '../tools/BcpTools')
-            });
-            // proc.once('close', () => {
-            //     dispatch({
-            //         type: 'parseDev/queryDev', payload: {
-            //             condition: null,
-            //             pageIndex: 1,
-            //             pageSize: 5
-            //         }
-            //     });
-            // });
-            proc.once('error', (err) => {
-                logger.error(`生成BCP错误 @model/default/receive/listener/parseEnd: ${err.message}`);
-            });
-        }
-        if (!isparseok && !helper.isNullOrUndefined(errmsg)) {
-            Modal.error({
-                title: '解析错误',
-                content: errmsg,
-                okText: '确定'
-            });
-        }
-    } catch (error) {
-        logger.error(`自动生成BCP错误 @model/default/receive/listener/parseEnd: ${error.message}`);
-    } finally {
-        //# 更新解析状态为`完成或失败`状态
+    if (ParseCategory.Quick === category) {
+        //快速点验
+        dispatch({ type: 'checkingList/removeRecord', payload: deviceId });//从点验列表中移除
         dispatch({
-            type: 'parseDev/updateParseState', payload: {
+            type: 'quickRecordList/updateParseState', payload: {
                 id: deviceId,
                 parseState: isparseok ? ParseState.Finished : ParseState.Error
             }
-        });
-        dispatch({ type: 'parsingList/removeDevice', payload: deviceId });
+        }); //更新解析状态
+        dispatch({ type: 'device/saveQuickLog', payload: msg }); //写入日志
+    } else {
+        //标准取证
+        try {
+            let [caseData, deviceData]: [CaseInfo, DeviceType] = await Promise.all([
+                caseDb.findOne({ _id: caseId }),
+                deviceDb.findOne({ _id: deviceId })
+            ]);
+            if (isparseok && caseData.generateBcp) {
+                //# 解析`成功`且`是`自动生成BCP
+                logger.info(`解析结束开始自动生成BCP, 手机路径：${deviceData.phonePath}`);
+                const bcpExe = path.join(appPath, '../tools/BcpTools/BcpGen.exe');
+                const proc = execFile(bcpExe, [deviceData.phonePath!, caseData.attachment ? '1' : '0'], {
+                    windowsHide: true,
+                    cwd: path.join(appPath, '../tools/BcpTools')
+                });
+                // proc.once('close', () => {
+                //     dispatch({
+                //         type: 'parseDev/queryDev', payload: {
+                //             condition: null,
+                //             pageIndex: 1,
+                //             pageSize: 5
+                //         }
+                //     });
+                // });
+                proc.once('error', (err) => {
+                    logger.error(`生成BCP错误 @model/default/receive/listener/parseEnd: ${err.message}`);
+                });
+            }
+            if (!isparseok && !helper.isNullOrUndefined(errmsg)) {
+                Modal.error({
+                    title: '解析失败',
+                    content: errmsg,
+                    okText: '确定'
+                });
+            }
+        } catch (error) {
+            logger.error(`自动生成BCP错误 @model/default/receive/listener/parseEnd: ${error.message}`);
+        } finally {
+            //# 更新解析状态为`完成或失败`状态
+            dispatch({
+                type: 'parseDev/updateParseState', payload: {
+                    id: deviceId,
+                    parseState: isparseok ? ParseState.Finished : ParseState.Error
+                }
+            });
+            dispatch({ type: 'parsingList/removeDevice', payload: deviceId });
+        }
+        //# 保存日志
+        dispatch({ type: 'device/saveParseLog', payload: msg });
     }
-
-    //# 保存日志
-    dispatch({ type: 'device/saveParseLog', payload: msg });
 }
 
 /**
