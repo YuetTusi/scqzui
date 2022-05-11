@@ -8,6 +8,7 @@ import { useUnit, useDstUnit } from './unit';
 import { useAppConfig } from './app-config';
 import { useManufacturer } from './manufacturer';
 import { useQuickEvent } from './quick-event';
+import { useQuickHitCount, useQuickHit } from './quick-hit';
 
 export {
     useAppSerial,
@@ -21,5 +22,7 @@ export {
     useDstUnit,
     useAppConfig,
     useManufacturer,
-    useQuickEvent
+    useQuickEvent,
+    useQuickHitCount,
+    useQuickHit
 };

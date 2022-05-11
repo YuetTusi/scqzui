@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
+import clone from 'lodash/clone';
 import React, { FC } from 'react';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
 import Badge from 'antd/lib/badge';
 import Button from 'antd/lib/button';
-import { useCase, useQuickEvent } from '@/hook';
+import { useQuickHitCount, useQuickEvent } from '@/hook';
 import { Split } from '@/component/style-tool';
 import { ParseState } from '@/schema/device-state';
 import DeviceSystem from '@/schema/device-system';
@@ -98,11 +99,15 @@ const RecordInfo: FC<RecordInfoProp> = ({ data, onButtonClick }) => {
 
     const { caseId, parseState } = data;
     const eventData = useQuickEvent(caseId!);
+    const hitCount = useQuickHitCount(clone(data));//命中数量
 
     return <InfoBox>
         <div className="btn-bar">
             <div>
                 <Group size="small">
+                    <Button
+                        onClick={() => onButtonClick(data, ClickType.Hit)}
+                        type="primary">{`命中统计 (${hitCount})`}</Button>
                 </Group>
             </div>
             <div>
@@ -173,6 +178,12 @@ const RecordInfo: FC<RecordInfoProp> = ({ data, onButtonClick }) => {
                 </ul>
             </div>
         </div>
+        {/* <HitChartModal
+            visible={hitChartModalVisible}
+            record={data}
+            exportHandle={() => setHitChartModalVisible(false)}
+            closeHandle={() => setHitChartModalVisible(false)}
+        /> */}
     </InfoBox>;
 };
 

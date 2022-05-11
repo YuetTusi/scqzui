@@ -13,6 +13,7 @@ import RecordInfo from '../record-info';
 import { ClickType } from '../record-info/prop';
 import EditEventRecModal from '../edit-event-rec-modal';
 import ExportReportModal from '../export-report-modal';
+import HitChartModal from '../hit-chart-modal';
 import { getColumns } from './column';
 import { RecordListProp } from './prop';
 
@@ -35,6 +36,7 @@ const RecordList: FC<RecordListProp> = () => {
     const currentRec = useRef<QuickRecord>();
     const [editRecModalVisbile, setEditRecModalVisbile] = useState<boolean>(false);
     const [exportReportModalVisible, setExportReportModalVisible] = useState<boolean>(false);
+    const [hitChartModalVisible, setHitChartModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         query({ eventId }, pageIndex, 5);
@@ -70,6 +72,10 @@ const RecordList: FC<RecordListProp> = () => {
     */
     const onRecButtonClick = (data: QuickRecord, fn: ClickType) => {
         switch (fn) {
+            case ClickType.Hit:
+                currentRec.current = data;
+                setHitChartModalVisible(true);
+                break;
             case ClickType.Edit:
                 currentRec.current = data;
                 setEditRecModalVisbile(true);
@@ -166,6 +172,12 @@ const RecordList: FC<RecordListProp> = () => {
             visible={exportReportModalVisible}
             data={currentRec.current}
             closeHandle={() => setExportReportModalVisible(false)}
+        />
+        <HitChartModal
+            visible={hitChartModalVisible}
+            record={currentRec.current!}
+            exportHandle={() => setHitChartModalVisible(false)}
+            closeHandle={() => setHitChartModalVisible(false)}
         />
     </>
 };

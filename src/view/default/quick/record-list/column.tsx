@@ -76,7 +76,6 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
 
     const db = getDb<QuickEvent>(TableName.QuickEvent);
     try {
-        const appConfig = await helper.readAppJson();
         let eventData: QuickEvent = await db.findOne({
             _id: data.caseId
         });
@@ -100,10 +99,10 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
                 hasReport: true,
                 isDel: false,
                 isAi: false,
-                aiTypes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                useKeyword: appConfig?.useKeyword ?? false,
-                useDocVerify: appConfig?.useDocVerify ?? false,
-                dataMode: DataMode.Self,
+                aiTypes: Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                useKeyword: true,
+                useDocVerify: false,
+                dataMode: DataMode.Check,
                 tokenAppList: []
             }
         });
@@ -174,9 +173,7 @@ const runCreateReport = async (dispatch: Dispatch, exePath: string, device: Quic
             });
         }
     } catch (error) {
-        logger.error(
-            `写入JSON失败 @view/default/quick/record-list/column: ${error.message}`
-        );
+        logger.error(`写入JSON失败 @view/default/quick/record-list/column: ${error.message}`);
     }
 
     const proc = execFile(exePath, [casePath, device.phonePath!], { cwd: exeCwd });
@@ -252,7 +249,7 @@ export function getColumns(
                     case ParseState.Exception:
                         return <Tag color="red" style={{ marginRight: 0 }}>异常</Tag>;
                     default:
-                        return <Tag>未解析</Tag>;
+                        return <Tag style={{ marginRight: 0 }}>未解析</Tag>;
                 }
             }
         },

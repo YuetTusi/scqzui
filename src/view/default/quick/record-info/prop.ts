@@ -24,5 +24,9 @@ export enum ClickType {
     /**
      * 删除
      */
-    Delete
+    Delete,
+    /**
+     * 命中统计
+     */
+    Hit
 }
