@@ -48,6 +48,60 @@ const HitChartModal: FC<HitChartModalProp> = ({
     const eventData = useQuickEvent(record?.caseId!);
     const data = useQuickHit(record);
 
+    useEffect(() => {
+        return () => {
+            if (charts !== null) {
+                console.log('销毁');
+                charts.dispose();
+                charts = null;
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        const $target = document.getElementById('hit-dom');
+        if ($target !== null) {
+            if (charts === null) {
+                charts = echars.init($target, 'dark');
+            }
+            charts.setOption({
+                tooltip: {
+                    trigger: 'item'
+                },
+                backgroundColor: '#1f1f1f',
+                legend: {
+                    type: 'scroll',
+                    orient: 'vertical',
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    pageTextStyle: {
+                        color: '#fff'
+                    },
+                    formatter: (name: string) => {
+                        const next = (data?.items ?? []).find((item: any) => item.name === name);
+                        return `${name}(${next?.value ?? '0'})`;
+                    }
+                },
+                series: [
+                    {
+                        name: '命中统计',
+                        type: 'pie',
+                        center: ['40%', '50%'],
+                        data: data?.items ?? [],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            });
+        }
+    }, [data, visible]);
+
     const onDirSelect = async (event: MouseEvent<HTMLButtonElement>) => {
 
         const exeDir = join(cwd, '../tools/create_excel_report');
@@ -134,49 +188,7 @@ const HitChartModal: FC<HitChartModalProp> = ({
         }
     };
 
-    useEffect(() => {
-        const $target = document.getElementById('hit-dom');
-        if ($target !== null) {
-            if (charts === null) {
-                charts = echars.init($target, 'dark');
-            }
-            charts.setOption({
-                tooltip: {
-                    trigger: 'item'
-                },
-                backgroundColor: '#1f1f1f',
-                legend: {
-                    type: 'scroll',
-                    orient: 'vertical',
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    pageTextStyle: {
-                        color: '#fff'
-                    },
-                    formatter: (name: string) => {
-                        const next = (data?.items ?? []).find((item: any) => item.name === name);
-                        return `${name}(${next?.value ?? '0'})`;
-                    }
-                },
-                series: [
-                    {
-                        name: '命中统计',
-                        type: 'pie',
-                        center: ['40%', '50%'],
-                        data: data?.items ?? [],
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                        }
-                    }
-                ]
-            });
-        }
-    }, [data, visible]);
+    console.log(data);
 
     return <Modal
         footer={[
