@@ -206,7 +206,7 @@ export default {
                 call([eventDb, 'findOne'], { _id: caseId })
             ]);
             let entity = new ParseLogEntity();
-            entity.caseName = helper.isNullOrUndefinedOrEmptyString(eventData.eventName) ? `DEV_${helper.timestamp()}` : eventData.eventName;
+            entity.caseName = helper.isNullOrUndefinedOrEmptyString(eventData?.eventName) ? '未知案件' : eventData.eventName.split('_')[0];
             entity.mobileName = recData?.mobileName ?? '';
             entity.mobileNo = recData?.mobileNo ?? '';
             entity.mobileHolder = recData?.mobileHolder ?? '';
