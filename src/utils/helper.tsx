@@ -1,6 +1,4 @@
-import { ipcRenderer } from 'electron';
 import React from 'react';
-import os from 'os';
 import { execSync } from 'child_process';
 import crypto from 'crypto';
 import fs from 'fs';
@@ -18,16 +16,14 @@ import Select from 'antd/lib/select';
 import log from './log';
 import { Conf } from '../type/model';
 import { BcpEntity } from '../schema/bcp-entity';
-import { DataMode } from '../schema/data-mode';
 import { AppCategory } from '../schema/app-config';
 import { BaseApp } from '../schema/base-app';
 import { TableName } from '../schema/table-name';
 import { CaseInfo } from '../schema/case-info';
 import { Manufaturer } from '../schema/manufaturer';
-import { LocalStoreKey } from './local-store';
+import { AppJson } from '../schema/app-json';
+import { CheckJson } from '../schema/check-json';
 import { getDb } from './db';
-import { AppJson } from '@/schema/app-json';
-import { CheckJson } from '@/schema/check-json';
 
 const cwd = process.cwd();//应用的根目录
 const KEY = 'az'; //密钥
@@ -64,13 +60,6 @@ const helper = {
      * 云取证AppMD5校验地址（配置文件中若没有地址则使用）
      */
     VALID_CLOUD_APP_URL: 'http://139.9.112.8:9699/md5',
-    /**
-     * @description 取当前日期
-     * @param format 格式化字串 默认年-月-日
-     */
-    getNow(format: string = 'YYYY-MM-DD'): string {
-        return dayjs().format(format);
-    },
     /**
      * @description 转为Moment日期格式
      * @param date 原日期字串
@@ -129,45 +118,6 @@ const helper = {
         }
     },
     /**
-     * @description 是否是数组
-     * @param val 任意值
-     */
-    isArray(val: any): boolean {
-        return Object.prototype.toString.call(val) === '[object Array]';
-    },
-    /**
-     * @description 是否是字符串
-     * @param val 任意值
-     */
-    isString(val: any): boolean {
-        return Object.prototype.toString.call(val) === '[object String]';
-    },
-    /**
-     * @description 是否是数值
-     * @param val 任意值
-     */
-    isNumber(val: any): boolean {
-        return Object.prototype.toString.call(val) === '[object Number]';
-    },
-    /**
-     * @description 是否是对象
-     * @param val 任意值
-     */
-    isObject(val: any): boolean {
-        return Object.prototype.toString.call(val) === '[object Object]';
-    },
-    /**
-     * @description 是否是Promise
-     * @param val 任意值
-     */
-    isPromise(val: any): boolean {
-        if (Object.prototype.toString.call(val) === '[object Promise]' && typeof val.then === 'function') {
-            return true;
-        } else {
-            return false;
-        }
-    },
-    /**
      * 运行exe文件
      * @param filePath 文件路径
      * @param args 命令参数 
@@ -206,17 +156,6 @@ const helper = {
             handle = null;
         });
     },
-    /**
-     * 参数时间是否在现在之后
-     * @param currentDate 当前时间
-     */
-    // isAfter(currentDate?: Moment) {
-    //     if (currentDate === undefined) {
-    //         return false;
-    //     } else {
-    //         return currentDate.isAfter();
-    //     }
-    // },
     /**
      * 读取配置文件
      * @param algo 解密算法（默认rc4）
@@ -505,7 +444,7 @@ const helper = {
      * @throws 格式有误抛出TypeError
      */
     getAllApps(apps: AppCategory[]): BaseApp[] {
-        if (this.isArray(apps)) {
+        if (Object.prototype.toString.call(apps) === '[object Array]') {
             return apps.reduce((acc: BaseApp[], current: AppCategory) =>
                 acc.concat(current.app_list.map(i => ({
                     m_strID: i.app_id,
@@ -585,13 +524,6 @@ const helper = {
      */
     base64ToString(base64: string) {
         return Buffer.from(base64, 'base64').toString('utf8');
-    },
-    /**
-     * 是否是Win7系统
-     * @returns {boolean} Win7系统为true
-     */
-    isWin7() {
-        return process.platform === 'win32' && os.release().startsWith('6.1');
     },
     /**
      * 读取应用名称

@@ -13,7 +13,6 @@ import { send } from '@/utils/tcp-server';
 import { caseStore } from "@/utils/local-store";
 import inputPassword from '@/component/dialog/input-password';
 import { DatapassParam } from '@/component/dialog/input-password/prop';
-// import { CaptchaMsg } from '@src/components/guide/CloudCodeModal/CloudCodeModalType';
 import CommandType, { Command, SocketType } from "@/schema/command";
 import DeviceType from "@/schema/device-type";
 import { FetchState, ParseState } from "@/schema/device-state";
@@ -439,4 +438,5 @@ export function appRecFinish({ msg }: Command<{
     message.destroy();
     message.info(msg.info ?? '');
     dispatch({ type: 'trail/readAppQueryJson', payload: { value: msg.value } });
+    dispatch({ type: 'appSet/setReading', payload: false })
 }

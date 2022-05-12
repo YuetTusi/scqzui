@@ -25,7 +25,6 @@ const { resourcesPath } = process;
 const appName = helper.readAppName();
 let httpPort = 9900;
 let config: Conf | null = null;
-let useHardwareAcceleration = false; //是否使用硬件加速
 let existManuJson = false;
 let mainWindow: BrowserWindow | null = null;
 let timerWindow: BrowserWindow | null = null; //计时
@@ -56,7 +55,6 @@ server.use(
 );
 
 config = helper.readConf();
-useHardwareAcceleration = config?.useHardwareAcceleration ?? !helper.isWin7();
 existManuJson = helper.existManufaturer(mode!, appPath);
 // app.commandLine.appendArgument('--ignore-gpu-blacklist');
 
