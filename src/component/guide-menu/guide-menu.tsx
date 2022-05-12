@@ -17,7 +17,7 @@ import { GuideMenuProp } from './prop';
 import envidence from './image/3.jpg';
 import tool from './image/2.jpg';
 
-const { useToolBox } = helper.readConf()!;
+const { useBcp, useToolBox } = helper.readConf()!;
 
 /**
  * 主屏菜单
@@ -94,7 +94,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
 
         <div className="setting">
             <ColorButton
-                to="/settings"
+                to={useBcp ? '/settings' : '/settings/self-unit'}
                 icon={<FontAwesomeIcon icon={faGears} />}
                 color="#82589F">
                 软件设置

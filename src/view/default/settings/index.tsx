@@ -23,7 +23,7 @@ import { MenuPanel } from './styled/menu';
 import { SettingLayout } from './styled/sub-layout';
 import ContentBox from './content-box';
 
-const { useTraceLogin } = helper.readConf()!;
+const { useBcp, useTraceLogin } = helper.readConf()!;
 
 /**
  * 设置布局页
@@ -36,30 +36,34 @@ const Index: FC<{}> = () => <SettingLayout>
             软件设置
         </div>
         <ul>
-            <li>
-                <NavLink to="/settings" exact={true} replace={true} className="hvr-sweep-to-right">
-                    <div>
-                        <span className="ico"><FontAwesomeIcon icon={faBuilding} /></span>
-                        <span className="name">采集单位</span>
-                    </div>
-                </NavLink>
-            </li>
-            <li>
-                <NavLink to="/settings/dst-unit" replace={true} className="hvr-sweep-to-right">
-                    <div>
-                        <span className="ico"><FontAwesomeIcon icon={faBuildingColumns} /></span>
-                        <span className="name">目的检验单位</span>
-                    </div>
-                </NavLink>
-            </li>
-            <li>
-                <NavLink to="/settings/self-unit" replace={true} className="hvr-sweep-to-right">
-                    <div>
-                        <span className="ico"><FontAwesomeIcon icon={faBuilding} /></span>
-                        <span className="name">采集单位管理</span>
-                    </div>
-                </NavLink>
-            </li>
+            <Auth deny={!useBcp}>
+                <li>
+                    <NavLink to="/settings" exact={true} replace={true} className="hvr-sweep-to-right">
+                        <div>
+                            <span className="ico"><FontAwesomeIcon icon={faBuilding} /></span>
+                            <span className="name">采集单位</span>
+                        </div>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink to="/settings/dst-unit" replace={true} className="hvr-sweep-to-right">
+                        <div>
+                            <span className="ico"><FontAwesomeIcon icon={faBuildingColumns} /></span>
+                            <span className="name">目的检验单位</span>
+                        </div>
+                    </NavLink>
+                </li>
+            </Auth>
+            <Auth deny={useBcp}>
+                <li>
+                    <NavLink to="/settings/self-unit" replace={true} className="hvr-sweep-to-right">
+                        <div>
+                            <span className="ico"><FontAwesomeIcon icon={faBuilding} /></span>
+                            <span className="name">采集单位管理</span>
+                        </div>
+                    </NavLink>
+                </li>
+            </Auth>
             <li>
                 <NavLink to="/settings/officer" replace={true} className="hvr-sweep-to-right">
                     <div>

@@ -5,8 +5,9 @@ import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
-import { EditUnitModalProp } from './prop';
+import { AllowCaseName } from '@/utils/regex';
 import { SelfUnit } from '@/schema/self-unit';
+import { EditUnitModalProp } from './prop';
 
 const { Item, useForm } = Form;
 
@@ -71,11 +72,12 @@ const EditUnitModal: FC<EditUnitModalProp> = ({
         <Form form={formRef} layout="horizontal">
             <Item
                 rules={[
-                    { required: true, message: '请填写单位名称' }
+                    { required: true, message: '请填写单位名称' },
+                    { pattern: AllowCaseName, message: '禁止输入非法字符' }
                 ]}
                 name="unitName"
                 label="单位名称">
-                <Input />
+                <Input maxLength={50} />
             </Item>
         </Form>
     </Modal>
