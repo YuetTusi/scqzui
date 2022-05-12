@@ -21,4 +21,20 @@ const MenuPanel = styled.div`
     }
 `;
 
-export { MenuPanel };
+const VersionBox = styled.div`
+    margin-top: 2rem;
+    p{
+        padding: 5px 0;
+        margin: 0;
+        font-size: 1.2rem;
+        label{
+            display: inline-block;
+            width: 70px;
+        }
+        span{
+            color:#0fb9b1;
+        }
+    }
+`;
+
+export { MenuPanel, VersionBox };

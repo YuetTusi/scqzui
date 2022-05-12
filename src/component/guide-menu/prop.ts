@@ -1,3 +1,7 @@
+import { MouseEvent } from 'react';
+
+type clickHandle = (event: MouseEvent<HTMLElement>) => void;
+
 interface GuideMenuProp { }
 
 interface ColorButtonProp {
@@ -5,7 +9,7 @@ interface ColorButtonProp {
     /**
      * 跳转路径
      */
-    to: string,
+    to: string | clickHandle,
     /**
      * 按钮颜色值
      */

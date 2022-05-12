@@ -8,12 +8,21 @@ import { ColorButtonProp } from './prop';
  */
 const ColorButton: FC<ColorButtonProp> = ({ to, icon, color, children }) => {
 
-    return <Color color={color}>
-        <NavLink to={to} replace={true}>
-            <div className="icon-box">{icon}</div>
-            <div className="text-box">{children}</div>
-        </NavLink>
-    </Color>;
+    if (typeof to === 'string') {
+        return <Color color={color}>
+            <NavLink to={to} replace={true}>
+                <div className="icon-box">{icon}</div>
+                <div className="text-box">{children}</div>
+            </NavLink>
+        </Color>;
+    } else {
+        return <Color onClick={to} color={color}>
+            <a>
+                <div className="icon-box">{icon}</div>
+                <div className="text-box">{children}</div>
+            </a>
+        </Color>
+    }
 };
 
 export default ColorButton;
