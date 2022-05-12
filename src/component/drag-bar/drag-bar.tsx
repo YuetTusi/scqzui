@@ -8,7 +8,7 @@ import { faWindowMaximize, faWindowMinimize, faXmark } from '@fortawesome/free-s
 const DragBarBox = styled.div`
     box-sizing: border-box;
     height: 24px;
-    background-color: #181d30;
+    background-color:  transparent;
     display: flex;
     flex-direction: row;
     &>.app-name{
@@ -39,7 +39,8 @@ const DragBarBox = styled.div`
             border-bottom-left-radius: ${props => props.theme['border-radius-base']};;
             border-bottom-right-radius: ${props => props.theme['border-radius-base']};;
             &:nth-child(1){
-                border-right: 1px solid #141414;
+                border-left: 1px solid #141414;
+                border-bottom: 1px solid #141414;
                 border-bottom-right-radius: 0;
                 background-color: #2b3347;
                 &:hover{
@@ -50,6 +51,8 @@ const DragBarBox = styled.div`
                 border-bottom-left-radius: 0;
                 border-bottom-right-radius: ${props => props.theme['border-radius-base']};;
                 border-right: 1px solid #141414;
+                border-left: 1px solid #141414;
+                border-bottom: 1px solid #141414;
                 margin-right: 10px;
                 background-color: #2b3347;
                 &:hover{

@@ -19,9 +19,6 @@ const GlobalStyle = createGlobalStyle`
 		width:auto;
 		height: 100%;
         background-color: #181d30;
-		/* background-image: url(${require('./images/bg.jpg')});
-		background-repeat: no-repeat;
-		background-size: cover; */
 		/* background-image: linear-gradient(to right,#181d30,#222739); */
 	}
 

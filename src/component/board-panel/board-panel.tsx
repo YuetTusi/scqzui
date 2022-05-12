@@ -7,7 +7,7 @@ import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
 import message from 'antd/lib/message';
 import { helper } from '@/utils/helper';
-import { Header } from './styled/header';
+import { BackgroundBox, Header } from './styled/header';
 import { Center } from './styled/center';
 import { Footer } from './styled/footer';
 import DragBar from '../drag-bar';
@@ -85,24 +85,26 @@ const BoardPanel: FC<{}> = ({ children }) => {
     };
 
     return <>
-        <DragBar />
-        <Header>
-            <div className="header-caption">{title ?? ''}</div>
-            <div className="header-buttons">
-                <QuestionCircleOutlined onClick={openHelpDocClick} title="帮助文档" />
-                <BoardMenu onItemClick={onItemClick}>
-                    <MenuOutlined />
-                </BoardMenu>
-            </div>
-        </Header>
-        <Center>
-            {children}
-        </Center>
-        <Footer>
-            <div>
-                Copyright © 2022 北京万盛华通科技有限公司
-            </div>
-        </Footer>
+        <BackgroundBox>
+            <DragBar />
+            <Header>
+                <div className="header-caption">{title ?? ''}</div>
+                <div className="header-buttons">
+                    <QuestionCircleOutlined onClick={openHelpDocClick} title="帮助文档" />
+                    <BoardMenu onItemClick={onItemClick}>
+                        <MenuOutlined />
+                    </BoardMenu>
+                </div>
+            </Header>
+            <Center>
+                {children}
+            </Center>
+            <Footer>
+                <div>
+                    Copyright © 2022 北京万盛华通科技有限公司
+                </div>
+            </Footer>
+        </BackgroundBox>
         <SofthardwareModal
             visible={softhardwareModalVisible}
             closeHandle={() => setSofthardwareModalVisible(false)} />

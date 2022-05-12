@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import bg from './image/bg.jpg';
 
 const Header = styled.div`
 
@@ -32,4 +33,17 @@ const Header = styled.div`
     }
 `;
 
-export { Header };
+const BackgroundBox = styled.div`
+
+    position: absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+
+    background-image: url(${bg});
+    background-size: cover;
+    background-repeat: no-repeat;
+`;
+
+export { Header, BackgroundBox };
