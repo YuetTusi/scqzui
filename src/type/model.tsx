@@ -29,6 +29,7 @@ import { QuickEventListState } from '@/model/default/quick-event-list';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
 import { QuickRecordListState } from '@/model/default/quick-record-list';
 import { CheckingListState } from '@/model/default/checking-list';
+import { SelfUnitState } from '@/model/default/self-unit';
 
 declare global {
 	interface Window {
@@ -74,6 +75,7 @@ interface StateTree {
 	editQuickEventModal: EditQuickEventModalState,
 	quickRecordList: QuickRecordListState,
 	checkingList: CheckingListState,
+	selfUnit: SelfUnitState,
 	[modelName: string]: any
 }
 

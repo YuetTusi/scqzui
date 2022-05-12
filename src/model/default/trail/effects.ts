@@ -38,7 +38,7 @@ export default {
 
         const { value } = payload;
         const { phonePath }: DeviceType = yield select((state: StateTree) => state.trail.deviceData);
-
+        yield put({ type: 'setLoading', payload: true });
         try {
             const dir: string[] = yield readdir(join(phonePath!, 'AppQuery', value));
             if (dir.length > 0) {
@@ -66,6 +66,7 @@ export default {
      */
     *readHistoryAppJson({ payload }: AnyAction, { put }: EffectsCommandMap) {
 
+        yield put({ type: 'setLoading', payload: true });
         try {
             const { data }: { data: InstallApp[] } =
                 yield helper.readJSONFile(payload);

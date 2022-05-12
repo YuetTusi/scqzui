@@ -35,9 +35,9 @@ enum TableName {
      */
     CreateBcpHistory = 'create-bcp-history',
     /**
-     * 单位表（部队版本）
+     * 自定义单位表（部队版本）
      */
-    ArmyUnit = 'army-unit',
+    SelfUnit = 'self-unit',
     /**
      * 痕迹查询用户表
      * 保存登录用户

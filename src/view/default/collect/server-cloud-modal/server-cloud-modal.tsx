@@ -51,15 +51,13 @@ const config = helper.readConf();
 function filterToParseApp(treeNodes: ITreeNode[]) {
     return treeNodes
         .filter((node) => node.level == 2)
-        .map(
-            (node) =>
-                new CloudApp({
-                    m_strID: node.id,
-                    key: node.appKey,
-                    name: node.appDesc,
-                    ext: node.ext
-                })
-        );
+        .map((node) =>
+            new CloudApp({
+                m_strID: node.id,
+                key: node.appKey,
+                name: node.appDesc,
+                ext: node.ext
+            }));
 }
 
 /**

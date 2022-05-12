@@ -60,6 +60,47 @@ export default {
         }
     },
     /**
+     * 保存自定义单位设置
+     * @param {string} payload.unitName 采集单位名称
+     * @param {string} payload.unitCode 采集单位编号
+     */
+    *saveSelfUnit({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+        const db = getDb<Organization>(TableName.Organization);
+        const { unitName, unitCode } = payload;
+        try {
+            const next: Organization[] = yield call([db, 'all']);
+            if (next.length === 0) {
+                yield call([db, 'insert'], payload);
+                yield put({ type: 'writeJson', payload });
+            } else {
+                yield call([db, 'update'], { _id: next[0]._id }, {
+                    ...next[0],
+                    collectUnitName: unitName,
+                    collectUnitCode: unitCode
+                });
+                yield put({
+                    type: 'writeJson', payload: {
+                        ...next[0],
+                        collectUnitName: unitName,
+                        collectUnitCode: unitCode
+                    }
+                });
+            }
+            yield put({
+                type: 'setCollectUnit', payload: {
+                    collectUnitName: unitName,
+                    collectUnitCode: unitCode
+                }
+            });
+            message.destroy();
+            message.success('保存成功');
+        } catch (error) {
+            log.error(`@model/default/organization/*saveCollectUnit: ${error.message}`);
+            message.destroy();
+            message.error('保存失败');
+        }
+    },
+    /**
      * 保存采集单位设置
      * @param {string} payload.collectUnitName 采集单位名称
      * @param {string} payload.collectUnitCode 采集单位编号
@@ -105,7 +146,7 @@ export default {
      * @param {string} payload.dstUnitName 目的检验单位名称
      * @param {string} payload.dstUnitCode 目的检验单位编号
      */
-    * saveDstUnit({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *saveDstUnit({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
         const db = getDb<Organization>(TableName.Organization);
         const { dstUnitName, dstUnitCode } = payload;
         try {

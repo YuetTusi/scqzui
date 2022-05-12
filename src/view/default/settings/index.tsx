@@ -11,6 +11,7 @@ import Reading from '@/component/loading/reading';
 import AlartMessage from '@/component/alert-message';
 import Unit from '@/view/default/settings/unit';
 import DstUnit from '@/view/default/settings/dst-unit';
+import SelfUnit from '@/view/default/settings/self-unit';
 import Officer from '@/view/default/settings/officer';
 import OfficerEdit from '@/view/default/settings/officer/edit';
 import Keywords from '@/view/default/settings/keywords';
@@ -48,6 +49,14 @@ const Index: FC<{}> = () => <SettingLayout>
                     <div>
                         <span className="ico"><FontAwesomeIcon icon={faBuildingColumns} /></span>
                         <span className="name">目的检验单位</span>
+                    </div>
+                </NavLink>
+            </li>
+            <li>
+                <NavLink to="/settings/self-unit" replace={true} className="hvr-sweep-to-right">
+                    <div>
+                        <span className="ico"><FontAwesomeIcon icon={faBuilding} /></span>
+                        <span className="name">采集单位管理</span>
                     </div>
                 </NavLink>
             </li>
@@ -113,6 +122,9 @@ const Index: FC<{}> = () => <SettingLayout>
     <Route
         path="/settings/dst-unit"
         component={() => <ContentBox title="目的检验单位"><DstUnit /></ContentBox>} />
+    <Route
+        path="/settings/self-unit"
+        component={() => <ContentBox title="采集单位管理"><SelfUnit /></ContentBox>} />
     <Route
         path="/settings/officer"
         exact={true}
