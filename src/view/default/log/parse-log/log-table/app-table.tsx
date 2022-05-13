@@ -1,8 +1,11 @@
 import React, { FC } from 'react';
 import Empty from 'antd/lib/empty';
 import Table, { ColumnProps } from 'antd/lib/table';
+import { helper } from '@/utils/helper';
 import { ParseApp } from '@/schema/parse-log';
 import { InnerAppTableBox } from '../styled/style';
+
+const { parseText } = helper.readConf()!;
 
 interface AppTableProp {
     /**
@@ -17,7 +20,7 @@ const getColumns = (): ColumnProps<ParseApp>[] => {
         dataIndex: 'appname',
         key: 'appname'
     }, {
-        title: '解析数量',
+        title: `${parseText ?? '解析'}数量`,
         dataIndex: 'u64count',
         key: 'u64count',
         width: 180

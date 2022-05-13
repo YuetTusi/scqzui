@@ -19,10 +19,12 @@ import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import { useQuickEvent, useQuickHit } from '@/hook';
+import { helper } from '@/utils/helper';
 import { EmptyBox } from './styled/style';
 import { HitChartModalProp } from './prop';
 
 const cwd = process.cwd();
+const { caseText } = helper.readConf()!;
 let charts: echars.ECharts | null = null;
 
 echars.use([
@@ -110,7 +112,7 @@ const HitChartModal: FC<HitChartModalProp> = ({
 
         if (eventData === undefined) {
             message.destroy();
-            message.warn('读取案件数据失败，无法导出报表');
+            message.warn(`读取${caseText ?? '案件'}数据失败，无法导出报表`);
             return;
         }
 

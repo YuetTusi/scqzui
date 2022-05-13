@@ -10,8 +10,10 @@ import { EventDescModalProp } from './prop';
 import { QuickEvent } from '@/schema/quick-event';
 import Empty from 'antd/lib/empty';
 import { getDb } from '@/utils/db';
+import { helper } from '@/utils/helper';
 import { TableName } from '@/schema/table-name';
 
+const { caseText, devText } = helper.readConf()!;
 /**
  * 点验案件详情框
  */
@@ -69,7 +71,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
         }
         return <ul>
             <li>
-                <label>案件名称</label>
+                <label>{`${caseText ?? '案件'}名称`}</label>
                 <span>{data.eventName.split('_')[0]}</span>
             </li>
             <li>
@@ -123,7 +125,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
             <div className="desc">
                 <div className="ibox">
                     <div className="caption">
-                        案件信息
+                        {`${caseText ?? '案件'}信息`}
                     </div>
                     <div className="content">
                         {renderEvent(data)}

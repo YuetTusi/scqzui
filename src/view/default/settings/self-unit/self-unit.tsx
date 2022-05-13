@@ -21,6 +21,8 @@ import EditUnitModal from './edit-unit-modal';
 import { getColumns } from './column';
 import { SelfUnitProp } from './prop';
 
+const { fetchText } = helper.readConf()!;
+
 /**
  * 自定义单位管理
  */
@@ -117,7 +119,7 @@ const SelfUnit: FC<SelfUnitProp> = () => {
             });
         } else {
             message.destroy();
-            message.info('请选择采集单位');
+            message.info(`请选择${fetchText ?? '取证'}单位`);
         }
     }, 500, { leading: true, trailing: false })
 

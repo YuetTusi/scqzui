@@ -4,6 +4,8 @@ import { caseStore } from '@/utils/local-store';
 import { CaseInfoBox } from './styled/case-info-box';
 import { CaseInfoProp } from './prop';
 
+const { caseText, devText } = helper.readConf()!;
+
 /**
  * 案件信息
  */
@@ -32,7 +34,7 @@ const CaseInfo: FC<CaseInfoProp> = ({ usb }) => {
 
     return <CaseInfoBox>
         <div>
-            <label className="txt">案件名称</label>
+            <label className="txt">{`${caseText ?? '案件'}名称`}</label>
             <span title={caseName} className="val">{caseName}</span>
         </div>
         <div>
@@ -41,7 +43,7 @@ const CaseInfo: FC<CaseInfoProp> = ({ usb }) => {
         </div>
         {!helper.isNullOrUndefinedOrEmptyString(mobileNo) ? (
             <div>
-                <label className="txt">手机编号</label>
+                <label className="txt">{`${devText ?? '设备'}编号`}</label>
                 <span title={mobileNo} className="val">{mobileNo}</span>
             </div>
         ) : null}

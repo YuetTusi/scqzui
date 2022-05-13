@@ -1,6 +1,5 @@
 import { statSync } from 'fs';
 import { join, sep } from 'path';
-import { ipcRenderer } from 'electron';
 import { helper } from '@/utils/helper';
 import { CaseInfo } from '@/schema/case-info';
 import { TableName } from '@/schema/table-name';
@@ -9,6 +8,8 @@ import { DataMode } from '@/schema/data-mode';
 import { FetchState, ParseState } from '@/schema/device-state';
 import { CaseJson, DeviceJson } from './prop';
 import { getDb } from '@/utils/db';
+
+const { caseText, devText } = helper.readConf()!;
 
 /**
  * 导入设备
@@ -21,10 +22,10 @@ async function importDevice(deviceJsonPath: string, caseData: CaseInfo) {
     try {
         const deviceJson: DeviceJson = await helper.readJSONFile(deviceJsonPath);
         if (helper.isNullOrUndefined(deviceJson.mobileName)) {
-            throw new Error('读取设备名称失败');
+            throw new Error(`读取${devText ?? '设备'}名称失败`);
         }
         if (helper.isNullOrUndefined(deviceJson.mobileHolder)) {
-            throw new Error('读取设备持有人失败');
+            throw new Error(`读取${devText ?? '设备'}持有人失败`);
         }
         const [isParse, current] = await Promise.all([
             helper.existFile(join(devicePath, './out/baseinfo.json')),
@@ -48,7 +49,7 @@ async function importDevice(deviceJsonPath: string, caseData: CaseInfo) {
         }
 
     } catch (error) {
-        throw new Error('导入设备检材数据失败');
+        throw new Error(`导入${devText ?? '设备'}检材数据失败`);
     }
 }
 
@@ -68,7 +69,7 @@ async function readCaseJson(jsonPath: string) {
             m_bIsAutoParse: json.m_bIsAutoParse ?? true
         };
     } catch (error) {
-        throw new Error('读取案件数据失败');
+        throw new Error(`读取${caseText ?? '案件'}数据失败`);
     }
 }
 
@@ -97,7 +98,7 @@ async function getCaseByName(caseJson: CaseJson, casePath: string) {
             return next;
         }
     } catch (error) {
-        throw new Error('导入案件数据失败');
+        throw new Error(`导入${caseText ?? '案件'}数据失败`);
     }
 }
 

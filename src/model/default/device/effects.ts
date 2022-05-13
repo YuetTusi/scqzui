@@ -35,6 +35,9 @@ import { QuickEvent } from '@/schema/quick-event';
 import parseApps from '@/config/parse-app.yaml';
 import { DeviceStoreState } from './index';
 import { AppSetStore } from '../app-set';
+
+const { caseText, fetchText } = helper.readConf()!;
+
 /**
  * 副作用
  */
@@ -206,7 +209,7 @@ export default {
                 call([eventDb, 'findOne'], { _id: caseId })
             ]);
             let entity = new ParseLogEntity();
-            entity.caseName = helper.isNullOrUndefinedOrEmptyString(eventData?.eventName) ? '未知案件' : eventData.eventName.split('_')[0];
+            entity.caseName = helper.isNullOrUndefinedOrEmptyString(eventData?.eventName) ? `未知名称` : eventData.eventName.split('_')[0];
             entity.mobileName = recData?.mobileName ?? '';
             entity.mobileNo = recData?.mobileNo ?? '';
             entity.mobileHolder = recData?.mobileHolder ?? '';
@@ -571,7 +574,7 @@ export default {
         const { device } = payload as { device: DeviceType };
 
         if (helper.isNullOrUndefinedOrEmptyString(sendCase?.CaseName)) {
-            message.warn('案件名称为空，请确认平台数据完整');
+            message.warn(`${caseText ?? '案件'}名称为空，请确认平台数据完整`);
             return;
         }
         if (helper.isNullOrUndefinedOrEmptyString(sendCase?.OwnerName)) {
@@ -585,7 +588,7 @@ export default {
             if (hasCase === undefined) {
                 //# 库中无重名案件，从警综平台数据中创建案件入库
                 let filePaths: string[] | undefined = yield ipcRenderer.invoke('open-dialog-sync', {
-                    title: '选择案件存储目录',
+                    title: `选择${caseText ?? '案件'}存储目录`,
                     properties: ['openDirectory']
                 });
                 if (filePaths === undefined || filePaths.length === 0) { return; }
@@ -680,7 +683,7 @@ export default {
             }
 
         } catch (error) {
-            message.error(`取证失败: ${error.message}`);
+            message.error(`${fetchText ?? '取证'}失败: ${error.message}`);
             logger.error(`警综平台获取数据取证失败 @model/default/device/*saveCaseFromPlatform: ${error.message}`);
         }
     },

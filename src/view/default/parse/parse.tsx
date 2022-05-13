@@ -2,10 +2,13 @@ import React, { FC, useEffect } from 'react';
 import { useDispatch, useLocation } from 'dva';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
+import { helper } from '@/utils/helper';
 import ParsingList from './parsing-list';
 import CaseList from './case-list';
 import DevList from './dev-list';
 import { TableBox, ParseBox, ParsingPanel } from './styled/style';
+
+const { caseText, devText, parseText } = helper.readConf()!;
 
 const Parse: FC<{}> = () => {
 
@@ -19,7 +22,7 @@ const Parse: FC<{}> = () => {
         }
     }, [search]);
 
-    return <SubLayout title="数据解析">
+    return <SubLayout title={`数据${parseText ?? '解析'}`}>
         <ParseBox>
             <ParsingPanel>
                 <ParsingList />
@@ -28,7 +31,7 @@ const Parse: FC<{}> = () => {
             <TableBox>
                 <div className="case-list">
                     <div className="title-bar">
-                        案件
+                        {caseText ?? '案件'}
                     </div>
                     <div>
                         <CaseList />
@@ -36,7 +39,7 @@ const Parse: FC<{}> = () => {
                 </div>
                 <div className="dev-list">
                     <div className="title-bar">
-                        设备
+                        {devText ?? '设备'}
                     </div>
                     <div>
                         <DevList />

@@ -5,15 +5,18 @@ import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
+import { helper } from '@/utils/helper';
 import { App } from '@/schema/app-config';
 import { CaptchaMsg, CloudAppMessages, CloudAppState } from '@/schema/cloud-app-messages';
 import { ITreeNode } from '@/type/ztree';
 import { StateTree } from '@/type/model';
 import { AppSetStore } from '@/model/default/app-set';
-import { SmsMessageType } from '@/component/dialog/cloud-code-modal/prop';
-import { DetailModalProps } from './prop';
-import { DetailModalBox } from './styled/style';
 import { CloudLogModalState } from '@/model/default/cloud-log-modal';
+import { SmsMessageType } from '@/component/dialog/cloud-code-modal/prop';
+import { DetailModalBox } from './styled/style';
+import { DetailModalProps } from './prop';
+
+const { fetchText } = helper.readConf()!;
 
 /**
  * 查找云取应用结果中存在的应用，如果没有返回空数组
@@ -198,7 +201,7 @@ const CloudAppDetailModal: FC<DetailModalProps> = ({
                     <span>取消</span>
                 </Button>
             ]}
-            title="采集记录"
+            title={`${fetchText ?? '采集'}记录`}
             onCancel={cancelHandle}
             centered={true}
             destroyOnClose={true}

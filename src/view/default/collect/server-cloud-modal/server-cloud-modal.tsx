@@ -42,7 +42,7 @@ import { FormValue, Prop } from './prop';
 
 const { Panel } = Collapse;
 const { Item, useForm } = Form;
-const config = helper.readConf();
+const { cloudAppUrl, caseText, devText, fetchText } = helper.readConf()!;
 
 /**
  * 过滤勾选的node，返回level==2的应用结点
@@ -249,7 +249,7 @@ const ServerCloudModal: FC<Prop> = ({
                                 磁盘空间仅存<strong>{round(FreeSpace, 1)}GB</strong>
                                 ，建议清理数据
                             </p>
-                            <p>设备数据过大可能会采集失败，继续取证？</p>
+                            <p>{`${devText ?? '设备'}数据过大可能会${fetchText ?? '取证'}失败，继续${fetchText ?? '取证'}？`}</p>
                         </Instruction>,
                         okText: '是',
                         cancelText: '否',
@@ -288,15 +288,15 @@ const ServerCloudModal: FC<Prop> = ({
                             <Item
                                 rules={[{
                                     required: true,
-                                    message: '请选择案件'
+                                    message: `请选择${caseText ?? '案件'}`
                                 }]}
                                 name="case"
-                                label="案件名称">
+                                label={`${caseText ?? '案件'}名称`}>
                                 <Select
                                     onChange={caseChange}
                                     showSearch={true}
                                     notFoundContent="暂无数据"
-                                    placeholder="选择案件，可输入案件名称筛选">
+                                    placeholder={`选择${caseText ?? '案件'}，可输入名称筛选`}>
                                     {bindCaseSelect()}
                                 </Select>
                             </Item>
@@ -305,7 +305,7 @@ const ServerCloudModal: FC<Prop> = ({
                                     onClick={toCaseAddView}
                                     type="primary"
                                     size="small"
-                                    title="添加案件"
+                                    title={`添加${caseText ?? '案件'}`}
                                 ><PlusSquareOutlined /></Button>
                             </Item>
                         </Col>
@@ -321,7 +321,7 @@ const ServerCloudModal: FC<Prop> = ({
                                     onClick={() => setAppSelectModalVisible(true)}
                                     style={{ width: '100%' }}>
                                     <SelectOutlined />
-                                    <span>{`云取证App（${selectedApps.length}）`}</span>
+                                    <span>{`云${fetchText ?? '取证'}App（${selectedApps.length}）`}</span>
                                 </Button>
                             </Item>
                         </Col>
@@ -360,7 +360,7 @@ const ServerCloudModal: FC<Prop> = ({
                             <Item rules={[
                                 {
                                     required: true,
-                                    message: '请填写手机名称'
+                                    message: `请填写${devText ?? '设备'}名称`
                                 },
                                 {
                                     pattern: Backslashe,
@@ -369,7 +369,7 @@ const ServerCloudModal: FC<Prop> = ({
                                 { pattern: UnderLine, message: '不允许输入下划线' }
                             ]}
                                 name="phoneName"
-                                label="手机名称"
+                                label={`${devText ?? '设备'}名称`}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}>
                                 <AutoComplete
@@ -428,7 +428,7 @@ const ServerCloudModal: FC<Prop> = ({
                                 }
                             ]}
                                 name="deviceNumber"
-                                label="手机编号"
+                                label={`${devText ?? '设备'}编号`}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}>
                                 <AutoComplete
@@ -589,14 +589,14 @@ const ServerCloudModal: FC<Prop> = ({
                         <CloseCircleOutlined />
                         <span>取消</span>
                     </Button>,
-                    <Tooltip title="确定后开始采集数据" key="B_1">
+                    <Tooltip title={`确定后开始${fetchText ?? '取证'}数据`} key="B_1">
                         <Button type="primary" onClick={formSubmit}>
                             <CheckCircleOutlined />
                             <span>确定</span>
                         </Button>
                     </Tooltip>
                 ]}
-                title="取证信息录入（云取）"
+                title={`${fetchText ?? '取证'}信息录入（云取）`}
                 width={1000}
                 maskClosable={false}
                 destroyOnClose={true}
@@ -605,9 +605,9 @@ const ServerCloudModal: FC<Prop> = ({
                 <ServerCloudModalBox>{renderForm()}</ServerCloudModalBox>
             </Modal>
             <CloudAppSelectModal
-                title="云取证App"
+                title={`云${fetchText ?? '取证'}App`}
                 visible={appSelectModalVisible}
-                url={config?.cloudAppUrl ?? helper.FETCH_CLOUD_APP_URL}
+                url={cloudAppUrl ?? helper.FETCH_CLOUD_APP_URL}
                 // url="http://localhost:9900/app/cloud-app"
                 selectedKeys={selectedApps.map((i) => i.m_strID)}
                 okHandle={appSelectHandle}

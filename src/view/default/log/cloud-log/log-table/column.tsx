@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
 import React, { MouseEvent } from 'react';
 import { Dispatch } from 'redux';
-import Tag from 'antd/lib/tag';
 import { ColumnProps } from 'antd/lib/table';
 import { helper } from '@/utils/helper';
 import { CloudLog } from '@/schema/cloud-log';
+
+const { caseText, devText, fetchText } = helper.readConf()!;
 
 /**
  * 表头定义
@@ -12,7 +13,7 @@ import { CloudLog } from '@/schema/cloud-log';
 function getColumns(dispatch: Dispatch): ColumnProps<CloudLog>[] {
     let cols: ColumnProps<CloudLog>[] = [
         {
-            title: '手机名称',
+            title: `${devText ?? '设备'}名称`,
             dataIndex: 'mobileName',
             key: 'mobileName',
             render(val: string, record: CloudLog) {
@@ -45,7 +46,7 @@ function getColumns(dispatch: Dispatch): ColumnProps<CloudLog>[] {
             }
         },
         {
-            title: '手机编号',
+            title: `${devText ?? '设备'}编号`,
             dataIndex: 'mobileNo',
             key: 'mobileNo',
             width: 75,
@@ -58,7 +59,7 @@ function getColumns(dispatch: Dispatch): ColumnProps<CloudLog>[] {
             }
         },
         {
-            title: '案件名称',
+            title: `${caseText ?? '案件'}名称`,
             dataIndex: 'caseName',
             key: 'caseName'
         },
@@ -76,7 +77,7 @@ function getColumns(dispatch: Dispatch): ColumnProps<CloudLog>[] {
             }
         },
         {
-            title: '采集时间',
+            title: `${fetchText ?? '取证'}时间`,
             dataIndex: 'fetchTime',
             key: 'fetchTime',
             width: 160,
@@ -94,7 +95,7 @@ function getColumns(dispatch: Dispatch): ColumnProps<CloudLog>[] {
             }
         },
         {
-            title: '采集记录',
+            title: `${fetchText ?? '取证'}记录`,
             dataIndex: '_id',
             key: 'detail',
             width: 100,
@@ -107,7 +108,7 @@ function getColumns(dispatch: Dispatch): ColumnProps<CloudLog>[] {
                             dispatch({ type: 'cloudLogModal/setVisible', payload: true });
                             dispatch({ type: 'cloudLogModal/setCloudApps', payload: apps });
                         }}>
-                        采集记录
+                        {`${fetchText ?? '取证'}记录`}
                     </a>
                 );
             }

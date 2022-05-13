@@ -15,7 +15,7 @@ const fakeModal = (brand: string) => {
 
     const handle = Modal.info({
         title: '正在检测',
-        content: '正在检测连接设备，请稍等...',
+        content: '正在检测连接，请稍等...',
         okText: '确定',
         icon: <LoadingOutlined />,
         centered: true,

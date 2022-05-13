@@ -11,6 +11,8 @@ import FetchRecord, { ProgressType } from '@/schema/fetch-record';
 import { FetchRecordBox } from './styled/style';
 import { LiveModalProp } from './prop';
 
+const { fetchText } = helper.readConf()!;
+
 /**
  * 采集记录框（此框用于采集时实显示进度消息）
  */
@@ -129,7 +131,7 @@ const LiveModal: FC<LiveModalProp> = ({ title, device, visible, cancelHandle }) 
 
 LiveModal.defaultProps = {
     visible: false,
-    title: '采集记录',
+    title: `${fetchText ?? '取证'}记录`,
     cancelHandle: () => { }
 };
 

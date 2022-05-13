@@ -17,6 +17,8 @@ import { FetchState, ParseState } from '@/schema/device-state';
 import CommandType, { SocketType } from '@/schema/command';
 import { FormValue } from '@/view/default/tool/import-data-modal/prop';
 
+const { parseText } = helper.readConf()!;
+
 export default {
     /** 将第三方导入的手机数据入库到案件下
       * @param {FormValue} payload.formValue 表单数据
@@ -164,7 +166,7 @@ export default {
                 }
             })}`);
             yield put({ type: 'setVisible', payload: false });
-            message.info('数据已导入，请在「数据解析」页面查看进度');
+            message.info(`数据已导入，请在「数据${parseText ?? '解析'}」页面查看进度`);
         } catch (error) {
             logger.error(`设备数据入库失败 @model/default/import-data-modal/*saveImportDeviceToCase: ${error.message}`);
             message.warn('导入失败，请正确选择数据目录');

@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'dva';
 import Empty from 'antd/lib/empty';
 import Progress from 'antd/lib/progress';
 import { StateTree } from '@/type/model';
+import { helper } from '@/utils/helper';
 import { CheckingListState } from '@/model/default/checking-list';
 import ParseDetail from '@/schema/parse-detail';
-import { ListBox } from './styled/style';
 import { QuickRecord } from '@/schema/quick-record';
+import { ListBox } from './styled/style';
 
+const { devText } = helper.readConf()!;
 
 /**
  * 正在解析的设备列表
@@ -32,7 +34,7 @@ const CheckingRec: FC<{ info: ParseDetail, records: QuickRecord[] }> = ({ info, 
         const dev = records.find(item => item._id === deviceId);
         return <ul>
             <li>
-                <label>手机名称</label>
+                <label>{`${devText ?? '设备'}名称`}</label>
                 <span>{dev?.mobileName === undefined ? '' : dev?.mobileName.split('_')[0]}</span>
             </li>
             <li>
@@ -138,7 +140,7 @@ const CheckingList: FC<{}> = () => {
         } else {
             return <div className="d-empty">
                 <Empty
-                    description="暂无点验设备"
+                    description={`暂无点验${devText ?? '设备'}`}
                     image={Empty.PRESENTED_IMAGE_SIMPLE} />
             </div>
         }

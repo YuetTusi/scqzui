@@ -21,7 +21,7 @@ import { helper } from '@/utils/helper';
 
 type SetDataHandle = (data: DeviceType[]) => void;
 type SetLoadingHandle = (loading: boolean) => void;
-const { useAi, useBcp } = helper.readConf()!;
+const { useAi, useBcp, caseText, fetchText, devText, parseText } = helper.readConf()!;
 
 /**
  * 表头定义
@@ -30,7 +30,7 @@ const { useAi, useBcp } = helper.readConf()!;
 export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
     let columns: ColumnType<CaseInfo>[] = [
         {
-            title: '案件名称',
+            title: `${caseText ?? '案件'}名称`,
             dataIndex: 'm_strCaseName',
             key: 'm_strCaseName',
             render: (cell: string) => {
@@ -38,7 +38,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             }
         },
         {
-            title: '备用案件名称',
+            title: `备用${caseText ?? '案件'}名称`,
             dataIndex: 'spareName',
             key: 'spareName'
         },
@@ -61,7 +61,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
-            title: '自动解析',
+            title: `自动${parseText ?? '解析'}`,
             dataIndex: 'm_bIsAutoParse',
             key: 'm_bIsAutoParse',
             width: '80px',
@@ -148,7 +148,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
                             e.stopPropagation();
                             Modal.confirm({
                                 title: `删除「${caseName}」`,
-                                content: `案件下取证数据将一并删除，确认吗？`,
+                                content: `${caseText ?? '案件'}下${fetchText ?? '取证'}数据将一并删除，确认吗？`,
                                 okText: '是',
                                 cancelText: '否',
                                 onOk() {
@@ -196,7 +196,7 @@ export function getDeviceColumns(
 ): ColumnsType<DeviceType> {
     const columns: ColumnType<DeviceType>[] = [
         {
-            title: '手机名称',
+            title: `${devText ?? '手机'}名称`,
             dataIndex: 'mobileName',
             key: 'mobileName',
             render(value: string, { mode, system }: DeviceType) {
@@ -211,7 +211,7 @@ export function getDeviceColumns(
                         }
                         {
                             mode === DataMode.ServerCloud
-                                ? <CloudFilled style={{ marginLeft: '5px' }} title="云取证" className="cloud-color" />
+                                ? <CloudFilled style={{ marginLeft: '5px' }} title={`云${fetchText ?? '取证'}`} className="cloud-color" />
                                 : null
                         }
                     </span>
@@ -230,7 +230,7 @@ export function getDeviceColumns(
             width: '150px'
         },
         {
-            title: '手机编号',
+            title: `${devText ?? '设备'}编号`,
             dataIndex: 'mobileNo',
             key: 'mobileNo',
             width: '150px'
@@ -245,7 +245,7 @@ export function getDeviceColumns(
             }
         },
         {
-            title: '取证时间',
+            title: `${fetchText ?? '取证'}时间`,
             dataIndex: 'fetchTime',
             key: 'fetchTime',
             width: '160px',
@@ -275,7 +275,7 @@ export function getDeviceColumns(
                         onClick={() => {
                             Modal.confirm({
                                 title: `删除「${record.mobileName?.split('_')[0]}」数据`,
-                                content: `确认删除该取证数据吗？`,
+                                content: `确认删除该${devText ?? '设备'}数据吗？`,
                                 okText: '是',
                                 cancelText: '否',
                                 async onOk() {

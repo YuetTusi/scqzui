@@ -25,6 +25,7 @@ import { CheckInputModalBox } from './styled/style';
 import { FormValue, Prop } from './prop';
 import { CheckInputModalState } from '@/model/default/check-input-modal';
 
+const { caseText, devText, fetchText } = helper.readConf()!;
 const { Option } = Select;
 const { Item, useForm } = Form;
 const formItemLayout = {
@@ -138,15 +139,13 @@ const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }
                             saveHandle(entity!);
                         },
                         title: '磁盘空间不足',
-                        content: (
-                            <Instruction>
-                                <p>
-                                    磁盘空间仅存<strong>{round(FreeSpace, 1)}GB</strong>
-                                    ，建议清理数据
-                                </p>
-                                <p>设备数据过大可能会采集失败，继续取证？</p>
-                            </Instruction>
-                        ),
+                        content: <Instruction>
+                            <p>
+                                磁盘空间仅存<strong>{round(FreeSpace, 1)}GB</strong>
+                                ，建议清理数据
+                            </p>
+                            <p>{`${devText ?? '设备'}数据过大可能会${fetchText ?? '取证'}失败，继续${fetchText ?? '取证'}？`}</p>
+                        </Instruction>,
                         okText: '是',
                         cancelText: '否',
                         centered: true
@@ -167,117 +166,115 @@ const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }
 
     const renderForm = (): JSX.Element => {
 
-        return (
-            <div>
-                <Form form={formRef} layout="horizontal" {...formItemLayout}>
-                    <Row>
-                        <Col
-                            span={24}>
-                            <Item
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: '请选择案件'
-                                    }
-                                ]}
-                                name="case"
-                                label="案件名称">
-                                <Select
-                                    onChange={caseChange}
-                                    showSearch={true}
-                                    notFoundContent="暂无数据"
-                                    placeholder="选择案件，可输入案件名称筛选">
-                                    {bindCaseSelect()}
-                                </Select>
-                            </Item>
-                            <div className="with-btn">
-                                <Button
-                                    onClick={toCaseAddView}
-                                    type="primary"
-                                    size="small"
-                                    title="添加案件"
-                                >
-                                    <PlusCircleOutlined />
-                                </Button>
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Item
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: '请填写姓名'
-                                    },
-                                    {
-                                        pattern: Backslashe,
-                                        message: '不允许输入斜线字符'
-                                    }
-                                ]}
-                                name="user"
-                                label="姓名"
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 13 }}>
-                                <Input />
-                            </Item>
-                        </Col>
-                        <Col span={12}>
-                            <Item
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: '请填写身份证/军官证号'
-                                    }
-                                ]}
-                                name="credential"
-                                label="身份证/军官证号"
-                                labelCol={{ span: 7 }}
-                                wrapperCol={{ span: 13 }}>
-                                <Input />
-                            </Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Item
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: '请填写手机名称'
-                                    },
-                                    {
-                                        pattern: Backslashe,
-                                        message: '不允许输入斜线字符'
-                                    },
-                                    { pattern: UnderLine, message: '不允许输入下划线' }
-                                ]}
-                                name="phoneName"
-                                label="手机名称"
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 13 }}>
-                                <Input />
-                            </Item>
-                        </Col>
-                        <Col span={12}>
-                            <Item
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: '请填写设备手机号'
-                                    }
-                                ]}
-                                name="note"
-                                label="设备手机号"
-                                labelCol={{ span: 7 }}
-                                wrapperCol={{ span: 13 }}>
-                                <Input maxLength={100} />
-                            </Item>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
-        );
+        return <div>
+            <Form form={formRef} layout="horizontal" {...formItemLayout}>
+                <Row>
+                    <Col
+                        span={24}>
+                        <Item
+                            rules={[
+                                {
+                                    required: true,
+                                    message: `请选择${caseText ?? '案件'}`
+                                }
+                            ]}
+                            name="case"
+                            label={`${caseText ?? '案件'}名称`}>
+                            <Select
+                                onChange={caseChange}
+                                showSearch={true}
+                                notFoundContent="暂无数据"
+                                placeholder={`选择${caseText ?? '案件'}，可输入名称筛选`}>
+                                {bindCaseSelect()}
+                            </Select>
+                        </Item>
+                        <div className="with-btn">
+                            <Button
+                                onClick={toCaseAddView}
+                                type="primary"
+                                size="small"
+                                title={`添加${caseText ?? '案件'}`}
+                            >
+                                <PlusCircleOutlined />
+                            </Button>
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Item
+                            rules={[
+                                {
+                                    required: true,
+                                    message: '请填写姓名'
+                                },
+                                {
+                                    pattern: Backslashe,
+                                    message: '不允许输入斜线字符'
+                                }
+                            ]}
+                            name="user"
+                            label="姓名"
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 13 }}>
+                            <Input />
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Item
+                            rules={[
+                                {
+                                    required: true,
+                                    message: '请填写身份证/军官证号'
+                                }
+                            ]}
+                            name="credential"
+                            label="身份证/军官证号"
+                            labelCol={{ span: 7 }}
+                            wrapperCol={{ span: 13 }}>
+                            <Input />
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Item
+                            rules={[
+                                {
+                                    required: true,
+                                    message: `请填写${devText ?? '设备'}名称`
+                                },
+                                {
+                                    pattern: Backslashe,
+                                    message: '不允许输入斜线字符'
+                                },
+                                { pattern: UnderLine, message: '不允许输入下划线' }
+                            ]}
+                            name="phoneName"
+                            label={`${devText ?? '设备'}名称`}
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 13 }}>
+                            <Input />
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Item
+                            rules={[
+                                {
+                                    required: true,
+                                    message: '请填写手机号'
+                                }
+                            ]}
+                            name="note"
+                            label="手机号"
+                            labelCol={{ span: 7 }}
+                            wrapperCol={{ span: 13 }}>
+                            <Input maxLength={100} />
+                        </Item>
+                    </Col>
+                </Row>
+            </Form>
+        </div>;
     };
 
     return <Modal
@@ -294,7 +291,7 @@ const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }
                 <CloseCircleOutlined />
                 <span>取消</span>
             </Button>,
-            <Tooltip title="确定后开始采集数据" key="CIM_1">
+            <Tooltip title={`确定后开始${fetchText ?? '取证'}数据`} key="CIM_1">
                 <Button
                     type="primary"
                     onClick={formSubmit}>
@@ -303,7 +300,7 @@ const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }
                 </Button>
             </Tooltip>
         ]}
-        title="取证信息录入（点验）"
+        title={`${fetchText ?? '取证'}信息录入（点验）`}
         width={1000}
         maskClosable={false}
         destroyOnClose={true}

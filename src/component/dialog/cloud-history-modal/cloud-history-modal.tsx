@@ -5,16 +5,18 @@ import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
+import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
 import { ITreeNode } from '@/type/ztree';
+import { AppSetStore } from '@/model/default/app-set';
 import { App, AppCategory } from '@/schema/app-config';
 import { CaptchaMsg, CloudAppMessages, CloudAppState } from '@/schema/cloud-app-messages';
 import { SmsMessageType } from '../cloud-code-modal/prop';
 import { CloudCodeModalStoreState } from '@/model/default/cloud-code-modal';
-import { AppSetStore } from '@/model/default/app-set';
 import { CloudHistoryModalBox } from './styled/style';
 import { CloudHistoryModalProp } from './prop';
 
+const { fetchText } = helper.readConf()!;
 let ztree: any = null;
 
 /**
@@ -201,7 +203,7 @@ const CloudHistoryModal: FC<CloudHistoryModalProp> = ({
             forceRender={true}
             maskClosable={false}
             width={850}
-            title="采集记录">
+            title={`${fetchText ?? '取证'}记录`}>
             <CloudHistoryModalBox>
                 <div className="cloud-panel">
                     <div className="left-tree">

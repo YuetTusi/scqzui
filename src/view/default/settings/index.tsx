@@ -23,7 +23,7 @@ import { MenuPanel } from './styled/menu';
 import { SettingLayout } from './styled/sub-layout';
 import ContentBox from './content-box';
 
-const { useBcp, useTraceLogin } = helper.readConf()!;
+const { useBcp, useTraceLogin, fetchText } = helper.readConf()!;
 
 /**
  * 设置布局页
@@ -41,7 +41,7 @@ const Index: FC<{}> = () => <SettingLayout>
                     <NavLink to="/settings" exact={true} replace={true} className="hvr-sweep-to-right">
                         <div>
                             <span className="ico"><FontAwesomeIcon icon={faBuilding} /></span>
-                            <span className="name">采集单位</span>
+                            <span className="name">{`${fetchText ?? '取证'}单位`}</span>
                         </div>
                     </NavLink>
                 </li>
@@ -59,7 +59,7 @@ const Index: FC<{}> = () => <SettingLayout>
                     <NavLink to="/settings/self-unit" replace={true} className="hvr-sweep-to-right">
                         <div>
                             <span className="ico"><FontAwesomeIcon icon={faBuilding} /></span>
-                            <span className="name">采集单位管理</span>
+                            <span className="name">{`${fetchText ?? '取证'}单位管理`}</span>
                         </div>
                     </NavLink>
                 </li>
@@ -68,7 +68,7 @@ const Index: FC<{}> = () => <SettingLayout>
                 <NavLink to="/settings/officer" replace={true} className="hvr-sweep-to-right">
                     <div>
                         <span className="ico"><FontAwesomeIcon icon={faUser} /></span>
-                        <span className="name">采集人员信息</span>
+                        <span className="name">{`${fetchText ?? '取证'}人员信息`}</span>
                     </div>
                 </NavLink>
             </li>
@@ -119,23 +119,23 @@ const Index: FC<{}> = () => <SettingLayout>
     <Route
         path="/settings"
         exact={true}
-        component={() => <ContentBox title="采集单位"><Unit /></ContentBox>} />
+        component={() => <ContentBox title={`${fetchText ?? '取证'}单位`}><Unit /></ContentBox>} />
     <Route
         path="/settings/unit"
-        component={() => <ContentBox title="采集单位"><Unit /></ContentBox>} />
+        component={() => <ContentBox title={`${fetchText ?? '取证'}单位`}><Unit /></ContentBox>} />
     <Route
         path="/settings/dst-unit"
         component={() => <ContentBox title="目的检验单位"><DstUnit /></ContentBox>} />
     <Route
         path="/settings/self-unit"
-        component={() => <ContentBox title="采集单位管理"><SelfUnit /></ContentBox>} />
+        component={() => <ContentBox title={`${fetchText ?? '取证'}单位管理`}><SelfUnit /></ContentBox>} />
     <Route
         path="/settings/officer"
         exact={true}
-        component={() => <ContentBox title="采集人员信息"><Officer /></ContentBox>} />
+        component={() => <ContentBox title={`${fetchText ?? '取证'}人员信息`}><Officer /></ContentBox>} />
     <Route
         path="/settings/officer/:id"
-        component={() => <ContentBox title="编辑采集人员"><OfficerEdit /></ContentBox>} />
+        component={() => <ContentBox title={`编辑${fetchText ?? '取证'}人员`}><OfficerEdit /></ContentBox>} />
     <Route
         path="/settings/keywords"
         component={() => <ContentBox title="关键词配置"><Keywords /></ContentBox>} />

@@ -5,9 +5,11 @@ import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
-import { EditDevModalProp, FormValue } from './prop';
+import { helper } from '@/utils/helper';
 import DeviceType from '@/schema/device-type';
+import { EditDevModalProp, FormValue } from './prop';
 
+const { devText } = helper.readConf()!;
 const { Item, useForm } = Form;
 const formItemLayout = {
     labelCol: { span: 4 },
@@ -79,7 +81,7 @@ const EditDevModal: FC<EditDevModalProp> = ({
         centered={true}
         maskClosable={false}
         destroyOnClose={true}
-        title={`编辑设备 ${data?.mobileName === undefined ? '' : data.mobileName.split('_')[0]}`}>
+        title={`编辑${devText ?? '设备'} ${data?.mobileName === undefined ? '' : data.mobileName.split('_')[0]}`}>
         <Form form={formRef} {...formItemLayout}>
             <Item
                 rules={[
@@ -89,7 +91,7 @@ const EditDevModal: FC<EditDevModalProp> = ({
                 label="持有人">
                 <Input maxLength={20} />
             </Item>
-            <Item name="mobileNo" label="手机编号">
+            <Item name="mobileNo" label={`${devText ?? '设备'}编号`}>
                 <Input maxLength={10} />
             </Item>
             <Item name="note" label="备注">

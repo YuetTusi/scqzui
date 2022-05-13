@@ -4,9 +4,11 @@ import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
 import DatePicker from 'antd/lib/date-picker';
+import { helper } from '@/utils/helper';
 import { SearchFormBox } from '../styled/search-form';
 import { SearchFormProp } from './prop';
 
+const { fetchText } = helper.readConf()!;
 const { Item } = Form;
 const Datepicker = DatePicker as any;
 
@@ -36,7 +38,7 @@ const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle }
 
     return <SearchFormBox>
         <Form form={formRef} layout="inline">
-            <Item name="start" label="采集时间 起">
+            <Item name="start" label={`${fetchText ?? '取证'}时间 起`}>
                 <Datepicker
                     showTime={true}
                     placeholder="请选择时间"

@@ -11,6 +11,7 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { EditModalProp } from './prop';
 
+const { devText } = helper.readConf()!;
 const { Item, useForm } = Form;
 const formItemLayout = {
     labelCol: { span: 6 },
@@ -126,7 +127,7 @@ const EditModal: FC<EditModalProp> = ({
     >
         <Form form={formRef} {...formItemLayout}>
             <Item
-                rules={[{ required: true, message: '请填写手机名称' }]}
+                rules={[{ required: true, message: '请填写姓名' }]}
                 name="mobileHolder"
                 label="姓名">
                 <Input />
@@ -138,20 +139,20 @@ const EditModal: FC<EditModalProp> = ({
                 <Input />
             </Item>
             <Item
-                rules={[{ required: true, message: '请填写手机名称' }]}
+                rules={[{ required: true, message: `请填写${devText ?? '设备'}名称` }]}
                 name="mobileName"
-                label="手机名称">
+                label={`${devText ?? '设备'}名称`}>
                 <Input />
             </Item>
             <Item
-                rules={[{ required: true, message: '请填写设备手机号' }]}
+                rules={[{ required: true, message: '请填写手机号' }]}
                 name="note"
-                label="设备手机号">
+                label="手机号">
                 <Input />
             </Item>
             <Item
                 name="mobileNo"
-                label="手机编号">
+                label={`${devText ?? '设备'}编号`}>
                 <Input />
             </Item>
         </Form>

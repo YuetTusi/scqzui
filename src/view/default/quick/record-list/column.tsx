@@ -32,6 +32,7 @@ import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import logger from '@/utils/log';
 
+const { fetchText, parseText } = helper.readConf()!;
 const cwd = process.cwd();
 const { Group } = Button;
 
@@ -57,7 +58,7 @@ const openOnSystemWindow = debounce(
         access(defaultPath, (err) => {
             if (err) {
                 message.destroy();
-                message.warning('取证数据不存在');
+                message.warning('数据不存在');
             } else {
                 shell.showItemInFolder(defaultPath);
             }
@@ -237,11 +238,11 @@ export function getColumns(
             render(state: ParseState) {
                 switch (state) {
                     case ParseState.Fetching:
-                        return <Tag style={{ marginRight: 0 }}>采集中</Tag>;
+                        return <Tag style={{ marginRight: 0 }}>{`${fetchText ?? '取证'}中`}</Tag>;
                     case ParseState.NotParse:
-                        return <Tag style={{ marginRight: 0 }}>未解析</Tag>;
+                        return <Tag style={{ marginRight: 0 }}>{`未${parseText ?? '解析'}`}</Tag>;
                     case ParseState.Parsing:
-                        return <Tag color="blue" style={{ marginRight: 0 }}>解析中</Tag>;
+                        return <Tag color="blue" style={{ marginRight: 0 }}>{`${parseText ?? '解析'}中`}</Tag>;
                     case ParseState.Finished:
                         return <Tag color="green" style={{ marginRight: 0 }}>完成</Tag>;
                     case ParseState.Error:
@@ -249,7 +250,7 @@ export function getColumns(
                     case ParseState.Exception:
                         return <Tag color="red" style={{ marginRight: 0 }}>异常</Tag>;
                     default:
-                        return <Tag style={{ marginRight: 0 }}>未解析</Tag>;
+                        return <Tag style={{ marginRight: 0 }}>{`未${parseText ?? '解析'}`}</Tag>;
                 }
             }
         },
@@ -353,7 +354,7 @@ export function getColumns(
             }
         },
         {
-            title: '解析',
+            title: parseText ?? '解析',
             dataIndex: '_id',
             key: '_id',
             align: 'center',
@@ -371,8 +372,8 @@ export function getColumns(
                                 doParse(dispatch, record);
                             } else {
                                 Modal.confirm({
-                                    title: '重新解析',
-                                    content: '可能所需时间较长，确定重新解析吗？',
+                                    title: `重新${parseText ?? '解析'}`,
+                                    content: `可能所需时间较长，确定重新${parseText ?? '解析'}吗？`,
                                     okText: '是',
                                     cancelText: '否',
                                     centered: true,
@@ -383,10 +384,10 @@ export function getColumns(
                             }
                         } else {
                             message.destroy();
-                            message.warning('取证数据不存在');
+                            message.warning('数据不存在');
                         }
                     }}>
-                    解析
+                    {parseText ?? '解析'}
                 </Button>
             }
         }

@@ -30,8 +30,8 @@ import { DataMode } from '@/schema/data-mode';
 import { CaptchaMsg, CloudAppMessages } from '@/schema/cloud-app-messages';
 import { LoginState } from '../trace-login';
 
+const { fetchText, parseText } = helper.readConf()!;
 const appPath = process.cwd();
-
 
 /**
  * 设备状态变化
@@ -80,7 +80,7 @@ export function deviceChange({ msg }: Command<{
         }
         //发送Windows消息
         ipcRenderer.send('show-notice', {
-            message: `终端 #${usb}「${manufacturer}」采集结束`
+            message: `终端 #${usb}「${manufacturer}」${fetchText ?? '取证'}结束`
         });
         //#开始解析
         dispatch({ type: 'device/startParse', payload: usb });
@@ -318,7 +318,7 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
             }
             if (!isparseok && !helper.isNullOrUndefined(errmsg)) {
                 Modal.error({
-                    title: '解析失败',
+                    title: `${parseText ?? '解析'}失败`,
                     content: errmsg,
                     okText: '确定'
                 });

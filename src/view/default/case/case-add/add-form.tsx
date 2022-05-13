@@ -38,7 +38,7 @@ const formItemLayout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 18 }
 };
-const { useBcp, useAi } = helper.readConf()!;
+const { useBcp, useAi, caseText, fetchText, parseText } = helper.readConf()!;
 
 
 const AddForm: FC<FormProp> = ({
@@ -87,7 +87,7 @@ const AddForm: FC<FormProp> = ({
         try {
             const { length } = await helper.caseNameExist(next);
             if (length > 0) {
-                throw new Error('案件名称已存在');
+                throw new Error(`${caseText ?? '案件'}名称已存在`);
             }
         } catch (error) {
             throw error;
@@ -102,15 +102,15 @@ const AddForm: FC<FormProp> = ({
                 <Row>
                     <Col span={24}>
                         <Item rules={[
-                            { required: true, message: '请填写案件名称' },
+                            { required: true, message: `请填写${caseText ?? '案件'}名称` },
                             { pattern: AllowCaseName, message: '不允许输入非法字符' },
                             {
                                 validator: validCaseNameExists,
-                                message: '案件名称已存在'
+                                message: `${caseText ?? '案件'}名称已存在`
                             }
                         ]}
                             name="currentCaseName"
-                            label="案件名称">
+                            label={`${caseText ?? '案件'}名称`}>
                             <Search maxLength={30} loading={isCheck} />
                         </Item>
                     </Col>
@@ -177,13 +177,13 @@ const AddForm: FC<FormProp> = ({
                                     onClick={() => setParseAppSelectModalVisible(true)}
                                     style={{ width: 200 }}>
                                     <FileSyncOutlined />
-                                    <span>{`解析App（${parseAppList.length}）`}</span>
+                                    <span>{`${parseText ?? '解析'}App（${parseAppList.length}）`}</span>
                                 </Button>
                                 <Button
                                     onClick={() => setTokenAppSelectModalVisible(true)}
                                     style={{ width: 200 }}>
                                     <CloudSyncOutlined />
-                                    <span>{`Token云取证App（${tokenAppList.length}）`}</span>
+                                    <span>{`Token云${fetchText ?? '取证'}App（${tokenAppList.length}）`}</span>
                                 </Button>
                             </Group>
                         </Item>
@@ -200,8 +200,8 @@ const AddForm: FC<FormProp> = ({
                         <Checkbox onChange={(event) => setHasReport(event.target.checked)} checked={hasReport} />
                     </Col>
                     <Col span={3}>
-                        <span>自动解析：</span>
-                        <Tooltip title="勾选后, 取证完成将自动解析应用数据">
+                        <span>{`自动${parseText ?? '解析'}：`}</span>
+                        <Tooltip title={`勾选后, ${fetchText ?? '取证'}完成将自动${parseText ?? '解析'}应用数据`}>
                             <Checkbox onChange={(event) => {
                                 const { checked } = event.target;
                                 if (!checked) {
@@ -263,18 +263,18 @@ const AddForm: FC<FormProp> = ({
                                 rules={[
                                     {
                                         required: generateBcp,
-                                        message: '请选择采集人员'
+                                        message: `请选择${fetchText ?? '取证'}人员`
                                     }
                                 ]}
                                 name="officerNo"
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
-                                label="采集人员">
+                                label={`${fetchText ?? '取证'}人员`}>
                                 <Select
                                     onChange={() => { }}
                                     notFoundContent={
                                         <Empty
-                                            description="暂无采集人员"
+                                            description={`暂无${fetchText ?? '取证'}人员`}
                                             image={Empty.PRESENTED_IMAGE_SIMPLE}
                                         />
                                     }>
@@ -517,9 +517,9 @@ const AddForm: FC<FormProp> = ({
                     setParseAppList([]);
                     setParseAppSelectModalVisible(false);
                 }}
-                title="解析App">
+                title={`${parseText ?? '解析'}App`}>
                 <fieldset>
-                    <legend>解析App</legend>
+                    <legend>{`${parseText ?? '解析'}App`}</legend>
                     <ul>
                         <li>不勾选App默认拉取所有应用</li>
                     </ul>
@@ -541,16 +541,16 @@ const AddForm: FC<FormProp> = ({
                     setTokenAppList([]);
                     setTokenAppSelectModalVisible(false);
                 }}
-                title="Token云取证App">
+                title={`Token云${fetchText ?? '取证'}App`}>
                 <fieldset>
                     <legend>Token云取App（目前只支持 Android 设备）</legend>
                     <ul>
-                        <li>Token云取证App必须包含在解析App列表中</li>
+                        <li>{`Token云${fetchText ?? '取证'}App必须包含在${parseText ?? '解析'}App列表中`}</li>
                         <li>
                             微信——先要先在手机端打开微信, 并且进入账单（此过程手机会联网）,
-                            在手机上看到账单正常加载之后, 再进行取证
+                            在手机上看到账单正常加载之后, 再进行操作
                         </li>
-                        <li>其他App没有特殊说明的按正常取证流程, 取证后会自动进行云取</li>
+                        <li>{`其他App没有特殊说明的按正常${fetchText ?? '取证'}流程, ${fetchText ?? '取证'}后会自动进行云取`}</li>
                     </ul>
                 </fieldset>
             </AppSelectModal>

@@ -1,12 +1,13 @@
-import React, { MouseEvent } from 'react';
 import dayjs from 'dayjs';
+import { Dispatch } from 'dva';
+import React from 'react';
 import Tag from 'antd/lib/tag';
 import { ColumnProps } from 'antd/lib/table';
 import { helper } from '@/utils/helper';
 import { ParseState } from '@/schema/device-state';
 import ParseLog from '@/schema/parse-log';
-import Modal from 'antd/lib/modal';
-import { Dispatch } from 'redux';
+
+const { caseText, devText, parseText } = helper.readConf()!;
 
 /**
  * 表头定义
@@ -14,7 +15,7 @@ import { Dispatch } from 'redux';
 function getColumns(dispatch: Dispatch): ColumnProps<ParseLog>[] {
     let cols: ColumnProps<ParseLog>[] = [
         {
-            title: '手机名称',
+            title: `${devText ?? '设备'}名称`,
             dataIndex: 'mobileName',
             key: 'mobileName',
             render(val: string, record: ParseLog) {
@@ -33,7 +34,7 @@ function getColumns(dispatch: Dispatch): ColumnProps<ParseLog>[] {
             width: 140
         },
         {
-            title: '手机编号',
+            title: `${devText ?? '设备'}编号`,
             dataIndex: 'mobileNo',
             key: 'mobileNo',
             width: 75,
@@ -46,7 +47,7 @@ function getColumns(dispatch: Dispatch): ColumnProps<ParseLog>[] {
             }
         },
         {
-            title: '案件名称',
+            title: `${caseText ?? '案件'}名称`,
             dataIndex: 'caseName',
             key: 'caseName'
         },
@@ -64,7 +65,7 @@ function getColumns(dispatch: Dispatch): ColumnProps<ParseLog>[] {
             }
         },
         {
-            title: '解析开始时间',
+            title: `${parseText ?? '解析'}开始时间`,
             dataIndex: 'startTime',
             key: 'startTime',
             width: 160,
@@ -82,7 +83,7 @@ function getColumns(dispatch: Dispatch): ColumnProps<ParseLog>[] {
             }
         },
         {
-            title: '解析完成时间',
+            title: `${parseText ?? '解析'}完成时间`,
             dataIndex: 'endTime',
             key: 'endTime',
             width: 160,
@@ -110,13 +111,13 @@ function getColumns(dispatch: Dispatch): ColumnProps<ParseLog>[] {
                     case ParseState.NotParse:
                         return (
                             <Tag color="silver" style={{ marginRight: 0 }}>
-                                未解析
+                                {`未${parseText ?? '解析'}`}
                             </Tag>
                         );
                     case ParseState.Parsing:
                         return (
                             <Tag color="blue" style={{ marginRight: 0 }}>
-                                解析中
+                                {`${parseText ?? '解析'}中`}
                             </Tag>
                         );
                     case ParseState.Finished:

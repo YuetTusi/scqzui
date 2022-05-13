@@ -20,7 +20,15 @@ import envidence from './image/3.jpg';
 import tool from './image/2.jpg';
 import { useManufacturer } from '@/hook';
 
-const { useBcp, useToolBox, useQuickFetch } = helper.readConf()!;
+const {
+    useBcp,
+    useToolBox,
+    useQuickFetch,
+    caseText,
+    devText,
+    fetchText,
+    parseText
+} = helper.readConf()!;
 
 /**
  * 权限首列占位
@@ -42,7 +50,7 @@ const renderFirstBox = () => {
                 to="/parse"
                 icon={<FontAwesomeIcon icon={faFileWaveform} />}
                 color="#FD7272">
-                数据解析
+                {`数据${parseText ?? '解析'}`}
             </ColorButton>
         </div>
     }
@@ -60,7 +68,7 @@ const renderLastBox = (manu: Manufaturer | null) => {
                 to="/parse"
                 icon={<FontAwesomeIcon icon={faFileWaveform} />}
                 color="#FD7272">
-                数据解析
+                {`数据${parseText ?? '解析'}`}
             </ColorButton>
         </div>]);
     }
@@ -136,7 +144,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 to="/case-data"
                 icon={<FontAwesomeIcon icon={faFileLines} />}
                 color="#1B9CFC">
-                案件管理
+                {`${caseText ?? '案件'}管理`}
             </ColorButton>
         </div>
         {renderFirstBox()}
@@ -149,7 +157,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                     <li>还没来得及插入USB，数据已提取</li>
                     <li>快来成为快如闪电般的男人</li>
                 </ul>}>
-                设备取证
+                {`${devText ?? '设备'}${fetchText ?? '取证'}`}
             </ImageButton>
         </div>
         <Auth deny={!useToolBox}>

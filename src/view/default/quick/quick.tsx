@@ -16,6 +16,8 @@ import EventDescModal from './event-desc-modal';
 import CheckingList from './checking-list';
 import RecordList from './record-list';
 
+const { caseText, devText } = helper.readConf()!;
+
 /**
  * 快速点验
  */
@@ -127,7 +129,7 @@ const Quick: FC<{}> = () => {
             <TableBox>
                 <div className="case-list">
                     <div className="title-bar">
-                        点验案件
+                        {`点验${caseText ?? '案件'}`}
                     </div>
                     <div>
                         <EventList
@@ -137,7 +139,7 @@ const Quick: FC<{}> = () => {
                 </div>
                 <div className="dev-list">
                     <div className="title-bar">
-                        设备
+                        {devText ?? '设备'}
                     </div>
                     <div>
                         <RecordList />

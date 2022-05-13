@@ -6,12 +6,14 @@ import AppleFilled from '@ant-design/icons/AppleFilled';
 import Badge from 'antd/lib/badge';
 import Button from 'antd/lib/button';
 import { useQuickHitCount, useQuickEvent } from '@/hook';
+import { helper } from '@/utils/helper';
 import { Split } from '@/component/style-tool';
 import { ParseState } from '@/schema/device-state';
 import DeviceSystem from '@/schema/device-system';
 import { InfoBox } from './styled/style';
 import { ClickType, RecordInfoProp } from './prop';
 
+const { caseText, devText, fetchText } = helper.readConf()!;
 const { Group } = Button;
 
 /**
@@ -65,7 +67,7 @@ const StateDot: FC<{ state?: ParseState }> = ({ state }) => {
     switch (state) {
         case ParseState.Fetching:
             color = '#fff';
-            text = '采集中';
+            text = `${fetchText ?? '取证'}中`;
             break;
         case ParseState.NotParse:
             color = '#fff';
@@ -139,11 +141,11 @@ const RecordInfo: FC<RecordInfoProp> = ({ data, onButtonClick }) => {
             <div className="desc">
                 <ul>
                     <li>
-                        <label htmlFor="span">所属案件</label>
+                        <label htmlFor="span">{`所属${caseText ?? '案件'}`}</label>
                         <span>{eventData?.eventName === undefined ? '' : eventData.eventName.split('_')[0]}</span>
                     </li>
                     <li>
-                        <label htmlFor="span">手机名称</label>
+                        <label htmlFor="span">{`${devText ?? '设备'}名称`}</label>
                         <span>{data.mobileName === undefined ? '' : data.mobileName?.split('_')[0]}</span>
                         <StateDot state={data.parseState} />
                     </li>
@@ -152,7 +154,7 @@ const RecordInfo: FC<RecordInfoProp> = ({ data, onButtonClick }) => {
                         <span>{data.mobileHolder}</span>
                     </li>
                     <li>
-                        <label htmlFor="span">手机编号</label>
+                        <label htmlFor="span">{`${devText ?? '设备'}编号`}</label>
                         <span>{data.mobileNo}</span>
                     </li>
                     <li>
@@ -178,12 +180,6 @@ const RecordInfo: FC<RecordInfoProp> = ({ data, onButtonClick }) => {
                 </ul>
             </div>
         </div>
-        {/* <HitChartModal
-            visible={hitChartModalVisible}
-            record={data}
-            exportHandle={() => setHitChartModalVisible(false)}
-            closeHandle={() => setHitChartModalVisible(false)}
-        /> */}
     </InfoBox>;
 };
 

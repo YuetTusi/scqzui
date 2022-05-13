@@ -13,7 +13,8 @@ import { CaseListProp } from './prop';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import message from 'antd/lib/message';
 import { helper } from '@/utils/helper';
-import DeviceType from '@/schema/device-type';
+
+const { caseText } = helper.readConf()!;
 
 /**
  * 案件表格
@@ -133,7 +134,7 @@ const CaseList: FC<CaseListProp> = () => {
             })}
             locale={{
                 emptyText: <Empty
-                    description="暂无案件数据"
+                    description={`暂无${caseText ?? '案件'}数据`}
                     image={Empty.PRESENTED_IMAGE_SIMPLE} />
             }}
             rowKey="_id"

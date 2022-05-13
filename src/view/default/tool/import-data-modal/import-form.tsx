@@ -9,9 +9,11 @@ import Select from 'antd/lib/select';
 import Form from 'antd/lib/form';
 import { useCaseList } from '@/hook';
 import { IMEI } from '@/utils/regex';
+import { helper } from '@/utils/helper';
 import { ImportTypes } from '@/schema/import-type';
 import { ImportFormProp } from './prop';
 
+const { caseText, devText } = helper.readConf()!;
 const { Item } = Form;
 const { Option } = Select;
 const formItemLayout = {
@@ -127,16 +129,16 @@ const ImportForm: FC<ImportFormProp> = ({
                     rules={[
                         {
                             required: true,
-                            message: '请选择案件'
+                            message: `请选择${caseText ?? '案件'}`
                         }
                     ]}
                     name="caseId"
-                    label="案件名称">
+                    label={`${caseText ?? '案件'}名称`}>
                     <Select
                         filterOption={onFilterOption}
                         showSearch={true}
                         notFoundContent="暂无数据"
-                        placeholder="选择案件，可输入案件名称筛选">
+                        placeholder={`选择${caseText ?? '案件'}，可输入名称筛选`}>
                         {bindCaseOptions()}
                     </Select>
                 </Item>
@@ -175,11 +177,11 @@ const ImportForm: FC<ImportFormProp> = ({
                     rules={[
                         {
                             required: true,
-                            message: '请填写手机名称'
+                            message: `请填写${devText ?? '设备'}名称`
                         }
                     ]}
                     name="mobileName"
-                    label="手机名称"
+                    label={`${devText ?? '设备'}名称`}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}>
                     <Input maxLength={20} />

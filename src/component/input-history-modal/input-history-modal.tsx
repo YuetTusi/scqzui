@@ -9,6 +9,9 @@ import message from 'antd/lib/message';
 import { HistoryList } from './history-list';
 import { InputHistoryModalProp } from './prop';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
+import { helper } from '@/utils/helper';
+
+const { caseText, devText } = helper.readConf()!;
 
 /**
  * 用户输入项管理框
@@ -84,7 +87,7 @@ const InputHistoryModal: FC<InputHistoryModalProp> = ({
             <Col flex={1}>
                 <Card
                     extra={<Button onClick={() => onDelClick(HistoryKeys.HISTORY_DEVICENAME)} danger={true} size="small">清除</Button>}
-                    title="手机名称"
+                    title={`${devText ?? '设备'}名称`}
                     size="small">
                     <HistoryList
                         data={deviceName}
@@ -114,7 +117,7 @@ const InputHistoryModal: FC<InputHistoryModalProp> = ({
             <Col flex={1}>
                 <Card
                     extra={<Button onClick={() => onDelClick(HistoryKeys.HISTORY_DEVICENUMBER)} danger={true} size="small">清除</Button>}
-                    title="手机编号"
+                    title={`${devText ?? '设备'}编号`}
                     size="small">
                     <HistoryList
                         data={deviceNumber}

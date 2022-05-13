@@ -9,6 +9,7 @@ import { ProgressType } from '@/schema/fetch-record';
 import { HistoryModalProp } from './prop';
 import { FetchRecordBox } from './styled/style';
 
+const { fetchText } = helper.readConf()!;
 /**
  * 渲染时间
  * @param time 时间对象
@@ -101,7 +102,7 @@ const HistoryModal: FC<HistoryModalProp> = ({ title, visible, data, cancelHandle
 HistoryModal.defaultProps = {
     visible: false,
     data: [],
-    title: '采集记录',
+    title: `${fetchText ?? '取证'}记录`,
     cancelHandle: () => { }
 };
 

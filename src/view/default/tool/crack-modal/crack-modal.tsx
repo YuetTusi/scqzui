@@ -122,7 +122,7 @@ const CrackModal: FC<CrackModalProp> = ({
                 type="default"
                 key="CM_0">
                 <SyncOutlined />
-                <span>刷新设备</span>
+                <span>刷新</span>
             </Button>,
             <Button
                 onClick={() => {

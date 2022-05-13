@@ -7,6 +7,8 @@ import { helper } from '@/utils/helper';
 import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
 
+const { caseText } = helper.readConf()!;
+
 export default {
     /**
      * 点验案件保存
@@ -20,7 +22,7 @@ export default {
             if (helper.isNullOrUndefined(_id)) {
                 yield helper.mkDir(targetPath);
                 yield call([db, 'insert'], payload);
-                message.success('保存成功，请点击案件名称扫码点验');
+                message.success(`保存成功，请点击${caseText ?? '案件'}名称扫码点验`);
             } else {
                 yield call([db, 'update'], { _id }, payload);
                 message.success('保存成功');

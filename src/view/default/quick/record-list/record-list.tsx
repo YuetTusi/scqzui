@@ -17,6 +17,8 @@ import HitChartModal from '../hit-chart-modal';
 import { getColumns } from './column';
 import { RecordListProp } from './prop';
 
+const { devText } = helper.readConf()!;
+
 /**
  * 快速点验设备列表
  */
@@ -86,7 +88,7 @@ const RecordList: FC<RecordListProp> = () => {
                     onOk() {
                         dispatch({ type: 'quickRecordList/delRec', payload: data });
                     },
-                    title: '删除设备',
+                    title: `删除${devText ?? '设备'}`,
                     content: `确认删除「${name}」数据？`,
                     okText: '是',
                     cancelText: '否',

@@ -18,6 +18,8 @@ import AddForm from './add-form';
 import { CaseAddProp, FormValue } from './prop';
 // const { max } = helper.readConf()!;
 // const { Option } = Select;
+
+const { caseText } = helper.readConf()!;
 const { useForm } = Form;
 
 /**
@@ -116,7 +118,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
         }
     }, 500, { leading: true, trailing: false });
 
-    return <SubLayout title="创建新案件">
+    return <SubLayout title={`创建新${caseText ?? '案件'}`}>
         <CaseBox>
             <div className="button-bar">
                 <Button onClick={onBackClick} type="primary">

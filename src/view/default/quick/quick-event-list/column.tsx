@@ -3,8 +3,11 @@ import { Dispatch } from "dva";
 import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined'
 import { ColumnsType } from "antd/lib/table";
 import Modal from 'antd/lib/modal';
+import { helper } from "@/utils/helper";
 import { QuickEvent } from "@/schema/quick-event";
 import { NowrapText } from './styled/style';
+
+const { caseText } = helper.readConf()!;
 
 const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEvent> => {
 
@@ -28,7 +31,7 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
             }
         },
         {
-            title: '案件名称',
+            title: `${caseText ?? '案件'}名称`,
             dataIndex: 'eventName',
             key: 'eventName',
             render(value: string, record) {
@@ -69,7 +72,7 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                         onOk() {
                             dispatch({ type: 'quickEventList/del', payload: value });
                         },
-                        title: '删除点验案件',
+                        title: `删除点验${caseText ?? '案件'}`,
                         content: `确认删除「${name}」？`,
                         okText: '是',
                         cancelText: '否',

@@ -34,6 +34,7 @@ import Instruction from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
 
+const { caseText, devText, fetchText, parseText } = helper.readConf()!;
 const { Option } = Select;
 const { Item, useForm } = Form;
 
@@ -61,14 +62,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
     const [formRef] = useForm<FormValue>();
     const currentCase = useRef<CaseInfo>(); //当前案件数据
-    // const caseId = useRef<string>(''); //案件id
-    // const spareName = useRef<string>(''); //案件备用名
-    // const casePath = useRef<string>(''); //案件存储路径
-    // const appList = useRef<any[]>([]); //解析App
-    // const sdCard = useRef<boolean>(false); //是否拉取SD卡
-    // const hasReport = useRef<boolean>(false); //是否生成报告
-    // const isAuto = useRef<boolean>(false); //是否自动解析
-    // const unitName = useRef<string>(''); //检验单位
     const [appSelectModalVisible, setAppSelectModalVisible] = useState(false);
     const [selectedApps, setSelectedApps] = useState<ParseApp[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -110,14 +103,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             return (
                 <Option
                     value={JSON.stringify(opt)}
-                    // data-case-id={opt._id}
-                    // data-spare-name={opt.spareName ?? ''}
-                    // data-case-path={opt.m_strCasePath}
-                    // data-app-list={opt.m_Applist}
-                    // data-sdcard={opt.sdCard}
-                    // data-has-report={opt.hasReport}
-                    // data-is-auto={opt.m_bIsAutoParse}
-                    // data-unitname={opt.m_strCheckUnitName}
                     key={opt._id}>
                     {`${name}（${helper
                         .parseDate(tick, 'YYYYMMDDHHmmss')
@@ -133,15 +118,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     const caseChange = (value: string, option: JSX.Element | JSX.Element[]) => {
 
         currentCase.current = JSON.parse(value) as CaseInfo;
-
-        // caseId.current = (option as JSX.Element).props['data-case-id'] as string;
-        // spareName.current = (option as JSX.Element).props['data-spare-name'] as string;
-        // casePath.current = (option as JSX.Element).props['data-case-path'] as string;
-        // appList.current = (option as JSX.Element).props['data-app-list'] as any[];
-        // isAuto.current = (option as JSX.Element).props['data-is-auto'] as boolean;
-        // sdCard.current = (option as JSX.Element).props['data-sdcard'] as boolean;
-        // hasReport.current = (option as JSX.Element).props['data-has-report'] as boolean;
-        // unitName.current = (option as JSX.Element).props['data-unitname'] as string;
     };
 
     /**
@@ -156,14 +132,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
     const resetValue = () => {
         currentCase.current = undefined;
-        // caseId.current = ''; //案件id
-        // spareName.current = ''; //案件备用名
-        // casePath.current = ''; //案件存储路径
-        // appList.current = []; //解析App
-        // sdCard.current = false; //是否拉取SD卡
-        // hasReport.current = false; //是否生成报告
-        // isAuto.current = false; //是否自动解析
-        // unitName.current = ''; //检验单位
         formRef.resetFields();
     };
 
@@ -252,14 +220,14 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                             <Item rules={[
                                 {
                                     required: true,
-                                    message: '请选择案件'
+                                    message: `请选择${caseText ?? '案件'}`
                                 }
-                            ]} name="case" label="案件名称">
+                            ]} name="case" label={`${caseText ?? '案件'}名称`}>
                                 <Select
                                     onChange={caseChange}
                                     showSearch={true}
                                     notFoundContent="暂无数据"
-                                    placeholder="选择案件，可输入案件名称筛选">
+                                    placeholder={`选择${caseText ?? '案件'}，可输入名称筛选`}>
                                     {bindCaseSelect()}
                                 </Select>
                             </Item>
@@ -268,7 +236,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                     onClick={toCaseAddView}
                                     type="primary"
                                     size="small"
-                                    title="添加案件"
+                                    title={`添加${caseText ?? '案件'}`}
                                 ><PlusSquareOutlined /></Button>
                             </Item>
                         </Col>
@@ -280,12 +248,12 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                     onClick={() => setAppSelectModalVisible(true)}
                                     style={{ width: '100%' }}>
                                     <SelectOutlined />
-                                    <span>{`解析App（${selectedApps.length}）`}</span>
+                                    <span>{`${parseText ?? '解析'}App（${selectedApps.length}）`}</span>
                                 </Button>
                             </Item>
                         </Col>
                         <Col span={12}>
-                            <div className="app-tips">未选择App以「所属案件配置」为准</div>
+                            <div className="app-tips">{`未选择App以「所属${caseText ?? '案件'}配置」为准`}</div>
                         </Col>
                     </Row>
                     <Row>
@@ -294,14 +262,14 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                 name="phoneName"
                                 rules={[{
                                     required: true,
-                                    message: '请填写手机名称'
+                                    message: `请填写${devText ?? '设备'}名称`
                                 },
                                 {
                                     pattern: Backslashe,
                                     message: '不允许输入斜线字符'
                                 },
                                 { pattern: UnderLine, message: '不允许输入下划线' }]}
-                                label="手机名称"
+                                label={`${devText ?? '设备'}名称`}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}>
                                 <AutoComplete
@@ -358,7 +326,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                     },
                                     { pattern: UnderLine, message: '不允许输入下划线' }
                                 ]}
-                                label="手机编号"
+                                label={`${devText ?? '设备'}编号`}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}>
                                 <AutoComplete
@@ -421,7 +389,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                         <CloseCircleOutlined />
                         <span>取消</span>
                     </Button>,
-                    <Tooltip title="确定后开始采集数据" key="B_1">
+                    <Tooltip title={`确定后开始${fetchText ?? '取证'}数据`} key="B_1">
                         <Button
                             onClick={formSubmit}
                             disabled={loading}
@@ -431,7 +399,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                         </Button>
                     </Tooltip>
                 ]}
-                title="取证信息录入"
+                title={`${fetchText ?? '取证'}信息录入`}
                 width={1000}
                 maskClosable={false}
                 destroyOnClose={true}
@@ -440,7 +408,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                 <NormalInputModalBox>{renderForm()}</NormalInputModalBox>
             </Modal>
             <AppSelectModal
-                title="解析App"
+                title={`${parseText ?? '解析'}App`}
                 visible={appSelectModalVisible}
                 treeData={parseApp.fetch}
                 selectedKeys={selectedApps.map((i) => i.m_strID)}

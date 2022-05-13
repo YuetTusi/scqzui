@@ -44,7 +44,7 @@ import { CollectProp } from './prop';
 
 
 const { Group } = Button;
-const { useBcp } = helper.readConf()!;
+const { useBcp, fetchText, parseText } = helper.readConf()!;
 
 /**
  * 取证页
@@ -163,8 +163,8 @@ const Collect: FC<CollectProp> = ({ }) => {
             message.destroy();
             message.info({
                 content: useBcp
-                    ? '未设置采集单位，请在「软件设置」→「采集单位」中配置'
-                    : '未设置单位，请在「软件设置」→「单位管理」中配置'
+                    ? `未设置${fetchText ?? '取证'}单位，请在「软件设置」→「${fetchText ?? '取证'}单位」中配置`
+                    : `未设置单位，请在「软件设置」→「${fetchText ?? '取证'}单位管理」中配置`
             });
             return false;
         }
@@ -500,7 +500,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                     <FontAwesomeIcon
                         icon={faFileWaveform}
                         style={{ marginRight: '10px' }} />
-                    <span>数据解析</span>
+                    <span>{`数据${parseText ?? '解析'}`}</span>
                 </Button>
             </div>
             <Split />

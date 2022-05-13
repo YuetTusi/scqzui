@@ -13,6 +13,7 @@ import DeviceType from '@/schema/device-type';
 import { helper } from '@/utils/helper';
 import CaseInfo from '@/schema/case-info';
 
+const { caseText, devText, fetchText } = helper.readConf()!;
 
 /**
  * 状态点
@@ -53,7 +54,7 @@ const DeviceInfo: FC<DeviceInfoProp> = memo(({ caseId, deviceId }) => {
     const renderCaseDevice = (caseData: CaseInfo | null, deviceData: DeviceType | null) => {
 
         if (deviceData === null) {
-            return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无设备数据" />
+            return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无数据" />
         }
         return <DeviceBox>
             <div className="dev-detail">
@@ -68,14 +69,14 @@ const DeviceInfo: FC<DeviceInfoProp> = memo(({ caseId, deviceId }) => {
                 <div className="desc">
                     <ul>
                         <li>
-                            <label htmlFor="span">所属案件</label>
+                            <label htmlFor="span">{`${caseText ?? '案件'}`}</label>
                             <span>{
                                 helper.isNullOrUndefinedOrEmptyString(caseData?.spareName)
                                     ? helper.getNameWithoutTime(caseData?.m_strCaseName)
                                     : caseData?.spareName}</span>
                         </li>
                         <li>
-                            <label htmlFor="span">手机名称</label>
+                            <label htmlFor="span">{`${devText ?? '手机'}名称`}</label>
                             <span>{deviceData.mobileName === undefined ? '' : deviceData.mobileName?.split('_')[0]}</span>
                             <StateDot state={deviceData.parseState} />
                         </li>
@@ -84,7 +85,7 @@ const DeviceInfo: FC<DeviceInfoProp> = memo(({ caseId, deviceId }) => {
                             <span>{deviceData.mobileHolder}</span>
                         </li>
                         <li>
-                            <label htmlFor="span">手机编号</label>
+                            <label htmlFor="span">{`${devText ?? '手机'}编号`}</label>
                             <span>{deviceData.mobileNo}</span>
                         </li>
                         <li>
@@ -104,7 +105,7 @@ const DeviceInfo: FC<DeviceInfoProp> = memo(({ caseId, deviceId }) => {
                             <span>{deviceData.serial}</span>
                         </li>
                         <li>
-                            <label htmlFor="span">取证时间</label>
+                            <label htmlFor="span">{`${fetchText ?? '取证'}时间`}</label>
                             <span>{dayjs(deviceData.createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
                         </li>
                     </ul>

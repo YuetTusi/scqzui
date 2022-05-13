@@ -17,6 +17,7 @@ import ExportBcpModal from '../export-bcp-modal';
 import { getDevColumns } from './column';
 import { DevListProp } from './prop';
 
+const { parseText } = helper.readConf()!;
 
 /**
  * 设备表格
@@ -149,7 +150,7 @@ const DevList: FC<DevListProp> = ({ }) => {
                 setExportReportModalVisible(true);
             } else {
                 message.destroy();
-                message.info('无报告数据，请解析完成后生成报告');
+                message.info(`无报告数据，请${parseText ?? '解析'}完成后生成报告`);
             }
         } catch (error) {
             message.warning('读取报告数据失败，请重新生成报告');

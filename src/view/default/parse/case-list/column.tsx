@@ -9,7 +9,7 @@ import { OperateDoingState } from '@/model/default/operate-doing';
 import { NoWrapText } from './styled/style';
 
 const { Group } = Button;
-const { useBcp } = helper.readConf()!;
+const { useBcp, caseText } = helper.readConf()!;
 
 /**
  * 表头定义
@@ -25,7 +25,7 @@ export function getCaseColumns(
 ): ColumnsType<CaseInfo> {
     let columns: ColumnType<CaseInfo>[] = [
         {
-            title: '案件名称',
+            title: `${caseText ?? '案件'}名称`,
             dataIndex: 'm_strCaseName',
             key: 'm_strCaseName',
             render: (value: string) => {

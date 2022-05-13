@@ -6,13 +6,15 @@ import { helper } from '@/utils/helper';
 import { FetchState } from '@/schema/device-state';
 import { FetchLog } from '@/schema/fetch-log';
 
+const { caseText, devText, fetchText } = helper.readConf()!;
+
 /**
  * 表头定义
  */
 function getColumns(showHistoryHandle: (data: FetchLog) => void): ColumnProps<FetchLog>[] {
     const columns: ColumnProps<FetchLog>[] = [
         {
-            title: '手机名称',
+            title: `${devText ?? '设备'}名称`,
             dataIndex: 'mobileName',
             key: 'mobileName',
             render(text: string, record: FetchLog) {
@@ -30,13 +32,13 @@ function getColumns(showHistoryHandle: (data: FetchLog) => void): ColumnProps<Fe
             width: 140
         },
         {
-            title: '手机编号',
+            title: `${devText ?? '设备'}编号`,
             dataIndex: 'mobileNo',
             key: 'mobileNo',
             width: 75
         },
         {
-            title: '案件名称',
+            title: `${caseText ?? '案件'}名称`,
             dataIndex: 'caseName',
             key: 'caseName',
             render(value: string, record: FetchLog) {
@@ -50,7 +52,7 @@ function getColumns(showHistoryHandle: (data: FetchLog) => void): ColumnProps<Fe
             // width: 160
         },
         {
-            title: '采集时间',
+            title: `${fetchText ?? '取证'}时间`,
             dataIndex: 'fetchTime',
             key: 'fetchTime',
             width: 160,
@@ -84,7 +86,7 @@ function getColumns(showHistoryHandle: (data: FetchLog) => void): ColumnProps<Fe
             }
         },
         {
-            title: '采集记录',
+            title: `${fetchText ?? '取证'}记录`,
             dataIndex: 'record',
             key: 'record',
             align: 'center',
@@ -95,28 +97,11 @@ function getColumns(showHistoryHandle: (data: FetchLog) => void): ColumnProps<Fe
                         onClick={() => {
                             showHistoryHandle(log);
                         }}>
-                        采集记录
+                        {`${fetchText ?? '取证'}记录`}
                     </a>
                 );
             }
-        },
-        // {
-        //     title: '删除',
-        //     dataIndex: 'del',
-        //     key: 'del',
-        //     align: 'center',
-        //     width: 60,
-        //     render(value: any, log: FetchLog) {
-        //         return (
-        //             <a
-        //                 onClick={() => {
-
-        //                 }}>
-        //                 删除
-        //             </a>
-        //         );
-        //     }
-        // }
+        }
     ];
 
     return columns;

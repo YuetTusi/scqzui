@@ -2,20 +2,21 @@ import React, { FC, MouseEvent, useEffect } from 'react';
 import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined'
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined'
 import Empty from 'antd/lib/empty';
-import Icon from 'antd/lib/icon';
 import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
 import { connect, useDispatch, useSelector } from 'dva';
 import { routerRedux } from 'dva/router';
+import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
-import { Officer as OfficerEntity } from '@/schema/officer';
-import policeSvg from './styled/images/police.svg';
-import { OfficerProp } from './prop';
 import { OfficerState } from '@/model/default/officer';
-import { OfficerBox } from './styled/style';
-import SubLayout from '@/component/sub-layout';
+import { Officer as OfficerEntity } from '@/schema/officer';
 import { Split } from '@/component/style-tool';
 import { MainBox } from '@/component/sub-layout/styled/layout';
+import policeSvg from './styled/images/police.svg';
+import { OfficerBox } from './styled/style';
+import { OfficerProp } from './prop';
+
+const { fetchText } = helper.readConf()!;
 
 /**
  * @description 采集人员信息
@@ -80,7 +81,7 @@ const Officer: FC<OfficerProp> = () => {
                             data-id={item._id}
                             data-name={item.name}
                             onClick={delOfficerClick}
-                            title="删除采集人员">
+                            title={`删除${fetchText ?? '取证'}人员`}>
                             <CloseCircleOutlined style={{ fontSize: '22px' }} />
                         </div>
                     </div>
@@ -88,7 +89,7 @@ const Officer: FC<OfficerProp> = () => {
             ));
             return <ul>{$li}</ul>;
         } else {
-            return <Empty description="暂无采集人员" image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+            return <Empty description={`暂无${fetchText ?? '取证'}人员`} image={Empty.PRESENTED_IMAGE_SIMPLE} />;
         }
     };
 

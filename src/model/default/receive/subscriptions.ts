@@ -25,7 +25,7 @@ import {
 
 const cwd = process.cwd();
 const { Fetch, Parse, Bho, Trace, Error } = SocketType;
-const { max, useTraceLogin } = helper.readConf()!;
+const { max, useTraceLogin, devText, fetchText, parseText } = helper.readConf()!;
 
 /**
  * 订阅
@@ -81,7 +81,7 @@ export default {
                     Modal.destroyAll();
                     Modal.warning({
                         title: '警告',
-                        content: '此手机USB冲突',
+                        content: `此${devText ?? '设备'}USB冲突`,
                         okText: '确定'
                     });
                     break;
@@ -220,7 +220,7 @@ export default {
         ipcRenderer.on('check-parse', async (event: IpcRendererEvent, args: Record<string, any>) => {
 
             ipcRenderer.send('show-notice', {
-                message: `「${args.mobileName ?? '未知设备'}」采集结束，开始解析点验数据`
+                message: `「${args.mobileName ?? '未知设备'}」${fetchText ?? '取证'}结束，开始${parseText ?? '解析'}点验数据`
             });
 
             //NOTE:将设备数据入库

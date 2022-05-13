@@ -11,6 +11,7 @@ import { Key } from 'antd/es/table/interface';
 import message from 'antd/lib/message';
 import { useSubscribe } from '@/hook';
 import { StateTree } from '@/type/model';
+import { helper } from '@/utils/helper';
 import { Organization } from '@/schema/organization';
 import { Split } from '@/component/style-tool';
 import { MainBox } from '../styled/sub-layout';
@@ -18,6 +19,7 @@ import { getColumns } from './columns';
 import { UnitNameBox } from './styled/box';
 import { UnitProp, UnitRecord } from './prop';
 
+const { fetchText } = helper.readConf()!;
 let selectPcsCode: string | undefined = undefined;
 let selectPcsName: string | undefined = undefined;
 
@@ -94,7 +96,7 @@ const Unit: FC<UnitProp> = () => {
                 }
             });
         } else {
-            message.info('请选择采集单位');
+            message.info(`请选择${fetchText ?? '取证'}单位`);
         }
     }, 500, { leading: true, trailing: false });
 

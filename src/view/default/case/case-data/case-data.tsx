@@ -2,32 +2,31 @@ import debounce from 'lodash/debounce';
 import { join } from 'path';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
 import React, { FC, useEffect, useState } from 'react';
-import { routerRedux, useDispatch, useLocation, useSelector } from 'dva';
+import { routerRedux, useDispatch, useSelector } from 'dva';
 import ImportOutlined from '@ant-design/icons/ImportOutlined';
 import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
+import Modal from 'antd/lib/modal';
 import { Key } from 'antd/lib/table/interface';
 import SubLayout from '@/component/sub-layout/sub-layout';
 import { CaseInfo } from '@/schema/case-info';
 import { StateTree } from '@/type/model';
 import { CaseDataState } from '@/model/default/case-data';
+import { Split } from '@/component/style-tool';
+import { helper } from '@/utils/helper';
 import { getCaseColumns } from './column';
 import { CaseDataBox } from './styled/style';
 import DeviceTable from './device-table';
-import { Split } from '@/component/style-tool';
-import Modal from 'antd/lib/modal';
 import { importDevice, readCaseJson, readDirOnly, getCaseByName } from './util';
-import { helper } from '@/utils/helper';
 
-
+const { caseText } = helper.readConf()!;
 const { Group } = Button;
 
 const CaseData: FC<{}> = ({ }) => {
 
     const dispatch = useDispatch();
-    const { search } = useLocation();
     const {
         loading, current, pageSize, total, caseData
     } = useSelector<StateTree, CaseDataState>(state => state.caseData);
@@ -57,7 +56,7 @@ const CaseData: FC<{}> = ({ }) => {
          */
     const startImportCase = async (caseJsonPath: string) => {
         const modal = Modal.info({
-            content: '正在导入案件及检材，请稍后...',
+            content: `正在导入${caseText ?? '案件'}及检材，请稍后...`,
             okText: '确定',
             maskClosable: false,
             centered: true,
@@ -67,7 +66,7 @@ const CaseData: FC<{}> = ({ }) => {
         try {
             const caseJson = await readCaseJson(caseJsonPath);
             if (helper.isNullOrUndefinedOrEmptyString(caseJson.caseName)) {
-                throw new Error('无法读取案件数据，请选择Case.json文件');
+                throw new Error(`无法读取${caseText ?? '案件'}数据，请选择Case.json文件`);
             }
             const casePath = join(caseJsonPath, '../../');
             const caseSavePath = join(caseJsonPath, '../');
@@ -89,12 +88,12 @@ const CaseData: FC<{}> = ({ }) => {
             await Promise.allSettled(importTasks);
 
             modal.update({
-                content: '案件导入成功',
+                content: `${caseText ?? '案件'}导入成功`,
                 okButtonProps: { disabled: false }
             });
         } catch (error) {
             modal.update({
-                title: '案件导入失败',
+                title: `${caseText ?? '案件'}导入失败`,
                 content: error.message,
                 okButtonProps: { disabled: false }
             });
@@ -123,7 +122,7 @@ const CaseData: FC<{}> = ({ }) => {
         try {
             const caseJson = await readCaseJson(caseJsonPath);
             if (helper.isNullOrUndefinedOrEmptyString(caseJson.caseName)) {
-                throw new Error('导入检材失败，无法读取案件数据');
+                throw new Error(`导入检材失败，无法读取${caseText ?? '案件'}数据`);
             }
             const caseData = await getCaseByName(caseJson, casePath);
             await importDevice(deviceJsonPath, caseData);
@@ -174,7 +173,7 @@ const CaseData: FC<{}> = ({ }) => {
      */
     const renderSubTable = ({ _id }: CaseInfo) => <DeviceTable caseId={_id!} />;
 
-    return <SubLayout title="案件管理">
+    return <SubLayout title={`${caseText ?? '案件'}管理`}>
         <CaseDataBox>
             <div className="case-content">
                 <div className="search-bar">
@@ -183,7 +182,7 @@ const CaseData: FC<{}> = ({ }) => {
                             onClick={() => selectCaseOrDeviceHandle(true)}
                             type="primary">
                             <ImportOutlined />
-                            <span>导入案件</span>
+                            <span>{`导入${caseText ?? '案件'}`}</span>
                         </Button>
                         <Button
                             onClick={() => selectCaseOrDeviceHandle(false)}
@@ -217,7 +216,7 @@ const CaseData: FC<{}> = ({ }) => {
                             pageSize,
                             onChange
                         }}
-                        locale={{ emptyText: <Empty description="无案件数据" image={Empty.PRESENTED_IMAGE_SIMPLE} /> }}
+                        locale={{ emptyText: <Empty description={`无${caseText ?? '案件'}数据`} image={Empty.PRESENTED_IMAGE_SIMPLE} /> }}
                         loading={loading}
                         bordered={true}
                     />

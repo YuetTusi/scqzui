@@ -27,7 +27,7 @@ import { FormBox } from './styled/styled';
 import { filterToParseApp } from '../helper';
 import { FormProp } from './prop';
 
-const { useBcp, useAi } = helper.readConf()!;
+const { useBcp, useAi, caseText, parseText, fetchText } = helper.readConf()!;
 
 const { Group } = Button;
 const { Item, useForm } = Form;
@@ -66,10 +66,10 @@ const EditForm: FC<FormProp> = ({
             <Row>
                 <Col span={24}>
                     <Item
-                        rules={[{ required: true, message: '请填写案件名称' }]}
+                        rules={[{ required: true, message: `请填写${caseText ?? '案件'}名称` }]}
                         name="m_strCaseName"
-                        label="案件名称"
-                        tooltip="不可修改，请使用「备用案件名称」代替原案件名称">
+                        label={`${caseText ?? '案件'}名称`}
+                        tooltip={`不可修改，请使用「备用${caseText ?? '案件'}名称」代替原${caseText ?? '案件'}名称`}>
                         <Input
                             maxLength={30}
                             disabled={true}
@@ -82,9 +82,9 @@ const EditForm: FC<FormProp> = ({
                     <Item
                         rules={[{ pattern: AllowCaseName, message: '不允许输入非法字符' }]}
                         name="spareName"
-                        label="备用案件名称">
+                        label={`备用${caseText ?? '案件'}名称`}>
                         <Input
-                            placeholder="备用案件名称将代替原案件名称"
+                            placeholder={`备用${caseText ?? '案件'}名称将代替原${caseText ?? '案件'}名称`}
                             maxLength={30}
                         />
                     </Item>
@@ -175,8 +175,8 @@ const EditForm: FC<FormProp> = ({
                     <Checkbox onChange={(event) => setHasReport(event.target.checked)} checked={hasReport} />
                 </Col>
                 <Col span={3}>
-                    <span>自动解析：</span>
-                    <Tooltip title="勾选后, 取证完成将自动解析应用数据">
+                    <span>{`自动${parseText ?? '解析'}：`}</span>
+                    <Tooltip title={`勾选后, 取证完成将自动${parseText ?? '解析'}应用数据`}>
                         <Checkbox onChange={(event) => {
                             const { checked } = event.target;
                             if (!checked) {
@@ -214,7 +214,7 @@ const EditForm: FC<FormProp> = ({
                 </Auth>
                 <Col span={3}>
                     <span>删除原数据：</span>
-                    <Tooltip title="解析结束自动删除原始数据，可节省磁盘空间，不可再次重新解析">
+                    <Tooltip title={`${parseText ?? '解析'}结束自动删除原始数据，可节省磁盘空间，不可再次重新${parseText ?? '解析'}`}>
                         <Checkbox onChange={(event) => setIsDel(event.target.checked)} checked={isDel} />
                     </Tooltip>
                 </Col>
@@ -238,18 +238,17 @@ const EditForm: FC<FormProp> = ({
                             rules={[
                                 {
                                     required: generateBcpState[0] ?? false,
-                                    message: '请选择采集人员'
+                                    message: `请选择${fetchText ?? '取证'}人员`
                                 }
                             ]}
                             name="officerNo"
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
-                            label="采集人员">
+                            label={`${fetchText ?? '取证'}人员`}>
                             <Select
-                                // onChange={context.officerChange}
                                 notFoundContent={
                                     <Empty
-                                        description="暂无采集人员"
+                                        description={`暂无${fetchText ?? '取证'}人员`}
                                         image={Empty.PRESENTED_IMAGE_SIMPLE}
                                     />
                                 }>
@@ -483,9 +482,9 @@ const EditForm: FC<FormProp> = ({
                 setParseAppSelectModalVisible(false);
             }}
             treeId="parseTree"
-            title="解析App">
+            title={`${parseText ?? '解析'}App`}>
             <fieldset>
-                <legend>解析App</legend>
+                <legend>{`${parseText ?? '解析'}App`}</legend>
                 <ul>
                     <li>不勾选App默认拉取所有应用</li>
                 </ul>
@@ -511,7 +510,7 @@ const EditForm: FC<FormProp> = ({
             <fieldset>
                 <legend>Token云取App（目前只支持 Android 设备）</legend>
                 <ul>
-                    <li>Token云取证App必须包含在解析App列表中</li>
+                    <li>{`Token云取证App必须包含在${parseText ?? '解析'}App列表中`}</li>
                     <li>
                         微信——先要先在手机端打开微信, 并且进入账单（此过程手机会联网）,
                         在手机上看到账单正常加载之后, 再进行取证

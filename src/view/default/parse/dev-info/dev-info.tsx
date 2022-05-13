@@ -18,7 +18,7 @@ import { InfoBox } from './styled/style';
 import { ClickType, DevInfoProp } from './prop';
 
 const { Group } = Button;
-const { useBcp, useTraceLogin } = helper.readConf()!;
+const { useBcp, useTraceLogin, devText, fetchText, parseText } = helper.readConf()!;
 
 /**
  * 功能按钮禁用状态
@@ -71,15 +71,15 @@ const StateDot: FC<{ state?: ParseState }> = ({ state }) => {
     switch (state) {
         case ParseState.Fetching:
             color = '#fff';
-            text = '采集中';
+            text = `${fetchText ?? '取证'}中`;
             break;
         case ParseState.NotParse:
             color = '#fff';
-            text = '未解析';
+            text = `未${parseText ?? '解析'}`;
             break;
         case ParseState.Parsing:
             color = 'blue';
-            text = '解析中';
+            text = `${parseText ?? '解析'}中`;
             break;
         case ParseState.Finished:
             color = 'green';
@@ -189,7 +189,7 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                         <span>{caseData?.m_strCaseName === undefined ? '' : caseData.m_strCaseName.split('_')[0]}</span>
                     </li>
                     <li>
-                        <label htmlFor="span">手机名称</label>
+                        <label htmlFor="span">{`${devText ?? '设备'}名称`}</label>
                         <span>{data.mobileName === undefined ? '' : data.mobileName?.split('_')[0]}</span>
                         <StateDot state={data.parseState} />
                     </li>
@@ -198,7 +198,7 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                         <span>{data.mobileHolder}</span>
                     </li>
                     <li>
-                        <label htmlFor="span">手机编号</label>
+                        <label htmlFor="span">{`${devText ?? '设备'}编号`}</label>
                         <span>{data.mobileNo}</span>
                     </li>
                     <li>
@@ -218,7 +218,7 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                         <span>{data.serial}</span>
                     </li>
                     <li>
-                        <label htmlFor="span">取证时间</label>
+                        <label htmlFor="span">{`${fetchText ?? '取证'}时间`}</label>
                         <span>{dayjs(data.createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
                     </li>
                 </ul>

@@ -6,6 +6,8 @@ import { FetchInfo } from './fetch-info';
 import { CaseInfo } from './case-info';
 import { MobileInfoProp } from './prop';
 
+const { fetchText, devText } = helper.readConf()!;
+
 const ModelList: FC<{ phoneInfo: { name: string, value: string }[] }> = ({ phoneInfo }) => {
 
     if (helper.isNullOrUndefined(phoneInfo)) {
@@ -28,9 +30,9 @@ const MobileInfo: FC<MobileInfoProp> = ({ device, recordHandle }) => {
     if (helper.isNullOrUndefined(device)) {
         return <>
             <div className="help">
-                <p>暂未连接到设备</p>
-                <div>安卓设备请打开<strong>USB调试</strong>且是<strong>文件传输模式</strong></div>
-                <div>苹果设备请点击<strong>信任</strong>此电脑</div>
+                <p>{`暂未连接到${devText ?? '设备'}`}</p>
+                <div>{`安卓${devText ?? '设备'}请打开`}<strong>USB调试</strong>且是<strong>文件传输模式</strong></div>
+                <div>{`苹果${devText ?? '设备'}请点击`}<strong>信任</strong>此电脑</div>
             </div>
         </>;
     }
@@ -50,9 +52,9 @@ const MobileInfo: FC<MobileInfoProp> = ({ device, recordHandle }) => {
         case FetchState.NotConnected:
             return <>
                 <div className="help">
-                    <p>暂未连接到设备</p>
-                    <div>安卓设备请打开<strong>USB调试</strong>且是<strong>文件传输模式</strong></div>
-                    <div>苹果设备请点击<strong>信任</strong>此电脑</div>
+                    <p>{`暂未连接到${devText ?? '设备'}`}</p>
+                    <div>{`安卓${devText ?? '设备'}请打开`}<strong>USB调试</strong>且是<strong>文件传输模式</strong></div>
+                    <div>{`苹果${devText ?? '设备'}请点击`}<strong>信任</strong>此电脑</div>
                 </div>
             </>;
         case FetchState.Connected:
@@ -67,11 +69,10 @@ const MobileInfo: FC<MobileInfoProp> = ({ device, recordHandle }) => {
             return <>
                 <div className="help">
                     {extra === undefined ? null : <p>{extra}</p>}
-                    {/* <ModelList phoneInfo={phoneInfo!} /> */}
                 </div>
                 <CaseInfo usb={usb!} />
                 <div className="rec-link">
-                    <a onClick={onRecordClick}>采集记录</a>
+                    <a onClick={onRecordClick}>{`${fetchText ?? '取证'}记录`}</a>
                 </div>
             </>;
         case FetchState.Fetching:
@@ -83,9 +84,6 @@ const MobileInfo: FC<MobileInfoProp> = ({ device, recordHandle }) => {
                     <FetchInfo device={device} recordHandle={recordHandle} />
                 </div>
                 <CaseInfo usb={usb!} />
-                {/* <div className="rec-link">
-                    <a onClick={onRecordClick}>采集记录</a>
-                </div> */}
             </>;
         default:
             return null;

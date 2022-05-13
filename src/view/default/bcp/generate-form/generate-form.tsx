@@ -23,8 +23,7 @@ import { Split } from '@/component/style-tool';
 import { GenerateFormBox } from './styled/style';
 import { GenerateFormProp } from './prop';
 
-
-
+const { fetchText } = helper.readConf()!;
 const { Item } = Form;
 const { Group } = Radio;
 const { Option } = Select;
@@ -262,11 +261,11 @@ const GenerateForm: FC<GenerateFormProp> = ({
                         rules={[
                             {
                                 required: true,
-                                message: '请选择采集单位'
+                                message: `请选择${fetchText ?? '取证'}单位`
                             }
                         ]}
                         name="unitCode"
-                        label="采集单位">
+                        label={`${fetchText ?? '取证'}单位`}>
                         <Select
                             showSearch={true}
                             placeholder={'输入单位名称进行查询'}
@@ -322,13 +321,12 @@ const GenerateForm: FC<GenerateFormProp> = ({
                         rules={[
                             {
                                 required: true,
-                                message: '请选择采集人员'
+                                message: `请选择${fetchText ?? '取证'}人员`
                             }
                         ]}
                         name="officerNo"
-                        label="采集人员">
+                        label={`${fetchText ?? '取证'}人员`}>
                         <Select
-                            // onChange={officerChangeHandle}
                             notFoundContent="暂无数据">
                             {helper.arrayToOptions(officerList, 'name', 'no')}
                         </Select>
