@@ -4,9 +4,9 @@ useServerCloud: true
 useBcp: true
 useToolBox: true
 useFakeButton: true
-useAi: false
+useAi: true
 useQuickFetch: true
-useTraceLogin: false
+useTraceLogin: true
 caseText: 案件
 fetchText: 取证
 devText: 设备

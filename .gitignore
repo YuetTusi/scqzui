@@ -102,9 +102,10 @@ dist
 
 # TernJS port file
 .tern-port
-/qzdb
-/src/config/conf
 
 # Myself
 /data
 /info.dat
+/qzdb
+/src/config/conf
+/debug

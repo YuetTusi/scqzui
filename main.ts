@@ -1,8 +1,7 @@
 import { join } from 'path';
 import { ChildProcessWithoutNullStreams } from 'child_process';
 import {
-    app, BrowserWindow, dialog, ipcMain, globalShortcut, Menu,
-    OpenDialogReturnValue, SaveDialogReturnValue, shell, IpcMainEvent
+    app, BrowserWindow, dialog, ipcMain, globalShortcut, shell, IpcMainEvent
 } from 'electron';
 import { WindowsBalloon } from 'node-notifier';
 import cors from 'cors';
@@ -222,7 +221,7 @@ if (!instanceLock) {
             minHeight: config?.minHeight ?? 900, //最小高度
             minWidth: config?.minWidth ?? 960, //最小宽度
             frame: false,
-            backgroundColor: '#181d30',
+            backgroundColor: '#0f224d',
             webPreferences: {
                 webSecurity: false,
                 contextIsolation: false,
@@ -324,9 +323,9 @@ ipcMain.on('do-close', (event: IpcMainEvent) => {
 /**
  * 重启应用
  */
- ipcMain.on('do-relaunch', () => {
-	app.relaunch();
-	exitApp(process.platform);
+ipcMain.on('do-relaunch', () => {
+    app.relaunch();
+    exitApp(process.platform);
 });
 
 //最小化窗口
