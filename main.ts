@@ -321,6 +321,14 @@ ipcMain.on('do-close', (event: IpcMainEvent) => {
     exitApp(process.platform);
 });
 
+/**
+ * 重启应用
+ */
+ ipcMain.on('do-relaunch', () => {
+	app.relaunch();
+	exitApp(process.platform);
+});
+
 //最小化窗口
 ipcMain.on('minimize', (event: IpcMainEvent) => {
     if (mainWindow) {

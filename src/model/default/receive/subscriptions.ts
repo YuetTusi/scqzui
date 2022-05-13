@@ -292,8 +292,6 @@ export default {
      */
     socketDisconnect() {
 
-        let warning = localStorage.getItem(LocalStoreKey.SocketWarning) === '1';
-
         server.on(Error, (port: number, type: string) => {
 
             logger.error(`Socket异常断开, port:${port}, type:${type}`);
@@ -316,11 +314,12 @@ export default {
                     break;
             }
 
-            if (warning) {
+            if (localStorage.getItem(LocalStoreKey.SocketWarning) === '1') {
                 Modal.destroyAll();
                 Modal.confirm({
                     title: '服务中断',
                     content,
+                    centered: true,
                     okText: '重新启动',
                     cancelText: '退出',
                     onOk() {
