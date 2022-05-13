@@ -7,8 +7,6 @@ import { LocalStoreKey } from '@/utils/local-store';
 import Auth from '../auth';
 import { MenuBox } from './styled/menu';
 
-const cwd = process.cwd();
-
 interface MenuProp {
     /**
      * 菜单项Click
