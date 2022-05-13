@@ -667,6 +667,17 @@ const helper = {
             encoding: 'utf-8'
         });
         return result.includes(ip);
+    },
+    /**
+     * 是否处于调试模式
+     */
+    async isDebug(): Promise<boolean> {
+        try {
+            const exist = await this.existFile(path.join(cwd, './debug'));
+            return exist;
+        } catch (error) {
+            return false;
+        }
     }
 };
 

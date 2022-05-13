@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 const MenuBox = styled.ul`
+    width: 200px;
     margin:-12px -16px;
     padding: 0;
     

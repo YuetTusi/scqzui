@@ -25,7 +25,11 @@ enum LocalStoreKey {
     /**
      * 是否保活
      */
-    IsAlive = 'IsAlive'
+    IsAlive = 'IsAlive',
+    /**
+     * 断线警告
+     */
+    SocketWarning = 'SocketWarning'
 }
 
 /**

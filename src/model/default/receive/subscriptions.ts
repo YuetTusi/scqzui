@@ -22,6 +22,7 @@ import {
     humanVerify, saveOrUpdateOfficerFromPlatform, traceLogin, limitResult,
     appRecFinish, fetchPercent, importErr, backDatapass
 } from './listener';
+import { LocalStoreKey } from '@/utils/local-store';
 
 const cwd = process.cwd();
 const { Fetch, Parse, Bho, Trace, Error } = SocketType;
@@ -291,11 +292,7 @@ export default {
      */
     socketDisconnect() {
 
-        let disableWarn = false;
-        const jsonPath =
-            process.env['NODE_ENV'] === 'development'
-                ? join(cwd, './data/app.json')
-                : join(cwd, './resources/config/app.json');
+        let warning = localStorage.getItem(LocalStoreKey.SocketWarning) === '1';
 
         server.on(Error, (port: number, type: string) => {
 
@@ -319,13 +316,7 @@ export default {
                     break;
             }
 
-            try {
-                disableWarn = JSON.parse(readFileSync(jsonPath, { encoding: 'utf8' }))?.disableSocketDisconnectWarn;
-            } catch (error) {
-                disableWarn = false;
-            }
-
-            if (!disableWarn) {
+            if (warning) {
                 Modal.destroyAll();
                 Modal.confirm({
                     title: '服务中断',
