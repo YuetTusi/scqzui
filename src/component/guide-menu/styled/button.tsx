@@ -47,6 +47,7 @@ const Image = styled.div`
     width:100%;
     height:100%;
     border-radius: ${props => props.theme['border-radius-base']};
+    background-color: rgba(0,0,0,0.5);
 
     .push-img{
         position: relative;

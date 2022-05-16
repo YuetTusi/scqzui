@@ -77,7 +77,7 @@ const renderLastBox = (manu: Manufaturer | null) => {
             <ColorButton
                 to="/log"
                 icon={<FontAwesomeIcon icon={faUserPen} />}
-                color="#3c6382">
+                color="#22a6b3">
                 操作日志
             </ColorButton>
         </div>,
@@ -121,7 +121,7 @@ const renderLastBox = (manu: Manufaturer | null) => {
                         });
                     }}
                     icon={<FontAwesomeIcon icon={faRegistered} />}
-                    color="#15a085">
+                    color="#4b6584">
                     版本信息
                 </ColorButton>
             </div>
