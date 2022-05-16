@@ -2,10 +2,10 @@ import styled from 'styled-components';
 
 const ExtendPanel = styled.div`
     position: absolute;
-    top:0;
-    left:0;
-    bottom:0;
-    right:20px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 15px;
     overflow-x: scroll;
 
     //内层隐藏滚动条
