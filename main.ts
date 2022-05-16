@@ -215,7 +215,7 @@ if (!instanceLock) {
             title: appName ?? '北京万盛华通科技有限公司',
             icon: config?.logo ? join(appPath, `../config/${config.logo}`) : undefined,
             width: config?.windowWidth ?? 1280, //主窗体宽
-            height: config?.windowHeight ?? 800, //主窗体高
+            height: config?.windowHeight ?? 900, //主窗体高
             autoHideMenuBar: true, //隐藏主窗口菜单
             center: config?.center ?? true, //居中显示
             minHeight: config?.minHeight ?? 900, //最小高度
