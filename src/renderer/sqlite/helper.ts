@@ -1,15 +1,16 @@
 import { Database as DataBase } from "sqlite3";
 
-const path = require('path');
+const { join } = require('path');
 const { Database } = require('sqlite3').verbose();
 
+const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'];
 
 let defaultDatabasePath: string | null = null;
 if (isDev === 'development') {
-	defaultDatabasePath = path.join(process.cwd(), 'data/base.db');
+	defaultDatabasePath = join(cwd, 'data/base.db');
 } else {
-	defaultDatabasePath = path.join(process.cwd(), 'resources/data/base.db');
+	defaultDatabasePath = join(cwd, 'resources/data/base.db');
 }
 
 class Helper {

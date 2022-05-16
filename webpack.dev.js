@@ -1,19 +1,12 @@
 const { join, resolve } = require('path');
 const { ProvidePlugin } = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AntdDayjsPlugin = require('antd-dayjs-webpack-plugin');
+const { getEntry, getHtmlPlugins } = require('./webpack.tool');
 const theme = require('./theme/cyan.json');
 
 let config = {
 	mode: 'development',
-	entry: {
-		default: join(__dirname, './src/renderer/default/default.ts'),
-		sqlite: join(__dirname, './src/renderer/sqlite/sqlite.ts'),
-		protocol: join(__dirname, './src/renderer/protocol/protocol.ts'),
-		timer: join(__dirname, './src/renderer/timer/timer.ts'),
-		fetchRecord: join(__dirname, './src/renderer/fetch-record/fetch-record.ts'),
-		report: join(__dirname, './src/renderer/report/report.ts')
-	},
+	entry: getEntry(),
 	output: {
 		filename: '[name].js',
 		path: join(__dirname, './dist/renderer')
@@ -95,36 +88,7 @@ let config = {
 		new AntdDayjsPlugin({
 			// plugins: ['localeData']
 		}),
-		new HtmlWebpackPlugin({
-			template: join(__dirname, './src/renderer/default/default.html'),
-			filename: 'default.html',
-			chunks: ['default']
-		}),
-		new HtmlWebpackPlugin({
-			template: join(__dirname, './src/renderer/sqlite/sqlite.html'),
-			filename: 'sqlite.html',
-			chunks: ['sqlite']
-		}),
-		new HtmlWebpackPlugin({
-			template: join(__dirname, './src/renderer/protocol/protocol.html'),
-			filename: 'protocol.html',
-			chunks: ['protocol']
-		}),
-		new HtmlWebpackPlugin({
-			template: join(__dirname, './src/renderer/timer/timer.html'),
-			filename: 'timer.html',
-			chunks: ['timer']
-		}),
-		new HtmlWebpackPlugin({
-			template: join(__dirname, './src/renderer/fetch-record/fetch-record.html'),
-			filename: 'fetch-record.html',
-			chunks: ['fetchRecord']
-		}),
-		new HtmlWebpackPlugin({
-			template: join(__dirname, './src/renderer/report/report.html'),
-			filename: 'report.html',
-			chunks: ['report']
-		})
+		...getHtmlPlugins()
 	]
 };
 
