@@ -1,5 +1,7 @@
+import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
-import React, { FC, MouseEvent, useEffect } from 'react';
+import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
@@ -11,9 +13,10 @@ import InputNumber from 'antd/lib/input-number';
 import Form, { RuleObject } from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
 import { StateTree } from '@/type/model';
+import { helper } from '@/utils/helper';
+import { AllowCaseName } from '@/utils/regex';
 import { QuickEvent } from '@/schema/quick-event';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
-import { helper } from '@/utils/helper';
 
 const { caseText } = helper.readConf()!;
 const { Item, useForm } = Form;
@@ -32,6 +35,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         visible,
         data
     } = useSelector<StateTree, EditQuickEventModalState>(state => state.editQuickEventModal);
+    const [isCheck, setIsCheck] = useState(false);
     const [formRef] = useForm<QuickEvent>();
 
     useEffect(() => {
@@ -59,7 +63,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
     /**
      * 保存
      */
-    const onSave = async () => {
+    const onSave = debounce(async () => {
         const { validateFields } = formRef;
         try {
             const values = await validateFields();
@@ -83,7 +87,25 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         } catch (error) {
             console.warn(error);
         }
-    };
+    }, 500, { leading: true, trailing: false });
+
+    /**
+     * 验证案件重名
+     */
+    const validEventNameExist = throttle(async (rule: any, value: string) => {
+        setIsCheck(true);
+        let next = value === '..' ? '.' : value;
+        try {
+            const { length } = await helper.eventNameExist(next);
+            if (length > 0) {
+                throw new Error(`${caseText ?? '案件'}名称已存在`);
+            }
+        } catch (error) {
+            throw error;
+        } finally {
+            setIsCheck(false);
+        }
+    }, 500);
 
     /**
      * 选择目录
@@ -139,10 +161,17 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         <Form form={formRef} layout="horizontal" {...fromLayout}>
             <Item
                 rules={[
-                    { required: true, message: `请填写${caseText ?? '案件'}名称` }
+                    { required: true, message: `请填写${caseText ?? '案件'}名称` },
+                    { pattern: AllowCaseName, message: '不允许输入非法字符' },
+                    {
+                        validator: validEventNameExist,
+                        message: `${caseText ?? '案件'}名称已存在`
+                    }
                 ]}
                 label={`${caseText ?? '案件'}名称`}
                 name="eventName"
+                hasFeedback={true}
+                validateStatus={isCheck ? 'validating' : undefined}
                 tooltip={helper.isNullOrUndefined(data?._id) ? undefined : `不可修改${caseText ?? '案件'}名称`}>
                 <Input disabled={!helper.isNullOrUndefined(data?._id)} />
             </Item>

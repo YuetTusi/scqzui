@@ -23,6 +23,7 @@ import { CaseInfo } from '../schema/case-info';
 import { Manufaturer } from '../schema/manufaturer';
 import { AppJson } from '../schema/app-json';
 import { CheckJson } from '../schema/check-json';
+import { QuickEvent } from '@/schema/quick-event';
 import { getDb } from './db';
 
 const cwd = process.cwd();//应用的根目录
@@ -471,12 +472,26 @@ const helper = {
     /**
      * 验证案件名称是否存在
      * @param {string} caseName 案件名称
-     * @returns {CCaseInfo[]} 数组长度>0表示存在
+     * @returns {CaseInfo[]} 数组长度>0表示存在
      */
     async caseNameExist(caseName: string) {
-        const db = getDb(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Case);
         try {
             let list = await db.find({ m_strCaseName: { $regex: new RegExp(`^${caseName}(?=_)`) } });
+            return list;
+        } catch (error) {
+            throw error;
+        }
+    },
+    /**
+     * 验证点验案件名称是否存在
+     * @param {string} eventName 案件名称
+     * @returns {QuickEvent[]} 数组长度>0表示存在
+     */
+    async eventNameExist(eventName: string) {
+        const db = getDb<QuickEvent>(TableName.QuickEvent);
+        try {
+            let list = await db.find({ eventName: { $regex: new RegExp(`^${eventName}(?=_)`) } });
             return list;
         } catch (error) {
             throw error;
