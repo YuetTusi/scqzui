@@ -38,7 +38,7 @@ const BackgroundBox = styled.div`
     right:0;
     top:0;
     bottom:0;
-    background: radial-gradient(#1285b4, #0f224d 70%);
+    background: radial-gradient(#1285b4, #0f224d 60%);
 `;
 
 export { Header, BackgroundBox };

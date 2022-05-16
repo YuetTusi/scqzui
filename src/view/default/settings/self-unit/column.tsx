@@ -56,6 +56,7 @@ export function getColumns(dispatch: Dispatch, ...handles: any[]): ColumnsType<S
                                 content: `确认删除「${record.unitName}」？`,
                                 okText: '是',
                                 cancelText: '否',
+                                centered: true,
                                 onOk() {
                                     dispatch({ type: 'selfUnit/del', payload: id });
                                 }

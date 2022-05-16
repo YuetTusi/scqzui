@@ -125,6 +125,7 @@ const Keywords: FC<KeywordsProp> = () => {
             content: `确认删除「${file}」？`,
             okText: '是',
             cancelText: '否',
+            centered: true,
             onOk() {
                 let rmPath = join(saveFolder, file);
                 unlink(rmPath, (err) => {

@@ -113,6 +113,7 @@ const CheckManage: FC<CheckManageProp> = () => {
             content: `确认删除全部点验数据？`,
             okText: '是',
             cancelText: '否',
+            centered: true,
             onOk() {
                 dispatch({ type: 'checkManageTable/delData', payload: {} });
             }

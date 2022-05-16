@@ -88,6 +88,7 @@ export function getColumns<T = any>(dispatch: Dispatch, onAction: (action: strin
                                 content: `删除序列号为「${record.serial}」的数据？`,
                                 okText: '是',
                                 cancelText: '否',
+                                centered: true,
                                 onOk() {
                                     onAction('del', record);
                                 }

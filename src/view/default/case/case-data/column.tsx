@@ -151,6 +151,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
                                 content: `${caseText ?? '案件'}下${fetchText ?? '取证'}数据将一并删除，确认吗？`,
                                 okText: '是',
                                 cancelText: '否',
+                                centered: true,
                                 onOk() {
                                     dispatch({ type: 'caseData/setLoading', payload: true });
                                     dispatch({
@@ -278,6 +279,7 @@ export function getDeviceColumns(
                                 content: `确认删除该${devText ?? '设备'}数据吗？`,
                                 okText: '是',
                                 cancelText: '否',
+                                centered: true,
                                 async onOk() {
                                     const modal = Modal.info({
                                         content: '正在删除，请不要关闭程序',

@@ -221,6 +221,7 @@ if (!instanceLock) {
             minHeight: config?.minHeight ?? 900, //最小高度
             minWidth: config?.minWidth ?? 960, //最小宽度
             frame: false,
+            thickFrame: false,
             backgroundColor: '#0f224d',
             webPreferences: {
                 webSecurity: false,
