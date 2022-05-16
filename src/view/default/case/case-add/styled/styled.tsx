@@ -7,7 +7,7 @@ export const CaseBox = styled.div`
     bottom: 10px;
     left: 0;
     background-color: #202940;
-    border-radius: ${props => props.theme['border-radius-base']};;
+    border-radius: ${props => props.theme['border-radius-base']};
     margin:0 10px;
     padding: 10px;
 
@@ -26,7 +26,7 @@ export const FormBox = styled.div`
     bottom: 10px;
     left: 10px;
     background-color: #141414;
-    border-radius: ${props => props.theme['border-radius-base']};;
+    border-radius: ${props => props.theme['border-radius-base']};
     overflow: auto;
     padding-top: 30px;
 

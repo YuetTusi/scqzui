@@ -4,7 +4,7 @@ export const GenerateFormBox = styled.div`
 
     padding: 20px 20px;
     margin-bottom: 10px;
-    border-radius: ${props => props.theme['border-radius-base']};;
+    border-radius: ${props => props.theme['border-radius-base']};
     background-color: #141414;
 
     em {

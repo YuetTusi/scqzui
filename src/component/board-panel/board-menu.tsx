@@ -76,7 +76,7 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
                 setIsWarning(!isWarning);
             }}>
                 <FontAwesomeIcon icon={isWarning ? faBell : faBellSlash} />
-                <span>开关服务中断警告</span>
+                <span>开启/关闭断线警告</span>
             </li>
             <li
                 onClick={() => onItemClick(BoardMenuAction.DevTool)}>

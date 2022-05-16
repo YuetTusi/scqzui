@@ -13,7 +13,7 @@ export const CaseDataBox = styled.div`
 		left: 10px;
 		right: 10px;
 		bottom: 10px;
-		border-radius: ${props => props.theme['border-radius-base']};;
+		border-radius: ${props => props.theme['border-radius-base']};
 	}
 
 	.search-bar {

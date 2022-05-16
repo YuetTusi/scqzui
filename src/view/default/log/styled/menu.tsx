@@ -28,7 +28,7 @@ const MenuPanel = styled.menu`
             padding:0;
             list-style-type: none;
             & > a{
-                border-radius: ${props => props.theme['border-radius-base']};;
+                border-radius: ${props => props.theme['border-radius-base']};
                 padding: 12px 15px;
                 display:block;
                 color:#a9afbbd1;

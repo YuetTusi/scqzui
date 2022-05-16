@@ -11,7 +11,7 @@ const DeivceBox = styled.div`
     width:300px;
     height:400px;
     padding: 10px;
-    border-radius: ${props => props.theme['border-radius-base']};;
+    border-radius: ${props => props.theme['border-radius-base']};
     background-color:#056099;
 
     &.not-connected{

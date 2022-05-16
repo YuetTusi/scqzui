@@ -213,7 +213,7 @@ const helper = {
                 json = data;
             } else {
                 try {
-                    json = JSON.stringify(data);;
+                    json = JSON.stringify(data);
                 } catch (error) {
                     reject(error);
                 }

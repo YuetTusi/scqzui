@@ -41,7 +41,7 @@ const MainBox = styled.div`
     bottom: 10px;
     left: 0;
     background-color: #202940;
-    border-radius: ${props => props.theme['border-radius-base']};;
+    border-radius: ${props => props.theme['border-radius-base']};
     margin:0 10px;
     padding: 10px;
 `;

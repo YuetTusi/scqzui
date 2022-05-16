@@ -59,7 +59,7 @@ const CloudLog: FC<CloudLogProp> = () => {
         cancelText: '否',
         title: '清理确认',
         content: '日志删除不可恢复，确认清理日志吗？'
-    });;
+    });
 
     /**
      * 关闭详情框

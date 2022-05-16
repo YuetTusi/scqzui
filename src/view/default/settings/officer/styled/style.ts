@@ -36,7 +36,7 @@ export const OfficerBox = styled.div`
 		.police {
 			position: relative;
 			cursor: pointer;
-			border-radius: ${props => props.theme['border-radius-base']};;
+			border-radius: ${props => props.theme['border-radius-base']};
 			background-color: ${props => props.theme['primary-color']};
 			border-left: 1px solid ${props => color2(props.theme['primary-color']).darken(10).toString()};
 			border-top: 1px solid ${props => color2(props.theme['primary-color']).darken(10).toString()};
