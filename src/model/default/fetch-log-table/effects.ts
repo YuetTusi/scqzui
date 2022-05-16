@@ -91,7 +91,7 @@ export default {
             } else {
                 message.error('日志清理失败');
             }
-            yield put({ type: 'queryAllFetchLog', payload: { condition: {}, current: 1, pageSize: 10 } });
+            yield put({ type: 'queryAllFetchLog', payload: { condition: {}, current: 1, pageSize: helper.PAGE_SIZE } });
         } catch (error) {
             message.error('日志清理失败');
             yield put({ type: 'setLoading', payload: false });
@@ -106,7 +106,7 @@ export default {
         yield put({ type: 'setLoading', payload: true });
         try {
             yield call([db, 'remove'], {}, true);
-            yield put({ type: 'queryAllFetchLog', payload: { condition: {}, current: 1, pageSize: 10 } });
+            yield put({ type: 'queryAllFetchLog', payload: { condition: {}, current: 1, pageSize: helper.PAGE_SIZE } });
             message.success('日志清除成功');
         } catch (error) {
             message.error('日志清除失败');
@@ -124,7 +124,7 @@ export default {
         yield put({ type: 'setLoading', payload: true });
         try {
             yield call([db, 'remove'], { _id: payload }, true);
-            yield put({ type: 'queryAllFetchLog', payload: { condition: {}, current: 1, pageSize: 10 } });
+            yield put({ type: 'queryAllFetchLog', payload: { condition: {}, current: 1, pageSize: helper.PAGE_SIZE } });
             message.success('删除成功');
         } catch (error) {
             message.error('删除失败');

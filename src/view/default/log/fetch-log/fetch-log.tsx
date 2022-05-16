@@ -43,6 +43,22 @@ const FetchLog: FC<FetchLogProp> = () => {
     };
 
     /**
+     * 清除handle
+     */
+    const onClearHandle = () => {
+        Modal.confirm({
+            onOk() {
+                dispatch({ type: 'fetchLogTable/dropAllData' });
+            },
+            centered: true,
+            okText: '是',
+            cancelText: '否',
+            title: '清理确认',
+            content: '日志全部清除且不可恢复，确认清理日志吗？'
+        });
+    };
+
+    /**
      * 查询
      * @param condition 条件
      * @param current 当前页
@@ -80,7 +96,8 @@ const FetchLog: FC<FetchLogProp> = () => {
         <SearchForm
             formRef={formRef}
             onSearchHandle={onSearchHandle}
-            onDelHandle={onDelHandle} />
+            onDelHandle={onDelHandle}
+            onClearHandle={onClearHandle} />
         <Split />
         <LogTable formRef={formRef} />
         <DelAskModal

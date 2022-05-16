@@ -1,11 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEraser, faPenRuler, faWrench, faBell, faBellSlash } from '@fortawesome/free-solid-svg-icons';
+import {
+    faEraser, faPenRuler, faWrench, faBell, faBellSlash,
+    faMobileScreenButton, faArrowsRotate, faCloud
+} from '@fortawesome/free-solid-svg-icons';
 import Popover from 'antd/lib/popover';
 import { helper } from '@/utils/helper';
 import { LocalStoreKey } from '@/utils/local-store';
 import Auth from '../auth';
 import { MenuBox } from './styled/menu';
+
+const { fetchText, parseText } = helper.readConf()!;
 
 interface MenuProp {
     /**
@@ -17,7 +22,10 @@ interface MenuProp {
 enum BoardMenuAction {
     HistoryClear,
     Manufaturer,
-    DevTool
+    DevTool,
+    FetchLog,
+    ParseLog,
+    CloudLog
 }
 
 const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
@@ -46,6 +54,18 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
             <span>表单记录清除</span>
         </li>
         <Auth deny={!isDev}>
+            <li onClick={() => onItemClick(BoardMenuAction.FetchLog)}>
+                <FontAwesomeIcon icon={faMobileScreenButton} />
+                <span>{`${fetchText}日志管理`}</span>
+            </li>
+            <li onClick={() => onItemClick(BoardMenuAction.ParseLog)}>
+                <FontAwesomeIcon icon={faArrowsRotate} />
+                <span>{`${parseText}日志管理`}</span>
+            </li>
+            <li onClick={() => onItemClick(BoardMenuAction.CloudLog)}>
+                <FontAwesomeIcon icon={faCloud} />
+                <span>云取日志管理</span>
+            </li>
             <li
                 onClick={() => onItemClick(BoardMenuAction.Manufaturer)}>
                 <FontAwesomeIcon icon={faPenRuler} />

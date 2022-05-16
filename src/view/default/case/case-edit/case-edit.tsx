@@ -12,12 +12,12 @@ import { StateTree } from '@/type/model';
 import { CaseEditState } from '@/model/default/case-edit';
 import { helper } from '@/utils/helper';
 import CaseInfo from '@/schema/case-info';
-import { CaseBox } from './styled/styled';
-import { CaseEditProp } from './prop';
-import EditForm from './edit-form';
 import { BaseApp } from '@/schema/base-app';
 import { ParseApp } from '@/schema/parse-app';
 import { TokenApp } from '@/schema/token-app';
+import EditForm from './edit-form';
+import { CaseBox } from './styled/styled';
+import { CaseEditProp } from './prop';
 
 const { useForm } = Form;
 

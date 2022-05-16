@@ -8,7 +8,7 @@ export const SearchFormBox = styled.div`
 
     .fn {
         .ant-btn {
-           margin-left: 5px;
+           margin-left: 16px;
         }
     }
 `;

@@ -13,5 +13,9 @@ export enum DelLogType {
     /**
      * 两年前
      */
-    TwoYearsAgo
+    TwoYearsAgo,
+    /**
+     * 全部
+     */
+    All
 }

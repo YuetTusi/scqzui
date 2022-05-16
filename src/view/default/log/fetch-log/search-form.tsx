@@ -1,9 +1,11 @@
-import React, { FC, MouseEvent } from 'react';
+import React, { FC, MouseEvent, useEffect, useState } from 'react';
+import { useLocation } from 'dva';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
 import DatePicker from 'antd/lib/date-picker';
+import Auth from '@/component/auth';
 import { helper } from '@/utils/helper';
 import { SearchFormBox } from '../styled/search-form';
 import { SearchFormProp } from './prop';
@@ -15,7 +17,14 @@ const Datepicker = DatePicker as any;
 /**
  * 查询表单
  */
-const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle }) => {
+const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle, onClearHandle }) => {
+
+    const { search } = useLocation<{ admin: string }>();
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+    useEffect(() => {
+        setIsAdmin(new URLSearchParams(search).get('admin') === '1');
+    }, [search]);
 
 
     /**
@@ -34,6 +43,14 @@ const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle }
     const onDel = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         onDelHandle();
+    };
+
+    /**
+     * 全部删除
+     */
+    const onClear = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        onClearHandle();
     };
 
     return <SearchFormBox>
@@ -62,10 +79,12 @@ const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle }
                 <DeleteOutlined />
                 <span>清理</span>
             </Button>
-            {/* <Button type="primary" danger={true} onClick={onDel}>
-                <DeleteOutlined />
-                <span>全部清除</span>
-            </Button> */}
+            <Auth deny={!isAdmin}>
+                <Button type="primary" danger={true} onClick={onClear}>
+                    <DeleteOutlined />
+                    <span>全部清除</span>
+                </Button>
+            </Auth>
         </div>
     </SearchFormBox>
 }

@@ -2,7 +2,7 @@ import { join } from 'path';
 import debounce from 'lodash/debounce';
 import { ipcRenderer, shell } from 'electron';
 import React, { FC, MouseEvent, useEffect, useState } from 'react';
-// import { useDispatch } from 'dva';
+import { useDispatch, routerRedux } from 'dva';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
 import message from 'antd/lib/message';
@@ -48,6 +48,7 @@ const openHelpDocClick = debounce(async (event: MouseEvent<HTMLSpanElement>) => 
  */
 const BoardPanel: FC<{}> = ({ children }) => {
 
+    const dispatch = useDispatch();
     const [title, setTitle] = useState<string>('');
     const [softhardwareModalVisible, setSofthardwareModalVisible] = useState<boolean>(false);
     const [inputHistoryModalVisbile, setInputHistoryModalVisible] = useState<boolean>(false);
@@ -78,6 +79,15 @@ const BoardPanel: FC<{}> = ({ children }) => {
                 break;
             case BoardMenuAction.DevTool:
                 ipcRenderer.send('dev-tool');
+                break;
+            case BoardMenuAction.FetchLog:
+                dispatch(routerRedux.push('/log?admin=1'));
+                break;
+            case BoardMenuAction.ParseLog:
+                dispatch(routerRedux.push('/log/parse-log?admin=1'));
+                break;
+            case BoardMenuAction.CloudLog:
+                dispatch(routerRedux.push('/log/cloud-log?admin=1'));
                 break;
             default:
                 break;
