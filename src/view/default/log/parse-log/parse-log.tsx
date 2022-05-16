@@ -45,6 +45,22 @@ const ParseLog: FC<ParseLogProp> = () => {
     });
 
     /**
+     * 清除handle
+     */
+    const onClearHandle = () => {
+        Modal.confirm({
+            onOk() {
+                dispatch({ type: 'parseLogTable/dropAllLog' });
+            },
+            centered: true,
+            okText: '是',
+            cancelText: '否',
+            title: '清理确认',
+            content: '日志全部清除且不可恢复，确认清理日志吗？'
+        });
+    };
+
+    /**
      * 查询
      * @param condition 条件
      * @param current 当前页
@@ -64,7 +80,8 @@ const ParseLog: FC<ParseLogProp> = () => {
         <SearchForm
             formRef={formRef}
             onSearchHandle={onSearchHandle}
-            onDelHandle={() => setDelAskModalVisible(true)} />
+            onDelHandle={() => setDelAskModalVisible(true)}
+            onClearHandle={onClearHandle} />
         <Split />
         <LogTable formRef={formRef} />
         <DelAskModal

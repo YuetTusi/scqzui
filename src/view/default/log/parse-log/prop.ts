@@ -16,7 +16,11 @@ export interface SearchFormProp {
     /**
      * 删除handle
      */
-    onDelHandle: () => void
+    onDelHandle: () => void,
+    /**
+     * 清除handle
+     */
+     onClearHandle: () => void
 }
 
 export interface FormValue {
