@@ -33,6 +33,22 @@ const CloudLog: FC<CloudLogProp> = () => {
         setDelAskModalVisible(true);
     };
 
+    /**
+     * 清除handle
+     */
+    const onClearHandle = () => {
+        Modal.confirm({
+            onOk() {
+                dispatch({ type: 'cloudLogTable/dropAll' });
+            },
+            centered: true,
+            okText: '是',
+            cancelText: '否',
+            title: '清理确认',
+            content: '日志全部清除且不可恢复，确认清理日志吗？'
+        });
+    };
+
     const delHandle = (type: DelLogType) => Modal.confirm({
         onOk() {
             dispatch({ type: 'cloudLogTable/del', payload: type });
@@ -57,6 +73,7 @@ const CloudLog: FC<CloudLogProp> = () => {
         <SearchForm
             onSearchHandle={onSearch}
             onDelHandle={onDel}
+            onClearHandle={onClearHandle}
             formRef={formRef} />
         <Split />
         <LogTable formRef={formRef} />

@@ -89,5 +89,22 @@ export default {
             yield put({ type: 'setLoading', payload: false });
             log.error(`日志删除失败 @model/default/cloud-log-table/*del: ${error.message}`);
         }
+    },
+    /**
+     * 删除全部日志
+     */
+    *dropAll({ }: AnyAction, { call, put }: EffectsCommandMap) {
+        const db = getDb<CloudLog>(TableName.CloudLog);
+        yield put({ type: 'setLoading', payload: true });
+        try {
+            yield call([db, 'remove'], {}, true);
+            yield put({ type: 'query', payload: { condition: {}, current: 1, pageSize: helper.PAGE_SIZE } });
+            message.success('日志清除成功');
+        } catch (error) {
+            message.error('日志清除失败');
+            log.error(`日志清除失败 @modal/default/cloud-log-table/*dropAll: ${error.message}`);
+        } finally {
+            yield put({ type: 'setLoading', payload: false });
+        }
     }
 };

@@ -20,7 +20,7 @@ export interface SearchFormProp {
     /**
      * 清除handle
      */
-     onClearHandle: () => void
+    onClearHandle: () => void
 }
 
 export interface FormValue {
