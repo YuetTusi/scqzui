@@ -18,6 +18,11 @@ const { caseText } = helper.readConf()!;
 
 /**
  * 案件表格
+ * +---+
+ * |   |
+ * +---+
+ * |#| |
+ * +---+
  */
 const CaseList: FC<CaseListProp> = () => {
 

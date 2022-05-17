@@ -21,6 +21,11 @@ const { parseText } = helper.readConf()!;
 
 /**
  * 设备表格
+ * +---+
+ * |   |
+ * +---+
+ * | |#|
+ * +---+
  */
 const DevList: FC<DevListProp> = ({ }) => {
 

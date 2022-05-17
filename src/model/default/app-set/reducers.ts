@@ -18,22 +18,6 @@ export default {
         return state;
     },
     /**
-     * 设置警综平台数据
-     * @param {SendCase | null} payload 平台数据，清空数据传null
-     */
-    setSendCase(state: AppSetStore, { payload }: AnyAction) {
-        state.sendCase = payload;
-        return state;
-    },
-    /**
-     * 设置警综平台采集人员
-     * @param {Officer} payload 采集人员对象
-     */
-    setSendOfficer(state: AppSetStore, { payload }: AnyAction) {
-        state.sendOfficer = [payload];
-        return state;
-    },
-    /**
      * 设置云取应用数据
      * @param {AppCategory[]} payload
      */

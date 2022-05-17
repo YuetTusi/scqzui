@@ -135,14 +135,6 @@
      */
     ExtraMsg = 'extra_msg',
     /**
-     * 接收警综平台数据（Bho）
-     */
-    Platform = 'platform',
-    /**
-     * 警综平台配置更新（Parse）
-     */
-    PlatChange = 'plat_change',
-    /**
      * 查询登录（Trace）
      */
     TraceLogin = 'login',
@@ -176,10 +168,6 @@ enum SocketType {
      * 解析
      */
     Parse = 'parse',
-    /**
-     * 警综平台
-     */
-    Bho = 'bho',
     /**
      * 痕迹记录查询
      */

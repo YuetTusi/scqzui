@@ -7,6 +7,7 @@ import { helper } from '@/utils/helper';
 import logger from '@/utils/log';
 import { getDb } from '@/utils/db';
 import server, { send } from '@/utils/tcp-server';
+import { LocalStoreKey } from '@/utils/local-store';
 import TipType from '@/schema/tip-type';
 import { TableName } from '@/schema/table-name';
 import { FetchLog } from '@/schema/fetch-log';
@@ -18,14 +19,11 @@ import { DeviceSystem } from '@/schema/device-system';
 import { ParseCategory } from '@/schema/parse-detail';
 import {
     deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,
-    parseCurinfo, parseEnd, saveCaseFromPlatform, /*importErr,*/
-    humanVerify, saveOrUpdateOfficerFromPlatform, traceLogin, limitResult,
+    parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
     appRecFinish, fetchPercent, importErr, backDatapass
 } from './listener';
-import { LocalStoreKey } from '@/utils/local-store';
 
-const cwd = process.cwd();
-const { Fetch, Parse, Bho, Trace, Error } = SocketType;
+const { Fetch, Parse, Trace, Error } = SocketType;
 const { max, useTraceLogin, devText, fetchText, parseText } = helper.readConf()!;
 
 /**
@@ -163,23 +161,7 @@ export default {
             }
         });
     },
-    /**
-     * 接收警综平台消息
-     */
-    receiveBho({ dispatch }: SubscriptionAPI) {
-        server.on(Bho, (command: Command) => {
-            switch (command.cmd) {
-                case CommandType.Platform:
-                    //# 接收警综平台数据
-                    saveCaseFromPlatform(command, dispatch);
-                    saveOrUpdateOfficerFromPlatform(command, dispatch);
-                    break;
-                default:
-                    console.log('未知命令:', command);
-                    break;
-            }
-        });
-    },
+
     /**
      * 接收Trace消息
      */
@@ -302,9 +284,6 @@ export default {
                     break;
                 case Parse:
                     content = '解析服务通讯中断，请重启应用';
-                    break;
-                case Bho:
-                    content = '警综服务通讯中断，请重启应用';
                     break;
                 case Trace:
                     content = '应用查询服务中断，请重启应用';

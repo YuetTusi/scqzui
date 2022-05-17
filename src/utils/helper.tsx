@@ -579,6 +579,17 @@ const helper = {
         }
     },
     /**
+     * 使用显卡黑名单渲染
+     */
+    useBlackListRender() {
+        try {
+            fs.accessSync(path.join(cwd, 'blacklist'));
+            return true;
+        } catch (error) {
+            return false;
+        }
+    },
+    /**
      * 写net.json文件
      * @param cwd 工作目录
      * @param chunk 数据

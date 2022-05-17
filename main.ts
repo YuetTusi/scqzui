@@ -55,7 +55,6 @@ server.use(
 
 config = helper.readConf();
 existManuJson = helper.existManufaturer(mode!, appPath);
-// app.commandLine.appendArgument('--ignore-gpu-blacklist');
 
 if (config === null) {
     dialog.showErrorBox('启动失败', '配置文件读取失败, 请联系技术支持');
@@ -64,6 +63,10 @@ if (config === null) {
 if (!existManuJson) {
     dialog.showErrorBox('启动失败', 'manufaturer配置读取失败, 请联系技术支持');
     app.exit(0);
+}
+if (helper.useBlackListRender()) {
+    app.commandLine.appendArgument('--ignore-gpu-blacklist');
+    log.warn('Use BlackList 启用chromium显卡黑名单渲染');
 }
 
 /**

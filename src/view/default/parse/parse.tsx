@@ -10,6 +10,9 @@ import { TableBox, ParseBox, ParsingPanel } from './styled/style';
 
 const { caseText, devText, parseText } = helper.readConf()!;
 
+/**
+ * 数据解析页
+ */
 const Parse: FC<{}> = () => {
 
     const dispatch = useDispatch();

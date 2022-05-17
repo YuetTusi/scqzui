@@ -4,7 +4,6 @@ import { ipcRenderer } from "electron";
 import { EffectsCommandMap } from "dva";
 import { AnyAction } from 'redux';
 import dayjs from 'dayjs';
-import message from "antd/lib/message";
 import { StateTree } from '@/type/model';
 import logger from "@/utils/log";
 import { helper } from '@/utils/helper';
@@ -22,11 +21,8 @@ import { FetchState, ParseState } from "@/schema/device-state";
 import CommandType, { SocketType } from "@/schema/command";
 import { ParseEnd } from '@/schema/parse-log';
 import ParseLogEntity from '@/schema/parse-log';
-import Officer from '@/schema/officer';
 import { DataMode } from '@/schema/data-mode';
-import { ParseApp } from '@/schema/parse-app';
 import { BcpEntity } from '@/schema/bcp-entity';
-import { GuangZhouCase } from '@/schema/platform/guangzhou-case';
 import { DeviceSystem } from '@/schema/device-system';
 import { AppJson } from '@/schema/app-json';
 import { ParseCategory } from '@/schema/parse-detail';
@@ -298,89 +294,44 @@ export default {
             note: rec.note ?? '',
             mode: rec.mode ?? DataMode.Self
         });
-        const { sendCase, dataMode }: AppSetStore = yield select((state: StateTree) => state.appSet);
-        if (fetchData.mode === DataMode.GuangZhou) {
-            // sendCase = yield select((state: StateTree) => state.appSet.sendCase);//警综案件数据
-            rec.handleOfficerNo = sendCase?.ObjectID ?? ''; //#持有人编号从警经综数据接收
-            //将警综平台数据写入Platform.json，解析会读取
-            yield fork([helper, 'writeJSONfile'], path.join(rec.phonePath, 'Platform.json'), sendCase);
-        }
 
         try {
             const caseData: CaseInfo = yield call([db, 'findOne'], { _id: fetchData.caseId });
             const bcp = new BcpEntity();
-            if (dataMode === DataMode.GuangZhou) {
-                //警综
-                bcp.mobilePath = phonePath;
-                bcp.attachment = caseData.attachment;
-                bcp.checkUnitName = caseData.m_strCheckUnitName ?? '';
-                bcp.unitNo = sendCase?.dept ?? '';
-                bcp.unitName = sendCase?.deptName ?? '';
-                bcp.dstUnitNo = sendCase?.dept ?? '';
-                bcp.dstUnitName = sendCase?.deptName ?? '';
-                bcp.officerNo = sendCase?.OfficerID ?? '';
-                bcp.officerName = sendCase?.OfficerName ?? '';
-                bcp.mobileHolder = fetchData.mobileHolder!;
-                bcp.remark = fetchData.note ?? '';
-                bcp.bcpNo = '';
-                bcp.phoneNumber = sendCase?.Phone ?? '';
-                bcp.credentialType = sendCase?.IdentityIDTypeCode ?? '0';
-                bcp.credentialNo = sendCase?.IdentityID ?? '';
-                bcp.credentialEffectiveDate = '';
-                bcp.credentialExpireDate = '';
-                bcp.credentialOrg = '';
-                bcp.credentialAvatar = '';
-                bcp.gender = '0';
-                bcp.nation = sendCase?.MinzuCode ?? '00';
-                bcp.birthday = '';
-                bcp.address = sendCase?.Dz ?? '';
-                bcp.securityCaseNo = caseData.securityCaseNo ?? '';
-                bcp.securityCaseType = caseData.securityCaseType ?? '';
-                bcp.securityCaseName = caseData.securityCaseName ?? '';
-                //LEGACY:目前为保证BCP文件上传成功，将`执法办案`相关4个字段存为固定空串
-                bcp.handleCaseNo = caseData.handleCaseNo ?? '';
-                bcp.handleCaseType = caseData.handleCaseType ?? '';
-                bcp.handleCaseName = caseData.handleCaseName ?? '';
-                bcp.handleOfficerNo = sendCase?.ObjectID ?? '';
-                //LEGACY ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                yield fork([helper, 'writeBcpJson'], phonePath, { ...bcp, ...sendCase });
-            } else {
-                const {
-                    collectUnitCode, collectUnitName, dstUnitCode, dstUnitName
-                } = yield select((state: StateTree) => state.organization);
-                //非警综
-                bcp.mobilePath = phonePath;
-                bcp.attachment = caseData.attachment;
-                bcp.checkUnitName = caseData.m_strCheckUnitName ?? '';
-                bcp.unitNo = collectUnitCode ?? '';
-                bcp.unitName = collectUnitName ?? '';
-                bcp.dstUnitNo = dstUnitCode ?? '';
-                bcp.dstUnitName = dstUnitName ?? '';
-                bcp.officerNo = caseData.officerNo;
-                bcp.officerName = caseData.officerName;
-                bcp.mobileHolder = fetchData.mobileHolder!;
-                bcp.remark = fetchData.note ?? '';
-                bcp.bcpNo = '';
-                bcp.phoneNumber = '';
-                bcp.credentialType = '0';
-                bcp.credentialNo = '';
-                bcp.credentialEffectiveDate = '';
-                bcp.credentialExpireDate = '';
-                bcp.credentialOrg = '';
-                bcp.credentialAvatar = '';
-                bcp.gender = '0';
-                bcp.nation = '00';
-                bcp.birthday = '';
-                bcp.address = '';
-                bcp.securityCaseNo = caseData.securityCaseNo ?? '';
-                bcp.securityCaseType = caseData.securityCaseType ?? '';
-                bcp.securityCaseName = caseData.securityCaseName ?? '';
-                bcp.handleCaseNo = caseData.handleCaseNo ?? '';
-                bcp.handleCaseType = caseData.handleCaseType ?? '';
-                bcp.handleCaseName = caseData.handleCaseName ?? '';
-                bcp.handleOfficerNo = fetchData.handleOfficerNo ?? '';
-                yield fork([helper, 'writeBcpJson'], phonePath, bcp);
-            }
+            const {
+                collectUnitCode, collectUnitName, dstUnitCode, dstUnitName
+            } = yield select((state: StateTree) => state.organization);
+            bcp.mobilePath = phonePath;
+            bcp.attachment = caseData.attachment;
+            bcp.checkUnitName = caseData.m_strCheckUnitName ?? '';
+            bcp.unitNo = collectUnitCode ?? '';
+            bcp.unitName = collectUnitName ?? '';
+            bcp.dstUnitNo = dstUnitCode ?? '';
+            bcp.dstUnitName = dstUnitName ?? '';
+            bcp.officerNo = caseData.officerNo;
+            bcp.officerName = caseData.officerName;
+            bcp.mobileHolder = fetchData.mobileHolder!;
+            bcp.remark = fetchData.note ?? '';
+            bcp.bcpNo = '';
+            bcp.phoneNumber = '';
+            bcp.credentialType = '0';
+            bcp.credentialNo = '';
+            bcp.credentialEffectiveDate = '';
+            bcp.credentialExpireDate = '';
+            bcp.credentialOrg = '';
+            bcp.credentialAvatar = '';
+            bcp.gender = '0';
+            bcp.nation = '00';
+            bcp.birthday = '';
+            bcp.address = '';
+            bcp.securityCaseNo = caseData.securityCaseNo ?? '';
+            bcp.securityCaseType = caseData.securityCaseType ?? '';
+            bcp.securityCaseName = caseData.securityCaseName ?? '';
+            bcp.handleCaseNo = caseData.handleCaseNo ?? '';
+            bcp.handleCaseType = caseData.handleCaseType ?? '';
+            bcp.handleCaseName = caseData.handleCaseName ?? '';
+            bcp.handleOfficerNo = fetchData.handleOfficerNo ?? '';
+            yield fork([helper, 'writeBcpJson'], phonePath, bcp);
         } catch (error) {
             logger.error(`Bcp.json写入失败 @model/default/device/*startFetch: ${error.message}`);
         } finally {
@@ -566,154 +517,6 @@ export default {
             }
         } catch (error) {
             logger.error(`开始解析失败 @model/default/device/*startParse: ${error.message}`);
-        }
-    },
-    /**
-     * 从警综平台获取案件数据入库
-     * @param {DeviceType} payload.device 当前设备数据
-     */
-    *saveCaseFromPlatform({ payload }: AnyAction, { select, call, fork, put }: EffectsCommandMap) {
-        const sendCase: GuangZhouCase = yield select((state: StateTree) => state.dashboard.sendCase);//警综案件数据
-        const { device } = payload as { device: DeviceType };
-
-        if (helper.isNullOrUndefinedOrEmptyString(sendCase?.CaseName)) {
-            message.warn(`${caseText ?? '案件'}名称为空，请确认平台数据完整`);
-            return;
-        }
-        if (helper.isNullOrUndefinedOrEmptyString(sendCase?.OwnerName)) {
-            message.warn('姓名为空，请确认平台数据完整');
-            return;
-        }
-
-        try {
-            const [hasCase]: CaseInfo[] = yield call([helper, 'caseNameExist'], sendCase.CaseName);
-
-            if (hasCase === undefined) {
-                //# 库中无重名案件，从警综平台数据中创建案件入库
-                let filePaths: string[] | undefined = yield ipcRenderer.invoke('open-dialog-sync', {
-                    title: `选择${caseText ?? '案件'}存储目录`,
-                    properties: ['openDirectory']
-                });
-                if (filePaths === undefined || filePaths.length === 0) { return; }
-                const newCase = new CaseInfo();
-                newCase._id = helper.newId();
-                newCase.m_strCaseName = `${sendCase.CaseName!.replace(
-                    /_/g,
-                    ''
-                )}_${helper.timestamp()}`;
-                newCase.m_strCasePath = filePaths[0];
-                newCase.m_strCheckUnitName = sendCase.deptName;
-                newCase.handleCaseNo = sendCase.CaseID;
-                newCase.handleCaseName = sendCase.CaseName;
-                newCase.handleCaseType = sendCase.CaseType;
-                // newCase.handleOfficerNo = sendCase.ObjectID;
-                newCase.securityCaseNo = sendCase.CaseID;
-                newCase.securityCaseName = sendCase.CaseName;
-                newCase.securityCaseType = sendCase.CaseType;
-                newCase.officerName = sendCase.OfficerName;
-                newCase.officerNo = sendCase.OfficerID;
-                newCase.m_Applist = helper.getAllApps(parseApps.fetch) as ParseApp[];
-                newCase.tokenAppList = [];
-                newCase.sdCard = false;
-                newCase.m_bIsAutoParse = true;
-                newCase.generateBcp = true;
-                newCase.attachment = false;
-                newCase.hasReport = false;
-                newCase.isAi = false;
-                newCase.isDel = false;
-                yield call([ipcRenderer, 'invoke'], 'db-insert', TableName.Case, newCase);
-                let exist: boolean = yield call([helper, 'existFile'], path.join(newCase.m_strCasePath, newCase.m_strCaseName));
-                if (!exist) {
-                    //案件路径不存在，创建之
-                    mkdirSync(path.join(newCase.m_strCasePath, newCase.m_strCaseName));
-                }
-                //写Case.json
-                yield fork([helper, 'writeCaseJson'], path.join(newCase.m_strCasePath, newCase.m_strCaseName), newCase);
-                //从警综平台数据中创建设备采集数据
-                const fetchData = new FetchData();
-                fetchData.caseName = newCase.m_strCaseName;
-                fetchData.caseId = newCase._id;
-                fetchData.casePath = filePaths[0];
-                fetchData.sdCard = newCase.sdCard;
-                fetchData.isAuto = newCase.m_bIsAutoParse;
-                fetchData.hasReport = newCase.hasReport;
-                fetchData.unitName = sendCase.deptName;
-                fetchData.mobileName = `${device.model ?? ''}_${helper.timestamp(device.usb)}`;
-                fetchData.mobileNo = '';
-                fetchData.mobileNumber = sendCase.Phone ?? '';
-                fetchData.mobileHolder = sendCase.OwnerName ?? '';
-                fetchData.note = sendCase.Desc ?? '';
-                fetchData.credential = sendCase.IdentityID ?? '';
-                fetchData.serial = device.serial ?? '';
-                fetchData.mode = DataMode.GuangZhou;
-                fetchData.appList = newCase.m_Applist ?? [];
-                fetchData.cloudAppList = [];
-                //开始采集
-                yield put({
-                    type: 'device/startFetch', payload: {
-                        deviceData: device,
-                        fetchData
-                    }
-                });
-            } else {
-                //# 已存在案件，从警综平台推送案件中取数据，直接走采集流程
-                const fetchData = new FetchData();
-                fetchData.caseId = hasCase._id;
-                fetchData.caseName = hasCase.m_strCaseName;
-                fetchData.casePath = hasCase.m_strCasePath;
-                fetchData.sdCard = hasCase.sdCard;
-                fetchData.isAuto = hasCase.m_bIsAutoParse;
-                fetchData.hasReport = hasCase.hasReport;
-                fetchData.unitName = sendCase.deptName;
-                fetchData.mobileName = `${device.model}_${helper.timestamp(device.usb)}`;
-                fetchData.mobileNo = '';
-                fetchData.mobileNumber = sendCase.Phone ?? '';
-                fetchData.mobileHolder = sendCase.OwnerName ?? '';
-                fetchData.handleOfficerNo = sendCase.ObjectID ?? '';
-                fetchData.note = sendCase.Desc ?? '';
-                fetchData.credential = sendCase.IdentityID ?? '';
-                fetchData.serial = device.serial ?? '';
-                fetchData.mode = DataMode.GuangZhou;
-                fetchData.appList = hasCase.m_Applist ?? [];
-                fetchData.cloudAppList = [];
-                //开始采集
-                yield put({
-                    type: 'device/startFetch', payload: {
-                        deviceData: device,
-                        fetchData
-                    }
-                });
-            }
-
-        } catch (error) {
-            message.error(`${fetchText ?? '取证'}失败: ${error.message}`);
-            logger.error(`警综平台获取数据取证失败 @model/default/device/*saveCaseFromPlatform: ${error.message}`);
-        }
-    },
-    /**
-     * 添加或更新采集人员（存在编号则更新）
-     * @param {Officer} payload 采集人员
-     */
-    *saveOrUpdateOfficer({ payload }: AnyAction, { call, fork }: EffectsCommandMap) {
-
-        const db = getDb<Officer>(TableName.Officer);
-        const { no, name } = payload as Officer;
-
-        try {
-            const prev: Officer | null = yield call([db, 'findOne'], { no });
-            if (prev === null) {
-                //insert
-                yield fork([db, 'insert'], payload);
-            } else {
-                //update
-                const next = {
-                    ...prev,
-                    name
-                };
-                yield fork([db, 'update'], { no }, next);
-            }
-        } catch (error) {
-            logger.error(`保存采集人员失败 @model/default/device/*saveOrUpdateOfficer: ${error.message}`);
         }
     }
 };

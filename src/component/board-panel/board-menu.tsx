@@ -56,11 +56,11 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
         <Auth deny={!isDev}>
             <li onClick={() => onItemClick(BoardMenuAction.FetchLog)}>
                 <FontAwesomeIcon icon={faMobileScreenButton} />
-                <span>{`${fetchText}日志管理`}</span>
+                <span>{`${fetchText ?? '取证'}日志管理`}</span>
             </li>
             <li onClick={() => onItemClick(BoardMenuAction.ParseLog)}>
                 <FontAwesomeIcon icon={faArrowsRotate} />
-                <span>{`${parseText}日志管理`}</span>
+                <span>{`${parseText ?? '解析'}日志管理`}</span>
             </li>
             <li onClick={() => onItemClick(BoardMenuAction.CloudLog)}>
                 <FontAwesomeIcon icon={faCloud} />

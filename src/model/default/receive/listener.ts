@@ -5,7 +5,6 @@ import { Dispatch } from "dva";
 import { ipcRenderer } from "electron";
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
-import notification from 'antd/lib/notification';
 import logger from "@/utils/log";
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
@@ -22,9 +21,7 @@ import TipType, { ReturnButton } from "@/schema/tip-type";
 import ParseDetail, { ParseCategory } from "@/schema/parse-detail";
 import { ParseEnd } from "@/schema/parse-log";
 import { CaseInfo } from "@/schema/case-info";
-import { Officer } from '@/schema/officer';
 import { TableName } from "@/schema/table-name";
-import { GuangZhouCase } from '@/schema/platform/guangzhou-case';
 import { HumanVerify } from '@/schema/human-verify';
 import { DataMode } from '@/schema/data-mode';
 import { CaptchaMsg, CloudAppMessages } from '@/schema/cloud-app-messages';
@@ -209,44 +206,6 @@ export function humanVerify({ msg }: Command<{
             humanVerifyData: msg.humanVerifyData
         }
     });
-}
-
-/**
- * 接收警综平台数据保存到model
- */
-export function saveCaseFromPlatform({ msg }: Command<GuangZhouCase>, dispatch: Dispatch<any>) {
-
-    if (helper.isNullOrUndefined(msg.errcode)) {
-        //* 若无errcode，则说明接口访问无误
-        notification.close('platformNotice');
-        notification.info({
-            key: 'platformNotice',
-            message: '警综平台消息',
-            description: `接收到案件：「${msg.CaseName}」，姓名：「${msg.OwnerName}」`,
-            duration: 20
-        });
-        logger.info(`接收警综平台数据 @model/default/receive/listener/saveCaseFromPlatform：${JSON.stringify(msg)}`);
-        const officer: Officer = {
-            name: msg.OfficerName ?? '',
-            no: msg.OfficerID ?? ''
-        };
-        dispatch({ type: 'dashboard/setSendCase', payload: msg });
-        dispatch({ type: 'dashboard/setSendOfficer', payload: officer });
-    } else {
-        notification.error({
-            message: '警综数据错误',
-            description: `数据接收错误，请在警综平台重新发起推送`
-        });
-        dispatch({ type: 'dashboard/setSendCase', payload: null });
-    }
-}
-
-/**
- * 接收警综平台数据录入采集人员
- */
-export function saveOrUpdateOfficerFromPlatform({ msg }: Command<GuangZhouCase>, dispatch: Dispatch<any>) {
-    const officer = new Officer({ no: msg.OfficerID, name: msg.OfficerName });
-    dispatch({ type: 'device/saveOrUpdateOfficer', payload: officer });
 }
 
 /**

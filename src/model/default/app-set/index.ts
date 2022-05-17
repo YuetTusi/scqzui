@@ -1,9 +1,7 @@
 
 import { Model } from 'dva';
-import { Officer } from '@/schema/officer';
 import { DataMode } from '@/schema/data-mode';
 import { AppCategory } from '@/schema/app-config';
-import { GuangZhouCase } from '@/schema/platform/guangzhou-case';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
 import reducers from './reducers';
 import effects from './effects';
@@ -19,14 +17,6 @@ interface AppSetStore {
      * 模式（标准，云取证，点验，警综）
      */
     dataMode: DataMode,
-    /**
-     * 接收平台案件数据
-     */
-    sendCase: GuangZhouCase | null,
-    /**
-     * 接收警综采集人员
-     */
-    sendOfficer: Officer[],
     /**
      * 全局警告消息，无消息为空数组
      */
@@ -46,8 +36,6 @@ let model: Model = {
     state: {
         reading: false,
         dataMode: DataMode.Self,
-        sendCase: null,
-        sendOfficer: [],
         alertMessage: [],
         cloudAppData: []
     },

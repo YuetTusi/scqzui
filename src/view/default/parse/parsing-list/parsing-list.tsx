@@ -13,6 +13,11 @@ const { devText } = helper.readConf()!;
 
 /**
  * 正在解析的设备列表
+ * +---+
+ * |###|
+ * +---+
+ * | | |
+ * +---+
  */
 const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, devices }) => {
 

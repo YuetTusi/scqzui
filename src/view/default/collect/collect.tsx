@@ -63,7 +63,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     const [guideModalVisible, setGuideModalVisible] = useState<boolean>(false);
     const [checkInputModalVisible, setCheckInputModalVisible] = useState<boolean>(false);
     const [cloudHistoryModalVisible, setCloudHistoryModalVisible] = useState<boolean>(false);
-    const { dataMode, sendCase } = useSelector<StateTree, AppSetStore>(state => state.appSet);
+    const { dataMode } = useSelector<StateTree, AppSetStore>(state => state.appSet);
     const [unitCode] = useUnit();
     const [dstUnitCode] = useDstUnit();
     const devicePanelRef = useRef<HTMLDivElement>(null);
@@ -140,22 +140,6 @@ const Collect: FC<CollectProp> = ({ }) => {
     }
 
     /**
-     * 通过警综平台获取数据
-     * @param data
-     */
-    const getCaseDataFromGuangZhouPlatform = (data: DeviceType) => {
-        if (helper.isNullOrUndefined(sendCase)) {
-            message.destroy();
-            message.info('未接收警综平台数据');
-        } else {
-            dispatch({
-                type: 'device/saveCaseFromPlatform',
-                payload: { device: data }
-            });
-        }
-    };
-
-    /**
      * 采集前验证相关设置
      */
     const validateBeforeFetch = () => {
@@ -220,16 +204,7 @@ const Collect: FC<CollectProp> = ({ }) => {
      */
     const collectHandle = (data: DeviceType) => {
         currentDevice.current = data; //寄存手机数据，采集时会使用
-        switch (dataMode) {
-            case DataMode.GuangZhou:
-                //#广州警综平台
-                getCaseDataFromGuangZhouPlatform(data);
-                break;
-            default:
-                //#标准或点验模式
-                getCaseDataFromUser(data);
-                break;
-        }
+        getCaseDataFromUser(data);
     };
     /**
      * 云取证回调
