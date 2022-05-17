@@ -5,7 +5,7 @@ import { ButtonListProp } from './prop';
 
 const { Group } = Button;
 
-const ButtonList: FC<ButtonListProp> = ({ buttonList, onSearch }) => (
+const ButtonList: FC<ButtonListProp> = ({ buttonList, onSearch }) =>
     <Group style={{ flexWrap: 'wrap' }}>
         {buttonList.map(({ name, value, type }) => (
             <Button
@@ -16,8 +16,7 @@ const ButtonList: FC<ButtonListProp> = ({ buttonList, onSearch }) => (
                 <span>{name}</span>
             </Button>
         ))}
-    </Group>
-);
+    </Group>;
 
 ButtonList.defaultProps = {
     buttonList: [],

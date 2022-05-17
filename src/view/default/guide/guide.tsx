@@ -31,7 +31,7 @@ const Guide: FC<{}> = () => {
                     Dashboard
                 </BoardMenu>
             </ExtendPanel>
-            {/* <div className="right-opacity"></div> */}
+            {/* <div className="right-opacity"/> */}
             <Reading />
         </GuideBox>
     );

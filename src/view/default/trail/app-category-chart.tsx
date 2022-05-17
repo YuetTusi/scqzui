@@ -122,28 +122,24 @@ const AppCategoryChart: FC<{ data: InstallApp | null }> = ({ data }) => {
         if (data.length === 0) {
             return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无统计数据" />;
         } else {
-            return (
-                <ul>
-                    {data.map(({ name, pkg }, i) => {
-                        return <li key={`K_${i}`}>{`${name}（${pkg}）`}</li>;
-                    })}
-                </ul>
-            );
+            return <ul>
+                {data.map(({ name, pkg }, i) => {
+                    return <li key={`K_${i}`}>{`${name}（${pkg}）`}</li>;
+                })}
+            </ul>;
         }
     };
 
-    return (
-        <TrailChartBox>
-            <div id="app-category-chart" className="chart-box"></div>
+    return <TrailChartBox>
+        <div id="app-category-chart" className="chart-box"></div>
 
-            <div className="list-box">
-                <div className="list-panel">
-                    <div className="caption">{category === undefined ? '应用列表' : category}</div>
-                    <div className="list">{renderLi(detailList)}</div>
-                </div>
+        <div className="list-box">
+            <div className="list-panel">
+                <div className="caption">{category === undefined ? '应用列表' : category}</div>
+                <div className="list">{renderLi(detailList)}</div>
             </div>
-        </TrailChartBox>
-    );
+        </div>
+    </TrailChartBox>;
 };
 
 export { AppCategoryChart };

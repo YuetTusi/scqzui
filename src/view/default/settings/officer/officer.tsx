@@ -58,6 +58,7 @@ const Officer: FC<OfficerProp> = () => {
             content: `确认删除「${name}」？`,
             okText: '是',
             cancelText: '否',
+            centered: true,
             onOk: () => {
                 dispatch({ type: 'officer/delOfficer', payload: id });
             }

@@ -25,8 +25,8 @@ const InstructionBox = styled.div`
 /**
  * 文案说明
  */
-const Instruction: FC<{}> = memo(({ children }) => (
+const Instruction: FC<{}> = memo(({ children }) =>
 	<InstructionBox>{children}</InstructionBox>
-));
+);
 
 export default Instruction;

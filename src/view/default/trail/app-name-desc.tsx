@@ -11,32 +11,26 @@ import { EmptyBox } from './styled/style';
  */
 const AppNameDesc: FC<{ data: InstallApp | null }> = ({ data }) => {
     if (helper.isNullOrUndefined(data)) {
-        return (
-            <EmptyBox>
-                <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            </EmptyBox>
-        );
+        return <EmptyBox>
+            <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </EmptyBox>;
     }
 
     const { appNameList, cateNameList, apppkgList } = data!;
 
     if (helper.isNullOrUndefined(appNameList) || appNameList === '') {
-        return (
-            <EmptyBox>
-                <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            </EmptyBox>
-        );
+        return <EmptyBox>
+            <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </EmptyBox>;
     }
 
     const nameList = appNameList.split('\u0001');
     const len = nameList.length;
 
     if (len === 0) {
-        return (
-            <EmptyBox>
-                <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            </EmptyBox>
-        );
+        return <EmptyBox>
+            <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </EmptyBox>;
     }
 
     const categoryList = helper.isNullOrUndefined(cateNameList) ? [] : cateNameList.split(',');

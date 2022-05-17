@@ -38,7 +38,7 @@ export const getCaseName = (name?: string): [string, string] => {
     return [caseName, timestamp];
 }
 
-const CaseEdit: FC<CaseEditProp> = ({ }) => {
+const CaseEdit: FC<CaseEditProp> = () => {
 
     const dispatch = useDispatch();
     const { data } = useSelector<StateTree, CaseEditState>(state => state.caseEdit);
@@ -68,14 +68,12 @@ const CaseEdit: FC<CaseEditProp> = ({ }) => {
             //首次加载时，将数据库中案件的解析应用列表数据赋值给parseAppList
             parseAppList[1](data?.m_Applist ? data.m_Applist : []);
         }
-        // context.parseAppSelectHandle(data.m_Applist ? data.m_Applist : []);
     }, [data?.m_Applist]);
     useEffect(() => {
         if (tokenAppList[0].length === 0) {
             //首次加载时，将数据库中案件的云取证应用列表数据赋值给cloudAppList
             tokenAppList[1](data?.tokenAppList ? data.tokenAppList : []);
         }
-        // context.tokenAppSelectHandle(data.tokenAppList ? data.tokenAppList : []);
     }, [data?.tokenAppList]);
 
     useEffect(() => {

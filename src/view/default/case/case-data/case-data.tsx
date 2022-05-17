@@ -11,15 +11,17 @@ import Table from 'antd/lib/table';
 import Modal from 'antd/lib/modal';
 import { Key } from 'antd/lib/table/interface';
 import SubLayout from '@/component/sub-layout/sub-layout';
+import { Split } from '@/component/style-tool';
 import { CaseInfo } from '@/schema/case-info';
 import { StateTree } from '@/type/model';
-import { CaseDataState } from '@/model/default/case-data';
-import { Split } from '@/component/style-tool';
 import { helper } from '@/utils/helper';
+import { CaseDataState } from '@/model/default/case-data';
 import { getCaseColumns } from './column';
 import { CaseDataBox } from './styled/style';
 import DeviceTable from './device-table';
-import { importDevice, readCaseJson, readDirOnly, getCaseByName } from './util';
+import {
+    importDevice, readCaseJson, readDirOnly, getCaseByName
+} from './util';
 
 const { caseText } = helper.readConf()!;
 const { Group } = Button;
