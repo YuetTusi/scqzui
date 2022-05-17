@@ -1,11 +1,12 @@
 import throttle from 'lodash/throttle';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
 import React, { FC, MouseEvent, useState, useCallback } from 'react';
 import AutoComplete from 'antd/lib/auto-complete';
 import FileSyncOutlined from '@ant-design/icons/FileSyncOutlined'
 import CloudSyncOutlined from '@ant-design/icons/CloudSyncOutlined'
 import SelectOutlined from '@ant-design/icons/SelectOutlined'
-import AppstoreOutlined from '@ant-design/icons/AppstoreOutlined';
 import Button from 'antd/lib/button';
 import Switch from 'antd/lib/switch';
 import Checkbox from 'antd/lib/checkbox';
@@ -254,7 +255,7 @@ const AddForm: FC<FormProp> = ({
                     className="cate"
                     style={{ display: useBcp && generateBcp ? 'block' : 'none' }}>
                     <div className="cate-bar">
-                        <AppstoreOutlined rotate={45} />
+                        <FontAwesomeIcon icon={faAnglesDown} />
                         <span>BCP信息</span>
                     </div>
                     <Row>
@@ -350,7 +351,7 @@ const AddForm: FC<FormProp> = ({
                 </div>
                 <div className="cate" style={{ display: useAi && isAi ? 'block' : 'none' }}>
                     <div className="cate-bar">
-                        <AppstoreOutlined rotate={45} />
+                        <FontAwesomeIcon icon={faAnglesDown} />
                         <span>AI信息</span>
                     </div>
                     <Row>

@@ -224,7 +224,7 @@ const Trail: FC<{}> = () => {
      */
     const render = () => {
         if (imei.length === 0 && helper.isNullOrUndefinedOrEmptyString(oaid)) {
-            return <Empty description="暂无数据" />;
+            return <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />;
         } else {
             return <>
                 <div>

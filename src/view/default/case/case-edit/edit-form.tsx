@@ -1,7 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import CloudSyncOutlined from '@ant-design/icons/CloudSyncOutlined';
 import FileSyncOutlined from '@ant-design/icons/FileSyncOutlined';
-import AppstoreOutlined from '@ant-design/icons/AppstoreOutlined';
 import AutoComplete from 'antd/lib/auto-complete';
 import Col from 'antd/lib/col';
 import Row from 'antd/lib/row';
@@ -229,7 +230,7 @@ const EditForm: FC<FormProp> = ({
                 className="cate"
                 style={{ display: useBcp && generateBcpState[0] ? 'block' : 'none' }}>
                 <div className="cate-bar">
-                    <AppstoreOutlined rotate={45} />
+                    <FontAwesomeIcon icon={faAnglesDown} />
                     <span>BCP信息</span>
                 </div>
                 <Row>
@@ -325,7 +326,7 @@ const EditForm: FC<FormProp> = ({
                 className="cate"
                 style={{ display: useAi && isAiState[0] ? 'block' : 'none' }}>
                 <div className="cate-bar">
-                    <AppstoreOutlined rotate={45} />
+                    <FontAwesomeIcon icon={faAnglesDown} />
                     <span>AI信息</span>
                 </div>
                 <Row>

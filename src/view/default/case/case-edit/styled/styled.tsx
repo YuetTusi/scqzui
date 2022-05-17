@@ -40,9 +40,10 @@ export const FormBox = styled.div`
 			line-height: 40px;
 			margin-bottom: 15px;
 
-			.anticon {
+            & > svg {
 				color: #fff;
-				margin-left: 14px;
+                margin-left:10px;
+				padding: 0 5px;
 			}
 
 			span {
