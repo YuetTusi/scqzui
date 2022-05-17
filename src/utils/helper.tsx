@@ -30,10 +30,6 @@ const cwd = process.cwd();//应用的根目录
 const KEY = 'az'; //密钥
 dayjs.locale('zh-cn');
 
-export const PAGE_SIZE = 10;
-export const CLOUD_TIMEOUT = 3600;
-export const CLOUD_TIMESPAN = 4;
-
 //封装工具函数
 const helper = {
     PAGE_SIZE: 10,
@@ -61,6 +57,10 @@ const helper = {
      * 云取证AppMD5校验地址（配置文件中若没有地址则使用）
      */
     VALID_CLOUD_APP_URL: 'http://139.9.112.8:9699/md5',
+    /**
+     * 快速点验二维码IP名单
+     */
+    QUICK_QR_IP: ['192.168.137.1', '192.168.50.99', '192.168.191.1'],
     /**
      * @description 转为Moment日期格式
      * @param date 原日期字串

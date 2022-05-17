@@ -1,6 +1,6 @@
 
 import { Model } from 'dva';
-import { PAGE_SIZE } from '@/utils/helper';
+import { helper } from '@/utils/helper';
 import { QuickRecord } from '@/schema/quick-record';
 import reducers from './reducers';
 import effects from './effects';
@@ -43,7 +43,7 @@ let model: Model = {
         eventId: undefined,
         data: [],
         pageIndex: 1,
-        pageSize: PAGE_SIZE,
+        pageSize: helper.PAGE_SIZE,
         total: 0,
         loading: false,
         expandedRowKeys: []

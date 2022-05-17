@@ -24,7 +24,7 @@ const { caseText, devText } = helper.readConf()!;
 const Quick: FC<{}> = () => {
 
     const dispatch = useDispatch();
-    const ipWhiteList = useRef<string[]>(['192.168.137.1', '192.168.50.99', '192.168.191.1']);//IP白名单
+    const ipWhiteList = useRef<string[]>(helper.QUICK_QR_IP);//IP白名单
     const portOccupy = useRef<boolean>(false); //端口占用
     const [detailId, setDetailId] = useState<string>('');
     const [ip, setIp] = useState<string>('127.0.0.1');
