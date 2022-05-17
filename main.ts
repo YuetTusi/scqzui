@@ -66,7 +66,7 @@ if (!existManuJson) {
 }
 if (helper.useBlackListRender()) {
     app.commandLine.appendArgument('--ignore-gpu-blacklist');
-    log.warn('Use BlackList 启用chromium显卡黑名单渲染');
+    log.warn('Use black list 忽略chromium显卡黑名单渲染');
 }
 
 /**
@@ -223,8 +223,8 @@ if (!instanceLock) {
             center: config?.center ?? true, //居中显示
             minHeight: config?.minHeight ?? 900, //最小高度
             minWidth: config?.minWidth ?? 960, //最小宽度
-            frame: false,
-            thickFrame: false,
+            frame: false,//不使用原生标题栏
+            thickFrame: true,
             backgroundColor: '#0f224d',
             webPreferences: {
                 webSecurity: false,
@@ -483,8 +483,8 @@ ipcMain.on('show-notice', (event: IpcMainEvent, { title, message }) =>
     notifier.notify({
         sound: true,
         type: 'info',
-        title: title || '消息',
-        message: message || '有消息反馈请查阅'
+        title: title ?? '消息',
+        message: message ?? '有消息反馈请查阅'
     })
 );
 
