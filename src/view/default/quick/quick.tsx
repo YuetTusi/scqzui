@@ -24,6 +24,7 @@ const { caseText, devText } = helper.readConf()!;
 const Quick: FC<{}> = () => {
 
     const dispatch = useDispatch();
+    const ipWhiteList = useRef<string[]>(['192.168.137.1', '192.168.50.99', '192.168.191.1']);//IP白名单
     const portOccupy = useRef<boolean>(false); //端口占用
     const [detailId, setDetailId] = useState<string>('');
     const [ip, setIp] = useState<string>('127.0.0.1');
@@ -55,8 +56,13 @@ const Quick: FC<{}> = () => {
      * 二维码handle
      */
     const qrcodeHandle = debounce((data: QuickEvent) => {
-        let hasHotSpot = helper.hasIP('192.168.137.1');
-        let hasRouter = helper.hasIP('192.168.50.99');
+
+        const allowIp = ipWhiteList.current.reduce<string[]>((acc, current) => {
+            if (helper.hasIP(current)) {
+                acc.push(current);
+            }
+            return acc;
+        }, []);
         if (portOccupy.current) {
             Modal.warn({
                 title: '端口占用',
@@ -64,7 +70,7 @@ const Quick: FC<{}> = () => {
                 okText: '确定',
                 centered: true
             });
-        } else if (!hasHotSpot && !hasRouter) {
+        } else if (allowIp.length === 0) {
             Modal.warn({
                 title: '生成二维码失败',
                 content: '未检测到热点或路由器，请连接采集盒子或者打开电脑上的移动热点',
@@ -72,7 +78,7 @@ const Quick: FC<{}> = () => {
                 centered: true
             });
         } else {
-            setIp(hasHotSpot ? '192.168.137.1' : '192.168.50.99');
+            setIp(allowIp[0]);
             setQuickQRCodeModalVisble(true);
         }
     }, 500, { leading: true, trailing: false });
@@ -82,8 +88,12 @@ const Quick: FC<{}> = () => {
      */
     const detailHandle = debounce(({ _id }: QuickEvent) => {
 
-        let hasHotSpot = helper.hasIP('192.168.137.1');
-        let hasRouter = helper.hasIP('192.168.50.99');
+        const allowIp = ipWhiteList.current.reduce<string[]>((acc, current) => {
+            if (helper.hasIP(current)) {
+                acc.push(current);
+            }
+            return acc;
+        }, []);
         if (portOccupy.current) {
             Modal.warn({
                 title: '端口占用',
@@ -91,7 +101,7 @@ const Quick: FC<{}> = () => {
                 okText: '确定',
                 centered: true
             });
-        } else if (!hasHotSpot && !hasRouter) {
+        } else if (allowIp.length === 0) {
             Modal.warn({
                 title: '生成二维码失败',
                 content: '未检测到热点或路由器，请连接采集盒子或者打开电脑上的移动热点',
@@ -99,7 +109,7 @@ const Quick: FC<{}> = () => {
                 centered: true
             });
         } else {
-            setIp(hasHotSpot ? '192.168.137.1' : '192.168.50.99');
+            setIp(allowIp[0]);
             setDetailId(_id!);
             setEventDescVisible(true);
         }
