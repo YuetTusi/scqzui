@@ -161,9 +161,13 @@ const Quick: FC<{}> = () => {
         <QuickQRCodeModal
             visible={quickQRCodeModalVisible}
             ip={ip}
-            cancelHandle={() => setQuickQRCodeModalVisble(false)} />
+            cancelHandle={() => {
+                setQuickQRCodeModalVisble(false);
+            }} />
         <EventDescModal
-            cancelHandle={() => setEventDescVisible(false)}
+            cancelHandle={() => {
+                setEventDescVisible(false)
+            }}
             visible={eventDescVisible}
             id={detailId}
             ip={ip}

@@ -36,13 +36,11 @@ const createRouter = (api?: RouterAPI) => {
 								const Next = lazy<FC<any>>(
 									() => import('@/view/default/guide')
 								);
-								return (
-									<Suspense fallback={<LoadView />}>
-										<BoardPanel>
-											<Next />
-										</BoardPanel>
-									</Suspense>
-								);
+								return <Suspense fallback={<LoadView />}>
+									<BoardPanel>
+										<Next />
+									</BoardPanel>
+								</Suspense>;
 							}}
 						/>
 						<Route
@@ -52,13 +50,11 @@ const createRouter = (api?: RouterAPI) => {
 								const Next = lazy<FC<any>>(
 									() => import('@/view/default/collect')
 								);
-								return (
-									<Suspense fallback={<LoadView />}>
-										<LayoutPanel>
-											<Next />
-										</LayoutPanel>
-									</Suspense>
-								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
 							}}
 						/>
 						<Route
@@ -67,13 +63,11 @@ const createRouter = (api?: RouterAPI) => {
 								const Next = lazy<FC<any>>(
 									() => import('@/view/default/quick')
 								);
-								return (
-									<Suspense fallback={<LoadView />}>
-										<LayoutPanel>
-											<Next />
-										</LayoutPanel>
-									</Suspense>
-								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
 							}}
 						/>
 						<Route
@@ -83,13 +77,11 @@ const createRouter = (api?: RouterAPI) => {
 								const Next = lazy<FC<any>>(
 									() => import('@/view/default/case/case-data')
 								);
-								return (
-									<Suspense fallback={<LoadView />}>
-										<LayoutPanel>
-											<Next />
-										</LayoutPanel>
-									</Suspense>
-								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
 							}}
 						/>
 						<Route
@@ -99,13 +91,11 @@ const createRouter = (api?: RouterAPI) => {
 								const Next = lazy<FC<any>>(
 									() => import('@/view/default/case/case-add')
 								);
-								return (
-									<Suspense fallback={<LoadView />}>
-										<LayoutPanel>
-											<Next />
-										</LayoutPanel>
-									</Suspense>
-								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
 							}}
 						/>
 						<Route
@@ -115,13 +105,11 @@ const createRouter = (api?: RouterAPI) => {
 								const Next = lazy<FC<any>>(
 									() => import('@/view/default/case/case-edit')
 								);
-								return (
-									<Suspense fallback={<LoadView />}>
-										<LayoutPanel>
-											<Next />
-										</LayoutPanel>
-									</Suspense>
-								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
 							}}
 						/>
 						<Route

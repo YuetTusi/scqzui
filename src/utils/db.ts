@@ -1,4 +1,4 @@
-import path from 'path';
+import { join } from 'path';
 import DataStore from 'nedb';
 
 const pool = new Map<string, Db>();
@@ -31,7 +31,7 @@ class Db<T = any> {
      */
     constructor(collection: string) {
         this._collection = collection;
-        this._dbpath = path.join(process.cwd(), `qzdb/${collection}.nedb`);
+        this._dbpath = join(process.cwd(), `qzdb/${collection}.nedb`);
         this._instance = new DataStore({
             filename: this._dbpath,
             timestampData: true

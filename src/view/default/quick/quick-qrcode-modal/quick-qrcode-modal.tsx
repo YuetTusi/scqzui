@@ -1,10 +1,13 @@
-
 import QRCode from 'qrcode';
-import React, { FC, useEffect } from 'react';
+import { IpcRendererEvent } from 'electron';
+import React, { FC, useEffect, useState } from 'react';
+import CheckCircleFilled from '@ant-design/icons/CheckCircleFilled';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
+import Spin from 'antd/lib/spin';
 import message from 'antd/lib/message';
+import { useSubscribe } from '@/hook';
 import { QuickQRCodeModalBox } from './styled/style';
 import { QuickQRcodeModalProp } from './prop';
 
@@ -16,6 +19,8 @@ const QuickQRCodeModal: FC<QuickQRcodeModalProp> = ({
     ip,
     cancelHandle
 }) => {
+
+    const [scanned, setScanned] = useState<boolean>(false);
 
     useEffect(() => {
         if (visible) {
@@ -39,6 +44,19 @@ const QuickQRCodeModal: FC<QuickQRcodeModalProp> = ({
         }
     }, [visible]);
 
+    /**
+     * 扫描二维码完成响应
+     * @param finish 扫码完成
+     */
+    const quickScannedHandle = (event: IpcRendererEvent, finish: boolean) => {
+        setScanned(finish);
+        setTimeout(() => {
+            setScanned(false);
+        }, 3000);
+    };
+
+    useSubscribe('quick-scanned', quickScannedHandle);
+
     return <Modal
         footer={[
             <Button
@@ -58,7 +76,13 @@ const QuickQRCodeModal: FC<QuickQRcodeModalProp> = ({
         title="扫码点验">
         <QuickQRCodeModalBox>
             <p>将设备连接至采集盒子或者无线热点后，打开浏览器扫码下载</p>
-            <canvas width="320" height="320" id="downApk" />
+            <Spin
+                spinning={scanned}
+                indicator={<CheckCircleFilled style={{ color: '#52c41a' }} />}
+                tip={<span style={{ color: '#52c41a' }}>扫码成功</span>}
+            >
+                <canvas width="320" height="320" id="downApk" />
+            </Spin>
         </QuickQRCodeModalBox>
     </Modal>
 };

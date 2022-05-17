@@ -149,6 +149,7 @@ function api(webContents: WebContents) {
 
         try {
             const { size } = await stat(target);
+            webContents.send('quick-scanned', true);
             res.setHeader('Content-Length', size);
             log.info(`下载点验APK附件(${target}), 附件大小:${size}`);
         } catch (error) {

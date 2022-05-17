@@ -1,4 +1,4 @@
-import React, { FC, Key, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Table from 'antd/lib/table';
 import { StateTree } from '@/type/model';

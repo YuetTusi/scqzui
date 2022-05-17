@@ -1,4 +1,3 @@
-import { QuickEvent } from "@/schema/quick-event"
 
 export interface QuickQRcodeModalProp {
 
