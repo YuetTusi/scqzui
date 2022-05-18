@@ -1,5 +1,5 @@
 import round from 'lodash/round';
-import path from 'path';
+import { parse, sep } from 'path';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { SubscriptionAPI } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -15,7 +15,7 @@ import { DataMode } from '@/schema/data-mode';
 import { AppCategory } from '@/schema/app-config';
 
 const cwd = process.cwd();
-const { useBcp, useServerCloud, useTraceLogin, cloudAppMd5, cloudAppUrl } = helper.readConf()!;
+const { useServerCloud, cloudAppMd5, cloudAppUrl } = helper.readConf()!;
 
 export default {
     /**
@@ -33,41 +33,6 @@ export default {
         //NOTE: 当设备还有正在解析或采集时关闭了应用，下一次启动
         //NOTE: UI时要把所有为`解析中`和`采集中`的设备更新为`未解析`
         dispatch({ type: 'updateAllDeviceParseState', payload: ParseState.NotParse });
-    },
-    /**
-     * 查询软硬件配置信息
-     * 写入LocalStorage（创建BCP需要此数据）
-     */
-    async queryManufacturer() {
-        const jsonPath =
-            process.env['NODE_ENV'] === 'development'
-                ? path.join(cwd, './data/manufaturer.json')
-                : path.join(cwd, './resources/config/manufaturer.json');
-        try {
-            const exist = await helper.existFile(jsonPath);
-            if (exist) {
-                const data = await helper.readManufaturer();
-                localStorage.setItem('manufacturer', data?.manufacturer ?? '');
-                localStorage.setItem('security_software_orgcode', data?.security_software_orgcode ?? '');
-                localStorage.setItem('materials_name', data?.materials_name ?? '');
-                localStorage.setItem('materials_model', data?.materials_model ?? '');
-                localStorage.setItem('materials_hardware_version', data?.materials_hardware_version ?? '');
-                localStorage.setItem('materials_software_version', data?.materials_software_version ?? '');
-                localStorage.setItem('materials_serial', data?.materials_serial ?? '');
-                localStorage.setItem('ip_address', data?.ip_address ?? '');
-            } else {
-                localStorage.setItem('manufacturer', '');
-                localStorage.setItem('security_software_orgcode', '');
-                localStorage.setItem('materials_name', '');
-                localStorage.setItem('materials_model', '');
-                localStorage.setItem('materials_hardware_version', '');
-                localStorage.setItem('materials_software_version', '');
-                localStorage.setItem('materials_serial', '');
-                localStorage.setItem('ip_address', '');
-            }
-        } catch (error) {
-            logger.error(`软硬件信息数据写入LocalStorage失败：${error.message}`);
-        }
     },
     /**
      * 读取conf配置文件、JSON等
@@ -133,10 +98,7 @@ export default {
                 }
             }
         });
-        // ipcRenderer.on('update-export-msg', (event: IpcRendererEvent, args: AlarmMessageInfo) => {
-        //     dispatch({ type: 'updateAlertMessage', payload: args });
-        // });
-        //legacy:待还原上面类型
+
         ipcRenderer.on('update-export-msg', (event: IpcRendererEvent, args: any) => {
             dispatch({ type: 'alartMessage/updateAlertMessage', payload: args });
         });
@@ -145,8 +107,8 @@ export default {
      * 应用所在盘容量过底警告
      */
     async appSpaceWarning() {
-        const { root } = path.parse(cwd);
-        const [disk] = root.split(path.sep);
+        const { root } = parse(cwd);
+        const [disk] = root.split(sep);
 
         try {
             const { FreeSpace } = await helper.getDiskInfo(disk, true);

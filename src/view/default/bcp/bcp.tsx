@@ -124,9 +124,6 @@ const Bcp: FC<BcpProp> = () => {
             bcp.handleCaseName = values.handleCaseName ?? '';
             bcp.handleOfficerNo = values.handleOfficerNo ?? '';
 
-            console.clear();
-            console.log(values);
-
             dispatch({
                 type: 'bcpHistory/saveOrUpdateBcpHistory',
                 payload: {
@@ -134,9 +131,9 @@ const Bcp: FC<BcpProp> = () => {
                     deviceId: currentDev?._id
                 }
             });
+            message.loading('正在生成BCP...', 0);
             await helper.writeBcpJson(currentDev?.phonePath!, bcp);
             const bcpExe = join(cwd, '../tools/BcpTools/BcpGen.exe');
-            message.loading('正在生成BCP...', 0);
             const process = execFile(
                 bcpExe,
                 [currentDev?.phonePath!, bcp.attachment ? '1' : '0'],
@@ -172,12 +169,6 @@ const Bcp: FC<BcpProp> = () => {
     const onDstUnitChange = (value: string, name: string) =>
         dstUnitNameRef.current = name;
 
-    /**
-     * 采集人员Change
-     */
-    const onOfficerChange = (value: string) =>
-        console.log(value);
-    // officerNameRef.current = label;
 
     return <SubLayout title="生成BCP">
         <BcpBox>
@@ -212,8 +203,7 @@ const Bcp: FC<BcpProp> = () => {
                         unit={unit}
                         dstUnit={dstUnit}
                         unitChangeHandle={onUnitChange}
-                        dstUnitChangeHandle={onDstUnitChange}
-                        officerChangeHandle={onOfficerChange} />
+                        dstUnitChangeHandle={onDstUnitChange} />
                 </FormPanel>
             </div>
         </BcpBox>

@@ -81,7 +81,7 @@ const selectDirHandle = debounce(
  */
 const GenerateForm: FC<GenerateFormProp> = ({
     formRef, history, caseData, deviceData, unit, dstUnit,
-    unitChangeHandle, dstUnitChangeHandle, officerChangeHandle
+    unitChangeHandle, dstUnitChangeHandle
 }) => {
 
     const { setFieldsValue } = formRef;
