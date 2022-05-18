@@ -73,7 +73,7 @@ const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, de
                 strokeColor="#26e5dc" />
         </div>
         <div className="info">
-            <div className="live">
+            <div className="live" title={curinfo}>
                 {curinfo ?? '暂无进度消息'}
             </div>
             {renderLi()}

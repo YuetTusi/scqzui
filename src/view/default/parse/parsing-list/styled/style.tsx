@@ -61,15 +61,17 @@ export const ListBox = styled.div`
                     font-size: 1.2rem;
                     font-weight: bold;
                     margin:10px;
-                    padding: 10px;
+                    padding: 0 5px;
                     height: 50px;
+                    line-height: 50px;
+                    text-align: center;
                     background-color: #044066;
                     border-radius: ${props => props.theme['border-radius-base']};
 
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
+                    display: block;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
                 ul{
                     margin:0;

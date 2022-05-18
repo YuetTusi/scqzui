@@ -98,7 +98,6 @@ function destroyAllWindow() {
     }
 }
 
-
 /**
  * 退出应用
  */
