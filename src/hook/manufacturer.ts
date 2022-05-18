@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Manufaturer } from '@/schema/manufaturer';
+import log from '@/utils/log';
 import { helper } from '@/utils/helper';
-import logger from '@/utils/log';
+import { Manufaturer } from '@/schema/manufaturer';
 
 /**
  * 读取软硬件配置
@@ -15,7 +15,7 @@ const useManufacturer = () => {
                 const next = await helper.readManufaturer();
                 setData(next);
             } catch (error) {
-                logger.error(`读取Manufacturer.json失败:${error.message}`);
+                log.error(`读取Manufacturer.json失败:${error.message}`);
                 setData(null);
             }
         })();

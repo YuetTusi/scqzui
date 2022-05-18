@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
+import { getDb } from '@/utils/db';
 import { TableName } from '@/schema/table-name';
 import { Officer } from '@/schema/officer';
-import { getDb } from '@/utils/db';
 
 function useOfficerList() {
     const db = getDb<Officer>(TableName.Officer);

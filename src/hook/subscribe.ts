@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
+import { useEffect } from 'react';
 
 /**
  * 事件回调

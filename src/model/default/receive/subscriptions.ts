@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { readFileSync, mkdirSync } from 'fs';
+import { mkdirSync } from 'fs';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { SubscriptionAPI } from 'dva';
 import Modal from 'antd/lib/modal';
@@ -245,8 +245,6 @@ export default {
             });
             dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [next.caseId] });//选中案件
             dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [next._id] });//展开点验设备
-
-            logger.warn(`开始解析快速点验设备 ${JSON.stringify(next)}`);
 
             //# 通知parse开始解析
             send(SocketType.Parse, {

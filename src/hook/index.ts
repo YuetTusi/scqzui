@@ -9,6 +9,7 @@ import { useAppConfig } from './app-config';
 import { useManufacturer } from './manufacturer';
 import { useQuickEvent } from './quick-event';
 import { useQuickHitCount, useQuickHit } from './quick-hit';
+import { useDestroy } from './destroy';
 
 export {
     useAppSerial,
@@ -24,5 +25,6 @@ export {
     useManufacturer,
     useQuickEvent,
     useQuickHitCount,
-    useQuickHit
+    useQuickHit,
+    useDestroy
 };

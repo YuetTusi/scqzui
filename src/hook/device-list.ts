@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
+import log from "@/utils/log";
 import { getDb } from "@/utils/db";
 import DeviceType from "@/schema/device-type";
 import { TableName } from "@/schema/table-name";
-import log from "@/utils/log";
 
 /**
  * 读取设备数据

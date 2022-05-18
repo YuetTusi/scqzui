@@ -1,4 +1,3 @@
-
 import { stat } from 'fs/promises';
 import { join } from 'path';
 import express from 'express';
@@ -115,7 +114,7 @@ function api(webContents: WebContents) {
                     ]);
                 }, [])
                 .map(({ _id, eventName, eventPath, devices, ruleFrom, ruleTo }) => ({
-                    _id,
+                    id: _id,
                     m_strCaseName: eventName,
                     m_strCasePath: eventPath,
                     ruleFrom,

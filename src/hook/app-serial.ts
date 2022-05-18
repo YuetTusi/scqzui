@@ -1,4 +1,4 @@
-import path from 'path';
+import { join } from 'path';
 import { readFile } from 'fs/promises';
 import log from '@/utils/log';
 import { helper } from '@/utils/helper';
@@ -12,7 +12,7 @@ const cwd = process.cwd();
 function useAppSerial() {
 
     const [appSerial, setAppSerial] = useState<string>('');
-    const serialPath = path.join(cwd, '../update/__hardware__.txt');
+    const serialPath = join(cwd, '../update/__hardware__.txt');
 
     try {
         (async () => {

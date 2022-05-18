@@ -230,9 +230,6 @@ const Collect: FC<CollectProp> = ({ }) => {
         if (fetchData.mode === DataMode.ServerCloud) {
             //#云取证把应用数据赋值给cloudCodeModal模型，以接收验证码详情
             const { usb } = currentDevice.current!;
-            console.clear();
-            console.log('赋值云取应用到cloudCodeModal');
-            console.log(fetchData.cloudAppList);
             dispatch({
                 type: 'cloudCodeModal/setApps',
                 payload: {
