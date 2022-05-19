@@ -114,7 +114,7 @@ function api(webContents: WebContents) {
                     ]);
                 }, [])
                 .map(({ _id, eventName, eventPath, devices, ruleFrom, ruleTo }) => ({
-                    id: _id,
+                    _id,
                     m_strCaseName: eventName,
                     m_strCasePath: eventPath,
                     ruleFrom,
