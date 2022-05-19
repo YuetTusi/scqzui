@@ -30,4 +30,4 @@ yqExe: yqRPC.exe
 appQueryPath: ./AppQuery
 appQueryExe: AppQuery.exe
 logFile: ./log/app.log
-devPageUrl: http://localhost:8081/default.html
+devPageUrl: http://localhost:8085/default.html

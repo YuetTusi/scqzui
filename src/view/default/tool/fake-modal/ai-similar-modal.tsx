@@ -72,6 +72,7 @@ const AiSimilarModal: FC<{
                     <span>确定</span>
                 </Button>,
             ]}
+            onCancel={() => onCloseClick(false)}
             visible={visible}
             centered={true}
             maskClosable={false}

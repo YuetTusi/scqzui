@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { readFile } from 'fs/promises';
 import path from 'path';
 import ini from 'ini';
 import React, { FC, useEffect, useState, useRef } from 'react';
@@ -52,7 +52,7 @@ const Version: FC<{}> = () => {
         (async () => {
             let exist = await helper.existFile(versionPath);
             if (exist) {
-                let logTxt = await readFile(versionPath);
+                let logTxt = await readFile(versionPath, { encoding: 'utf8' });
                 let logContent = ini.parse(logTxt);
                 logContent = Object.entries(logContent);
                 logs.current = logContent as Record<string, LogItem>[];
@@ -161,22 +161,5 @@ const Version: FC<{}> = () => {
 
     return render(manu);
 };
-
-/**
- * 读取文件内容
- * @param path 文件路径
- * @return 文件内容的Promise
- */
-function readFile(path: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        fs.readFile(path, { encoding: 'utf8' }, (err, chunk) => {
-            if (err) {
-                reject(err.message);
-            } else {
-                resolve(chunk);
-            }
-        });
-    });
-}
 
 export default Version;

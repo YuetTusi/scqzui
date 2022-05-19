@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { ChildProcessWithoutNullStreams } from 'child_process';
 import {
-    app, BrowserWindow, dialog, ipcMain, globalShortcut, shell, IpcMainEvent
+    app, BrowserWindow, dialog, ipcMain, IpcMainEvent, globalShortcut, shell
 } from 'electron';
 import { WindowsBalloon } from 'node-notifier';
 import cors from 'cors';
@@ -10,10 +10,12 @@ import { api } from './src/http/api';
 import log from './src/utils/log';
 import { helper } from './src/utils/helper';
 import { Conf } from './src/type/model';
-import { BatchExportTask, ExportCondition, TreeParam } from '@/renderer/report/types';
-import FetchLog from '@/schema/fetch-log';
-import FetchRecord from '@/schema/fetch-record';
-import FetchData from '@/schema/fetch-data';
+import {
+    BatchExportTask, ExportCondition, TreeParam
+} from './src/renderer/report/types';
+import FetchLog from './src/schema/fetch-log';
+import FetchRecord from './src/schema/fetch-record';
+import FetchData from './src/schema/fetch-data';
 
 const mode = process.env['NODE_ENV'];
 const cwd = process.cwd();
@@ -234,7 +236,7 @@ if (!instanceLock) {
         });
 
         if (mode === 'development') {
-            mainWindow.loadURL('http://localhost:8085/default.html');
+            mainWindow.loadURL(config!.devPageUrl);
             mainWindow.webContents.openDevTools();
         } else {
             mainWindow.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/default.html'));

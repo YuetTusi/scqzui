@@ -102,36 +102,6 @@ const GenerateForm: FC<GenerateFormProp> = ({
 
     useEffect(() => {
 
-        // console.log({
-        //     attachment: caseData?.attachment ?? false,
-        //     unitCode: unit[0] ?? '',
-        //     dstUnitCode: dstUnit[0] ?? '',
-        //     officerNo: caseData?.officerNo ?? '',
-        //     mobileHolder: deviceData?.mobileHolder ?? '',
-        //     bcpNo1: getBcpNo1(unit[0]),
-        //     phoneNumber: history?.phoneNumber ?? '',
-        //     handleOfficerNo: history?.handleOfficerNo ?? deviceData?.handleOfficerNo,
-        //     credentialType: history?.credentialType ?? '',
-        //     credentialNo: history?.credentialNo ?? '',
-        //     credentialEffectiveDate: helper.isNullOrUndefinedOrEmptyString(history?.credentialEffectiveDate)
-        //         ? '' : dayjs(history!.credentialEffectiveDate).format('YYYY-MM-DD'),
-        //     credentialExpireDate: helper.isNullOrUndefinedOrEmptyString(history?.credentialExpireDate)
-        //         ? '' : dayjs(history!.credentialExpireDate).format('YYYY-MM-DD'),
-        //     credentialOrg: history?.credentialOrg ?? '',
-        //     credentialAvatar: history?.credentialAvatar ?? '',
-        //     gender: history?.gender ?? '1',
-        //     nation: history?.nation ?? '01',
-        //     birthday: helper.isNullOrUndefinedOrEmptyString(history?.birthday)
-        //         ? '' : dayjs(history!.birthday).format('YYYY-MM-DD'),
-        //     address: history?.address ?? '',
-        //     securityCaseNo: history?.securityCaseNo ?? '',
-        //     securityCaseType: history?.securityCaseType ?? '',
-        //     securityCaseName: history?.securityCaseName ?? '',
-        //     handleCaseNo: history?.handleCaseNo ?? '',
-        //     handleCaseType: history?.handleCaseType ?? '',
-        //     handleCaseName: history?.handleCaseName ?? ''
-        // });
-
         if (caseData !== null && deviceData !== null) {
             setFieldsValue({
                 attachment: caseData?.attachment ?? false,
@@ -365,7 +335,6 @@ const GenerateForm: FC<GenerateFormProp> = ({
                         <Switch
                             checked={bcpRequired}
                             onChange={(checked: boolean) => {
-                                // resetFields(['bcpNo1', 'bcpNo2', 'bcpNo3']);
                                 setBcpRequired(checked);
                             }}
                             size="small"
@@ -513,6 +482,7 @@ const GenerateForm: FC<GenerateFormProp> = ({
                                     return false;
                                 }
                             }}
+                            defaultPickerValue={dayjs().add(-10, 'year')}
                             style={{ width: '100%' }}
                         />
                     </Item>
