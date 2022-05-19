@@ -2,12 +2,14 @@ const { join, resolve } = require('path');
 const { ProvidePlugin } = require('webpack');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const AntdDayjsPlugin = require('antd-dayjs-webpack-plugin');
-const { getEntry, getHtmlPlugins } = require('./webpack.tool');
+const { getRenderer, getEntry, getHtmlPlugins } = require('./webpack.tool');
 const theme = require('./theme/cyan.json');
+
+const dir = getRenderer();
 
 let config = {
 	mode: 'production',
-	entry: getEntry(),
+	entry: getEntry(dir),
 	output: {
 		filename: '[name].js',
 		path: join(__dirname, './dist/renderer')
@@ -86,7 +88,7 @@ let config = {
 			jQuery: 'jquery'
 		}),
 		new AntdDayjsPlugin(['customParseFormat', 'localeData', 'weekday']),
-		...getHtmlPlugins()
+		...getHtmlPlugins(dir)
 	]
 };
 

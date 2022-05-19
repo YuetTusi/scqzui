@@ -3,11 +3,15 @@ const { readdirSync } = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
+ * 读取renderer目录
+ */
+const getRenderer = () => readdirSync(join(__dirname, './src/renderer'));
+
+/**
  * 打包入口
  */
-const getEntry = () => {
+const getEntry = (dir) => {
 	try {
-		const dir = readdirSync(join(__dirname, './src/renderer'));
 		const entry = dir.reduce(
 			(entries, item) => ({
 				...entries,
@@ -26,9 +30,8 @@ const getEntry = () => {
 /**
  * 模版插件
  */
-const getHtmlPlugins = () => {
+const getHtmlPlugins = (dir) => {
 	try {
-		const dir = readdirSync(join(__dirname, './src/renderer'));
 		const plugins = dir.map((item) => {
 			return new HtmlWebpackPlugin({
 				template: join(__dirname, `./src/renderer/${item}/${item}.html`),
@@ -42,4 +45,4 @@ const getHtmlPlugins = () => {
 	}
 };
 
-module.exports = { getEntry, getHtmlPlugins };
+module.exports = { getRenderer, getEntry, getHtmlPlugins };
