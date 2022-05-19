@@ -57,7 +57,7 @@ export const EventDescBox = styled.div`
 
 export const HelpBox = styled.div`
     
-    width: 240px;
+    width: 320px;
     margin-right: 20px;
 
     .step-label{

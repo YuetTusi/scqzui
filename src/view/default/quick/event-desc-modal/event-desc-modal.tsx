@@ -137,7 +137,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
                         <label className="step-label">步骤1</label>
                         <p>使用手机连接热点或采集盒子WiFi</p>
                         <label className="step-label">步骤2</label>
-                        <p>打开浏览器扫描下方二维码，下载APP并安装</p>
+                        <p>打开浏览器扫描下方二维码，下载APP安装后打开「采集助手」</p>
                         <div>
                             <Spin
                                 spinning={scanned}
@@ -148,13 +148,13 @@ const EventDescModal: FC<EventDescModalProp> = ({
                             </Spin>
                         </div>
                         <label className="step-label">步骤3</label>
-                        <p>选择案件，开始点验</p>
+                        <p>{`选择${caseText ?? '案件'}，输入编号及名称后确认`}</p>
                         <label className="step-label">步骤4</label>
-                        <p>等待手机点验完成后，可卸载APP</p>
+                        <p>等待手机点验完成后，可卸载「采集助手」</p>
                     </HelpBox>
                     <div className="event-info">
                         <div className="caption">
-                            案件信息
+                            {`${caseText ?? '案件'}信息`}
                         </div>
                         <div className="cinfo">
                             {renderEvent(data)}
