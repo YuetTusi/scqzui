@@ -7,6 +7,10 @@ const theme = require('./theme/cyan.json');
 
 const dir = getRenderer();
 
+console.clear();
+console.info('Read Webpack Entry:');
+console.table(dir);
+
 let config = {
 	mode: 'production',
 	entry: getEntry(dir),

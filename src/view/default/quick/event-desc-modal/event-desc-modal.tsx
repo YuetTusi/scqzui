@@ -14,7 +14,7 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
-import { EventDescBox } from './styled/style';
+import { EventDescBox, HelpBox } from './styled/style';
 import { EventDescModalProp } from './prop';
 
 const { caseText } = helper.readConf()!;
@@ -37,7 +37,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
                 try {
                     const target = document.getElementById('qrcode');
                     await QRCode.toCanvas(target, `http://${ip}:9900/check/${id}`, {
-                        width: 240,
+                        width: 200,
                         margin: 2,
                         color: {
                             light: '#181d30',
@@ -127,32 +127,38 @@ const EventDescModal: FC<EventDescModalProp> = ({
         forceRender={true}
         maskClosable={false}
         destroyOnClose={false}
-        width={850}
+        width={740}
         title="快速点验"
     >
         <EventDescBox>
-            <div className="qr">
-                <div className="ibox">
-                    <div className="caption">请用手机浏览器扫码点验</div>
-                </div>
+            <div className="ibox">
                 <div className="content">
-                    <Spin
-                        spinning={scanned}
-                        indicator={<CheckCircleFilled style={{ color: '#52c41a' }} />}
-                        tip={<span style={{ color: '#52c41a' }}>扫码成功</span>}
-                    >
-                        <canvas width="320" height="320" id="qrcode" />
-                    </Spin>
-                </div>
-
-            </div>
-            <div className="desc">
-                <div className="ibox">
-                    <div className="caption">
-                        {`${caseText ?? '案件'}信息`}
-                    </div>
-                    <div className="content">
-                        {renderEvent(data)}
+                    <HelpBox>
+                        <label className="step-label">步骤1</label>
+                        <p>使用手机连接热点或采集盒子WiFi</p>
+                        <label className="step-label">步骤2</label>
+                        <p>打开浏览器扫描下方二维码，下载APP并安装</p>
+                        <div>
+                            <Spin
+                                spinning={scanned}
+                                indicator={<CheckCircleFilled style={{ color: '#52c41a' }} />}
+                                tip={<span style={{ color: '#52c41a' }}>扫码成功</span>}
+                            >
+                                <canvas width="200" height="200" id="qrcode" />
+                            </Spin>
+                        </div>
+                        <label className="step-label">步骤3</label>
+                        <p>选择案件，开始点验</p>
+                        <label className="step-label">步骤4</label>
+                        <p>等待手机点验完成后，可卸载APP</p>
+                    </HelpBox>
+                    <div className="event-info">
+                        <div className="caption">
+                            案件信息
+                        </div>
+                        <div className="cinfo">
+                            {renderEvent(data)}
+                        </div>
                     </div>
                 </div>
             </div>

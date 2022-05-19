@@ -12,7 +12,7 @@ import { EventListProp } from './prop';
 /**
  * 快速点验案件表格
  */
-const QuickEventList: FC<EventListProp> = ({ qrcodeHandle, detailHandle }) => {
+const QuickEventList: FC<EventListProp> = ({ detailHandle }) => {
 
     const dispatch = useDispatch();
     const {
@@ -70,7 +70,7 @@ const QuickEventList: FC<EventListProp> = ({ qrcodeHandle, detailHandle }) => {
                     total,
                 }
             }
-            columns={getColumns(dispatch, qrcodeHandle, detailHandle)}
+            columns={getColumns(dispatch, detailHandle)}
             onRow={({ _id }) => ({
                 onClick: () => onRowClick(_id!)
             })}

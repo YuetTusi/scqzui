@@ -11,7 +11,6 @@ import { QuickEvent } from '@/schema/quick-event';
 import { CheckingPanel, QuickBox, TableBox } from './styled/style';
 import EventList from './quick-event-list';
 import EditQuickEventModal from './edit-quick-event-modal';
-import QuickQRCodeModal from './quick-qrcode-modal';
 import EventDescModal from './event-desc-modal';
 import CheckingList from './checking-list';
 import RecordList from './record-list';
@@ -28,7 +27,6 @@ const Quick: FC<{}> = () => {
     const portOccupy = useRef<boolean>(false); //端口占用
     const [detailId, setDetailId] = useState<string>('');
     const [ip, setIp] = useState<string>('127.0.0.1');
-    const [quickQRCodeModalVisible, setQuickQRCodeModalVisble] = useState<boolean>(false);
     const [eventDescVisible, setEventDescVisible] = useState<boolean>(false);
 
     useEffect(() => {
@@ -51,37 +49,6 @@ const Quick: FC<{}> = () => {
             }
         })();
     }, []);
-
-    /**
-     * 二维码handle
-     */
-    const qrcodeHandle = debounce((data: QuickEvent) => {
-
-        const allowIp = ipWhiteList.current.reduce<string[]>((acc, current) => {
-            if (helper.hasIP(current)) {
-                acc.push(current);
-            }
-            return acc;
-        }, []);
-        if (portOccupy.current) {
-            Modal.warn({
-                title: '端口占用',
-                content: `点验端口已被其他服务占用，请检查`,
-                okText: '确定',
-                centered: true
-            });
-        } else if (allowIp.length === 0) {
-            Modal.warn({
-                title: '生成二维码失败',
-                content: '未检测到热点或路由器，请连接采集盒子或者打开电脑上的移动热点',
-                okText: '确定',
-                centered: true
-            });
-        } else {
-            setIp(allowIp[0]);
-            setQuickQRCodeModalVisble(true);
-        }
-    }, 500, { leading: true, trailing: false });
 
     /**
      * 详情handle
@@ -143,8 +110,7 @@ const Quick: FC<{}> = () => {
                     </div>
                     <div>
                         <EventList
-                            detailHandle={detailHandle}
-                            qrcodeHandle={qrcodeHandle} />
+                            detailHandle={detailHandle} />
                     </div>
                 </div>
                 <div className="dev-list">
@@ -158,12 +124,6 @@ const Quick: FC<{}> = () => {
             </TableBox>
         </QuickBox>
         <EditQuickEventModal />
-        <QuickQRCodeModal
-            visible={quickQRCodeModalVisible}
-            ip={ip}
-            cancelHandle={() => {
-                setQuickQRCodeModalVisble(false);
-            }} />
         <EventDescModal
             cancelHandle={() => {
                 setEventDescVisible(false)

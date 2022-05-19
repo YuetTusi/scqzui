@@ -11,7 +11,7 @@ const { caseText } = helper.readConf()!;
 
 const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEvent> => {
 
-    const [qrcodeHandle, detailHandle] = handles;
+    const [detailHandle] = handles;
 
     return [
         {
@@ -24,7 +24,7 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                 return <QrcodeOutlined
                     onClick={(e: MouseEvent<HTMLSpanElement>) => {
                         e.stopPropagation();
-                        qrcodeHandle(record);
+                        detailHandle(record);
                     }}
                     className="primary-color"
                     title="扫码点验" />
