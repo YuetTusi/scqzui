@@ -22,7 +22,17 @@ const Header = styled.div`
     }
     .header-caption{
         margin-left: 4rem;
-        letter-spacing: 3px;
+        &>span{
+            letter-spacing: 3px;
+        }
+        &>em{
+            cursor: pointer;
+            color:${props => props.theme['primary-color']};
+            padding: 0 1rem;
+            font-family: Arial;
+            font-style: normal;
+            text-decoration: none;
+        }
     }
     .header-buttons{
         .anticon{

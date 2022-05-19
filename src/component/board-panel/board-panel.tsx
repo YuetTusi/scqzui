@@ -50,6 +50,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
 
     const dispatch = useDispatch();
     const [title, setTitle] = useState<string>('');
+    const [version, setVersion] = useState<string>('');
     const [softhardwareModalVisible, setSofthardwareModalVisible] = useState<boolean>(false);
     const [inputHistoryModalVisbile, setInputHistoryModalVisible] = useState<boolean>(false);
 
@@ -57,10 +58,12 @@ const BoardPanel: FC<{}> = ({ children }) => {
         (async () => {
             try {
                 const { materials_name, materials_software_version } = await helper.readManufaturer();
-                setTitle(`${materials_name} ${filterCharactor(materials_software_version)}`);
+                setTitle(materials_name ?? '智能终端取证系统');
+                setVersion(materials_software_version ?? 'v0.0.1');
             } catch (error) {
                 console.warn(error);
                 setTitle('');
+                setVersion('');
             }
         })();
     }, []);
@@ -98,7 +101,12 @@ const BoardPanel: FC<{}> = ({ children }) => {
         <BackgroundBox>
             <DragBar />
             <Header>
-                <div className="header-caption">{title ?? ''}</div>
+                <div className="header-caption">
+                    <span>{title}</span>
+                    <em onClick={() => dispatch(routerRedux.push('/settings/version'))}>
+                        {filterCharactor(version)}
+                    </em>
+                </div>
                 <div className="header-buttons">
                     <QuestionCircleOutlined onClick={openHelpDocClick} title="帮助文档" />
                     <BoardMenu onItemClick={onItemClick}>

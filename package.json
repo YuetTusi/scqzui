@@ -106,7 +106,7 @@
 		"dva": "^2.6.0-beta.22",
 		"dva-immer": "^1.0.0",
 		"echarts": "^5.3.2",
-		"electron": "^17.0.1",
+		"electron": "^18.2.4",
 		"electron-builder": "^22.14.13",
 		"ftp": "^0.3.10",
 		"html-webpack-plugin": "^5.5.0",
