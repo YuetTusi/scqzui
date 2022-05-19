@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMobileScreenButton, faArrowsRotate, faCloud } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, Route } from 'dva/router';
 import { helper } from '@/utils/helper';
+import Auth from '@/component/auth';
 import Reading from '@/component/loading/reading';
 import AlartMessage from '@/component/alert-message';
 import FetchLog from '@/view/default/log/fetch-log';
@@ -12,7 +13,7 @@ import { MenuPanel } from './styled/menu';
 import { LogLayout } from './styled/sub-layout';
 import ContentBox from './content-box';
 
-const { fetchText, parseText } = helper.readConf()!;
+const { useFetch, useServerCloud, fetchText, parseText } = helper.readConf()!;
 
 /**
  * 设置布局页
@@ -26,12 +27,15 @@ const Index: FC<{}> = () => <LogLayout>
         </div>
         <ul>
             <li>
-                <NavLink to="/log" exact={true} replace={true} className="hvr-sweep-to-right">
-                    <div>
-                        <span className="ico"><FontAwesomeIcon icon={faMobileScreenButton} /></span>
-                        <span className="name">{`${fetchText ?? '取证'}日志`}</span>
-                    </div>
-                </NavLink>
+                <Auth deny={!useFetch && !useServerCloud}>
+                    <NavLink to="/log" exact={true} replace={true} className="hvr-sweep-to-right">
+                        <div>
+                            <span className="ico"><FontAwesomeIcon icon={faMobileScreenButton} /></span>
+                            <span className="name">{`${fetchText ?? '取证'}日志`}</span>
+                        </div>
+                    </NavLink>
+                </Auth>
+
             </li>
             <li>
                 <NavLink to="/log/parse-log" replace={true} className="hvr-sweep-to-right">
@@ -42,12 +46,14 @@ const Index: FC<{}> = () => <LogLayout>
                 </NavLink>
             </li>
             <li>
-                <NavLink to="/log/cloud-log" replace={true} className="hvr-sweep-to-right">
-                    <div>
-                        <span className="ico"><FontAwesomeIcon icon={faCloud} /></span>
-                        <span className="name">云取日志</span>
-                    </div>
-                </NavLink>
+                <Auth deny={!useServerCloud}>
+                    <NavLink to="/log/cloud-log" replace={true} className="hvr-sweep-to-right">
+                        <div>
+                            <span className="ico"><FontAwesomeIcon icon={faCloud} /></span>
+                            <span className="name">云取日志</span>
+                        </div>
+                    </NavLink>
+                </Auth>
             </li>
         </ul>
     </MenuPanel>

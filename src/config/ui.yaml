@@ -1,6 +1,6 @@
 max: 8
-useFetch: true
-useServerCloud: true
+useFetch: false
+useServerCloud: false
 useBcp: true
 useToolBox: true
 useFakeButton: true
