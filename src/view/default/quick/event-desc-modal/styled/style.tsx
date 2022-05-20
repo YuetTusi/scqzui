@@ -73,8 +73,8 @@ export const HelpBox = styled.div`
         background-color: #202940;
         border-radius:${props => props.theme['border-radius-base']};
 
-        p{
-            padding: 20px 0;
+        .desc{
+            padding: 20px 5px;
             line-height: 1.8;
             strong{
                 font-weight: normal;

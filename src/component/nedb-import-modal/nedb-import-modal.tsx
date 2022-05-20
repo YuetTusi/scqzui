@@ -81,7 +81,7 @@ const NedbImportModal: FC<NedbImportModalProp> = ({
         ]}
         onCancel={cancelHandle}
         visible={visible}
-        title="原数据导入"
+        title="旧版本数据导入"
         destroyOnClose={true}
         maskClosable={false}
         centered={true}
@@ -96,11 +96,12 @@ const NedbImportModal: FC<NedbImportModalProp> = ({
         <Form form={formRef}>
             <Item
                 rules={[
-                    { required: true, message: '请选择数据库目录' },
+                    { required: true, message: '请选择数据表目录' },
                 ]}
-                initialValue={join(cwd, './nedb')}
+                // initialValue={join(cwd, './nedb')}
+                initialValue="E:\qzdb"
                 name="nedbDir"
-                label="数据目录"
+                label="数据表目录"
                 tooltip="请选择旧版软件安装位置下的qzui/nedb目录">
                 <Input
                     onClick={() => selectDirHandle()}

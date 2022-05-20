@@ -56,7 +56,7 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
         </li>
         <li onClick={() => onItemClick(BoardMenuAction.NedbImport)}>
             <FontAwesomeIcon icon={faRecycle} />
-            <span>原数据导入</span>
+            <span>旧版本数据导入</span>
         </li>
         <Auth deny={!isDev}>
             {/* <li onClick={() => onItemClick(BoardMenuAction.FetchLog)}>

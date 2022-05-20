@@ -1,5 +1,6 @@
 import { join } from 'path';
 import debounce from 'lodash/debounce';
+import differenceWith from 'lodash/differenceWith';
 import { ipcRenderer, shell } from 'electron';
 import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import { useDispatch, routerRedux } from 'dva';
@@ -25,6 +26,7 @@ import { BoardMenu, BoardMenuAction } from './board-menu';
 import SofthardwareModal from '../softhardware-modal';
 import InputHistoryModal from '../input-history-modal';
 import NedbImportModal from '../nedb-import-modal';
+import { UnorderList } from '../style-tool/list';
 
 const cwd = process.cwd();
 
@@ -106,13 +108,24 @@ const BoardPanel: FC<{}> = ({ children }) => {
                 const deviceDb = getDb<DeviceType>(TableName.Device);
                 const recordDb = getDb<QuickRecord>(TableName.QuickRecord);
 
-                const [originCase, originDevice] = await Promise.all([
+                const [
+                    prevCase, //旧案件
+                    prevDevice, //旧设备
+                    nextCase,//新标准案件
+                    nextEvent,//新快速点验案件
+                    nextDevice,//新案件设备
+                    nextRecord//新快速点验设备
+                ] = await Promise.all([
                     originCaseDb.all(),
-                    originDeviceDb.all()
+                    originDeviceDb.all(),
+                    caseDb.all(),
+                    eventDb.all(),
+                    deviceDb.all(),
+                    recordDb.all()
                 ]);
 
                 //将原数据表按caseType拆分为现在4张表
-                const next = originCase.reduce<{
+                const next = prevCase.reduce<{
                     normalCase: CaseInfo[],
                     quickEvent: QuickEvent[],
                     device: DeviceType[],
@@ -128,7 +141,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
                             ruleTo: (current as any)?.ruleTo
                         });
                         acc.quickRecord = acc.quickRecord.concat(
-                            originDevice
+                            prevDevice
                                 .filter(item => item.caseId === current._id)
                                 .map(item => ({ ...item, id: undefined }))
                         );
@@ -136,7 +149,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
                         //标准案件
                         acc.normalCase.push(current);
                         acc.device = acc.device.concat(
-                            originDevice
+                            prevDevice
                                 .filter(item => item.caseId === current._id)
                                 .map(item => ({ ...item, id: undefined }))
                         );
@@ -144,11 +157,11 @@ const BoardPanel: FC<{}> = ({ children }) => {
                     return acc;
                 }, { normalCase: [], quickEvent: [], device: [], quickRecord: [] });
 
-                await Promise.all([
-                    caseDb.insert(next.normalCase),
-                    eventDb.insert(next.quickEvent),
-                    deviceDb.insert(next.device),
-                    recordDb.insert(next.quickRecord),
+                const [caseCount, eventCount, deviceCount, recordCount] = await Promise.all([
+                    caseDb.insert(differenceWith(next.normalCase, nextCase, (prev, next) => prev._id === next._id)),
+                    eventDb.insert(differenceWith(next.quickEvent, nextEvent, (prev, next) => prev._id === next._id)),
+                    deviceDb.insert(differenceWith(next.device, nextDevice, (prev, next) => prev._id === next._id)),
+                    recordDb.insert(differenceWith(next.quickRecord, nextRecord, (prev, next) => prev._id === next._id)),
                 ]);
 
                 handle.update({
@@ -156,12 +169,12 @@ const BoardPanel: FC<{}> = ({ children }) => {
                         setNedbImportModalVisbile(false);
                     },
                     title: '导入成功',
-                    content: <ul>
-                        <li>案件${next.normalCase.length}条</li>
-                        <li>案件设备${next.device.length}条</li>
-                        <li>快速点验${next.quickEvent.length}条</li>
-                        <li>快速点验设备${next.quickRecord.length}条</li>
-                    </ul>,
+                    content: <UnorderList>
+                        <li>案件<em>{(caseCount as CaseInfo[]).length}</em>条</li>
+                        <li>案件设备<em>{(eventCount as QuickEvent[]).length}</em>条</li>
+                        <li>快速点验<em>{(deviceCount as DeviceType[]).length}</em>条</li>
+                        <li>快速点验设备<em>{(recordCount as QuickRecord[]).length}</em>条</li>
+                    </UnorderList>,
                     icon: <CheckCircleOutlined />,
                     okButtonProps: { disabled: false }
                 });

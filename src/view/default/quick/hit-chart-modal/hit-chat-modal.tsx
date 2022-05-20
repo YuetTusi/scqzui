@@ -53,7 +53,6 @@ const HitChartModal: FC<HitChartModalProp> = ({
     useEffect(() => {
         return () => {
             if (charts !== null) {
-                console.log('销毁');
                 charts.dispose();
                 charts = null;
             }
