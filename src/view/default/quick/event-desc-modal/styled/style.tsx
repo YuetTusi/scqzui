@@ -76,6 +76,12 @@ export const HelpBox = styled.div`
         p{
             padding: 20px 0;
             line-height: 1.8;
+            strong{
+                font-weight: normal;
+                font-style: normal;
+                text-decoration: none;
+                color:${props => props.theme['primary-color']};
+            }
         }
     }
 

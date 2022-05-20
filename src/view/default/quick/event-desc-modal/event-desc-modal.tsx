@@ -123,14 +123,17 @@ const EventDescModal: FC<EventDescModalProp> = ({
             <HelpBox>
                 <div className="step">
                     <label className="step-label">步骤1</label>
-                    <p>使用手机连接热点或采集盒子WiFi</p>
+                    <p>
+                        使用手机连接到
+                        <div><strong>{ip === '192.168.191.1' ? 'WiFi：快速点验密码8个1  密码：11111111' : 'WiFi：abco_apbc5G  密码：11111111'}</strong></div>
+                    </p>
                 </div>
                 <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
                 <div className="step">
                     <HorBox>
                         <div>
                             <label className="step-label">步骤2</label>
-                            <p>打开浏览器扫描右侧二维码，下载APP安装后打开「采集助手」</p>
+                            <p>使用手机浏览器扫描右侧二维码，下载APP安装后打开「采集助手」</p>
                         </div>
                         <Spin
                             spinning={scanned}
