@@ -1,5 +1,5 @@
 import round from 'lodash/round';
-import { parse, sep } from 'path';
+import { join, parse, sep } from 'path';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { SubscriptionAPI } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -13,6 +13,7 @@ import { request } from '@/utils/request';
 import { ParseState } from '@/schema/device-state';
 import { DataMode } from '@/schema/data-mode';
 import { AppCategory } from '@/schema/app-config';
+import { importPrevNedb } from '@/component/nedb-import-modal';
 
 const cwd = process.cwd();
 const { useServerCloud, cloudAppMd5, cloudAppUrl } = helper.readConf()!;
@@ -52,6 +53,21 @@ export default {
             }
         } catch (error) {
             dispatch({ type: 'setDataMode', payload: DataMode.Self });
+        }
+    },
+    /**
+     * 备份旧版本数据表
+     */
+    async backupPrevNedb({ dispatch }: SubscriptionAPI) {
+        const hasBackup = localStorage.getItem(LocalStoreKey.BakPrevNedb) === '1'; //是否已备份过旧表数据
+        if (!hasBackup) {
+            try {
+                const [caseCount, eventCount, deviceCount, recordCount] = await importPrevNedb(join(cwd, './nedb'));
+                localStorage.setItem(LocalStoreKey.BakPrevNedb, '1');
+                logger.info(`已成功备份旧库数据 caseCount:${caseCount}, eventCount:${eventCount}, deviceCount:${deviceCount}, recordCount:${recordCount}`);
+            } catch (error) {
+                logger.error(`备份旧库数据失败 @model/default/app-set/subscriptions/backupPrevNedb: ${error.message}`);
+            }
         }
     },
     /**

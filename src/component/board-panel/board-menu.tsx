@@ -54,10 +54,10 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
             <FontAwesomeIcon icon={faEraser} />
             <span>表单记录清除</span>
         </li>
-        <li onClick={() => onItemClick(BoardMenuAction.NedbImport)}>
+        {/* <li onClick={() => onItemClick(BoardMenuAction.NedbImport)}>
             <FontAwesomeIcon icon={faRecycle} />
             <span>旧版本数据导入</span>
-        </li>
+        </li> */}
         <Auth deny={!isDev}>
             {/* <li onClick={() => onItemClick(BoardMenuAction.FetchLog)}>
                 <FontAwesomeIcon icon={faMobileScreenButton} />

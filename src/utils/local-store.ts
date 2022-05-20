@@ -29,7 +29,11 @@ enum LocalStoreKey {
     /**
      * 断线警告
      */
-    SocketWarning = 'SocketWarning'
+    SocketWarning = 'SocketWarning',
+    /**
+     * 是否备份旧版本数据
+     */
+    BakPrevNedb = 'BakPrevNedb'
 }
 
 /**

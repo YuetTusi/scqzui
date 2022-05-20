@@ -1,6 +1,8 @@
 import { join } from 'path';
 import debounce from 'lodash/debounce';
+import differenceWith from 'lodash/differenceWith';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
+import { Db, getDb } from '@/utils/db';
 import React, { FC, MouseEvent } from 'react';
 import ImportOutlined from '@ant-design/icons/ImportOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
@@ -8,11 +10,97 @@ import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
+import { CaseInfo } from '@/schema/case-info';
+import { DeviceType } from '@/schema/device-type';
+import { QuickEvent } from '@/schema/quick-event';
+import { QuickRecord } from '@/schema/quick-record';
+import { TableName } from '@/schema/table-name';
 import { TipBox } from './styled/style';
 import { NedbImportModalProp } from './prop';
 
 const cwd = process.cwd();
 const { Item, useForm } = Form;
+
+/**
+ * 导入旧版本表数据
+ * @param {string} dir 旧UI表目录(传到qzui/nedb)
+ */
+const importPrevNedb = async (dir: string) => {
+    const originCaseDb = new Db<CaseInfo>('Case', join(dir, '../'));
+    const originDeviceDb = new Db<DeviceType>('Device', join(dir, '../'));
+
+    const caseDb = getDb<CaseInfo>(TableName.Case);
+    const eventDb = getDb<QuickEvent>(TableName.QuickEvent);
+    const deviceDb = getDb<DeviceType>(TableName.Device);
+    const recordDb = getDb<QuickRecord>(TableName.QuickRecord);
+
+    try {
+        const [
+            prevCase, //旧案件
+            prevDevice, //旧设备
+            nextCase,//新标准案件
+            nextEvent,//新快速点验案件
+            nextDevice,//新案件设备
+            nextRecord//新快速点验设备
+        ] = await Promise.all([
+            originCaseDb.all(),
+            originDeviceDb.all(),
+            caseDb.all(),
+            eventDb.all(),
+            deviceDb.all(),
+            recordDb.all()
+        ]);
+
+        //将原数据表按caseType拆分为现在4张表
+        const next = prevCase.reduce<{
+            normalCase: CaseInfo[],
+            quickEvent: QuickEvent[],
+            device: DeviceType[],
+            quickRecord: QuickRecord[]
+        }>((acc, current) => {
+            if ((current as any).caseType === 1) {
+                //快速点验
+                acc.quickEvent.push({
+                    _id: current._id,
+                    eventName: current.m_strCaseName,
+                    eventPath: current.m_strCasePath,
+                    ruleFrom: (current as any)?.ruleFrom,
+                    ruleTo: (current as any)?.ruleTo
+                });
+                acc.quickRecord = acc.quickRecord.concat(
+                    prevDevice
+                        .filter(item => item.caseId === current._id)
+                        .map(item => ({ ...item, id: undefined }))
+                );
+            } else {
+                //标准案件
+                acc.normalCase.push(current);
+                acc.device = acc.device.concat(
+                    prevDevice
+                        .filter(item => item.caseId === current._id)
+                        .map(item => ({ ...item, id: undefined }))
+                );
+            }
+            return acc;
+        }, { normalCase: [], quickEvent: [], device: [], quickRecord: [] });
+
+        const [caseCount, eventCount, deviceCount, recordCount] = await Promise.all([
+            caseDb.insert(differenceWith(next.normalCase, nextCase, (prev, next) => prev._id === next._id)),
+            eventDb.insert(differenceWith(next.quickEvent, nextEvent, (prev, next) => prev._id === next._id)),
+            deviceDb.insert(differenceWith(next.device, nextDevice, (prev, next) => prev._id === next._id)),
+            recordDb.insert(differenceWith(next.quickRecord, nextRecord, (prev, next) => prev._id === next._id)),
+        ]);
+
+        return [
+            (caseCount as CaseInfo[]).length,
+            (eventCount as QuickEvent[]).length,
+            (deviceCount as DeviceType[]).length,
+            (recordCount as QuickRecord[]).length
+        ];
+    } catch (error) {
+        throw error;
+    }
+};
 
 /**
  * 导入旧版本UI数据（兼容性功能）
@@ -98,8 +186,7 @@ const NedbImportModal: FC<NedbImportModalProp> = ({
                 rules={[
                     { required: true, message: '请选择数据表目录' },
                 ]}
-                // initialValue={join(cwd, './nedb')}
-                initialValue="E:\qzdb"
+                initialValue={join(cwd, './nedb')}
                 name="nedbDir"
                 label="数据表目录"
                 tooltip="请选择旧版软件安装位置下的qzui/nedb目录">
@@ -118,4 +205,5 @@ NedbImportModal.defaultProps = {
     importHandle: () => { }
 }
 
+export { importPrevNedb };
 export default NedbImportModal;

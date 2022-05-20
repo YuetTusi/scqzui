@@ -1,6 +1,5 @@
 import { join } from 'path';
 import debounce from 'lodash/debounce';
-import differenceWith from 'lodash/differenceWith';
 import { ipcRenderer, shell } from 'electron';
 import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import { useDispatch, routerRedux } from 'dva';
@@ -11,13 +10,7 @@ import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
-import { Db, getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
-import { CaseInfo } from '@/schema/case-info';
-import { DeviceType } from '@/schema/device-type';
-import { QuickEvent } from '@/schema/quick-event';
-import { QuickRecord } from '@/schema/quick-record';
-import { TableName } from '@/schema/table-name';
 import { BackgroundBox, Header } from './styled/header';
 import { Center } from './styled/center';
 import { Footer } from './styled/footer';
@@ -25,7 +18,7 @@ import DragBar from '../drag-bar';
 import { BoardMenu, BoardMenuAction } from './board-menu';
 import SofthardwareModal from '../softhardware-modal';
 import InputHistoryModal from '../input-history-modal';
-import NedbImportModal from '../nedb-import-modal';
+import NedbImportModal, { importPrevNedb } from '../nedb-import-modal';
 import { UnorderList } from '../style-tool/list';
 
 const cwd = process.cwd();
@@ -100,69 +93,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
         try {
             const exist = await helper.existFile(join(dir, './Case.nedb'));
             if (exist) {
-                const originCaseDb = new Db<CaseInfo>('Case', join(dir, '../'));
-                const originDeviceDb = new Db<DeviceType>('Device', join(dir, '../'));
-
-                const caseDb = getDb<CaseInfo>(TableName.Case);
-                const eventDb = getDb<QuickEvent>(TableName.QuickEvent);
-                const deviceDb = getDb<DeviceType>(TableName.Device);
-                const recordDb = getDb<QuickRecord>(TableName.QuickRecord);
-
-                const [
-                    prevCase, //旧案件
-                    prevDevice, //旧设备
-                    nextCase,//新标准案件
-                    nextEvent,//新快速点验案件
-                    nextDevice,//新案件设备
-                    nextRecord//新快速点验设备
-                ] = await Promise.all([
-                    originCaseDb.all(),
-                    originDeviceDb.all(),
-                    caseDb.all(),
-                    eventDb.all(),
-                    deviceDb.all(),
-                    recordDb.all()
-                ]);
-
-                //将原数据表按caseType拆分为现在4张表
-                const next = prevCase.reduce<{
-                    normalCase: CaseInfo[],
-                    quickEvent: QuickEvent[],
-                    device: DeviceType[],
-                    quickRecord: QuickRecord[]
-                }>((acc, current) => {
-                    if ((current as any).caseType === 1) {
-                        //快速点验
-                        acc.quickEvent.push({
-                            _id: current._id,
-                            eventName: current.m_strCaseName,
-                            eventPath: current.m_strCasePath,
-                            ruleFrom: (current as any)?.ruleFrom,
-                            ruleTo: (current as any)?.ruleTo
-                        });
-                        acc.quickRecord = acc.quickRecord.concat(
-                            prevDevice
-                                .filter(item => item.caseId === current._id)
-                                .map(item => ({ ...item, id: undefined }))
-                        );
-                    } else {
-                        //标准案件
-                        acc.normalCase.push(current);
-                        acc.device = acc.device.concat(
-                            prevDevice
-                                .filter(item => item.caseId === current._id)
-                                .map(item => ({ ...item, id: undefined }))
-                        );
-                    }
-                    return acc;
-                }, { normalCase: [], quickEvent: [], device: [], quickRecord: [] });
-
-                const [caseCount, eventCount, deviceCount, recordCount] = await Promise.all([
-                    caseDb.insert(differenceWith(next.normalCase, nextCase, (prev, next) => prev._id === next._id)),
-                    eventDb.insert(differenceWith(next.quickEvent, nextEvent, (prev, next) => prev._id === next._id)),
-                    deviceDb.insert(differenceWith(next.device, nextDevice, (prev, next) => prev._id === next._id)),
-                    recordDb.insert(differenceWith(next.quickRecord, nextRecord, (prev, next) => prev._id === next._id)),
-                ]);
+                const [caseCount, eventCount, deviceCount, recordCount] = await importPrevNedb(dir);
 
                 handle.update({
                     onOk() {
@@ -170,10 +101,10 @@ const BoardPanel: FC<{}> = ({ children }) => {
                     },
                     title: '导入成功',
                     content: <UnorderList>
-                        <li>案件<em>{(caseCount as CaseInfo[]).length}</em>条</li>
-                        <li>案件设备<em>{(eventCount as QuickEvent[]).length}</em>条</li>
-                        <li>快速点验<em>{(deviceCount as DeviceType[]).length}</em>条</li>
-                        <li>快速点验设备<em>{(recordCount as QuickRecord[]).length}</em>条</li>
+                        <li>案件<em>{caseCount}</em>条</li>
+                        <li>案件设备<em>{eventCount}</em>条</li>
+                        <li>快速点验<em>{deviceCount}</em>条</li>
+                        <li>快速点验设备<em>{recordCount}</em>条</li>
                     </UnorderList>,
                     icon: <CheckCircleOutlined />,
                     okButtonProps: { disabled: false }
