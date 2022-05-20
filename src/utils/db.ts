@@ -1,6 +1,7 @@
 import { join } from 'path';
 import DataStore from 'nedb';
 
+const cwd = process.cwd();
 const pool = new Map<string, Db>();
 
 /**
@@ -28,10 +29,11 @@ class Db<T = any> {
     /**
      * 实例化NeDB
      * @param {string} collection 集合名称
+     * @param {string} dbRoot 数据库目录位置
      */
-    constructor(collection: string) {
+    constructor(collection: string, dbRoot: string = cwd) {
         this._collection = collection;
-        this._dbpath = join(process.cwd(), `qzdb/${collection}.nedb`);
+        this._dbpath = join(dbRoot, `qzdb/${collection}.nedb`);
         this._instance = new DataStore({
             filename: this._dbpath,
             timestampData: true
@@ -131,8 +133,8 @@ class Db<T = any> {
      * @param {any} doc 文档对象
      * @returns {Promise<T>}
      */
-    insert(doc: T) {
-        return new Promise<T>((resolve, reject) => {
+    insert(doc: T | T[]) {
+        return new Promise<T | T[]>((resolve, reject) => {
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);

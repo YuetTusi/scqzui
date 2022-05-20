@@ -3,10 +3,20 @@ import debounce from 'lodash/debounce';
 import { ipcRenderer, shell } from 'electron';
 import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import { useDispatch, routerRedux } from 'dva';
+import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
+import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
+import WarningOutlined from '@ant-design/icons/WarningOutlined';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
+import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
+import { Db, getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
+import { CaseInfo } from '@/schema/case-info';
+import { DeviceType } from '@/schema/device-type';
+import { QuickEvent } from '@/schema/quick-event';
+import { QuickRecord } from '@/schema/quick-record';
+import { TableName } from '@/schema/table-name';
 import { BackgroundBox, Header } from './styled/header';
 import { Center } from './styled/center';
 import { Footer } from './styled/footer';
@@ -14,6 +24,7 @@ import DragBar from '../drag-bar';
 import { BoardMenu, BoardMenuAction } from './board-menu';
 import SofthardwareModal from '../softhardware-modal';
 import InputHistoryModal from '../input-history-modal';
+import NedbImportModal from '../nedb-import-modal';
 
 const cwd = process.cwd();
 
@@ -53,6 +64,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
     const [version, setVersion] = useState<string>('');
     const [softhardwareModalVisible, setSofthardwareModalVisible] = useState<boolean>(false);
     const [inputHistoryModalVisbile, setInputHistoryModalVisible] = useState<boolean>(false);
+    const [nedbImportModalVisbile, setNedbImportModalVisbile] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
@@ -67,6 +79,109 @@ const BoardPanel: FC<{}> = ({ children }) => {
             }
         })();
     }, []);
+
+    /**
+     * 导入旧版数据handle
+     * @param dir 原Nedb目录
+     */
+    const onImportHandle = async (dir: string) => {
+
+        const handle = Modal.info({
+            title: '导入原数据',
+            content: '正在检测数据...',
+            okText: '确定',
+            icon: <LoadingOutlined />,
+            okButtonProps: { disabled: true },
+            centered: true
+        });
+
+        try {
+            const exist = await helper.existFile(join(dir, './Case.nedb'));
+            if (exist) {
+                const originCaseDb = new Db<CaseInfo>('Case', join(dir, '../'));
+                const originDeviceDb = new Db<DeviceType>('Device', join(dir, '../'));
+
+                const caseDb = getDb<CaseInfo>(TableName.Case);
+                const eventDb = getDb<QuickEvent>(TableName.QuickEvent);
+                const deviceDb = getDb<DeviceType>(TableName.Device);
+                const recordDb = getDb<QuickRecord>(TableName.QuickRecord);
+
+                const [originCase, originDevice] = await Promise.all([
+                    originCaseDb.all(),
+                    originDeviceDb.all()
+                ]);
+
+                //将原数据表按caseType拆分为现在4张表
+                const next = originCase.reduce<{
+                    normalCase: CaseInfo[],
+                    quickEvent: QuickEvent[],
+                    device: DeviceType[],
+                    quickRecord: QuickRecord[]
+                }>((acc, current) => {
+                    if ((current as any).caseType === 1) {
+                        //快速点验
+                        acc.quickEvent.push({
+                            _id: current._id,
+                            eventName: current.m_strCaseName,
+                            eventPath: current.m_strCasePath,
+                            ruleFrom: (current as any)?.ruleFrom,
+                            ruleTo: (current as any)?.ruleTo
+                        });
+                        acc.quickRecord = acc.quickRecord.concat(
+                            originDevice
+                                .filter(item => item.caseId === current._id)
+                                .map(item => ({ ...item, id: undefined }))
+                        );
+                    } else {
+                        //标准案件
+                        acc.normalCase.push(current);
+                        acc.device = acc.device.concat(
+                            originDevice
+                                .filter(item => item.caseId === current._id)
+                                .map(item => ({ ...item, id: undefined }))
+                        );
+                    }
+                    return acc;
+                }, { normalCase: [], quickEvent: [], device: [], quickRecord: [] });
+
+                await Promise.all([
+                    caseDb.insert(next.normalCase),
+                    eventDb.insert(next.quickEvent),
+                    deviceDb.insert(next.device),
+                    recordDb.insert(next.quickRecord),
+                ]);
+
+                handle.update({
+                    onOk() {
+                        setNedbImportModalVisbile(false);
+                    },
+                    title: '导入成功',
+                    content: <ul>
+                        <li>案件${next.normalCase.length}条</li>
+                        <li>案件设备${next.device.length}条</li>
+                        <li>快速点验${next.quickEvent.length}条</li>
+                        <li>快速点验设备${next.quickRecord.length}条</li>
+                    </ul>,
+                    icon: <CheckCircleOutlined />,
+                    okButtonProps: { disabled: false }
+                });
+            } else {
+                handle.update({
+                    title: '导入失败',
+                    content: '该目录下无数据文件，请确认选择目录正确',
+                    icon: <WarningOutlined style={{ color: '#f9ca24' }} />,
+                    okButtonProps: { disabled: false }
+                });
+            }
+        } catch (error) {
+            handle.update({
+                title: '导入失败',
+                content: error.message,
+                icon: <WarningOutlined style={{ color: '#f9ca24' }} />,
+                okButtonProps: { disabled: false }
+            });
+        }
+    };
 
     /**
      * 菜单项Click
@@ -91,6 +206,9 @@ const BoardPanel: FC<{}> = ({ children }) => {
                 break;
             case BoardMenuAction.CloudLog:
                 dispatch(routerRedux.push('/log/cloud-log?admin=1'));
+                break;
+            case BoardMenuAction.NedbImport:
+                setNedbImportModalVisbile(true);
                 break;
             default:
                 break;
@@ -129,6 +247,10 @@ const BoardPanel: FC<{}> = ({ children }) => {
         <InputHistoryModal
             visible={inputHistoryModalVisbile}
             closeHandle={() => setInputHistoryModalVisible(false)} />
+        <NedbImportModal
+            visible={nedbImportModalVisbile}
+            importHandle={onImportHandle}
+            cancelHandle={() => setNedbImportModalVisbile(false)} />
     </>
 };
 

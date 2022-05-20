@@ -17,11 +17,11 @@ enum TableName {
     /**
      * 案件表
      */
-    Case = 'case',
+    Case = 'cases',
     /**
      * 设备（手机）表
      */
-    Device = 'device',
+    Device = 'devices',
     /**
      * 检验员
      */

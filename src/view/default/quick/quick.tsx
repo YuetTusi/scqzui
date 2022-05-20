@@ -71,7 +71,7 @@ const Quick: FC<{}> = () => {
         } else if (allowIp.length === 0) {
             Modal.warn({
                 title: '生成二维码失败',
-                content: '未检测到热点或路由器，请连接采集盒子或者打开电脑上的移动热点',
+                content: '未检测到采集WiFi或路由器，请确认WiFi正常或连接采集盒子',
                 okText: '确定',
                 centered: true
             });
