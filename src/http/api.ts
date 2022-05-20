@@ -1,6 +1,6 @@
 import { stat } from 'fs/promises';
 import { join } from 'path';
-import express from 'express';
+import { Router } from 'express';
 import { WebContents, ipcMain } from "electron";
 import log from '../utils/log';
 import { getDb } from '../utils/db';
@@ -8,10 +8,8 @@ import { CaseInfo } from '../schema/case-info';
 import { TableName } from '../schema/table-name';
 import { DeviceType } from '../schema/device-type';
 import { ParseState } from '../schema/device-state';
-import { QuickEvent } from '@/schema/quick-event';
-import { QuickRecord } from '@/schema/quick-record';
-// const { getWLANIP } = require('./utils');
-const { Router } = express;
+import { QuickEvent } from '../schema/quick-event';
+import { QuickRecord } from '../schema/quick-record';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
@@ -94,15 +92,17 @@ function api(webContents: WebContents) {
             ]);
             let nextDevices = recList.map(({
                 _id, caseId, phonePath,
-                mobileHolder, mobileName, mobileNo, mode }) => ({
-                    id: _id,
-                    caseId,
-                    mobileName,
-                    phonePath,
-                    mobileHolder,
-                    mobileNo: mobileNo ?? '',
-                    mode: mode ?? 0
-                }));
+                mobileHolder, mobileName,
+                mobileNo, mode
+            }) => ({
+                id: _id,
+                caseId,
+                mobileName,
+                phonePath,
+                mobileHolder,
+                mobileNo: mobileNo ?? '',
+                mode: mode ?? 0
+            }));
 
             let next = eventList
                 .reduce((acc: any[], current: QuickEvent) => {

@@ -1,10 +1,13 @@
 import dayjs from 'dayjs';
 import QRCode from 'qrcode';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { IpcRendererEvent } from 'electron';
 import React, { FC, useEffect, useState } from 'react';
 import CheckCircleFilled from '@ant-design/icons/CheckCircleFilled';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import Button from 'antd/lib/button';
+import Descriptions from 'antd/lib/descriptions';
 import Modal from 'antd/lib/modal';
 import Spin from 'antd/lib/spin';
 import Empty from 'antd/lib/empty';
@@ -14,10 +17,11 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
-import { EventDescBox, HelpBox } from './styled/style';
+import { EventDescBox, HelpBox, HorBox } from './styled/style';
 import { EventDescModalProp } from './prop';
 
 const { caseText } = helper.readConf()!;
+const { Item } = Descriptions;
 /**
  * 点验案件详情框
  */
@@ -37,7 +41,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
                 try {
                     const target = document.getElementById('qrcode');
                     await QRCode.toCanvas(target, `http://${ip}:9900/check/${id}`, {
-                        width: 200,
+                        width: 160,
                         margin: 2,
                         color: {
                             light: '#181d30',
@@ -87,28 +91,13 @@ const EventDescModal: FC<EventDescModalProp> = ({
         if (data === null) {
             return <Empty description="暂无数据" />
         }
-        return <ul>
-            <li>
-                <label>{`${caseText ?? '案件'}名称`}</label>
-                <span>{data.eventName.split('_')[0]}</span>
-            </li>
-            <li>
-                <label>存储位置</label>
-                <span>{data.eventPath}</span>
-            </li>
-            <li>
-                <label>违规时段</label>
-                <span>{data.ruleFrom} 时 ~ {data.ruleTo} 时</span>
-            </li>
-            <li>
-                <label>创建时间</label>
-                <span>{dayjs(data.createdAt).format('YYYY年MM月DD日 HH:mm:ss')}</span>
-            </li>
-            <li>
-                <label>IP地址</label>
-                <span>{ip ?? ''}</span>
-            </li>
-        </ul>;
+        return <Descriptions bordered={true} size="small">
+            <Item label={`${caseText ?? '案件'}名称`} span={3}>{data.eventName.split('_')[0]}</Item>
+            <Item label="存储位置" span={3}>{data.eventPath}</Item>
+            <Item label="违规时段">{data.ruleFrom} 时 ~ {data.ruleTo} 时</Item>
+            <Item label="创建时间">{dayjs(data.createdAt).format('YYYY年MM月DD日 HH:mm:ss')}</Item>
+            <Item label="IP地址">{ip ?? ''}</Item>
+        </Descriptions>
     }
 
     return <Modal
@@ -127,31 +116,44 @@ const EventDescModal: FC<EventDescModalProp> = ({
         forceRender={true}
         maskClosable={false}
         destroyOnClose={false}
-        width={740}
+        width={1000}
         title="快速点验"
     >
         <EventDescBox>
+            <HelpBox>
+                <div className="step">
+                    <label className="step-label">步骤1</label>
+                    <p>使用手机连接热点或采集盒子WiFi</p>
+                </div>
+                <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
+                <div className="step">
+                    <HorBox>
+                        <div>
+                            <label className="step-label">步骤2</label>
+                            <p>打开浏览器扫描右侧二维码，下载APP安装后打开「采集助手」</p>
+                        </div>
+                        <Spin
+                            spinning={scanned}
+                            indicator={<CheckCircleFilled style={{ color: '#52c41a' }} />}
+                            tip={<span style={{ color: '#52c41a' }}>扫码成功</span>}
+                        >
+                            <canvas width="160" height="160" id="qrcode" />
+                        </Spin>
+                    </HorBox>
+                </div>
+                <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
+                <div className="step">
+                    <label className="step-label">步骤3</label>
+                    <p>{`选择${caseText ?? '案件'}，输入编号及名称后确认`}</p>
+                </div>
+                <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
+                <div className="step">
+                    <label className="step-label">步骤4</label>
+                    <p>等待手机点验完成后，可卸载「采集助手」</p>
+                </div>
+            </HelpBox>
             <div className="ibox">
                 <div className="content">
-                    <HelpBox>
-                        <label className="step-label">步骤1</label>
-                        <p>使用手机连接热点或采集盒子WiFi</p>
-                        <label className="step-label">步骤2</label>
-                        <p>打开浏览器扫描下方二维码，下载APP安装后打开「采集助手」</p>
-                        <div>
-                            <Spin
-                                spinning={scanned}
-                                indicator={<CheckCircleFilled style={{ color: '#52c41a' }} />}
-                                tip={<span style={{ color: '#52c41a' }}>扫码成功</span>}
-                            >
-                                <canvas width="200" height="200" id="qrcode" />
-                            </Spin>
-                        </div>
-                        <label className="step-label">步骤3</label>
-                        <p>{`选择${caseText ?? '案件'}，输入编号及名称后确认`}</p>
-                        <label className="step-label">步骤4</label>
-                        <p>等待手机点验完成后，可卸载「采集助手」</p>
-                    </HelpBox>
                     <div className="event-info">
                         <div className="caption">
                             {`${caseText ?? '案件'}信息`}

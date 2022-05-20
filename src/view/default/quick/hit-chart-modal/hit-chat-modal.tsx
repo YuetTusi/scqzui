@@ -190,8 +190,6 @@ const HitChartModal: FC<HitChartModalProp> = ({
         }
     };
 
-    console.log(data);
-
     return <Modal
         footer={[
             <Button onClick={onDirSelect}

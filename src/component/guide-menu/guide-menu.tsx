@@ -39,7 +39,7 @@ const renderColorButtons = (manu: Manufaturer | null) => {
     let buttons: JSX.Element[] = [];
     if (useFetch || useServerCloud) {
         buttons = buttons.concat([
-            <div className="case">
+            <div className="case" key="CaseData">
                 <ColorButton
                     to="/case-data"
                     icon={<FontAwesomeIcon icon={faFileLines} />}
@@ -51,7 +51,7 @@ const renderColorButtons = (manu: Manufaturer | null) => {
     }
     if (useQuickFetch) {
         buttons = buttons.concat([
-            <div>
+            <div key="Quick">
                 <ColorButton
                     to="/quick"
                     icon={<FontAwesomeIcon icon={faBolt} />}
@@ -63,7 +63,7 @@ const renderColorButtons = (manu: Manufaturer | null) => {
     }
     if (useFetch || useServerCloud) {
         buttons = buttons.concat([
-            <div className="parse">
+            <div className="parse" key="Parse">
                 <ColorButton
                     to="/parse"
                     icon={<FontAwesomeIcon icon={faFileWaveform} />}
@@ -74,7 +74,7 @@ const renderColorButtons = (manu: Manufaturer | null) => {
         ]);
     }
     buttons = buttons.concat([
-        <div className="log" key="GM_1">
+        <div className="log" key="Log">
             <ColorButton
                 to={!useFetch && !useServerCloud ? '/log/parse-log' : '/log'}
                 icon={<FontAwesomeIcon icon={faUserPen} />}
@@ -82,7 +82,7 @@ const renderColorButtons = (manu: Manufaturer | null) => {
                 操作日志
             </ColorButton>
         </div>,
-        <div className="setting" key="GM_2">
+        <div className="setting" key="Settings">
             <ColorButton
                 to={useBcp ? '/settings' : '/settings/self-unit'}
                 icon={<FontAwesomeIcon icon={faGears} />}
@@ -93,7 +93,7 @@ const renderColorButtons = (manu: Manufaturer | null) => {
     ]);
     if (buttons.length % 2 !== 0) {
         buttons = buttons.concat([
-            <div className="version" key="GM_3">
+            <div className="version" key="Version">
                 <ColorButton
                     to={(event: MouseEvent<HTMLElement>) => {
                         event.preventDefault();

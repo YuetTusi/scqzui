@@ -18,7 +18,6 @@ const ConfForm: FC<ConfFormProp> = ({ formRef, data }) => {
 
     useEffect(() => {
         if (data !== null) {
-            console.log(data);
             setEnable(data.enable);
             setFieldsValue(data);
         }

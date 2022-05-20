@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const EventDescBox = styled.div`
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 
     .ibox{
         width: 100%;
@@ -18,6 +18,9 @@ export const EventDescBox = styled.div`
                 margin:0;
                 padding: 5px 0;
                 list-style-type: none;
+                &>div{
+                    display:inline-block
+                }
                 label{
                     display: block;
                 }
@@ -29,8 +32,8 @@ export const EventDescBox = styled.div`
         }
 
         .event-info{
-            position:relative;
             width: 100%;
+            margin-top: 20px;
             &>.caption{
                 color:#fff;
                 padding: 5px 5px;
@@ -45,31 +48,43 @@ export const EventDescBox = styled.div`
                 border-bottom-left-radius: ${props => props.theme['border-radius-base']};
                 border-bottom-right-radius: ${props => props.theme['border-radius-base']};
                 padding: 20px;
-                position: absolute;
-                top:32px;
-                left:0;
-                right:0;
-                bottom:0;
             }
         }
     }
 `;
 
+export const HorBox = styled.div`
+    display:flex;
+    flex-direction: row;
+`;
+
 export const HelpBox = styled.div`
     
-    width: 320px;
-    margin-right: 20px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    .step{
+        align-self: stretch;
+        padding:10px;
+        border:1px solid #303030;
+        background-color: #202940;
+        border-radius:${props => props.theme['border-radius-base']};
+
+        p{
+            padding: 20px 0;
+            line-height: 1.8;
+        }
+    }
 
     .step-label{
-        display: block;
+        display: inline-block;
         width:50px;
         text-align: center;
         border-radius: ${props => props.theme['border-radius-base']};
         color:#fff;
         background-color: ${props => props.theme['primary-color']};
-    }
-    &>p{
-        margin:0;
-        padding: 5px 0;
     }
 `;

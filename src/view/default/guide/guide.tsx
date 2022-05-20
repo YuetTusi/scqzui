@@ -4,9 +4,16 @@ import BoardMenu from '@/component/guide-menu';
 import { ExtendPanel } from './styled/extend-panel';
 import { GuideBox } from './styled/box';
 
+/**
+ * 首屏按钮页
+ */
 const Guide: FC<{}> = () => {
+
     const scrollRef = useRef<HTMLDivElement>(null);
 
+    /**
+     * 按钮面板Wheel
+     */
     const onPanelWheel = (event: WheelEvent) => {
         event.preventDefault();
         const { deltaY } = event;
@@ -24,17 +31,15 @@ const Guide: FC<{}> = () => {
         };
     }, []);
 
-    return (
-        <GuideBox>
-            <ExtendPanel ref={scrollRef}>
-                <BoardMenu>
-                    Dashboard
-                </BoardMenu>
-            </ExtendPanel>
-            {/* <div className="right-opacity"/> */}
-            <Reading />
-        </GuideBox>
-    );
+    return <GuideBox>
+        <ExtendPanel ref={scrollRef}>
+            <BoardMenu>
+                Dashboard
+            </BoardMenu>
+        </ExtendPanel>
+        {/* <div className="right-opacity"/> */}
+        <Reading />
+    </GuideBox>;
 };
 
 export default Guide;

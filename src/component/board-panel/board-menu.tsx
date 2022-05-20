@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faEraser, faPenRuler, faWrench, faBell, faBellSlash,
-    faMobileScreenButton, faArrowsRotate, faCloud
+    faMobileScreenButton, faArrowsRotate, faCloud, faRecycle
 } from '@fortawesome/free-solid-svg-icons';
 import Popover from 'antd/lib/popover';
 import { helper } from '@/utils/helper';
@@ -25,7 +25,8 @@ enum BoardMenuAction {
     DevTool,
     FetchLog,
     ParseLog,
-    CloudLog
+    CloudLog,
+    NedbImport
 }
 
 const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
@@ -53,6 +54,10 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
             <FontAwesomeIcon icon={faEraser} />
             <span>表单记录清除</span>
         </li>
+        {/* <li onClick={() => onItemClick(BoardMenuAction.NedbImport)}>
+            <FontAwesomeIcon icon={faRecycle} />
+            <span>原数据导入</span>
+        </li> */}
         <Auth deny={!isDev}>
             {/* <li onClick={() => onItemClick(BoardMenuAction.FetchLog)}>
                 <FontAwesomeIcon icon={faMobileScreenButton} />
