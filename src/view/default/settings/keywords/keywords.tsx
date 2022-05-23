@@ -1,12 +1,16 @@
 import { join } from 'path';
-import { mkdir, readdir, unlink } from 'fs';
+import { mkdir, unlink } from 'fs';
+import { readdir, writeFile } from 'fs/promises';
 import debounce from 'lodash/debounce';
 import classnames from 'classnames';
+import xlsx from 'node-xlsx';
 import { ipcRenderer, OpenDialogReturnValue, shell } from 'electron';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import React, { FC, useEffect, useState, MouseEvent } from 'react';
+import EditOutlined from '@ant-design/icons/EditOutlined';
 import ImportOutlined from '@ant-design/icons/ImportOutlined';
+import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined';
 import FolderOpenOutlined from '@ant-design/icons/FolderOpenOutlined';
 import SaveOutlined from '@ant-design/icons/SaveOutlined';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
@@ -16,10 +20,11 @@ import Switch from 'antd/lib/switch';
 import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
 import { useAppConfig } from '@/hook';
+import { helper } from '@/utils/helper';
 import { AppJson } from '@/schema/app-json';
 import { Split } from '@/component/style-tool';
 import { SortPanel } from '@/component/style-tool/split';
-import { helper } from '@/utils/helper';
+import NewCategoryModal from './new-category-modal';
 import { MainBox } from '../styled/sub-layout';
 import { ExcelList, FormBox } from './styled/style';
 import { KeywordsProp } from './prop';
@@ -29,23 +34,24 @@ const cwd = process.cwd();
 const { Group } = Button;
 
 let saveFolder = cwd;
-let defaultWordsPath = cwd; //部队关键词模版目录
 if (process.env['NODE_ENV'] === 'development') {
     saveFolder = join(cwd, 'data/keywords');
-    defaultWordsPath = join(cwd, 'data/army');
 } else {
     saveFolder = join(cwd, 'resources/keywords');
-    defaultWordsPath = join(cwd, 'resources/army');
 }
 
 const Keywords: FC<KeywordsProp> = () => {
 
+    const [loading, setLoading] = useState<boolean>(false);
+    const [isDefault, setIsDefault] = useState<boolean>(true);//开启默认模版
     const [isUseKeyword, setIsUseKeyword] = useState<boolean>(false); //开启关键词验证
     const [isUseDocVerify, setIsUseDocVerify] = useState<boolean>(false); //开启文档验证
+    const [addCategoryModalVisible, setAddCategoryModalVisible] = useState<boolean>(false);
     const [fileList, setFileList] = useState<string[]>([]);
     const appConfig = useAppConfig();
 
     useEffect(() => {
+        setIsDefault(appConfig?.useDefaultTemp ?? true);
         setIsUseKeyword(appConfig?.useKeyword ?? false);
         setIsUseDocVerify(appConfig?.useDocVerify ?? false);
     }, [appConfig]);
@@ -155,12 +161,39 @@ const Keywords: FC<KeywordsProp> = () => {
     };
 
     /**
+     * 读取关键词文件列表
+     * @returns {string[]} 返回目录下所有的文件
+     */
+    const readKeywordsList = async () => {
+        try {
+            const files = await readdir(saveFolder, { encoding: 'utf8' });
+            return files;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    /**
+     * 读取文件列表
+     */
+    const loadFileList = async () => {
+        try {
+            const data = await readKeywordsList();
+            const next = data.filter((i) => !/.+\$.+/.test(join(saveFolder, i)));
+            setFileList(next);
+        } catch (error) {
+            setFileList([]);
+        }
+    };
+
+    /**
      * 保存Click
      */
     const onSaveClick = async (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         const next: AppJson = {
             ...appConfig!,
+            useDefaultTemp: isDefault,
             useKeyword: isUseKeyword,
             useDocVerify: isUseDocVerify,
         };
@@ -179,15 +212,43 @@ const Keywords: FC<KeywordsProp> = () => {
     };
 
     /**
-     * 读取文件列表
+     * 写excel文档
      */
-    const loadFileList = () => {
-        readdir(saveFolder, { encoding: 'utf8' }, (err, data) => {
-            if (!err) {
-                const next = data.filter((i) => !/.+\$.+/.test(join(saveFolder, i)));
-                setFileList(next);
+    const writeExcel = (to: string, data: any[] = ['关键词', '浏览器内容', '聊天内容', '短信内容', '安装app']) => {
+
+        const chunk = xlsx.build([{
+            data: [data],
+            options: {},
+            name: '关键词',
+        }]);
+
+        return writeFile(join(to), chunk);
+    };
+
+    /**
+     * 保存分类excel
+     * @param name 分类名称
+     */
+    const saveCategoryHandle = async (name: string) => {
+        setLoading(true);
+        try {
+            const list = await readKeywordsList();
+            const exist = list.some(item => item === `${name}.xlsx`);
+            message.destroy();
+            if (exist) {
+                message.warn(`「${name}」分类已存在`);
+            } else {
+                await writeExcel(join(saveFolder, `${name}.xlsx`));
+                await loadFileList();
+                shell.openPath(join(saveFolder, `${name}.xlsx`));
+                message.success('分类保存成功，请在Excel文档中添加关键词');
+                setAddCategoryModalVisible(false);
             }
-        });
+        } catch (error) {
+            console.warn(error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const renderFileList = () => {
@@ -212,8 +273,8 @@ const Keywords: FC<KeywordsProp> = () => {
                                 onClick={() => openFileHandle(file)}
                                 size="small"
                                 type="default">
-                                <FolderOpenOutlined />
-                                <span>打开</span>
+                                <EditOutlined />
+                                <span>编辑</span>
                             </Button>
                             <Button
                                 onClick={() => delFileHandle(file)}
@@ -232,6 +293,16 @@ const Keywords: FC<KeywordsProp> = () => {
     return <MainBox>
         <FormBox>
             <ul>
+                <li>
+                    <label>使用默认模版：</label>
+                    <Switch
+                        checked={isDefault}
+                        onChange={() => {
+                            setIsDefault((prev) => !prev);
+                        }}
+                        size="small"
+                    />
+                </li>
                 <li>
                     <label>关键词验证：</label>
                     <Switch
@@ -258,22 +329,16 @@ const Keywords: FC<KeywordsProp> = () => {
             <div>
                 <Group>
                     <Button
+                        onClick={() => setAddCategoryModalVisible(true)}
+                        type="primary">
+                        <PlusCircleOutlined />
+                        <span>新建关键词类型</span>
+                    </Button>
+                    <Button
                         onClick={() => selectFileHandle(cwd)}
                         type="primary">
                         <ImportOutlined />
-                        <span>导入数据</span>
-                    </Button>
-                    <Button
-                        onClick={() => selectFileHandle(defaultWordsPath)}
-                        type="primary">
-                        <ImportOutlined />
-                        <span>导入模版</span>
-                    </Button>
-                    <Button
-                        onClick={() => openFolder()}
-                        type="primary">
-                        <FolderOpenOutlined />
-                        <span>打开位置</span>
+                        <span>导入关键词</span>
                     </Button>
                 </Group>
             </div>
@@ -289,6 +354,12 @@ const Keywords: FC<KeywordsProp> = () => {
                 </ExcelList>
             </div>
         </SortPanel>
+        <NewCategoryModal
+            visible={addCategoryModalVisible}
+            loading={loading}
+            saveHandle={saveCategoryHandle}
+            cancelHandle={() => setAddCategoryModalVisible(false)}
+        />
     </MainBox>
 };
 

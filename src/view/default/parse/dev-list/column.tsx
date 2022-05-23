@@ -110,6 +110,7 @@ const doParse = async (dispatch: Dispatch, data: DeviceType) => {
                 caseData.aiTransfer ? 1 : 0,
                 caseData.aiScreenshot ? 1 : 0
             ],
+            useDefaultTemp: appConfig?.useDefaultTemp ?? true,
             useKeyword: appConfig?.useKeyword ?? false,
             useDocVerify: appConfig?.useDocVerify ?? false,
             dataMode: data.mode ?? DataMode.Self,

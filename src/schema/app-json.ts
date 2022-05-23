@@ -4,9 +4,9 @@
  */
 export interface AppJson {
     /**
-     * 禁用Socket断线警告
+     * 是否开启默认关键词模版
      */
-    disableSocketDisconnectWarn: boolean,
+    useDefaultTemp: boolean,
     /**
      * 是否开启关键词验证
      */

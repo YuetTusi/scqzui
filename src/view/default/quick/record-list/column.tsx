@@ -101,6 +101,7 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
                 isDel: false,
                 isAi: false,
                 aiTypes: Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                useDefaultTemp: true,
                 useKeyword: true,
                 useDocVerify: false,
                 dataMode: DataMode.Check,

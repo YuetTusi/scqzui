@@ -50,6 +50,7 @@ const ImportDataModal: FC<ImportModalProp> = () => {
                 type: 'importDataModal/saveImportDeviceToCase', payload: {
                     formValue: values,
                     importType,
+                    useDefaultTemp: appConfig?.useKeyword ?? true,
                     useKeyword: appConfig?.useKeyword ?? false,
                     useDocVerify: appConfig?.useDocVerify ?? false
                 }

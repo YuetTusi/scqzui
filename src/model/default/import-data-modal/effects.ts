@@ -28,8 +28,8 @@ export default {
       */
     *saveImportDeviceToCase({ payload }: AnyAction, { call, fork, put }: EffectsCommandMap) {
 
-        const { formValue, importType, useDocVerify, useKeyword } = payload as {
-            formValue: FormValue, importType: ImportTypes, useKeyword: boolean, useDocVerify: boolean
+        const { formValue, importType, useDefaultTemp, useDocVerify, useKeyword } = payload as {
+            formValue: FormValue, importType: ImportTypes, useDefaultTemp: boolean, useKeyword: boolean, useDocVerify: boolean
         };
         const caseDb = getDb<CaseInfo>(TableName.Case);
         const deviceDb = getDb<DeviceType>(TableName.Device);
@@ -119,6 +119,7 @@ export default {
                 mobileNo: [rec.mobileNo ?? ''], //此字段意义换为IMEI
                 note: rec.note ?? '',
                 hasReport: caseData?.hasReport ?? false,
+                useDefaultTemp,
                 useKeyword,
                 useDocVerify
             });
@@ -140,6 +141,7 @@ export default {
                     mobileNo: [rec.mobileNo ?? ''], //此字段意义换为IMEI
                     note: rec.note ?? '',
                     hasReport: caseData?.hasReport ?? false,
+                    useDefaultTemp,
                     useKeyword,
                     useDocVerify
                 }
@@ -161,6 +163,7 @@ export default {
                     mobileNo: [rec.mobileNo ?? ''], //此字段意义换为IMEI
                     note: rec.note ?? '',
                     hasReport: caseData?.hasReport ?? false,
+                    useDefaultTemp,
                     useKeyword,
                     useDocVerify
                 }

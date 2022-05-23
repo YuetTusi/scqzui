@@ -463,6 +463,7 @@ export default {
                         caseData.aiTransfer ? 1 : 0,
                         caseData.aiScreenshot ? 1 : 0
                     ],
+                    useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                     useKeyword: appConfig?.useKeyword ?? false,
                     useDocVerify: appConfig?.useDocVerify ?? false,
                     tokenAppList
@@ -493,6 +494,7 @@ export default {
                             caseData.aiTransfer ? 1 : 0,
                             caseData.aiScreenshot ? 1 : 0
                         ],
+                        useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                         useKeyword: appConfig?.useKeyword ?? false,
                         useDocVerify: appConfig?.useDocVerify ?? false,
                         tokenAppList

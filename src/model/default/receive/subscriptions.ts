@@ -206,6 +206,8 @@ export default {
                 message: `「${args.mobileName ?? '未知设备'}」${fetchText ?? '取证'}结束，开始${parseText ?? '解析'}点验数据`
             });
 
+            const appJson = await helper.readAppJson();
+
             //NOTE:将设备数据入库
             let next = new QuickRecord();
             next._id = helper.newId();
@@ -260,8 +262,9 @@ export default {
                     isDel: false,
                     isAi: false,
                     aiTypes: Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                    useKeyword: true,
-                    useDocVerify: false,
+                    useDefaultTemp: appJson?.useDefaultTemp ?? true,
+                    useKeyword: appJson?.useKeyword ?? false,
+                    useDocVerify: appJson?.useDocVerify ?? false,
                     tokenAppList: []
                 }
             });

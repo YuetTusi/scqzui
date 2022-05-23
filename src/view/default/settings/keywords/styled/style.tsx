@@ -13,11 +13,9 @@ export const FormBox = styled.div`
     li{
         list-style-type: none;
         display: inline;
-        &:nth-child(2){
-            margin-left: 10px;
-        }
-        &:nth-child(3){
-            margin-left: 10px;
+        margin-left: 10px;
+        &:nth-child(1){
+            margin-left: 0;
         }
     }
 `;
