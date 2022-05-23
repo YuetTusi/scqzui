@@ -57,6 +57,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
     const dispatch = useDispatch();
     const [title, setTitle] = useState<string>('');
     const [version, setVersion] = useState<string>('');
+    const [manu, setManu] = useState<string>('');
     const [softhardwareModalVisible, setSofthardwareModalVisible] = useState<boolean>(false);
     const [inputHistoryModalVisbile, setInputHistoryModalVisible] = useState<boolean>(false);
     const [nedbImportModalVisbile, setNedbImportModalVisbile] = useState<boolean>(false);
@@ -64,7 +65,8 @@ const BoardPanel: FC<{}> = ({ children }) => {
     useEffect(() => {
         (async () => {
             try {
-                const { materials_name, materials_software_version } = await helper.readManufaturer();
+                const { manufacturer, materials_name, materials_software_version } = await helper.readManufaturer();
+                setManu(manufacturer ?? '北京万盛华通科技有限公司');
                 setTitle(materials_name ?? '智能终端取证系统');
                 setVersion(materials_software_version ?? 'v0.0.1');
             } catch (error) {
@@ -181,7 +183,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
             </Center>
             <Footer>
                 <div>
-                    Copyright © 2022 北京万盛华通科技有限公司
+                    Copyright © {new Date().getFullYear()} {manu}
                 </div>
             </Footer>
         </BackgroundBox>
