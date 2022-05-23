@@ -17,11 +17,11 @@ const { caseText, devText, fetchText } = helper.readConf()!;
 const { Group } = Button;
 
 /**
- * 功能按钮禁用状态
+ * 命中按钮禁用状态
  * 除`解析完成`都是禁用状态
  * @param parseState 解析状态
  */
-const fnButtonDisable = (parseState?: ParseState) => {
+const hitButtonDisable = (parseState?: ParseState) => {
     switch (parseState) {
         case ParseState.Fetching:
         case ParseState.NotParse:
@@ -43,9 +43,7 @@ const fnButtonDisable = (parseState?: ParseState) => {
 const delButtonDisable = (parseState?: ParseState) => {
     switch (parseState) {
         case ParseState.Fetching:
-        case ParseState.Exception:
         case ParseState.Parsing:
-        case ParseState.Error:
             return true
         case ParseState.Error:
         case ParseState.Exception:
@@ -108,6 +106,7 @@ const RecordInfo: FC<RecordInfoProp> = ({ data, onButtonClick }) => {
             <div>
                 <Group size="small">
                     <Button
+                        disabled={hitButtonDisable(parseState)}
                         onClick={() => onButtonClick(data, ClickType.Hit)}
                         type="primary">{`命中统计 (${hitCount})`}</Button>
                 </Group>

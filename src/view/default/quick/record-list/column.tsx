@@ -307,6 +307,7 @@ export function getColumns(
             render: (id: string, record) => {
                 return <Group size="small">
                     <Button
+                        disabled={parseButtonDisable(record.parseState!)}
                         onClick={async (event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
                             const treeJsonPath = join(
@@ -346,6 +347,7 @@ export function getColumns(
                         }
                         type="primary">生成</Button>
                     <Button
+                        disabled={parseButtonDisable(record.parseState!)}
                         onClick={(event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
                             exportReportClick(record);
