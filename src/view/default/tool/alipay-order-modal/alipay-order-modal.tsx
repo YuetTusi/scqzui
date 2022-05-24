@@ -1,4 +1,4 @@
-import React, { FC, memo, MouseEvent, useEffect } from 'react';
+import React, { FC, memo, MouseEvent } from 'react';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import Space from 'antd/lib/space';
@@ -51,6 +51,7 @@ const AlipayOrderModal: FC<AlipayOrderModalProp> = memo(({
         onCancel={cancelHandle}
         visible={visible}
         title="支付宝帐单云取"
+        width={600}
         centered={true}
         maskClosable={false}
         destroyOnClose={true}
