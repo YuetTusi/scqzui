@@ -29,7 +29,7 @@ export const ExcelList = styled.div`
     justify-content: center;
     align-items: center;
     &.nothing{
-        min-height: 400px;
+        min-height: 700px;
     }
     ul{
         flex:1;

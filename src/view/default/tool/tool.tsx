@@ -256,7 +256,7 @@ const Tool: FC<ToolProp> = () => {
                     </div>
                 </div>
             </SortBox>
-            <Auth deny={useFakeButton}>
+            <Auth deny={!useFakeButton}>
                 <SortBox>
                     <div className="caption">其他品牌取证</div>
                     <Split />
