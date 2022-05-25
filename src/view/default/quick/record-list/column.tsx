@@ -81,7 +81,11 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
             _id: data.caseId
         });
         let caseJsonPath = join(data.phonePath!, '../../');
-        let caseJsonExist = await helper.existFile(join(caseJsonPath, 'Case.json'));
+        const [caseJsonExist, appJson] = await Promise.all([
+            helper.existFile(join(caseJsonPath, 'Case.json')),
+            helper.readAppJson()
+        ]);
+        // let caseJsonExist = await helper.existFile(join(caseJsonPath, 'Case.json'));
 
         if (!caseJsonExist) {
             const caseData = new CaseInfo();
@@ -101,8 +105,8 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
                 isDel: false,
                 isAi: false,
                 aiTypes: Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                useDefaultTemp: true,
-                useKeyword: true,
+                useDefaultTemp: appJson?.useDefaultTemp ?? true,
+                useKeyword: appJson?.useKeyword ?? false,
                 useDocVerify: false,
                 dataMode: DataMode.Check,
                 tokenAppList: []
