@@ -1,9 +1,8 @@
 import { join } from 'path';
 import { mkdir, unlink } from 'fs';
-import { readdir, writeFile } from 'fs/promises';
+import { readdir } from 'fs/promises';
 import debounce from 'lodash/debounce';
 import classnames from 'classnames';
-import xlsx from 'node-xlsx';
 import { ipcRenderer, OpenDialogReturnValue, shell } from 'electron';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +10,6 @@ import React, { FC, useEffect, useState, MouseEvent } from 'react';
 import EditOutlined from '@ant-design/icons/EditOutlined';
 import ImportOutlined from '@ant-design/icons/ImportOutlined';
 import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined';
-import FolderOpenOutlined from '@ant-design/icons/FolderOpenOutlined';
 import SaveOutlined from '@ant-design/icons/SaveOutlined';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import Button from 'antd/lib/button';
@@ -33,10 +31,13 @@ import { KeywordsProp } from './prop';
 const cwd = process.cwd();
 const { Group } = Button;
 
+let armyFolder = cwd;
 let saveFolder = cwd;
 if (process.env['NODE_ENV'] === 'development') {
+    armyFolder = join(cwd, 'data/army');
     saveFolder = join(cwd, 'data/keywords');
 } else {
+    armyFolder = join(cwd, 'resources/army');
     saveFolder = join(cwd, 'resources/keywords');
 }
 
@@ -212,17 +213,17 @@ const Keywords: FC<KeywordsProp> = () => {
     };
 
     /**
-     * 写excel文档
+     * 从army目录中拷贝模版文件并重命名
+     * @param newName 新名称（用户输入的分类名）
      */
-    const writeExcel = (to: string, data: any[] = ['关键词', '浏览器内容', '聊天内容', '短信内容', '安装app']) => {
-
-        const chunk = xlsx.build([{
-            data: [data],
-            options: {},
-            name: '关键词',
-        }]);
-
-        return writeFile(join(to), chunk);
+    const renameTemplate = async (newName: string) => {
+        try {
+            await helper.copyFiles(join(armyFolder, 'template.xlsx'), saveFolder, {
+                rename: () => `${newName}.xlsx`
+            })
+        } catch (error) {
+            throw error;
+        }
     };
 
     /**
@@ -232,13 +233,19 @@ const Keywords: FC<KeywordsProp> = () => {
     const saveCategoryHandle = async (name: string) => {
         setLoading(true);
         try {
+            message.destroy();
+            const hasTemp = await helper.existFile(join(armyFolder, 'template.xlsx'));
+            if (!hasTemp) {
+                message.warn('无模版文件');
+                return;
+            }
             const list = await readKeywordsList();
             const exist = list.some(item => item === `${name}.xlsx`);
-            message.destroy();
             if (exist) {
                 message.warn(`「${name}」分类已存在`);
             } else {
-                await writeExcel(join(saveFolder, `${name}.xlsx`));
+                // await writeExcel(join(saveFolder, `${name}.xlsx`));
+                await renameTemplate(name);
                 await loadFileList();
                 shell.openPath(join(saveFolder, `${name}.xlsx`));
                 message.success('分类保存成功，请在Excel文档中添加关键词');
