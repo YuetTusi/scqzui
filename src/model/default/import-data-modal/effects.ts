@@ -15,6 +15,7 @@ import { ImportTypes } from '@/schema/import-type';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchState, ParseState } from '@/schema/device-state';
 import CommandType, { SocketType } from '@/schema/command';
+import { ParseCategory } from '@/schema/parse-detail';
 import { FormValue } from '@/view/default/tool/import-data-modal/prop';
 
 const { parseText } = helper.readConf()!;
@@ -131,6 +132,7 @@ export default {
                 msg: {
                     caseId: rec.caseId,
                     deviceId: rec._id,
+                    category: ParseCategory.Normal,
                     phonePath: rec.phonePath,
                     packagePath: formValue.packagePath,
                     sdCardPath: formValue.sdCardPath ?? '',
