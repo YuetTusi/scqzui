@@ -82,8 +82,11 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     }, [visible]);
 
     useEffect(() => {
-        formRef.setFieldsValue({ phoneName: device?.model ?? '' });
-    }, [device]);
+        if (visible) {
+            formRef.setFieldsValue({ phoneName: device?.model ?? '' });
+        }
+
+    }, [device, visible]);
 
     /**
      * 跳转到新增案件页

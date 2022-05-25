@@ -130,8 +130,10 @@ const ServerCloudModal: FC<Prop> = ({
     }, [visible]);
 
     useEffect(() => {
-        formRef.setFieldsValue({ phoneName: device?.model ?? '' });
-    }, [device]);
+        if (visible) {
+            formRef.setFieldsValue({ phoneName: device?.model ?? '' });
+        }
+    }, [device, visible]);
 
     useSubscribe(
         'protocol-read',
