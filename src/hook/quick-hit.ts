@@ -51,9 +51,11 @@ export const useQuickHit = (record: QuickRecord) => {
                 try {
                     const exist = await helper.existFile(target);
                     if (exist) {
-                        const next = await helper.readJSONFile(target);
-                        console.log(next);
-                        setData(next);
+                        let next = await helper.readJSONFile(target);
+                        setData({
+                            ...next,
+                            items: (next?.items ?? []).filter((item: { name: string, value: number }) => item.value !== 0),
+                        });
                     } else {
                         setData(undefined);
                     }

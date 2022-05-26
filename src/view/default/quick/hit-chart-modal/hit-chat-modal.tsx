@@ -215,7 +215,7 @@ const HitChartModal: FC<HitChartModalProp> = ({
         destroyOnClose={true}
         maskClosable={false}
         forceRender={true}
-        title="命中统计">
+        title={`命中统计（${data?.totalcount ?? 0}）`}>
         <div
             id="hit-dom"
             style={{
