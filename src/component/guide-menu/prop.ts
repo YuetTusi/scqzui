@@ -17,7 +17,11 @@ interface ColorButtonProp {
     /**
      * 图标DOM
      */
-    icon: JSX.Element
+    icon: JSX.Element,
+    /**
+     * 描述
+     */
+    description?: string | JSX.Element
 }
 
 interface ImageButtonProp {

@@ -55,6 +55,12 @@ const renderColorButtons = (manu: Manufaturer | null) => {
                 <ColorButton
                     to="/quick"
                     icon={<FontAwesomeIcon icon={faBolt} />}
+                    description={
+                        <ul>
+                            <li>手机连接WiFi，通过扫码方式仅采集短信、电话本、</li>
+                            <li>通话记录、系统日志、应用安装列表等信息</li>
+                        </ul>
+                    }
                     color="#e1b12c">
                     快速{fetchText ?? '点验'}
                 </ColorButton>
@@ -147,7 +153,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                     to="/collect"
                     src={envidence}
                     description={<ul>
-                        <li>通过连接USB或WIFI方式实现多路全数据快速采集、</li>
+                        <li>通过连接USB或WiFi方式实现多路全数据快速采集、</li>
                         <li>N路同时解析、数据深度恢复</li>
                     </ul>}>
                     {`${devText ?? '设备'}${fetchText ?? '取证'}`}

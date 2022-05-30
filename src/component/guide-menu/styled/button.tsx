@@ -5,6 +5,7 @@ import color2 from 'tinycolor2';
  * 纯色按钮
  */
 const Color = styled.div<{ color: string }>`
+    position: relative;
     cursor: pointer;
     color:#fff;
     width:350px;
@@ -34,6 +35,45 @@ const Color = styled.div<{ color: string }>`
             padding-top:1rem;
             letter-spacing: 2px;
         }
+    }
+
+    &>.desc-mask{
+            position: absolute;
+            pointer-events: none;
+            background-color:rgba(34,34,34,0.9);
+            color:#fff;
+            top: 0;
+            left:0;
+            right:0;
+            bottom: 0;
+            z-index: 1;
+            box-sizing: border-box;
+            display:none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: hidden;
+
+            &>ul{
+                width: 100%;
+                margin:0;
+                padding:20px;
+            }
+            &>ul>li{
+                margin:0;
+                padding:5px 0;
+                font-size: 1.4rem;
+                font-weight: lighter;
+                list-style-type: none;
+                /* white-space: normal; */
+            }
+
+            &.open{
+                display:flex;
+                animation: show 0.2s linear;
+            }
     }
 `;
 

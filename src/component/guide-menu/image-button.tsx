@@ -56,7 +56,6 @@ const ImageButton: FC<ImageButtonProp> = ({ to, icon, src, description, children
                 <div className="icon-box">{icon}</div>
                 <div className="text-box">{children}</div>
             </a>
-
             {renderDescMask()}
         </div>
     </Image>;
