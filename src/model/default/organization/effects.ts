@@ -6,6 +6,7 @@ import { getDb } from '@/utils/db';
 import log from '@/utils/log';
 import { TableName } from '@/schema/table-name';
 import { Organization } from '@/schema/organization';
+import { ClearKey } from '@/view/default/settings/unit';
 import { helper } from '@/utils/helper';
 
 const cwd = process.cwd();
@@ -185,7 +186,7 @@ export default {
     /**
      * 将采集单位&目的检验单位写入unit.json
      */
-    * writeJson({ payload }: AnyAction, { fork }: EffectsCommandMap) {
+    *writeJson({ payload }: AnyAction, { fork }: EffectsCommandMap) {
         const { collectUnitName, collectUnitCode, dstUnitName, dstUnitCode } = payload;
         let jsonSavePath = ''; //JSON文件路径
         if (process.env['NODE_ENV'] === 'development') {
@@ -201,4 +202,43 @@ export default {
             dstUnitName: dstUnitName ?? ''
         });
     },
+    /**
+     * 清空设置
+     * @param {ClearKey} payload 清除类型
+     */
+    *clear({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+        const db = getDb<Organization>(TableName.Organization);
+        let $condition: Record<string, any> = {};
+        switch (payload as ClearKey) {
+            case ClearKey.Collect:
+                $condition = { $set: { collectUnitName: undefined, collectUnitCode: undefined } };
+                break;
+            case ClearKey.Dst:
+                $condition = { $set: { dstUnitName: undefined, dstUnitCode: undefined } };
+                break;
+            default:
+                break;
+        }
+        try {
+            const data: Organization[] = yield call([db, 'all']);
+            let rows = 0;
+            if (data.length > 0) {
+                rows = yield call(
+                    [db, 'update'],
+                    { _id: data[0]._id },
+                    $condition
+                );
+            }
+            message.destroy();
+            if (rows === 0) {
+                message.warn('清除失败');
+            } else {
+                message.success('单位清除成功');
+                yield put({ type: 'query' });
+            }
+        } catch (error) {
+            log.error(`@model/default/organization/*clear: ${error.message}`);
+            message.error('单位清空失败');
+        }
+    }
 }

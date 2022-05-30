@@ -18,4 +18,18 @@ interface UnitRecord {
     PcsCode: string
 }
 
-export { UnitProp, UnitRecord };
+/**
+ * 清除类型
+ */
+enum ClearKey {
+    /**
+     * 采集单位
+     */
+    Collect,
+    /**
+     * 目的检验单位
+     */
+    Dst
+}
+
+export { UnitProp, UnitRecord, ClearKey };

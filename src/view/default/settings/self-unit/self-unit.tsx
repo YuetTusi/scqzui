@@ -1,12 +1,14 @@
 import debounce from 'lodash/debounce';
 import React, { FC, useEffect, useRef, useState, MouseEvent } from 'react';
-import { useDispatch, useSelector } from 'dva';
+import { useDispatch, useSelector, useLocation } from 'dva';
 import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
+import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import Button from 'antd/lib/button';
 import Input, { InputRef } from 'antd/lib/input';
 import Table from 'antd/lib/table';
+import Modal from 'antd/lib/modal';
 import { Key } from 'antd/lib/table/interface';
 import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
@@ -20,6 +22,8 @@ import { MainBox } from '../styled/sub-layout';
 import EditUnitModal from './edit-unit-modal';
 import { getColumns } from './column';
 import { SelfUnitProp } from './prop';
+import Auth from '@/component/auth';
+import { ClearKey } from '../unit';
 
 const { fetchText } = helper.readConf()!;
 
@@ -36,11 +40,18 @@ const SelfUnit: FC<SelfUnitProp> = () => {
         collectUnitCode,
         collectUnitName
     } = useSelector<StateTree, Organization>(state => state.organization);
+    const { search } = useLocation<{ admin: string }>();
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [editUnitModalVisible, setEditUnitModalVisible] = useState<boolean>(false);
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
     const [editData, setEditData] = useState<SelfUnitEntity>();
     const selectedUnitName = useRef<string | undefined>(collectUnitName);
     const inputRef = useRef<InputRef | null>(null);
+
+    useEffect(() => {
+        const sp = new URLSearchParams(search);
+        setIsAdmin(sp.get('admin') === '1');
+    }, [search]);
 
     useEffect(() => {
         query({}, 1);
@@ -121,7 +132,23 @@ const SelfUnit: FC<SelfUnitProp> = () => {
             message.destroy();
             message.info(`请选择${fetchText ?? '取证'}单位`);
         }
-    }, 500, { leading: true, trailing: false })
+    }, 500, { leading: true, trailing: false });
+
+    /**
+     * 清除Click
+     */
+    const onClearClick = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        Modal.confirm({
+            onOk() {
+                dispatch({ type: 'organization/clear', payload: ClearKey.Collect });
+            },
+            okText: '是',
+            cancelText: '否',
+            title: '清除',
+            content: '确认清除当前单位设置？'
+        });
+    };
 
     /**
      * 显示编辑弹框handle
@@ -142,7 +169,11 @@ const SelfUnit: FC<SelfUnitProp> = () => {
 
     return <MainBox>
         <BarBox>
-            <div className="u-name" title={collectUnitCode ?? '未设置单位'}>{collectUnitName ?? '未设置单位'}</div>
+            <div
+                className="u-name"
+                title={collectUnitCode ?? '未设置单位'}>
+                {collectUnitName ?? '未设置单位'}
+            </div>
             <div className="u-btn">
                 <Input ref={inputRef} placeholder="请输入单位名称查询" />
                 <Button onClick={onSearchClick} type="primary">
@@ -157,6 +188,12 @@ const SelfUnit: FC<SelfUnitProp> = () => {
                     <CheckCircleOutlined />
                     <span>保存</span>
                 </Button>
+                <Auth deny={!isAdmin}>
+                    <Button onClick={onClearClick} type="primary" danger={true}>
+                        <DeleteOutlined />
+                        <span>清除</span>
+                    </Button>
+                </Auth>
             </div>
         </BarBox>
         <Split />

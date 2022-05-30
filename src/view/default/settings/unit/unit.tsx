@@ -1,23 +1,26 @@
 import debounce from 'lodash/debounce';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import React, { FC, useEffect, useRef, useState, MouseEvent } from 'react';
-import { useSelector, useDispatch } from 'dva';
-import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined'
-import SearchOutlined from '@ant-design/icons/SearchOutlined'
+import { useSelector, useDispatch, useLocation } from 'dva';
+import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
+import SearchOutlined from '@ant-design/icons/SearchOutlined';
+import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Table from 'antd/lib/table';
 import { Key } from 'antd/es/table/interface';
 import message from 'antd/lib/message';
+import Modal from 'antd/lib/modal';
 import { useSubscribe } from '@/hook';
 import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import { Organization } from '@/schema/organization';
 import { Split } from '@/component/style-tool';
+import Auth from '@/component/auth';
 import { MainBox } from '../styled/sub-layout';
 import { getColumns } from './columns';
 import { UnitNameBox } from './styled/box';
-import { UnitProp, UnitRecord } from './prop';
+import { ClearKey, UnitProp, UnitRecord } from './prop';
 
 const { fetchText } = helper.readConf()!;
 let selectPcsCode: string | undefined = undefined;
@@ -30,13 +33,20 @@ const Unit: FC<UnitProp> = () => {
         collectUnitName,
         collectUnitCode
     } = useSelector<StateTree, Organization>(state => state.organization);
+    const { search } = useLocation<{ admin: string }>();
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
     const [data, setData] = useState<UnitRecord[]>([]);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [total, setTotal] = useState<number>(0);
     const [pageIndex, setPageIndex] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
 
     const inputRef = useRef<any>(null);
+
+    useEffect(() => {
+        const sp = new URLSearchParams(search);
+        setIsAdmin(sp.get('admin') === '1');
+    }, [search]);
 
     /**
      * 查询表格数据
@@ -101,6 +111,22 @@ const Unit: FC<UnitProp> = () => {
     }, 500, { leading: true, trailing: false });
 
     /**
+     * 清除Click
+     */
+    const onClearClick = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        Modal.confirm({
+            onOk() {
+                dispatch({ type: 'organization/clear', payload: ClearKey.Collect });
+            },
+            okText: '是',
+            cancelText: '否',
+            title: '清除',
+            content: '确认清除当前单位设置？'
+        });
+    };
+
+    /**
      * 翻页Change
      * @param pageIndex 当前页
      */
@@ -132,7 +158,7 @@ const Unit: FC<UnitProp> = () => {
             </div>
             <div className="btn-box">
                 <label>单位名称：</label>
-                <Input ref={inputRef} placeholder="请输入单位名称查询" />
+                <Input ref={inputRef} style={{ width: '160px' }} placeholder="请输入单位名称查询" />
                 <Button onClick={onSearchClick} type="primary">
                     <SearchOutlined />
                     <span>查询</span>
@@ -141,6 +167,12 @@ const Unit: FC<UnitProp> = () => {
                     <CheckCircleOutlined />
                     <span>保存</span>
                 </Button>
+                <Auth deny={!isAdmin}>
+                    <Button onClick={onClearClick} type="primary" danger={true}>
+                        <DeleteOutlined />
+                        <span>清除</span>
+                    </Button>
+                </Auth>
             </div>
         </UnitNameBox>
         <Split />

@@ -22,6 +22,7 @@ import NedbImportModal, { importPrevNedb } from '../nedb-import-modal';
 import { UnorderList } from '../style-tool/list';
 
 const cwd = process.cwd();
+const { useBcp } = helper.readConf()!;
 
 /**
  * 过滤-字符
@@ -155,6 +156,16 @@ const BoardPanel: FC<{}> = ({ children }) => {
                 break;
             case BoardMenuAction.NedbImport:
                 setNedbImportModalVisbile(true);
+                break;
+            case BoardMenuAction.UnitClear:
+                useBcp
+                    ?
+                    dispatch(routerRedux.push('/settings?admin=1'))
+                    :
+                    dispatch(routerRedux.push('/settings/self-unit?admin=1'));
+                break;
+            case BoardMenuAction.DstUnitClear:
+                dispatch(routerRedux.push('/settings/dst-unit?admin=1'))
                 break;
             default:
                 break;

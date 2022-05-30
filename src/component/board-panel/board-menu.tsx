@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faEraser, faPenRuler, faWrench, faBell, faBellSlash,
+    faEraser, faBuilding, faBuildingColumns, faPenRuler, faWrench, faBell, faBellSlash,
     faMobileScreenButton, faArrowsRotate, faCloud, faRecycle
 } from '@fortawesome/free-solid-svg-icons';
 import Popover from 'antd/lib/popover';
@@ -26,7 +26,9 @@ enum BoardMenuAction {
     FetchLog,
     ParseLog,
     CloudLog,
-    NedbImport
+    NedbImport,
+    UnitClear,
+    DstUnitClear
 }
 
 const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
@@ -53,6 +55,14 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
         <li onClick={() => onItemClick(BoardMenuAction.HistoryClear)}>
             <FontAwesomeIcon icon={faEraser} />
             <span>表单记录清除</span>
+        </li>
+        <li onClick={() => onItemClick(BoardMenuAction.UnitClear)}>
+            <FontAwesomeIcon icon={faBuilding} />
+            <span>{`${fetchText ?? '采集'}单位管理`}</span>
+        </li>
+        <li onClick={() => onItemClick(BoardMenuAction.DstUnitClear)}>
+            <FontAwesomeIcon icon={faBuildingColumns} />
+            <span>目的检验单位管理</span>
         </li>
         <li onClick={() => onItemClick(BoardMenuAction.NedbImport)}>
             <FontAwesomeIcon icon={faRecycle} />

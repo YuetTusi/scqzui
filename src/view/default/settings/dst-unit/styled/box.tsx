@@ -4,20 +4,15 @@ const UnitNameBox = styled.div`
 
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
 
     .info-bar{
-        flex:1;
+        padding-right: 1rem;
         em{
-            display: block;
-            width:550px;
             color:${(props) => props.theme['primary-color']};
             font-weight: bold;
             font-style: normal;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
     }
 

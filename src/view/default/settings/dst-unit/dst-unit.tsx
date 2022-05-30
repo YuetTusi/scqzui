@@ -1,12 +1,14 @@
 import debounce from 'lodash/debounce';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import React, { FC, useEffect, useRef, useState, MouseEvent } from 'react';
-import { useDispatch, useSelector } from 'dva';
-import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined'
-import SearchOutlined from '@ant-design/icons/SearchOutlined'
+import { useDispatch, useSelector, useLocation } from 'dva';
+import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
+import SearchOutlined from '@ant-design/icons/SearchOutlined';
+import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Table from 'antd/lib/table';
+import Modal from 'antd/lib/modal';
 import { Key } from 'antd/es/table/interface';
 import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
@@ -17,6 +19,8 @@ import { MainBox } from '../styled/sub-layout';
 import { getColumns } from './columns';
 import { UnitNameBox } from './styled/box';
 import { UnitProp, UnitRecord } from './prop';
+import { ClearKey } from '../unit';
+import Auth from '@/component/auth';
 
 let selectPcsCode: string | undefined = undefined;
 let selectPcsName: string | undefined = undefined;
@@ -31,13 +35,20 @@ const DstUnit: FC<UnitProp> = () => {
         dstUnitName,
         dstUnitCode
     } = useSelector<StateTree, Organization>(state => state.organization);
+    const { search } = useLocation<{ admin: string }>();
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [data, setData] = useState<UnitRecord[]>([]);
     const [total, setTotal] = useState<number>(0);
     const [pageIndex, setPageIndex] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
 
     const inputRef = useRef<any>(null);
+
+    useEffect(() => {
+        const sp = new URLSearchParams(search);
+        setIsAdmin(sp.get('admin') === '1');
+    }, [search]);
 
     /**
      * 查询表格数据
@@ -113,6 +124,22 @@ const DstUnit: FC<UnitProp> = () => {
     }, 500, { leading: true, trailing: false })
 
     /**
+     * 清除Click
+     */
+    const onClearClick = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        Modal.confirm({
+            onOk() {
+                dispatch({ type: 'organization/clear', payload: ClearKey.Dst });
+            },
+            okText: '是',
+            cancelText: '否',
+            title: '清除',
+            content: '确认清除当前单位设置？'
+        });
+    };
+
+    /**
      * 翻页Change
      * @param pageIndex 当前页
      */
@@ -135,7 +162,7 @@ const DstUnit: FC<UnitProp> = () => {
             </div>
             <div className="btn-box">
                 <label>单位名称：</label>
-                <Input ref={inputRef} placeholder="请输入单位名称查询" />
+                <Input ref={inputRef} style={{ width: '160px' }} placeholder="请输入单位名称查询" />
                 <Button onClick={onSearchClick} type="primary">
                     <SearchOutlined />
                     <span>查询</span>
@@ -144,6 +171,12 @@ const DstUnit: FC<UnitProp> = () => {
                     <CheckCircleOutlined />
                     <span>保存</span>
                 </Button>
+                <Auth deny={!isAdmin}>
+                    <Button onClick={onClearClick} type="primary" danger={true}>
+                        <DeleteOutlined />
+                        <span>清除</span>
+                    </Button>
+                </Auth>
             </div>
         </UnitNameBox>
         <Split />
@@ -167,7 +200,6 @@ const DstUnit: FC<UnitProp> = () => {
                 onChange: rowSelectChange,
                 selectedRowKeys: selectedRowKeys
             }}>
-
         </Table>
     </MainBox>;
 }
