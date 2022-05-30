@@ -15,7 +15,7 @@ import EventDescModal from './event-desc-modal';
 import CheckingList from './checking-list';
 import RecordList from './record-list';
 
-const { caseText, devText } = helper.readConf()!;
+const { fetchText, caseText, devText } = helper.readConf()!;
 
 /**
  * 快速点验
@@ -90,12 +90,12 @@ const Quick: FC<{}> = () => {
         dispatch({ type: 'editQuickEventModal/setVisible', payload: true });
     };
 
-    return <SubLayout title="快速点验">
+    return <SubLayout title={`快速${fetchText ?? '点验'}`}>
         <QuickBox>
             <div className="search-bar">
                 <Button onClick={onAddClick} type="primary">
                     <PlusCircleOutlined />
-                    <span>添加点验</span>
+                    <span>添加{fetchText ?? '点验'}</span>
                 </Button>
             </div>
             <Split />
@@ -106,7 +106,7 @@ const Quick: FC<{}> = () => {
             <TableBox>
                 <div className="case-list">
                     <div className="title-bar">
-                        {`点验${caseText ?? '案件'}`}
+                        {`${fetchText ?? '点验'}${caseText ?? '案件'}`}
                     </div>
                     <div>
                         <EventList

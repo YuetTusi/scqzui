@@ -295,7 +295,7 @@ export function getColumns(
             key: 'mobileHolder'
         },
         {
-            title: '点验时间',
+            title: `${fetchText ?? '点验'}时间`,
             dataIndex: 'createdAt',
             key: 'createdAt',
             align: 'center',

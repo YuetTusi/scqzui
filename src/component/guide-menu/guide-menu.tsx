@@ -56,7 +56,7 @@ const renderColorButtons = (manu: Manufaturer | null) => {
                     to="/quick"
                     icon={<FontAwesomeIcon icon={faBolt} />}
                     color="#e1b12c">
-                    快速点验
+                    快速{fetchText ?? '点验'}
                 </ColorButton>
             </div>
         ]);
@@ -147,9 +147,8 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                     to="/collect"
                     src={envidence}
                     description={<ul>
-                        <li>1秒极速提取N部设备</li>
-                        <li>还没来得及插入USB，数据已提取</li>
-                        <li>快来成为快如闪电般的男人</li>
+                        <li>通过连接USB或WIFI方式实现多路全数据快速采集、</li>
+                        <li>N路同时解析、数据深度恢复</li>
                     </ul>}>
                     {`${devText ?? '设备'}${fetchText ?? '取证'}`}
                 </ImageButton>
@@ -161,7 +160,8 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                     to="/tool"
                     src={tool}
                     description={<ul>
-                        <li>大佬提供的多种方便工具</li>
+                        <li>加载第三方备份/镜像文件解析、支付宝账单扫码</li>
+                        <li>云取、应用所破解等多款工具</li>
                     </ul>}>
                     工具箱
                 </ImageButton>

@@ -22,7 +22,7 @@ import NedbImportModal, { importPrevNedb } from '../nedb-import-modal';
 import { UnorderList } from '../style-tool/list';
 
 const cwd = process.cwd();
-const { useBcp } = helper.readConf()!;
+const { fetchText, useBcp } = helper.readConf()!;
 
 /**
  * 过滤-字符
@@ -106,8 +106,8 @@ const BoardPanel: FC<{}> = ({ children }) => {
                     content: <UnorderList>
                         <li>案件<em>{caseCount}</em>条</li>
                         <li>案件设备<em>{eventCount}</em>条</li>
-                        <li>快速点验<em>{deviceCount}</em>条</li>
-                        <li>快速点验设备<em>{recordCount}</em>条</li>
+                        <li>快速{fetchText ?? '点验'}<em>{deviceCount}</em>条</li>
+                        <li>快速{fetchText ?? '点验'}设备<em>{recordCount}</em>条</li>
                     </UnorderList>,
                     icon: <CheckCircleOutlined />,
                     okButtonProps: { disabled: false }

@@ -9,6 +9,8 @@ import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
 import { QuickRecord } from '@/schema/quick-record';
 
+const { fetchText } = helper.readConf()!;
+
 export default {
 
     /**
@@ -63,7 +65,7 @@ export default {
             if (next === null) {
                 modal.update({
                     title: '删除失败',
-                    content: '点验数据有误，请重试',
+                    content: `${fetchText ?? '点验'}数据有误，请重试`,
                     okButtonProps: {
                         disabled: false
                     }

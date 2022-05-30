@@ -173,7 +173,7 @@ const RecordInfo: FC<RecordInfoProp> = ({ data, onButtonClick }) => {
                         <span>{data.serial}</span>
                     </li>
                     <li>
-                        <label htmlFor="span">点验时间</label>
+                        <label htmlFor="span">{`${fetchText ?? '点验'}时间`}</label>
                         <span>{dayjs(data.createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
                     </li>
                 </ul>

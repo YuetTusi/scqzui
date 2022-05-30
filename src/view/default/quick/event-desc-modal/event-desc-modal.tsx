@@ -20,7 +20,7 @@ import { QuickEvent } from '@/schema/quick-event';
 import { EventDescBox, HelpBox, HorBox } from './styled/style';
 import { EventDescModalProp } from './prop';
 
-const { caseText } = helper.readConf()!;
+const { caseText, fetchText } = helper.readConf()!;
 const { Item } = Descriptions;
 /**
  * 点验案件详情框
@@ -117,7 +117,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
         maskClosable={false}
         destroyOnClose={false}
         width={1000}
-        title="快速点验"
+        title={`快速${fetchText ?? '点验'}`}
     >
         <EventDescBox>
             <HelpBox>
@@ -125,7 +125,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
                     <label className="step-label">步骤1</label>
                     <div className="desc">
                         使用手机连接到
-                        <div><strong>{ip === '192.168.191.1' ? 'WiFi：快速点验密码8个1  密码：11111111' : 'WiFi：abco_apbc5G  密码：11111111'}</strong></div>
+                        <div><strong>{ip === '192.168.191.1' ? `WiFi：快速${fetchText ?? '点验'}密码8个1  密码：11111111` : 'WiFi：abco_apbc5G  密码：11111111'}</strong></div>
                     </div>
                 </div>
                 <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
@@ -152,7 +152,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
                 <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
                 <div className="step">
                     <label className="step-label">步骤4</label>
-                    <div className="desc">等待手机点验完成后，可卸载「采集助手」</div>
+                    <div className="desc">等待手机{fetchText ?? '点验'}完成后，可卸载「采集助手」</div>
                 </div>
             </HelpBox>
             <div className="ibox">

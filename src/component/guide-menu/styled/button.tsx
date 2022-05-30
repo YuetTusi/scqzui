@@ -99,14 +99,17 @@ const Image = styled.div`
             text-overflow: hidden;
 
             &>ul{
+                width: 100%;
                 margin:0;
-                padding:0;
+                padding:20px;
             }
             &>ul>li{
                 margin:0;
                 padding:5px 0;
                 font-size: 1.4rem;
                 font-weight: lighter;
+                list-style-type: none;
+                /* white-space: normal; */
             }
 
             &.open{

@@ -203,7 +203,7 @@ export default {
         ipcRenderer.on('check-parse', async (event: IpcRendererEvent, args: Record<string, any>) => {
 
             ipcRenderer.send('show-notice', {
-                message: `「${args.mobileName ?? '未知设备'}」${fetchText ?? '取证'}结束，开始${parseText ?? '解析'}点验数据`
+                message: `「${args.mobileName ?? '未知设备'}」${fetchText ?? '取证'}结束，开始${parseText ?? '解析'}${fetchText ?? '点验'}数据`
             });
 
             const appJson = await helper.readAppJson();

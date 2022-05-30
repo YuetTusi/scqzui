@@ -7,7 +7,7 @@ import { helper } from "@/utils/helper";
 import { QuickEvent } from "@/schema/quick-event";
 import { NowrapText } from './styled/style';
 
-const { caseText } = helper.readConf()!;
+const { caseText, fetchText } = helper.readConf()!;
 
 const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEvent> => {
 
@@ -27,7 +27,7 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                         detailHandle(record);
                     }}
                     className="primary-color"
-                    title="扫码点验" />
+                    title={`扫码${fetchText ?? '点验'}`} />
             }
         },
         {
@@ -72,7 +72,7 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                         onOk() {
                             dispatch({ type: 'quickEventList/del', payload: value });
                         },
-                        title: `删除点验${caseText ?? '案件'}`,
+                        title: `删除${caseText ?? '案件'}`,
                         content: `确认删除「${name}」？`,
                         okText: '是',
                         cancelText: '否',

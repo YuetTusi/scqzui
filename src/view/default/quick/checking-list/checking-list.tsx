@@ -9,7 +9,7 @@ import ParseDetail from '@/schema/parse-detail';
 import { QuickRecord } from '@/schema/quick-record';
 import { ListBox } from './styled/style';
 
-const { devText } = helper.readConf()!;
+const { devText, fetchText } = helper.readConf()!;
 
 /**
  * 正在解析的设备列表
@@ -140,7 +140,7 @@ const CheckingList: FC<{}> = () => {
         } else {
             return <div className="d-empty">
                 <Empty
-                    description={`暂无点验${devText ?? '设备'}`}
+                    description={`暂无${fetchText ?? '点验'}${devText ?? '设备'}`}
                     image={Empty.PRESENTED_IMAGE_SIMPLE} />
             </div>
         }
@@ -148,7 +148,7 @@ const CheckingList: FC<{}> = () => {
 
     return <ListBox>
         <div className="title">
-            点验列表
+            {fetchText ?? '点验'}列表
         </div>
         <div ref={devRef} className="dev">
             {renderList()}
