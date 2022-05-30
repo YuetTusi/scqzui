@@ -67,6 +67,8 @@ if (!existManuJson) {
     app.exit(0);
 }
 if (helper.useBlackListRender()) {
+    app.disableHardwareAcceleration();
+    app.commandLine.appendArgument('--disable-gpu');
     app.commandLine.appendArgument('--ignore-gpu-blacklist');
     log.warn('Use black list 忽略chromium显卡黑名单渲染');
 }

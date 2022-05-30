@@ -54,12 +54,12 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
             <FontAwesomeIcon icon={faEraser} />
             <span>表单记录清除</span>
         </li>
-        {/* <li onClick={() => onItemClick(BoardMenuAction.NedbImport)}>
+        <li onClick={() => onItemClick(BoardMenuAction.NedbImport)}>
             <FontAwesomeIcon icon={faRecycle} />
             <span>旧版本数据导入</span>
-        </li> */}
+        </li>
         <Auth deny={!isDev}>
-            {/* <li onClick={() => onItemClick(BoardMenuAction.FetchLog)}>
+            <li onClick={() => onItemClick(BoardMenuAction.FetchLog)}>
                 <FontAwesomeIcon icon={faMobileScreenButton} />
                 <span>{`${fetchText ?? '取证'}日志管理`}</span>
             </li>
@@ -75,7 +75,7 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
                 onClick={() => onItemClick(BoardMenuAction.Manufaturer)}>
                 <FontAwesomeIcon icon={faPenRuler} />
                 <span>软硬件信息配置</span>
-            </li> */}
+            </li>
             <li onClick={() => {
                 localStorage.setItem(LocalStoreKey.SocketWarning, isWarning ? '0' : '1');
                 setIsWarning(!isWarning);
