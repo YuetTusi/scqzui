@@ -548,17 +548,16 @@ const ServerCloudModal: FC<Prop> = ({
                                             </Item>
                                         </Col>
                                         <Col span={8}>
-                                            <Tooltip title="不要勾选，特殊需求用">
-                                                <Item
-                                                    initialValue={getIsAliveFromStorage()}
-                                                    name="isAlive"
-                                                    valuePropName="checked"
-                                                    label="是否保活"
-                                                    labelCol={{ span: 12 }}
-                                                    wrapperCol={{ span: 6 }}>
-                                                    <Checkbox />
-                                                </Item>
-                                            </Tooltip>
+                                            <Item
+                                                initialValue={getIsAliveFromStorage()}
+                                                name="isAlive"
+                                                valuePropName="checked"
+                                                label="是否保活"
+                                                tooltip="不要勾选，特殊需求用"
+                                                labelCol={{ span: 12 }}
+                                                wrapperCol={{ span: 6 }}>
+                                                <Checkbox />
+                                            </Item>
                                         </Col>
                                     </Row>
                                 </Panel>

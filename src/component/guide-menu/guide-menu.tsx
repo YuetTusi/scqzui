@@ -113,7 +113,7 @@ const renderColorButtons = (manu: Manufaturer | null) => {
                                 </p>
                                 <p>
                                     <label>当前版本</label>
-                                    <span>{manu?.materials_software_version ?? ''}</span>
+                                    <span>{(manu?.materials_software_version ?? '').replace(/-/g, '.')}</span>
                                 </p>
                             </VersionBox>,
                             centered: true,
