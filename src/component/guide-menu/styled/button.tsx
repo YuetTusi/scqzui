@@ -64,6 +64,7 @@ const Color = styled.div<{ color: string }>`
                 padding:5px 0;
                 font-size: 1.4rem;
                 font-weight: lighter;
+                list-style-type: square;
             }
 
             &.open{
@@ -142,7 +143,7 @@ const Image = styled.div`
                 padding:5px 0;
                 font-size: 1.4rem;
                 font-weight: lighter;
-                /* white-space: normal; */
+                list-style-type: square;
             }
 
             &.open{

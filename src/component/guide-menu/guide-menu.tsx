@@ -58,8 +58,8 @@ const renderColorButtons = (manu: Manufaturer | null) => {
                     description={
                         <ul>
                             <li>手机连接WiFi，通过扫码方式采集</li>
-                            <li>仅采集短信，电话本</li>
-                            <li>通话记录，系统日志</li>
+                            <li>仅采集短信、电话本</li>
+                            <li>通话记录、系统日志</li>
                             <li>应用安装列表等信息</li>
                         </ul>
                     }
