@@ -57,8 +57,10 @@ const renderColorButtons = (manu: Manufaturer | null) => {
                     icon={<FontAwesomeIcon icon={faBolt} />}
                     description={
                         <ul>
-                            <li>手机连接WiFi，通过扫码方式仅采集短信、电话本、</li>
-                            <li>通话记录、系统日志、应用安装列表等信息</li>
+                            <li>手机连接WiFi，通过扫码方式采集</li>
+                            <li>仅采集短信，电话本</li>
+                            <li>通话记录，系统日志</li>
+                            <li>应用安装列表等信息</li>
                         </ul>
                     }
                     color="#e1b12c">
@@ -153,8 +155,10 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                     to="/collect"
                     src={envidence}
                     description={<ul>
-                        <li>通过连接USB或WiFi方式实现多路全数据快速采集、</li>
-                        <li>N路同时解析、数据深度恢复</li>
+                        <li>通过连接USB或WiFi方式</li>
+                        <li>实现多路全数据快速采集</li>
+                        <li>N路同时解析</li>
+                        <li>数据深度恢复</li>
                     </ul>}>
                     {`${devText ?? '设备'}${fetchText ?? '取证'}`}
                 </ImageButton>
@@ -166,7 +170,8 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                     to="/tool"
                     src={tool}
                     description={<ul>
-                        <li>加载第三方备份/镜像文件解析、支付宝账单扫码</li>
+                        <li>加载第三方备份/镜像文件解析</li>
+                        <li>支付宝账单扫码</li>
                         <li>云取、应用所破解等多款工具</li>
                     </ul>}>
                     工具箱
