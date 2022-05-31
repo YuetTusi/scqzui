@@ -18,7 +18,7 @@ import { AllowCaseName } from '@/utils/regex';
 import { QuickEvent } from '@/schema/quick-event';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
 
-const { caseText } = helper.readConf()!;
+const { caseText, fetchText } = helper.readConf()!;
 const { Item, useForm } = Form;
 const fromLayout = {
     labelCol: { span: 5 },
@@ -151,7 +151,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         ]}
         onCancel={onCancel}
         visible={visible}
-        title={helper.isNullOrUndefined(data?._id) ? `添加点验${caseText ?? '案件'}` : `编辑点验${caseText ?? '案件'}`}
+        title={helper.isNullOrUndefined(data?._id) ? `添加${fetchText ?? '点验'}${caseText ?? '案件'}` : `编辑${fetchText ?? '点验'}${caseText ?? '案件'}`}
         width={600}
         centered={true}
         maskClosable={false}
