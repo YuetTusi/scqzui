@@ -6,8 +6,8 @@ import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
 import { SaveForm } from './save-form';
-import { AlipayOrderModalProp } from './prop';
 import { TipFieldSet } from './styled/style';
+import { AlipayOrderModalProp } from './prop';
 
 const { useForm } = Form;
 

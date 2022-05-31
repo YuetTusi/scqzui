@@ -16,8 +16,6 @@ import { Split } from '@/component/style-tool';
 import { CaseBox } from './styled/styled';
 import AddForm from './add-form';
 import { CaseAddProp, FormValue } from './prop';
-// const { max } = helper.readConf()!;
-// const { Option } = Select;
 
 const { caseText } = helper.readConf()!;
 const { useForm } = Form;

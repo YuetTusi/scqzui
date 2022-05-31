@@ -31,7 +31,7 @@ import { FormProp } from './prop';
 const { useBcp, useAi, caseText, parseText, fetchText } = helper.readConf()!;
 
 const { Group } = Button;
-const { Item, useForm } = Form;
+const { Item } = Form;
 const formItemLayout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 18 }
@@ -97,12 +97,12 @@ const EditForm: FC<FormProp> = ({
                         rules={[
                             {
                                 required: true,
-                                message: '请选择存储路径'
+                                message: '请选择存储位置'
                             }
                         ]}
                         name="m_strCasePath"
-                        label="存储路径"
-                        tooltip="不可修改存储路径">
+                        label="存储位置"
+                        tooltip="不可修改存储位置">
                         <Input
                             disabled={true}
                             readOnly={true}

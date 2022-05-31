@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import SyncOutlined from '@ant-design/icons/SyncOutlined';
 import KeyOutlined from '@ant-design/icons/KeyOutlined';

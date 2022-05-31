@@ -121,15 +121,15 @@ const AddForm: FC<FormProp> = ({
                         <Item rules={[
                             {
                                 required: true,
-                                message: '请选择存储路径'
+                                message: '请选择存储位置'
                             }
                         ]}
                             name="m_strCasePath"
-                            label="存储路径">
+                            label="存储位置">
                             <Input
                                 suffix={<SelectOutlined onClick={selectDirHandle} />}
                                 readOnly={true}
-                                placeholder="请选择存储路径"
+                                placeholder="请选择存储位置"
                                 onClick={selectDirHandle}
                             />
                         </Item>
