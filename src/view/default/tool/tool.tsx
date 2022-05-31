@@ -132,7 +132,7 @@ const Tool: FC<ToolProp> = () => {
                 <div className="caption">导入第三方数据</div>
                 <Split />
                 <div className="t-row">
-                    <div onClick={() => onImportClick(ImportTypes.IOS, '导入数据（iTunes备份）')} className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.IOS, '导入数据（苹果iTunes备份）')} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faItunes} color="#ed2139" />
                         </div>
@@ -145,7 +145,7 @@ const Tool: FC<ToolProp> = () => {
                             <FontAwesomeIcon icon={faApple} />
                         </div>
                         <div className="name">
-                            苹果镜像导入
+                            苹果镜像
                         </div>
                     </div>
                     <div onClick={() => onImportClick(ImportTypes.Hisuite, '导入数据（华为备份）')} className="t-button">

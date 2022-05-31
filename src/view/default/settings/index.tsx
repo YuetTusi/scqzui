@@ -41,7 +41,7 @@ const Index: FC<{}> = () => <SettingLayout>
                     <NavLink to="/settings" exact={true} replace={true} className="hvr-sweep-to-right">
                         <div>
                             <span className="ico"><FontAwesomeIcon icon={faBuilding} /></span>
-                            <span className="name">{`${fetchText ?? '取证'}单位`}</span>
+                            <span className="name">采集单位</span>
                         </div>
                     </NavLink>
                 </li>
@@ -59,7 +59,7 @@ const Index: FC<{}> = () => <SettingLayout>
                     <NavLink to="/settings/self-unit" replace={true} className="hvr-sweep-to-right">
                         <div>
                             <span className="ico"><FontAwesomeIcon icon={faBuilding} /></span>
-                            <span className="name">{`${fetchText ?? '取证'}单位管理`}</span>
+                            <span className="name">采集单位管理</span>
                         </div>
                     </NavLink>
                 </li>
@@ -119,16 +119,16 @@ const Index: FC<{}> = () => <SettingLayout>
     <Route
         path="/settings"
         exact={true}
-        component={() => <ContentBox title={`${fetchText ?? '取证'}单位`}><Unit /></ContentBox>} />
+        component={() => <ContentBox title="采集单位"><Unit /></ContentBox>} />
     <Route
         path="/settings/unit"
-        component={() => <ContentBox title={`${fetchText ?? '取证'}单位`}><Unit /></ContentBox>} />
+        component={() => <ContentBox title="采集单位"><Unit /></ContentBox>} />
     <Route
         path="/settings/dst-unit"
         component={() => <ContentBox title="目的检验单位"><DstUnit /></ContentBox>} />
     <Route
         path="/settings/self-unit"
-        component={() => <ContentBox title={`${fetchText ?? '取证'}单位管理`}><SelfUnit /></ContentBox>} />
+        component={() => <ContentBox title="采集单位管理"><SelfUnit /></ContentBox>} />
     <Route
         path="/settings/officer"
         exact={true}

@@ -57,14 +57,14 @@ const Color = styled.div<{ color: string }>`
             text-overflow: hidden;
 
             &>ul{
-                margin:0;
+                margin:0 auto;
             }
             &>ul>li{
                 margin:0;
-                padding:5px 0;
                 font-size: 1.4rem;
                 font-weight: lighter;
                 list-style-type: square;
+                padding:5px 5px 5px 0;
             }
 
             &.open{
@@ -136,14 +136,15 @@ const Image = styled.div`
             text-overflow: hidden;
 
             &>ul{
-                margin:0;
+                margin:0 auto;
             }
             &>ul>li{
                 margin:0;
-                padding:5px 0;
+                padding:5px 5px 5px 0;
                 font-size: 1.4rem;
                 font-weight: lighter;
                 list-style-type: square;
+                list-style-position: outside;
             }
 
             &.open{

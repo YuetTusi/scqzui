@@ -44,7 +44,7 @@ import { CollectProp } from './prop';
 
 
 const { Group } = Button;
-const { useBcp, fetchText, parseText } = helper.readConf()!;
+const { useBcp, devText, fetchText, parseText } = helper.readConf()!;
 
 /**
  * 取证页
@@ -147,8 +147,8 @@ const Collect: FC<CollectProp> = ({ }) => {
             message.destroy();
             message.info({
                 content: useBcp
-                    ? `未设置${fetchText ?? '取证'}单位，请在「软件设置」→「${fetchText ?? '取证'}单位」中配置`
-                    : `未设置单位，请在「软件设置」→「${fetchText ?? '取证'}单位管理」中配置`
+                    ? `未设置采集单位，请在「软件设置」→「采集单位」中配置`
+                    : `未设置采集单位，请在「软件设置」→「采集单位管理」中配置`
             });
             return false;
         }
@@ -450,7 +450,7 @@ const Collect: FC<CollectProp> = ({ }) => {
         setCheckInputModalVisible(false);
     };
 
-    return <SubLayout title="设备取证">
+    return <SubLayout title={`${devText ?? '设备'}${fetchText ?? '取证'}`}>
         <ContentBox>
             <div className="hidden-scroll-bar" />
             <div className="button-bar">
