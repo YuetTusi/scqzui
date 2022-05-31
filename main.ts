@@ -286,7 +286,7 @@ if (!instanceLock) {
     });
 }
 
-//启动后台服务（采集，解析，云取证）
+//启动后台服务（采集，解析，云取证等）
 ipcMain.on('run-service', () => {
     helper.runProc(
         fetchProcess,
@@ -297,6 +297,12 @@ ipcMain.on('run-service', () => {
         parseProcess,
         config!.parseExe ?? 'parse.exe',
         join(appPath, '../../../', config?.parsePath ?? './parse')
+    );
+    //不论开启关闭快速点验功能，都调起服务
+    helper.runProc(
+        quickFetchProcess,
+        config?.quickFetchExe ?? 'QuickFetchServer.exe',
+        join(appPath, '../../../', config?.quickFetchPath ?? './QuickFetch')
     );
     if (config!.useServerCloud) {
         //有云取功能，调起云RPC服务
@@ -313,14 +319,6 @@ ipcMain.on('run-service', () => {
             appQueryProcess,
             config?.appQueryExe ?? 'AppQuery.exe',
             join(appPath, '../../../', config?.appQueryPath ?? './AppQuery')
-        );
-    }
-    if (config!.useQuickFetch) {
-        //有快速点验功能，调起服务
-        helper.runProc(
-            quickFetchProcess,
-            config?.quickFetchExe ?? 'QuickFetchServer.exe',
-            join(appPath, '../../../', config?.quickFetchPath ?? './QuickFetch')
         );
     }
 });

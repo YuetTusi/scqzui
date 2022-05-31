@@ -1,6 +1,6 @@
-import { readFile } from 'fs/promises';
-import path from 'path';
 import ini from 'ini';
+import { readFile } from 'fs/promises';
+import { join } from 'path';
 import React, { FC, useEffect, useState, useRef } from 'react';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined'
 import Button from 'antd/lib/button';
@@ -15,13 +15,13 @@ import logo from './images/icon.png';
 import { LogItem } from './prop';
 // import { useDispatch } from 'dva';
 
-const appRootPath = process.cwd();
+const cwd = process.cwd();
 const config = helper.readConf();
 const jsonPath =
     process.env['NODE_ENV'] === 'development'
-        ? path.join(appRootPath, './data/manufaturer.json')
-        : path.join(appRootPath, './resources/config/manufaturer.json');
-const versionPath = path.join(appRootPath, './info.dat');
+        ? join(cwd, './data/manufaturer.json')
+        : join(cwd, './resources/config/manufaturer.json');
+const versionPath = join(cwd, './info.dat');
 
 const filterString = (src: string) => src.replace(/-/g, '.');
 
@@ -71,7 +71,7 @@ const Version: FC<{}> = () => {
         if (process.env.NODE_ENV === 'development') {
             return logo;
         } else {
-            const logo = path.join(appRootPath, `./resources/config/${config?.logo}`);
+            const logo = join(cwd, `./resources/config/${config?.logo}`);
             return logo;
         }
     };
