@@ -94,3 +94,11 @@ export const HelpBox = styled.div`
         background-color: ${props => props.theme['primary-color']};
     }
 `;
+
+export const WiFiTipBox = styled.div`
+    display: inline-block;
+    min-width: 120px;
+    strong{
+        ${props => props.theme['primary-color']};
+    }
+`;

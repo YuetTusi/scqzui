@@ -17,6 +17,7 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
+import { WiFiTips } from './wifi-tips';
 import { EventDescBox, HelpBox, HorBox } from './styled/style';
 import { EventDescModalProp } from './prop';
 
@@ -41,7 +42,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
                 try {
                     const target = document.getElementById('qrcode');
                     await QRCode.toCanvas(target, `http://${ip}:9900/check/${id}`, {
-                        width: 160,
+                        width: 200,
                         margin: 2,
                         color: {
                             light: '#181d30',
@@ -116,7 +117,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
         forceRender={true}
         maskClosable={false}
         destroyOnClose={false}
-        width={1000}
+        width={1050}
         title={`快速${fetchText ?? '点验'}`}
     >
         <EventDescBox>
@@ -124,8 +125,8 @@ const EventDescModal: FC<EventDescModalProp> = ({
                 <div className="step">
                     <label className="step-label">步骤1</label>
                     <div className="desc">
-                        使用手机连接到
-                        <div><strong>{ip === '192.168.191.1' ? `WiFi：快速${fetchText ?? '点验'}密码8个1  密码：11111111` : 'WiFi：abco_apbc5G  密码：11111111'}</strong></div>
+                        请使用手机连接到
+                        <div><WiFiTips ip={ip} /></div>
                     </div>
                 </div>
                 <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
@@ -133,14 +134,14 @@ const EventDescModal: FC<EventDescModalProp> = ({
                     <label className="step-label">步骤2</label>
                     <HorBox>
                         <div className="desc">
-                            <div>使用手机浏览器扫描右侧二维码，下载APP安装后打开「采集助手」</div>
+                            <div>使用手机浏览器<strong>扫描右侧二维码</strong>，下载APP安装后打开「<strong>采集助手</strong>」</div>
                         </div>
                         <Spin
                             spinning={scanned}
                             indicator={<CheckCircleFilled style={{ color: '#52c41a' }} />}
                             tip={<span style={{ color: '#52c41a' }}>扫码成功</span>}
                         >
-                            <canvas width="160" height="160" id="qrcode" />
+                            <canvas width="200" height="200" id="qrcode" />
                         </Spin>
                     </HorBox>
                 </div>
@@ -152,7 +153,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
                 <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
                 <div className="step">
                     <label className="step-label">步骤4</label>
-                    <div className="desc">等待手机{fetchText ?? '点验'}完成后，可卸载「采集助手」</div>
+                    <div className="desc">等待手机{fetchText ?? '点验'}完成后，可卸载「<strong>采集助手</strong>」</div>
                 </div>
             </HelpBox>
             <div className="ibox">
