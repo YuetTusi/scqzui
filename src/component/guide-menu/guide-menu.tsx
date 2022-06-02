@@ -16,7 +16,7 @@ import { MenuPanel, VersionBox } from './styled/menu-panel';
 import ColorButton from './color-button';
 import ImageButton from './image-button';
 import { GuideMenuProp } from './prop';
-import envidence from './image/3.jpg';
+import envidence from './image/1.jpg';
 import tool from './image/2.jpg';
 import { useManufacturer } from '@/hook';
 

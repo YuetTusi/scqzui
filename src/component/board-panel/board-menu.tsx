@@ -68,7 +68,7 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
             <FontAwesomeIcon icon={faRecycle} />
             <span>旧版本数据导入</span>
         </li>
-        {/* <Auth deny={!isDev}>
+        <Auth deny={!isDev}>
             <li onClick={() => onItemClick(BoardMenuAction.FetchLog)}>
                 <FontAwesomeIcon icon={faMobileScreenButton} />
                 <span>{`${fetchText ?? '取证'}日志管理`}</span>
@@ -98,7 +98,7 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
                 <FontAwesomeIcon icon={faWrench} />
                 <span>打开开发者工具</span>
             </li>
-        </Auth> */}
+        </Auth>
     </MenuBox>
 }
 
