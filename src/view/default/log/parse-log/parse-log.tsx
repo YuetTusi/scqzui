@@ -10,6 +10,7 @@ import LogTable from './log-table';
 import { SearchForm } from './search-form';
 import DelAskModal from '../del-ask-modal';
 import { FormValue, ParseLogProp } from './prop';
+import { ScrollBox } from './styled/style';
 
 const { useForm } = Form;
 
@@ -83,7 +84,9 @@ const ParseLog: FC<ParseLogProp> = () => {
             onDelHandle={() => setDelAskModalVisible(true)}
             onClearHandle={onClearHandle} />
         <Split />
-        <LogTable formRef={formRef} />
+        <ScrollBox>
+            <LogTable formRef={formRef} />
+        </ScrollBox>
         <DelAskModal
             visible={delAskModalVisible}
             okHandle={delHandle}

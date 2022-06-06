@@ -7,3 +7,14 @@ export const InnerAppTableBox = styled.div`
         margin: 0 !important;
     }
 `;
+
+export const ScrollBox = styled.div`
+
+    box-sizing: border-box;
+    position: absolute;
+    top:63px;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    overflow-y: auto;
+`;
