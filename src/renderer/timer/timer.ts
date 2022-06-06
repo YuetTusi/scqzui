@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import 'dayjs/locale/zh-cn';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { helper } from '@/utils/helper';
 
 dayjs.extend(customParseFormat);
@@ -14,7 +14,7 @@ for (let i = 0; i < max; i++) {
     list.push('00:00:00');
 }
 
-ipcRenderer.on('time', (event, usb, isStart) => {
+ipcRenderer.on('time', (event: IpcRendererEvent, usb: number, isStart: boolean) => {
     if (isStart) {
         if (timerMap.get(`timer_${usb}`) === undefined) {
             timerMap.set(

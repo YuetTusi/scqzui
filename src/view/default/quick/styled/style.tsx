@@ -18,6 +18,10 @@ export const QuickBox = styled.div`
 		flex-direction: row;
 		justify-content: flex-end;
 		padding: 10px 10px 0 10px;
+
+        .ant-btn{
+            margin-left:16px;
+        }
 	}
 `;
 
