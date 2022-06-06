@@ -55,6 +55,7 @@ const Color = styled.div<{ color: string }>`
             white-space: nowrap;
             overflow: hidden;
             text-overflow: hidden;
+            border-radius: ${props => props.theme['border-radius-base']};
 
             &>ul{
                 margin:0 auto;

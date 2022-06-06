@@ -18,7 +18,7 @@ import ImageButton from './image-button';
 import { GuideMenuProp } from './prop';
 import envidence from './image/1.jpg';
 import tool from './image/2.jpg';
-import { useManufacturer } from '@/hook';
+import { useAppSerial, useManufacturer } from '@/hook';
 
 const {
     useFetch,
@@ -34,8 +34,10 @@ const {
 
 /**
  * 渲染色块按钮
+ * @param {Manufaturer|null} manufaturer.json
+ * @param {string} serial 软件序列号
  */
-const renderColorButtons = (manu: Manufaturer | null) => {
+const renderColorButtons = (manu: Manufaturer | null, serial: string) => {
     let buttons: JSX.Element[] = [];
     if (useFetch || useServerCloud) {
         buttons = buttons.concat([
@@ -117,7 +119,7 @@ const renderColorButtons = (manu: Manufaturer | null) => {
                                 </p>
                                 <p>
                                     <label>序列号</label>
-                                    <span>{manu?.materials_serial ?? ''}</span>
+                                    <span>{serial}</span>
                                 </p>
                                 <p>
                                     <label>当前版本</label>
@@ -125,6 +127,7 @@ const renderColorButtons = (manu: Manufaturer | null) => {
                                 </p>
                             </VersionBox>,
                             centered: true,
+                            width: 500,
                             title: '版本信息',
                             okText: '确定'
                         });
@@ -144,8 +147,9 @@ const renderColorButtons = (manu: Manufaturer | null) => {
  */
 const GuideMenu: FC<GuideMenuProp> = () => {
 
+    const serial = useAppSerial();
     const manu = useManufacturer();
-    const buttons = renderColorButtons(manu);
+    const buttons = renderColorButtons(manu, serial);
 
     return <MenuPanel>
         {buttons.slice(0, 2)}
@@ -172,7 +176,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                     description={<ul>
                         <li>加载第三方备份/镜像文件解析</li>
                         <li>支付宝账单扫码</li>
-                        <li>云取、应用所破解等多款工具</li>
+                        <li>云取、应用锁破解等多款工具</li>
                     </ul>}>
                     工具箱
                 </ImageButton>
