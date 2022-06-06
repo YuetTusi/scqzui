@@ -42,10 +42,13 @@ const getBcpNo = (no1: string, no2: string, no3: string): string | undefined => 
     }
 };
 
+/**
+ * 生成BCP
+ */
 const Bcp: FC<BcpProp> = () => {
 
     const dispatch = useDispatch();
-    const { cid, did } = useParams<{ cid: string, did: string }>();
+    const { cid, did } = useParams<{ cid: string, did: string }>(); //案件id, 设备id
     const { search } = useLocation<{ cp: string, dp: string }>();
     const { bcpHistory } = useSelector<StateTree, BcpHistoryState>(state => state.bcpHistory);
     const [formRef] = useForm<FormValue>();

@@ -9,8 +9,8 @@ import { MainBox } from '../styled/sub-layout';
 import LogTable from './log-table';
 import { SearchForm } from './search-form';
 import DelAskModal from '../del-ask-modal';
-import { FormValue, ParseLogProp } from './prop';
 import { ScrollBox } from './styled/style';
+import { FormValue, ParseLogProp } from './prop';
 
 const { useForm } = Form;
 

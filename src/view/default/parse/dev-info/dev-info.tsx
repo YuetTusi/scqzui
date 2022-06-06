@@ -18,7 +18,7 @@ import { InfoBox } from './styled/style';
 import { ClickType, DevInfoProp } from './prop';
 
 const { Group } = Button;
-const { useBcp, useTraceLogin, devText, fetchText, parseText } = helper.readConf()!;
+const { useBcp, useTraceLogin, caseText, devText, fetchText, parseText } = helper.readConf()!;
 
 /**
  * 功能按钮禁用状态
@@ -185,7 +185,7 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
             <div className="desc">
                 <ul>
                     <li>
-                        <label htmlFor="span">所属案件</label>
+                        <label htmlFor="span">{caseText ?? '案件'}</label>
                         <span>{caseData?.m_strCaseName === undefined ? '' : caseData.m_strCaseName.split('_')[0]}</span>
                     </li>
                     <li>

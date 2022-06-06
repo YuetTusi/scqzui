@@ -41,6 +41,11 @@ if (process.env['NODE_ENV'] === 'development') {
     saveFolder = join(cwd, 'resources/keywords');
 }
 
+/**
+ * 关键词碰撞设置
+ * # 默认模版目录中内置了一些关键词Excel
+ * # 用户若想新加关键词可新键分类，并开启验证开关
+ */
 const Keywords: FC<KeywordsProp> = () => {
 
     const [loading, setLoading] = useState<boolean>(false);

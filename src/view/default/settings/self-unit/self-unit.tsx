@@ -14,16 +14,16 @@ import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { SelfUnitState } from '@/model/default/self-unit';
 import { helper } from '@/utils/helper';
+import Auth from '@/component/auth';
 import { Split } from '@/component/style-tool';
 import { Organization } from '@/schema/organization';
 import { SelfUnit as SelfUnitEntity } from '@/schema/self-unit';
 import { BarBox } from './styled/style';
 import { MainBox } from '../styled/sub-layout';
 import EditUnitModal from './edit-unit-modal';
+import { ClearKey } from '../unit';
 import { getColumns } from './column';
 import { SelfUnitProp } from './prop';
-import Auth from '@/component/auth';
-import { ClearKey } from '../unit';
 
 const { fetchText } = helper.readConf()!;
 
@@ -59,7 +59,7 @@ const SelfUnit: FC<SelfUnitProp> = () => {
 
     /**
      * 查询
-     * @param pageIndex 当页页
+     * @param pageIndex 当前页
      * @param pageSize 页尺寸
      */
     const query = (condition: Record<string, any>, pageIndex: number, pageSize: number = helper.PAGE_SIZE) =>

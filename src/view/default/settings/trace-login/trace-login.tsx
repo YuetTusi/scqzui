@@ -39,6 +39,9 @@ const getLoginState = (state: LoginState) => {
     }
 };
 
+/**
+ * 云点验查询登录
+ */
 const TraceLogin: FC<TraceLoginProp> = () => {
 
     const dispatch = useDispatch();
