@@ -186,12 +186,6 @@ const CaseData: FC<{}> = ({ }) => {
                             <ImportOutlined />
                             <span>{`导入${caseText ?? '案件'}`}</span>
                         </Button>
-                        <Button
-                            onClick={() => selectCaseOrDeviceHandle(false)}
-                            type="primary">
-                            <ImportOutlined />
-                            <span>导入检材</span>
-                        </Button>
                     </Group>
                     <Group>
                         <Button

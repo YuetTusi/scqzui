@@ -51,7 +51,7 @@ function queryUnit(keyword: string, current = 1, pageSize = 10) {
 		totalSqlParams.push(`%${keyword}%`);
 	}
 
-	pageSql += ' order by [PcsID] desc';
+	pageSql += ' order by [PcsID] asc';
 
 	pageSql += ' limit ? offset ? ';
 	pageSqlParams.push(pageSize);
