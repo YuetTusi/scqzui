@@ -1,4 +1,6 @@
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef, MouseEvent } from 'react';
+import { faAnglesRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Reading from '@/component/loading/reading';
 import BoardMenu from '@/component/guide-menu';
 import { ExtendPanel } from './styled/extend-panel';
@@ -31,13 +33,27 @@ const Guide: FC<{}> = () => {
         };
     }, []);
 
+    /**
+     * 向右滚动Click 
+     */
+    const onToRightClick = (event: MouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        if (scrollRef.current) {
+            scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+        }
+    };
+
     return <GuideBox>
         <ExtendPanel ref={scrollRef}>
             <BoardMenu>
                 Dashboard
             </BoardMenu>
         </ExtendPanel>
-        {/* <div className="right-opacity"/> */}
+        <div className="right-opacity">
+            <div onClick={onToRightClick} className="aim" title="向右滚动">
+                <FontAwesomeIcon icon={faAnglesRight} />
+            </div>
+        </div>
         <Reading />
     </GuideBox>;
 };
