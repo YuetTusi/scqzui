@@ -49,7 +49,6 @@ const delButtonDisable = (parseState?: ParseState) => {
         case ParseState.Fetching:
         case ParseState.Exception:
         case ParseState.Parsing:
-        case ParseState.Error:
             return true
         case ParseState.Error:
         case ParseState.Exception:
