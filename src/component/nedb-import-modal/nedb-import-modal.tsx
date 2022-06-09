@@ -29,9 +29,9 @@ const importPrevNedb = async (dir: string) => {
     const originCaseDb = new Db<CaseInfo>('Case', join(dir, '../'));
     const originDeviceDb = new Db<DeviceType>('Device', join(dir, '../'));
 
-    const caseDb = getDb<CaseInfo>(TableName.Case);
+    const caseDb = getDb<CaseInfo>(TableName.Cases);
     const eventDb = getDb<QuickEvent>(TableName.QuickEvent);
-    const deviceDb = getDb<DeviceType>(TableName.Device);
+    const deviceDb = getDb<DeviceType>(TableName.Devices);
     const recordDb = getDb<QuickRecord>(TableName.QuickRecord);
 
     try {

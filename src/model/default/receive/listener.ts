@@ -231,8 +231,8 @@ export function parseCurinfo({ msg }: Command<ParseDetail[]>, dispatch: Dispatch
  */
 export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<any>) {
 
-    const caseDb = getDb<CaseInfo>(TableName.Case);
-    const deviceDb = getDb<DeviceType>(TableName.Device);
+    const caseDb = getDb<CaseInfo>(TableName.Cases);
+    const deviceDb = getDb<DeviceType>(TableName.Devices);
     const { caseId, deviceId, isparseok, errmsg, category } = msg;
 
     console.log('解析结束：', JSON.stringify(msg));
@@ -328,7 +328,7 @@ export function importErr({ msg }: Command<{
     msg: string
 }>, dispatch: Dispatch) {
 
-    const db = getDb<DeviceType>(TableName.Device);
+    const db = getDb<DeviceType>(TableName.Devices);
 
     db.findOne({ _id: msg.deviceId })
         .then((data) => {

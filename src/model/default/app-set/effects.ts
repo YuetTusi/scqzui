@@ -41,7 +41,7 @@ export default {
      * @param {ParseState} payload 解析状态
      */
     *updateAllDeviceParseState({ payload }: AnyAction, { all, call, fork }: EffectsCommandMap) {
-        const deviceDb = getDb<DeviceType>(TableName.Device);
+        const deviceDb = getDb<DeviceType>(TableName.Devices);
         const recDb = getDb<QuickRecord>(TableName.QuickRecord);
         let msgBox: any = null;
         try {

@@ -11,7 +11,7 @@ import { TableName } from "@/schema/table-name";
  */
 function useDevice(deviceId: string | undefined) {
 
-    const db = getDb<DeviceType>(TableName.Device);
+    const db = getDb<DeviceType>(TableName.Devices);
     const [data, setData] = useState<DeviceType | null>(null);
 
     useEffect(() => {

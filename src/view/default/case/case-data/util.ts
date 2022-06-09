@@ -17,7 +17,7 @@ const { caseText, devText } = helper.readConf()!;
  * @param caseData 设备所属案件
  */
 async function importDevice(deviceJsonPath: string, caseData: CaseInfo) {
-    const db = getDb<DeviceType>(TableName.Device);
+    const db = getDb<DeviceType>(TableName.Devices);
     const devicePath = join(deviceJsonPath, '../');
     try {
         const deviceJson: DeviceJson = await helper.readJSONFile(deviceJsonPath);
@@ -80,7 +80,7 @@ async function readCaseJson(jsonPath: string) {
  * @param casePath 案件路径
  */
 async function getCaseByName(caseJson: CaseJson, casePath: string) {
-    const db = getDb<CaseInfo>(TableName.Case);
+    const db = getDb<CaseInfo>(TableName.Cases);
     try {
         const [current] = await db.find({ m_strCaseName: caseJson.caseName });
         if (current) {

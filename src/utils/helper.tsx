@@ -469,7 +469,7 @@ const helper = {
      * @returns {CaseInfo[]} 数组长度>0表示存在
      */
     async caseNameExist(caseName: string) {
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
         try {
             let list = await db.find({ m_strCaseName: { $regex: new RegExp(`^${caseName}(?=_)`) } });
             return list;

@@ -42,7 +42,7 @@ export default {
      * 查询案件数据是否为空
      */
     *queryEmptyCase({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
         try {
             let count: number = yield call([db, 'count'], null);
             yield put({ type: 'device/setEmptyCase', payload: count === 0 });
@@ -57,7 +57,7 @@ export default {
      * @param {DeviceType} payload.data 设备数据
      */
     *saveDeviceToCase({ payload }: AnyAction, { call }: EffectsCommandMap) {
-        const db = getDb<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Devices);
         const { data } = payload as { id: string, data: DeviceType };
         try {
             yield call([db, 'insert'], {
@@ -114,7 +114,7 @@ export default {
      */
     *updateParseState({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
         const { id, parseState } = payload;
-        const db = getDb<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Devices);
         try {
             yield call([db, 'update'], { id }, { $set: { parseState } });
             yield put({
@@ -154,8 +154,8 @@ export default {
      * @param {ParseEnd} payload 采集结束后ParseEnd数据
      */
     *saveParseLog({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
-        const deviceDb = getDb<DeviceType>(TableName.Device);
-        const caseDb = getDb<CaseInfo>(TableName.Case);
+        const deviceDb = getDb<DeviceType>(TableName.Devices);
+        const caseDb = getDb<CaseInfo>(TableName.Cases);
         const parseLogDb = getDb<ParseLogEntity>(TableName.ParseLog);
         const {
             caseId, deviceId, isparseok, parseapps, u64parsestarttime, u64parseendtime
@@ -236,7 +236,7 @@ export default {
      * @param {FetchData} payload.fetchData 为当前采集输入数据
      */
     *startFetch({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
         const { deviceData, fetchData } = payload as { deviceData: DeviceType, fetchData: FetchData };
         // *再次采集前要把采集记录清除
         ipcRenderer.send('progress-clear', deviceData.usb!);
@@ -431,7 +431,7 @@ export default {
      */
     *startParse({ payload }: AnyAction, { select, call, fork, put }: EffectsCommandMap) {
 
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
         const device: DeviceStoreState = yield select((state: StateTree) => state.device);
         const current = device.deviceList.find((item) => item?.usb == payload);
 

@@ -15,7 +15,7 @@ import { DescBox } from './styled/style';
  */
 const inputPassword = (params: DatapassParam, callback: OkHandle) => {
 	let desc: JSX.Element = <></>;
-	const db = getDb<DeviceType>(TableName.Device);
+	const db = getDb<DeviceType>(TableName.Devices);
 
 	db.findOne({ _id: params.deviceId })
 		.then(data => {

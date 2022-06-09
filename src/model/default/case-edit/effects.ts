@@ -19,7 +19,7 @@ export default {
      */
     *queryById({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
 
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
         yield put({ type: 'setLoading', payload: true });
         try {
             const data: CaseInfo = yield call([db, 'findOne'], { _id: payload });
@@ -35,7 +35,7 @@ export default {
      * @param {CaseInfo} payload 案件
      */
     *saveCase({ payload }: AnyAction, { call, fork, put }: EffectsCommandMap) {
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
         const casePath = join(payload.m_strCasePath, payload.m_strCaseName);
         yield put({ type: 'setLoading', payload: true });
         UserHistory.set(HistoryKeys.HISTORY_UNITNAME, payload.m_strCheckUnitName);//将用户输入的单位名称记录到本地存储中，下次输入可读取

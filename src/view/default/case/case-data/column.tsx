@@ -269,7 +269,7 @@ export function getDeviceColumns(
             width: 60,
             align: 'center',
             render: (record: DeviceType) => {
-                const deviceDb = getDb<DeviceType>(TableName.Device);
+                const deviceDb = getDb<DeviceType>(TableName.Devices);
                 const bcpDb = getDb<DeviceType>(TableName.CreateBcpHistory);
                 return (
                     <a

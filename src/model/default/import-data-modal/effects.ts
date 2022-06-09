@@ -32,8 +32,8 @@ export default {
         const { formValue, importType, useDefaultTemp, useDocVerify, useKeyword } = payload as {
             formValue: FormValue, importType: ImportTypes, useDefaultTemp: boolean, useKeyword: boolean, useDocVerify: boolean
         };
-        const caseDb = getDb<CaseInfo>(TableName.Case);
-        const deviceDb = getDb<DeviceType>(TableName.Device);
+        const caseDb = getDb<CaseInfo>(TableName.Cases);
+        const deviceDb = getDb<DeviceType>(TableName.Devices);
         let caseData: CaseInfo | null = null;
 
         try {

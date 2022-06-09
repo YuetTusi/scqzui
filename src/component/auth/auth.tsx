@@ -1,14 +1,23 @@
 import React, { FC } from 'react';
+import { AuthProp } from './prop';
+
+const Demotion: FC<{ widget?: JSX.Element | string }> = ({ widget }) =>
+    widget === undefined
+        ? null
+        : <>{widget}</>;
 
 /**
  * 鉴权显示
- * @param {boolean} props.deny 鉴权否决
  */
-const Auth: FC<{ deny: boolean }> = ({ deny, children }) =>
-    deny ? null : <>{children}</>;
+const Auth: FC<AuthProp> = ({ deny, demotion, children }) =>
+    deny
+        ? <Demotion widget={demotion} />
+        : <>{children}</>;
+
 
 Auth.defaultProps = {
-    deny: false
+    deny: false,
+    demotion: undefined
 }
 
 export default Auth;

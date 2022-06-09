@@ -20,13 +20,13 @@ const GuideBox = styled.div`
         &>.aim{
             cursor: pointer;
             position: absolute;
-            bottom:70px;
+            bottom:20px;
             right:0;
             font-size:2.4rem;
             opacity: 0.6;
-            width: 40px;
             text-align: center;
             pointer-events: all;
+            z-index: 10;
             &:hover{
                 opacity: 1;
             }

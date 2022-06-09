@@ -16,7 +16,7 @@ export default {
      */
     *fetchCaseData({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
         const { current, pageSize = helper.PAGE_SIZE } = payload;
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
         yield put({ type: 'setLoading', payload: true });
         try {
             const [result, total]: [CaseInfo[], number] = yield all([
@@ -35,7 +35,7 @@ export default {
      * 查询全部案件
      */
     *queryAllCaseData({ }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
         try {
             const next: CaseInfo[] = yield call([db, 'find'], null, 'createdAt', -1);
             yield put({ type: 'setAllCaseData', payload: next });
@@ -49,8 +49,8 @@ export default {
      * @param {string} payload.casePath 案件路径
      */
     *deleteCaseData({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
-        const caseDb = getDb<CaseInfo>(TableName.Case);
-        const deviceDb = getDb<DeviceType>(TableName.Device);
+        const caseDb = getDb<CaseInfo>(TableName.Cases);
+        const deviceDb = getDb<DeviceType>(TableName.Devices);
         const checkDb = getDb<BcpEntity>(TableName.CheckData);
         const bcpDb = getDb<BcpEntity>(TableName.CreateBcpHistory);
         const modal = Modal.info({

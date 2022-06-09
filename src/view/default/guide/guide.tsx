@@ -50,7 +50,7 @@ const Guide: FC<{}> = () => {
             </BoardMenu>
         </ExtendPanel>
         <div className="right-opacity">
-            <div onClick={onToRightClick} className="aim" title="向右滚动">
+            <div onClick={onToRightClick} className="aim" title="滚动到最右">
                 <FontAwesomeIcon icon={faAnglesRight} />
             </div>
         </div>

@@ -9,7 +9,7 @@ import { TableName } from '@/schema/table-name';
  */
 function useCaseList() {
 
-    const db = getDb<CaseInfo>(TableName.Case);
+    const db = getDb<CaseInfo>(TableName.Cases);
     const [data, setData] = useState<CaseInfo[]>([]);
 
     useEffect(() => {
@@ -34,7 +34,7 @@ function useCaseList() {
  */
 function useCase(caseId: string | undefined) {
 
-    const db = getDb<CaseInfo>(TableName.Case);
+    const db = getDb<CaseInfo>(TableName.Cases);
     const [data, setData] = useState<CaseInfo | null>(null);
 
     useEffect(() => {

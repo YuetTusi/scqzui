@@ -17,8 +17,8 @@ export default {
     * @param {string} payload  设备id
     */
     *queryDeviceAndCaseById({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
-        const deviceDb = getDb<DeviceType>(TableName.Device);
-        const caseDb = getDb<CaseInfo>(TableName.Case);
+        const deviceDb = getDb<DeviceType>(TableName.Devices);
+        const caseDb = getDb<CaseInfo>(TableName.Cases);
         try {
             const [deviceData, caseData]: [DeviceType, CaseInfo] = yield all([
                 call([deviceDb, 'findOne'], { _id: payload }),

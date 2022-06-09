@@ -14,7 +14,7 @@ export default {
     *queryDev({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
 
         const { deviceId } = payload;
-        const db = getDb<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Devices);
         try {
             const next: DeviceType = yield call([db, 'findOne'], { _id: deviceId });
             if (next) {

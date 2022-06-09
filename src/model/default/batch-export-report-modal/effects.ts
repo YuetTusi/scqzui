@@ -9,8 +9,8 @@ export default {
 
     *queryDevicesByCaseId({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
 
-        const caseDb = getDb(TableName.Case);
-        const deviceDb = getDb(TableName.Device);
+        const caseDb = getDb(TableName.Cases);
+        const deviceDb = getDb(TableName.Devices);
         try {
             const [caseData, devices]: [CaseInfo, DeviceType[]] = yield all([
                 call([caseDb, 'findOne'], { _id: payload }),

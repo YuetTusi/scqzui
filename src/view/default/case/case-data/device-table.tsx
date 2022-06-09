@@ -15,7 +15,7 @@ const DeviceTable: FC<DeviceTableProp> = ({ caseId }) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        const db = getDb<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Devices);
         (async () => {
             setLoading(true);
             let deviceData = await db.find({ caseId });

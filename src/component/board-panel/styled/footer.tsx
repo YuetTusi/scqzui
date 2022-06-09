@@ -8,6 +8,7 @@ const Footer = styled.div`
     align-items: center;
     color:${(props => props.theme['text-color'])};
     height:50px;
+    pointer-events: none;
 
     position:absolute;
     bottom:0;

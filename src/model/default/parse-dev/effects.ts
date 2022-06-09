@@ -26,7 +26,7 @@ export default {
     *queryDev({ payload }: AnyAction, { all, call, put, select }: EffectsCommandMap) {
 
         const { pageIndex, pageSize, condition } = payload;
-        const db = getDb<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Devices);
         const { caseId } = yield select((state: StateTree) => state.parseDev);
 
         yield put({ type: 'setLoading', payload: true });
@@ -67,7 +67,7 @@ export default {
      * @param {number} payload.pageIndex 当前页
      */
     *updateParseState({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
-        const db = getDb<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Devices);
         const currentState: ParseDevState = yield select((state: StateTree) => state.parseDev);
         const { id, parseState, pageIndex } = payload as { id: string, parseState: ParseState, pageIndex: number };
         try {
@@ -90,7 +90,7 @@ export default {
     * @param {DeviceType} payload 
     */
     *updateDev({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
-        const db = getDb<DeviceType>(TableName.Device);
+        const db = getDb<DeviceType>(TableName.Devices);
         const { pageIndex, pageSize } = yield select((state: StateTree) => state.parseDev);
         try {
             yield call([db, 'update'], { _id: payload._id }, {
@@ -130,7 +130,7 @@ export default {
      */
     *delDev({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
         const { _id, phonePath } = payload as DeviceType;
-        const deviceDb = getDb<DeviceType>(TableName.Device);
+        const deviceDb = getDb<DeviceType>(TableName.Devices);
         const bcpHistoryDb = getDb<BcpEntity>(TableName.CreateBcpHistory);
         const handle = Modal.info({
             title: '正在删除',

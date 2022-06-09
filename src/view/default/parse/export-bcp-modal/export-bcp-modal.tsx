@@ -29,7 +29,7 @@ let ztree: any = null;
  * @param caseId 案件id
  */
 const queryDevice = async (caseId: string) => {
-    const db = getDb<DeviceType>(TableName.Device);
+    const db = getDb<DeviceType>(TableName.Devices);
     let devices: DeviceType[] = [];
     try {
         devices = await db.find({ caseId });

@@ -1,0 +1,11 @@
+export interface AuthProp {
+
+    /**
+     * 鉴权否决（true不渲染children）
+     */
+    deny: boolean,
+    /**
+     * 降级渲染的组件
+     */
+    demotion?: JSX.Element | string
+}

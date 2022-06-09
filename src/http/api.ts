@@ -39,8 +39,8 @@ function api(webContents: WebContents) {
 
     router.get('/case', async (req, res) => {
 
-        const caseDb = getDb<CaseInfo>(TableName.Case);
-        const deviceDb = getDb<DeviceType>(TableName.Device);
+        const caseDb = getDb<CaseInfo>(TableName.Cases);
+        const deviceDb = getDb<DeviceType>(TableName.Devices);
         try {
             let [caseList, deviceList]: [CaseInfo[], DeviceType[]] = await Promise.all([
                 caseDb.find({}),

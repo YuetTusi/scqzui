@@ -12,7 +12,7 @@ export default {
      * 查询案件下拉列表数据
      */
     *queryCaseList({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
         try {
             const caseList: CaseInfo[] = yield call([db, 'find'], {}, 'createdAt', -1);
             yield put({ type: 'setCaseList', payload: caseList });

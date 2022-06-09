@@ -74,7 +74,7 @@ const openOnSystemWindow = debounce(
  */
 const doParse = async (dispatch: Dispatch, data: DeviceType) => {
 
-    const db = getDb<CaseInfo>(TableName.Case);
+    const db = getDb<CaseInfo>(TableName.Cases);
     const appConfig = await helper.readAppJson();
     let caseData: CaseInfo = await db.findOne({
         _id: data.caseId
@@ -139,7 +139,7 @@ const runCreateReport = async (dispatch: Dispatch, exePath: string, device: Devi
     const {
         _id, caseId, mobileHolder, mobileName, mobileNo, mode, phonePath, note
     } = device;
-    const db = getDb<CaseInfo>(TableName.Case);
+    const db = getDb<CaseInfo>(TableName.Cases);
     const casePath = join(phonePath!, '../../'); //案件路径
     const exeCwd = join(cwd, '../tools/CreateReport');
     const msg = new AlartMessageInfo({

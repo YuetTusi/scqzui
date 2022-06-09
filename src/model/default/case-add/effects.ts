@@ -19,7 +19,7 @@ export default {
      * @param {string} payload.name 
      */
     *saveCase({ payload }: AnyAction, { call, fork, put }: EffectsCommandMap) {
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
         const { entity, name } = payload as { entity: CaseInfo, name: string | null };
         const casePath = join(entity.m_strCasePath, entity.m_strCaseName);
         yield put({ type: 'setSaving', payload: true });

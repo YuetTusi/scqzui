@@ -40,7 +40,7 @@ export const OfficerBox = styled.div`
 			background-color: ${props => props.theme['primary-color']};
 			border-left: 1px solid ${props => color2(props.theme['primary-color']).darken(10).toString()};
 			border-top: 1px solid ${props => color2(props.theme['primary-color']).darken(10).toString()};
-			padding: 32px;
+			padding: 24px 20px;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
@@ -63,7 +63,7 @@ export const OfficerBox = styled.div`
 
 				span {
 					display: block;
-					max-width: 98px;
+					width: 110px;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					white-space: nowrap;

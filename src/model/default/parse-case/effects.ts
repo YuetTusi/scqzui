@@ -13,7 +13,7 @@ export default {
      */
     *queryCase({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
         const { pageIndex, pageSize, condition } = payload;
-        const db = getDb<CaseInfo>(TableName.Case);
+        const db = getDb<CaseInfo>(TableName.Cases);
 
         yield put({ type: 'setLoading', payload: true });
         try {
