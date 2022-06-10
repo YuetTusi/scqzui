@@ -10,7 +10,6 @@ import Empty from 'antd/lib/empty';
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
 import Select from 'antd/lib/select';
-import Switch from 'antd/lib/switch';
 import Input from 'antd/lib/input';
 import Checkbox from 'antd/lib/checkbox';
 import Tooltip from 'antd/lib/tooltip';
@@ -25,6 +24,7 @@ import { AppSelectModal } from '@/component/dialog';
 import parseApp from '@/config/parse-app.yaml';
 import tokenApp from '@/config/token-app.yaml';
 import { FormBox } from './styled/styled';
+import AiSwitch from '../ai-switch';
 import { filterToParseApp } from '../helper';
 import { FormProp } from './prop';
 
@@ -331,138 +331,10 @@ const EditForm: FC<FormProp> = ({
                 </div>
                 <Row>
                     <Col span={2} />
-                    <Col span={3}>
-                        <Tooltip title="缩略图是指聊天应用接收到，未点击查看的图片，该类型图片识别度较低，数量较多">
-                            <Item
-                                name="aiThumbnail"
-                                valuePropName="checked"
-                                label="分析缩略图"
-                                labelCol={{ span: 12 }}
-                                wrapperCol={{ span: 4 }}>
-                                <Switch size="small" />
-                            </Item>
-                        </Tooltip>
+                    <Col span={20}>
+                        <AiSwitch />
                     </Col>
-                    <Col span={3}>
-                        <Tooltip title="刀具，大炮，坦克，枪械，军舰，子弹">
-                            <Item
-                                name="aiWeapon"
-                                valuePropName="checked"
-                                label="武器类"
-                                labelCol={{ span: 12 }}
-                                wrapperCol={{ span: 4 }}>
-                                <Switch size="small" />
-                            </Item>
-                        </Tooltip>
-                    </Col>
-                    <Col span={3}>
-                        <Tooltip title="文件，红头文件，盖章文件，二维码">
-                            <Item
-                                name="aiDoc"
-                                valuePropName="checked"
-                                label="文档类"
-                                labelCol={{ span: 12 }}
-                                wrapperCol={{ span: 4 }}>
-                                <Switch size="small" />
-                            </Item>
-                        </Tooltip>
-                    </Col>
-                    <Col span={3}>
-                        <Item
-                            name="aiDrug"
-                            valuePropName="checked"
-                            label="毒品类"
-                            labelCol={{ span: 12 }}
-                            wrapperCol={{ span: 4 }}>
-                            <Switch size="small" />
-                        </Item>
-                    </Col>
-                    <Col span={3}>
-                        <Item
-                            name="aiNude"
-                            valuePropName="checked"
-                            label="裸体类"
-                            labelCol={{ span: 12 }}
-                            wrapperCol={{ span: 4 }}>
-                            <Switch size="small" />
-                        </Item>
-                    </Col>
-                    <Col span={3}>
-                        <Tooltip title="货币">
-                            <Item
-                                name="aiMoney"
-                                valuePropName="checked"
-                                label="货币类"
-                                labelCol={{ span: 12 }}
-                                wrapperCol={{ span: 4 }}>
-                                <Switch size="small" />
-                            </Item>
-                        </Tooltip>
-                    </Col>
-                    <Col span={3}>
-                        <Tooltip title="军装">
-                            <Item
-                                name="aiDress"
-                                valuePropName="checked"
-                                label="着装类"
-                                labelCol={{ span: 12 }}
-                                wrapperCol={{ span: 4 }}>
-                                <Switch size="small" />
-                            </Item>
-                        </Tooltip>
-                    </Col>
-                </Row>
-                <Row>
                     <Col span={2} />
-                    <Col span={3}>
-                        <Tooltip title="汽车，飞机">
-                            <Item
-                                name="aiTransport"
-                                valuePropName="checked"
-                                label="交通工具"
-                                labelCol={{ span: 12 }}
-                                wrapperCol={{ span: 4 }}>
-                                <Switch size="small" />
-                            </Item>
-                        </Tooltip>
-                    </Col>
-                    <Col span={3}>
-                        <Tooltip title="银行卡，证件，证书执照">
-                            <Item
-                                name="aiCredential"
-                                valuePropName="checked"
-                                label="证件类"
-                                labelCol={{ span: 12 }}
-                                wrapperCol={{ span: 4 }}>
-                                <Switch size="small" />
-                            </Item>
-                        </Tooltip>
-                    </Col>
-                    <Col span={3}>
-                        <Tooltip title="交易记录，聊天记录，转账红包">
-                            <Item
-                                name="aiTransfer"
-                                valuePropName="checked"
-                                label="聊天转帐类"
-                                labelCol={{ span: 12 }}
-                                wrapperCol={{ span: 4 }}>
-                                <Switch size="small" />
-                            </Item>
-                        </Tooltip>
-                    </Col>
-                    <Col span={3}>
-                        <Tooltip title="截图，人像，照片">
-                            <Item
-                                name="aiScreenshot"
-                                valuePropName="checked"
-                                label="照片截图"
-                                labelCol={{ span: 12 }}
-                                wrapperCol={{ span: 4 }}>
-                                <Switch size="small" />
-                            </Item>
-                        </Tooltip>
-                    </Col>
-                    <Col span={10} />
                 </Row>
             </div>
         </Form>

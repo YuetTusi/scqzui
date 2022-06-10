@@ -4,12 +4,14 @@ import { EffectsCommandMap } from "dva";
 import { AnyAction } from 'redux';
 import { routerRedux } from "dva/router";
 import message from "antd/lib/message";
+import { StateTree } from '@/type/model';
 import logger from '@/utils/log';
 import { getDb } from '@/utils/db';
 import { helper } from "@/utils/helper";
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { TableName } from '@/schema/table-name';
 import { CaseInfo } from '@/schema/case-info';
+import { AiSwitchState } from '../ai-switch';
 
 export default {
 
@@ -18,7 +20,7 @@ export default {
      * @param {CaseInfo} payload.entity 案件
      * @param {string} payload.name 
      */
-    *saveCase({ payload }: AnyAction, { call, fork, put }: EffectsCommandMap) {
+    *saveCase({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
         const db = getDb<CaseInfo>(TableName.Cases);
         const { entity, name } = payload as { entity: CaseInfo, name: string | null };
         const casePath = join(entity.m_strCasePath, entity.m_strCaseName);
@@ -27,6 +29,7 @@ export default {
         UserHistory.set(HistoryKeys.HISTORY_UNITNAME, entity.m_strCheckUnitName);
 
         try {
+            const aiSwitch: AiSwitchState = yield select((state: StateTree) => state.aiSwitch);
             yield call([db, 'insert'], entity);
             if (helper.isNullOrUndefined(name)) {
                 yield put(routerRedux.push('/case-data'));
@@ -40,6 +43,7 @@ export default {
                 mkdirSync(casePath);
             }
             yield fork([helper, 'writeCaseJson'], casePath, entity);
+            yield fork([helper, 'writeJSONfile'], join(casePath, 'predict.json'), aiSwitch.data); //写ai配置JSON
             message.success('保存成功');
         } catch (error) {
             console.error(`@modal/CaseAdd.ts/saveCase: ${error.message}`);

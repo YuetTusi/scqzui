@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useState } from 'react';
+import React, { FC, MouseEvent, useState, useEffect } from 'react';
 import { useLocation, useDispatch } from 'dva';
 import { routerRedux } from 'dva/router';
 import debounce from 'lodash/debounce';
@@ -37,6 +37,10 @@ const CaseAdd: FC<CaseAddProp> = () => {
     const isAi = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
     const tokenAppList = useState<BaseApp[]>([]);
+
+    useEffect(() => {
+        dispatch({ type: 'aiSwitch/readAiConfig', payload: { casePath: undefined } });
+    }, []);
 
     /**
      * 返回Click

@@ -218,6 +218,7 @@ const helper = {
                     reject(error);
                 }
             }
+            console.log(json);
             fs.writeFile(filePath, json, (err) => {
                 if (err) {
                     reject(err);

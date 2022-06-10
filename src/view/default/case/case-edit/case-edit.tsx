@@ -1,3 +1,4 @@
+import { join } from 'path';
 import debounce from 'lodash/debounce';
 import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import { useDispatch, useLocation, useParams, useSelector } from 'dva';
@@ -89,6 +90,10 @@ const CaseEdit: FC<CaseEditProp> = () => {
             attachment[1](data?.attachment ?? false);
             isDel[1](data?.isDel ?? false);
             isAi[1](data?.isAi ?? false);
+            dispatch({
+                type: 'aiSwitch/readAiConfig',
+                payload: { casePath: join(data.m_strCasePath, data.m_strCaseName) }
+            });
         }
     }, [data]);
 

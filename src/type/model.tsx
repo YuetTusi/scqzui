@@ -9,6 +9,7 @@ import { CloudCodeModalStoreState } from '@/model/default/cloud-code-modal';
 import { OfficerState } from '@/model/default/officer';
 import { CaseAddState } from '@/model/default/case-add';
 import { CaseEditState } from '@/model/default/case-edit';
+import { AiSwitchState } from '@/model/default/ai-switch';
 import { Organization } from '@/schema/organization';
 import { ParseCaseState } from '@/model/default/parse-case';
 import { ParseDevState } from '@/model/default/parse-dev';
@@ -52,6 +53,7 @@ interface StateTree {
 	caseData: CaseDataState,
 	caseAdd: CaseAddState,
 	caseEdit: CaseEditState,
+	aiSwitch: AiSwitchState,
 	checkInputModal: CheckInputModalState,
 	cloudCodeModal: CloudCodeModalStoreState,
 	officer: OfficerState,
