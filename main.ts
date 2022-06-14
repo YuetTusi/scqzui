@@ -538,7 +538,8 @@ ipcMain.on('report-export', (event: IpcMainEvent, exportCondition: ExportConditi
 });
 
 //导出报告（批量）
-ipcMain.on('report-batch-export', (event: IpcMainEvent, batchExportTasks: BatchExportTask[], isAttach: boolean, isZip: boolean, msgId: string) => {
+ipcMain.on('report-batch-export', (event: IpcMainEvent,
+    batchExportTasks: BatchExportTask[], isAttach: boolean, isZip: boolean, msgId: string) => {
     if (reportWindow === null) {
         reportWindow = new BrowserWindow({
             title: '报告导出',
@@ -582,7 +583,8 @@ ipcMain.on('update-export-msg', (event, args) => {
 });
 
 //导出报告完成
-ipcMain.on('report-export-finish', (event: IpcMainEvent, success: boolean, exportCondition: ExportCondition, isBatch: boolean, msgId: string) => {
+ipcMain.on('report-export-finish', (event: IpcMainEvent,
+    success: boolean, exportCondition: ExportCondition, isBatch: boolean, msgId: string) => {
     if (reportWindow !== null) {
         reportWindow.destroy();
         reportWindow = null;

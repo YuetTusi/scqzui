@@ -1,5 +1,5 @@
 import DefaultComponent from './ai-switch';
-import { AiTypes } from './prop';
+import { Predict } from './prop';
 
-export { AiTypes };
+export { Predict };
 export default DefaultComponent;

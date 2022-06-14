@@ -1,5 +1,5 @@
 import { mkdirSync } from 'fs';
-import path from 'path';
+import { join } from 'path';
 import { ipcRenderer } from "electron";
 import { EffectsCommandMap } from "dva";
 import { AnyAction } from 'redux';
@@ -262,7 +262,7 @@ export default {
         }
 
         //拼接手机完整路径
-        let phonePath = path.join(fetchData.casePath!, fetchData.caseName!,
+        let phonePath = join(fetchData.casePath!, fetchData.caseName!,
             fetchData.mobileHolder!, fetchData.mobileName!);
 
         //NOTE:将设备数据入库
@@ -284,10 +284,10 @@ export default {
         let exist: boolean = yield call([helper, 'existFile'], rec.phonePath);
         if (!exist) {
             //手机路径不存在，创建之
-            mkdirSync(rec.phonePath, { recursive: true });
+            mkdirSync(rec.phonePath!, { recursive: true });
         }
         //将设备信息写入Device.json
-        yield fork([helper, 'writeJSONfile'], path.join(rec.phonePath, 'Device.json'), {
+        yield fork([helper, 'writeJSONfile'], join(rec.phonePath!, 'Device.json'), {
             mobileHolder: rec.mobileHolder ?? '',
             mobileNo: rec.mobileNo ?? '',
             mobileName: rec.mobileName ?? '',
@@ -429,7 +429,7 @@ export default {
      * 开始解析
      * @param {number} payload USB序号
      */
-    *startParse({ payload }: AnyAction, { select, call, fork, put }: EffectsCommandMap) {
+    *startParse({ payload }: AnyAction, { all, select, call, fork, put }: EffectsCommandMap) {
 
         const db = getDb<CaseInfo>(TableName.Cases);
         const device: DeviceStoreState = yield select((state: StateTree) => state.device);
@@ -438,9 +438,13 @@ export default {
         try {
             const caseData: CaseInfo = yield call([db, 'findOne'], { _id: current?.caseId });
             if (current && caseData.m_bIsAutoParse) {
-                const appConfig: AppJson = yield call([helper, 'readAppJson']);
+                const [appConfig, aiConfig]: [AppJson, Record<string, any>] = yield all([
+                    call([helper, 'readAppJson']),
+                    call([helper, 'readJSONFile'], join(caseData.m_strCasePath, caseData.m_strCaseName))
+                ]);
                 const tokenAppList: string[] = caseData.tokenAppList ? caseData.tokenAppList.map(i => i.m_strID) : [];
 
+                debugger;
                 logger.info(`开始解析(StartParse):${JSON.stringify({
                     caseId: caseData._id,
                     deviceId: current._id,
@@ -450,19 +454,7 @@ export default {
                     hasReport: caseData.hasReport ?? false,
                     isDel: caseData.isDel ?? false,
                     isAi: caseData.isAi ?? false,
-                    aiTypes: [
-                        caseData.aiThumbnail ? 1 : 0,
-                        caseData.aiDoc ? 1 : 0,
-                        caseData.aiDrug ? 1 : 0,
-                        caseData.aiMoney ? 1 : 0,
-                        caseData.aiNude ? 1 : 0,
-                        caseData.aiWeapon ? 1 : 0,
-                        caseData.aiDress ? 1 : 0,
-                        caseData.aiTransport ? 1 : 0,
-                        caseData.aiCredential ? 1 : 0,
-                        caseData.aiTransfer ? 1 : 0,
-                        caseData.aiScreenshot ? 1 : 0
-                    ],
+                    aiTypes: aiConfig,
                     useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                     useKeyword: appConfig?.useKeyword ?? false,
                     useDocVerify: appConfig?.useDocVerify ?? false,
@@ -481,19 +473,7 @@ export default {
                         hasReport: caseData.hasReport ?? false,
                         isDel: caseData.isDel ?? false,
                         isAi: caseData.isAi ?? false,
-                        aiTypes: [
-                            caseData.aiThumbnail ? 1 : 0,
-                            caseData.aiDoc ? 1 : 0,
-                            caseData.aiDrug ? 1 : 0,
-                            caseData.aiMoney ? 1 : 0,
-                            caseData.aiNude ? 1 : 0,
-                            caseData.aiWeapon ? 1 : 0,
-                            caseData.aiDress ? 1 : 0,
-                            caseData.aiTransport ? 1 : 0,
-                            caseData.aiCredential ? 1 : 0,
-                            caseData.aiTransfer ? 1 : 0,
-                            caseData.aiScreenshot ? 1 : 0
-                        ],
+                        aiTypes: aiConfig,
                         useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                         useKeyword: appConfig?.useKeyword ?? false,
                         useDocVerify: appConfig?.useDocVerify ?? false,

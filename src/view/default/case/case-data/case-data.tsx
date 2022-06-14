@@ -202,7 +202,7 @@ const CaseData: FC<{}> = ({ }) => {
                         columns={getCaseColumns(dispatch)}
                         expandedRowRender={renderSubTable}
                         dataSource={caseData}
-                        rowKey={(record: CaseInfo) => record.m_strCaseName}
+                        rowKey={(record: CaseInfo) => record._id!}
                         expandRowByClick={true}
                         expandedRowKeys={expendRowKeys}
                         onExpandedRowsChange={(rowKeys) => setExpendRowKeys(rowKeys)}

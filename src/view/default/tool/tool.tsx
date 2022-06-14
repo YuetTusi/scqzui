@@ -25,6 +25,7 @@ import umagicSvg from './styled/images/umagic.svg';
 import oppoSvg from './styled/images/oppo.svg';
 import vivoSvg from './styled/images/vivo.svg';
 import miSvg from './styled/images/mi.svg';
+import miChangePng from './styled/images/michange.png';
 import symbianSvg from './styled/images/symbian.svg';
 import windowsmobileSvg from './styled/images/windowsmobile.svg';
 import windowsphoneSvg from './styled/images/windowsphone.svg';
@@ -202,6 +203,14 @@ const Tool: FC<ToolProp> = () => {
                         </div>
                         <div className="name">
                             小米自备份
+                        </div>
+                    </div>
+                    <div onClick={() => onImportClick(ImportTypes.XiaomiChange, '导入数据（小米换机备份）')} className="t-button">
+                        <div className="ico">
+                            <img src={miChangePng} height="50" />
+                        </div>
+                        <div className="name">
+                            小米换机备份
                         </div>
                     </div>
                     <div onClick={() => onImportClick(ImportTypes.AndroidData, '导入数据（安卓数据）')} className="t-button">

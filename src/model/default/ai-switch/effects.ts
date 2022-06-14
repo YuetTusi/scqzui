@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { AiTypes } from '@/view/default/case/ai-switch';
+import { Predict } from '@/view/default/case/ai-switch';
 import { helper } from '@/utils/helper';
 
 const cwd = process.cwd();
@@ -21,18 +21,18 @@ export default {
         try {
             if (casePath === undefined) {
                 //无案件目录，是新增，读模版
-                const next: AiTypes[] = yield call([helper, 'readJSONFile'], tempAt);
+                const next: Predict[] = yield call([helper, 'readJSONFile'], tempAt);
                 put({ type: 'setData', payload: next });
             } else {
                 const aiConfigAt = join(casePath, './predict.json'); //当前案件AI路径
                 const exist: boolean = yield call([helper, 'existFile'], aiConfigAt);
                 if (exist) {
                     //案件下存在，读取案件下的predict.json
-                    const next: AiTypes[] = yield call([helper, 'readJSONFile'], aiConfigAt);
+                    const next: Predict[] = yield call([helper, 'readJSONFile'], aiConfigAt);
                     yield put({ type: 'setData', payload: next });
                 } else {
                     //不存在，读取模版
-                    const next: AiTypes[] = yield call([helper, 'readJSONFile'], tempAt);
+                    const next: Predict[] = yield call([helper, 'readJSONFile'], tempAt);
                     yield put({ type: 'setData', payload: next });
                 }
             }

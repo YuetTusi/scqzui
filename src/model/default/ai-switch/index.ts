@@ -1,10 +1,10 @@
 import { Model } from 'dva';
-import { AiTypes } from '@/view/default/case/ai-switch';
 import reducers from './reducers';
 import effects from './effects';
+import { Predict } from '@/view/default/case/ai-switch';
 
 interface AiSwitchState {
-    data: AiTypes[]
+    data: Predict[]
 }
 
 let model: Model = {

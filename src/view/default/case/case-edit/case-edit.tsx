@@ -147,17 +147,17 @@ const CaseEdit: FC<CaseEditProp> = () => {
             entity.handleCaseType = values.handleCaseType;
             entity.handleCaseName = values.handleCaseName;
             entity.isAi = isAi[0];
-            entity.aiThumbnail = values.aiThumbnail;
-            entity.aiWeapon = values.aiWeapon;
-            entity.aiDoc = values.aiDoc;
-            entity.aiDrug = values.aiDrug;
-            entity.aiNude = values.aiNude;
-            entity.aiMoney = values.aiMoney;
-            entity.aiDress = values.aiDress;
-            entity.aiTransport = values.aiTransport;
-            entity.aiCredential = values.aiCredential;
-            entity.aiTransfer = values.aiTransfer;
-            entity.aiScreenshot = values.aiScreenshot;
+            // entity.aiThumbnail = values.aiThumbnail;
+            // entity.aiWeapon = values.aiWeapon;
+            // entity.aiDoc = values.aiDoc;
+            // entity.aiDrug = values.aiDrug;
+            // entity.aiNude = values.aiNude;
+            // entity.aiMoney = values.aiMoney;
+            // entity.aiDress = values.aiDress;
+            // entity.aiTransport = values.aiTransport;
+            // entity.aiCredential = values.aiCredential;
+            // entity.aiTransfer = values.aiTransfer;
+            // entity.aiScreenshot = values.aiScreenshot;
             entity._id = id;
             saveCase(entity);
         } catch (error) {

@@ -54,7 +54,6 @@ export default {
                 }
             }); //同步更新点验记录
             const casePath = join(payload.m_strCasePath, prev.m_strCaseName);
-            console.log(payload);
             let exist: boolean = yield helper.existFile(casePath);
             if (!exist) {
                 //案件路径不存在，创建之

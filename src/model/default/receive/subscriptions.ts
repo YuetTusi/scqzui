@@ -23,6 +23,8 @@ import {
     appRecFinish, fetchPercent, importErr, backDatapass
 } from './listener';
 
+const cwd = process.cwd();
+const isDev = process.env['NODE_ENV'] === 'development';
 const { Fetch, Parse, Trace, Error } = SocketType;
 const { max, useTraceLogin, devText, fetchText, parseText } = helper.readConf()!;
 
@@ -206,7 +208,14 @@ export default {
                 message: `「${args.mobileName ?? '未知设备'}」${fetchText ?? '取证'}结束，开始${parseText ?? '解析'}${fetchText ?? '点验'}数据`
             });
 
-            const appJson = await helper.readAppJson();
+            const aiTempPath = isDev
+                ? join(cwd, './data/predict.json')
+                : join(cwd, './resources/config/predict.json');
+
+            const [appJson, aiConfig] = await Promise.all([
+                helper.readAppJson(),
+                helper.readJSONFile(aiTempPath)
+            ]);
 
             //NOTE:将设备数据入库
             let next = new QuickRecord();
@@ -261,7 +270,7 @@ export default {
                     hasReport: true,
                     isDel: false,
                     isAi: false,
-                    aiTypes: Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                    aiTypes: aiConfig,
                     useDefaultTemp: appJson?.useDefaultTemp ?? true,
                     useKeyword: appJson?.useKeyword ?? false,
                     useDocVerify: appJson?.useDocVerify ?? false,

@@ -32,8 +32,9 @@ import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import logger from '@/utils/log';
 
-const { fetchText, parseText } = helper.readConf()!;
 const cwd = process.cwd();
+const isDev = process.env['NODE_ENV'] === 'development';
+const { fetchText, parseText } = helper.readConf()!;
 const { Group } = Button;
 
 /**
@@ -81,11 +82,11 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
             _id: data.caseId
         });
         let caseJsonPath = join(data.phonePath!, '../../');
-        const [caseJsonExist, appJson] = await Promise.all([
+        const [caseJsonExist, appJson, aiConfig] = await Promise.all([
             helper.existFile(join(caseJsonPath, 'Case.json')),
-            helper.readAppJson()
+            helper.readAppJson(),
+            helper.readJSONFile(isDev ? join(cwd, './data/predict.json') : join(cwd, './resources/config/predict.json'))
         ]);
-        // let caseJsonExist = await helper.existFile(join(caseJsonPath, 'Case.json'));
 
         if (!caseJsonExist) {
             const caseData = new CaseInfo();
@@ -104,7 +105,7 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
                 hasReport: true,
                 isDel: false,
                 isAi: false,
-                aiTypes: Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                aiTypes: aiConfig,
                 useDefaultTemp: appJson?.useDefaultTemp ?? true,
                 useKeyword: appJson?.useKeyword ?? false,
                 useDocVerify: false,
@@ -344,10 +345,8 @@ export function getColumns(
                             });
                         }}
                         disabled={
-                            creatingDeviceId.some((i) => i === record._id) ||
-                            exportingDeviceId.length !== 0 ||
-                            (record.parseState !== ParseState.Finished
-                                && record.parseState !== ParseState.Error)
+                            creatingDeviceId.some((i) => i === record._id)
+                            || exportingDeviceId.length !== 0
                         }
                         type="primary">生成</Button>
                     <Button

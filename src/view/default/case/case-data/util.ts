@@ -82,10 +82,12 @@ async function readCaseJson(jsonPath: string) {
 async function getCaseByName(caseJson: CaseJson, casePath: string) {
     const db = getDb<CaseInfo>(TableName.Cases);
     try {
-        const [current] = await db.find({ m_strCaseName: caseJson.caseName });
-        if (current) {
+        const current = await db.find({
+            m_strCaseName: caseJson.caseName
+        });
+        if (current.length > 0) {
             //案件存在
-            return current as CaseInfo;
+            return current[0] as CaseInfo;
         } else {
             //案件不存在
             const next: CaseInfo = {

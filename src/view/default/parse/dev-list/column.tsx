@@ -75,16 +75,19 @@ const openOnSystemWindow = debounce(
 const doParse = async (dispatch: Dispatch, data: DeviceType) => {
 
     const db = getDb<CaseInfo>(TableName.Cases);
-    const appConfig = await helper.readAppJson();
     let caseData: CaseInfo = await db.findOne({
         _id: data.caseId
     });
     let caseJsonPath = join(data.phonePath!, '../../');
     let caseJsonExist = await helper.existFile(join(caseJsonPath, 'Case.json'));
-
     if (!caseJsonExist) {
         await helper.writeCaseJson(caseJsonPath, caseData);
     }
+
+    const [appConfig, aiConfig] = await Promise.all([
+        helper.readAppJson(),
+        helper.readJSONFile(join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json'))
+    ]);
 
     send(SocketType.Parse, {
         type: SocketType.Parse,
@@ -97,19 +100,7 @@ const doParse = async (dispatch: Dispatch, data: DeviceType) => {
             hasReport: caseData?.hasReport ?? false,
             isDel: caseData?.isDel ?? false,
             isAi: caseData?.isAi ?? false,
-            aiTypes: [
-                caseData.aiThumbnail ? 1 : 0,
-                caseData.aiDoc ? 1 : 0,
-                caseData.aiDrug ? 1 : 0,
-                caseData.aiMoney ? 1 : 0,
-                caseData.aiNude ? 1 : 0,
-                caseData.aiWeapon ? 1 : 0,
-                caseData.aiDress ? 1 : 0,
-                caseData.aiTransport ? 1 : 0,
-                caseData.aiCredential ? 1 : 0,
-                caseData.aiTransfer ? 1 : 0,
-                caseData.aiScreenshot ? 1 : 0
-            ],
+            aiTypes: aiConfig,
             useDefaultTemp: appConfig?.useDefaultTemp ?? true,
             useKeyword: appConfig?.useKeyword ?? false,
             useDocVerify: appConfig?.useDocVerify ?? false,
@@ -348,10 +339,8 @@ export function getDevColumns(
                             });
                         }}
                         disabled={
-                            creatingDeviceId.some((i) => i === record._id) ||
-                            exportingDeviceId.length !== 0 ||
-                            (record.parseState !== ParseState.Finished
-                                && record.parseState !== ParseState.Error)
+                            creatingDeviceId.some((i) => i === record._id)
+                            || exportingDeviceId.length !== 0
                         }
                         type="primary">生成</Button>
                     <Button

@@ -18,7 +18,6 @@ import CheckingList from './checking-list';
 import RecordList from './record-list';
 import { getEventByName, importRec, readCaseJson, readDirOnly } from './util';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
-import { caseType } from '@/schema/case-type';
 
 const { fetchText, caseText, devText } = helper.readConf()!;
 
@@ -192,7 +191,7 @@ const Quick: FC<{}> = () => {
             <div className="search-bar">
                 <Button onClick={onImportClick} type="primary">
                     <ImportOutlined />
-                    <span>导入</span>
+                    <span>导入案件</span>
                 </Button>
                 <Button onClick={onAddClick} type="primary">
                     <PlusCircleOutlined />

@@ -1,7 +1,7 @@
 /**
  * 导入方式枚举
  */
- export enum ImportTypes {
+export enum ImportTypes {
     /**
      * 华为Hisuite备份
      */
@@ -26,6 +26,10 @@
      * 小米自备份
      */
     XiaomiBackup = 'xiaomi_backup',
+    /**
+     * 小米换机备份
+     */
+    XiaomiChange = 'xiaomi_change',
     /**
      * 安卓数据
      */

@@ -1,5 +1,5 @@
 
-export interface AiTypes {
+export interface Predict {
     /**
      * AI分类名称
      */
@@ -8,6 +8,10 @@ export interface AiTypes {
      * 是否开启
      */
     use: boolean,
+    /**
+     * 隐藏
+     */
+    hide: boolean,
     /**
      * 说明
      */
