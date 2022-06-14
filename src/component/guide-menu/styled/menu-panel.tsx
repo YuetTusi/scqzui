@@ -19,6 +19,11 @@ const MenuPanel = styled.div`
         grid-row-start: 1;
         grid-row-end:3;
     }
+    .last{
+        width: 0;
+        grid-row-start: 1;
+        grid-row-end:3;
+    }
 `;
 
 const VersionBox = styled.div`
