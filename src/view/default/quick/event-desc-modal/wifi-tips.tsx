@@ -17,7 +17,7 @@ const WiFiTips: FC<{ ip: string }> = memo(({ ip }) => {
             break;
         case '192.168.50.99':
             tip = <div style={{ width: '140px' }}>
-                <div>WiFi：<strong>abco_apbc5G</strong></div>
+                <div>WiFi：<strong>abco_apbc5G</strong>或<strong>abco_apbc5G</strong></div>
                 <div>密码：<strong>11111111</strong></div>
             </div>;
             break;
