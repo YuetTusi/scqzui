@@ -8,6 +8,7 @@ import { QuickEvent } from '@/schema/quick-event';
 import { CaseListBox } from './styled/style';
 import { getColumns } from './column';
 import { EventListProp } from './prop';
+import { Key } from 'antd/lib/table/interface';
 
 /**
  * 快速点验案件表格
@@ -76,7 +77,8 @@ const QuickEventList: FC<EventListProp> = ({ detailHandle }) => {
             })}
             rowSelection={{
                 type: 'radio',
-                selectedRowKeys
+                selectedRowKeys,
+                onChange: (k: Key[]) => onRowClick(k[0] as string)
             }}
             dataSource={data}
             loading={loading}
