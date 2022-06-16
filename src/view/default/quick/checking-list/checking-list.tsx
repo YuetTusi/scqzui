@@ -14,24 +14,34 @@ const { devText, fetchText } = helper.readConf()!;
 /**
  * 正在解析的设备列表
  */
-const CheckingRec: FC<{ info: ParseDetail, records: QuickRecord[] }> = ({ info, records }) => {
+const CheckingRec: FC<{ info?: ParseDetail, records: QuickRecord[] }> = ({ info, records }) => {
 
+    const prevDetail = useRef<ParseDetail>();
     const dispatch = useDispatch();
-    const { curinfo, curprogress, deviceId, caseId } = info;
+
+    useEffect(() => {
+        if (info !== undefined) {
+            //有进度消息则记忆，当进度为空时展示上一次的进度值
+            prevDetail.current = info;
+        }
+    }, [info]);
 
     /**
      * 解析中设备Click
      */
     const onItemClick = (event: MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
-        //todo: 此处需将rowKey同步到model中
-        dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [caseId] });
-        dispatch({ type: 'quickRecordList/setEventId', payload: caseId });
-        dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [deviceId] }); //点击自动展开设备表格行
+        if (info?.caseId !== undefined) {
+            dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [info.caseId] });
+            dispatch({ type: 'quickRecordList/setEventId', payload: info.caseId });
+        }
+        if (info?.deviceId !== undefined) {
+            dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [info.deviceId] }); //点击自动展开设备表格行
+        }
     };
 
     const renderLi = () => {
-        const dev = records.find(item => item._id === deviceId);
+        const dev = records.find(item => item._id === info?.deviceId);
         return <ul>
             <li>
                 <label>{`${devText ?? '设备'}名称`}</label>
@@ -63,14 +73,14 @@ const CheckingRec: FC<{ info: ParseDetail, records: QuickRecord[] }> = ({ info, 
     return <div className="d-item" onClick={onItemClick}>
         <div className="prog">
             <Progress
-                percent={curprogress}
+                percent={info?.curprogress ?? prevDetail.current?.curprogress}
                 format={progFormatter}
                 type="circle"
                 strokeColor="#26e5dc" />
         </div>
         <div className="info">
-            <div className="live" title={curinfo}>
-                {curinfo ?? '暂无进度消息'}
+            <div className="live" title={info?.curinfo}>
+                {info?.curinfo ?? prevDetail.current?.curinfo}
             </div>
             {renderLi()}
         </div>
@@ -132,11 +142,14 @@ const CheckingList: FC<{}> = () => {
      */
     const renderList = () => {
 
-        if (info && info.length > 0) {
-            return info.map((item) => <CheckingRec
-                info={item}
-                records={records}
-                key={`PD_${item.deviceId}`} />);
+        if (info.length > 0 && records.length > 0) {
+            return records.map((item) => {
+                const next = info.find(i => i.deviceId === item._id);
+                return <CheckingRec
+                    info={next}
+                    records={records}
+                    key={`PD_${item._id}`} />;
+            });
         } else {
             return <div className="d-empty">
                 <Empty

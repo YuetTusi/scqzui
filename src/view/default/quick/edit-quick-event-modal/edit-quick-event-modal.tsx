@@ -37,6 +37,10 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
     } = useSelector<StateTree, EditQuickEventModalState>(state => state.editQuickEventModal);
     const [isCheck, setIsCheck] = useState(false);
     const [formRef] = useForm<QuickEvent>();
+    let nameRules: any[] = [
+        { required: true, message: `请填写${caseText ?? '案件'}名称` },
+        { pattern: AllowCaseName, message: '不允许输入非法字符' }
+    ];
 
     useEffect(() => {
         const { setFieldsValue } = formRef;
@@ -107,6 +111,13 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         }
     }, 500);
 
+    if (helper.isNullOrUndefined(data?._id)) {
+        nameRules = nameRules.concat([{
+            validator: validEventNameExist,
+            message: `${caseText ?? '案件'}名称已存在`
+        }])
+    }
+
     /**
      * 选择目录
      */
@@ -160,14 +171,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
     >
         <Form form={formRef} layout="horizontal" {...fromLayout}>
             <Item
-                rules={[
-                    { required: true, message: `请填写${caseText ?? '案件'}名称` },
-                    { pattern: AllowCaseName, message: '不允许输入非法字符' },
-                    {
-                        validator: validEventNameExist,
-                        message: `${caseText ?? '案件'}名称已存在`
-                    }
-                ]}
+                rules={nameRules}
                 label={`${caseText ?? '案件'}名称`}
                 name="eventName"
                 hasFeedback={true}

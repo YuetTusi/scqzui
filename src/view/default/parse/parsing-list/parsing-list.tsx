@@ -21,13 +21,13 @@ const { devText } = helper.readConf()!;
  */
 const ParsingDev: FC<{ info?: ParseDetail, devices: DeviceType[] }> = ({ info, devices }) => {
 
-    const prevPercent = useRef<ParseDetail>();
+    const prevDetail = useRef<ParseDetail>();
     const dispatch = useDispatch();
 
     useEffect(() => {
         if (info !== undefined) {
             //有进度消息则记忆，当进度为空时展示上一次的进度值
-            prevPercent.current = info;
+            prevDetail.current = info;
         }
     }, [info]);
 
@@ -78,14 +78,14 @@ const ParsingDev: FC<{ info?: ParseDetail, devices: DeviceType[] }> = ({ info, d
     return <div className="d-item" onClick={onItemClick}>
         <div className="prog">
             <Progress
-                percent={info?.curprogress ?? prevPercent.current?.curprogress}
+                percent={info?.curprogress ?? prevDetail.current?.curprogress}
                 format={progFormatter}
                 type="circle"
                 strokeColor="#26e5dc" />
         </div>
         <div className="info">
-            <div className="live" title={info?.curinfo ?? ''}>
-                {info?.curinfo ?? prevPercent.current?.curinfo}
+            <div className="live" title={info?.curinfo}>
+                {info?.curinfo ?? prevDetail.current?.curinfo}
             </div>
             {renderLi()}
         </div>
