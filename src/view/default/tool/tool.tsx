@@ -131,6 +131,24 @@ const Tool: FC<ToolProp> = () => {
     };
 
     /**
+     * 运行小米换机exe
+     */
+    const runMiChangeExe = (targetPath: string) => {
+        message.info('正在启动工具，请稍等...');
+        const workPath = resolve(cwd, '../tools/mhj');
+        helper.runExe(join(workPath, 'mhj.exe'), [targetPath], workPath).catch((errMsg: string) => {
+            console.log(errMsg);
+            message.destroy();
+            Modal.error({
+                title: '启动失败',
+                content: '启动失败，请联系技术支持',
+                okText: '确定'
+            });
+        });
+        setMiChangeModalVisible(false);
+    };
+
+    /**
      * 小米换机导入handle
      */
     const miChangeHandle = () => setMiChangeModalVisible(true);
@@ -406,20 +424,7 @@ const Tool: FC<ToolProp> = () => {
             cancelHandle={() => setCrackModalVisible(false)} />
         <MiChangeModal
             visible={miChangeModalVisible}
-            onOk={(targetPath) => {
-                message.info('正在启动工具，请稍等...');
-                const workPath = resolve(cwd, '../tools/mhj');
-                helper.runExe(join(workPath, 'mhj.exe'), [targetPath], workPath).catch((errMsg: string) => {
-                    console.log(errMsg);
-                    message.destroy();
-                    Modal.error({
-                        title: '启动失败',
-                        content: '启动失败，请联系技术支持',
-                        okText: '确定'
-                    });
-                });
-                setMiChangeModalVisible(false);
-            }}
+            onOk={runMiChangeExe}
             onCancel={() => setMiChangeModalVisible(false)}
         />
     </SubLayout>
