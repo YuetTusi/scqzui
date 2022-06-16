@@ -19,8 +19,10 @@ const MenuPanel = styled.div`
         grid-row-start: 1;
         grid-row-end:3;
     }
-    .last{
+    &::after{
+        content: "";
         width: 0;
+        height: auto;
         grid-row-start: 1;
         grid-row-end:3;
     }

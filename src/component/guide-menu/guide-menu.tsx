@@ -183,7 +183,6 @@ const GuideMenu: FC<GuideMenuProp> = () => {
             </div>
         </Auth>
         {buttons.slice(2)}
-        <div className="last"></div>
     </MenuPanel>;
 };
 
