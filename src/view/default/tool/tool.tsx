@@ -1,7 +1,8 @@
-import { join } from 'path';
+import { join, resolve } from 'path';
 import React, { FC, useState, useCallback, useRef, MouseEvent } from 'react';
 import { useDispatch } from 'dva';
 import message from 'antd/lib/message';
+import Modal from 'antd/lib/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers
@@ -17,6 +18,7 @@ import AlipayOrderModal from './alipay-order-modal';
 import ImportDataModal from './import-data-modal';
 import CrackModal from './crack-modal';
 import { AiSimilarModal, fakeModal } from './fake-modal';
+import MiChangeModal from './mi-change-modal';
 import { SortBox, ToolBox } from './styled/style';
 import { ImportTypes } from '@/schema/import-type';
 import huaweiSvg from './styled/images/huawei.svg';
@@ -48,6 +50,7 @@ const Tool: FC<ToolProp> = () => {
     const [alipayOrderModalVisible, setAlipayOrderModalVisible] = useState<boolean>(false);
     const [aiSimilarModalVisible, setAiSimilarModalVisible] = useState<boolean>(false);
     const [crackModalVisible, setCrackModalVisible] = useState<boolean>(false);
+    const [miChangeModalVisible, setMiChangeModalVisible] = useState<boolean>(false);
 
     /**
      * 支付宝云取取消handle
@@ -126,6 +129,11 @@ const Tool: FC<ToolProp> = () => {
                 });
         }
     };
+
+    /**
+     * 小米换机导入handle
+     */
+    const miChangeHandle = () => setMiChangeModalVisible(true);
 
     return <SubLayout title="工具箱">
         <ToolBox>
@@ -373,6 +381,14 @@ const Tool: FC<ToolProp> = () => {
                             AI相似人像查看
                         </div>
                     </div>
+                    <div onClick={() => miChangeHandle()} className="t-button">
+                        <div className="ico">
+                            <img src={miChangePng} height={50} />
+                        </div>
+                        <div className="name">
+                            小米换机采集
+                        </div>
+                    </div>
                 </div>
             </SortBox>
         </ToolBox>
@@ -388,6 +404,24 @@ const Tool: FC<ToolProp> = () => {
             visible={crackModalVisible}
             type={currentCrackType.current}
             cancelHandle={() => setCrackModalVisible(false)} />
+        <MiChangeModal
+            visible={miChangeModalVisible}
+            onOk={(targetPath) => {
+                message.info('正在启动工具，请稍等...');
+                const workPath = resolve(cwd, '../tools/mhj');
+                helper.runExe(join(workPath, 'mhj.exe'), [targetPath], workPath).catch((errMsg: string) => {
+                    console.log(errMsg);
+                    message.destroy();
+                    Modal.error({
+                        title: '启动失败',
+                        content: '启动失败，请联系技术支持',
+                        okText: '确定'
+                    });
+                });
+                setMiChangeModalVisible(false);
+            }}
+            onCancel={() => setMiChangeModalVisible(false)}
+        />
     </SubLayout>
 };
 

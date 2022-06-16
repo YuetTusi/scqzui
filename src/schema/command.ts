@@ -1,7 +1,7 @@
 /**
  * Socket命令
  */
- enum CommandType {
+enum CommandType {
     /**
      * Socket连入（Fetch&Parse）
      */
@@ -172,6 +172,10 @@ enum SocketType {
      * 痕迹记录查询
      */
     Trace = 'trace',
+    /**
+     * 小米换机
+     */
+    Inst = 'inst',
     /**
      * 错误
      */
