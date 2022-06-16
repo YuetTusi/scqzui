@@ -19,23 +19,34 @@ const { devText } = helper.readConf()!;
  * | | |
  * +---+
  */
-const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, devices }) => {
+const ParsingDev: FC<{ info?: ParseDetail, devices: DeviceType[] }> = ({ info, devices }) => {
 
+    const prevPercent = useRef<ParseDetail>();
     const dispatch = useDispatch();
-    const { curinfo, curprogress, deviceId, caseId } = info;
+
+    useEffect(() => {
+        if (info !== undefined) {
+            //有进度消息则记忆，当进度为空时展示上一次的进度值
+            prevPercent.current = info;
+        }
+    }, [info]);
 
     /**
      * 解析中设备Click
      */
     const onItemClick = (event: MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
-        dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [caseId] });
-        dispatch({ type: 'parseDev/setCaseId', payload: caseId });
-        dispatch({ type: 'parseDev/setExpandedRowKeys', payload: [deviceId] }); //点击自动展开设备表格行
+        if (info?.caseId !== undefined) {
+            dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [info.caseId] });
+            dispatch({ type: 'parseDev/setCaseId', payload: info.caseId });
+        }
+        if (info?.deviceId !== undefined) {
+            dispatch({ type: 'parseDev/setExpandedRowKeys', payload: [info.deviceId] }); //点击自动展开设备表格行
+        }
     };
 
     const renderLi = () => {
-        const dev = devices.find(item => item._id === deviceId);
+        const dev = devices.find(item => item._id === info?.deviceId);
         return <ul>
             <li>
                 <label>{`${devText ?? '设备'}名称`}</label>
@@ -58,7 +69,7 @@ const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, de
 
     const progFormatter = (percent?: number) => {
         if (percent === 100) {
-            return <span>完成</span>;
+            return <span style={{ color: '#0fb9b1' }}>完成</span>;
         } else {
             return <span>{`${percent}%`}</span>;
         }
@@ -67,14 +78,14 @@ const ParsingDev: FC<{ info: ParseDetail, devices: DeviceType[] }> = ({ info, de
     return <div className="d-item" onClick={onItemClick}>
         <div className="prog">
             <Progress
-                percent={curprogress}
+                percent={info?.curprogress ?? prevPercent.current?.curprogress}
                 format={progFormatter}
                 type="circle"
                 strokeColor="#26e5dc" />
         </div>
         <div className="info">
-            <div className="live" title={curinfo}>
-                {curinfo ?? '暂无进度消息'}
+            <div className="live" title={info?.curinfo ?? ''}>
+                {info?.curinfo ?? prevPercent.current?.curinfo}
             </div>
             {renderLi()}
         </div>
@@ -136,11 +147,14 @@ const ParsingList: FC<{}> = () => {
      */
     const renderList = () => {
 
-        if (info && info.length > 0) {
-            return info.map((item) => <ParsingDev
-                info={item}
-                devices={devices}
-                key={`PD_${item.deviceId}`} />);
+        if (info.length > 0 && devices.length > 0) {
+            return devices.map((item, index) => {
+                const next = info.find(i => i.deviceId === item._id);
+                return <ParsingDev
+                    info={next}
+                    devices={devices}
+                    key={`PD_${item._id}`} />
+            });
         } else {
             return <div className="d-empty">
                 <Empty

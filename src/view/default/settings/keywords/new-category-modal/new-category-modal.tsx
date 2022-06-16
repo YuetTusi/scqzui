@@ -66,7 +66,7 @@ const NewCategoryModal: FC<NewCategoryModalProp> = ({
         ]}
         visible={visible}
         onCancel={onCancelClick}
-        title="添加关键词分类"
+        title="新建关键词分类"
         centered={true}
         forceRender={true}
         maskClosable={false}

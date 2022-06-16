@@ -3,6 +3,8 @@ import subscriptions from './subscriptions';
 
 let model: Model = {
     namespace: 'receive',
+    effects: {},
+    reducers: {},
     subscriptions
 };
 

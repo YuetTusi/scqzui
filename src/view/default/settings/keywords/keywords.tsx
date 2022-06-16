@@ -344,7 +344,7 @@ const Keywords: FC<KeywordsProp> = () => {
                         onClick={() => setAddCategoryModalVisible(true)}
                         type="primary">
                         <PlusCircleOutlined />
-                        <span>新建关键词类型</span>
+                        <span>新建分类</span>
                     </Button>
                     <Button
                         onClick={() => selectFileHandle(cwd)}
