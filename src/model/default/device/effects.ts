@@ -28,11 +28,10 @@ import { AppJson } from '@/schema/app-json';
 import { ParseCategory } from '@/schema/parse-detail';
 import { QuickRecord } from '@/schema/quick-record';
 import { QuickEvent } from '@/schema/quick-event';
-import parseApps from '@/config/parse-app.yaml';
 import { DeviceStoreState } from './index';
-import { AppSetStore } from '../app-set';
 
-const { caseText, fetchText } = helper.readConf()!;
+const cwd = process.cwd();
+const isDev = process.env['NODE_ENV'] === 'development';
 
 /**
  * 副作用
@@ -436,12 +435,30 @@ export default {
         const current = device.deviceList.find((item) => item?.usb == payload);
 
         try {
+            let appConfig: AppJson | undefined;
+            let predictAt: string = cwd;
             const caseData: CaseInfo = yield call([db, 'findOne'], { _id: current?.caseId });
+
             if (current && caseData.m_bIsAutoParse) {
-                const [appConfig, aiConfig]: [AppJson, Record<string, any>] = yield all([
-                    call([helper, 'readAppJson']),
-                    call([helper, 'readJSONFile'], join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json'))
-                ]);
+                let aiConfig: any[] = [];
+                predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
+                let exist: boolean = yield call([helper, 'existFile'], predictAt);
+                if (exist) {
+                    //案件下存在predict.json
+                    [appConfig, aiConfig] = yield all([
+                        call([helper, 'readAppJson']),
+                        call([helper, 'readJSONFile'], predictAt)
+                    ]);
+                } else {
+                    predictAt = isDev
+                        ? join(cwd, './data/predict.json')
+                        : join(cwd, './resources/config/predict.json');
+                    [appConfig, aiConfig] = yield all([
+                        call([helper, 'readAppJson']),
+                        call([helper, 'readJSONFile'], predictAt)
+                    ]);
+                }
+                // const appConfig: AppJson = yield call([helper, 'readAppJson']);
                 const tokenAppList: string[] = caseData.tokenAppList ? caseData.tokenAppList.map(i => i.m_strID) : [];
                 logger.info(`开始解析(StartParse):${JSON.stringify({
                     caseId: caseData._id,

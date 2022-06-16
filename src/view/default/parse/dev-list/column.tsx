@@ -33,6 +33,7 @@ import logger from '@/utils/log';
 
 const { devText, fetchText, parseText } = helper.readConf()!;
 const cwd = process.cwd();
+const isDev = process.env['NODE_ENV'] === 'development';
 const { Group } = Button;
 
 /**
@@ -84,9 +85,25 @@ const doParse = async (dispatch: Dispatch, data: DeviceType) => {
         await helper.writeCaseJson(caseJsonPath, caseData);
     }
 
+    let predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
+
+    try {
+        const exist = await helper.existFile(predictAt);
+        if (!exist) {
+            //案件下不存在predict.json，读模版文件
+            predictAt = isDev
+                ? join(cwd, './data/predict.json')
+                : join(cwd, './resources/config/predict.json');
+        }
+    } catch (error) {
+        predictAt = isDev
+            ? join(cwd, './data/predict.json')
+            : join(cwd, './resources/config/predict.json');
+    }
+
     const [appConfig, aiConfig] = await Promise.all([
         helper.readAppJson(),
-        helper.readJSONFile(join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json'))
+        helper.readJSONFile(predictAt)
     ]);
 
     send(SocketType.Parse, {
