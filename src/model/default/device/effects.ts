@@ -440,11 +440,9 @@ export default {
             if (current && caseData.m_bIsAutoParse) {
                 const [appConfig, aiConfig]: [AppJson, Record<string, any>] = yield all([
                     call([helper, 'readAppJson']),
-                    call([helper, 'readJSONFile'], join(caseData.m_strCasePath, caseData.m_strCaseName))
+                    call([helper, 'readJSONFile'], join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json'))
                 ]);
                 const tokenAppList: string[] = caseData.tokenAppList ? caseData.tokenAppList.map(i => i.m_strID) : [];
-
-                debugger;
                 logger.info(`开始解析(StartParse):${JSON.stringify({
                     caseId: caseData._id,
                     deviceId: current._id,

@@ -197,9 +197,13 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                     });
                 } else {
                     saveHandle!(entity);
+                    setSelectedApps([]);
+                    resetValue();
                 }
             } catch (error) {
                 saveHandle!(entity);
+                setSelectedApps([]);
+                resetValue();
                 log.error(`读取磁盘信息失败:${(error as any).message}`);
             } finally {
                 setLoading(false);
