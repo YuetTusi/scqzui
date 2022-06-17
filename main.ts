@@ -17,11 +17,11 @@ import FetchLog from './src/schema/fetch-log';
 import FetchRecord from './src/schema/fetch-record';
 import FetchData from './src/schema/fetch-data';
 
-const mode = process.env['NODE_ENV'];
+const { env, resourcesPath } = process;
+const isDev = env['NODE_ENV'] === 'development';
 const cwd = process.cwd();
 const appPath = app.getAppPath();
 const server = express();
-const { resourcesPath } = process;
 
 const appName = helper.readAppName();
 let httpPort = 9900;
@@ -56,7 +56,7 @@ server.use(
 );
 
 config = helper.readConf();
-existManuJson = helper.existManufaturer(mode!, appPath);
+existManuJson = helper.existManufaturer(env['NODE_ENV']!, appPath);
 
 if (config === null) {
     dialog.showErrorBox('启动失败', '配置文件读取失败, 请联系技术支持');
@@ -242,7 +242,7 @@ if (!instanceLock) {
             }
         });
 
-        if (mode === 'development') {
+        if (isDev) {
             mainWindow.loadURL(config!.devPageUrl);
             mainWindow.webContents.openDevTools();
         } else {
@@ -253,7 +253,7 @@ if (!instanceLock) {
             mainWindow!.show();
             timerWindow!.loadFile(join(__dirname, './renderer/timer.html'));
             fetchRecordWindow!.loadFile(join(__dirname, './renderer/fetch-record.html'));
-            if (mode === 'development') {
+            if (isDev) {
                 timerWindow!.webContents.openDevTools();
                 fetchRecordWindow!.webContents.openDevTools();
             }
@@ -371,7 +371,7 @@ ipcMain.on('query-db', (event: IpcMainEvent, ...args) => {
         });
 
         sqliteWindow.loadFile(join(__dirname, './renderer/sqlite.html'));
-        if (mode === 'development') {
+        if (isDev) {
             sqliteWindow.webContents.openDevTools();
         }
         sqliteWindow.webContents.once('did-finish-load', () => sqliteWindow!.webContents.send('query-db', args));
@@ -409,7 +409,7 @@ ipcMain.on('show-protocol', (event: IpcMainEvent, fetchData: FetchData) => {
                 javascript: true
             }
         });
-        if (mode === 'development') {
+        if (isDev) {
             protocolWindow.loadFile(join(__dirname, './renderer/protocol.html'));
         } else {
             protocolWindow.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/protocol.html'));
@@ -524,7 +524,7 @@ ipcMain.on('report-export', (event: IpcMainEvent, exportCondition: ExportConditi
         });
 
         reportWindow.loadFile(join(__dirname, './renderer/report.html'));
-        if (mode === 'development') {
+        if (isDev) {
             reportWindow.webContents.openDevTools();
         }
         reportWindow.webContents.once('did-finish-load', () => {

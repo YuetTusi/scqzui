@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, MouseEvent } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Reading from '@/component/loading/reading';
@@ -35,12 +35,14 @@ const Guide: FC<{}> = () => {
 
     /**
      * 向右滚动Click 
+     * @param to 滚动方向
      */
-    const onScrollToClick = (to: string) => {
+    const onScrollToClick = (to: 'left' | 'right') => {
         if (scrollRef.current) {
+            const { scrollWidth } = scrollRef.current;
             to === 'left'
                 ? scrollRef.current.scrollLeft = 0
-                : scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+                : scrollRef.current.scrollLeft = scrollWidth;
         }
     };
 

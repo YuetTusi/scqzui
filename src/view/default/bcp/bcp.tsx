@@ -25,7 +25,6 @@ import { FormValue } from './generate-form/prop';
 import { BcpBox, ButtonBar, FormPanel } from './styled/style';
 import { BcpProp } from './prop';
 
-
 const cwd = process.cwd();
 const { useForm } = Form;
 
