@@ -21,7 +21,7 @@ import { WiFiTips } from './wifi-tips';
 import { EventDescBox, HelpBox, HorBox } from './styled/style';
 import { EventDescModalProp } from './prop';
 
-const { caseText, fetchText } = helper.readConf()!;
+const { caseText, fetchText, parseText } = helper.readConf()!;
 const { Item } = Descriptions;
 /**
  * 点验案件详情框
@@ -42,8 +42,8 @@ const EventDescModal: FC<EventDescModalProp> = ({
                 try {
                     const target = document.getElementById('qrcode');
                     await QRCode.toCanvas(target, `http://${ip}:9900/check/${id}`, {
-                        width: 200,
-                        margin: 2,
+                        width: 300,
+                        margin: 1,
                         color: {
                             light: '#181d30',
                             dark: '#ffffffd9'
@@ -117,7 +117,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
         forceRender={true}
         maskClosable={false}
         destroyOnClose={false}
-        width={1050}
+        width={1120}
         title={`快速${fetchText ?? '点验'}`}
     >
         <EventDescBox>
@@ -135,25 +135,33 @@ const EventDescModal: FC<EventDescModalProp> = ({
                     <HorBox>
                         <div className="desc">
                             <div>使用手机浏览器<strong>扫描右侧二维码</strong>，下载APP安装后打开「<strong>采集助手</strong>」</div>
+                            <div style={{ marginTop: '20px' }}><strong>提示：如果无法完成扫码，请安装QQ浏览器重新扫描</strong></div>
                         </div>
                         <Spin
                             spinning={scanned}
                             indicator={<CheckCircleFilled style={{ color: '#52c41a' }} />}
                             tip={<span style={{ color: '#52c41a' }}>扫码成功</span>}
                         >
-                            <canvas width="200" height="200" id="qrcode" />
+                            <canvas width="300" height="300" id="qrcode" />
                         </Spin>
                     </HorBox>
                 </div>
                 <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
                 <div className="step">
                     <label className="step-label">步骤3</label>
-                    <div className="desc">{`选择${caseText ?? '案件'}，输入编号及名称后确认`}</div>
+                    <div className="desc">
+                        <div>
+                            选择<strong>{caseText ?? '案件'}</strong>，输入<strong>编号</strong>及<strong>名称</strong>后确认，等待{fetchText ?? '取证'}完成
+                        </div>
+                        <div style={{ marginTop: '20px' }}>
+                            <strong>提示：采集助手会提示开启相关权限，请一律允许</strong>
+                        </div>
+                    </div>
                 </div>
                 <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
                 <div className="step">
                     <label className="step-label">步骤4</label>
-                    <div className="desc">等待手机{fetchText ?? '点验'}完成后，可卸载「<strong>采集助手</strong>」</div>
+                    <div className="desc">完成后将自动{parseText ?? '解析'}数据，可以卸载「<strong>采集助手</strong>」</div>
                 </div>
             </HelpBox>
             <div className="ibox">

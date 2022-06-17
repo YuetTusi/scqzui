@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, MouseEvent } from 'react';
-import { faAnglesRight } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Reading from '@/component/loading/reading';
 import BoardMenu from '@/component/guide-menu';
@@ -11,7 +11,7 @@ import { GuideBox } from './styled/box';
  */
 const Guide: FC<{}> = () => {
 
-    const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLDivElement>(null); //滚动div
 
     /**
      * 按钮面板Wheel
@@ -36,10 +36,11 @@ const Guide: FC<{}> = () => {
     /**
      * 向右滚动Click 
      */
-    const onToRightClick = (event: MouseEvent<HTMLDivElement>) => {
-        event.preventDefault();
+    const onScrollToClick = (to: string) => {
         if (scrollRef.current) {
-            scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+            to === 'left'
+                ? scrollRef.current.scrollLeft = 0
+                : scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
         }
     };
 
@@ -49,8 +50,13 @@ const Guide: FC<{}> = () => {
                 Dashboard
             </BoardMenu>
         </ExtendPanel>
+        <div className="left-opacity">
+            <div onClick={() => onScrollToClick('left')} className="aim" title="滚动到最左">
+                <FontAwesomeIcon icon={faAnglesLeft} />
+            </div>
+        </div>
         <div className="right-opacity">
-            <div onClick={onToRightClick} className="aim" title="滚动到最右">
+            <div onClick={() => onScrollToClick('right')} className="aim" title="滚动到最右">
                 <FontAwesomeIcon icon={faAnglesRight} />
             </div>
         </div>
