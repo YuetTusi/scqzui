@@ -5,8 +5,8 @@ import Space from 'antd/lib/space';
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
+import Explain from '@/component/explain';
 import { SaveForm } from './save-form';
-import { TipFieldSet } from './styled/style';
 import { AlipayOrderModalProp } from './prop';
 
 const { useForm } = Form;
@@ -58,8 +58,7 @@ const AlipayOrderModal: FC<AlipayOrderModalProp> = memo(({
         forceRender={true}
     >
         <Space direction="vertical">
-            <TipFieldSet>
-                <legend>支付宝账单云取提示</legend>
+            <Explain title="支付宝账单云取提示">
                 <ul>
                     <li>支付宝账单获取需要手机联网，可能造成其他App登录状态失效</li>
                     <li>
@@ -70,7 +69,7 @@ const AlipayOrderModal: FC<AlipayOrderModalProp> = memo(({
                         操作过程中，请<strong>不要关闭弹出来的二维码窗口</strong>
                     </li>
                 </ul>
-            </TipFieldSet>
+            </Explain>
             <SaveForm formRef={formRef} />
         </Space>
     </Modal>

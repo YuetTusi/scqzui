@@ -53,8 +53,11 @@ const GlobalStyle = createGlobalStyle`
 	.primary-color{
 		color:#0fb9b1;
 	}
-	.cloud-color{
+	.cloud-color,.warn-color{
 		color:#f9ca24;
+	}
+	.error-color{
+		color:#db2222;
 	}
 
 	.ant-empty-description{

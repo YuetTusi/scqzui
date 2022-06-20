@@ -7,8 +7,8 @@ import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
-import { ModalBox } from './styled/style';
 import { MiChangeModalProp } from './prop';
+import Explain from '@/component/explain';
 
 const { Item, useForm } = Form;
 const formItemLayout = {
@@ -79,33 +79,30 @@ const MiChangeModal: FC<MiChangeModalProp> = ({ visible, onOk, onCancel }) => {
         destroyOnClose={true}
         className="mi-change-modal-root"
     >
-        <ModalBox>
-            <fieldset className="tip-msg">
-                <legend>小米换机采集提示</legend>
-                <ul>
-                    <li>选择数据保存目录</li>
-                    <li>使用小米手机连接热点：<strong>abco_apbc5G_MI</strong></li>
-                    <li>打开小米换机，点击<strong>旧手机</strong>，选择热点<strong>abco_apbc5G_MI</strong>开始采集</li>
-                </ul>
-            </fieldset>
-            <div className="form-box">
-                <Form form={formRef} {...formItemLayout}>
-                    <Item
-                        rules={[
-                            { required: true, message: '请选保存目录' }
-                        ]}
-                        name="targetPath"
-                        label="保存目录"
-                        labelCol={{ span: 4 }}
-                        wrapperCol={{ span: 20 }}>
-                        <Input
-                            readOnly={true}
-                            onClick={selectSaveHandle}
-                        />
-                    </Item>
-                </Form>
-            </div>
-        </ModalBox>
+        <Explain title="小米换机采集提示">
+            <ul>
+                <li>选择数据保存目录</li>
+                <li>使用小米手机连接热点：<strong>abco_apbc5G_MI</strong></li>
+                <li>打开小米换机，点击<strong>旧手机</strong>，选择热点<strong>abco_apbc5G_MI</strong>开始采集</li>
+            </ul>
+        </Explain>
+        <div style={{ marginTop: '10px' }}>
+            <Form form={formRef} {...formItemLayout}>
+                <Item
+                    rules={[
+                        { required: true, message: '请选保存目录' }
+                    ]}
+                    name="targetPath"
+                    label="保存目录"
+                    labelCol={{ span: 4 }}
+                    wrapperCol={{ span: 20 }}>
+                    <Input
+                        readOnly={true}
+                        onClick={selectSaveHandle}
+                    />
+                </Item>
+            </Form>
+        </div>
     </Modal>
 };
 
