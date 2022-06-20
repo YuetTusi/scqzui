@@ -173,10 +173,6 @@ enum SocketType {
      */
     Trace = 'trace',
     /**
-     * 小米换机
-     */
-    Inst = 'inst',
-    /**
      * 错误
      */
     Error = 'socket_error'

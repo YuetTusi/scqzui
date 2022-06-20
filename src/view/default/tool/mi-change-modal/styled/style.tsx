@@ -19,7 +19,7 @@ export const ModalBox = styled.div`
 			font-style: normal;
 		}
 		strong {
-			color: #f5222d;
+			color: ${props => props.theme['error-color']};
 			font-weight: bold;
 			font-size: 12px;
 			font-style: normal;

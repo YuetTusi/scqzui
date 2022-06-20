@@ -20,12 +20,12 @@ import { ParseCategory } from '@/schema/parse-detail';
 import {
     deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,
     parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
-    appRecFinish, fetchPercent, importErr, backDatapass, miChangeFinish
+    appRecFinish, fetchPercent, importErr, backDatapass
 } from './listener';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
-const { Fetch, Parse, Trace, Inst, Error } = SocketType;
+const { Fetch, Parse, Trace, Error } = SocketType;
 const { max, useTraceLogin, devText, fetchText, parseText } = helper.readConf()!;
 
 /**
@@ -277,34 +277,6 @@ export default {
                     tokenAppList: []
                 }
             });
-        });
-    },
-
-    /**
-     * 接收Inst消息
-     */
-    receiveInst({ dispatch }: SubscriptionAPI) {
-        server.on(Inst, (command: Command) => {
-            console.log(command);
-            switch (command.cmd) {
-                case CommandType.Connect:
-                    logger.info(`Inst Connect`);
-                    send(Inst, {
-                        type: Inst,
-                        cmd: CommandType.ConnectOK,
-                        msg: ''
-                    });
-                    Modal.info({
-                        title: '小米换机采集',
-                        content: '请打开小米换机应用，点击旧手机连接WiFi「abco_apbc_MI」进行采集',
-                        okText: '确定',
-                        centered: true
-                    });
-                    break;
-                default:
-                    miChangeFinish(command);
-                    break;
-            }
         });
     },
 

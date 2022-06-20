@@ -5,7 +5,6 @@ import { Dispatch } from "dva";
 import { ipcRenderer } from "electron";
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
-import notification from 'antd/lib/notification';
 import logger from "@/utils/log";
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
@@ -399,14 +398,4 @@ export function appRecFinish({ msg }: Command<{
     message.info(msg.info ?? '');
     dispatch({ type: 'trail/readAppQueryJson', payload: { value: msg.value } });
     dispatch({ type: 'appSet/setReading', payload: false })
-}
-
-/**
- * 接收小米换机采集消息
- */
-export function miChangeFinish({ }: Command<any>) {
-    notification.success({
-        message: '采集完成',
-        description: '小米换机采集完成'
-    });
 }

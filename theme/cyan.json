@@ -4,5 +4,6 @@
 	"border-radius-base": "2px",
 	"border-color-base": "#303030",
 	"text-color": "#ffffffd9",
+	"warn-color": "#f9ca24",
 	"error-color": "#db2222"
 }

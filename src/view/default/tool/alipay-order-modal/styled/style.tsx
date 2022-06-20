@@ -12,7 +12,6 @@ export const TipFieldSet = styled.fieldset`
         font-size:1.2rem;
         width: auto;
         margin:0;
-        color:${props => props.theme['primary-color']};
     }
     ul,li{
         margin:0;
@@ -21,8 +20,9 @@ export const TipFieldSet = styled.fieldset`
     li{
         padding: 2px 0;
         list-style-type: none;
+        color: ${props => props.theme['primary-color']};
         strong{
-            color:${props => props.theme['error-color']};
+            color: ${props => props.theme['error-color']};
         }
     }
 `;
