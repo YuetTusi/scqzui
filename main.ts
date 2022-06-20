@@ -17,7 +17,7 @@ import FetchLog from './src/schema/fetch-log';
 import FetchRecord from './src/schema/fetch-record';
 import FetchData from './src/schema/fetch-data';
 
-const { env, resourcesPath } = process;
+const { env, platform, resourcesPath } = process;
 const isDev = env['NODE_ENV'] === 'development';
 const cwd = process.cwd();
 const appPath = app.getAppPath();
@@ -69,13 +69,13 @@ if (!existManuJson) {
 if (helper.useBlackListRender()) {
     app.commandLine.appendSwitch('no-sandbox');
     app.commandLine.appendSwitch('disable-gpu');
-    app.commandLine.appendSwitch('disable-software-rasterizer');
     app.commandLine.appendSwitch('disable-gpu-compositing');
     app.commandLine.appendSwitch('disable-gpu-rasterization');
     app.commandLine.appendSwitch('disable-gpu-sandbox');
+    app.commandLine.appendSwitch('disable-software-rasterizer');
     app.commandLine.appendSwitch('--no-sandbox');
     app.disableHardwareAcceleration();
-    log.warn('已禁用GPU, 忽略chromium显卡黑名单');
+    log.warn('禁用GPU渲染, 忽略Chromium显卡黑名单');
 }
 
 /**
@@ -327,7 +327,7 @@ ipcMain.on('run-service', () => {
 //退出应用
 ipcMain.on('do-close', (event: IpcMainEvent) => {
     //mainWindow通知退出程序
-    exitApp(process.platform);
+    exitApp(platform);
 });
 
 /**
@@ -335,7 +335,7 @@ ipcMain.on('do-close', (event: IpcMainEvent) => {
  */
 ipcMain.on('do-relaunch', () => {
     app.relaunch();
-    exitApp(process.platform);
+    exitApp(platform);
 });
 
 //最小化窗口
