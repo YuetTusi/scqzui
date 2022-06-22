@@ -1,5 +1,7 @@
 import fs from 'fs';
+import { readFile } from 'fs/promises';
 import cpy from 'cpy';
+import convert from 'heic-convert';
 import log from '@/utils/log';
 
 /**
@@ -56,6 +58,25 @@ function copy(from: string, to: string) {
  */
 function copyFiles(fileList: string[], destination: string, options: Record<string, any>) {
     return cpy(fileList, destination, options);
+}
+
+/**
+ * heic转码jpeg
+ * @param heicPath heic图像路径
+ */
+async function heicToJpeg(heicPath: string): Promise<Buffer | null> {
+    try {
+        const chunk = await readFile(heicPath);
+        const jpegBuf: Buffer = await convert({
+            buffer: chunk, // the HEIC file buffer
+            format: 'JPEG',      // output format
+            quality: 1           // the jpeg compression quality, between 0 and 1
+        });
+        return jpegBuf;
+    } catch (error) {
+        log.error(`HEIC转码失败(${heicPath})：${error.message}`);
+        return null;
+    }
 }
 
 /**
@@ -119,10 +140,11 @@ function updateFileTime(filePath: string, atime: Date, mtime: Date) {
     });
 }
 
-module.exports = {
+export {
     mkdir,
     copy,
     copyFiles,
+    heicToJpeg,
     readJSONFile,
     writeJSONfile,
     updateFileTime
