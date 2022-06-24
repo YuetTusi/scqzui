@@ -98,14 +98,16 @@ const Index: FC<{}> = () => <SettingLayout>
                     </NavLink>
                 </li>
             </Auth>
-            <li>
-                <NavLink to="/settings/ftp" replace={true} className="hvr-sweep-to-right">
-                    <div>
-                        <span className="ico"><FontAwesomeIcon icon={faFileArrowUp} /></span>
-                        <span className="name">文件上传配置</span>
-                    </div>
-                </NavLink>
-            </li>
+            <Auth deny={!useBcp}>
+                <li>
+                    <NavLink to="/settings/ftp" replace={true} className="hvr-sweep-to-right">
+                        <div>
+                            <span className="ico"><FontAwesomeIcon icon={faFileArrowUp} /></span>
+                            <span className="name">文件上传配置</span>
+                        </div>
+                    </NavLink>
+                </li>
+            </Auth>
             <li>
                 <NavLink to="/settings/version" replace={true} className="hvr-sweep-to-right">
                     <div>
