@@ -6,7 +6,7 @@ interface CheckJson {
     /**
      * 端口
      */
-    port: number,
+    port: string,
     /**
      * 用户名
      */

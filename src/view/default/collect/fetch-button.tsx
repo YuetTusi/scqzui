@@ -8,7 +8,13 @@ import { DeviceSystem } from '@/schema/device-system';
 import { FetchButtonProp } from './prop';
 
 const { Group } = Button;
-const { useFetch, useServerCloud } = helper.readConf()!;
+const {
+    useFetch,
+    useServerCloud,
+    fetchText,
+    fetchButtonText,
+    cloudButtonText
+} = helper.readConf()!;
 
 /**
  * 按钮区
@@ -29,7 +35,7 @@ const FetchButton: FC<FetchButtonProp> = ({
         event.stopPropagation();
         Modal.confirm({
             title: '停止',
-            content: '确定停止取证？',
+            content: `确定停止${fetchText ?? '取证'}？`,
             okText: '是',
             cancelText: '否',
             centered: true,
@@ -50,10 +56,20 @@ const FetchButton: FC<FetchButtonProp> = ({
         case FetchState.HasError:
             return <Group>
                 <Auth deny={!useFetch}>
-                    <Button onClick={() => onNormalHandle(device)} style={{ width: '100px' }} type="primary">取证</Button>
+                    <Button
+                        onClick={() => onNormalHandle(device)}
+                        style={{ width: '100px' }}
+                        type="primary">
+                        {fetchButtonText ?? '取证'}
+                    </Button>
                 </Auth>
                 <Auth deny={!useServerCloud}>
-                    <Button onClick={() => onServerCloudHandle(device)} style={{ width: '100px' }} type="primary">云取证</Button>
+                    <Button
+                        onClick={() => onServerCloudHandle(device)}
+                        style={{ width: '100px' }}
+                        type="primary">
+                        {cloudButtonText ?? '云取证'}
+                    </Button>
                 </Auth>
             </Group>
         case FetchState.Fetching:
@@ -62,16 +78,26 @@ const FetchButton: FC<FetchButtonProp> = ({
                     onClick={onStopClick}
                     type="primary"
                     disabled={device.isStopping}>
-                    {device.isStopping ? '停止中' : '停止取证'}
+                    {device.isStopping ? '停止中' : `停止${fetchText ?? '取证'}`}
                 </Button>
             </Group>;
         default:
             return <Group>
                 <Auth deny={!useFetch}>
-                    <Button type="primary" style={{ width: '100px' }} disabled={true}>取证</Button>
+                    <Button
+                        type="primary"
+                        style={{ width: '100px' }}
+                        disabled={true}>
+                        {fetchButtonText ?? '取证'}
+                    </Button>
                 </Auth>
                 <Auth deny={!useServerCloud}>
-                    <Button type="primary" style={{ width: '100px' }} disabled={true}>云取证</Button>
+                    <Button
+                        type="primary"
+                        style={{ width: '100px' }}
+                        disabled={true}>
+                        {cloudButtonText ?? '云取证'}
+                    </Button>
                 </Auth>
             </Group>;
     }

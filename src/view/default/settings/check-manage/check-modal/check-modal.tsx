@@ -58,7 +58,7 @@ const CheckModal: FC<CheckModalProp> = ({
             saveHandle({
                 isCheck,
                 ip: values.ip ?? '',
-                port: values.port ?? 0,
+                port: values.port ?? '21',
                 password: values.password ?? '',
                 username: values.username ?? '',
                 serverPath

@@ -138,6 +138,14 @@ interface Conf {
 	 */
 	parseText: string;
 	/**
+	 * 取证按钮文案（默认`取证`）
+	 */
+	fetchButtonText: string;
+	/**
+	 * 云取证按钮文案（默认`云取证`）
+	 */
+	cloudButtonText: string;
+	/**
 	 * 云取应用HTTP接口地址
 	 */
 	cloudAppUrl: string;
