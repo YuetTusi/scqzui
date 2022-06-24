@@ -48,6 +48,9 @@ const checkFtpConnect = debounce(
     { leading: true, trailing: false }
 );
 
+/**
+ * BCP文件上传
+ */
 const Ftp: FC<{}> = () => {
 
     const [formRef] = useForm<FormValue>();

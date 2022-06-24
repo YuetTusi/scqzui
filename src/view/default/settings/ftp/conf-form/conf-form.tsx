@@ -26,7 +26,7 @@ const ConfForm: FC<ConfFormProp> = ({ formRef, data }) => {
     return <FormBox>
         <Form form={formRef} layout="vertical">
             <div className="switch-bar">
-                <label>文件上传</label>
+                <label>启用上传</label>
                 <Item name="enable" noStyle={true}>
                     <Switch
                         checked={enable}
