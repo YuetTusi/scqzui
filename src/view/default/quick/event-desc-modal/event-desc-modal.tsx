@@ -45,8 +45,8 @@ const EventDescModal: FC<EventDescModalProp> = ({
                         width: 300,
                         margin: 1,
                         color: {
-                            light: '#181d30',
-                            dark: '#ffffffd9'
+                            light: '#ffffff',
+                            dark: '#181d30'
                         }
                     });
                 } catch (error) {
