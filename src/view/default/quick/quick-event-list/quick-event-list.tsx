@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Table from 'antd/lib/table';
+import { Key } from 'antd/lib/table/interface';
 import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import { QuickEventListState } from '@/model/default/quick-event-list';
@@ -8,7 +9,6 @@ import { QuickEvent } from '@/schema/quick-event';
 import { CaseListBox } from './styled/style';
 import { getColumns } from './column';
 import { EventListProp } from './prop';
-import { Key } from 'antd/lib/table/interface';
 
 /**
  * 快速点验案件表格

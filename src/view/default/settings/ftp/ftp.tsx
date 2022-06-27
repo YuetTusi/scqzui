@@ -7,13 +7,13 @@ import SaveOutlined from '@ant-design/icons/SaveOutlined';
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
 import message from 'antd/lib/message';
+import logger from '@/utils/log';
 import { helper } from '@/utils/helper';
 import { Split } from '@/component/style-tool';
 import { MainBox } from '../styled/sub-layout';
 import ConfForm, { FormValue } from './conf-form';
 import { TestState, TestAlert } from './test-alert';
 import { BarBox } from './styled/style';
-import logger from '@/utils/log';
 
 const { useForm } = Form;
 const cwd = process.cwd();

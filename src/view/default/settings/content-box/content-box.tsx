@@ -19,9 +19,7 @@ const ContentBox: FC<ContentBoxProp> = ({ title, children }) => {
                 </Button>
             </div>
         </div>
-        <ScrollBox>
-            {children}
-        </ScrollBox>
+        <ScrollBox>{children}</ScrollBox>
     </div>;
 }
 

@@ -7,6 +7,9 @@ interface AiSwitchState {
     data: Predict[]
 }
 
+/**
+ * AI配置组件Model
+ */
 let model: Model = {
 
     namespace: 'aiSwitch',

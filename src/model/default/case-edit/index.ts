@@ -1,5 +1,5 @@
-import CaseInfo from '@/schema/case-info';
 import { Model } from 'dva';
+import CaseInfo from '@/schema/case-info';
 import effects from './effects';
 import reducers from './reducers';
 
@@ -15,7 +15,7 @@ interface CaseEditState {
 }
 
 /**
- * 案件编辑
+ * 案件编辑Model
  */
 let model: Model = {
     namespace: 'caseEdit',

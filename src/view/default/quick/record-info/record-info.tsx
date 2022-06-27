@@ -140,7 +140,7 @@ const RecordInfo: FC<RecordInfoProp> = ({ data, onButtonClick }) => {
             <div className="desc">
                 <ul>
                     <li>
-                        <label htmlFor="span">{`所属${caseText ?? '案件'}`}</label>
+                        <label htmlFor="span">{`${caseText ?? '案件'}`}</label>
                         <span>{eventData?.eventName === undefined ? '' : eventData.eventName.split('_')[0]}</span>
                     </li>
                     <li>

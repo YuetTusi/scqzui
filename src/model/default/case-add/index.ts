@@ -9,6 +9,9 @@ interface CaseAddState {
     saving: boolean
 }
 
+/**
+ * 添加案件Model
+ */
 let model: Model = {
     namespace: "caseAdd",
     state: {

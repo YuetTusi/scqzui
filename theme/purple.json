@@ -1,5 +1,9 @@
 {
 	"primary-color": "#5863b5",
 	"link-color": "#5863b5",
-	"border-radius-base": "2px"
+	"border-radius-base": "2px",
+	"border-color-base": "#303030",
+	"text-color": "#ffffffd9",
+	"warn-color": "#f9ca24",
+	"error-color": "#ff3333"
 }

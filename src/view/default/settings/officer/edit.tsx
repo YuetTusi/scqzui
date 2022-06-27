@@ -4,13 +4,13 @@ import RollbackOutlined from '@ant-design/icons/RollbackOutlined'
 import SaveOutlined from '@ant-design/icons/SaveOutlined'
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
-import { MainBox } from '../styled/sub-layout';
 import { Split } from '@/component/style-tool';
-import { EditBox } from './styled/style';
 import { TableName } from '@/schema/table-name';
 import Officer from '@/schema/officer';
 import { getDb } from '@/utils/db';
 import EditForm from './edit-form';
+import { MainBox } from '../styled/sub-layout';
+import { EditBox } from './styled/style';
 import policeSvg from './styled/images/police.svg';
 
 const { useForm } = Form;
