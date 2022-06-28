@@ -326,9 +326,6 @@ export function getDeviceColumns(
                                             modal.destroy();
                                         }, 1000);
                                     } catch (error) {
-                                        console.log(
-                                            `@view/CaseData/InnerPhoneTable/columns: ${error.message}`
-                                        );
                                         modal.update({
                                             title: '删除失败',
                                             content: '可能文件仍被占用，请稍后再试',

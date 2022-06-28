@@ -126,6 +126,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
         try {
             const values = await validateFields();
             let entity = new CaseInfo();
+            entity._id = id;
             entity.m_strCaseName = values.m_strCaseName;
             entity.spareName = values.spareName;
             entity.m_strCasePath = values.m_strCasePath;
@@ -139,7 +140,6 @@ const CaseEdit: FC<CaseEditProp> = () => {
             entity.m_Applist = parseAppList[0] as ParseApp[];
             entity.tokenAppList = tokenAppList[0] as TokenApp[];
             entity.officerNo = values.officerNo;
-            // entity.officerName = this.currentOfficerName || officerName;
             entity.securityCaseNo = values.securityCaseNo;
             entity.securityCaseType = values.securityCaseType;
             entity.securityCaseName = values.securityCaseName;
@@ -147,20 +147,9 @@ const CaseEdit: FC<CaseEditProp> = () => {
             entity.handleCaseType = values.handleCaseType;
             entity.handleCaseName = values.handleCaseName;
             entity.isAi = isAi[0];
-            // entity.aiThumbnail = values.aiThumbnail;
-            // entity.aiWeapon = values.aiWeapon;
-            // entity.aiDoc = values.aiDoc;
-            // entity.aiDrug = values.aiDrug;
-            // entity.aiNude = values.aiNude;
-            // entity.aiMoney = values.aiMoney;
-            // entity.aiDress = values.aiDress;
-            // entity.aiTransport = values.aiTransport;
-            // entity.aiCredential = values.aiCredential;
-            // entity.aiTransfer = values.aiTransfer;
-            // entity.aiScreenshot = values.aiScreenshot;
-            entity._id = id;
             saveCase(entity);
         } catch (error) {
+            console.clear();
             console.warn(error);
         }
     }, 500, { leading: true, trailing: false });

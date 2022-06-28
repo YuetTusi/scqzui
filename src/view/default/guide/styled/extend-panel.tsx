@@ -7,18 +7,6 @@ const ExtendPanel = styled.div`
     bottom: 0;
     right: 15px;
     overflow-x: scroll;
-
-    //内层隐藏滚动条
-    /* &::after {
-        content:"";
-        display:block;
-        position: absolute;
-        left:0;
-        right:0;
-        bottom:0;
-        height:17px;
-        background-color: #181d30;
-    } */
 `;
 
 export { ExtendPanel }

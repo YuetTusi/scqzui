@@ -56,9 +56,7 @@ const FetchInfo: FC<FetchInfoProp> = memo(({ device, recordHandle }) => {
      * 采集结束后监听消息，清除USB序号对应的缓存
      * @param usb 序号
      */
-    const fetchOverHandle = (event: IpcRendererEvent, usb: number) => {
-        prev.delete(usb);
-    };
+    const fetchOverHandle = (event: IpcRendererEvent, usb: number) => prev.delete(usb);
 
     /**
      * 接收当前USB序号的最新一条进度消息
