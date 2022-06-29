@@ -28,6 +28,7 @@ import { AppJson } from '@/schema/app-json';
 import { ParseCategory } from '@/schema/parse-detail';
 import { QuickRecord } from '@/schema/quick-record';
 import { QuickEvent } from '@/schema/quick-event';
+import { Predict } from '@/view/default/case/ai-switch';
 import { DeviceStoreState } from './index';
 
 const cwd = process.cwd();
@@ -435,31 +436,25 @@ export default {
         const current = device.deviceList.find((item) => item?.usb == payload);
 
         try {
-            let appConfig: AppJson | undefined;
-            let predictAt: string = cwd;
-            const caseData: CaseInfo = yield call([db, 'findOne'], { _id: current?.caseId });
+            const aiTempAt = isDev
+                ? join(cwd, './data/predict.json')
+                : join(cwd, './resources/config/predict.json'); //AI配置模版所在路径
+            const [caseData, appConfig, aiTemp]: [CaseInfo, AppJson, Predict[]] = yield all([
+                call([db, 'findOne'], { _id: current?.caseId }),
+                call([helper, 'readAppJson']),
+                call([helper, 'readJSONFile'], aiTempAt)
+            ]);
 
             if (current && caseData.m_bIsAutoParse) {
-                let aiConfig: any[] = [];
-                predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
+                let aiConfig: Predict[] = [];
+                const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
                 let exist: boolean = yield call([helper, 'existFile'], predictAt);
                 if (exist) {
                     //案件下存在predict.json
-                    [appConfig, aiConfig] = yield all([
-                        call([helper, 'readAppJson']),
-                        call([helper, 'readJSONFile'], predictAt)
-                    ]);
-                } else {
-                    predictAt = isDev
-                        ? join(cwd, './data/predict.json')
-                        : join(cwd, './resources/config/predict.json');
-                    [appConfig, aiConfig] = yield all([
-                        call([helper, 'readAppJson']),
-                        call([helper, 'readJSONFile'], predictAt)
-                    ]);
+                    aiConfig = yield call([helper, 'readJSONFile'], predictAt);
                 }
-                // const appConfig: AppJson = yield call([helper, 'readAppJson']);
                 const tokenAppList: string[] = caseData.tokenAppList ? caseData.tokenAppList.map(i => i.m_strID) : [];
+                const aiTypes = helper.combinePredict(aiTemp, aiConfig);
                 logger.info(`开始解析(StartParse):${JSON.stringify({
                     caseId: caseData._id,
                     deviceId: current._id,
@@ -469,7 +464,7 @@ export default {
                     hasReport: caseData.hasReport ?? false,
                     isDel: caseData.isDel ?? false,
                     isAi: caseData.isAi ?? false,
-                    aiTypes: aiConfig,
+                    aiTypes,
                     useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                     useKeyword: appConfig?.useKeyword ?? false,
                     useDocVerify: appConfig?.useDocVerify ?? false,
@@ -488,7 +483,7 @@ export default {
                         hasReport: caseData.hasReport ?? false,
                         isDel: caseData.isDel ?? false,
                         isAi: caseData.isAi ?? false,
-                        aiTypes: aiConfig,
+                        aiTypes,
                         useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                         useKeyword: appConfig?.useKeyword ?? false,
                         useDocVerify: appConfig?.useDocVerify ?? false,

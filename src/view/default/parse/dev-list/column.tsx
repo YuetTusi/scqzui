@@ -26,10 +26,12 @@ import { TableName } from '@/schema/table-name';
 import CaseInfo from '@/schema/case-info';
 import { ParseCategory } from '@/schema/parse-detail';
 import CommandType, { SocketType } from '@/schema/command';
+import { AppJson } from '@/schema/app-json';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import logger from '@/utils/log';
+import { Predict } from '../../case/ai-switch';
 
 const { devText, fetchText, parseText } = helper.readConf()!;
 const cwd = process.cwd();
@@ -76,65 +78,62 @@ const openOnSystemWindow = debounce(
 const doParse = async (dispatch: Dispatch, data: DeviceType) => {
 
     const db = getDb<CaseInfo>(TableName.Cases);
-    let caseData: CaseInfo = await db.findOne({
-        _id: data.caseId
-    });
-    let caseJsonPath = join(data.phonePath!, '../../');
-    let caseJsonExist = await helper.existFile(join(caseJsonPath, 'Case.json'));
-    if (!caseJsonExist) {
-        await helper.writeCaseJson(caseJsonPath, caseData);
-    }
-
-    let predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
+    const caseJsonPath = join(data.phonePath!, '../../');
+    const aiTempAt = isDev
+        ? join(cwd, './data/predict.json')
+        : join(cwd, './resources/config/predict.json'); //AI配置模版所在路径
 
     try {
+        const [caseData, caseJsonExist, appConfig, aiTemp]: [CaseInfo, boolean, AppJson | null, Predict[]]
+            = await Promise.all([
+                db.findOne({ _id: data.caseId }),
+                helper.existFile(join(caseJsonPath, 'Case.json')),
+                helper.readAppJson(),
+                helper.readJSONFile(aiTempAt)
+            ]);
+
+        if (!caseJsonExist) {
+            await helper.writeCaseJson(caseJsonPath, caseData);
+        }
+
+        let aiConfig: Predict[] = [];
+        const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
         const exist = await helper.existFile(predictAt);
-        if (!exist) {
-            //案件下不存在predict.json，读模版文件
-            predictAt = isDev
-                ? join(cwd, './data/predict.json')
-                : join(cwd, './resources/config/predict.json');
+        if (exist) {
+            aiConfig = await helper.readJSONFile(predictAt);
         }
+        send(SocketType.Parse, {
+            type: SocketType.Parse,
+            cmd: CommandType.StartParse,
+            msg: {
+                caseId: data.caseId,
+                deviceId: data._id,
+                category: ParseCategory.Normal,
+                phonePath: data.phonePath,
+                hasReport: caseData?.hasReport ?? false,
+                isDel: caseData?.isDel ?? false,
+                isAi: caseData?.isAi ?? false,
+                aiTypes: helper.combinePredict(aiTemp, aiConfig),
+                useDefaultTemp: appConfig?.useDefaultTemp ?? true,
+                useKeyword: appConfig?.useKeyword ?? false,
+                useDocVerify: appConfig?.useDocVerify ?? false,
+                dataMode: data.mode ?? DataMode.Self,
+                tokenAppList: caseData.tokenAppList
+                    ? caseData.tokenAppList.map((i) => i.m_strID)
+                    : []
+            }
+        });
+        dispatch({
+            type: 'parseDev/updateParseState',
+            payload: {
+                id: data._id,
+                parseState: ParseState.Parsing,
+                pageIndex: 1
+            }
+        });
     } catch (error) {
-        predictAt = isDev
-            ? join(cwd, './data/predict.json')
-            : join(cwd, './resources/config/predict.json');
+        logger.error(`解析失败 @view/default/parse/dev-list/column.tsx:${error.message}`);
     }
-
-    const [appConfig, aiConfig] = await Promise.all([
-        helper.readAppJson(),
-        helper.readJSONFile(predictAt)
-    ]);
-
-    send(SocketType.Parse, {
-        type: SocketType.Parse,
-        cmd: CommandType.StartParse,
-        msg: {
-            caseId: data.caseId,
-            deviceId: data._id,
-            category: ParseCategory.Normal,
-            phonePath: data.phonePath,
-            hasReport: caseData?.hasReport ?? false,
-            isDel: caseData?.isDel ?? false,
-            isAi: caseData?.isAi ?? false,
-            aiTypes: aiConfig,
-            useDefaultTemp: appConfig?.useDefaultTemp ?? true,
-            useKeyword: appConfig?.useKeyword ?? false,
-            useDocVerify: appConfig?.useDocVerify ?? false,
-            dataMode: data.mode ?? DataMode.Self,
-            tokenAppList: caseData.tokenAppList
-                ? caseData.tokenAppList.map((i) => i.m_strID)
-                : []
-        }
-    });
-    dispatch({
-        type: 'parseDev/updateParseState',
-        payload: {
-            id: data._id,
-            parseState: ParseState.Parsing,
-            pageIndex: 1
-        }
-    });
 };
 
 /**

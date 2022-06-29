@@ -17,13 +17,13 @@ import log from './log';
 import { Conf } from '../type/model';
 import { BcpEntity } from '../schema/bcp-entity';
 import { AppCategory } from '../schema/app-config';
-import { BaseApp } from '../schema/base-app';
 import { TableName } from '../schema/table-name';
 import { CaseInfo } from '../schema/case-info';
 import { Manufaturer } from '../schema/manufaturer';
 import { AppJson } from '../schema/app-json';
 import { CheckJson } from '../schema/check-json';
-import { QuickEvent } from '@/schema/quick-event';
+import { QuickEvent } from '../schema/quick-event';
+import { Predict } from '../view/default/case/ai-switch';
 import { getDb } from './db';
 
 const cwd = process.cwd();//应用的根目录
@@ -434,24 +434,6 @@ const helper = {
         });
     },
     /**
-     * 取全部应用
-     * @param apps AppYaml配置
-     * @throws 格式有误抛出TypeError
-     */
-    getAllApps(apps: AppCategory[]): BaseApp[] {
-        if (Object.prototype.toString.call(apps) === '[object Array]') {
-            return apps.reduce((acc: BaseApp[], current: AppCategory) =>
-                acc.concat(current.app_list.map(i => ({
-                    m_strID: i.app_id,
-                    m_strPktlist: i.packages,
-                    name: i.name,
-                    key: i.key
-                }))), []);
-        } else {
-            throw new TypeError('应用格式错误');
-        }
-    },
-    /**
      * 返回应用id对应的名称
      * @param appData yaml应用数据
      * @param id 应用id
@@ -698,6 +680,30 @@ const helper = {
         } catch (error) {
             return false;
         }
+    },
+    /**
+     * 以模版为准合并AI配置
+     * 当模版中存在某配置项而案件下的配置不存在时，设为true；反之忽略
+     * @param temp 模版predict.json
+     * @param caseAi 案件AI配置
+     */
+    combinePredict(temp: Predict[], caseAi: Predict[]) {
+        return temp.reduce((total: Predict[], current: Predict) => {
+            const has = caseAi.find(i => i.type === current.type);
+            if (has) {
+                //案件下存在配置项，以案件为谁
+                total.push({
+                    ...current,
+                    use: has.use
+                });
+            } else {
+                total.push({
+                    ...current,
+                    use: true
+                });
+            }
+            return total;
+        }, []);
     }
 };
 
