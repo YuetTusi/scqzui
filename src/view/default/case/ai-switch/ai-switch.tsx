@@ -80,7 +80,7 @@ const AiSwitch: FC<AiSwitchProp> = ({ casePath }) => {
         if (data.length === 0) {
             return null;
         }
-        const rows = chunk(data, 6);
+        const rows = chunk(data.filter(i => i.hide === false), 6);
         return rows.map((row, i) => <Row style={{ padding: '16px 0' }} key={`AIROW_${i}`}>
             {
                 row.map((col, j) => {
