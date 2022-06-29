@@ -22,7 +22,7 @@ export default {
             const temp: Predict[] = yield call([helper, 'readJSONFile'], tempAt);
             if (casePath === undefined) {
                 //无案件目录，是新增，读模版
-                put({ type: 'setData', payload: temp });
+                yield put({ type: 'setData', payload: temp });
             } else {
                 const aiConfigAt = join(casePath, './predict.json'); //当前案件AI路径
                 const exist: boolean = yield call([helper, 'existFile'], aiConfigAt);
@@ -48,7 +48,7 @@ export default {
             }
         } catch (error) {
             console.warn(`读取predict.json失败, @view/default/case/ai-switch:${error.message}`);
-            put({ type: 'setData', payload: [] });
+            yield put({ type: 'setData', payload: [] });
         }
     }
 };
