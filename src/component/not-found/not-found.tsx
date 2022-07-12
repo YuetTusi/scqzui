@@ -14,6 +14,9 @@ const NotFoundBox = styled.div`
     align-items: center;
 `;
 
+/**
+ * 未找到视图
+ */
 const NotFound: FC<{}> = () => {
 
     const dispatch = useDispatch();

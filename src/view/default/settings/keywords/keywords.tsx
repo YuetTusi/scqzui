@@ -254,6 +254,7 @@ const Keywords: FC<KeywordsProp> = () => {
                 await loadFileList();
                 shell.openPath(join(saveFolder, `${name}.xlsx`));
                 message.success('分类保存成功，请在Excel文档中添加关键词');
+
                 setAddCategoryModalVisible(false);
             }
         } catch (error) {
@@ -356,7 +357,14 @@ const Keywords: FC<KeywordsProp> = () => {
             </div>
         </FormBox>
         <Split />
-        <SortPanel>
+        <SortPanel style={{
+            position: 'absolute',
+            top: '62px',
+            left: '9px',
+            right: '9px',
+            bottom: '9px',
+            backgroundColor: '#141414'
+        }}>
             <div className="caption">
                 关键词文档列表
             </div>

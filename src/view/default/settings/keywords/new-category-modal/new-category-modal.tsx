@@ -27,12 +27,13 @@ const NewCategoryModal: FC<NewCategoryModalProp> = ({
     * 保存Click
     */
     const onSaveClick = async (e: MouseEvent<HTMLButtonElement>) => {
-        const { validateFields } = formRef;
+        const { validateFields, resetFields } = formRef;
         e.preventDefault();
 
         try {
             const values = await validateFields();
             saveHandle(values.name);
+            resetFields();
         } catch (error) {
             console.warn(error);
         }

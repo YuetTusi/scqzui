@@ -29,7 +29,11 @@ export const ExcelList = styled.div`
     justify-content: center;
     align-items: center;
     &.nothing{
-        min-height: 700px;
+        position: absolute;
+        top:32px;
+        right:0;
+        bottom:0;
+        left:0;
     }
     ul{
         flex:1;
