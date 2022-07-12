@@ -11,6 +11,7 @@ import MenuOutlined from '@ant-design/icons/MenuOutlined';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import { helper } from '@/utils/helper';
+import Auth from '../auth';
 import { BackgroundBox, Header } from './styled/header';
 import { Center } from './styled/center';
 import { Footer } from './styled/footer';
@@ -22,7 +23,7 @@ import NedbImportModal, { importPrevNedb } from '../nedb-import-modal';
 import { UnorderList } from '../style-tool/list';
 
 const cwd = process.cwd();
-const { fetchText, useBcp } = helper.readConf()!;
+const { fetchText, useBcp, max } = helper.readConf()!;
 
 /**
  * 过滤-字符
@@ -59,6 +60,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
     const [title, setTitle] = useState<string>('');
     const [version, setVersion] = useState<string>('');
     const [manu, setManu] = useState<string>('');
+    const [isDebug, setIsDebug] = useState<boolean>(false);
     const [softhardwareModalVisible, setSofthardwareModalVisible] = useState<boolean>(false);
     const [inputHistoryModalVisbile, setInputHistoryModalVisible] = useState<boolean>(false);
     const [nedbImportModalVisbile, setNedbImportModalVisbile] = useState<boolean>(false);
@@ -75,6 +77,12 @@ const BoardPanel: FC<{}> = ({ children }) => {
                 setTitle('');
                 setVersion('');
             }
+        })();
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            setIsDebug(await helper.isDebug());
         })();
     }, []);
 
@@ -178,6 +186,9 @@ const BoardPanel: FC<{}> = ({ children }) => {
             <Header>
                 <div className="header-caption">
                     <span>{title}</span>
+                    <Auth deny={!isDebug}>
+                        <span style={{ color: '#f9ca24' }}>{max}路</span>
+                    </Auth>
                     <em onClick={() => dispatch(routerRedux.push('/settings/version'))}>
                         {filterCharactor(version)}
                     </em>
