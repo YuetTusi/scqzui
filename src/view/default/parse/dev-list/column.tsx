@@ -110,6 +110,8 @@ const doParse = async (dispatch: Dispatch, data: DeviceType) => {
                 deviceId: data._id,
                 category: ParseCategory.Normal,
                 phonePath: data.phonePath,
+                ruleFrom: caseData.ruleFrom ?? 0,
+                ruleTo: caseData.ruleTo ?? 8,
                 hasReport: caseData?.hasReport ?? false,
                 isDel: caseData?.isDel ?? false,
                 isAi: caseData?.isAi ?? false,

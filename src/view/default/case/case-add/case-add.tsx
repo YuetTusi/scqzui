@@ -39,6 +39,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
     const tokenAppList = useState<BaseApp[]>([]);
 
     useEffect(() => {
+        formRef.setFieldsValue({ ruleFrom: 0, ruleTo: 8 });
         dispatch({ type: 'aiSwitch/readAiConfig', payload: { casePath: undefined } });
     }, []);
 
@@ -88,6 +89,8 @@ const CaseAdd: FC<CaseAddProp> = () => {
             entity.sdCard = sdCard[0];
             entity.hasReport = hasReport[0];
             entity.m_bIsAutoParse = autoParse[0];
+            entity.ruleFrom = values.ruleFrom;
+            entity.ruleTo = values.ruleTo;
             entity.m_Applist = parseAppList[0] as ParseApp[];
             entity.tokenAppList = tokenAppList[0] as TokenApp[];
             entity.generateBcp = generateBcp[0];

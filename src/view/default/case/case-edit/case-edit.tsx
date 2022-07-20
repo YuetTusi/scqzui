@@ -81,6 +81,8 @@ const CaseEdit: FC<CaseEditProp> = () => {
         if (data !== null) {
             formRef.setFieldsValue({
                 ...data,
+                ruleFrom: data.ruleFrom ?? 0,
+                ruleTo: data.ruleTo ?? 8,
                 m_strCaseName: getCaseName(data.m_strCaseName)[0]
             });
             sdCard[1](data?.sdCard ?? true);
@@ -137,6 +139,8 @@ const CaseEdit: FC<CaseEditProp> = () => {
             entity.generateBcp = generateBcp[0];
             entity.attachment = attachment[0];
             entity.isDel = isDel[0];
+            entity.ruleFrom = values.ruleFrom;
+            entity.ruleTo = values.ruleTo;
             entity.m_Applist = parseAppList[0] as ParseApp[];
             entity.tokenAppList = tokenAppList[0] as TokenApp[];
             entity.officerNo = values.officerNo;

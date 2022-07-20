@@ -17,6 +17,7 @@ import { ParseState } from '@/schema/device-state';
 import { DataMode } from '@/schema/data-mode';
 import { DeviceSystem } from '@/schema/device-system';
 import { ParseCategory } from '@/schema/parse-detail';
+import { QuickEvent } from '@/schema/quick-event';
 import {
     deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,
     parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
@@ -202,6 +203,7 @@ export default {
      * 接收快速点验消息
      */
     receiveCheck({ dispatch }: SubscriptionAPI) {
+        const db = getDb<QuickEvent>(TableName.QuickEvent);
         ipcRenderer.on('check-parse', async (event: IpcRendererEvent, args: Record<string, any>) => {
 
             ipcRenderer.send('show-notice', {
@@ -212,9 +214,10 @@ export default {
                 ? join(cwd, './data/predict.json')
                 : join(cwd, './resources/config/predict.json');
 
-            const [appJson, aiConfig] = await Promise.all([
+            const [appJson, aiConfig, eventData] = await Promise.all([
                 helper.readAppJson(),
-                helper.readJSONFile(aiTempPath)
+                helper.readJSONFile(aiTempPath),
+                db.findOne({ _id: args.caseId })
             ]);
 
             //NOTE:将设备数据入库
@@ -267,6 +270,8 @@ export default {
                     category: ParseCategory.Quick,
                     phonePath: next.phonePath,
                     dataMode: DataMode.Check,
+                    ruleFrom: eventData?.ruleFrom ?? 0,
+                    ruleTo: eventData?.ruleTo ?? 8,
                     hasReport: true,
                     isDel: false,
                     isAi: false,

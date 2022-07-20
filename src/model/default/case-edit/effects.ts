@@ -43,7 +43,14 @@ export default {
         try {
             const aiSwitch: AiSwitchState = yield select((state: StateTree) => state.aiSwitch);
             const prev: CaseInfo = yield call([db, 'findOne'], { _id: payload._id });
-            yield call([db, 'update'], { _id: payload._id }, { ...payload, m_strCaseName: prev.m_strCaseName });
+            yield call(
+                [db, 'update'],
+                { _id: payload._id },
+                {
+                    ...payload,
+                    m_strCaseName: prev.m_strCaseName
+                }
+            );
             yield put({
                 type: 'updateCheckDataFromCase', payload: {
                     caseId: payload._id,

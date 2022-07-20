@@ -102,6 +102,8 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
                 deviceId: data._id,
                 category: ParseCategory.Quick,
                 phonePath: data.phonePath,
+                ruleFrom: eventData.ruleFrom ?? 0,
+                ruleTo: eventData.ruleTo ?? 8,
                 hasReport: true,
                 isDel: false,
                 isAi: false,

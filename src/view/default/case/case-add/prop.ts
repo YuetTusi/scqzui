@@ -96,47 +96,11 @@ export interface FormValue {
      */
     handleOfficerNo: string;
     /**
-     * AI分析缩略图
+     * 违规时段起
      */
-    aiThumbnail: boolean;
+    ruleFrom: number;
     /**
-     * AI武器类
+     * 违规时段止
      */
-    aiWeapon: boolean;
-    /**
-     * AI文档类
-     */
-    aiDoc: boolean;
-    /**
-     * AI毒品类
-     */
-    aiDrug: boolean;
-    /**
-     * AI裸体类
-     */
-    aiNude: boolean;
-    /**
-     * AI货币类
-     */
-    aiMoney: boolean;
-    /**
-     * AI着装类
-     */
-    aiDress: boolean;
-    /**
-     * AI交通工具
-     */
-    aiTransport: boolean;
-    /**
-     * AI证件类
-     */
-    aiCredential: boolean;
-    /**
-     * AI聊天转帐类
-     */
-    aiTransfer: boolean;
-    /**
-     * AI照片截图
-     */
-    aiScreenshot: boolean;
+    ruleTo: number;
 }

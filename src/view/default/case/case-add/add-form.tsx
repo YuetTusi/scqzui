@@ -9,9 +9,10 @@ import CloudSyncOutlined from '@ant-design/icons/CloudSyncOutlined'
 import SelectOutlined from '@ant-design/icons/SelectOutlined'
 import Button from 'antd/lib/button';
 import Checkbox from 'antd/lib/checkbox';
-import Form from 'antd/lib/form';
+import Form, { RuleObject } from 'antd/lib/form';
 import Empty from 'antd/lib/empty';
 import Input from 'antd/lib/input';
+import InputNumber from 'antd/lib/input-number';
 import Select from 'antd/lib/select';
 import Tooltip from 'antd/lib/tooltip';
 import Col from 'antd/lib/col';
@@ -42,6 +43,9 @@ const formItemLayout = {
 const { useBcp, useAi, caseText, fetchText, parseText } = helper.readConf()!;
 
 
+/**
+ * 案件表单（添加）
+ */
 const AddForm: FC<FormProp> = ({
     formRef, sdCardState, hasReportState, autoParseState, generateBcpState,
     attachmentState, isDelState, isAiState, parseAppListState, tokenAppListState
@@ -96,6 +100,13 @@ const AddForm: FC<FormProp> = ({
             setIsCheck(false);
         }
     }, 400);
+
+    const ruleToValid = async (rule: RuleObject, value: any) => {
+        const from = formRef.getFieldValue('ruleFrom');
+        if (from >= value) {
+            throw new Error('请大于起始时段');
+        }
+    };
 
     return (
         <FormBox>
@@ -168,6 +179,37 @@ const AddForm: FC<FormProp> = ({
                                     )}
                             />
                         </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <Row>
+                            <Col span={12}>
+                                <Item
+                                    name="ruleFrom"
+                                    label="违规时段 起"
+                                    rules={[
+                                        { required: true, message: '请填写违规时段' }
+                                    ]}
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 14 }}>
+                                    <InputNumber min={0} max={24} style={{ width: '100%' }} />
+                                </Item>
+                            </Col>
+                            <Col span={12}>
+                                <Item
+                                    name="ruleTo"
+                                    label="违规时段 止"
+                                    rules={[
+                                        { required: true, message: '请填写违规时段' },
+                                        { validator: ruleToValid }
+                                    ]}
+                                    labelCol={{ span: 6 }}
+                                    wrapperCol={{ span: 14 }}>
+                                    <InputNumber min={0} max={24} style={{ width: '100%' }} />
+                                </Item>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
                 <Row>
