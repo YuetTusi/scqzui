@@ -1,5 +1,3 @@
-import { join } from 'path';
-import { mkdirSync } from 'fs';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { SubscriptionAPI } from 'dva';
 import Modal from 'antd/lib/modal';
@@ -11,23 +9,16 @@ import { LocalStoreKey } from '@/utils/local-store';
 import TipType from '@/schema/tip-type';
 import { TableName } from '@/schema/table-name';
 import { FetchLog } from '@/schema/fetch-log';
-import { QuickRecord } from '@/schema/quick-record';
 import CommandType, { SocketType, Command } from '@/schema/command';
 import { ParseState } from '@/schema/device-state';
-import { DataMode } from '@/schema/data-mode';
-import { DeviceSystem } from '@/schema/device-system';
-import { ParseCategory } from '@/schema/parse-detail';
-import { QuickEvent } from '@/schema/quick-event';
 import {
     deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,
     parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
-    appRecFinish, fetchPercent, importErr, backDatapass
+    appRecFinish, fetchPercent, importErr, backDatapass, checkFinishToParse
 } from './listener';
 
-const cwd = process.cwd();
-const isDev = process.env['NODE_ENV'] === 'development';
 const { Fetch, Parse, Trace, Error } = SocketType;
-const { max, useTraceLogin, devText, fetchText, parseText } = helper.readConf()!;
+const { max, useTraceLogin, devText } = helper.readConf()!;
 
 /**
  * 订阅
@@ -203,86 +194,7 @@ export default {
      * 接收快速点验消息
      */
     receiveCheck({ dispatch }: SubscriptionAPI) {
-        const db = getDb<QuickEvent>(TableName.QuickEvent);
-        ipcRenderer.on('check-parse', async (event: IpcRendererEvent, args: Record<string, any>) => {
-
-            ipcRenderer.send('show-notice', {
-                message: `「${args.mobileName ?? '未知设备'}」${fetchText ?? '取证'}结束，开始${parseText ?? '解析'}${fetchText ?? '点验'}数据`
-            });
-
-            const aiTempPath = isDev
-                ? join(cwd, './data/predict.json')
-                : join(cwd, './resources/config/predict.json');
-
-            const [appJson, aiConfig, eventData] = await Promise.all([
-                helper.readAppJson(),
-                helper.readJSONFile(aiTempPath),
-                db.findOne({ _id: args.caseId })
-            ]);
-
-            //NOTE:将设备数据入库
-            let next = new QuickRecord();
-            next._id = helper.newId();
-            next.mobileHolder = args.mobileHolder ?? '';
-            next.phonePath = args.phonePath ?? '';
-            next.caseId = args.caseId ?? '';//所属案件id
-            next.mobileNo = args.mobileNo ?? '';
-            next.mobileName = `${args.mobileName ?? 'unknow'}_${helper.timestamp()}`;
-            next.parseState = ParseState.Parsing;
-            next.mode = DataMode.Check;
-            next.fetchTime = new Date();
-            next.mobileNumber = '';
-            next.handleOfficerNo = '';
-            next.note = '';
-            next.cloudAppList = [];
-            next.system = DeviceSystem.Android;
-
-            let exist: boolean = await helper.existFile(next.phonePath!);
-            if (!exist) {
-                //手机路径不存在，创建之
-                mkdirSync(next.phonePath!, { recursive: true });
-            }
-            //将设备信息写入Device.json
-            await helper.writeJSONfile(join(next.phonePath!, 'Device.json'), {
-                mobileHolder: next.mobileHolder ?? '',
-                mobileNo: next.mobileNo ?? '',
-                mobileName: next.mobileName ?? '',
-                note: next.note ?? '',
-                mode: next.mode ?? DataMode.Self
-            });
-
-            dispatch({
-                type: 'quickRecordList/saveToEvent', payload: {
-                    id: next.caseId,
-                    data: next
-                }
-            });
-            dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [next.caseId] });//选中案件
-            dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [next._id] });//展开点验设备
-
-            //# 通知parse开始解析
-            send(SocketType.Parse, {
-                type: SocketType.Parse,
-                cmd: CommandType.StartParse,
-                msg: {
-                    caseId: next.caseId,
-                    deviceId: next._id,
-                    category: ParseCategory.Quick,
-                    phonePath: next.phonePath,
-                    dataMode: DataMode.Check,
-                    ruleFrom: eventData?.ruleFrom ?? 0,
-                    ruleTo: eventData?.ruleTo ?? 8,
-                    hasReport: true,
-                    isDel: false,
-                    isAi: false,
-                    aiTypes: aiConfig,
-                    useDefaultTemp: appJson?.useDefaultTemp ?? true,
-                    useKeyword: appJson?.useKeyword ?? false,
-                    useDocVerify: appJson?.useDocVerify ?? false,
-                    tokenAppList: []
-                }
-            });
-        });
+        checkFinishToParse(dispatch);
     },
 
     /**

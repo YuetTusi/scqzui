@@ -1,8 +1,9 @@
-import path from 'path';
+import { join } from 'path';
+import { mkdirSync } from 'fs';
 import { execFile } from 'child_process';
 import groupBy from 'lodash/groupBy';
 import { Dispatch } from "dva";
-import { ipcRenderer } from "electron";
+import { ipcRenderer, IpcRendererEvent } from "electron";
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import logger from "@/utils/log";
@@ -25,8 +26,13 @@ import { TableName } from "@/schema/table-name";
 import { HumanVerify } from '@/schema/human-verify';
 import { DataMode } from '@/schema/data-mode';
 import { CaptchaMsg, CloudAppMessages } from '@/schema/cloud-app-messages';
+import { QuickEvent } from '@/schema/quick-event';
+import { QuickRecord } from '@/schema/quick-record';
+import { DeviceSystem } from '@/schema/device-system';
 import { LoginState } from '../trace-login';
 
+const cwd = process.cwd();
+const isDev = process.env['NODE_ENV'] === 'development';
 const { fetchText, parseText } = helper.readConf()!;
 const appPath = process.cwd();
 
@@ -257,10 +263,10 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
             if (isparseok && caseData.generateBcp) {
                 //# 解析`成功`且`是`自动生成BCP
                 logger.info(`解析结束开始自动生成BCP, 手机路径：${deviceData.phonePath}`);
-                const bcpExe = path.join(appPath, '../tools/BcpTools/BcpGen.exe');
+                const bcpExe = join(appPath, '../tools/BcpTools/BcpGen.exe');
                 const proc = execFile(bcpExe, [deviceData.phonePath!, caseData.attachment ? '1' : '0'], {
                     windowsHide: true,
-                    cwd: path.join(appPath, '../tools/BcpTools')
+                    cwd: join(appPath, '../tools/BcpTools')
                 });
                 // proc.once('close', () => {
                 //     dispatch({
@@ -398,4 +404,90 @@ export function appRecFinish({ msg }: Command<{
     message.info(msg.info ?? '');
     dispatch({ type: 'trail/readAppQueryJson', payload: { value: msg.value } });
     dispatch({ type: 'appSet/setReading', payload: false })
+}
+
+/**
+ * 快速点验采集结束，接收数据进行解析
+ */
+export function checkFinishToParse(dispatch: Dispatch<any>) {
+    const db = getDb<QuickEvent>(TableName.QuickEvent);
+    ipcRenderer.on('check-parse', async (event: IpcRendererEvent, args: Record<string, any>) => {
+
+        ipcRenderer.send('show-notice', {
+            message: `「${args.mobileName ?? '未知设备'}」${fetchText ?? '取证'}结束，开始${parseText ?? '解析'}${fetchText ?? '点验'}数据`
+        });
+
+        const aiTempPath = isDev
+            ? join(cwd, './data/predict.json')
+            : join(cwd, './resources/config/predict.json');
+
+        const [appJson, aiConfig, eventData] = await Promise.all([
+            helper.readAppJson(),
+            helper.readJSONFile(aiTempPath),
+            db.findOne({ _id: args.caseId })
+        ]);
+
+        //NOTE:将设备数据入库
+        let next = new QuickRecord();
+        next._id = helper.newId();
+        next.mobileHolder = args.mobileHolder ?? '';
+        next.phonePath = args.phonePath ?? '';
+        next.caseId = args.caseId ?? '';//所属案件id
+        next.mobileNo = args.mobileNo ?? '';
+        next.mobileName = `${args.mobileName ?? 'unknow'}_${helper.timestamp()}`;
+        next.parseState = ParseState.Parsing;
+        next.mode = DataMode.Check;
+        next.fetchTime = new Date();
+        next.mobileNumber = '';
+        next.handleOfficerNo = '';
+        next.note = '';
+        next.cloudAppList = [];
+        next.system = DeviceSystem.Android;
+
+        let exist: boolean = await helper.existFile(next.phonePath!);
+        if (!exist) {
+            //手机路径不存在，创建之
+            mkdirSync(next.phonePath!, { recursive: true });
+        }
+        //将设备信息写入Device.json
+        await helper.writeJSONfile(join(next.phonePath!, 'Device.json'), {
+            mobileHolder: next.mobileHolder ?? '',
+            mobileNo: next.mobileNo ?? '',
+            mobileName: next.mobileName ?? '',
+            note: next.note ?? '',
+            mode: next.mode ?? DataMode.Self
+        });
+
+        dispatch({
+            type: 'quickRecordList/saveToEvent', payload: {
+                id: next.caseId,
+                data: next
+            }
+        });
+        dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [next.caseId] });//选中案件
+        dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [next._id] });//展开点验设备
+
+        //# 通知parse开始解析
+        send(SocketType.Parse, {
+            type: SocketType.Parse,
+            cmd: CommandType.StartParse,
+            msg: {
+                caseId: next.caseId,
+                deviceId: next._id,
+                category: ParseCategory.Quick,
+                phonePath: next.phonePath,
+                dataMode: DataMode.Check,
+                ruleFrom: eventData?.ruleFrom ?? 0,
+                ruleTo: eventData?.ruleTo ?? 8,
+                hasReport: true,
+                isDel: false,
+                isAi: false,
+                aiTypes: aiConfig,
+                useDefaultTemp: appJson?.useDefaultTemp ?? true,
+                useKeyword: appJson?.useKeyword ?? false,
+                useDocVerify: appJson?.useDocVerify ?? false,
+                tokenAppList: []
+            }
+        });
+    });
 }

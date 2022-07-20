@@ -60,7 +60,7 @@ const MobileInfo: FC<MobileInfoProp> = ({ device, recordHandle }) => {
         case FetchState.Connected:
             return <>
                 <div className="help">
-                    {extra === undefined ? null : <p>{extra}</p>}
+                    {extra === undefined ? null : <p className="extra">{extra}</p>}
                     <ModelList phoneInfo={phoneInfo!} />
                 </div>
                 <div className="rec-link"></div>
@@ -68,7 +68,7 @@ const MobileInfo: FC<MobileInfoProp> = ({ device, recordHandle }) => {
         case FetchState.Finished:
             return <>
                 <div className="help">
-                    {extra === undefined ? null : <p>{extra}</p>}
+                    {extra === undefined ? null : <p className="extra">{extra}</p>}
                 </div>
                 <CaseInfo usb={usb!} />
                 <div className="rec-link">
@@ -78,6 +78,7 @@ const MobileInfo: FC<MobileInfoProp> = ({ device, recordHandle }) => {
         case FetchState.Fetching:
             return <>
                 <div className="help">
+                    {extra === undefined ? null : <p className="extra">{extra}</p>}
                     <div className="clock">
                         <Clock usb={Number(usb!) - 1} />
                     </div>

@@ -346,7 +346,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                         },
                                         []
                                     )}>
-                                    <Input maxLength={3} />
+                                    <Input />
                                 </AutoComplete>
                             </Item>
                         </Col>

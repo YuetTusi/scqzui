@@ -352,7 +352,7 @@ const ServerCloudModal: FC<Prop> = ({
                                         },
                                         []
                                     )}>
-                                    <Input maxLength={16} />
+                                    <Input />
                                 </AutoComplete>
                             </Item>
                         </Col>
@@ -443,7 +443,7 @@ const ServerCloudModal: FC<Prop> = ({
                                         },
                                         []
                                     )}>
-                                    <Input maxLength={3} />
+                                    <Input />
                                 </AutoComplete>
                             </Item>
                         </Col>

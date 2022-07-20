@@ -18,16 +18,14 @@ import theme from '../../../theme/cyan.json';
  * @param api 路由参数
  * @returns 路由
  */
-const createRouter = (api?: RouterAPI) => {
-	const { history } = api!;
-
-	return <ConfigProvider
+const createRouter = (api?: RouterAPI) =>
+	<ConfigProvider
 		locale={localeCN}
 		autoInsertSpaceInButton={false}
 		componentSize="middle">
 		<ThemeProvider theme={theme}>
 			<Crash>
-				<Router history={history}>
+				<Router history={api!.history}>
 					<Switch>
 						<Route
 							path="/"
@@ -197,6 +195,5 @@ const createRouter = (api?: RouterAPI) => {
 		</ThemeProvider>
 		<GlobalStyle />
 	</ConfigProvider>;
-};
 
 export { createRouter };

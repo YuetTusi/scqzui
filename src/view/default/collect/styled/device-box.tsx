@@ -56,6 +56,13 @@ const DeivceBox = styled.div`
             &>div{
                 padding:2px 0;
             }
+            &>.extra{
+                margin:0;
+                padding: 0;
+                font-size:1.2rem;
+                font-weight: normal;
+                color:${(props => props.theme['error-color'])};
+            }
             &>.clock{
                 text-align: center;
             }

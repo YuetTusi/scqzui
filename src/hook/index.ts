@@ -10,6 +10,7 @@ import { useManufacturer } from './manufacturer';
 import { useQuickEvent } from './quick-event';
 import { useQuickHitCount, useQuickHit } from './quick-hit';
 import { useDestroy } from './destroy';
+import { useKeyboardEvent } from './keyboard';
 
 export {
     useAppSerial,
@@ -26,5 +27,6 @@ export {
     useQuickEvent,
     useQuickHitCount,
     useQuickHit,
-    useDestroy
+    useDestroy,
+    useKeyboardEvent
 };
