@@ -6,14 +6,14 @@ type KeyType = 'keydown' | 'keyup' | 'keypress';
 /**
  * 绑定键盘事件
  */
-const useKeyboardEvent = (type: KeyType, element: HTMLElement, handle: (e: KeyboardEvent) => void) => {
+const useKeyboardEvent = (type: KeyType, handle: (e: KeyboardEvent) => void) => {
 
     useEffect(() => {
 
-        element.addEventListener(type, handle);
+        document.addEventListener(type, handle);
 
         return () => {
-            element.removeEventListener(type, handle);
+            document.removeEventListener(type, handle);
         }
     }, []);
 };

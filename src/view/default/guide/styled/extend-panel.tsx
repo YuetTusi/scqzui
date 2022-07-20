@@ -7,6 +7,7 @@ const ExtendPanel = styled.div`
     bottom: 0;
     right: 15px;
     overflow-x: scroll;
+    scroll-behavior:smooth;
 `;
 
 export { ExtendPanel }

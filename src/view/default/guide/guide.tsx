@@ -1,3 +1,4 @@
+import throttle from 'lodash/throttle';
 import React, { FC, useEffect, useRef } from 'react';
 import { faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -5,6 +6,7 @@ import Reading from '@/component/loading/reading';
 import BoardMenu from '@/component/guide-menu';
 import { ExtendPanel } from './styled/extend-panel';
 import { GuideBox } from './styled/box';
+import { useKeyboardEvent } from '@/hook';
 
 /**
  * 首屏按钮页
@@ -12,6 +14,7 @@ import { GuideBox } from './styled/box';
 const Guide: FC<{}> = () => {
 
     const scrollRef = useRef<HTMLDivElement>(null); //滚动div
+    const outerBoxRef = useRef<HTMLDivElement>(null);//最外层div
 
     /**
      * 按钮面板Wheel
@@ -20,12 +23,31 @@ const Guide: FC<{}> = () => {
         event.preventDefault();
         const { deltaY } = event;
         if (scrollRef.current !== null) {
+            scrollRef.current.style.scrollBehavior = 'auto';
             scrollRef.current.scrollLeft += deltaY - 10;
+        }
+    };
+
+    /**
+     * 左右滚动键盘事件
+     */
+    const onPanelKeydown = (event: KeyboardEvent) => {
+        if (scrollRef.current !== null) {
+            scrollRef.current.style.scrollBehavior = 'smooth';
+            switch (event.code) {
+                case 'ArrowRight':
+                    scrollRef.current.scrollLeft += 200;
+                    break;
+                case 'ArrowLeft':
+                    scrollRef.current.scrollLeft -= 200;
+                    break;
+            }
         }
     };
 
     useEffect(() => {
         if (scrollRef.current !== null) {
+            scrollRef.current.style.scrollBehavior = 'smooth';
             scrollRef.current.addEventListener('wheel', onPanelWheel);
         }
         return () => {
@@ -33,12 +55,15 @@ const Guide: FC<{}> = () => {
         };
     }, []);
 
+    useKeyboardEvent('keydown', throttle(onPanelKeydown, 100));
+
     /**
      * 向右滚动Click 
      * @param to 滚动方向
      */
     const onScrollToClick = (to: 'left' | 'right') => {
         if (scrollRef.current) {
+            scrollRef.current.style.scrollBehavior = 'smooth';
             const { scrollWidth } = scrollRef.current;
             to === 'left'
                 ? scrollRef.current.scrollLeft = 0
@@ -46,7 +71,7 @@ const Guide: FC<{}> = () => {
         }
     };
 
-    return <GuideBox>
+    return <GuideBox ref={outerBoxRef}>
         <ExtendPanel ref={scrollRef}>
             <BoardMenu>
                 Dashboard
