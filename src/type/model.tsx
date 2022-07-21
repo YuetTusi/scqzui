@@ -237,6 +237,10 @@ interface Conf {
 	 * 快速点验服务名称
 	 */
 	quickFetchExe: string;
+	/**
+	 * 报告显示方式
+	 */
+	reportType: number;
 }
 
 export { StateTree, Conf };

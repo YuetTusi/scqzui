@@ -78,6 +78,8 @@ if (helper.useBlackListRender()) {
     log.warn('禁用GPU渲染, 忽略Chromium显卡黑名单');
 }
 
+helper.writeReportJson(config?.reportType === undefined ? 0 : config.reportType); //写report.json
+
 /**
  * 销毁所有窗口
  */

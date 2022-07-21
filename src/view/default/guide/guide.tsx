@@ -14,7 +14,6 @@ import { useKeyboardEvent } from '@/hook';
 const Guide: FC<{}> = () => {
 
     const scrollRef = useRef<HTMLDivElement>(null); //滚动div
-    const outerBoxRef = useRef<HTMLDivElement>(null);//最外层div
 
     /**
      * 按钮面板Wheel
@@ -71,7 +70,7 @@ const Guide: FC<{}> = () => {
         }
     };
 
-    return <GuideBox ref={outerBoxRef}>
+    return <GuideBox>
         <ExtendPanel ref={scrollRef}>
             <BoardMenu>
                 Dashboard

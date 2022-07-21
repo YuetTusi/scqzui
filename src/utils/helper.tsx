@@ -2,6 +2,7 @@ import React from 'react';
 import { execSync } from 'child_process';
 import crypto from 'crypto';
 import fs from 'fs';
+import { writeFile } from 'fs/promises';
 import net from 'net';
 import path from 'path';
 import cpy from 'cpy';
@@ -27,6 +28,7 @@ import { Predict } from '../view/default/case/ai-switch';
 import { getDb } from './db';
 
 const cwd = process.cwd();//应用的根目录
+const isDev = process.env['NODE_ENV'] === 'development';
 const KEY = 'az'; //密钥
 dayjs.locale('zh-cn');
 
@@ -704,6 +706,20 @@ const helper = {
             }
             return total;
         }, []);
+    },
+    /**
+     * 写report.json文件
+     * @param reportType 值
+     */
+    async writeReportJson(reportType: number) {
+        try {
+            const saveTo = isDev
+                ? path.join(cwd, 'data/report.json')
+                : path.join(cwd, 'resources/config/report.json');
+            return await this.writeJSONfile(saveTo, { reportType });
+        } catch (error) {
+            log.error(`写入report.json失败:${error.message}`);
+        }
     }
 };
 
