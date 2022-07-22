@@ -155,7 +155,9 @@ const helper = {
         });
         handle.once('error', () => {
             console.log(`${exeName}启动失败`);
-            log.error(`${exeName}启动失败,exePath:${exePath}`);
+            if (!isDev) {
+                log.error(`${exeName}启动失败,exePath:${exePath}`);
+            }
             handle = null;
         });
     },
