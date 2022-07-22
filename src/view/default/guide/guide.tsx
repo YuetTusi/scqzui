@@ -2,11 +2,11 @@ import throttle from 'lodash/throttle';
 import React, { FC, useEffect, useRef } from 'react';
 import { faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useKeyboardEvent } from '@/hook';
 import Reading from '@/component/loading/reading';
 import BoardMenu from '@/component/guide-menu';
 import { ExtendPanel } from './styled/extend-panel';
 import { GuideBox } from './styled/box';
-import { useKeyboardEvent } from '@/hook';
 
 /**
  * 首屏按钮页
@@ -30,10 +30,10 @@ const Guide: FC<{}> = () => {
     /**
      * 左右滚动键盘事件
      */
-    const onPanelKeydown = (event: KeyboardEvent) => {
+    const onPanelKeydown = ({ code }: KeyboardEvent) => {
         if (scrollRef.current !== null) {
             scrollRef.current.style.scrollBehavior = 'smooth';
-            switch (event.code) {
+            switch (code) {
                 case 'ArrowRight':
                     scrollRef.current.scrollLeft += 200;
                     break;

@@ -10,7 +10,7 @@ import message from 'antd/lib/message';
 import Button from 'antd/lib/button';
 import { useDstUnit, useUnit } from '@/hook/unit';
 import { TipType } from '@/schema/tip-type';
-import { FetchState, ParseState } from '@/schema/device-state';
+import { FetchState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchData } from '@/schema/fetch-data';
 import { DeviceType } from '@/schema/device-type';
@@ -290,22 +290,11 @@ const Collect: FC<CollectProp> = ({ }) => {
      * 显示云取证验证码详情框
      * @param data 当前设备数据
      */
-    const showCloudCodeModal = ({ usb }: DeviceType) => {
-        //note: Code for test
-        // dispatch({
-        // 	type: 'cloudCodeModal/setApps',
-        // 	payload: {
-        // 		usb: data.usb,
-        // 		mobileHolder: data.mobileHolder,
-        // 		mobileNumber: data.mobileNumber,
-        // 		apps: data.cloudAppList
-        // 	}
-        // });
+    const showCloudCodeModal = ({ usb }: DeviceType) =>
         dispatch({
             type: 'cloudCodeModal/setVisible',
             payload: { usb, visible: true }
         });
-    };
 
     /**
      * 操作消息handle
@@ -398,11 +387,6 @@ const Collect: FC<CollectProp> = ({ }) => {
      */
     const uMagicCodeHandle = (usb: number, code: string) => {
         send(SocketType.Fetch, {
-            type: SocketType.Fetch,
-            cmd: CommandType.UMagicCodeReply,
-            msg: { usb, code }
-        });
-        console.log({
             type: SocketType.Fetch,
             cmd: CommandType.UMagicCodeReply,
             msg: { usb, code }

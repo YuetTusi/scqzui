@@ -24,9 +24,9 @@ import { Split } from '@/component/style-tool';
 import { AppSelectModal } from '@/component/dialog';
 import parseApp from '@/config/parse-app.yaml';
 import tokenApp from '@/config/token-app.yaml';
-import { FormBox } from './styled/styled';
 import AiSwitch from '../ai-switch';
 import { filterToParseApp } from '../helper';
+import { FormBox } from './styled/styled';
 import { FormProp } from './prop';
 
 const { useBcp, useAi, caseText, parseText, fetchText } = helper.readConf()!;
