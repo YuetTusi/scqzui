@@ -84,7 +84,7 @@ const EditForm: FC<FormProp> = ({
                             disabled={true}
                         />
                     </Item>
-                </Col>.
+                </Col>
             </Row>
             <Row>
                 <Col span={24}>
