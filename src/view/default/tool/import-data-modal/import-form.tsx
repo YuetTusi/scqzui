@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import debounce from 'lodash/debounce';
+import styled from 'styled-components';
 import { FileFilter, ipcRenderer, OpenDialogReturnValue } from 'electron';
 import React, { FC } from 'react';
 import Col from 'antd/lib/col';
@@ -20,6 +21,13 @@ const formItemLayout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 19 }
 };
+
+const NoteBox = styled.div`
+    color:${(props) => props.theme['error-color']};
+    height: 30px;
+    line-height: 30px;
+    font-size: 1.2rem;
+`;
 
 /**
  * 表单
@@ -240,9 +248,9 @@ const ImportForm: FC<ImportFormProp> = ({
                 </Item>
             </Col>
             <Col span={12}>
-                <div style={{ color: 'red', fontSize: '12px', lineHeight: '40px' }}>
+                <NoteBox>
                     不填写IMEI会影响生成BCP文件
-                </div>
+                </NoteBox>
             </Col>
         </Row>
     </Form>
