@@ -66,17 +66,17 @@ if (!existManuJson) {
     dialog.showErrorBox('启动失败', 'manufaturer配置读取失败, 请联系技术支持');
     app.exit(0);
 }
-if (helper.useBlackListRender()) {
-    app.commandLine.appendSwitch('no-sandbox');
-    app.commandLine.appendSwitch('disable-gpu');
-    app.commandLine.appendSwitch('disable-gpu-compositing');
-    app.commandLine.appendSwitch('disable-gpu-rasterization');
-    app.commandLine.appendSwitch('disable-gpu-sandbox');
-    app.commandLine.appendSwitch('disable-software-rasterizer');
-    app.commandLine.appendSwitch('--no-sandbox');
-    app.disableHardwareAcceleration();
-    log.warn('禁用GPU渲染, 忽略Chromium显卡黑名单');
-}
+// if (helper.useBlackListRender()) {
+// }
+app.commandLine.appendSwitch('no-sandbox');
+app.commandLine.appendSwitch('disable-gpu');
+app.commandLine.appendSwitch('disable-gpu-compositing');
+app.commandLine.appendSwitch('disable-gpu-rasterization');
+app.commandLine.appendSwitch('disable-gpu-sandbox');
+app.commandLine.appendSwitch('disable-software-rasterizer');
+app.commandLine.appendSwitch('--no-sandbox');
+app.disableHardwareAcceleration();
+log.warn('禁用GPU渲染, 忽略Chromium显卡黑名单');
 
 helper.writeReportJson(config?.reportType === undefined ? 0 : config.reportType); //写report.json
 

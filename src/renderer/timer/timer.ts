@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
 import 'dayjs/locale/zh-cn';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { helper } from '@/utils/helper';
 
