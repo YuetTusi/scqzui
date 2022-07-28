@@ -147,4 +147,24 @@ const Nothing = styled.div`
     }
 `;
 
-export { DeivceBox, Nothing };
+const PhoneInfoBox = styled.ul`
+
+    margin:0;
+    padding:0;
+    li{
+        list-style-type: none;
+        margin:0;
+        padding: 2px 4px;
+        font-size:1.2rem;
+        color:#fff;
+        &>label{
+            display: inline-block;
+            width: 70px;
+        }
+        &>span{
+            color: ${props => props.theme['link-color']};
+        }
+    }
+`;
+
+export { DeivceBox, Nothing, PhoneInfoBox };

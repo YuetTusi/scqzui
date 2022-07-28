@@ -99,6 +99,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
                 if (item === undefined) {
                     return null;
                 } else {
+
                     switch (item.fetchState) {
                         case FetchState.Fetching:
                             return <Ribbon text={getTipTxt(item)} key={`USB_${item?.usb ?? index}`}>
