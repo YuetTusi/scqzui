@@ -48,19 +48,19 @@ const getTipTxt = (device: DeviceType) => {
     let txt: string = '';
     switch (tipType) {
         case TipType.Flash:
-            txt = '操作确认';
+            txt = `操作确认 终端${usb ?? ''}`;
             break;
         case TipType.Normal:
-            txt = '操作提示';
+            txt = `操作提示 终端${usb ?? ''}`;
             break;
         case TipType.ApplePassword:
-            txt = '密码确认';
+            txt = `密码确认 终端${usb ?? ''}`;
             break;
         case TipType.CloudCode:
-            txt = '云取进度';
+            txt = `云取进度 终端${usb ?? ''}`;
             break;
         case TipType.UMagicCode:
-            txt = '连接码';
+            txt = `连接码 终端${usb ?? ''}`;
             break;
         case TipType.Nothing:
             txt = `终端${usb ?? ''}`;
