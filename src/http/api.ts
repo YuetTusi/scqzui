@@ -61,14 +61,12 @@ function api(webContents: WebContents) {
             }));
 
             let nextCases = caseList
-                .reduce((acc: any[], current: CaseInfo) => {
-                    return acc.concat([
-                        {
-                            ...current,
-                            devices: nextDevices.filter((i) => i.caseId === current._id)
-                        }
-                    ]);
-                }, [])
+                .reduce((acc: any[], current: CaseInfo) => acc.concat([
+                    {
+                        ...current,
+                        devices: nextDevices.filter((i) => i.caseId === current._id)
+                    }
+                ]), [])
                 .map(({ _id, m_strCaseName, m_strCasePath, devices }) => ({
                     id: _id,
                     m_strCaseName,
@@ -107,14 +105,12 @@ function api(webContents: WebContents) {
             }));
 
             let next = eventList
-                .reduce((acc: any[], current: QuickEvent) => {
-                    return acc.concat([
-                        {
-                            ...current,
-                            devices: nextDevices.filter((i) => i.caseId === current._id)
-                        }
-                    ]);
-                }, [])
+                .reduce((acc: any[], current: QuickEvent) => acc.concat([
+                    {
+                        ...current,
+                        devices: nextDevices.filter((i) => i.caseId === current._id)
+                    }
+                ]), [])
                 .map(({ _id, eventName, eventPath, devices, ruleFrom, ruleTo }) => ({
                     _id,
                     m_strCaseName: eventName,
@@ -192,7 +188,7 @@ function api(webContents: WebContents) {
                     all = all.concat(userFiles.map(item => join(userPath, item)));
                 }
 
-                data = all.reduce((acc: Record<string, any[]>, current) => {
+                data = all.reduce<Record<string, string[]>>((acc, current) => {
                     const sort = basename(current, '.xlsx');
                     const [sheet] = xlsx.parse(current);
                     if (sheet.data && sheet.data.length > 0) {
