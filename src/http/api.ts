@@ -1,8 +1,10 @@
-import { stat } from 'fs/promises';
-import { join } from 'path';
+import { stat, readdir } from 'fs/promises';
+import { basename, join } from 'path';
+import xlsx from 'node-xlsx';
 import { Router } from 'express';
 import { WebContents, ipcMain } from "electron";
 import log from '../utils/log';
+import { helper } from '../utils/helper';
 import { getDb } from '../utils/db';
 import { CaseInfo } from '../schema/case-info';
 import { TableName } from '../schema/table-name';
@@ -162,6 +164,53 @@ function api(webContents: WebContents) {
                 res.end(err.message);
             }
         });
+    });
+
+    router.get('/keyword', async (req, res) => {
+
+        const tempPath = join(cwd, './resources/army'); //默认模板位置
+        const userPath = join(cwd, './resources/keywords');//用户模板位置
+        let data: Record<string, string[]> = {};
+
+        try {
+            const exist = await helper.existFile(join(cwd, 'resources/config/app.json'));
+
+            if (exist) {
+                const [cfg, tempFiles, userFiles] = await Promise.all([
+                    helper.readAppJson(),
+                    readdir(tempPath),
+                    readdir(userPath)
+                ]);
+                const { useDefaultTemp, useKeyword } = cfg!;
+                let all: string[] = [];
+                if (useDefaultTemp) {
+                    all = all.concat(tempFiles
+                        .filter((item) => item !== 'apps_info.xlsx' && item !== 'template.xlsx')
+                        .map((item) => join(tempPath, item)));
+                }
+                if (useKeyword) {
+                    all = all.concat(userFiles.map(item => join(userPath, item)));
+                }
+
+                data = all.reduce((acc: Record<string, any[]>, current) => {
+                    const sort = basename(current, '.xlsx');
+                    const [sheet] = xlsx.parse(current);
+                    if (sheet.data && sheet.data.length > 0) {
+                        sheet.data.shift();
+                        acc[sort] = (sheet.data as any[])
+                            .filter((k) => k[0] !== undefined && k[0] !== null && k[0] !== '')
+                            .map((k) => k[0]);
+                    }
+                    return acc;
+                }, {});
+                res.json(data);
+            } else {
+                res.json(null);
+            }
+        } catch (error) {
+            log.error(`读取关键词失败: ${error.message}`);
+            res.json(null);
+        }
     });
 
     //接收点验结果发送给mainWindow入库并开始解析

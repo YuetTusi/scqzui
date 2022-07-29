@@ -127,6 +127,7 @@
 		"lodash": "^4.17.21",
 		"nedb": "^1.8.0",
 		"node-notifier": "^10.0.1",
+		"node-xlsx": "^0.21.0",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"sqlite3": "^5.0.8",
