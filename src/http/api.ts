@@ -166,10 +166,13 @@ function api(webContents: WebContents) {
 
         const tempPath = join(cwd, './resources/army'); //默认模板位置
         const userPath = join(cwd, './resources/keywords');//用户模板位置
+        // const tempPath = join('D:/Electronic/ElectronicForensics/qzui/resources/army'); //默认模板位置
+        // const userPath = join('D:/Electronic/ElectronicForensics/qzui/resources/keywords');//用户模板位置
         let data: Record<string, string[]> = {};
 
         try {
             const exist = await helper.existFile(join(cwd, 'resources/config/app.json'));
+            // const exist = await helper.existFile(join(cwd, 'data/app.json'));
 
             if (exist) {
                 const [cfg, tempFiles, userFiles] = await Promise.all([
@@ -177,14 +180,14 @@ function api(webContents: WebContents) {
                     readdir(tempPath),
                     readdir(userPath)
                 ]);
-                const { useDefaultTemp, useKeyword } = cfg!;
+                const { useDefaultTemp, useDocVerify } = cfg!;
                 let all: string[] = [];
-                if (useDefaultTemp) {
-                    all = all.concat(tempFiles
-                        .filter((item) => item !== 'apps_info.xlsx' && item !== 'template.xlsx')
-                        .map((item) => join(tempPath, item)));
-                }
-                if (useKeyword) {
+                if (useDocVerify) {
+                    if (useDefaultTemp) {
+                        all = all.concat(tempFiles
+                            .filter((item) => item !== 'apps_info.xlsx' && item !== 'template.xlsx')
+                            .map((item) => join(tempPath, item)));
+                    }
                     all = all.concat(userFiles.map(item => join(userPath, item)));
                 }
 

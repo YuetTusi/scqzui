@@ -135,7 +135,8 @@ const DstUnit: FC<UnitProp> = () => {
             okText: '是',
             cancelText: '否',
             title: '清除',
-            content: '确认清除当前单位设置？'
+            content: '确认清除当前单位设置？',
+            centered: true
         });
     };
 

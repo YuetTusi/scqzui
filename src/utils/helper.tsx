@@ -64,7 +64,7 @@ const helper = {
      */
     QUICK_QR_IP: ['192.168.137.1', '192.168.50.99', '192.168.191.1'],
     /**
-     * @description 转为Moment日期格式
+     * @description 转为dayjs日期格式
      * @param date 原日期字串
      * @param format 格式化字串 默认年-月-日
      * @returns Moment实例
