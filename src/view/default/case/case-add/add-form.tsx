@@ -103,8 +103,8 @@ const AddForm: FC<FormProp> = ({
 
     const ruleToValid = async (rule: RuleObject, value: any) => {
         const from = formRef.getFieldValue('ruleFrom');
-        if (from >= value) {
-            throw new Error('请大于起始时段');
+        if (from === value) {
+            throw new Error('不要等于起始时段');
         }
     };
 
