@@ -42,7 +42,6 @@ const DevList: FC<DevListProp> = ({ }) => {
     } = useSelector<StateTree, ParseDevState>(state => state.parseDev);
     const operateDoing = useSelector<StateTree, OperateDoingState>(state => state.operateDoing);
     const currentDev = useRef<DeviceType>();
-    // const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([]);
     const [editDevModalVisbile, setEditDevModalVisible] = useState<boolean>(false);
     const [exportReportModalVisible, setExportReportModalVisible] = useState<boolean>(false);
     const [exportBcpModalVisible, setExportBcpModalVisible] = useState<boolean>(false);

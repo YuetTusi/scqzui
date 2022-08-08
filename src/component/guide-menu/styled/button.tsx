@@ -38,40 +38,40 @@ const Color = styled.div<{ color: string }>`
     }
 
     &>.desc-mask{
-            position: absolute;
-            pointer-events: none;
-            background-color:rgba(34,34,34,0.9);
-            color:#fff;
-            top: 0;
-            left:0;
-            right:0;
-            bottom: 0;
-            z-index: 1;
-            box-sizing: border-box;
-            display:none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: hidden;
-            border-radius: ${props => props.theme['border-radius-base']};
+        position: absolute;
+        pointer-events: none;
+        background-color:rgba(34,34,34,0.9);
+        color:#fff;
+        top: 0;
+        left:0;
+        right:0;
+        bottom: 0;
+        z-index: 1;
+        box-sizing: border-box;
+        display:none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: hidden;
+        border-radius: ${props => props.theme['border-radius-base']};
 
-            &>ul{
-                margin:0 auto;
-            }
-            &>ul>li{
-                margin:0;
-                font-size: 1.4rem;
-                font-weight: lighter;
-                list-style-type: square;
-                padding:5px 5px 5px 0;
-            }
+        &>ul{
+            margin:0 auto;
+        }
+        &>ul>li{
+            margin:0;
+            font-size: 1.4rem;
+            font-weight: lighter;
+            list-style-type: square;
+            padding:5px 5px 5px 0;
+        }
 
-            &.open{
-                display:flex;
-                animation: show 0.2s linear;
-            }
+        &.open{
+            display:flex;
+            animation: show 0.2s linear;
+        }
     }
 `;
 

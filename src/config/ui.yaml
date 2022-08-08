@@ -18,7 +18,7 @@ cloudAppMd5: http://139.9.112.8:9699/test_md5
 logo: logo.png
 windowHeight: 1020
 windowWidth: 1460
-minHeight: 900
+minHeight: 940
 minWidth: 1280
 center: true
 tcpPort: 65222

@@ -33,6 +33,10 @@ export const InfoBox = styled.div`
                 font-size: 1.2rem;
             }
             li{
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
                 list-style-type: none;
                 padding: 2px;
                 label{
