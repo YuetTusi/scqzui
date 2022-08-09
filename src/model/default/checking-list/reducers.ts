@@ -23,7 +23,10 @@ export default {
      * @param {DeviceType} payload 设备数据
      */
     appendRecord(state: CheckingListState, { payload }: AnyAction) {
-        state.records.push(payload);
+        const has = state.records.some((item) => item._id === payload._id);
+        if (!has) {
+            state.records.push(payload);
+        }
         return state;
     },
     /**

@@ -110,7 +110,7 @@ const ParsingList: FC<{}> = () => {
                 dispatch({ type: 'parsingList/queryDev', payload: { deviceId: item.deviceId } });
             }
         });
-    }, [info]);
+    }, [info, devices]);
 
     useEffect(() => {
         return () => {
