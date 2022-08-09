@@ -188,7 +188,9 @@ function api(webContents: WebContents) {
                             .filter((item) => item !== 'apps_info.xlsx' && item !== 'template.xlsx')
                             .map((item) => join(tempPath, item)));
                     }
-                    all = all.concat(userFiles.map(item => join(userPath, item)));
+                    all = all.concat(userFiles
+                        .filter(item => !item.startsWith('~'))
+                        .map(item => join(userPath, item)));
                 }
 
                 data = all.reduce<Record<string, string[]>>((acc, current) => {
