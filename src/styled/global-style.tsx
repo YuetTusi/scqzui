@@ -1896,8 +1896,6 @@ span.tmpzTreeMove_arrow {
 		}
 	}
 }
-
-
 `;
 
 export { GlobalStyle };

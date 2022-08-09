@@ -32,7 +32,7 @@ export default {
      * @param {string} payload 唯一id
      */
     removeAlertMessage(state: AlartMessageState, { payload }: AnyAction) {
-        const next = state.alertMessage.filter(i => i.id !== payload);
+        const next = state.alertMessage.filter(({ id }) => id !== payload);
         state.alertMessage = next;
         return state;
     },
