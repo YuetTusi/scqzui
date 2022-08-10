@@ -24,7 +24,10 @@ export default {
      * @param {DeviceType} payload 设备数据
      */
     appendDevice(state: ParsingListState, { payload }: AnyAction) {
-        state.devices.push(payload);
+        const has = state.devices.some((item) => item._id === payload._id);
+        if (!has) {
+            state.devices.push(payload);
+        }
         return state;
     },
     /**

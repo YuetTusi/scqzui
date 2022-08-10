@@ -105,7 +105,7 @@ const CheckingList: FC<{}> = () => {
                 dispatch({ type: 'checkingList/queryRecord', payload: { deviceId: item.deviceId } });
             }
         });
-    }, [info]);
+    }, [info, records]);
 
     useEffect(() => {
         return () => {
