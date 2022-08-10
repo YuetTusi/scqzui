@@ -1,4 +1,4 @@
-import ParseDetail from '@/schema/parse-detail';
+import unionBy from 'lodash/unionBy';
 import { AnyAction } from 'redux';
 import { ParsingListState } from '.';
 
@@ -24,10 +24,7 @@ export default {
      * @param {DeviceType} payload 设备数据
      */
     appendDevice(state: ParsingListState, { payload }: AnyAction) {
-        const has = state.devices.some((item) => item._id === payload._id);
-        if (!has) {
-            state.devices.push(payload);
-        }
+        state.devices = unionBy(state.devices, [payload], '_id');
         return state;
     },
     /**

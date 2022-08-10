@@ -1,3 +1,4 @@
+import unionBy from 'lodash/unionBy';
 import { AnyAction } from 'redux';
 import { CheckingListState } from '.';
 
@@ -23,10 +24,7 @@ export default {
      * @param {DeviceType} payload 设备数据
      */
     appendRecord(state: CheckingListState, { payload }: AnyAction) {
-        const has = state.records.some((item) => item._id === payload._id);
-        if (!has) {
-            state.records.push(payload);
-        }
+        state.records = unionBy(state.records, [payload], '_id');
         return state;
     },
     /**
