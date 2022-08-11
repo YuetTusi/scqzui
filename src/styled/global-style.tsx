@@ -302,12 +302,6 @@ span.tmpzTreeMove_arrow {
 				&.app_1030044_ico_close {
 					background-image: url(${require('./images/ztree/app/1030044.png')}) !important;
 				}
-				//知乎
-				&.app_no_72a681f9_ico_docu,
-				&.app_no_72a681f9_ico_open,
-				&.app_no_72a681f9_ico_close {
-					background-image: url(${require('./images/ztree/app/no_72a681f9.png')}) !important;
-				}
 				//豆瓣
 				&.app_no_634a1dfa_ico_docu,
 				&.app_no_634a1dfa_ico_open,
@@ -829,6 +823,12 @@ span.tmpzTreeMove_arrow {
 				&.app_1560004_ico_open,
 				&.app_1560004_ico_close {
 					background-image: url(${require('./images/ztree/app/1560004.png')}) !important;
+				}
+				//知乎
+				&.app_no_d2fca57b_ico_docu,
+				&.app_no_d2fca57b_ico_open,
+				&.app_no_d2fca57b_ico_close {
+					background-image: url(${require('./images/ztree/app/no_d2fca57b.png')}) !important;
 				}
 				//自带邮箱
 				&.app_01003_ico_docu,
@@ -1483,6 +1483,12 @@ span.tmpzTreeMove_arrow {
 				&.app_1030037_ico_open,
 				&.app_1030037_ico_close {
 					background-image: url(${require('./images/ztree/app/1030037.png')}) !important;
+				}
+				//赫兹
+				&.app_no_ec3d9f4f_ico_docu,
+				&.app_no_ec3d9f4f_ico_open,
+				&.app_no_ec3d9f4f_ico_close {
+					background-image: url(${require('./images/ztree/app/no_ec3d9f4f.png')}) !important;
 				}
 				//爱聊
 				&.app_1030077_ico_docu,

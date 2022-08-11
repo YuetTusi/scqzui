@@ -182,8 +182,8 @@ export default {
      * 跳转页面
      */
     gotoUrl({ dispatch }: SubscriptionAPI) {
-        ipcRenderer.on('go-to-url', (event: IpcRendererEvent, url: string) => {
-            dispatch(routerRedux.push(url));
+        ipcRenderer.on('go-to-url', (event: IpcRendererEvent, url: string, state: any) => {
+            dispatch(routerRedux.push(url, state));
         });
     },
     /**
