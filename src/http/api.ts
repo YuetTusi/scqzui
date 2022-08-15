@@ -189,7 +189,7 @@ function api(webContents: WebContents) {
                             .map(item => join(tempPath, item)));
                     }
                     all = all.concat(userFiles
-                        .filter(item => !item.startsWith('~'))
+                        .filter((item) => item !== 'template.xlsx' && !item.startsWith('~'))
                         .map(item => join(userPath, item)));
                 }
 
