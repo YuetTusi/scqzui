@@ -179,32 +179,28 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                             saveHandle!(entity);
                         },
                         title: '磁盘空间不足',
-                        content: (
-                            <Instruction>
-                                <>
-                                    <p>
-                                        磁盘空间仅存<strong>{round(FreeSpace, 1)}GB</strong>
-                                        ，建议清理数据
-                                    </p>
-                                    <p>设备数据过大可能会采集失败，继续取证？</p>
-                                </>
-                            </Instruction>
-                        ),
+                        content: <Instruction>
+                            <p>
+                                磁盘空间仅存<strong>{round(FreeSpace, 1)}GB</strong>
+                                ，建议清理数据
+                            </p>
+                            <p>设备数据过大可能会采集失败，继续取证？</p>
+                        </Instruction>,
                         okText: '是',
                         cancelText: '否',
                         icon: <InfoCircleOutlined />,
                         centered: true
                     });
                 } else {
-                    saveHandle!(entity);
                     setSelectedApps([]);
                     resetValue();
+                    saveHandle!(entity);
                 }
             } catch (error) {
-                saveHandle!(entity);
                 setSelectedApps([]);
                 resetValue();
-                log.error(`读取磁盘信息失败:${(error as any).message}`);
+                saveHandle!(entity);
+                log.error(`读取磁盘信息失败:${error.message}`);
             } finally {
                 setLoading(false);
             }

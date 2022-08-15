@@ -402,19 +402,22 @@ Parse 命令：`parse_curinfo`，参数：
 注意：此参数解析会传为数组类型，每一条对应一部当前正在解析的设备，使用 deviceId 来做区分。举例：
 
 ```json
-msg: [{
-    caseId:'NWca882kj59ck',
-    deviceId:'Tq39s9lkjl2cj',
-    curinfo:'正在解析微信分身数据',
-	curprogress:20,
-    category:0
-},{
-    caseId:'NWca882kj59ck',
-    deviceId:'Ka30lj7Qcb5b',
-    curinfo:'正在解析浏览器',
-	curprogress:32,
-    category:0
-}]
+msg: [
+	{
+		caseId:'NWca882kj59ck',
+		deviceId:'Tq39s9lkjl2cj',
+		curinfo:'正在解析微信分身数据',
+		curprogress:20,
+		category:0
+	},
+	{
+		caseId:'NWca882kj59ck',
+		deviceId:'Ka30lj7Qcb5b',
+		curinfo:'正在解析浏览器',
+		curprogress:32,
+		category:0
+	}
+]
 ```
 
 #### 解析结束
