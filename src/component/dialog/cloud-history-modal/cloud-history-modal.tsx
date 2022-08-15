@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
-import { connect, useSelector } from 'dva';
-import moment from 'moment';
+import { useSelector } from 'dva';
+import dayjs from 'dayjs';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
@@ -140,7 +140,7 @@ const CloudHistoryModal: FC<CloudHistoryModalProp> = ({
                         return (
                             <li key={`L_${i}`} className="history-list-item">
                                 <label>
-                                    【{moment(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
+                                    【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
                                 </label>
                                 <span style={{ color: '#fff' }}>{item.content}</span>
                             </li>
@@ -149,7 +149,7 @@ const CloudHistoryModal: FC<CloudHistoryModalProp> = ({
                         return (
                             <li key={`L_${i}`} className="history-list-item">
                                 <label>
-                                    【{moment(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
+                                    【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
                                 </label>
                                 <span style={{ color: '#f5222d', fontWeight: 'bold' }}>{item.content}</span>
                             </li>
@@ -158,7 +158,7 @@ const CloudHistoryModal: FC<CloudHistoryModalProp> = ({
                         return (
                             <li key={`L_${i}`} className="history-list-item">
                                 <label>
-                                    【{moment(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
+                                    【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
                                 </label>
                                 <span style={{ color: '#f9ca24' }}>{item.content}</span>
                             </li>
@@ -167,7 +167,7 @@ const CloudHistoryModal: FC<CloudHistoryModalProp> = ({
                         return (
                             <li key={`L_${i}`} className="history-list-item">
                                 <label>
-                                    【{moment(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
+                                    【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
                                 </label>
                                 <span>{item.content}</span>
                             </li>
@@ -222,7 +222,4 @@ CloudHistoryModal.defaultProps = {
 };
 
 //共用CloudCodeModal组件的Model
-export default connect((state: StateTree) => ({
-    cloudCodeModal: state.cloudCodeModal,
-    dashboard: state.dashboard
-}))(CloudHistoryModal);
+export default CloudHistoryModal;

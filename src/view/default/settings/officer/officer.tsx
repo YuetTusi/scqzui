@@ -1,10 +1,10 @@
 import React, { FC, MouseEvent, useEffect } from 'react';
+import { useDispatch, useSelector } from 'dva';
 import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined'
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined'
 import Empty from 'antd/lib/empty';
 import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
-import { connect, useDispatch, useSelector } from 'dva';
 import { routerRedux } from 'dva/router';
 import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
@@ -115,4 +115,4 @@ const Officer: FC<OfficerProp> = () => {
     );
 };
 
-export default connect((state: StateTree) => ({ officer: state.officer }))(Officer);
+export default Officer;

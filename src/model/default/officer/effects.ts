@@ -13,7 +13,7 @@ export default {
     *fetchOfficer({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
         const db = getDb<Officer>(TableName.Officer);
         try {
-            let result: Officer[] = yield call([db, 'find'], null);
+            let result: Officer[] = yield call([db, 'find'], null, 'createdAt', -1);
             yield put({ type: 'setOfficer', payload: [...result] });
         } catch (error) {
             console.error(`@model/default/officer/*fetchOfficer: ${error.message}`);

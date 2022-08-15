@@ -27,7 +27,7 @@ const EditForm: FC<EditFormProp> = ({ formRef, data }) => {
     const isExistNo = throttle(async (rule: any, value: string) => {
         const db = getDb<Officer>(TableName.Officer);
         try {
-            let next: Officer[] = await db.find({
+            let next = await db.find({
                 no: value
             });
             if (data !== undefined) {
