@@ -613,9 +613,8 @@ ipcMain.handle('write-net-json', (event, servicePort: number) =>
 
 ipcMain.handle('open-dialog', (event, options) => dialog.showOpenDialog(options));
 
-ipcMain.handle('get-path', (event, type: "home" | "appData" | "userData"
-    | "cache" | "temp" | "exe" | "module" | "desktop" | "documents"
-    | "downloads" | "music" | "pictures" | "videos" | "recent" | "logs"
-    | "crashDumps") =>
+ipcMain.handle('get-path', (event, type: "home" | "appData" | "userData" |
+    "sessionData" | "temp" | "exe" | "module" | "desktop" | "documents" |
+    "downloads" | "music" | "pictures" | "videos" | "recent" | "logs" | "crashDumps") =>
     app.getPath(type)
 );
