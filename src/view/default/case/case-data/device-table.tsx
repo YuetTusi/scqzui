@@ -4,10 +4,13 @@ import dayjs from 'dayjs';
 import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
 import { getDb } from '@/utils/db';
+import { helper } from '@/utils/helper';
 import DeviceType from '@/schema/device-type';
 import { TableName } from '@/schema/table-name';
 import { getDeviceColumns } from './column';
 import { DeviceTableProp } from './prop';
+
+const { fetchText } = helper.readConf()!;
 
 const DeviceTable: FC<DeviceTableProp> = ({ caseId }) => {
 
@@ -41,7 +44,7 @@ const DeviceTable: FC<DeviceTableProp> = ({ caseId }) => {
                 }}
                 size="small"
                 locale={{
-                    emptyText: <Empty description="无取证数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    emptyText: <Empty description={`无${fetchText ?? '取证'}数据`} image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 }}
                 rowKey={(record: DeviceType) => record._id!}
                 bordered={true}

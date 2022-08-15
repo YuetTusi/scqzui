@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import { Split } from '@/component/style-tool';
-import SaveOutlined from '@ant-design/icons/SaveOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
 import Button from 'antd/lib/button';
 import Table from 'antd/lib/table';
@@ -22,7 +21,6 @@ import EditModal from './edit-modal';
 import { CheckManageProp } from './prop';
 import { CheckJson } from '@/schema/check-json';
 
-const cwd = process.cwd();
 const { useForm } = Form;
 /**
  * 点验记录管理

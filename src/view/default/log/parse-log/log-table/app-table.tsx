@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import Empty from 'antd/lib/empty';
 import Table, { ColumnProps } from 'antd/lib/table';
 import { helper } from '@/utils/helper';
 import { ParseApp } from '@/schema/parse-log';
@@ -40,9 +39,6 @@ const AppTable: FC<AppTableProp> = ({ data }) => {
                 bordered={true}
                 size="small"
                 rowKey="appname"
-                locale={{
-                    emptyText: <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                }}
             />
         </InnerAppTableBox>
     );

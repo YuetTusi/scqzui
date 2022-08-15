@@ -1,6 +1,7 @@
 import React, { FC, lazy, Suspense } from 'react';
 import { RouterAPI } from 'dva';
 import { Router, Route, Switch } from 'dva/router';
+import Empty from 'antd/lib/empty';
 import localeCN from 'antd/es/locale/zh_CN';
 import ConfigProvider from 'antd/lib/config-provider';
 import { ThemeProvider } from 'styled-components';
@@ -12,7 +13,6 @@ import BoardPanel from '@/component/board-panel';
 import LayoutPanel from '@/component/layout-panel/layout-panel';
 import theme from '../../../theme/cyan.json';
 
-
 /**
  * 路由配置
  * @param api 路由参数
@@ -22,6 +22,7 @@ const createRouter = (api?: RouterAPI) =>
 	<ConfigProvider
 		locale={localeCN}
 		autoInsertSpaceInButton={false}
+		renderEmpty={() => <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无数据" />}
 		componentSize="middle">
 		<ThemeProvider theme={theme}>
 			<Crash>

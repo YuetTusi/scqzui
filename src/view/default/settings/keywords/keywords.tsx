@@ -114,19 +114,19 @@ const Keywords: FC<KeywordsProp> = () => {
     /**
      * 打开关键词目录
      */
-    const openFolder = debounce(
-        () => {
-            let saveFolder = cwd;
-            if (process.env['NODE_ENV'] === 'development') {
-                saveFolder = join(cwd, 'data/keywords');
-            } else {
-                saveFolder = join(cwd, 'resources/keywords');
-            }
-            shell.openPath(saveFolder);
-        },
-        500,
-        { leading: true, trailing: false }
-    );
+    // const openFolder = debounce(
+    //     () => {
+    //         let saveFolder = cwd;
+    //         if (process.env['NODE_ENV'] === 'development') {
+    //             saveFolder = join(cwd, 'data/keywords');
+    //         } else {
+    //             saveFolder = join(cwd, 'resources/keywords');
+    //         }
+    //         shell.openPath(saveFolder);
+    //     },
+    //     500,
+    //     { leading: true, trailing: false }
+    // );
 
     /**
      * 删除文件handle
@@ -266,12 +266,10 @@ const Keywords: FC<KeywordsProp> = () => {
 
     const renderFileList = () => {
         if (fileList.length === 0) {
-            return (
-                <Empty
-                    description="暂无关键词配置"
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                />
-            );
+            return <Empty
+                description="暂无关键词配置"
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />;
         } else {
             return fileList.map((file, index) => (
                 <li key={`F_${index}`}>
