@@ -10,9 +10,8 @@ import Button from 'antd/lib/button';
 import { App, AppCategory, CloudExt } from '@/schema/app-config';
 import { StateTree } from '@/type/model';
 import { AppSetStore } from '@/model/default/app-set';
-import { access } from 'original-fs';
 
-const { Item, List, useForm } = Form;
+const { Item, useForm } = Form;
 
 /**
  * 查找应用
@@ -110,7 +109,7 @@ const ParamDrawer: FC<{
         getContainer={() => document.getElementById('root')!}
         destroyOnClose={true}
         forceRender={true}
-        zIndex={1002}>
+        style={{ top: '22px' }}>
         <Form
             form={formRef}
             size="small"

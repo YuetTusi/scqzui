@@ -66,6 +66,9 @@ const GlobalStyle = createGlobalStyle`
 	.ant-modal-mask,.ant-modal-wrap{
 		top:22px;
 	}
+	.ant-drawer{
+		z-index: 1999;
+	}
 
     //悬停动画
     /* Sweep To Right */
