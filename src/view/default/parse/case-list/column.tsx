@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { execFile } from 'child_process';
+import { ipcRenderer } from 'electron';
 import React, { MouseEvent } from 'react';
 import { Dispatch } from "dva";
 import { ColumnsType, ColumnType } from "antd/lib/table";
@@ -18,7 +19,6 @@ import { TableName } from '@/schema/table-name';
 import DeviceType from '@/schema/device-type';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { NoWrapText } from './styled/style';
-import { ipcRenderer } from 'electron';
 
 const cwd = process.cwd();
 const { Group } = Button;
@@ -133,7 +133,7 @@ export function getCaseColumns(
                                                     duration: 0
                                                 });
                                                 dispatch({
-                                                    type: 'dashboard/removeAlertMessage',
+                                                    type: 'alartMessage/removeAlertMessage',
                                                     payload: nextId
                                                 });
                                                 dispatch({

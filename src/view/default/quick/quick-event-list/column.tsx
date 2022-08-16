@@ -1,13 +1,26 @@
+import { join } from 'path';
+import { execFile } from 'child_process';
+import { ipcRenderer } from 'electron';
 import React, { MouseEvent } from "react";
 import { Dispatch } from "dva";
 import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined'
 import { ColumnsType } from "antd/lib/table";
+import MoreOutlined from '@ant-design/icons/MoreOutlined';
+import Button from 'antd/lib/button';
+import Popover from 'antd/lib/popover';
 import Modal from 'antd/lib/modal';
-import { helper } from "@/utils/helper";
+import message from 'antd/lib/message';
+import notification from 'antd/lib/notification';
+import { getDb } from '@/utils/db';
+import log from '@/utils/log';
+import { helper } from '@/utils/helper';
 import { QuickEvent } from "@/schema/quick-event";
+import { TableName } from '@/schema/table-name';
+import { QuickRecord } from '@/schema/quick-record';
 import { NowrapText } from './styled/style';
 
-const { caseText, fetchText } = helper.readConf()!;
+const cwd = process.cwd();
+const { caseText, fetchText, devText } = helper.readConf()!;
 
 const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEvent> => {
 
@@ -80,6 +93,94 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                     });
                 }}>删除</a>
             }
+        }, {
+            dataIndex: '_id',
+            key: 'more',
+            align: 'center',
+            width: 10,
+            render: (id: string, { eventPath, eventName }: QuickEvent) => <Popover
+                zIndex={9}
+                trigger="click"
+                content={
+                    <Button
+                        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                            event.stopPropagation();
+                            Modal.confirm({
+                                title: '批量生成报告',
+                                content: '所需时间较长，确定批量生成报告吗？',
+                                okText: '是',
+                                cancelText: '否',
+                                centered: true,
+                                async onOk() {
+                                    const db = getDb<QuickRecord>(TableName.QuickRecord);
+                                    const exePath = join(cwd, '../tools/CreateReport');
+                                    const nextId = helper.newId();
+                                    try {
+                                        const events = await db.find({ caseId: id });
+                                        if (events.length === 0) {
+                                            message.destroy();
+                                            message.info(`无${devText ?? '设备'}数据`);
+                                        } else {
+                                            dispatch({
+                                                type: 'alartMessage/addAlertMessage',
+                                                payload: {
+                                                    id: nextId,
+                                                    msg: `正在批量生成「${`${eventName.split('_')[0]}`}」报告`
+                                                }
+                                            });
+                                            dispatch({
+                                                type: 'operateDoing/setCreatingDeviceId',
+                                                payload: events.map(item => item._id)
+                                            });
+                                            const proc = execFile(
+                                                join(exePath, 'create_report.exe'),
+                                                [eventPath, events.map(item => item.phonePath).join('|')]
+                                            );
+                                            proc.once('error', () => {
+                                                message.destroy();
+                                                notification.error({
+                                                    type: 'error',
+                                                    message: '报告生成失败',
+                                                    description: '批量生成报告失败',
+                                                    duration: 0
+                                                });
+                                                dispatch({
+                                                    type: 'alartMessage/removeAlertMessage',
+                                                    payload: nextId
+                                                });
+                                                dispatch({
+                                                    type: 'operateDoing/clearCreatingDeviceId'
+                                                });
+                                            });
+                                            proc.once('exit', () => {
+                                                message.destroy();
+                                                notification.success({
+                                                    type: 'success',
+                                                    message: '报告批量生成成功',
+                                                    description: `「${`${eventName.split('_')[0]}`}」报告生成成功`,
+                                                    duration: 0
+                                                });
+                                                dispatch({
+                                                    type: 'alartMessage/removeAlertMessage',
+                                                    payload: nextId
+                                                });
+                                                dispatch({
+                                                    type: 'operateDoing/clearCreatingDeviceId'
+                                                });
+                                                ipcRenderer.send('show-progress', false);
+                                            });
+                                        }
+                                    } catch (error) {
+                                        log.error(`批量生成报告失败 @view/default/quick/quick-event-list/column.tsx: ${error.message}`);
+                                    }
+                                }
+                            });
+                        }}
+                        type="primary"
+                        size="small">生成报告</Button>
+                }>
+                <MoreOutlined style={{ color: '#0fb9b1', fontWeight: 'bold' }} />
+            </Popover>
         }
     ];
 }

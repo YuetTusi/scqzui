@@ -8,7 +8,7 @@ export const CaseListBox = styled.div`
 export const NowrapText = styled.a`
     cursor: pointer;
     display: inline-block;
-    max-width: 220px;
+    max-width: 190px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
