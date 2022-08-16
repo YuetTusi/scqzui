@@ -1,3 +1,8 @@
+/**
+ * 取证UI主进程入口文件
+ * @author Yuet
+ * @date 2022-08-16
+ */
 import { join } from 'path';
 import { ChildProcessWithoutNullStreams } from 'child_process';
 import {
