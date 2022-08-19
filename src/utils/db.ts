@@ -107,6 +107,9 @@ class Db<T = any> {
      */
     findByPage(condition: Record<string, any> | null | undefined, pageIndex = 1, pageSize = 10, sortField = 'updatedAt', asc = 1) {
         return new Promise<T[]>((resolve, reject) => {
+            if (pageIndex < 0 || pageSize < 1) {
+                reject(new Error('页号或分页尺寸有误'));
+            }
             this._instance.loadDatabase((err) => {
                 if (err) {
                     reject(err);

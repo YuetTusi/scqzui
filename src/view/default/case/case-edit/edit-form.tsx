@@ -396,7 +396,7 @@ const EditForm: FC<FormProp> = ({
             treeId="parseTree"
             title={`${parseText ?? '解析'}App`}>
             <fieldset>
-                <legend>{`${parseText ?? '解析'}App`}</legend>
+                <legend>提示</legend>
                 <ul>
                     <li>不勾选App默认拉取所有应用</li>
                 </ul>

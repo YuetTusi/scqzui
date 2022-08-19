@@ -4,8 +4,11 @@ import effects from './effects';
 import { Predict } from '@/view/default/case/ai-switch';
 
 interface AiSwitchState {
-    data: Predict[]
+    data: Predict[],
+    similarity: number
 }
+
+
 
 /**
  * AI配置组件Model
@@ -14,7 +17,8 @@ let model: Model = {
 
     namespace: 'aiSwitch',
     state: {
-        data: []
+        data: [],
+        similarity: 0
     },
     reducers,
     effects

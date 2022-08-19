@@ -125,7 +125,7 @@ export default {
                 }
             });
         } catch (error) {
-            logger.error(`更新解析状态入库失败 @model/default/device/*updateParseState: ${(error as any).message}`);
+            logger.error(`更新解析状态入库失败 @model/default/device/*updateParseState: ${error.message}`);
         }
     },
     /**
@@ -166,15 +166,21 @@ export default {
                 call([caseDb, 'findOne'], { _id: caseId })
             ]);
             let entity = new ParseLogEntity();
-            entity.caseName = helper.isNullOrUndefinedOrEmptyString(caseData.spareName) ? caseData.m_strCaseName.split('_')[0] : caseData.spareName;
+            entity.caseName = helper.isNullOrUndefinedOrEmptyString(caseData.spareName)
+                ? caseData.m_strCaseName.split('_')[0]
+                : caseData.spareName;
             entity.mobileName = deviceData?.mobileName ?? '';
             entity.mobileNo = deviceData?.mobileNo ?? '';
             entity.mobileHolder = deviceData?.mobileHolder ?? '';
             entity.note = deviceData?.note;
             entity.state = isparseok ? ParseState.Finished : ParseState.Error;
             entity.apps = parseapps;
-            entity.startTime = u64parsestarttime === -1 ? undefined : new Date(dayjs.unix(u64parsestarttime).valueOf());
-            entity.endTime = u64parseendtime === -1 ? undefined : new Date(dayjs.unix(u64parseendtime).valueOf());
+            entity.startTime = u64parsestarttime === -1
+                ? undefined
+                : new Date(dayjs.unix(u64parsestarttime).valueOf());
+            entity.endTime = u64parseendtime === -1
+                ? undefined
+                : new Date(dayjs.unix(u64parseendtime).valueOf());
             yield call([parseLogDb, 'insert'], entity);
             yield put({
                 type: 'parseLogTable/queryParseLog', payload: {

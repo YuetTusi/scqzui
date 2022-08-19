@@ -1,10 +1,9 @@
-import React from 'react';
 import { execSync } from 'child_process';
-import crypto from 'crypto';
-import fs from 'fs';
-import { writeFile } from 'fs/promises';
 import net from 'net';
-import path from 'path';
+import crypto from 'crypto';
+import { extname, join } from 'path';
+import { access, accessSync, mkdir, readFileSync, readFile, readdir, writeFile } from 'fs';
+import { readFile as readFilePromise, writeFile as writeFilePromise } from 'fs/promises';
 import cpy from 'cpy';
 import { v4 } from 'uuid';
 import yaml from 'js-yaml';
@@ -13,6 +12,7 @@ import memoize from 'lodash/memoize';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import { exec, execFile, spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import React from 'react';
 import Select from 'antd/lib/select';
 import log from './log';
 import { Conf } from '../type/model';
@@ -127,7 +127,7 @@ const helper = {
      */
     runExe(filePath: string, args: string[] = [], cwd?: string): Promise<string> {
         return new Promise<string>((resolve, reject) => {
-            if (path.extname(filePath) !== '.exe') {
+            if (extname(filePath) !== '.exe') {
                 reject('非exe可执行文件');
             } else {
                 execFile(filePath, args, {
@@ -168,14 +168,14 @@ const helper = {
     readConf: memoize((algo: string = 'rc4'): Conf | null => {
         const isDev = process.env['NODE_ENV'];
         if (isDev === 'development') {
-            let confPath = path.join(cwd, './src/config/ui.yaml');
-            let chunk = fs.readFileSync(confPath, 'utf8');
+            let confPath = join(cwd, './src/config/ui.yaml');
+            let chunk = readFileSync(confPath, 'utf8');
             return yaml.load(chunk) as Conf;
         } else {
-            let confPath = path.join(cwd, 'resources/config/conf');
+            let confPath = join(cwd, 'resources/config/conf');
             try {
-                fs.accessSync(confPath);
-                let chunk = fs.readFileSync(confPath, 'utf8');
+                accessSync(confPath);
+                let chunk = readFileSync(confPath, 'utf8');
                 const decipher = crypto.createDecipher(algo, KEY);
                 let conf = decipher.update(chunk, 'hex', 'utf8');
                 conf += decipher.final('utf8');
@@ -192,7 +192,7 @@ const helper = {
      */
     readJSONFile(filePath: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            fs.readFile(filePath, { encoding: 'utf8' }, (err, chunk) => {
+            readFile(filePath, { encoding: 'utf8' }, (err, chunk) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -222,7 +222,7 @@ const helper = {
                     reject(error);
                 }
             }
-            fs.writeFile(filePath, json, (err) => {
+            writeFile(filePath, json, (err) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -237,10 +237,10 @@ const helper = {
      * @param bcp BCP对象
      */
     async writeBcpJson(phonePath: string, bcp: BcpEntity) {
-        const target = path.join(phonePath, 'Bcp.json');
+        const target = join(phonePath, 'Bcp.json');
         try {
             const manu = await this.readManufaturer();
-            await fs.promises.writeFile(target, JSON.stringify({
+            await writeFilePromise(target, JSON.stringify({
                 ...bcp,
                 attachment: bcp.attachment ? '1' : '0',
                 manufacturer: manu.manufacturer ?? '',
@@ -262,7 +262,7 @@ const helper = {
      * @param data 案件数据
      */
     writeCaseJson(saveTo: string, data: CaseInfo) {
-        return this.writeJSONfile(path.join(saveTo, 'Case.json'), {
+        return this.writeJSONfile(join(saveTo, 'Case.json'), {
             ...data,
             caseName: helper.isNullOrUndefinedOrEmptyString(data.spareName)
                 ? data.m_strCaseName
@@ -275,17 +275,16 @@ const helper = {
      */
     readManufaturer(): Promise<Manufaturer> {
         const jsonPath = process.env['NODE_ENV'] === 'development'
-            ? path.join(cwd, './data/manufaturer.json')
-            : path.join(cwd, './resources/config/manufaturer.json');
+            ? join(cwd, './data/manufaturer.json')
+            : join(cwd, './resources/config/manufaturer.json');
 
         return new Promise((resolve, reject) => {
-            fs.readFile(jsonPath, { encoding: 'utf8' }, (err, chunk) => {
+            readFile(jsonPath, { encoding: 'utf8' }, (err, chunk) => {
                 if (err) {
                     reject(err);
                 } else {
                     try {
-                        const data: Manufaturer = JSON.parse(chunk);
-                        resolve(data);
+                        resolve(JSON.parse(chunk));
                     } catch (error) {
                         reject(error);
                     }
@@ -299,7 +298,7 @@ const helper = {
      */
     readDir(filePath: string): Promise<string[]> {
         return new Promise((resolve, reject) => {
-            fs.readdir(filePath, (err, files) => {
+            readdir(filePath, (err, files) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -314,7 +313,7 @@ const helper = {
      */
     mkDir(dir: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            fs.mkdir(dir, { recursive: true }, (err) => {
+            mkdir(dir, { recursive: true }, (err) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -346,7 +345,7 @@ const helper = {
      */
     existFile(filePath: string): Promise<boolean> {
         return new Promise((resolve) => {
-            fs.access(filePath, (err) => {
+            access(filePath, (err) => {
                 if (err) {
                     resolve(false);
                 } else {
@@ -361,7 +360,7 @@ const helper = {
      */
     delDiskFile(filePath: string): Promise<boolean> {
         return new Promise((resolve) => {
-            const delExe = path.join(cwd, '../tools/Del/Del.exe');
+            const delExe = join(cwd, '../tools/Del/Del.exe');
             const process = execFile(delExe, [filePath], {
                 windowsHide: true
             });
@@ -390,7 +389,7 @@ const helper = {
      */
     loadWorker(workerPath: string): Promise<Worker> {
         return new Promise((resolve, reject) => {
-            fs.readFile(workerPath, { encoding: 'utf8' }, (err, chunk) => {
+            readFile(workerPath, { encoding: 'utf8' }, (err, chunk) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -526,10 +525,10 @@ const helper = {
     readAppName(): string | undefined {
         const jsonPath =
             process.env['NODE_ENV'] === 'development'
-                ? path.join(cwd, './data/manufaturer.json')
-                : path.join(cwd, './resources/config/manufaturer.json');
+                ? join(cwd, './data/manufaturer.json')
+                : join(cwd, './resources/config/manufaturer.json');
         try {
-            const data = fs.readFileSync(jsonPath, { encoding: 'utf8' });
+            const data = readFileSync(jsonPath, { encoding: 'utf8' });
             const next = JSON.parse(data);
             return next.materials_name;
         } catch (error) {
@@ -544,14 +543,14 @@ const helper = {
     existManufaturer(mode: string, appPath: string) {
         if (mode === 'development') {
             try {
-                fs.accessSync(path.join(appPath, 'data/manufaturer.json'));
+                accessSync(join(appPath, 'data/manufaturer.json'));
                 return true;
             } catch (error) {
                 return false;
             }
         } else {
             try {
-                fs.accessSync(path.join(appPath, '../config/manufaturer.json'));
+                accessSync(join(appPath, '../config/manufaturer.json'));
                 return true;
             } catch (error) {
                 return false;
@@ -563,7 +562,7 @@ const helper = {
      */
     useBlackListRender() {
         try {
-            fs.accessSync(path.join(cwd, 'blacklist'));
+            accessSync(join(cwd, 'blacklist'));
             return true;
         } catch (error) {
             return false;
@@ -575,15 +574,13 @@ const helper = {
      * @param chunk 数据
      */
     async writeNetJson(cwd: string, chunk: any) {
-        const { writeFile } = fs.promises;
-
         const saveAs =
             process.env['NODE_ENV'] === 'development'
-                ? path.join(cwd, './data/net.json')
-                : path.join(cwd, './resources/config/net.json');
+                ? join(cwd, './data/net.json')
+                : join(cwd, './resources/config/net.json');
 
         try {
-            await writeFile(saveAs, JSON.stringify(chunk), { encoding: 'utf8' });
+            await writeFilePromise(saveAs, JSON.stringify(chunk), { encoding: 'utf8' });
         } catch (error) {
             log.error(`写入net.json失败 @writeNetJson(): ${error.message}`);
         }
@@ -605,10 +602,10 @@ const helper = {
     async readAppJson(): Promise<AppJson | null> {
         const isDev = process.env['NODE_ENV'] === 'development';
         const target = isDev
-            ? path.join(cwd, 'data/app.json')
-            : path.join(cwd, 'resources/config/app.json');
+            ? join(cwd, 'data/app.json')
+            : join(cwd, 'resources/config/app.json');
         try {
-            const prev = await fs.promises.readFile(target, { encoding: 'utf8' });
+            const prev = await readFilePromise(target, { encoding: 'utf8' });
             return JSON.parse(prev);
         } catch (error) {
             log.error(`读取app.json失败：${error.message}`);
@@ -621,10 +618,10 @@ const helper = {
     async writeAppJson(data: AppJson): Promise<boolean> {
         const isDev = process.env['NODE_ENV'] === 'development';
         const target = isDev
-            ? path.join(cwd, 'data/app.json')
-            : path.join(cwd, 'resources/config/app.json');
+            ? join(cwd, 'data/app.json')
+            : join(cwd, 'resources/config/app.json');
         try {
-            await fs.promises.writeFile(target, JSON.stringify(data), { encoding: 'utf8' });
+            await writeFilePromise(target, JSON.stringify(data), { encoding: 'utf8' });
             return true;
         } catch (error) {
             log.error(`读取app.json失败：${error.message}`);
@@ -637,10 +634,10 @@ const helper = {
     async readCheckJson(): Promise<CheckJson | null> {
         const isDev = process.env['NODE_ENV'] === 'development';
         const target = isDev
-            ? path.join(cwd, 'data/check.json')
-            : path.join(cwd, 'resources/config/check.json');
+            ? join(cwd, 'data/check.json')
+            : join(cwd, 'resources/config/check.json');
         try {
-            const prev = await fs.promises.readFile(target, { encoding: 'utf8' });
+            const prev = await readFilePromise(target, { encoding: 'utf8' });
             return JSON.parse(prev);
         } catch (error) {
             log.error(`读取check.json失败：${error.message}`);
@@ -653,10 +650,10 @@ const helper = {
     async writeCheckJson(data: CheckJson): Promise<boolean> {
         const isDev = process.env['NODE_ENV'] === 'development';
         const target = isDev
-            ? path.join(cwd, 'data/check.json')
-            : path.join(cwd, 'resources/config/check.json');
+            ? join(cwd, 'data/check.json')
+            : join(cwd, 'resources/config/check.json');
         try {
-            await fs.promises.writeFile(target, JSON.stringify(data), { encoding: 'utf8' });
+            await writeFilePromise(target, JSON.stringify(data), { encoding: 'utf8' });
             return true;
         } catch (error) {
             log.error(`读取check.json失败：${error.message}`);
@@ -679,7 +676,7 @@ const helper = {
      */
     async isDebug(): Promise<boolean> {
         try {
-            const exist = await this.existFile(path.join(cwd, './debug'));
+            const exist = await this.existFile(join(cwd, './debug'));
             return exist;
         } catch (error) {
             return false;
@@ -716,8 +713,8 @@ const helper = {
     async writeReportJson(reportType: number) {
         try {
             const saveTo = isDev
-                ? path.join(cwd, 'data/report.json')
-                : path.join(cwd, 'resources/config/report.json');
+                ? join(cwd, 'data/report.json')
+                : join(cwd, 'resources/config/report.json');
             return await this.writeJSONfile(saveTo, { reportType });
         } catch (error) {
             log.error(`写入report.json失败:${error.message}`);

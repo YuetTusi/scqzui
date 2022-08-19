@@ -119,6 +119,10 @@ const GlobalStyle = createGlobalStyle`
             padding: 0 !important;
         }
     }
+	//
+	.ant-slider-track{
+		background-color:#0fb9b1 !important;
+	}
 
 //重写ztree部分样式
 span.tmpzTreeMove_arrow {
