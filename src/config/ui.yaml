@@ -16,7 +16,7 @@ cloudButtonText: 云取证
 cloudAppUrl: http://139.9.112.8:9699/test_app
 cloudAppMd5: http://139.9.112.8:9699/test_md5
 logo: logo.png
-windowHeight: 1020
+windowHeight: 960
 windowWidth: 1460
 minHeight: 940
 minWidth: 1280

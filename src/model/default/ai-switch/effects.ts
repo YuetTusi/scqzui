@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import { Predict } from '@/view/default/case/ai-switch';
 import { helper } from '@/utils/helper';
-import { PredictComp } from '@/view/default/case/ai-switch/prop';
+import { PredictComp, PredictJson } from '@/view/default/case/ai-switch/prop';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
@@ -43,13 +43,13 @@ export default {
                             return total;
                         }, []);
                         yield put({ type: 'setData', payload: ret });
-                        yield put({ type: 'setSimilarity', payload: 0 });
+                        yield put({ type: 'setSimilarity', payload: (temp as PredictJson).similarity });
                     } else {
-                        const ret: { config: Predict[], similarity: number } = { config: [], similarity: caseAi.similarity };
-                        ret.config = (temp as { config: Predict[], similarity: number })
+                        const ret: PredictJson = { config: [], similarity: caseAi.similarity };
+                        ret.config = (temp as PredictJson)
                             .config
                             .reduce((total: Predict[], current: Predict) => {
-                                const next = (caseAi as { config: Predict[], similarity: number })
+                                const next = (caseAi as PredictJson)
                                     .config
                                     .find((i) => i.type === current.type);
                                 if (next !== undefined) {
