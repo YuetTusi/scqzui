@@ -31,7 +31,7 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import logger from '@/utils/log';
-import { Predict } from '../../case/ai-switch';
+import { PredictJson } from '../../case/ai-switch/prop';
 
 const { devText, fetchText, parseText } = helper.readConf()!;
 const cwd = process.cwd();
@@ -84,7 +84,7 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
         : join(cwd, './resources/config/predict.json'); //AI配置模版所在路径
 
     try {
-        const [caseData, caseJsonExist, appConfig, aiTemp]: [CaseInfo, boolean, AppJson | null, Predict[]]
+        const [caseData, caseJsonExist, appConfig, aiTemp]: [CaseInfo, boolean, AppJson | null, PredictJson]
             = await Promise.all([
                 db.findOne({ _id: data.caseId }),
                 helper.existFile(join(caseJsonPath, 'Case.json')),
@@ -96,7 +96,7 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
             await helper.writeCaseJson(caseJsonPath, caseData);
         }
 
-        let aiConfig: Predict[] = [];
+        let aiConfig: PredictJson = { similarity: 0, config: [] };
         const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
         const exist = await helper.existFile(predictAt);
         if (exist) {

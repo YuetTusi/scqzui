@@ -25,6 +25,7 @@ import { AppJson } from '../schema/app-json';
 import { CheckJson } from '../schema/check-json';
 import { QuickEvent } from '../schema/quick-event';
 import { Predict } from '../view/default/case/ai-switch';
+import { PredictJson } from '@/view/default/case/ai-switch/prop';
 import { getDb } from './db';
 
 const cwd = process.cwd();//应用的根目录
@@ -688,23 +689,26 @@ const helper = {
      * @param temp 模版predict.json
      * @param caseAi 案件AI配置
      */
-    combinePredict(temp: Predict[], caseAi: Predict[]) {
-        return temp.reduce((total: Predict[], current: Predict) => {
-            const has = caseAi.find(i => i.type === current.type);
-            if (has) {
-                //案件下存在配置项，以案件为谁
-                total.push({
-                    ...current,
-                    use: has.use
-                });
-            } else {
-                total.push({
-                    ...current,
-                    use: true
-                });
-            }
-            return total;
-        }, []);
+    combinePredict(temp: PredictJson, caseAi: PredictJson): PredictJson {
+        return {
+            similarity: caseAi.similarity ?? 0,
+            config: temp.config.reduce((total: Predict[], current: Predict) => {
+                const has = (caseAi.config ?? []).find(i => i.type === current.type);
+                if (has) {
+                    //案件下存在配置项，以案件为谁
+                    total.push({
+                        ...current,
+                        use: has.use
+                    });
+                } else {
+                    total.push({
+                        ...current,
+                        use: true
+                    });
+                }
+                return total;
+            }, [])
+        };
     },
     /**
      * 写report.json文件

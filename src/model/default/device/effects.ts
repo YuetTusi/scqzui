@@ -28,7 +28,7 @@ import { AppJson } from '@/schema/app-json';
 import { ParseCategory } from '@/schema/parse-detail';
 import { QuickRecord } from '@/schema/quick-record';
 import { QuickEvent } from '@/schema/quick-event';
-import { Predict } from '@/view/default/case/ai-switch';
+import { PredictJson } from '@/view/default/case/ai-switch/prop';
 import { DeviceStoreState } from './index';
 
 const cwd = process.cwd();
@@ -445,14 +445,14 @@ export default {
             const aiTempAt = isDev
                 ? join(cwd, './data/predict.json')
                 : join(cwd, './resources/config/predict.json'); //AI配置模版所在路径
-            const [caseData, appConfig, aiTemp]: [CaseInfo, AppJson, Predict[]] = yield all([
+            const [caseData, appConfig, aiTemp]: [CaseInfo, AppJson, PredictJson] = yield all([
                 call([db, 'findOne'], { _id: current?.caseId }),
                 call([helper, 'readAppJson']),
                 call([helper, 'readJSONFile'], aiTempAt)
             ]);
 
             if (current && caseData.m_bIsAutoParse) {
-                let aiConfig: Predict[] = [];
+                let aiConfig: PredictJson = { config: [], similarity: 0 };
                 const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
                 let exist: boolean = yield call([helper, 'existFile'], predictAt);
                 if (exist) {
