@@ -116,7 +116,7 @@
 		"yaml-loader": "^0.6.0"
 	},
 	"dependencies": {
-		"antd": "^4.19.5",
+		"antd": "^4.22.7",
 		"archiver": "^5.3.0",
 		"cors": "^2.8.5",
 		"cpy": "^8.1.2",
