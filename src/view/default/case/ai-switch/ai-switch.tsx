@@ -1,6 +1,6 @@
 import chunk from 'lodash/chunk';
 import { join } from 'path';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, FocusEvent } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Col from 'antd/lib/col';
 import Row from 'antd/lib/row';
@@ -21,7 +21,6 @@ const isDev = process.env['NODE_ENV'] === 'development';
 const AiSwitch: FC<AiSwitchProp> = ({ casePath }) => {
 
     const dispatch = useDispatch();
-    // const [rate, setRate] = useState(0);
     const { data, similarity } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
 
     useEffect(() => {
@@ -93,6 +92,12 @@ const AiSwitch: FC<AiSwitchProp> = ({ casePath }) => {
     const onSimilarChange = (value: number) =>
         dispatch({ type: 'aiSwitch/setSimilarity', payload: value });
 
+    const onSimilarBlur = ({ target }: FocusEvent<HTMLInputElement>) => {
+        if (target.value.trim() === '') {
+            dispatch({ type: 'aiSwitch/setSimilarity', payload: 0 });
+        }
+    }
+
     const renderSwitch = () => {
 
         if (data.length === 0) {
@@ -134,6 +139,7 @@ const AiSwitch: FC<AiSwitchProp> = ({ casePath }) => {
             <Col flex="auto">
                 <InputNumber
                     onChange={onSimilarChange}
+                    onBlur={onSimilarBlur}
                     value={similarity}
                     defaultValue={0}
                     min={0}

@@ -93,7 +93,9 @@ const SelfUnit: FC<SelfUnitProp> = () => {
     /**
      * 行选中Change
      */
-    const onSelectedRowChange = (keys: Key[]) => {
+    const onSelectedRowChange = (keys: Key[], selectedRows: SelfUnitEntity[]) => {
+        const [first] = selectedRows;
+        selectedUnitName.current = first?.unitName ?? '';
         setSelectedRowKeys(keys);
     };
 
@@ -120,7 +122,6 @@ const SelfUnit: FC<SelfUnitProp> = () => {
     const onSelectUnitClick = debounce((event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         if (selectedRowKeys.length !== 0) {
-            console.log(selectedRowKeys[0], selectedUnitName.current);
             dispatch({
                 type: 'organization/saveSelfUnit',
                 payload: {
