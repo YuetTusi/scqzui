@@ -3,7 +3,7 @@ import { useQueryDb } from './query-nedb';
 import { useSubscribe } from './subscribe';
 import { useCaseList, useCase } from './case-list';
 import { useDevice } from './device-list';
-import { useOfficerList } from './officer-list';
+import { useOfficerList, useOfficer } from './officer-list';
 import { useUnit, useDstUnit } from './unit';
 import { useAppConfig } from './app-config';
 import { useManufacturer } from './manufacturer';
@@ -20,6 +20,7 @@ export {
     useCase,
     useDevice,
     useOfficerList,
+    useOfficer,
     useUnit,
     useDstUnit,
     useAppConfig,

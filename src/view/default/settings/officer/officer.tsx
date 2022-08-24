@@ -94,25 +94,23 @@ const Officer: FC<OfficerProp> = () => {
         }
     };
 
-    return (
-        <MainBox>
-            <OfficerBox>
-                <div className="button-bar">
-                    <div></div>
-                    <div>
-                        <Button
-                            onClick={() => dispatch(routerRedux.push('/settings/officer/-1'))}
-                            type="primary">
-                            <PlusCircleOutlined />
-                            <span>添加</span>
-                        </Button>
-                    </div>
+    return <MainBox>
+        <OfficerBox>
+            <div className="button-bar">
+                <div></div>
+                <div>
+                    <Button
+                        onClick={() => dispatch(routerRedux.push('/settings/officer/-1'))}
+                        type="primary">
+                        <PlusCircleOutlined />
+                        <span>添加</span>
+                    </Button>
                 </div>
-                <Split />
-                <div className="police-list">{renderOfficer()}</div>
-            </OfficerBox>
-        </MainBox>
-    );
+            </div>
+            <Split />
+            <div className="police-list">{renderOfficer()}</div>
+        </OfficerBox>
+    </MainBox>;
 };
 
 export default Officer;

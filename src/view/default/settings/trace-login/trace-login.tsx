@@ -75,9 +75,9 @@ const TraceLogin: FC<TraceLoginProp> = () => {
     /**
      * 保存状态Change
      */
-    function onRememberChange(event: CheckboxChangeEvent) {
-        setRememberMe(event.target.checked);
-        dispatch({ type: 'traceLogin/updateRemember', payload: event.target.checked });
+    function onRememberChange({ target }: CheckboxChangeEvent) {
+        setRememberMe(target.checked);
+        dispatch({ type: 'traceLogin/updateRemember', payload: target.checked });
     }
 
     /**

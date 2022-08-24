@@ -2,8 +2,8 @@ import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import { useLocation } from 'dva';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
-import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
+import Button from 'antd/lib/button';
 import DatePicker from 'antd/lib/date-picker';
 import Auth from '@/component/auth';
 import { helper } from '@/utils/helper';
@@ -21,9 +21,11 @@ const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle, 
 
     const { search } = useLocation<{ admin: string }>();
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
+    const { getFieldsValue } = formRef;
 
     useEffect(() => {
-        setIsAdmin(new URLSearchParams(search).get('admin') === '1');
+        const urlParam = new URLSearchParams(search);
+        setIsAdmin(urlParam.get('admin') === '1');
     }, [search]);
 
 
@@ -31,7 +33,6 @@ const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle, 
      * 查询
      */
     const onSearch = (event: MouseEvent<HTMLButtonElement>) => {
-        const { getFieldsValue } = formRef;
         event.preventDefault();
         const values = getFieldsValue();
         onSearchHandle(values);
@@ -65,7 +66,7 @@ const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle, 
                 <Datepicker
                     showTime={true}
                     placeholder="请选择时间"
-                />
+                />0
             </Item>
             <Item>
                 <Button onClick={onSearch} type="primary">

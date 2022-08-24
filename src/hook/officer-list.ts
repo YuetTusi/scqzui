@@ -21,4 +21,22 @@ function useOfficerList() {
     return officer;
 }
 
-export { useOfficerList };
+function useOfficer(id: string) {
+
+    const db = getDb<Officer>(TableName.Officer);
+    const [officer, setOfficer] = useState<Officer | null>(null);
+    useEffect(() => {
+        (async () => {
+            try {
+                const next = await db.findOne({ _id: id });
+                setOfficer(next);
+            } catch (error) {
+                setOfficer(null);
+            }
+        })();
+    }, [id]);
+
+    return officer;
+}
+
+export { useOfficerList, useOfficer };
