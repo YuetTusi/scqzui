@@ -122,7 +122,7 @@ export function getCaseColumns(
                                             });
                                             const proc = execFile(
                                                 join(exePath, 'create_report.exe'),
-                                                [m_strCasePath, devices.map(item => item.phonePath).join('|')]
+                                                [join(m_strCasePath, m_strCaseName), devices.map(item => item.phonePath).join('|')]
                                             );
                                             proc.once('error', () => {
                                                 message.destroy();

@@ -134,7 +134,7 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                                             });
                                             const proc = execFile(
                                                 join(exePath, 'create_report.exe'),
-                                                [eventPath, events.map(item => item.phonePath).join('|')]
+                                                [join(eventPath, eventName), events.map(item => item.phonePath).join('|')]
                                             );
                                             proc.once('error', () => {
                                                 message.destroy();
