@@ -1,6 +1,9 @@
 import React, { FC } from 'react';
 import { AuthProp } from './prop';
 
+/**
+ * 降级组件
+ */
 const Demotion: FC<{ widget?: JSX.Element | string }> = ({ widget }) =>
     widget === undefined
         ? null

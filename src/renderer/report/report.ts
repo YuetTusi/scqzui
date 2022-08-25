@@ -1,7 +1,7 @@
-import { ipcRenderer, IpcRendererEvent } from 'electron';
-import fs from 'fs';
+import { createWriteStream } from 'fs';
 import { stat, writeFile } from 'fs/promises';
 import { basename, extname, join } from 'path';
+import { ipcRenderer, IpcRendererEvent } from 'electron';
 import groupBy from 'lodash/groupBy';
 import archiver from 'archiver';
 import log from '@/utils/log';
@@ -68,9 +68,9 @@ ipcRenderer.on('report-batch-export', async (event, batchExportTasks: BatchExpor
  * @param {string[]} treeParams.files 数据文件列表
  * @param {string[]} treeParams.attaches 附件文件列表
  */
-async function copyReport(exportCondition: ExportCondition, treeParams: TreeParam) {
-    const { reportRoot, saveTarget, reportName, isAttach } = exportCondition;
-    const { tree, files, attaches } = treeParams;
+async function copyReport(
+    { reportRoot, saveTarget, reportName, isAttach }: ExportCondition,
+    { tree, files, attaches }: TreeParam) {
 
     log.info(`${reportName} 导出报告至: ${saveTarget}`);
 
@@ -134,14 +134,14 @@ async function copyReport(exportCondition: ExportCondition, treeParams: TreePara
  * @param {string[]} treeParams.files 数据文件列表
  * @param {string[]} treeParams.attaches 附件文件列表
  */
-function compressReport(exportCondition: ExportCondition, treeParams: TreeParam) {
-    const { reportRoot, saveTarget, reportName, isAttach } = exportCondition;
-    const { tree, files, attaches } = treeParams;
+function compressReport(
+    { reportRoot, saveTarget, reportName, isAttach }: ExportCondition,
+    { tree, files, attaches }: TreeParam) {
 
     const archive = archiver('zip', {
         zlib: { level: 7 } //压缩级别
     });
-    const ws = fs.createWriteStream(join(saveTarget, `${reportName}.zip`));
+    const ws = createWriteStream(join(saveTarget, `${reportName}.zip`));
 
     return new Promise((resolve, reject) => {
         archive.once('error', (err) => {
@@ -154,12 +154,10 @@ function compressReport(exportCondition: ExportCondition, treeParams: TreeParam)
         //报告所需基本文件
         archive.glob(
             '{assert/**/*,fonts/**/*,public/default/**/*,public/icons/**/*,index.html,preview.html,*.js}',
-            {
-                cwd: reportRoot
-            }
+            { cwd: reportRoot }
         );
         //用户所选数据JSON
-        files.forEach((f) =>
+        files.forEach(f =>
             archive.file(join(reportRoot, 'public/data', f), { name: `public/data/${f}` })
         );
         //筛选子树JSON
