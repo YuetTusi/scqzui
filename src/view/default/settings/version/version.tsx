@@ -80,83 +80,81 @@ const Version: FC<{}> = () => {
      * 渲染版本信息
      */
     const render = (data: Manufaturer | null) => {
-        return (
-            <VersionBox>
-                <div className="logo">
-                    <img
-                        src={getLogo()}
-                        alt="logo"
-                        width={300}
-                        height={300}
-                        onDoubleClick={() => {
-                            console.table(process.versions);
-                        }}
-                    />
+        return <VersionBox>
+            <div className="logo">
+                <img
+                    src={getLogo()}
+                    alt="logo"
+                    width={300}
+                    height={300}
+                    onDoubleClick={() => {
+                        console.table(process.versions);
+                    }}
+                />
+            </div>
+            <div className="info">
+                <div>
+                    <label>产品名称</label>
+                    <span className="text">{data?.materials_name ?? ''}</span>
                 </div>
-                <div className="info">
-                    <div>
-                        <label>产品名称</label>
-                        <span className="text">{data?.materials_name ?? ''}</span>
-                    </div>
-                    <div>
-                        <label>产品型号</label>
-                        <span className="text">{data?.materials_model ?? ''}</span>
-                    </div>
-                    <div>
-                        <label>开发方</label>
-                        <span className="text">{data?.manufacturer ?? ''}</span>
-                    </div>
-                    <div>
-                        <label>序列号</label>
-                        <span className="text">
-                            <QuickCopy desc="拷贝序列号">
-                                <span style={{ paddingRight: '40px' }}>{serial}</span>
-                            </QuickCopy>
-                        </span>
-                    </div>
-                    <div>
-                        <label>当前版本</label>
-                        <span className="text">
-                            {helper.isNullOrUndefinedOrEmptyString(data?.materials_software_version)
-                                ? 'v0.0.1'
-                                : filterString(data?.materials_software_version!)}
-                        </span>
-                    </div>
-                    <div style={{ padding: 0 }}>
-                        <label>发行日志</label>
-                        <span className="text">
-                            <Button
-                                type="link"
-                                disabled={disabled}
-                                style={{ padding: 0 }}
-                                onClick={() => setPublishModalVisible(true)}>
-                                查看
-                            </Button>
-                        </span>
-                    </div>
+                <div>
+                    <label>产品型号</label>
+                    <span className="text">{data?.materials_model ?? ''}</span>
                 </div>
-                <Modal
-                    visible={publishModalVisible}
-                    footer={[
+                <div>
+                    <label>开发方</label>
+                    <span className="text">{data?.manufacturer ?? ''}</span>
+                </div>
+                <div>
+                    <label>序列号</label>
+                    <span className="text">
+                        <QuickCopy desc="拷贝序列号">
+                            <span style={{ paddingRight: '40px' }}>{serial}</span>
+                        </QuickCopy>
+                    </span>
+                </div>
+                <div>
+                    <label>当前版本</label>
+                    <span className="text">
+                        {helper.isNullOrUndefinedOrEmptyString(data?.materials_software_version)
+                            ? 'v0.0.1'
+                            : filterString(data?.materials_software_version!)}
+                    </span>
+                </div>
+                <div style={{ padding: 0 }}>
+                    <label>发行日志</label>
+                    <span className="text">
                         <Button
-                            key="B1"
-                            type="primary"
-                            onClick={() => setPublishModalVisible(false)}>
-                            <CheckCircleOutlined />
-                            <span>确定</span>
+                            type="link"
+                            disabled={disabled}
+                            style={{ padding: 0 }}
+                            onClick={() => setPublishModalVisible(true)}>
+                            查看
                         </Button>
-                    ]}
-                    title="发行日志"
-                    centered={true}
-                    closable={false}
-                    width={1050}
-                    destroyOnClose={true}
-                    maskClosable={false}
-                    className="zero-padding-body">
-                    <LogList logs={logs.current} />
-                </Modal>
-            </VersionBox>
-        );
+                    </span>
+                </div>
+            </div>
+            <Modal
+                visible={publishModalVisible}
+                footer={[
+                    <Button
+                        key="B1"
+                        type="primary"
+                        onClick={() => setPublishModalVisible(false)}>
+                        <CheckCircleOutlined />
+                        <span>确定</span>
+                    </Button>
+                ]}
+                title="发行日志"
+                centered={true}
+                closable={false}
+                width={1050}
+                destroyOnClose={true}
+                maskClosable={false}
+                className="zero-padding-body">
+                <LogList logs={logs.current} />
+            </Modal>
+        </VersionBox>;
     };
 
     return render(manu);

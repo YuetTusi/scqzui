@@ -66,7 +66,7 @@ const SearchForm: FC<SearchFormProp> = ({ formRef, onSearchHandle, onDelHandle, 
                 <Datepicker
                     showTime={true}
                     placeholder="请选择时间"
-                />0
+                />
             </Item>
             <Item>
                 <Button onClick={onSearch} type="primary">

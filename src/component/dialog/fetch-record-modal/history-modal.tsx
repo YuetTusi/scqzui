@@ -45,14 +45,14 @@ const HistoryModal: FC<HistoryModalProp> = ({ title, visible, data, cancelHandle
                                 return (
                                     <li key={`FR_${index}`}>
                                         <label>【{renderTime(time)}】</label>
-                                        <span style={{ color: '#222' }}>{info}</span>
+                                        <span style={{ color: '#fff' }}>{info}</span>
                                     </li>
                                 );
                             case ProgressType.Warning:
                                 return (
                                     <li key={`FR_${index}`}>
                                         <label>【{renderTime(time)}】</label>
-                                        <span style={{ color: '#dc143c' }}>{info}</span>
+                                        <span style={{ color: '#ff3333' }}>{info}</span>
                                     </li>
                                 );
                             case ProgressType.Message:
@@ -66,7 +66,7 @@ const HistoryModal: FC<HistoryModalProp> = ({ title, visible, data, cancelHandle
                                 return (
                                     <li key={`FR_${index}`}>
                                         <label>【{renderTime(time)}】</label>
-                                        <span style={{ color: '#222' }}>{info}</span>
+                                        <span style={{ color: '#fff' }}>{info}</span>
                                     </li>
                                 );
                         }

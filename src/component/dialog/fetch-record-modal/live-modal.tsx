@@ -80,7 +80,7 @@ const LiveModal: FC<LiveModalProp> = ({ title, device, visible, cancelHandle }) 
                                 return (
                                     <li key={`L_${i}`}>
                                         <label>【{renderTime(item.time)}】</label>
-                                        <span style={{ color: '#dc143c', fontWeight: 'bold' }}>{item.info}</span>
+                                        <span style={{ color: '#ff3333', fontWeight: 'bold' }}>{item.info}</span>
                                     </li>
                                 );
                             case ProgressType.Message:
