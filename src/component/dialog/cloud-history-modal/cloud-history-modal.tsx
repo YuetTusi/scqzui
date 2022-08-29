@@ -137,83 +137,69 @@ const CloudHistoryModal: FC<CloudHistoryModalProp> = ({
             const next = msg.map((item, i) => {
                 switch (item.type) {
                     case SmsMessageType.Normal:
-                        return (
-                            <li key={`L_${i}`} className="history-list-item">
-                                <label>
-                                    【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
-                                </label>
-                                <span style={{ color: '#fff' }}>{item.content}</span>
-                            </li>
-                        );
+                        return <li key={`L_${i}`} className="history-list-item">
+                            <label>
+                                【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
+                            </label>
+                            <span style={{ color: '#fff' }}>{item.content}</span>
+                        </li>;
                     case SmsMessageType.Warning:
-                        return (
-                            <li key={`L_${i}`} className="history-list-item">
-                                <label>
-                                    【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
-                                </label>
-                                <span style={{ color: '#f5222d', fontWeight: 'bold' }}>{item.content}</span>
-                            </li>
-                        );
+                        return <li key={`L_${i}`} className="history-list-item">
+                            <label>
+                                【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
+                            </label>
+                            <span style={{ color: '#f5222d', fontWeight: 'bold' }}>{item.content}</span>
+                        </li>;
                     case SmsMessageType.Important:
-                        return (
-                            <li key={`L_${i}`} className="history-list-item">
-                                <label>
-                                    【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
-                                </label>
-                                <span style={{ color: '#f9ca24' }}>{item.content}</span>
-                            </li>
-                        );
+                        return <li key={`L_${i}`} className="history-list-item">
+                            <label>
+                                【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
+                            </label>
+                            <span style={{ color: '#f9ca24' }}>{item.content}</span>
+                        </li>;
                     default:
-                        return (
-                            <li key={`L_${i}`} className="history-list-item">
-                                <label>
-                                    【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
-                                </label>
-                                <span>{item.content}</span>
-                            </li>
-                        );
+                        return <li key={`L_${i}`} className="history-list-item">
+                            <label>
+                                【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
+                            </label>
+                            <span>{item.content}</span>
+                        </li>;
                 }
             });
-            return (
-                <div className="right-record">
-                    <ul className="history-list">{next}</ul>
-                </div>
-            );
+            return <div className="right-record">
+                <ul className="history-list">{next}</ul>
+            </div>;
         } else {
-            return (
-                <div className="right-record empty">
-                    <Empty description="暂无记录" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                </div>
-            );
+            return <div className="right-record empty">
+                <Empty description="暂无记录" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            </div>;
         }
     };
 
-    return (
-        <Modal
-            footer={[
-                <Button onClick={cancelHandle} type="default" key="CHM_0">
-                    <CheckCircleOutlined />
-                    <span>取消</span>
-                </Button>
-            ]}
-            onCancel={cancelHandle}
-            visible={visible}
-            className="zero-padding-body"
-            destroyOnClose={true}
-            forceRender={true}
-            maskClosable={false}
-            width={850}
-            title={`${fetchText ?? '取证'}记录`}>
-            <CloudHistoryModalBox>
-                <div className="cloud-panel">
-                    <div className="left-tree">
-                        <ul className="ztree" id="cloud-history-tree"></ul>
-                    </div>
-                    {renderRecords(records)}
+    return <Modal
+        footer={[
+            <Button onClick={cancelHandle} type="default" key="CHM_0">
+                <CheckCircleOutlined />
+                <span>取消</span>
+            </Button>
+        ]}
+        onCancel={cancelHandle}
+        visible={visible}
+        className="zero-padding-body"
+        destroyOnClose={true}
+        forceRender={true}
+        maskClosable={false}
+        width={850}
+        title={`${fetchText ?? '取证'}记录`}>
+        <CloudHistoryModalBox>
+            <div className="cloud-panel">
+                <div className="left-tree">
+                    <ul className="ztree" id="cloud-history-tree"></ul>
                 </div>
-            </CloudHistoryModalBox>
-        </Modal>
-    );
+                {renderRecords(records)}
+            </div>
+        </CloudHistoryModalBox>
+    </Modal>;
 };
 
 CloudHistoryModal.defaultProps = {

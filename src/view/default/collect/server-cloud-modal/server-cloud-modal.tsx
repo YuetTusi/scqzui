@@ -165,16 +165,13 @@ const ServerCloudModal: FC<Prop> = ({
         return allCaseData.map((opt: CaseInfo) => {
             let pos = opt.m_strCaseName.lastIndexOf('\\');
             let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
-            let onlyName = opt.m_strCaseName.substring(pos + 1);
-            return (
-                <Option
-                    value={JSON.stringify(opt)}
-                    key={opt._id}>
-                    {`${name}（${helper
-                        .parseDate(tick, 'YYYYMMDDHHmmss')
-                        .format('YYYY-M-D H:mm:ss')}）`}
-                </Option>
-            );
+            return <Option
+                value={JSON.stringify(opt)}
+                key={opt._id}>
+                {`${name}（${helper
+                    .parseDate(tick, 'YYYYMMDDHHmmss')
+                    .format('YYYY-M-D H:mm:ss')}）`}
+            </Option>;
         });
     };
 
@@ -282,340 +279,336 @@ const ServerCloudModal: FC<Prop> = ({
             wrapperCol: { span: 18 }
         };
 
-        return (
-            <div>
-                <Form form={formRef} layout="horizontal" {...formItemLayout}>
-                    <Row>
-                        <Col span={24}>
-                            <Item
-                                rules={[{
-                                    required: true,
-                                    message: `请选择${caseText ?? '案件'}`
-                                }]}
-                                name="case"
-                                label={`${caseText ?? '案件'}名称`}>
-                                <Select
-                                    onChange={caseChange}
-                                    showSearch={true}
-                                    notFoundContent="暂无数据"
-                                    placeholder={`选择${caseText ?? '案件'}，可输入名称筛选`}>
-                                    {bindCaseSelect()}
-                                </Select>
-                            </Item>
-                            <Item className="with-btn">
-                                <Button
-                                    onClick={toCaseAddView}
-                                    type="primary"
-                                    size="small"
-                                    title={`添加${caseText ?? '案件'}`}
-                                ><PlusSquareOutlined /></Button>
-                            </Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Item
-                                label="选择App"
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                                required={true}>
-                                <Button
-                                    onClick={() => setAppSelectModalVisible(true)}
-                                    style={{ width: '100%' }}>
-                                    <SelectOutlined />
-                                    <span>{`云${fetchText ?? '取证'}App（${selectedApps.length}）`}</span>
-                                </Button>
-                            </Item>
-                        </Col>
-                        <Col span={12}>
-                            <Item rules={[
-                                {
-                                    required: true,
-                                    message: '请填写手机号'
-                                },
-                                {
-                                    pattern: MobileNumber,
-                                    message: '请输入正确的手机号'
-                                }
-                            ]}
-                                name="mobileNumber"
-                                label="手机号"
-                                labelCol={{ span: 6 }}
-                                wrapperCol={{ span: 14 }}>
-                                <AutoComplete
-                                    options={historyMobileNumber.current.reduce(
-                                        (total: { value: string }[], current: string, index: number) => {
-                                            if (index < 10 && current !== null) {
-                                                total.push({ value: current });
-                                            }
-                                            return total;
-                                        },
-                                        []
-                                    )}>
-                                    <Input />
-                                </AutoComplete>
-                            </Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Item rules={[
-                                {
-                                    required: true,
-                                    message: `请填写${devText ?? '设备'}名称`
-                                },
-                                {
-                                    pattern: Backslashe,
-                                    message: '不允许输入斜线字符'
-                                },
-                                { pattern: UnderLine, message: '不允许输入下划线' }
-                            ]}
-                                name="phoneName"
-                                label={`${devText ?? '设备'}名称`}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}>
-                                <AutoComplete
-                                    options={historyDeviceName.current.reduce(
-                                        (total: { value: string }[], current: string, index: number) => {
-                                            if (index < 10 && current !== null) {
-                                                total.push({ value: current });
-                                            }
-                                            return total;
-                                        },
-                                        []
-                                    )}
-                                />
-                            </Item>
-                        </Col>
-                        <Col span={12}>
-                            <Item
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: '请填写持有人'
+        return <div>
+            <Form form={formRef} layout="horizontal" {...formItemLayout}>
+                <Row>
+                    <Col span={24}>
+                        <Item
+                            rules={[{
+                                required: true,
+                                message: `请选择${caseText ?? '案件'}`
+                            }]}
+                            name="case"
+                            label={`${caseText ?? '案件'}名称`}>
+                            <Select
+                                onChange={caseChange}
+                                showSearch={true}
+                                notFoundContent="暂无数据"
+                                placeholder={`选择${caseText ?? '案件'}，可输入名称筛选`}>
+                                {bindCaseSelect()}
+                            </Select>
+                        </Item>
+                        <Item className="with-btn">
+                            <Button
+                                onClick={toCaseAddView}
+                                type="primary"
+                                size="small"
+                                title={`添加${caseText ?? '案件'}`}
+                            ><PlusSquareOutlined /></Button>
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Item
+                            label="选择App"
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                            required={true}>
+                            <Button
+                                onClick={() => setAppSelectModalVisible(true)}
+                                style={{ width: '100%' }}>
+                                <SelectOutlined />
+                                <span>{`云${fetchText ?? '取证'}App（${selectedApps.length}）`}</span>
+                            </Button>
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Item rules={[
+                            {
+                                required: true,
+                                message: '请填写手机号'
+                            },
+                            {
+                                pattern: MobileNumber,
+                                message: '请输入正确的手机号'
+                            }
+                        ]}
+                            name="mobileNumber"
+                            label="手机号"
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 14 }}>
+                            <AutoComplete
+                                options={historyMobileNumber.current.reduce(
+                                    (total: { value: string }[], current: string, index: number) => {
+                                        if (index < 10 && current !== null) {
+                                            total.push({ value: current });
+                                        }
+                                        return total;
                                     },
-                                    {
-                                        pattern: Backslashe,
-                                        message: '不允许输入斜线字符'
-                                    }
-                                ]}
-                                name="user"
-                                label="持有人"
-                                labelCol={{ span: 6 }}
-                                wrapperCol={{ span: 14 }}>
-                                <AutoComplete
-                                    options={historyDeviceHolder.current.reduce(
-                                        (total: { value: string }[], current: string, index: number) => {
-                                            if (index < 10 && current !== null) {
-                                                total.push({ value: current });
-                                            }
-                                            return total;
-                                        },
-                                        []
-                                    )}
-                                />
-                            </Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Item rules={[
+                                    []
+                                )}>
+                                <Input />
+                            </AutoComplete>
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Item rules={[
+                            {
+                                required: true,
+                                message: `请填写${devText ?? '设备'}名称`
+                            },
+                            {
+                                pattern: Backslashe,
+                                message: '不允许输入斜线字符'
+                            },
+                            { pattern: UnderLine, message: '不允许输入下划线' }
+                        ]}
+                            name="phoneName"
+                            label={`${devText ?? '设备'}名称`}
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}>
+                            <AutoComplete
+                                options={historyDeviceName.current.reduce(
+                                    (total: { value: string }[], current: string, index: number) => {
+                                        if (index < 10 && current !== null) {
+                                            total.push({ value: current });
+                                        }
+                                        return total;
+                                    },
+                                    []
+                                )}
+                            />
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Item
+                            rules={[
+                                {
+                                    required: true,
+                                    message: '请填写持有人'
+                                },
                                 {
                                     pattern: Backslashe,
                                     message: '不允许输入斜线字符'
-                                },
-                                {
-                                    pattern: UnderLine,
-                                    message: '不允许输入下划线'
                                 }
                             ]}
-                                name="deviceNumber"
-                                label={`${devText ?? '设备'}编号`}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}>
-                                <AutoComplete
-                                    options={historyDeviceNumber.current.reduce(
-                                        (total: { value: string }[], current: string, index: number) => {
-                                            if (index < 10 && current !== null) {
-                                                total.push({ value: current });
+                            name="user"
+                            label="持有人"
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 14 }}>
+                            <AutoComplete
+                                options={historyDeviceHolder.current.reduce(
+                                    (total: { value: string }[], current: string, index: number) => {
+                                        if (index < 10 && current !== null) {
+                                            total.push({ value: current });
+                                        }
+                                        return total;
+                                    },
+                                    []
+                                )}
+                            />
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Item rules={[
+                            {
+                                pattern: Backslashe,
+                                message: '不允许输入斜线字符'
+                            },
+                            {
+                                pattern: UnderLine,
+                                message: '不允许输入下划线'
+                            }
+                        ]}
+                            name="deviceNumber"
+                            label={`${devText ?? '设备'}编号`}
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}>
+                            <AutoComplete
+                                options={historyDeviceNumber.current.reduce(
+                                    (total: { value: string }[], current: string, index: number) => {
+                                        if (index < 10 && current !== null) {
+                                            total.push({ value: current });
+                                        }
+                                        return total;
+                                    },
+                                    []
+                                )}>
+                                <Input />
+                            </AutoComplete>
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Item
+                            name="handleOfficerNo"
+                            label="检材持有人编号"
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 14 }}>
+                            <Input
+                                maxLength={100}
+                                placeholder="检材持有人编号/执法办案人员编号"
+                            />
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <Item name="note" label="备注">
+                            <Input maxLength={100} />
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <Collapse
+                            onChange={(key) => {
+                                setActivePanelKey(key as string);
+                            }}
+                            accordion={true}
+                            activeKey={activePanelKey}>
+                            <Panel
+                                header={
+                                    <PanelHeader
+                                        onResetButtonHover={(e: MouseEvent) => {
+                                            if (activePanelKey !== '1') {
+                                                setActivePanelKey('1');
                                             }
-                                            return total;
-                                        },
-                                        []
-                                    )}>
-                                    <Input />
-                                </AutoComplete>
-                            </Item>
-                        </Col>
-                        <Col span={12}>
-                            <Item
-                                name="handleOfficerNo"
-                                label="检材持有人编号"
-                                labelCol={{ span: 6 }}
-                                wrapperCol={{ span: 14 }}>
-                                <Input
-                                    maxLength={100}
-                                    placeholder="检材持有人编号/执法办案人员编号"
-                                />
-                            </Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}>
-                            <Item name="note" label="备注">
-                                <Input maxLength={100} />
-                            </Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}>
-                            <Collapse
-                                onChange={(key) => {
-                                    setActivePanelKey(key as string);
-                                }}
-                                accordion={true}
-                                activeKey={activePanelKey}>
-                                <Panel
-                                    header={
-                                        <PanelHeader
-                                            onResetButtonHover={(e: MouseEvent) => {
-                                                if (activePanelKey !== '1') {
-                                                    setActivePanelKey('1');
+                                        }}
+                                        onResetClick={(e: MouseEvent) => {
+                                            e.stopPropagation();
+                                            formRef.setFieldsValue({
+                                                cloudTimeout: helper.CLOUD_TIMEOUT,
+                                                cloudTimespan: helper.CLOUD_TIMESPAN,
+                                                isAlive: helper.IS_ALIVE
+                                            });
+                                            localStorage.removeItem(LocalStoreKey.CloudTimeout);
+                                            localStorage.removeItem(
+                                                LocalStoreKey.CloudTimespan
+                                            );
+                                            localStorage.removeItem(LocalStoreKey.IsAlive);
+                                            message.destroy();
+                                            message.success('已还原默认值');
+                                        }}
+                                    />
+                                }
+                                key="1"
+                                className="ant-collapse-panel-overwrite">
+                                <Row>
+                                    <Col span={8}>
+                                        <Item
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: '请填写超时时间'
                                                 }
-                                            }}
-                                            onResetClick={(e: MouseEvent) => {
-                                                e.stopPropagation();
-                                                formRef.setFieldsValue({
-                                                    cloudTimeout: helper.CLOUD_TIMEOUT,
-                                                    cloudTimespan: helper.CLOUD_TIMESPAN,
-                                                    isAlive: helper.IS_ALIVE
-                                                });
-                                                localStorage.removeItem(LocalStoreKey.CloudTimeout);
-                                                localStorage.removeItem(
-                                                    LocalStoreKey.CloudTimespan
-                                                );
-                                                localStorage.removeItem(LocalStoreKey.IsAlive);
-                                                message.destroy();
-                                                message.success('已还原默认值');
-                                            }}
-                                        />
-                                    }
-                                    key="1"
-                                    className="ant-collapse-panel-overwrite">
-                                    <Row>
-                                        <Col span={8}>
-                                            <Item
-                                                rules={[
-                                                    {
-                                                        required: true,
-                                                        message: '请填写超时时间'
-                                                    }
-                                                ]}
-                                                initialValue={getTimeFromStorage(
-                                                    LocalStoreKey.CloudTimeout
-                                                )}
-                                                name="cloudTimeout"
-                                                label="超时时间（秒）"
-                                                labelCol={{ span: 12 }}
-                                                wrapperCol={{ span: 10 }}>
-                                                <InputNumber
-                                                    min={0}
-                                                    precision={0}
-                                                    style={{ width: '100%' }}
-                                                />
-                                            </Item>
-                                        </Col>
-                                        <Col span={8}>
-                                            <Item
-                                                rules={[
-                                                    {
-                                                        required: true,
-                                                        message: '请填写查询间隔'
-                                                    }
-                                                ]}
-                                                initialValue={getTimeFromStorage(
-                                                    LocalStoreKey.CloudTimespan
-                                                )}
-                                                name="cloudTimespan"
-                                                label="查询间隔（秒）"
-                                                labelCol={{ span: 12 }}
-                                                wrapperCol={{ span: 10 }}>
-                                                <InputNumber
-                                                    min={0}
-                                                    precision={0}
-                                                    style={{ width: '100%' }}
-                                                />
-                                            </Item>
-                                        </Col>
-                                        <Col span={8}>
-                                            <Item
-                                                initialValue={getIsAliveFromStorage()}
-                                                name="isAlive"
-                                                valuePropName="checked"
-                                                label="是否保活"
-                                                tooltip="不要勾选，特殊需求用"
-                                                labelCol={{ span: 12 }}
-                                                wrapperCol={{ span: 6 }}>
-                                                <Checkbox />
-                                            </Item>
-                                        </Col>
-                                    </Row>
-                                </Panel>
-                            </Collapse>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
-        );
+                                            ]}
+                                            initialValue={getTimeFromStorage(
+                                                LocalStoreKey.CloudTimeout
+                                            )}
+                                            name="cloudTimeout"
+                                            label="超时时间（秒）"
+                                            labelCol={{ span: 12 }}
+                                            wrapperCol={{ span: 10 }}>
+                                            <InputNumber
+                                                min={0}
+                                                precision={0}
+                                                style={{ width: '100%' }}
+                                            />
+                                        </Item>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Item
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: '请填写查询间隔'
+                                                }
+                                            ]}
+                                            initialValue={getTimeFromStorage(
+                                                LocalStoreKey.CloudTimespan
+                                            )}
+                                            name="cloudTimespan"
+                                            label="查询间隔（秒）"
+                                            labelCol={{ span: 12 }}
+                                            wrapperCol={{ span: 10 }}>
+                                            <InputNumber
+                                                min={0}
+                                                precision={0}
+                                                style={{ width: '100%' }}
+                                            />
+                                        </Item>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Item
+                                            initialValue={getIsAliveFromStorage()}
+                                            name="isAlive"
+                                            valuePropName="checked"
+                                            label="是否保活"
+                                            tooltip="不要勾选，特殊需求用"
+                                            labelCol={{ span: 12 }}
+                                            wrapperCol={{ span: 6 }}>
+                                            <Checkbox />
+                                        </Item>
+                                    </Col>
+                                </Row>
+                            </Panel>
+                        </Collapse>
+                    </Col>
+                </Row>
+            </Form>
+        </div>;
     };
 
-    return (
-        <>
-            <Modal
-                visible={visible}
-                onCancel={() => {
-                    resetValue();
-                    setActivePanelKey('0');
-                    cancelHandle!();
-                }}
-                footer={[
-                    <Button
-                        type="default"
-                        key="B_0"
-                        onClick={() => {
-                            resetValue();
-                            setActivePanelKey('0');
-                            cancelHandle!();
-                        }}>
-                        <CloseCircleOutlined />
-                        <span>取消</span>
-                    </Button>,
-                    <Tooltip title={`确定后开始${fetchText ?? '取证'}数据`} key="B_1">
-                        <Button type="primary" onClick={formSubmit}>
-                            <CheckCircleOutlined />
-                            <span>确定</span>
-                        </Button>
-                    </Tooltip>
-                ]}
-                title={`${fetchText ?? '取证'}信息录入（云取）`}
-                width={1000}
-                maskClosable={false}
-                destroyOnClose={true}
-                forceRender={true}
-                centered={true}>
-                <ServerCloudModalBox>{renderForm()}</ServerCloudModalBox>
-            </Modal>
-            <CloudAppSelectModal
-                title={`云${fetchText ?? '取证'}App`}
-                visible={appSelectModalVisible}
-                url={cloudAppUrl ?? helper.FETCH_CLOUD_APP_URL}
-                // url="http://localhost:9900/app/cloud-app"
-                selectedKeys={selectedApps.map((i) => i.m_strID)}
-                okHandle={appSelectHandle}
-                closeHandle={() => setAppSelectModalVisible(false)}
-            />
-        </>
-    );
+    return <>
+        <Modal
+            visible={visible}
+            onCancel={() => {
+                resetValue();
+                setActivePanelKey('0');
+                cancelHandle!();
+            }}
+            footer={[
+                <Button
+                    type="default"
+                    key="B_0"
+                    onClick={() => {
+                        resetValue();
+                        setActivePanelKey('0');
+                        cancelHandle!();
+                    }}>
+                    <CloseCircleOutlined />
+                    <span>取消</span>
+                </Button>,
+                <Tooltip title={`确定后开始${fetchText ?? '取证'}数据`} key="B_1">
+                    <Button type="primary" onClick={formSubmit}>
+                        <CheckCircleOutlined />
+                        <span>确定</span>
+                    </Button>
+                </Tooltip>
+            ]}
+            title={`${fetchText ?? '取证'}信息录入（云取）`}
+            width={1000}
+            maskClosable={false}
+            destroyOnClose={true}
+            forceRender={true}
+            centered={true}>
+            <ServerCloudModalBox>{renderForm()}</ServerCloudModalBox>
+        </Modal>
+        <CloudAppSelectModal
+            title={`云${fetchText ?? '取证'}App`}
+            visible={appSelectModalVisible}
+            url={cloudAppUrl ?? helper.FETCH_CLOUD_APP_URL}
+            // url="http://localhost:9900/app/cloud-app"
+            selectedKeys={selectedApps.map((i) => i.m_strID)}
+            okHandle={appSelectHandle}
+            closeHandle={() => setAppSelectModalVisible(false)}
+        />
+    </>;
 };
 ServerCloudModal.defaultProps = {
     visible: false,

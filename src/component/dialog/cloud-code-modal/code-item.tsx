@@ -156,42 +156,40 @@ const CodeItem: FC<CodeItemProps> = ({ usb, app, humanVerifyDataHandle, cloudApp
 		}
 	};
 
-	return (
-		<div className="capp-row">
-			<div className="fn-msg-panel">
-				<label className="capp-name">{appDesc}</label>
-				<>{getLast(app.message)}</>
-			</div>
-			<div className="fn-input-panel">
-				<label>验证码</label>
-				<Input
-					disabled={app.disabled}
-					ref={inputRef}
-					style={{ width: 130 }}
-					placeholder="请输入短信验证码"
-					size="small"
-					maxLength={10}
-				/>
-				<Button onClick={sendClick} disabled={app.disabled} type="primary" size="small">
-					确定
-				</Button>
-				<Button onClick={resendClick} disabled={app.disabled} type="default" size="small">
-					重新发送验证码
-				</Button>
-				<Button
-					onClick={() => humanVerifyDataHandle(app.humanVerifyData, app.m_strID, appDesc)}
-					disabled={app.humanVerifyData === null}
-					className={classnames({ valart: app.humanVerifyData !== null })}
-					danger={true}
-					size="small">
-					用户验证
-				</Button>
-				<Button onClick={cancelClick} type="default" size="small">
-					取消
-				</Button>
-			</div>
+	return <div className="capp-row">
+		<div className="fn-msg-panel">
+			<label className="capp-name">{appDesc}</label>
+			<>{getLast(app.message)}</>
 		</div>
-	);
+		<div className="fn-input-panel">
+			<label>验证码</label>
+			<Input
+				disabled={app.disabled}
+				ref={inputRef}
+				style={{ width: 130 }}
+				placeholder="请输入短信验证码"
+				size="small"
+				maxLength={10}
+			/>
+			<Button onClick={sendClick} disabled={app.disabled} type="primary" size="small">
+				确定
+			</Button>
+			<Button onClick={resendClick} disabled={app.disabled} type="default" size="small">
+				重新发送验证码
+			</Button>
+			<Button
+				onClick={() => humanVerifyDataHandle(app.humanVerifyData, app.m_strID, appDesc)}
+				disabled={app.humanVerifyData === null}
+				className={classnames({ valart: app.humanVerifyData !== null })}
+				danger={true}
+				size="small">
+				用户验证
+			</Button>
+			<Button onClick={cancelClick} type="default" size="small">
+				取消
+			</Button>
+		</div>
+	</div>;
 };
 
 export default CodeItem;

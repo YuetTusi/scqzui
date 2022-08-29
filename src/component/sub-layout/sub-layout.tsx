@@ -6,6 +6,10 @@ import { Layout, ScrollBox } from './styled/layout';
 import Reading from '../loading/reading';
 import AlartMessage from '../alert-message';
 
+
+/**
+ * 布局页
+ */
 const SubLayout: FC<{ title?: string }> = ({ title, children }) => {
 
     const dispatch = useDispatch();

@@ -31,14 +31,12 @@ export function getColumns(dispatch: Dispatch, ...handles: any[]): ColumnsType<S
             width: 60,
             align: 'center',
             render(id: string, record) {
-                return (
-                    <a
-                        onClick={() => {
-                            editHandle(record);
-                        }}>
-                        编辑
-                    </a>
-                );
+                return <a
+                    onClick={() => {
+                        editHandle(record);
+                    }}>
+                    编辑
+                </a>;
             }
         },
         {
@@ -48,23 +46,21 @@ export function getColumns(dispatch: Dispatch, ...handles: any[]): ColumnsType<S
             width: 60,
             align: 'center',
             render(id: string, record: SelfUnitEntity) {
-                return (
-                    <a
-                        onClick={async () => {
-                            Modal.confirm({
-                                title: '删除单位',
-                                content: `确认删除「${record.unitName}」？`,
-                                okText: '是',
-                                cancelText: '否',
-                                centered: true,
-                                onOk() {
-                                    dispatch({ type: 'selfUnit/del', payload: id });
-                                }
-                            });
-                        }}>
-                        删除
-                    </a>
-                );
+                return <a
+                    onClick={async () => {
+                        Modal.confirm({
+                            title: '删除单位',
+                            content: `确认删除「${record.unitName}」？`,
+                            okText: '是',
+                            cancelText: '否',
+                            centered: true,
+                            onOk() {
+                                dispatch({ type: 'selfUnit/del', payload: id });
+                            }
+                        });
+                    }}>
+                    删除
+                </a>;
             }
         }
     ];

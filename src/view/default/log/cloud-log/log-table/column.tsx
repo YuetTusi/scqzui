@@ -101,16 +101,14 @@ function getColumns(dispatch: Dispatch): ColumnProps<CloudLog>[] {
             width: 100,
             align: 'center',
             render(id: string, { apps }: CloudLog) {
-                return (
-                    <a
-                        onClick={(e: MouseEvent<HTMLAnchorElement>) => {
-                            e.stopPropagation();
-                            dispatch({ type: 'cloudLogModal/setVisible', payload: true });
-                            dispatch({ type: 'cloudLogModal/setCloudApps', payload: apps });
-                        }}>
-                        {`${fetchText ?? '取证'}记录`}
-                    </a>
-                );
+                return <a
+                    onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                        e.stopPropagation();
+                        dispatch({ type: 'cloudLogModal/setVisible', payload: true });
+                        dispatch({ type: 'cloudLogModal/setCloudApps', payload: apps });
+                    }}>
+                    {`${fetchText ?? '取证'}记录`}
+                </a>;
             }
         }
     ];

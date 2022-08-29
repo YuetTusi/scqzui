@@ -105,7 +105,11 @@ class Db<T = any> {
      * @param {string} sortField 排序字段
      * @param {1|-1} asc 正序逆序
      */
-    findByPage(condition: Record<string, any> | null | undefined, pageIndex = 1, pageSize = 10, sortField = 'updatedAt', asc = 1) {
+    findByPage(
+        condition: Record<string, any> | null | undefined,
+        pageIndex = 1,
+        pageSize = 10,
+        sortField = 'updatedAt', asc = 1) {
         return new Promise<T[]>((resolve, reject) => {
             if (pageIndex < 0 || pageSize < 1) {
                 reject(new Error('页号或分页尺寸有误'));

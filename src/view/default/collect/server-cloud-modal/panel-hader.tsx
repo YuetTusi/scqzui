@@ -15,21 +15,19 @@ interface PanelHeaderProp {
 }
 
 const PanelHeader: FC<PanelHeaderProp> = ({ onResetButtonHover, onResetClick }) => {
-    return (
-        <PanelHeaderBox>
-            <span>高级设置</span>
-            <span>
-                <Button
-                    onMouseEnter={onResetButtonHover}
-                    onClick={onResetClick}
-                    type="default"
-                    size="small">
-                    <UndoOutlined />
-                    <span>还原默认值</span>
-                </Button>
-            </span>
-        </PanelHeaderBox>
-    );
+    return <PanelHeaderBox>
+        <span>高级设置</span>
+        <span>
+            <Button
+                onMouseEnter={onResetButtonHover}
+                onClick={onResetClick}
+                type="default"
+                size="small">
+                <UndoOutlined />
+                <span>还原默认值</span>
+            </Button>
+        </span>
+    </PanelHeaderBox>;
 };
 
 PanelHeader.defaultProps = {

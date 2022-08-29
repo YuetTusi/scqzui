@@ -109,29 +109,21 @@ function getColumns(dispatch: Dispatch): ColumnProps<ParseLog>[] {
             render(state: ParseState, record: ParseLog) {
                 switch (state) {
                     case ParseState.NotParse:
-                        return (
-                            <Tag color="silver" style={{ marginRight: 0 }}>
-                                {`未${parseText ?? '解析'}`}
-                            </Tag>
-                        );
+                        return <Tag color="silver" style={{ marginRight: 0 }}>
+                            {`未${parseText ?? '解析'}`}
+                        </Tag>;
                     case ParseState.Parsing:
-                        return (
-                            <Tag color="blue" style={{ marginRight: 0 }}>
-                                {`${parseText ?? '解析'}中`}
-                            </Tag>
-                        );
+                        return <Tag color="blue" style={{ marginRight: 0 }}>
+                            {`${parseText ?? '解析'}中`}
+                        </Tag>;
                     case ParseState.Finished:
-                        return (
-                            <Tag color="green" style={{ marginRight: 0 }}>
-                                完成
-                            </Tag>
-                        );
+                        return <Tag color="green" style={{ marginRight: 0 }}>
+                            完成
+                        </Tag>;
                     case ParseState.Error:
-                        return (
-                            <Tag color="red" style={{ marginRight: 0 }}>
-                                失败
-                            </Tag>
-                        );
+                        return <Tag color="red" style={{ marginRight: 0 }}>
+                            失败
+                        </Tag>;
                 }
             }
         },

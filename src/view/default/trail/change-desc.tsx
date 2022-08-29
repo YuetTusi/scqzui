@@ -10,40 +10,32 @@ import { EmptyBox } from './styled/style';
  */
 const ChangeDesc: FC<{ data: InstallApp | null }> = ({ data }) => {
     if (helper.isNullOrUndefined(data)) {
-        return (
-            <EmptyBox>
-                <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            </EmptyBox>
-        );
+        return <EmptyBox>
+            <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </EmptyBox>;
     }
 
     const { changePkgList, changePkgStatusList, changePkgTimeList } = data!;
 
     if (helper.isNullOrUndefined(changePkgList)) {
-        return (
-            <EmptyBox>
-                <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            </EmptyBox>
-        );
+        return <EmptyBox>
+            <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </EmptyBox>;
     }
 
     if (changePkgList.trim() === '') {
-        return (
-            <EmptyBox>
-                <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            </EmptyBox>
-        );
+        return <EmptyBox>
+            <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </EmptyBox>;
     }
 
     const pkgList = changePkgList.split(',');
     const len = pkgList.length;
 
     if (len === 0) {
-        return (
-            <EmptyBox>
-                <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            </EmptyBox>
-        );
+        return <EmptyBox>
+            <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </EmptyBox>;
     }
 
     const statusList = helper.isNullOrUndefined(changePkgStatusList)

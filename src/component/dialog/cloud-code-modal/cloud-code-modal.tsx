@@ -19,11 +19,16 @@ import { Prop } from './prop';
  */
 const CloudCodeModal: FC<Prop> = ({ cancelHandle }) => {
 
-	const appSet = useSelector<StateTree, AppSetStore>((state) => state.appSet);
-	const cloudCodeModal = useSelector<StateTree, CloudCodeModalStoreState>((state) => state.cloudCodeModal);
+	const appSet = useSelector<StateTree, AppSetStore>(state => state.appSet);
+	const {
+		usb,
+		mobileHolder = '云取进度',
+		mobileNumber = '...',
+		devices,
+		visible
+	} = useSelector<StateTree, CloudCodeModalStoreState>(state => state.cloudCodeModal);
 
-	const { usb, mobileHolder = '云取进度', mobileNumber = '...' } = cloudCodeModal;
-	const currentDevice = cloudCodeModal.devices[usb - 1];
+	const currentDevice = devices[usb - 1];
 
 	const [humanVerifyData, setHumanVerifyData] = useState<HumanVerify | null>(null);
 	const [appId, setAppId] = useState('');
@@ -31,19 +36,17 @@ const CloudCodeModal: FC<Prop> = ({ cancelHandle }) => {
 
 	const renderItem = () => {
 		if (currentDevice?.apps && currentDevice.apps.length > 0) {
-			return currentDevice.apps.map((app, i) => (
-				<CodeItem
-					app={app}
-					usb={usb}
-					humanVerifyDataHandle={(data, appId, appDesc) => {
-						setHumanVerifyData(data);
-						setAppId(appId);
-						setAppDesc(appDesc);
-					}}
-					cloudApps={appSet.cloudAppData}
-					key={`K_${i}`}
-				/>
-			));
+			return currentDevice.apps.map((app, i) => <CodeItem
+				app={app}
+				usb={usb}
+				humanVerifyDataHandle={(data, appId, appDesc) => {
+					setHumanVerifyData(data);
+					setAppId(appId);
+					setAppDesc(appDesc);
+				}}
+				cloudApps={appSet.cloudAppData}
+				key={`K_${i}`}
+			/>);
 		} else {
 			return <Empty description="暂无云取应用" image={Empty.PRESENTED_IMAGE_SIMPLE} />;
 		}
@@ -57,10 +60,11 @@ const CloudCodeModal: FC<Prop> = ({ cancelHandle }) => {
 					<span>取消</span>
 				</Button>
 			]}
-			visible={cloudCodeModal.visible}
+			visible={visible}
 			onCancel={cancelHandle}
 			width={800}
 			title={`${mobileHolder}（${mobileNumber}）`}
+			centered={true}
 			destroyOnClose={true}
 			forceRender={true}
 			maskClosable={false}

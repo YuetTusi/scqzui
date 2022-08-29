@@ -3,16 +3,16 @@ import { useDispatch, useLocation, useSelector } from 'dva';
 import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
 import { Key } from 'antd/lib/table/interface';
+import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { ParseCaseState } from '@/model/default/parse-case';
+import { OperateDoingState } from '@/model/default/operate-doing';
 import CaseInfo from '@/schema/case-info';
+import { helper } from '@/utils/helper';
 import BatchExportReportModal from '../batch-export-report-modal';
 import ExportBcpModal from '../export-bcp-modal';
 import { getCaseColumns } from './column';
 import { CaseListProp } from './prop';
-import { OperateDoingState } from '@/model/default/operate-doing';
-import message from 'antd/lib/message';
-import { helper } from '@/utils/helper';
 
 const { caseText } = helper.readConf()!;
 

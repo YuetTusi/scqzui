@@ -61,7 +61,7 @@ server.use(
 );
 
 config = helper.readConf();
-existManuJson = helper.existManufaturer(env['NODE_ENV']!, appPath);
+existManuJson = helper.existManufaturer(appPath);
 
 if (config === null) {
     dialog.showErrorBox('启动失败', '配置文件读取失败, 请联系技术支持');
@@ -72,15 +72,17 @@ if (!existManuJson) {
     app.exit(0);
 }
 
-app.commandLine.appendSwitch('no-sandbox');
-app.commandLine.appendSwitch('disable-gpu');
-app.commandLine.appendSwitch('disable-gpu-compositing');
-app.commandLine.appendSwitch('disable-gpu-rasterization');
-app.commandLine.appendSwitch('disable-gpu-sandbox');
-app.commandLine.appendSwitch('disable-software-rasterizer');
-app.commandLine.appendSwitch('--no-sandbox');
-app.disableHardwareAcceleration();
-log.warn('禁用GPU渲染, 忽略Chromium显卡黑名单');
+if (!helper.useGPURender()) {
+    app.commandLine.appendSwitch('no-sandbox');
+    app.commandLine.appendSwitch('disable-gpu');
+    app.commandLine.appendSwitch('disable-gpu-compositing');
+    app.commandLine.appendSwitch('disable-gpu-rasterization');
+    app.commandLine.appendSwitch('disable-gpu-sandbox');
+    app.commandLine.appendSwitch('disable-software-rasterizer');
+    app.commandLine.appendSwitch('--no-sandbox');
+    app.disableHardwareAcceleration();
+    log.warn('禁用GPU渲染, 忽略Chromium显卡黑名单');
+}
 
 helper.writeReportJson(config?.reportType === undefined ? 0 : config.reportType); //写report.json
 
@@ -265,7 +267,7 @@ if (!instanceLock) {
             }
         });
 
-        mainWindow.webContents.addListener('new-window', (event) => event.preventDefault());
+        mainWindow.webContents.addListener('new-window', event => event.preventDefault());
 
         mainWindow.on('close', (event) => {
             //关闭事件到mainWindow中去处理

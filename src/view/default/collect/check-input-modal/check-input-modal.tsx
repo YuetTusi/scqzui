@@ -62,15 +62,13 @@ const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }
         return caseList.map((opt: CaseInfo) => {
             let pos = opt.m_strCaseName.lastIndexOf('\\');
             let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
-            return (
-                <Option
-                    value={JSON.stringify(opt)}
-                    key={opt._id}>
-                    {`${name}（${helper
-                        .parseDate(tick, 'YYYYMMDDHHmmss')
-                        .format('YYYY-M-D H:mm:ss')}）`}
-                </Option>
-            );
+            return <Option
+                value={JSON.stringify(opt)}
+                key={opt._id}>
+                {`${name}（${helper
+                    .parseDate(tick, 'YYYYMMDDHHmmss')
+                    .format('YYYY-M-D H:mm:ss')}）`}
+            </Option>;
         });
     };
 

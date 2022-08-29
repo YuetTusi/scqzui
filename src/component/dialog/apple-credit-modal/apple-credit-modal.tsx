@@ -16,37 +16,35 @@ interface Prop {
  * @param props
  */
 const AppleCreditModal: FC<Prop> = ({ visible, okHandle }) => {
-	return (
-		<Modal
-			visible={visible}
-			footer={[
-				<Button
-					key="ACB_0"
-					type="primary"
-					onClick={() => {
-						if (okHandle) {
-							okHandle();
-						}
-					}}>
-					<CheckCircleOutlined />
-					<span>确定</span>
-				</Button>
-			]}
-			centered={true}
-			maskClosable={false}
-			closable={false}
-			width={500}
-			className="zero-padding-body">
-			<AppleCreditBox>
-				<div className="title">信任授权</div>
-				<Split />
-				<div className="content">
-					<h3>请点击屏幕上的信任按钮</h3>
-					<img src={debugImg} alt="iPhone信任" />
-				</div>
-			</AppleCreditBox>
-		</Modal>
-	);
+	return <Modal
+		visible={visible}
+		footer={[
+			<Button
+				key="ACB_0"
+				type="primary"
+				onClick={() => {
+					if (okHandle) {
+						okHandle();
+					}
+				}}>
+				<CheckCircleOutlined />
+				<span>确定</span>
+			</Button>
+		]}
+		centered={true}
+		maskClosable={false}
+		closable={false}
+		width={500}
+		className="zero-padding-body">
+		<AppleCreditBox>
+			<div className="title">信任授权</div>
+			<Split />
+			<div className="content">
+				<h3>请点击屏幕上的信任按钮</h3>
+				<img src={debugImg} alt="iPhone信任" />
+			</div>
+		</AppleCreditBox>
+	</Modal>;
 };
 
 export default memo(AppleCreditModal, (prev: Prop, next: Prop) => !prev.visible && !next.visible);

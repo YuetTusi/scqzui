@@ -41,30 +41,28 @@ const EditForm: FC<EditFormProp> = ({ formRef, data }) => {
         }
     }, 400);
 
-    return (
-        <Form
-            form={formRef}
-            style={{ width: '400px' }}
-            layout="vertical"
-        >
-            <Item rules={[
-                { required: true, message: '请填写姓名' }
-            ]}
-                name="name"
-                label="姓名">
-                <Input maxLength={20} />
-            </Item>
-            <Item rules={[
-                { required: true, message: '请填写编号' },
-                { pattern: PoliceNo, message: '6位数字' },
-                { validator: isExistNo, message: '编号已存在' }
-            ]}
-                name="no"
-                label="编号">
-                <Input placeholder="6位数字" />
-            </Item>
-        </Form>
-    );
+    return <Form
+        form={formRef}
+        style={{ width: '400px' }}
+        layout="vertical"
+    >
+        <Item rules={[
+            { required: true, message: '请填写姓名' }
+        ]}
+            name="name"
+            label="姓名">
+            <Input maxLength={20} />
+        </Item>
+        <Item rules={[
+            { required: true, message: '请填写编号' },
+            { pattern: PoliceNo, message: '6位数字' },
+            { validator: isExistNo, message: '编号已存在' }
+        ]}
+            name="no"
+            label="编号">
+            <Input placeholder="6位数字" />
+        </Item>
+    </Form>;
 };
 
 export default memo(EditForm);

@@ -271,33 +271,31 @@ const Keywords: FC<KeywordsProp> = () => {
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
             />;
         } else {
-            return fileList.map((file, index) => (
-                <li key={`F_${index}`}>
-                    <a
-                        onClick={() => openFileHandle(file)}>
-                        <FontAwesomeIcon icon={faFileExcel} />
-                        <span>{file}</span>
-                    </a>
-                    <div>
-                        <Group>
-                            <Button
-                                onClick={() => openFileHandle(file)}
-                                size="small"
-                                type="default">
-                                <EditOutlined />
-                                <span>编辑</span>
-                            </Button>
-                            <Button
-                                onClick={() => delFileHandle(file)}
-                                size="small"
-                                type="default">
-                                <DeleteOutlined />
-                                <span>删除</span>
-                            </Button>
-                        </Group>
-                    </div>
-                </li>
-            ));
+            return fileList.map((file, index) => <li key={`F_${index}`}>
+                <a
+                    onClick={() => openFileHandle(file)}>
+                    <FontAwesomeIcon icon={faFileExcel} />
+                    <span>{file}</span>
+                </a>
+                <div>
+                    <Group>
+                        <Button
+                            onClick={() => openFileHandle(file)}
+                            size="small"
+                            type="default">
+                            <EditOutlined />
+                            <span>编辑</span>
+                        </Button>
+                        <Button
+                            onClick={() => delFileHandle(file)}
+                            size="small"
+                            type="default">
+                            <DeleteOutlined />
+                            <span>删除</span>
+                        </Button>
+                    </Group>
+                </div>
+            </li>);
         }
     };
 

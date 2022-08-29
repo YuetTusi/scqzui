@@ -61,43 +61,35 @@ export function getColumns<T = any>(dispatch: Dispatch, onAction: (action: strin
             key: 'serial',
             width: '60px',
             align: 'center',
-            render: (val: string, record: FetchData) => {
-                return (
-                    <a
-                        onClick={(e: MouseEvent<HTMLAnchorElement>) => {
-                            e.stopPropagation();
-                            onAction('edit', record);
-                        }}>
-                        编辑
-                    </a>
-                );
-            }
+            render: (val: string, record: FetchData) => <a
+                onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                    e.stopPropagation();
+                    onAction('edit', record);
+                }}>
+                编辑
+            </a>
         },
         {
             title: '删除',
             key: 'serial',
             width: '60px',
             align: 'center',
-            render: (val: string, record: FetchData) => {
-                return (
-                    <a
-                        onClick={(e: MouseEvent<HTMLAnchorElement>) => {
-                            e.preventDefault();
-                            Modal.confirm({
-                                title: '删除',
-                                content: `删除序列号为「${record.serial}」的数据？`,
-                                okText: '是',
-                                cancelText: '否',
-                                centered: true,
-                                onOk() {
-                                    onAction('del', record);
-                                }
-                            });
-                        }}>
-                        删除
-                    </a>
-                );
-            }
+            render: (val: string, record: FetchData) => <a
+                onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    Modal.confirm({
+                        title: '删除',
+                        content: `删除序列号为「${record.serial}」的数据？`,
+                        okText: '是',
+                        cancelText: '否',
+                        centered: true,
+                        onOk() {
+                            onAction('del', record);
+                        }
+                    });
+                }}>
+                删除
+            </a>
         }
     ];
     return columns;

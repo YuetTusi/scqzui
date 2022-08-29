@@ -103,15 +103,13 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
         return allCaseData.map((opt: CaseInfo) => {
             let pos = opt.m_strCaseName.lastIndexOf('\\');
             let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
-            return (
-                <Option
-                    value={JSON.stringify(opt)}
-                    key={opt._id}>
-                    {`${name}（${helper
-                        .parseDate(tick, 'YYYYMMDDHHmmss')
-                        .format('YYYY-M-D H:mm:ss')}）`}
-                </Option>
-            );
+            return <Option
+                value={JSON.stringify(opt)}
+                key={opt._id}>
+                {`${name}（${helper
+                    .parseDate(tick, 'YYYYMMDDHHmmss')
+                    .format('YYYY-M-D H:mm:ss')}）`}
+            </Option>;
         });
     };
 
@@ -215,211 +213,207 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             wrapperCol: { span: 18 }
         };
 
-        return (
-            <div>
-                <Form form={formRef} layout="horizontal" {...formItemLayout}>
-                    <Row>
-                        <Col span={24}>
-                            <Item rules={[
+        return <div>
+            <Form form={formRef} layout="horizontal" {...formItemLayout}>
+                <Row>
+                    <Col span={24}>
+                        <Item rules={[
+                            {
+                                required: true,
+                                message: `请选择${caseText ?? '案件'}`
+                            }
+                        ]} name="case" label={`${caseText ?? '案件'}名称`}>
+                            <Select
+                                onChange={caseChange}
+                                showSearch={true}
+                                notFoundContent="暂无数据"
+                                placeholder={`选择${caseText ?? '案件'}，可输入名称筛选`}>
+                                {bindCaseSelect()}
+                            </Select>
+                        </Item>
+                        <Item className="with-btn">
+                            <Button
+                                onClick={toCaseAddView}
+                                type="primary"
+                                size="small"
+                                title={`添加${caseText ?? '案件'}`}
+                            ><PlusSquareOutlined /></Button>
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Item label="选择App" labelCol={{ span: 8 }} wrapperCol={{ span: 14 }}>
+                            <Button
+                                onClick={() => setAppSelectModalVisible(true)}
+                                style={{ width: '100%' }}>
+                                <SelectOutlined />
+                                <span>{`${parseText ?? '解析'}App（${selectedApps.length}）`}</span>
+                            </Button>
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <div className="app-tips">{`未选择App以「所属${caseText ?? '案件'}配置」为准`}</div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Item
+                            name="phoneName"
+                            rules={[{
+                                required: true,
+                                message: `请填写${devText ?? '设备'}名称`
+                            },
+                            {
+                                pattern: Backslashe,
+                                message: '不允许输入斜线字符'
+                            },
+                            { pattern: UnderLine, message: '不允许输入下划线' }]}
+                            label={`${devText ?? '设备'}名称`}
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}>
+                            <AutoComplete
+                                options={historyDeviceName.current.reduce(
+                                    (total: { value: string }[], current: string, index: number) => {
+                                        if (index < 10 && current !== null) {
+                                            total.push({ value: current });
+                                        }
+                                        return total;
+                                    },
+                                    []
+                                )}
+                            />
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Item
+                            name="user"
+                            rules={[
                                 {
                                     required: true,
-                                    message: `请选择${caseText ?? '案件'}`
-                                }
-                            ]} name="case" label={`${caseText ?? '案件'}名称`}>
-                                <Select
-                                    onChange={caseChange}
-                                    showSearch={true}
-                                    notFoundContent="暂无数据"
-                                    placeholder={`选择${caseText ?? '案件'}，可输入名称筛选`}>
-                                    {bindCaseSelect()}
-                                </Select>
-                            </Item>
-                            <Item className="with-btn">
-                                <Button
-                                    onClick={toCaseAddView}
-                                    type="primary"
-                                    size="small"
-                                    title={`添加${caseText ?? '案件'}`}
-                                ><PlusSquareOutlined /></Button>
-                            </Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Item label="选择App" labelCol={{ span: 8 }} wrapperCol={{ span: 14 }}>
-                                <Button
-                                    onClick={() => setAppSelectModalVisible(true)}
-                                    style={{ width: '100%' }}>
-                                    <SelectOutlined />
-                                    <span>{`${parseText ?? '解析'}App（${selectedApps.length}）`}</span>
-                                </Button>
-                            </Item>
-                        </Col>
-                        <Col span={12}>
-                            <div className="app-tips">{`未选择App以「所属${caseText ?? '案件'}配置」为准`}</div>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Item
-                                name="phoneName"
-                                rules={[{
-                                    required: true,
-                                    message: `请填写${devText ?? '设备'}名称`
+                                    message: '请填写持有人'
                                 },
                                 {
                                     pattern: Backslashe,
                                     message: '不允许输入斜线字符'
+                                }
+                            ]}
+                            label="持有人"
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 14 }}>
+                            <AutoComplete
+                                options={historyDeviceHolder.current.reduce(
+                                    (total: { value: string }[], current: string, index: number) => {
+                                        if (index < 10 && current !== null) {
+                                            total.push({ value: current });
+                                        }
+                                        return total;
+                                    },
+                                    []
+                                )}
+                            />
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Item
+                            name="deviceNumber"
+                            rules={[
+                                {
+                                    pattern: Backslashe,
+                                    message: '不允许输入斜线字符'
                                 },
-                                { pattern: UnderLine, message: '不允许输入下划线' }]}
-                                label={`${devText ?? '设备'}名称`}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}>
-                                <AutoComplete
-                                    options={historyDeviceName.current.reduce(
-                                        (total: { value: string }[], current: string, index: number) => {
-                                            if (index < 10 && current !== null) {
-                                                total.push({ value: current });
-                                            }
-                                            return total;
-                                        },
-                                        []
-                                    )}
-                                />
-                            </Item>
-                        </Col>
-                        <Col span={12}>
-                            <Item
-                                name="user"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: '请填写持有人'
+                                { pattern: UnderLine, message: '不允许输入下划线' }
+                            ]}
+                            label={`${devText ?? '设备'}编号`}
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}>
+                            <AutoComplete
+                                options={historyDeviceNumber.current.reduce(
+                                    (total: { value: string }[], current: string, index: number) => {
+                                        if (index < 10 && current !== null) {
+                                            total.push({ value: current });
+                                        }
+                                        return total;
                                     },
-                                    {
-                                        pattern: Backslashe,
-                                        message: '不允许输入斜线字符'
-                                    }
-                                ]}
-                                label="持有人"
-                                labelCol={{ span: 6 }}
-                                wrapperCol={{ span: 14 }}>
-                                <AutoComplete
-                                    options={historyDeviceHolder.current.reduce(
-                                        (total: { value: string }[], current: string, index: number) => {
-                                            if (index < 10 && current !== null) {
-                                                total.push({ value: current });
-                                            }
-                                            return total;
-                                        },
-                                        []
-                                    )}
-                                />
-                            </Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <Item
-                                name="deviceNumber"
-                                rules={[
-                                    {
-                                        pattern: Backslashe,
-                                        message: '不允许输入斜线字符'
-                                    },
-                                    { pattern: UnderLine, message: '不允许输入下划线' }
-                                ]}
-                                label={`${devText ?? '设备'}编号`}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}>
-                                <AutoComplete
-                                    options={historyDeviceNumber.current.reduce(
-                                        (total: { value: string }[], current: string, index: number) => {
-                                            if (index < 10 && current !== null) {
-                                                total.push({ value: current });
-                                            }
-                                            return total;
-                                        },
-                                        []
-                                    )}>
-                                    <Input />
-                                </AutoComplete>
-                            </Item>
-                        </Col>
-                        <Col span={12}>
-                            <Item
-                                name="handleOfficerNo"
-                                label="检材持有人编号"
-                                labelCol={{ span: 6 }}
-                                wrapperCol={{ span: 14 }}>
-                                <Input
-                                    maxLength={100}
-                                    placeholder="检材持有人编号/执法办案人员编号"
-                                />
-                            </Item>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}>
-                            <Item name="note" label="备注">
-                                <Input maxLength={100} />
-                            </Item>
-                        </Col>
-                    </Row>
-                </Form>
-            </div>
-        );
+                                    []
+                                )}>
+                                <Input />
+                            </AutoComplete>
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Item
+                            name="handleOfficerNo"
+                            label="检材持有人编号"
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 14 }}>
+                            <Input
+                                maxLength={100}
+                                placeholder="检材持有人编号/执法办案人员编号"
+                            />
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <Item name="note" label="备注">
+                            <Input maxLength={100} />
+                        </Item>
+                    </Col>
+                </Row>
+            </Form>
+        </div>;
     };
 
-    return (
-        <>
-            <Modal
-                visible={visible}
-                onCancel={() => {
-                    resetValue();
-                    setSelectedApps([]);
-                    cancelHandle!();
-                }}
-                footer={[
+    return <>
+        <Modal
+            visible={visible}
+            onCancel={() => {
+                resetValue();
+                setSelectedApps([]);
+                cancelHandle!();
+            }}
+            footer={[
+                <Button
+                    type="default"
+                    key="B_0"
+                    onClick={() => {
+                        setSelectedApps([]);
+                        resetValue();
+                        cancelHandle!();
+                    }}>
+                    <CloseCircleOutlined />
+                    <span>取消</span>
+                </Button>,
+                <Tooltip title={`确定后开始${fetchText ?? '取证'}数据`} key="B_1">
                     <Button
-                        type="default"
-                        key="B_0"
-                        onClick={() => {
-                            setSelectedApps([]);
-                            resetValue();
-                            cancelHandle!();
-                        }}>
-                        <CloseCircleOutlined />
-                        <span>取消</span>
-                    </Button>,
-                    <Tooltip title={`确定后开始${fetchText ?? '取证'}数据`} key="B_1">
-                        <Button
-                            onClick={formSubmit}
-                            disabled={loading}
-                            type="primary">
-                            {loading ? <LoadingOutlined /> : <CheckCircleOutlined />}
-                            <span>确定</span>
-                        </Button>
-                    </Tooltip>
-                ]}
-                title={`${fetchText ?? '取证'}信息录入`}
-                width={1000}
-                maskClosable={false}
-                destroyOnClose={true}
-                forceRender={true}
-                centered={true}>
-                <NormalInputModalBox>{renderForm()}</NormalInputModalBox>
-            </Modal>
-            <AppSelectModal
-                title={`${parseText ?? '解析'}App`}
-                visible={appSelectModalVisible}
-                treeData={parseApp.fetch}
-                selectedKeys={selectedApps.map((i) => i.m_strID)}
-                okHandle={appSelectHandle}
-                closeHandle={() => setAppSelectModalVisible(false)}
-            />
-        </>
-    );
+                        onClick={formSubmit}
+                        disabled={loading}
+                        type="primary">
+                        {loading ? <LoadingOutlined /> : <CheckCircleOutlined />}
+                        <span>确定</span>
+                    </Button>
+                </Tooltip>
+            ]}
+            title={`${fetchText ?? '取证'}信息录入`}
+            width={1000}
+            maskClosable={false}
+            destroyOnClose={true}
+            forceRender={true}
+            centered={true}>
+            <NormalInputModalBox>{renderForm()}</NormalInputModalBox>
+        </Modal>
+        <AppSelectModal
+            title={`${parseText ?? '解析'}App`}
+            visible={appSelectModalVisible}
+            treeData={parseApp.fetch}
+            selectedKeys={selectedApps.map((i) => i.m_strID)}
+            okHandle={appSelectHandle}
+            closeHandle={() => setAppSelectModalVisible(false)}
+        />
+    </>;
 };
 NormalInputModal.defaultProps = {
     visible: false,

@@ -26,27 +26,25 @@ const Jigsaw: FC<Prop> = ({
 		}
 	}, [gapInitStyle]);
 
-	return (
-		<JigsawBox>
-			<div className="img-panel">
-				<img src={bgSrc} width={bgWidth} height={bgHeight} className="bg" />
-				<Gap ref={gapRef} src={gapSrc} width={gapWidth} height={gapHeight} />
-			</div>
-			<div className="img-slider">
-				<Slider
-					className="slider-overwrite"
-					onChange={(value: number) => {
-						let gap = gapRef.current as HTMLImageElement;
-						gap.style.left = `${value}px`;
-					}}
-					onAfterChange={(value: number) => onPiece(value)}
-					max={bgWidth}
-					min={0}
-					tipFormatter={null}
-				/>
-			</div>
-		</JigsawBox>
-	);
+	return <JigsawBox>
+		<div className="img-panel">
+			<img src={bgSrc} width={bgWidth} height={bgHeight} className="bg" />
+			<Gap ref={gapRef} src={gapSrc} width={gapWidth} height={gapHeight} />
+		</div>
+		<div className="img-slider">
+			<Slider
+				className="slider-overwrite"
+				onChange={(value: number) => {
+					let gap = gapRef.current as HTMLImageElement;
+					gap.style.left = `${value}px`;
+				}}
+				onAfterChange={(value: number) => onPiece(value)}
+				max={bgWidth}
+				min={0}
+				tipFormatter={null}
+			/>
+		</div>
+	</JigsawBox>;
 };
 
 Jigsaw.defaultProps = {

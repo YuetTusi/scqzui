@@ -31,26 +31,24 @@ const DeviceTable: FC<DeviceTableProp> = ({ caseId }) => {
         })();
     }, [caseId]);
 
-    return (
-        <div className="case-inner-table">
-            <Table<DeviceType>
-                columns={getDeviceColumns(caseId, setData, setLoading)}
-                dataSource={data}
-                loading={loading}
-                pagination={{
-                    pageSize: 9,
-                    total: data ? data.length : 0,
-                    showSizeChanger: false
-                }}
-                size="small"
-                locale={{
-                    emptyText: <Empty description={`无${fetchText ?? '取证'}数据`} image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                }}
-                rowKey={(record: DeviceType) => record._id!}
-                bordered={true}
-                className="inner-device-table"></Table>
-        </div>
-    );
+    return <div className="case-inner-table">
+        <Table<DeviceType>
+            columns={getDeviceColumns(caseId, setData, setLoading)}
+            dataSource={data}
+            loading={loading}
+            pagination={{
+                pageSize: 9,
+                total: data ? data.length : 0,
+                showSizeChanger: false
+            }}
+            size="small"
+            locale={{
+                emptyText: <Empty description={`无${fetchText ?? '取证'}数据`} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            }}
+            rowKey={(record: DeviceType) => record._id!}
+            bordered={true}
+            className="inner-device-table"></Table>
+    </div>;
 };
 
 export default DeviceTable;

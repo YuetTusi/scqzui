@@ -1,5 +1,6 @@
 import { join } from 'path';
 import debounce from 'lodash/debounce';
+import { ipcRenderer, OpenDialogReturnValue } from 'electron';
 import React, { FC, MouseEvent, useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'dva';
 import ImportOutlined from '@ant-design/icons/ImportOutlined';
@@ -17,7 +18,6 @@ import EventDescModal from './event-desc-modal';
 import CheckingList from './checking-list';
 import RecordList from './record-list';
 import { getEventByName, importRec, readCaseJson, readDirOnly } from './util';
-import { ipcRenderer, OpenDialogReturnValue } from 'electron';
 
 const { fetchText, caseText, devText } = helper.readConf()!;
 

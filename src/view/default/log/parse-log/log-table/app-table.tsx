@@ -29,19 +29,15 @@ const getColumns = (): ColumnProps<ParseApp>[] => {
 /**
  * 解析App列表
  */
-const AppTable: FC<AppTableProp> = ({ data }) => {
-    return (
-        <InnerAppTableBox>
-            <Table<ParseApp>
-                dataSource={data}
-                columns={getColumns()}
-                pagination={false}
-                bordered={true}
-                size="small"
-                rowKey="appname"
-            />
-        </InnerAppTableBox>
-    );
-};
+const AppTable: FC<AppTableProp> = ({ data }) => <InnerAppTableBox>
+    <Table<ParseApp>
+        dataSource={data}
+        columns={getColumns()}
+        pagination={false}
+        bordered={true}
+        size="small"
+        rowKey="appname"
+    />
+</InnerAppTableBox>;
 
 export { AppTable };

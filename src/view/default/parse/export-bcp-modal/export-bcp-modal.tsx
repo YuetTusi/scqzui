@@ -178,42 +178,40 @@ const ExportBcpModal: FC<ExportBcpModalProp> = ({ visible, okHandle, cancelHandl
 
     const onCancelClick = (event: MouseEvent<HTMLElement>) => cancelHandle();
 
-    return (
-        <Modal
-            footer={[
-                <Button onClick={cancelHandle} key="EBCP_0">
-                    <CloseCircleOutlined />
-                    <span>取消</span>
-                </Button>,
-                <Button
-                    disabled={exporting}
-                    onClick={exportHandle}
-                    type="primary"
-                    key="EBCP_1">
-                    {exporting ? <LoadingOutlined /> : <CheckCircleOutlined />}
-                    <span>导出</span>
-                </Button>
-            ]}
-            onCancel={onCancelClick}
-            visible={visible}
-            title="导出BCP"
-            centered={true}
-            maskClosable={false}
-            destroyOnClose={true}
-            className="zero-padding-body">
-            <ExportBcpModalBox>
-                <div className="export-panel">
-                    <ul
-                        id="bcp-tree"
-                        className="ztree"
-                        style={{ display: isEmpty ? 'none' : 'block' }}></ul>
-                    <div className="empty-bcp" style={{ display: isEmpty ? 'flex' : 'none' }}>
-                        <Empty description="暂无BCP文件" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    </div>
+    return <Modal
+        footer={[
+            <Button onClick={cancelHandle} key="EBCP_0">
+                <CloseCircleOutlined />
+                <span>取消</span>
+            </Button>,
+            <Button
+                disabled={exporting}
+                onClick={exportHandle}
+                type="primary"
+                key="EBCP_1">
+                {exporting ? <LoadingOutlined /> : <CheckCircleOutlined />}
+                <span>导出</span>
+            </Button>
+        ]}
+        onCancel={onCancelClick}
+        visible={visible}
+        title="导出BCP"
+        centered={true}
+        maskClosable={false}
+        destroyOnClose={true}
+        className="zero-padding-body">
+        <ExportBcpModalBox>
+            <div className="export-panel">
+                <ul
+                    id="bcp-tree"
+                    className="ztree"
+                    style={{ display: isEmpty ? 'none' : 'block' }}></ul>
+                <div className="empty-bcp" style={{ display: isEmpty ? 'flex' : 'none' }}>
+                    <Empty description="暂无BCP文件" image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 </div>
-            </ExportBcpModalBox>
-        </Modal>
-    );
+            </div>
+        </ExportBcpModalBox>
+    </Modal>;
 };
 
 ExportBcpModal.defaultProps = {

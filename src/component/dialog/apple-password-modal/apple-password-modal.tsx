@@ -19,55 +19,52 @@ const ApplePasswordModal: FC<ApplePasswordModalProp> = ({
 }) => {
 	const [password, setPassword] = useState<string>('');
 
-	return (
-		<Modal
-			visible={visible}
-			footer={[
-				<Button
-					type="default"
-					key="APM_0"
-					onClick={() => {
-						cancelHandle(device?.usb);
-						setPassword('');
-					}}>
-					未知密码放弃
-				</Button>,
-				<Button
-					type="primary"
-					key="APM_1"
-					onClick={() => {
-						withoutPasswordHandle(device?.usb);
-						setPassword('');
-					}}>
-					未知密码继续
-				</Button>
-			]}
-			onCancel={closeHandle}
-			title="iTunes备份密码确认"
-			centered={true}
-			destroyOnClose={true}
-			forceRender={true}
-			maskClosable={false}
-			closable={true}>
-			<ApplePasswordModalBox>
-				<div className="control">
-					<label>密码：</label>
-					<div className="widget">
-						<Input onChange={(e) => setPassword(e.target.value)} value={password} />
-						<Button
-							type="primary"
-							onClick={() => {
-								confirmHandle(password, device?.usb);
-								setPassword('');
-							}}>
-							确定
-						</Button>
-					</div>
+	return <Modal
+		visible={visible}
+		footer={[
+			<Button
+				type="default"
+				key="APM_0"
+				onClick={() => {
+					cancelHandle(device?.usb);
+					setPassword('');
+				}}>
+				未知密码放弃
+			</Button>,
+			<Button
+				type="primary"
+				key="APM_1"
+				onClick={() => {
+					withoutPasswordHandle(device?.usb);
+					setPassword('');
+				}}>
+				未知密码继续
+			</Button>
+		]}
+		onCancel={closeHandle}
+		title="iTunes备份密码确认"
+		centered={true}
+		destroyOnClose={true}
+		forceRender={true}
+		maskClosable={false}
+		closable={true}>
+		<ApplePasswordModalBox>
+			<div className="control">
+				<label>密码：</label>
+				<div className="widget">
+					<Input onChange={(e) => setPassword(e.target.value)} value={password} />
+					<Button
+						type="primary"
+						onClick={() => {
+							confirmHandle(password, device?.usb);
+							setPassword('');
+						}}>
+						确定
+					</Button>
 				</div>
-			</ApplePasswordModalBox>
-
-		</Modal>
-	);
+			</div>
+		</ApplePasswordModalBox>
+	</Modal>;
 };
 
 ApplePasswordModal.defaultProps = {

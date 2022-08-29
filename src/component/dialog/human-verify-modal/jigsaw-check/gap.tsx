@@ -19,15 +19,13 @@ interface Prop {
  * 图片缺块
  */
 const Gap = forwardRef<HTMLImageElement, Prop>(({ src, height, width }, ref) => {
-	return (
-		<img
-			ref={ref}
-			src={src}
-			width={width}
-			height={height}
-			className="gap-box"
-		/>
-	);
+	return <img
+		ref={ref}
+		src={src}
+		width={width}
+		height={height}
+		className="gap-box"
+	/>;
 });
 
 Gap.defaultProps = {

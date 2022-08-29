@@ -105,11 +105,9 @@ const FetchInfo: FC<FetchInfoProp> = memo(({ device, recordHandle }) => {
         recordHandle(device!);
     }
 
-    return (
-        <FetchInfoBox onClick={onRecordClick}>
-            {setColor()}
-        </FetchInfoBox>
-    );
+    return <FetchInfoBox onClick={onRecordClick}>
+        {setColor()}
+    </FetchInfoBox>;
 });
 
 export { FetchInfo };

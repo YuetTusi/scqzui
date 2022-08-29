@@ -31,6 +31,7 @@ import { getDb } from './db';
 const cwd = process.cwd();//应用的根目录
 const isDev = process.env['NODE_ENV'] === 'development';
 const KEY = 'az'; //密钥
+const { Option } = Select;
 dayjs.locale('zh-cn');
 
 //封装工具函数
@@ -167,8 +168,7 @@ const helper = {
      * @param algo 解密算法（默认rc4）
      */
     readConf: memoize((algo: string = 'rc4'): Conf | null => {
-        const isDev = process.env['NODE_ENV'];
-        if (isDev === 'development') {
+        if (isDev) {
             let confPath = join(cwd, './src/config/ui.yaml');
             let chunk = readFileSync(confPath, 'utf8');
             return yaml.load(chunk) as Conf;
@@ -275,7 +275,7 @@ const helper = {
      * 读取设备软硬件信息
      */
     readManufaturer(): Promise<Manufaturer> {
-        const jsonPath = process.env['NODE_ENV'] === 'development'
+        const jsonPath = isDev
             ? join(cwd, './data/manufaturer.json')
             : join(cwd, './resources/config/manufaturer.json');
 
@@ -525,7 +525,7 @@ const helper = {
      */
     readAppName(): string | undefined {
         const jsonPath =
-            process.env['NODE_ENV'] === 'development'
+            isDev
                 ? join(cwd, './data/manufaturer.json')
                 : join(cwd, './resources/config/manufaturer.json');
         try {
@@ -538,11 +538,10 @@ const helper = {
     },
     /**
      * 是否存在manufaturer.json文件
-     * @param {String} mode 当前模式
      * @param {String} appPath 应用所在路径
      */
-    existManufaturer(mode: string, appPath: string) {
-        if (mode === 'development') {
+    existManufaturer(appPath: string) {
+        if (isDev) {
             try {
                 accessSync(join(appPath, 'data/manufaturer.json'));
                 return true;
@@ -559,11 +558,12 @@ const helper = {
         }
     },
     /**
-     * 使用显卡黑名单渲染
+     * 使用GPU渲染
+     * * UI根目录存在gpu文件，即开启GPU渲染
      */
-    useBlackListRender() {
+    useGPURender() {
         try {
-            accessSync(join(cwd, 'blacklist'));
+            accessSync(join(cwd, 'gpu'));
             return true;
         } catch (error) {
             return false;
@@ -576,7 +576,7 @@ const helper = {
      */
     async writeNetJson(cwd: string, chunk: any) {
         const saveAs =
-            process.env['NODE_ENV'] === 'development'
+            isDev
                 ? join(cwd, './data/net.json')
                 : join(cwd, './resources/config/net.json');
 
@@ -589,19 +589,20 @@ const helper = {
     /**
      * 数据转为下拉列表Options组件
      */
-    arrayToOptions(data: Record<string, any>[], nameField: string = 'name', valueField: string = 'value', prefix: string = 'K') {
-        return data.map((item, index) => {
-            return <Select.Option
-                value={item[valueField]} key={`${prefix}${index}_${item[valueField]}`}>
-                {item[nameField]}
-            </Select.Option>
-        })
+    arrayToOptions(
+        data: Record<string, any>[],
+        nameField: string = 'name',
+        valueField: string = 'value',
+        prefix: string = 'K') {
+        return data.map((item, index) => <Option
+            value={item[valueField]} key={`${prefix}${index}_${item[valueField]}`}>
+            {item[nameField]}
+        </Option>);
     },
     /**
      * 读取app.json配置
      */
     async readAppJson(): Promise<AppJson | null> {
-        const isDev = process.env['NODE_ENV'] === 'development';
         const target = isDev
             ? join(cwd, 'data/app.json')
             : join(cwd, 'resources/config/app.json');
@@ -617,7 +618,6 @@ const helper = {
      * 写入app.json配置
      */
     async writeAppJson(data: AppJson): Promise<boolean> {
-        const isDev = process.env['NODE_ENV'] === 'development';
         const target = isDev
             ? join(cwd, 'data/app.json')
             : join(cwd, 'resources/config/app.json');
@@ -633,7 +633,6 @@ const helper = {
      * 读取check.json配置
      */
     async readCheckJson(): Promise<CheckJson | null> {
-        const isDev = process.env['NODE_ENV'] === 'development';
         const target = isDev
             ? join(cwd, 'data/check.json')
             : join(cwd, 'resources/config/check.json');
@@ -649,7 +648,6 @@ const helper = {
      * 写入check.json配置
      */
     async writeCheckJson(data: CheckJson): Promise<boolean> {
-        const isDev = process.env['NODE_ENV'] === 'development';
         const target = isDev
             ? join(cwd, 'data/check.json')
             : join(cwd, 'resources/config/check.json');

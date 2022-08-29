@@ -59,7 +59,10 @@ dayjs.extend(weekday);
 dayjs.localeData();
 
 const { tcpPort } = helper.readConf()!;
-const app = dva({ history: createHistory() });
+const app = dva({
+    history: createHistory(),
+    namespacePrefixWarning: true
+});
 
 (async () => {
     let port = tcpPort;

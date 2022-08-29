@@ -33,11 +33,9 @@ const Clock: FC<ClockProp> = ({ usb }) => {
 
     useSubscribe('receive-time', timeHandle);
 
-    return (
-        <ClockBox>
-            {timeString}
-        </ClockBox>
-    );
+    return <ClockBox>
+        {timeString}
+    </ClockBox>;
 };
 
 Clock.defaultProps = {

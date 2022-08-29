@@ -31,72 +31,58 @@ const HistoryModal: FC<HistoryModalProp> = ({ title, visible, data, cancelHandle
      */
     const renderData = () => {
         if (helper.isNullOrUndefined(data) || data?.length === 0) {
-            return (
-                <div className="middle">
-                    <Empty description="暂无记录" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                </div>
-            );
+            return <div className="middle">
+                <Empty description="暂无记录" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            </div>;
         } else {
-            return (
-                <ul>
-                    {data?.map(({ type, info, time }, index) => {
-                        switch (type) {
-                            case ProgressType.Normal:
-                                return (
-                                    <li key={`FR_${index}`}>
-                                        <label>【{renderTime(time)}】</label>
-                                        <span style={{ color: '#fff' }}>{info}</span>
-                                    </li>
-                                );
-                            case ProgressType.Warning:
-                                return (
-                                    <li key={`FR_${index}`}>
-                                        <label>【{renderTime(time)}】</label>
-                                        <span style={{ color: '#ff3333' }}>{info}</span>
-                                    </li>
-                                );
-                            case ProgressType.Message:
-                                return (
-                                    <li key={`FR_${index}`}>
-                                        <label>【{renderTime(time)}】</label>
-                                        <span style={{ color: '#f9ca24' }}>{info}</span>
-                                    </li>
-                                );
-                            default:
-                                return (
-                                    <li key={`FR_${index}`}>
-                                        <label>【{renderTime(time)}】</label>
-                                        <span style={{ color: '#fff' }}>{info}</span>
-                                    </li>
-                                );
-                        }
-                    })}
-                </ul>
-            );
+            return <ul>
+                {data?.map(({ type, info, time }, index) => {
+                    switch (type) {
+                        case ProgressType.Normal:
+                            return <li key={`FR_${index}`}>
+                                <label>【{renderTime(time)}】</label>
+                                <span style={{ color: '#fff' }}>{info}</span>
+                            </li>;
+                        case ProgressType.Warning:
+                            return <li key={`FR_${index}`}>
+                                <label>【{renderTime(time)}】</label>
+                                <span style={{ color: '#ff3333' }}>{info}</span>
+                            </li>;
+                        case ProgressType.Message:
+                            return <li key={`FR_${index}`}>
+                                <label>【{renderTime(time)}】</label>
+                                <span style={{ color: '#f9ca24' }}>{info}</span>
+                            </li>;
+                        default:
+                            return <li key={`FR_${index}`}>
+                                <label>【{renderTime(time)}】</label>
+                                <span style={{ color: '#fff' }}>{info}</span>
+                            </li>;
+                    }
+                })}
+            </ul>;
         }
     };
 
-    return (
-        <Modal
-            visible={visible}
-            footer={[
-                <Button type="default" onClick={cancelHandle} key="FH_0">
-                    <CloseCircleOutlined />
-                    <span>取消</span>
-                </Button>
-            ]}
-            onCancel={cancelHandle}
-            title={title}
-            width={800}
-            centered={true}
-            maskClosable={false}
-            destroyOnClose={true}
-            className="zero-padding-body">
-            <FetchRecordBox>
-                <div className="list-block">{renderData()}</div>
-            </FetchRecordBox>
-        </Modal>
-    );
+    return <Modal
+        visible={visible}
+        footer={[
+            <Button type="default" onClick={cancelHandle} key="FH_0">
+                <CloseCircleOutlined />
+                <span>取消</span>
+            </Button>
+        ]}
+        onCancel={cancelHandle}
+        title={title}
+        width={800}
+        centered={true}
+        maskClosable={false}
+        destroyOnClose={true}
+        className="zero-padding-body">
+        <FetchRecordBox>
+            <div className="list-block">{renderData()}</div>
+        </FetchRecordBox>
+    </Modal>;
 };
 
 HistoryModal.defaultProps = {

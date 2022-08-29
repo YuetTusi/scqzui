@@ -92,14 +92,12 @@ function getColumns(showHistoryHandle: (data: FetchLog) => void): ColumnProps<Fe
             align: 'center',
             width: 100,
             render(value: any, log: FetchLog) {
-                return (
-                    <a
-                        onClick={() => {
-                            showHistoryHandle(log);
-                        }}>
-                        {`${fetchText ?? '取证'}记录`}
-                    </a>
-                );
+                return <a
+                    onClick={() => {
+                        showHistoryHandle(log);
+                    }}>
+                    {`${fetchText ?? '取证'}记录`}
+                </a>;
             }
         }
     ];

@@ -131,28 +131,23 @@ const UninstallCategoryChart: FC<{ data: InstallApp | null }> = ({ data }) => {
         if (data.length === 0) {
             return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无统计数据" />;
         } else {
-            return (
-                <ul>
-                    {data.map(({ name, pkg, time }, i) => {
-                        return <li key={`K_${i}`}>{`${name}（${pkg}）${time}`}</li>;
-                    })}
-                </ul>
-            );
+            return <ul>
+                {data.map(({ name, pkg, time }, i) => {
+                    return <li key={`K_${i}`}>{`${name}（${pkg}）${time}`}</li>;
+                })}
+            </ul>
         }
     };
 
-    return (
-        <TrailChartBox>
-            <div id="uninstall-category-chart" className="chart-box"></div>
-
-            <div className="list-box">
-                <div className="list-panel">
-                    <div className="caption">{category === undefined ? '应用列表' : category}</div>
-                    <div className="list">{renderLi(detailList)}</div>
-                </div>
+    return <TrailChartBox>
+        <div id="uninstall-category-chart" className="chart-box"></div>
+        <div className="list-box">
+            <div className="list-panel">
+                <div className="caption">{category === undefined ? '应用列表' : category}</div>
+                <div className="list">{renderLi(detailList)}</div>
             </div>
-        </TrailChartBox>
-    );
+        </div>
+    </TrailChartBox>;
 };
 
 export { UninstallCategoryChart };

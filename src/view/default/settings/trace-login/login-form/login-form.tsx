@@ -9,35 +9,39 @@ import { LoginFormProp } from './prop';
 const { Password } = Input;
 const { Item } = Form;
 
-const LoginForm: FC<LoginFormProp> = ({ formRef, loginState }) => {
-    return (
-        <Form form={formRef} layout="vertical">
-            <Row>
-                <Col span={24}>
-                    <Item name="username" rules={[{ required: true, message: '请输入用户' }]} label="用户">
-                        <Input
-                            disabled={
-                                loginState === LoginState.Busy ||
-                                loginState === LoginState.IsLogin
-                            }
-                        />
-                    </Item>
-                </Col>
-            </Row>
-            <Row>
-                <Col span={24}>
-                    <Item name="password" rules={[{ required: true, message: '请输入密码' }]} label="密码">
-                        <Password
-                            disabled={
-                                loginState === LoginState.Busy ||
-                                loginState === LoginState.IsLogin
-                            }
-                        />
-                    </Item>
-                </Col>
-            </Row>
-        </Form >
-    );
-}
+const LoginForm: FC<LoginFormProp> = ({ formRef, loginState }) => <Form
+    form={formRef}
+    layout="vertical">
+    <Row>
+        <Col span={24}>
+            <Item
+                name="username"
+                label="用户"
+                rules={[{ required: true, message: '请输入用户' }]}>
+                <Input
+                    disabled={
+                        loginState === LoginState.Busy
+                        || loginState === LoginState.IsLogin
+                    }
+                />
+            </Item>
+        </Col>
+    </Row>
+    <Row>
+        <Col span={24}>
+            <Item
+                name="password"
+                label="密码"
+                rules={[{ required: true, message: '请输入密码' }]} >
+                <Password
+                    disabled={
+                        loginState === LoginState.Busy
+                        || loginState === LoginState.IsLogin
+                    }
+                />
+            </Item>
+        </Col>
+    </Row>
+</Form>;
 
 export default LoginForm;

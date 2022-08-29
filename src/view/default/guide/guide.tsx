@@ -40,6 +40,9 @@ const Guide: FC<{}> = () => {
                 case 'ArrowLeft':
                     scrollRef.current.scrollLeft -= 200;
                     break;
+                default:
+                    console.warn(`未知KeyCode:${code}`);
+                    break;
             }
         }
     };

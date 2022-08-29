@@ -24,17 +24,13 @@ const GuideModal: FC<GuideModalProp> = (props) => {
 			//图示消息
 			let imgPath = getImages(device?.tipImage!);
 			if (imgPath === null) {
-				return (
-					<div className="flow">
-						<Empty description="暂无图示" />
-					</div>
-				);
+				return <div className="flow">
+					<Empty description="暂无图示" />
+				</div>;
 			} else {
-				return (
-					<div className="flow">
-						<img src={imgPath} />
-					</div>
-				);
+				return <div className="flow">
+					<img src={imgPath} />
+				</div>;
 			}
 		} else {
 			//文本消息
@@ -53,22 +49,20 @@ const GuideModal: FC<GuideModalProp> = (props) => {
 		}
 	};
 
-	return (
-		<Modal
-			visible={visible}
-			title={device?.tipTitle}
-			onCancel={cancelHandle}
-			footer={<FooterButtons {...props} yesHandle={yesHandle} noHandle={noHandle} />}
-			width={getWidth()}
-			centered={true}
-			destroyOnClose={true}
-			maskClosable={false}
-			closable={true}>
-			<GuideModalBox>
-				{renderContent()}
-			</GuideModalBox>
-		</Modal>
-	);
+	return <Modal
+		visible={visible}
+		title={device?.tipTitle}
+		onCancel={cancelHandle}
+		footer={<FooterButtons {...props} yesHandle={yesHandle} noHandle={noHandle} />}
+		width={getWidth()}
+		centered={true}
+		destroyOnClose={true}
+		maskClosable={false}
+		closable={true}>
+		<GuideModalBox>
+			{renderContent()}
+		</GuideModalBox>
+	</Modal>;
 };
 
 GuideModal.defaultProps = {

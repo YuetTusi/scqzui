@@ -128,61 +128,59 @@ const CloudAppSelectModal: FC<CloudAppSelectModalProp> = ({
         setParamDrawerVisible(false);
     };
 
-    return (
-        <Modal
-            visible={visible}
-            footer={[
-                <Button
-                    onClick={() => {
-                        setIds.current = [];
-                        closeHandle();
-                    }}
-                    type="default"
-                    key="CloudB_0">
-                    <CloseCircleOutlined />
-                    <span>取消</span>
-                </Button>,
-                <Button
-                    onClick={() => {
-                        setIds.current = [];
-                        okHandle(ztree.getCheckedNodes());
-                    }}
-                    type="primary"
-                    key="CloudB_1">
-                    <CheckCircleOutlined />
-                    <span>确定</span>
-                </Button>
-            ]}
-            onCancel={() => {
-                setIds.current = [];
-                closeHandle();
-            }}
-            title={title ?? '选择App'}
-            width={860}
-            centered={true}
-            maskClosable={false}
-            destroyOnClose={true}
-            zIndex={1001}
-            forceRender={true}
-            className="zero-padding-body">
-            <AppSelectModalBox>
-                <div className="tip-msg">{children}</div>
-                <div className="cloud-center-box">
-                    <div id="treePlace" className="no-data-place">
-                        <Empty description="暂无云取应用" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    </div>
-                    <ul className="ztree" id="cloud-app-tree"></ul>
+    return <Modal
+        visible={visible}
+        footer={[
+            <Button
+                onClick={() => {
+                    setIds.current = [];
+                    closeHandle();
+                }}
+                type="default"
+                key="CloudB_0">
+                <CloseCircleOutlined />
+                <span>取消</span>
+            </Button>,
+            <Button
+                onClick={() => {
+                    setIds.current = [];
+                    okHandle(ztree.getCheckedNodes());
+                }}
+                type="primary"
+                key="CloudB_1">
+                <CheckCircleOutlined />
+                <span>确定</span>
+            </Button>
+        ]}
+        onCancel={() => {
+            setIds.current = [];
+            closeHandle();
+        }}
+        title={title ?? '选择App'}
+        width={860}
+        centered={true}
+        maskClosable={false}
+        destroyOnClose={true}
+        zIndex={1001}
+        forceRender={true}
+        className="zero-padding-body">
+        <AppSelectModalBox>
+            <div className="tip-msg">{children}</div>
+            <div className="cloud-center-box">
+                <div id="treePlace" className="no-data-place">
+                    <Empty description="暂无云取应用" image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 </div>
-            </AppSelectModalBox>
-            <ParamDrawer
-                visible={paramDrawerVisible}
-                id={appId}
-                name={appDesc}
-                ext={appExt}
-                okHandle={onSaveHandle}
-                closeHandle={() => setParamDrawerVisible(false)} />
-        </Modal>
-    );
+                <ul className="ztree" id="cloud-app-tree"></ul>
+            </div>
+        </AppSelectModalBox>
+        <ParamDrawer
+            visible={paramDrawerVisible}
+            id={appId}
+            name={appDesc}
+            ext={appExt}
+            okHandle={onSaveHandle}
+            closeHandle={() => setParamDrawerVisible(false)} />
+    </Modal>;
 };
 
 CloudAppSelectModal.defaultProps = {

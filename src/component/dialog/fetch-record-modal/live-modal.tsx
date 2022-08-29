@@ -59,74 +59,59 @@ const LiveModal: FC<LiveModalProp> = ({ title, device, visible, cancelHandle }) 
     const renderData = () => {
 
         if (data.length === 0) {
-            return (
-                <div className="middle">
-                    <Empty description="暂无记录" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                </div>
-            );
+            return <div className="middle">
+                <Empty description="暂无记录" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            </div>;
         } else {
-            return (
-                <ul>
-                    {data.map((item, i) => {
-                        switch (item.type) {
-                            case ProgressType.Normal:
-                                return (
-                                    <li key={`L_${i}`}>
-                                        <label>【{renderTime(item.time)}】</label>
-                                        <span style={{ color: '#fff' }}>{item.info}</span>
-                                    </li>
-                                );
-                            case ProgressType.Warning:
-                                return (
-                                    <li key={`L_${i}`}>
-                                        <label>【{renderTime(item.time)}】</label>
-                                        <span style={{ color: '#ff3333', fontWeight: 'bold' }}>{item.info}</span>
-                                    </li>
-                                );
-                            case ProgressType.Message:
-                                return (
-                                    <li key={`L_${i}`}>
-                                        <label>【{renderTime(item.time)}】</label>
-                                        <span style={{ color: '#f9ca24' }}>{item.info}</span>
-                                    </li>
-                                );
-                            default:
-                                return (
-                                    <li key={`L_${i}`}>
-                                        <label>【{renderTime(item.time)}】</label>
-                                        <span style={{ color: '#fff' }}>{item.info}</span>
-                                    </li>
-                                );
-                        }
-                    })}
-                </ul>
-            );
+            return <ul>
+                {data.map((item, i) => {
+                    switch (item.type) {
+                        case ProgressType.Normal:
+                            return <li key={`L_${i}`}>
+                                <label>【{renderTime(item.time)}】</label>
+                                <span style={{ color: '#fff' }}>{item.info}</span>
+                            </li>;
+                        case ProgressType.Warning:
+                            return <li key={`L_${i}`}>
+                                <label>【{renderTime(item.time)}】</label>
+                                <span style={{ color: '#ff3333', fontWeight: 'bold' }}>{item.info}</span>
+                            </li>;
+                        case ProgressType.Message:
+                            return <li key={`L_${i}`}>
+                                <label>【{renderTime(item.time)}】</label>
+                                <span style={{ color: '#f9ca24' }}>{item.info}</span>
+                            </li>;
+                        default:
+                            return <li key={`L_${i}`}>
+                                <label>【{renderTime(item.time)}】</label>
+                                <span style={{ color: '#fff' }}>{item.info}</span>
+                            </li>;
+                    }
+                })}
+            </ul>;
         }
     };
 
-    return (
-        <Modal
-            visible={visible}
-            footer={[
-                <Button type="default" onClick={cancelHandle} key="REC_B0">
-                    <CloseCircleOutlined />
-                    <span>取消</span>
-                </Button>
-            ]}
-            onCancel={cancelHandle}
-            title={title}
-            width={800}
-            centered={true}
-            maskClosable={false}
-            className="zero-padding-body">
-            <FetchRecordBox>
-                <div className="list-block" ref={scrollBox}>
-                    {renderData()}
-                </div>
-            </FetchRecordBox>
-
-        </Modal>
-    );
+    return <Modal
+        visible={visible}
+        footer={[
+            <Button type="default" onClick={cancelHandle} key="REC_B0">
+                <CloseCircleOutlined />
+                <span>取消</span>
+            </Button>
+        ]}
+        onCancel={cancelHandle}
+        title={title}
+        width={800}
+        centered={true}
+        maskClosable={false}
+        className="zero-padding-body">
+        <FetchRecordBox>
+            <div className="list-block" ref={scrollBox}>
+                {renderData()}
+            </div>
+        </FetchRecordBox>
+    </Modal>;
 };
 
 LiveModal.defaultProps = {

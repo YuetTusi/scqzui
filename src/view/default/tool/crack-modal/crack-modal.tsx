@@ -91,24 +91,18 @@ const CrackModal: FC<CrackModalProp> = ({
     };
 
     const renderOptions = () => {
-        return dev.map(({ name, value }, index) => (
-            <Option key={`Dev_${index}`} value={value}>
-                {name}
-            </Option>
-        ));
+        return dev.map(({ name, value }, index) => <Option key={`Dev_${index}`} value={value}>
+            {name}
+        </Option>);
     };
 
     const renderMessage = () => {
         if (helper.isNullOrUndefined(message) || message.length === 0) {
             return <Empty description="暂无消息" image={Empty.PRESENTED_IMAGE_SIMPLE} />;
         } else {
-            return (
-                <ul>
-                    {message.map((item, index) => (
-                        <li key={`M_${index}`}>{item}</li>
-                    ))}
-                </ul>
-            );
+            return <ul>
+                {message.map((item, index) => <li key={`M_${index}`}>{item}</li>)}
+            </ul>
         }
     };
 

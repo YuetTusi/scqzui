@@ -143,29 +143,25 @@ const AppStatusChart: FC<AppStatusChartProp> = ({ data }) => {
         if (detailList.length === 0) {
             return <Empty description="暂无统计数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />;
         } else {
-            return detailList.map(({ pkg, status }) => (
-                <li key={pkg}>
-                    <Tag color={status === '-1' ? 'red' : 'green'}>
-                        {status === '-1' ? '卸载' : '安装'}
-                    </Tag>
-                    <span>{`${pkg}`}</span>
-                </li>
-            ));
+            return detailList.map(({ pkg, status }) => <li key={pkg}>
+                <Tag color={status === '-1' ? 'red' : 'green'}>
+                    {status === '-1' ? '卸载' : '安装'}
+                </Tag>
+                <span>{`${pkg}`}</span>
+            </li>);
         }
     };
 
-    return (
-        <TrailChartBox>
-            <div id="bar-root" className="chart-box"></div>
+    return <TrailChartBox>
+        <div id="bar-root" className="chart-box"></div>
 
-            <div className="list-box">
-                <div className="list-panel">
-                    <div className="caption">{`应用列表 ${appTime}`}</div>
-                    <div className="list">{renderLi()}</div>
-                </div>
+        <div className="list-box">
+            <div className="list-panel">
+                <div className="caption">{`应用列表 ${appTime}`}</div>
+                <div className="list">{renderLi()}</div>
             </div>
-        </TrailChartBox>
-    );
+        </div>
+    </TrailChartBox>;
 };
 
 export { AppStatusChart };

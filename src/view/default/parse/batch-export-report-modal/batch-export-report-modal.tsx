@@ -151,69 +151,67 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
         }
     }, [visible, batchExportReportModal]);
 
-    return (
-        <Modal
-            footer={[
-                <ControlBoxes key="BER_0">
-                    <Checkbox
-                        checked={isAttach}
-                        disabled={isEmpty}
-                        onChange={() => setIsAttach((prev) => !prev)}
-                    />
-                    <span
-                        onClick={() => {
-                            if (!isEmpty) {
-                                setIsAttach((prev) => !prev);
-                            }
-                        }}>
-                        附件
-                    </span>
-                    <Button disabled={isEmpty} onClick={validCheck} type="primary">
-                        <ExportOutlined />
-                        <span>导出</span>
-                    </Button>
-                </ControlBoxes>
-            ]}
-            onCancel={() => {
-                setIsAttach(true);
-                cancelHandle();
-            }}
-            visible={visible}
-            title="导出报告"
-            width={650}
-            centered={true}
-            destroyOnClose={true}
-            maskClosable={false}
-            className="zero-padding-body">
-            <BatchExportReportModalBox>
-                <fieldset className="batch-export-tips">
-                    <legend>批量导出提示</legend>
-                    <div>
-                        <ul>
-                            <li>
-                                无报告数据请先进行<em>生成报告</em>操作
-                            </li>
-                            <li>
-                                导出目录若存在<em>相同文件会覆盖</em>，导出前请确认
-                            </li>
-                            <li>
-                                请保证磁盘空间充足；数据过大会较慢，导出过程中<em>请勿关闭应用</em>
-                            </li>
-                        </ul>
-                    </div>
-                </fieldset>
-                <div className="export-panel">
-                    <ul
-                        style={{ display: isEmpty ? 'none' : 'block' }}
-                        id="batchReportTree"
-                        className="ztree"></ul>
-                    <div style={{ display: isEmpty ? 'flex' : 'none' }} className="empty-report">
-                        <Empty description="暂无报告" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    </div>
+    return <Modal
+        footer={[
+            <ControlBoxes key="BER_0">
+                <Checkbox
+                    checked={isAttach}
+                    disabled={isEmpty}
+                    onChange={() => setIsAttach((prev) => !prev)}
+                />
+                <span
+                    onClick={() => {
+                        if (!isEmpty) {
+                            setIsAttach((prev) => !prev);
+                        }
+                    }}>
+                    附件
+                </span>
+                <Button disabled={isEmpty} onClick={validCheck} type="primary">
+                    <ExportOutlined />
+                    <span>导出</span>
+                </Button>
+            </ControlBoxes>
+        ]}
+        onCancel={() => {
+            setIsAttach(true);
+            cancelHandle();
+        }}
+        visible={visible}
+        title="导出报告"
+        width={650}
+        centered={true}
+        destroyOnClose={true}
+        maskClosable={false}
+        className="zero-padding-body">
+        <BatchExportReportModalBox>
+            <fieldset className="batch-export-tips">
+                <legend>批量导出提示</legend>
+                <div>
+                    <ul>
+                        <li>
+                            无报告数据请先进行<em>生成报告</em>操作
+                        </li>
+                        <li>
+                            导出目录若存在<em>相同文件会覆盖</em>，导出前请确认
+                        </li>
+                        <li>
+                            请保证磁盘空间充足；数据过大会较慢，导出过程中<em>请勿关闭应用</em>
+                        </li>
+                    </ul>
                 </div>
-            </BatchExportReportModalBox>
-        </Modal>
-    );
+            </fieldset>
+            <div className="export-panel">
+                <ul
+                    style={{ display: isEmpty ? 'none' : 'block' }}
+                    id="batchReportTree"
+                    className="ztree"></ul>
+                <div style={{ display: isEmpty ? 'flex' : 'none' }} className="empty-report">
+                    <Empty description="暂无报告" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                </div>
+            </div>
+        </BatchExportReportModalBox>
+    </Modal>;
 };
 
 BatchExportReportModal.defaultProps = {

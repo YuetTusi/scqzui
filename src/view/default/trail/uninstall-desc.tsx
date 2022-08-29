@@ -9,11 +9,9 @@ import { InstallApp } from '@/schema/install-app';
  */
 const UninstallDesc: FC<{ data: InstallApp | null }> = ({ data }) => {
     if (helper.isNullOrUndefined(data)) {
-        return (
-            <div className="empty-box">
-                <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            </div>
-        );
+        return <div className="empty-box">
+            <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </div>;
     }
 
     const { unstallAppNameList, unstallApppkgList, unstallCateNameList, unstallAppStatusDayList } =
@@ -29,11 +27,9 @@ const UninstallDesc: FC<{ data: InstallApp | null }> = ({ data }) => {
     const len = nameList.length;
 
     if (len === 0) {
-        return (
-            <div className="empty-box">
-                <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            </div>
-        );
+        return <div className="empty-box">
+            <Empty description="暂无数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </div>;
     }
 
     const categoryList = helper.isNullOrUndefined(unstallCateNameList)

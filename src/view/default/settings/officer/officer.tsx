@@ -67,27 +67,25 @@ const Officer: FC<OfficerProp> = () => {
 
     const renderOfficer = (): JSX.Element => {
         if (data && data.length > 0) {
-            let $li = data.map((item, i) => (
-                <li key={`L_${i}`}>
-                    <div
-                        className="police"
-                        onClick={(event: MouseEvent<HTMLDivElement>) => policeClick(event, item)}>
-                        <img src={policeSvg} className="avatar" alt="头像" />
-                        <div className="info">
-                            <span>姓名：{item.name}</span>
-                            <em>编号：{item.no}</em>
-                        </div>
-                        <div
-                            className="drop"
-                            data-id={item._id}
-                            data-name={item.name}
-                            onClick={delOfficerClick}
-                            title={`删除${fetchText ?? '取证'}人员`}>
-                            <CloseCircleOutlined style={{ fontSize: '22px' }} />
-                        </div>
+            let $li = data.map((item, i) => <li key={`L_${i}`}>
+                <div
+                    className="police"
+                    onClick={(event: MouseEvent<HTMLDivElement>) => policeClick(event, item)}>
+                    <img src={policeSvg} className="avatar" alt="头像" />
+                    <div className="info">
+                        <span>姓名：{item.name}</span>
+                        <em>编号：{item.no}</em>
                     </div>
-                </li>
-            ));
+                    <div
+                        className="drop"
+                        data-id={item._id}
+                        data-name={item.name}
+                        onClick={delOfficerClick}
+                        title={`删除${fetchText ?? '取证'}人员`}>
+                        <CloseCircleOutlined style={{ fontSize: '22px' }} />
+                    </div>
+                </div>
+            </li>);
             return <ul>{$li}</ul>;
         } else {
             return <Empty description={`暂无${fetchText ?? '取证'}人员`} image={Empty.PRESENTED_IMAGE_SIMPLE} />;

@@ -28,16 +28,14 @@ const QuickCopy: FC<{ desc?: string }> = ({ desc, children }) => {
 		{ leading: true, trailing: false }
 	);
 
-	return (
-		<QuickCopyBox>
-			<span className="float-cpy">
-				<Button onClick={onCopyClick} title={desc} size="small">
-					<CopyOutlined />
-				</Button>
-			</span>
-			<span ref={childRef}>{children}</span>
-		</QuickCopyBox>
-	);
+	return <QuickCopyBox>
+		<span className="float-cpy">
+			<Button onClick={onCopyClick} title={desc} size="small">
+				<CopyOutlined />
+			</Button>
+		</span>
+		<span ref={childRef}>{children}</span>
+	</QuickCopyBox>;
 };
 
 export default QuickCopy;

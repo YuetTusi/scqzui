@@ -86,18 +86,16 @@ const HumanVerifyModal: FC<Prop> = ({
 		} else {
 			switch (verifyData.type) {
 				case 'ARTIFICIAL_BLOCK_PUZZLE':
-					return (
-						<JigsawCheck
-							bgSrc={verifyData.back_img.base64}
-							gapSrc={verifyData.jigsaw_img.base64}
-							bgWidth={verifyData.back_img.width}
-							bgHeight={verifyData.back_img.height}
-							gapWidth={verifyData.jigsaw_img.width}
-							gapHeight={verifyData.jigsaw_img.height}
-							gapInitStyle={verifyData.jigsaw_img.style}
-							onPiece={onPiece}
-						/>
-					);
+					return <JigsawCheck
+						bgSrc={verifyData.back_img.base64}
+						gapSrc={verifyData.jigsaw_img.base64}
+						bgWidth={verifyData.back_img.width}
+						bgHeight={verifyData.back_img.height}
+						gapWidth={verifyData.jigsaw_img.width}
+						gapHeight={verifyData.jigsaw_img.height}
+						gapInitStyle={verifyData.jigsaw_img.style}
+						onPiece={onPiece}
+					/>;
 				// case 'ARTIFICIAL_CLICK_WORD':
 				// 	return (
 				// 		<WordSelect

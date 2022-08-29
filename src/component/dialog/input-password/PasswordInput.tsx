@@ -27,20 +27,18 @@ interface Prop {
 const PasswordInput: FC<Prop> = ({ params, notificationId, okHandle }) => {
 	const inputRef = useRef<any>();
 
-	return (
-		<PasswordPanel>
-			<Input ref={inputRef} size="small" placeholder="请输入备份密码" />
-			<Button
-				type="primary"
-				size="small"
-				onClick={() => {
-					okHandle(params, false, inputRef.current.input.value);
-					notification.close(notificationId);
-				}}>
-				<CheckCircleOutlined />
-			</Button>
-		</PasswordPanel>
-	);
+	return <PasswordPanel>
+		<Input ref={inputRef} size="small" placeholder="请输入备份密码" />
+		<Button
+			type="primary"
+			size="small"
+			onClick={() => {
+				okHandle(params, false, inputRef.current.input.value);
+				notification.close(notificationId);
+			}}>
+			<CheckCircleOutlined />
+		</Button>
+	</PasswordPanel>;
 };
 
 export default PasswordInput;

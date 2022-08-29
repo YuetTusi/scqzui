@@ -25,29 +25,25 @@ const AlartMessage: FC<Prop> = () => {
         if (alertMessage.length === 0) {
             return null;
         } else {
-            return alertMessage.map((item, index) => (
-                <li key={`M_${index}`}>
-                    <div title={item.msg}>
-                        <SoundOutlined className="alarm-message-ico" />
-                        <span className="alarm-message-txt">{item.msg}</span>
-                    </div>
-                    <div className="alarm-message-close-btn" title="关闭">
-                        <CloseCircleOutlined onClick={() => closeHandle(item.id)} />
-                    </div>
-                </li>
-            ));
+            return alertMessage.map((item, index) => <li key={`M_${index}`}>
+                <div title={item.msg}>
+                    <SoundOutlined className="alarm-message-ico" />
+                    <span className="alarm-message-txt">{item.msg}</span>
+                </div>
+                <div className="alarm-message-close-btn" title="关闭">
+                    <CloseCircleOutlined onClick={() => closeHandle(item.id)} />
+                </div>
+            </li>);
         }
     };
 
-    return (
-        <AlartMessageBox
-            style={{ display: alertMessage.length === 0 ? 'none' : 'block' }}
-            className="alarm-message-root">
-            <div className="alarm-message-bg">
-                <ul>{renderList()}</ul>
-            </div>
-        </AlartMessageBox>
-    );
+    return <AlartMessageBox
+        style={{ display: alertMessage.length === 0 ? 'none' : 'block' }}
+        className="alarm-message-root">
+        <div className="alarm-message-bg">
+            <ul>{renderList()}</ul>
+        </div>
+    </AlartMessageBox>;
 };
 
 export default AlartMessage;
