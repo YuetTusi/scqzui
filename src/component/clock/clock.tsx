@@ -3,13 +3,7 @@ import React, { FC, useState, memo } from 'react';
 import { useSubscribe } from '@/hook';
 import { helper } from '@/utils/helper';
 import { ClockBox } from './styled/style';
-
-interface ClockProp {
-    /**
-     * USB序号（从0开始）
-     */
-    usb: number
-}
+import { ClockProp } from './prop';
 
 const prevTimeStringMap = new Map<number, string>();
 const { max } = helper.readConf()!;

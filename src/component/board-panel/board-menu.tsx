@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faEraser, faBuilding, faBuildingColumns, faPenRuler, faWrench, faBell, faBellSlash,
-    faMobileScreenButton, faArrowsRotate, faCloud, faRecycle
+    faEraser, faBuilding, faBuildingColumns, faPenRuler, faWrench,
+    faBell, faBellSlash, faMobileScreenButton, faArrowsRotate,
+    faCloud, faRecycle
 } from '@fortawesome/free-solid-svg-icons';
 import Popover from 'antd/lib/popover';
 import { helper } from '@/utils/helper';
@@ -96,7 +97,7 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
             <li
                 onClick={() => onItemClick(BoardMenuAction.DevTool)}>
                 <FontAwesomeIcon icon={faWrench} />
-                <span>打开开发者工具</span>
+                <span>开发者工具</span>
             </li>
         </Auth>
     </MenuBox>
