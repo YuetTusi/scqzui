@@ -81,7 +81,7 @@ if (!helper.useGPURender()) {
     app.commandLine.appendSwitch('disable-software-rasterizer');
     app.commandLine.appendSwitch('--no-sandbox');
     app.disableHardwareAcceleration();
-    log.warn('禁用GPU渲染, 忽略Chromium显卡黑名单');
+    log.info('启用GPU渲染');
 }
 
 helper.writeReportJson(config?.reportType === undefined ? 0 : config.reportType); //写report.json
