@@ -7,11 +7,9 @@ import 'dayjs/locale/zh-cn';
 import { createHashHistory as createHistory } from 'history';
 import dva from 'dva';
 import immer from 'dva-immer';
+// import reduxLogger from 'redux-logger';
 import messageBox from 'antd/lib/message';
 import notification from 'antd/lib/notification';
-// import 'antd/dist/antd.less';
-import 'antd/dist/antd.dark.less';
-// import 'antd/dist/antd.compact.less';
 import log from '@/utils/log';
 import { helper } from '@/utils/helper';
 import server from '@/utils/tcp-server';
@@ -51,6 +49,7 @@ import checkingListModel from '@/model/default/checking-list';
 import selfUnitModel from '@/model/default/self-unit';
 import 'jquery';
 import '@ztree/ztree_v3/js/jquery.ztree.all.min';
+import 'antd/dist/antd.dark.less';
 import '@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css';
 dayjs.locale('zh-cn');
 dayjs.extend(customParseFormat);
@@ -59,9 +58,11 @@ dayjs.extend(weekday);
 dayjs.localeData();
 
 const { tcpPort } = helper.readConf()!;
+const isDev = process.env['NODE_ENV'] === 'development';
+
 const app = dva({
     history: createHistory(),
-    namespacePrefixWarning: true
+    namespacePrefixWarning: isDev
 });
 
 (async () => {
@@ -79,24 +80,16 @@ const app = dva({
     }
 })();
 
-ipcRenderer.on('show-notification', (event: IpcRendererEvent, info: any) => {
+ipcRenderer.on('show-notification', (event: IpcRendererEvent, info: { message: string, description: string, type: string }) => {
     //显示notification消息
     let { message, description, type = 'info' } = info;
     switch (type) {
         case 'info':
-            notification.info({
-                message,
-                description
-            });
-            break;
         case 'error':
-            notification.error({
-                message,
-                description
-            });
-            break;
         case 'success':
-            notification.success({
+        case 'warn':
+        case 'warning':
+            notification[type]({
                 message,
                 description
             });

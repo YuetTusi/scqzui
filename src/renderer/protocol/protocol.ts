@@ -1,5 +1,5 @@
-import { FetchData } from '@/schema/fetch-data';
 import { ipcRenderer } from 'electron';
+import { FetchData } from '@/schema/fetch-data';
 
 let wait: number = 3;
 let timer: NodeJS.Timer | null = null;

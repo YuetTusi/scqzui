@@ -73,7 +73,7 @@ C:\Users\[你的用户名]\AppData\Local\electron\Cache
 
 再次执行`yarn run dist`命令，即可成功发布应用
 
-如果还有其他问题，Google 大法好 ^\_^
+如果还有其他问题，Google 大法好 ;-)
 
 ### ui.yaml 配置说明
 
