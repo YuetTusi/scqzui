@@ -26,16 +26,22 @@ function api(webContents: WebContents) {
     router.get('/', (req, res) =>
         res.json({
             data: 'HTTP接口',
-            routes: [
-                {
-                    path: '/case',
-                    desc: '案件数据（解析完成&解析异常）'
-                },
-                {
-                    path: '/app/:type',
-                    desc: '解析应用（parse-app），Token云取应用（token-app）'
-                }
-            ]
+            routes: [{
+                path: '/case',
+                desc: '案件数据（解析完成&解析异常）'
+            }, {
+                path: '/app/:type',
+                desc: '解析应用（parse-app），Token云取应用（token-app）'
+            }, {
+                path: '/wifi-case',
+                desc: '快速取证案件'
+            }, {
+                path: '/keyword',
+                desc: '当前关键词'
+            }, {
+                path: '/check/:id',
+                desc: '下载取证APK'
+            }]
         })
     );
 
