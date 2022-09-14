@@ -1,19 +1,23 @@
 import styled from 'styled-components';
 
 const FetchInfoBox = styled.div`
-cursor: pointer;
-font-size: 1.2rem;
-.info-danger {
-    color: #f5222d;
-}
+    cursor: pointer;
+    font-size: 1.2rem;
+    width: 280px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    .info-danger {
+        color: #f5222d;
+    }
 
-.info-primary {
-    color: #f9ca24;
-}
+    .info-primary {
+        color: #f9ca24;
+    }
 
-.info-default {
-    color: #fff;
-}
+    .info-default {
+        color: #fff;
+    }
 `;
 
 export { FetchInfoBox };
