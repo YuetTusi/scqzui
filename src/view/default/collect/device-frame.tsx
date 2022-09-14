@@ -15,7 +15,6 @@ import { MobileIco } from './mobile-ico';
 import { DeivceBox, Nothing } from './styled/device-box';
 import { DeviceFrameProp } from './prop';
 
-
 const { Ribbon } = Badge;
 
 /**
@@ -93,13 +92,11 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
                 image={Empty.PRESENTED_IMAGE_SIMPLE} />
         </Nothing>
     } else {
-
         return <>{
             deviceList.map((item, index) => {
                 if (item === undefined) {
                     return null;
                 } else {
-
                     switch (item.fetchState) {
                         case FetchState.Fetching:
                             return <Ribbon text={getTipTxt(item)} key={`USB_${item?.usb ?? index}`}>

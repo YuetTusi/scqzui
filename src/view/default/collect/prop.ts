@@ -1,5 +1,5 @@
-import DeviceSystem from "@/schema/device-system";
 import { DeviceType } from "@/schema/device-type";
+import { DeviceSystem } from "@/schema/device-system";
 
 interface CollectProp { };
 

@@ -7,7 +7,6 @@ import { FetchState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchButtonProp } from './prop';
 
-const { Group } = Button;
 const {
     useFetch,
     useServerCloud,
@@ -15,6 +14,7 @@ const {
     fetchButtonText,
     cloudButtonText
 } = helper.readConf()!;
+const { Group } = Button;
 
 /**
  * 按钮区

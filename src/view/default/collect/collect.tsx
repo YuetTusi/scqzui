@@ -147,8 +147,8 @@ const Collect: FC<CollectProp> = ({ }) => {
             message.destroy();
             message.info({
                 content: useBcp
-                    ? `未设置采集单位，请在「软件设置」→「采集单位」中配置`
-                    : `未设置采集单位，请在「软件设置」→「采集单位管理」中配置`
+                    ? '未设置采集单位，请在「软件设置」→「采集单位」中配置'
+                    : '未设置采集单位，请在「软件设置」→「采集单位管理」中配置'
             });
             return false;
         }
