@@ -728,6 +728,12 @@ span.tmpzTreeMove_arrow {
 				&.app_no_6c4724df_ico_close {
 					background-image: url(${require('./images/ztree/app/no_6c4724df.png')}) !important;
 				}
+				//孔夫子旧书网
+				&.app_no_83b33cc33_ico_docu,
+				&.app_no_83b33cc33_ico_open,
+				&.app_no_83b33cc33_ico_close {
+					background-image: url(${require('./images/ztree/app/no_83b33cc33.png')}) !important;
+				}
 				//1药网
 				&.app_no_6eb19b588_ico_docu,
 				&.app_no_6eb19b588_ico_open,
@@ -1933,6 +1939,24 @@ span.tmpzTreeMove_arrow {
 				&.app_no_439b85b3_ico_open,
 				&.app_no_439b85b3_ico_close {
 					background-image: url(${require('./images/ztree/app/no_439b85b3.png')}) !important;
+				}
+				//伊对
+				&.app_no_d06d6474_ico_docu,
+				&.app_no_d06d6474_ico_open,
+				&.app_no_d06d6474_ico_close {
+					background-image: url(${require('./images/ztree/app/no_d06d6474.png')}) !important;
+				}
+				//Bib
+				&.app_no_e70473d2_ico_docu,
+				&.app_no_e70473d2_ico_open,
+				&.app_no_e70473d2_ico_close {
+					background-image: url(${require('./images/ztree/app/no_e70473d2.png')}) !important;
+				}
+				//陌单
+				&.app_no_398cce84_ico_docu,
+				&.app_no_398cce84_ico_open,
+				&.app_no_398cce84_ico_close {
+					background-image: url(${require('./images/ztree/app/no_398cce84.png')}) !important;
 				}
 			}
 		}

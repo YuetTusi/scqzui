@@ -637,8 +637,13 @@ const helper = {
             ? join(cwd, 'data/check.json')
             : join(cwd, 'resources/config/check.json');
         try {
-            const prev = await readFilePromise(target, { encoding: 'utf8' });
-            return JSON.parse(prev);
+            const exist = await this.existFile(target);
+            if (exist) {
+                const prev = await readFilePromise(target, { encoding: 'utf8' });
+                return JSON.parse(prev);
+            } else {
+                return null;
+            }
         } catch (error) {
             log.error(`读取check.json失败：${error.message}`);
             return null;
