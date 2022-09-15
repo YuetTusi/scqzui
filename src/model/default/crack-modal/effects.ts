@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import { send } from '@/utils/tcp-server';
-import CommandType, { SocketType } from '@/schema/command';
+import { CommandType, SocketType } from '@/schema/command';
 
 export default {
     /**

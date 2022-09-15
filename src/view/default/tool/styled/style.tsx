@@ -19,6 +19,10 @@ export const SortBox = styled.div`
     border-radius: ${props => props.theme['border-radius-base']};
     background-color: #141414;
 
+    &:last-child{
+        margin-bottom: 0;
+    }
+
     &>.caption{
         /* color:${props => props.theme['primary-color']}; */
     }
@@ -26,7 +30,7 @@ export const SortBox = styled.div`
     .t-row{
         display: flex;
         flex-wrap:wrap;
-        padding-bottom: 10px;
+        padding-bottom: 0;
     }
 
     .t-button{

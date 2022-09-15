@@ -9,7 +9,7 @@ import { LocalStoreKey } from '@/utils/local-store';
 import TipType from '@/schema/tip-type';
 import { TableName } from '@/schema/table-name';
 import { FetchLog } from '@/schema/fetch-log';
-import CommandType, { SocketType, Command } from '@/schema/command';
+import { CommandType, SocketType, Command } from '@/schema/command';
 import { ParseState } from '@/schema/device-state';
 import {
     deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,

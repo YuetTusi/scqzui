@@ -13,7 +13,7 @@ import { send } from '@/utils/tcp-server';
 import { caseStore } from "@/utils/local-store";
 import inputPassword from '@/component/dialog/input-password';
 import { DatapassParam } from '@/component/dialog/input-password/prop';
-import CommandType, { Command, SocketType } from "@/schema/command";
+import Command, { CommandType, SocketType } from "@/schema/command";
 import DeviceType from "@/schema/device-type";
 import { FetchState, ParseState } from "@/schema/device-state";
 import { FetchProgress } from "@/schema/fetch-record";

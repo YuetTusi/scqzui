@@ -27,7 +27,6 @@ const isDev = env['NODE_ENV'] === 'development';
 const cwd = process.cwd();
 const appPath = app.getAppPath();
 const server = express();
-
 const appName = helper.readAppName();
 let httpPort = 9900;
 let config: Conf | null = null;
@@ -81,6 +80,8 @@ if (!helper.useGPURender()) {
     app.commandLine.appendSwitch('disable-software-rasterizer');
     app.commandLine.appendSwitch('--no-sandbox');
     app.disableHardwareAcceleration();
+    log.info('禁用GPU渲染');
+} else {
     log.info('启用GPU渲染');
 }
 

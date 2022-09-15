@@ -1,9 +1,8 @@
-import { ipcRenderer } from 'electron';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import { TableName } from '@/schema/table-name';
 import { TraceUser } from '@/schema/trace-user';
-import CommandType, { SocketType } from '@/schema/command';
+import { CommandType, SocketType } from '@/schema/command';
 import logger from '@/utils/log';
 import { send } from '@/utils/tcp-server';
 import { helper } from '@/utils/helper';

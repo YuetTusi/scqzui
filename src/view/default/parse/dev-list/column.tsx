@@ -25,7 +25,7 @@ import { DataMode } from '@/schema/data-mode';
 import { TableName } from '@/schema/table-name';
 import CaseInfo from '@/schema/case-info';
 import { ParseCategory } from '@/schema/parse-detail';
-import CommandType, { SocketType } from '@/schema/command';
+import { CommandType, SocketType } from '@/schema/command';
 import { AppJson } from '@/schema/app-json';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';

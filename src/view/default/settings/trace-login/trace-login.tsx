@@ -15,7 +15,7 @@ import { StateTree } from '@/type/model';
 import { LoginState, TraceLoginState } from '@/model/default/trace-login';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
-import CommandType, { SocketType } from '@/schema/command';
+import { CommandType, SocketType } from '@/schema/command';
 import { MainBox } from '../styled/sub-layout';
 import LoginForm from './login-form';
 import { FormValue } from './login-form/prop';

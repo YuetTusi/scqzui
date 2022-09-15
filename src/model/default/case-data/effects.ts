@@ -1,6 +1,5 @@
 import { EffectsCommandMap } from "dva";
 import { AnyAction } from 'redux';
-import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Modal from 'antd/lib/modal';
 import log from '@/utils/log';
 import { getDb } from '@/utils/db';

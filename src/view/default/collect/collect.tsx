@@ -16,7 +16,7 @@ import { FetchData } from '@/schema/fetch-data';
 import { DeviceType } from '@/schema/device-type';
 import { TableName } from '@/schema/table-name';
 import { DataMode } from '@/schema/data-mode';
-import CommandType, { SocketType } from '@/schema/command';
+import { CommandType, SocketType } from '@/schema/command';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
@@ -181,7 +181,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                 const fetchData = await getDb<FetchData>(TableName.CheckData)
                     .findOne({ serial });
                 if (fetchData === null) {
-                    //todo:完成点验功能后打开：
+                    //TODO:完成点验功能后打开：
                     setCheckInputModalVisible(true);
                 } else {
                     //note:如果数据库中存在此设备，直接走采集流程
@@ -225,7 +225,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     const startFetchHandle = (fetchData: FetchData) => {
         setNormalInputModal(false);
         setServerCloudModalVisible(false);
-        //todo: 关闭另两个输入框
+        //TODO: 关闭另两个输入框
 
         if (fetchData.mode === DataMode.ServerCloud) {
             //#云取证把应用数据赋值给cloudCodeModal模型，以接收验证码详情

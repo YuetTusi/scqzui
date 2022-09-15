@@ -14,7 +14,7 @@ import { TableName } from '@/schema/table-name';
 import { ImportTypes } from '@/schema/import-type';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchState, ParseState } from '@/schema/device-state';
-import CommandType, { SocketType } from '@/schema/command';
+import { CommandType, SocketType } from '@/schema/command';
 import { ParseCategory } from '@/schema/parse-detail';
 import { FormValue } from '@/view/default/tool/import-data-modal/prop';
 

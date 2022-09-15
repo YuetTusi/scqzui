@@ -19,7 +19,7 @@ export default {
     /**
      * 退出前检测采集&解析状态
      */
-    *fetchingAndParsingState({ payload }: AnyAction, { }: EffectsCommandMap) {
+    *fetchingAndParsingState() {
 
         let question = `确认退出吗？`;
         Modal.destroyAll();

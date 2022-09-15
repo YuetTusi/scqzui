@@ -16,7 +16,7 @@ import { helper } from '@/utils/helper';
 import { InvalidOAID } from '@/utils/regex';
 import ButtonList from './button-list';
 import InstallTab from './install-tab';
-import CommandType, { SocketType } from '@/schema/command';
+import { CommandType, SocketType } from '@/schema/command';
 import { send } from '@/utils/tcp-server';
 import Modal from 'antd/lib/modal';
 import DeviceInfo from '@/component/device-info';

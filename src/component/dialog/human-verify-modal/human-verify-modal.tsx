@@ -5,7 +5,7 @@ import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import { send } from '@/utils/tcp-server';
-import CommandType, { SocketType } from '@/schema/command';
+import { CommandType, SocketType } from '@/schema/command';
 import { HumanVerify } from '@/schema/human-verify';
 import JigsawCheck from './jigsaw-check';
 // import WordSelect from '../WordSelect';

@@ -26,7 +26,7 @@ import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
 import { CaseInfo } from '@/schema/case-info';
 import { ParseCategory } from '@/schema/parse-detail';
-import CommandType, { SocketType } from '@/schema/command';
+import { CommandType, SocketType } from '@/schema/command';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';

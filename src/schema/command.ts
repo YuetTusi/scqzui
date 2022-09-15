@@ -198,4 +198,4 @@ interface Command<T = any> {
 
 export { Command, CommandType, SocketType };
 
-export default CommandType;
+export default Command;

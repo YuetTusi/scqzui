@@ -8,7 +8,7 @@ import msgBox from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
-import CommandType, { SocketType } from '@/schema/command';
+import { CommandType, SocketType } from '@/schema/command';
 import {
 	CaptchaMsg,
 	CloudModalPressAction,
