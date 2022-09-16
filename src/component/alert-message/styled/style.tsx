@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const AlartMessageBox = styled.div`
     position: absolute;
-	top: -24px;
+	top: 0;
 	right: 180px;
 	z-index: 99;
 

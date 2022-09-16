@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import { ipcRenderer } from 'electron';
+import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined'
 import SoundOutlined from '@ant-design/icons/SoundOutlined'
@@ -9,7 +10,6 @@ import { Prop } from './prop';
 
 /**
  * 全局消息组件
- * 仓库数据使用DashboardModel
  */
 const AlartMessage: FC<Prop> = () => {
 
@@ -17,6 +17,12 @@ const AlartMessage: FC<Prop> = () => {
     const { alertMessage } = useSelector<StateTree, AlartMessageState>(state =>
         state.alartMessage
     );
+
+    useEffect(() => {
+        if (alertMessage.length === 0) {
+            ipcRenderer.send('report-export-close');
+        }
+    }, [alertMessage]);
 
     const closeHandle = (id: string) =>
         dispatch({ type: 'alartMessage/removeAlertMessage', payload: id });

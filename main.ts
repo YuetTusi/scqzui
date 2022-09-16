@@ -607,6 +607,16 @@ ipcMain.on('report-export-finish', (event: IpcMainEvent,
     }
 });
 
+//关闭导出报告
+ipcMain.on('report-export-close', (event: IpcMainEvent) => {
+    event.preventDefault();
+    mainWindow!.setProgressBar(0);
+    if (reportWindow !== null) {
+        reportWindow.destroy();
+        reportWindow = null;
+    }
+});
+
 //打开开发者工具
 ipcMain.on('dev-tool', () => {
     if (mainWindow !== null) {

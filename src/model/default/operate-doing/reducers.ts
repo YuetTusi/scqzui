@@ -42,5 +42,12 @@ export default {
     setExportingDeviceId(state: OperateDoingState, { payload }: AnyAction) {
         state.exportingDeviceId = payload;
         return state;
+    },
+    /**
+     * 清空正在导出的设备id
+     */
+    clearExportingDeviceId(state: OperateDoingState, { }: AnyAction) {
+        state.exportingDeviceId = [];
+        return state;
     }
 }
