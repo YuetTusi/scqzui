@@ -1,14 +1,25 @@
+import { join } from 'path';
+import { execFile } from 'child_process';
+import { ipcRenderer, OpenDialogReturnValue, shell } from 'electron';
 import React, { MouseEvent } from "react";
 import { Dispatch } from "dva";
-import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined'
+import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
+import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined';
 import { ColumnsType } from "antd/lib/table";
 import MoreOutlined from '@ant-design/icons/MoreOutlined';
 import Modal from 'antd/lib/modal';
 import { helper } from '@/utils/helper';
 import { QuickEvent } from "@/schema/quick-event";
 import { NowrapText } from './styled/style';
+import Popover from "antd/lib/popover";
+import Button from "antd/lib/button";
+import message from 'antd/lib/message';
+import { getDb } from '@/utils/db';
+import { TableName } from '@/schema/table-name';
+import { QuickRecord } from '@/schema/quick-record';
 
-const { caseText, fetchText } = helper.readConf()!;
+const cwd = process.cwd();
+const { caseText, fetchText, devText } = helper.readConf()!;
 
 const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEvent> => {
 
@@ -86,90 +97,97 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
             key: 'more',
             align: 'center',
             width: 10,
-            render: () => <MoreOutlined style={{ cursor: 'not-allowed' }} />
-            // render: (id: string, { eventPath, eventName }: QuickEvent) => <Popover
-            //     zIndex={9}
-            //     trigger="click"
-            //     content={
-            //         <Button
-            //             onClick={(event: MouseEvent<HTMLButtonElement>) => {
-            //                 event.stopPropagation();
-            //                 Modal.confirm({
-            //                     title: '批量生成报告',
-            //                     content: '所需时间较长，确定批量生成报告吗？',
-            //                     okText: '是',
-            //                     cancelText: '否',
-            //                     centered: true,
-            //                     async onOk() {
-            //                         const db = getDb<QuickRecord>(TableName.QuickRecord);
-            //                         const exePath = join(cwd, '../tools/CreateReport');
-            //                         const nextId = helper.newId();
-            //                         try {
-            //                             const events = await db.find({ caseId: id });
-            //                             if (events.length === 0) {
-            //                                 message.destroy();
-            //                                 message.info(`无${devText ?? '设备'}数据`);
-            //                             } else {
-            //                                 dispatch({
-            //                                     type: 'alartMessage/addAlertMessage',
-            //                                     payload: {
-            //                                         id: nextId,
-            //                                         msg: `正在批量生成「${`${eventName.split('_')[0]}`}」报告`
-            //                                     }
-            //                                 });
-            //                                 dispatch({
-            //                                     type: 'operateDoing/setCreatingDeviceId',
-            //                                     payload: events.map(item => item._id)
-            //                                 });
-            //                                 const proc = execFile(
-            //                                     join(exePath, 'create_report.exe'),
-            //                                     [join(eventPath, eventName), events.map(item => item.phonePath).join('|')]
-            //                                 );
-            //                                 proc.once('error', () => {
-            //                                     message.destroy();
-            //                                     notification.error({
-            //                                         type: 'error',
-            //                                         message: '报告生成失败',
-            //                                         description: '批量生成报告失败',
-            //                                         duration: 0
-            //                                     });
-            //                                     dispatch({
-            //                                         type: 'alartMessage/removeAlertMessage',
-            //                                         payload: nextId
-            //                                     });
-            //                                     dispatch({
-            //                                         type: 'operateDoing/clearCreatingDeviceId'
-            //                                     });
-            //                                 });
-            //                                 proc.once('exit', () => {
-            //                                     message.destroy();
-            //                                     notification.success({
-            //                                         type: 'success',
-            //                                         message: '报告批量生成成功',
-            //                                         description: `「${`${eventName.split('_')[0]}`}」报告生成成功`,
-            //                                         duration: 0
-            //                                     });
-            //                                     dispatch({
-            //                                         type: 'alartMessage/removeAlertMessage',
-            //                                         payload: nextId
-            //                                     });
-            //                                     dispatch({
-            //                                         type: 'operateDoing/clearCreatingDeviceId'
-            //                                     });
-            //                                     ipcRenderer.send('show-progress', false);
-            //                                 });
-            //                             }
-            //                         } catch (error) {
-            //                             log.error(`批量生成报告失败 @view/default/quick/quick-event-list/column.tsx: ${error.message}`);
-            //                         }
-            //                     }
-            //                 });
-            //             }}
-            //             type="primary"
-            //             size="small">生成报告</Button>
-            //     }>
-            //     <MoreOutlined style={{ color: '#0fb9b1', fontWeight: 'bold' }} />
-            // </Popover>
+            // render: () => <MoreOutlined style={{ cursor: 'not-allowed' }} />
+            render: (id: string, { eventPath, eventName, _id }: QuickEvent) => <Popover
+                zIndex={9}
+                trigger="click"
+                content={
+                    <Button
+                        onClick={async (event: MouseEvent<HTMLButtonElement>) => {
+                            const db = getDb<QuickRecord>(TableName.QuickRecord);
+                            event.stopPropagation();
+                            const exeDir = join(cwd, '../tools/create_excel_report');
+                            let recList: QuickRecord[] = [];
+                            try {
+                                recList = await db.find({ caseId: _id });
+                            } catch (error) {
+                                console.log(error);
+                            }
+
+                            if (recList.length === 0) {
+                                message.destroy();
+                                message.info(`查无${devText ?? '设备'}数据`);
+                                return;
+                            }
+
+                            const selectVal: OpenDialogReturnValue = await ipcRenderer.invoke('open-dialog', {
+                                title: '请选择目录',
+                                properties: ['openDirectory', 'createDirectory']
+                            });
+
+                            if (selectVal.filePaths && selectVal.filePaths.length > 0) {
+                                const [saveTarget] = selectVal.filePaths; //用户所选目标目录
+                                const casePath = join(eventPath, eventName);
+
+                                const handle = Modal.info({
+                                    title: '导出',
+                                    content: '正在导出Excel报表，请稍等...',
+                                    okText: '确定',
+                                    centered: true,
+                                    icon: <CheckCircleOutlined />,
+                                    okButtonProps: { disabled: true }
+                                });
+
+                                const proc = execFile(join(exeDir, 'create_excel_report.exe'),
+                                    [
+                                        casePath,
+                                        recList.map(item => item.phonePath).join('|'),
+                                        saveTarget,
+                                        '1'
+                                    ], {
+                                    cwd: exeDir,
+                                    windowsHide: true
+                                });
+                                proc.once('error', () => {
+                                    handle.update({
+                                        title: '导出',
+                                        content: `报表导出失败`,
+                                        okText: '确定',
+                                        centered: true,
+                                        okButtonProps: { disabled: false }
+                                    });
+                                });
+                                proc.once('exit', () => {
+                                    handle.update({
+                                        onOk() {
+                                            shell.showItemInFolder(join(saveTarget, '违规检测结果报告.xlsx'));
+                                        },
+                                        title: '导出',
+                                        content: `报表导出成功`,
+                                        okText: '确定',
+                                        centered: true,
+                                        okButtonProps: { disabled: false }
+                                    });
+                                });
+                                proc.once('close', () => {
+                                    handle.update({
+                                        onOk() {
+                                            shell.showItemInFolder(join(saveTarget, '违规检测结果报告.xlsx'));
+                                        },
+                                        title: '导出',
+                                        content: `报表导出成功`,
+                                        okText: '确定',
+                                        centered: true,
+                                        okButtonProps: { disabled: false }
+                                    });
+                                });
+                            }
+                        }}
+                        type="primary"
+                        size="small">导出报表</Button>
+                }>
+                <MoreOutlined style={{ color: '#0fb9b1', fontWeight: 'bold' }} />
+            </Popover>
         }
     ];
 }

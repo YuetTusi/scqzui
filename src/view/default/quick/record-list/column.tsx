@@ -348,11 +348,10 @@ export function getColumns(
                         }}
                         disabled={
                             creatingDeviceId.some((i) => i === record._id)
-                            || exportingDeviceId.length !== 0
                         }
                         type="primary">生成</Button>
                     <Button
-                        disabled={parseButtonDisable(record.parseState!)}
+                        disabled={parseButtonDisable(record.parseState!) || exportingDeviceId.length !== 0}
                         onClick={(event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
                             exportReportClick(record);
