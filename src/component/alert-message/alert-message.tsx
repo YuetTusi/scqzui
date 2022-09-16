@@ -20,6 +20,7 @@ const AlartMessage: FC<Prop> = () => {
 
     useEffect(() => {
         if (alertMessage.length === 0) {
+            dispatch({ type: 'operateDoing/clearExportingDeviceId' });
             ipcRenderer.send('report-export-close');
         }
     }, [alertMessage]);
