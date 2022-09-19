@@ -77,7 +77,7 @@ const HitChartModal: FC<HitChartModalProp> = ({
                     top: 0,
                     bottom: 0,
                     pageTextStyle: {
-                        color: '#fff'
+                        color: '#ffffff'
                     },
                     formatter: (name: string) => {
                         const next = (data?.items ?? []).find((item: any) => item.name === name);

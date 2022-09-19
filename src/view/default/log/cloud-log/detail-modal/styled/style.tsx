@@ -35,7 +35,7 @@ export const DetailModalBox = styled.div`
 
 			label {
 				flex: none;
-				color: #fff;
+				color: #ffffffd9;
 				align-self: center;
 			}
 

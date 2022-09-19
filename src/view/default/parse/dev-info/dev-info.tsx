@@ -18,7 +18,10 @@ import { InfoBox } from './styled/style';
 import { ClickType, DevInfoProp } from './prop';
 
 const { Group } = Button;
-const { useBcp, useTraceLogin, caseText, devText, fetchText, parseText } = helper.readConf()!;
+const {
+    useBcp, useTraceLogin, caseText, devText,
+    fetchText, parseText
+} = helper.readConf()!;
 
 /**
  * 功能按钮禁用状态

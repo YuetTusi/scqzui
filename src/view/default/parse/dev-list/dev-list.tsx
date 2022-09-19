@@ -97,10 +97,12 @@ const DevList: FC<DevListProp> = ({ }) => {
     const onDevButtonClick = (data: DeviceType, fn: ClickType) => {
         switch (fn) {
             case ClickType.Edit:
+                //编辑
                 currentDev.current = data;
                 setEditDevModalVisible(true);
                 break;
             case ClickType.Delete:
+                //删除
                 const [name] = data.mobileName!.split('_');
                 Modal.confirm({
                     onOk() {
@@ -115,22 +117,26 @@ const DevList: FC<DevListProp> = ({ }) => {
                 });
                 break;
             case ClickType.GenerateBCP:
+                //BCP生成
                 dispatch({ type: 'parseDev/gotoBcp', payload: { caseId, deviceId: data._id } });
                 break;
             case ClickType.ExportBCP:
+                //BCP导出
                 dispatch({ type: 'exportBcpModal/setIsBatch', payload: false });
                 dispatch({ type: 'exportBcpModal/setExportBcpDevice', payload: data });
                 setExportBcpModalVisible(true);
                 break;
             case ClickType.CloudSearch:
+                //云点验查询
                 dispatch({ type: 'parseDev/gotoTrail', payload: { caseId, deviceId: data._id } });
                 break;
             case ClickType.Hit:
+                //命中统计
                 currentDev.current = data;
                 setHitChartModalVisible(true);
                 break;
             default:
-                console.warn('未知Click类型:', fn);
+                console.warn(`未知Click类型:${fn}`);
                 break;
         }
     };

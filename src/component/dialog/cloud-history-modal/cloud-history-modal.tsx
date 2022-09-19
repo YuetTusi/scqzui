@@ -141,7 +141,7 @@ const CloudHistoryModal: FC<CloudHistoryModalProp> = ({
                             <label>
                                 【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
                             </label>
-                            <span style={{ color: '#fff' }}>{item.content}</span>
+                            <span style={{ color: '#ffffffd9' }}>{item.content}</span>
                         </li>;
                     case SmsMessageType.Warning:
                         return <li key={`L_${i}`} className="history-list-item">

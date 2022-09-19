@@ -1,4 +1,3 @@
-import color2 from 'tinycolor2';
 import styled from 'styled-components';
 
 const FetchRecordBox = styled.div`

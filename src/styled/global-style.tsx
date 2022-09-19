@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import theme from '../../theme/cyan.json';
 
 /**
  * 定义全局样式
@@ -51,13 +52,13 @@ const GlobalStyle = createGlobalStyle`
     }
 
 	.primary-color{
-		color:#0fb9b1;
+		color:${theme['primary-color'] ?? '#0fb9b1'};
 	}
 	.cloud-color,.warn-color{
-		color:#f9ca24;
+		color:${theme['warn-color'] ?? '#f9ca24'};
 	}
 	.error-color{
-		color:#db2222;
+		color:${theme['error-color'] ?? '#ff3333'};
 	}
 
 	.ant-empty-description{
@@ -92,7 +93,7 @@ const GlobalStyle = createGlobalStyle`
         left: 0;
         right: 0;
         bottom: 0;
-        background: #0fb9b1;
+        background: ${theme['primary-color'] ?? '#0fb9b1'};
         border-radius: 2px;
         -webkit-transform: scaleX(0);
         transform: scaleX(0);
@@ -170,7 +171,7 @@ span.tmpzTreeMove_arrow {
 		.ext {
 			display: inline-block;
 			cursor: pointer !important;
-			color: #f9ca24;
+			color: ${theme['warn-color'] ?? '#f9ca24'};
 			font-weight: bold;
 			vertical-align: bottom;
 		}
@@ -181,7 +182,7 @@ span.tmpzTreeMove_arrow {
 			text-overflow: ellipsis;
 			font-style: normal;
 			font-weight: bold;
-			color: #0fb9b1;
+			color: ${theme['primary-color'] ?? '#0fb9b1'};
 			vertical-align: middle;
 			& > span {
 				font-weight: normal;
