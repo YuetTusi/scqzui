@@ -10,10 +10,10 @@ import { OperateDoingState } from '@/model/default/operate-doing';
 import { QuickRecordListState } from '@/model/default/quick-record-list';
 import { QuickRecord } from '@/schema/quick-record';
 import RecordInfo from '../record-info';
+import HitChartModal from '../hit-chart-modal';
 import { ClickType } from '../record-info/prop';
 import EditEventRecModal from '../edit-event-rec-modal';
 import ExportReportModal from '../export-report-modal';
-import HitChartModal from '../hit-chart-modal';
 import { getColumns } from './column';
 import { RecordListProp } from './prop';
 

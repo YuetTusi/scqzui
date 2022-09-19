@@ -8,7 +8,7 @@ import { useUnit, useDstUnit } from './unit';
 import { useAppConfig } from './app-config';
 import { useManufacturer } from './manufacturer';
 import { useQuickEvent } from './quick-event';
-import { useQuickHitCount, useQuickHit } from './quick-hit';
+import { useQuickHitCount, useQuickHit, useHitCount, useHitData } from './hit-data';
 import { useDestroy } from './destroy';
 import { useKeyboardEvent } from './keyboard';
 
@@ -28,6 +28,8 @@ export {
     useQuickEvent,
     useQuickHitCount,
     useQuickHit,
+    useHitCount,
+    useHitData,
     useDestroy,
     useKeyboardEvent
 };

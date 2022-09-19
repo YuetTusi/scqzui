@@ -4,6 +4,7 @@ import { useDispatch, useSelector, useLocation } from 'dva';
 import Table from 'antd/lib/table';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
+import { useDestroy } from '@/hook';
 import { StateTree } from '@/type/model';
 import { DeviceType } from '@/schema/device-type';
 import { ParseDevState } from '@/model/default/parse-dev';
@@ -14,6 +15,7 @@ import { ClickType } from '../dev-info/prop';
 import EditDevModal from '../edit-dev-modal';
 import ExportReportModal from '../export-report-modal';
 import ExportBcpModal from '../export-bcp-modal';
+import HitChartModal from '../hit-chart-modal';
 import { getDevColumns } from './column';
 import { DevListProp } from './prop';
 
@@ -45,6 +47,12 @@ const DevList: FC<DevListProp> = ({ }) => {
     const [editDevModalVisbile, setEditDevModalVisible] = useState<boolean>(false);
     const [exportReportModalVisible, setExportReportModalVisible] = useState<boolean>(false);
     const [exportBcpModalVisible, setExportBcpModalVisible] = useState<boolean>(false);
+    const [hitChartModalVisible, setHitChartModalVisible] = useState<boolean>(false);
+
+    useDestroy(() => {
+        dispatch({ type: 'parseDev/setCaseId', payload: undefined });
+        dispatch({ type: 'parseDev/setExpandedRowKeys', payload: [] });
+    });
 
     /**
      * 查询案件下设备
@@ -61,13 +69,6 @@ const DevList: FC<DevListProp> = ({ }) => {
             }
         });
     }
-
-    useEffect(() => {
-        return () => {
-            dispatch({ type: 'parseDev/setCaseId', payload: undefined });
-            dispatch({ type: 'parseDev/setExpandedRowKeys', payload: [] });
-        }
-    }, []);
 
     useEffect(() => {
         const params = new URLSearchParams(search);
@@ -123,6 +124,10 @@ const DevList: FC<DevListProp> = ({ }) => {
                 break;
             case ClickType.CloudSearch:
                 dispatch({ type: 'parseDev/gotoTrail', payload: { caseId, deviceId: data._id } });
+                break;
+            case ClickType.Hit:
+                currentDev.current = data;
+                setHitChartModalVisible(true);
                 break;
             default:
                 console.warn('未知Click类型:', fn);
@@ -216,6 +221,12 @@ const DevList: FC<DevListProp> = ({ }) => {
             visible={exportBcpModalVisible}
             okHandle={exportBcpHandle}
             cancelHandle={() => setExportBcpModalVisible(false)}
+        />
+        <HitChartModal
+            visible={hitChartModalVisible}
+            record={currentDev.current!}
+            exportHandle={() => setHitChartModalVisible(false)}
+            closeHandle={() => setHitChartModalVisible(false)}
         />
     </>;
 };

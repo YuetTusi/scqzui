@@ -5,7 +5,7 @@ import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
 import Badge from 'antd/lib/badge';
 import Button from 'antd/lib/button';
-import { useCase } from '@/hook';
+import { useCase, useHitCount } from '@/hook';
 import { helper } from '@/utils/helper';
 import Auth from '@/component/auth';
 import { Split } from '@/component/style-tool';
@@ -127,6 +127,7 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
 
     const { caseId, parseState } = data;
     const caseData = useCase(caseId);
+    const hitCount = useHitCount(data);
 
     return <InfoBox>
         <div className="btn-bar">
@@ -146,6 +147,13 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                             导出BCP
                         </Button>
                     </Auth>
+                </Group>
+                <Group size="small" style={{ marginLeft: '10px' }}>
+                    <Button
+                        onClick={() => onButtonClick(data, ClickType.Hit)}
+                        type="primary">
+                        {`命中统计 (${hitCount})`}
+                    </Button>
                     <Auth deny={!useTraceLogin}>
                         <CloudSearchButton
                             device={data}

@@ -37,7 +37,11 @@ enum ClickType {
     /**
      * 删除
      */
-    Delete
+    Delete,
+    /**
+     * 命中数量
+     */
+    Hit
 }
 
 export { DevInfoProp, ClickType };

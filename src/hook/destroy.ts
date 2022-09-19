@@ -9,5 +9,5 @@ export function useDestroy(handle: Function) {
         return () => {
             handle();
         }
-    });
+    }, []);
 }
