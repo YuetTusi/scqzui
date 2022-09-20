@@ -2,6 +2,7 @@ import { AnyAction } from 'redux';
 import { helper } from '@/utils/helper';
 import DeviceType from '@/schema/device-type';
 import { TipType } from '@/schema/tip-type';
+import { DeviceStoreState } from '.';
 
 /**
  * Reducers
@@ -11,7 +12,7 @@ export default {
      * 更新案件数据是否为空
      * @param {boolean} payload
      */
-    setEmptyCase(state: any, { payload }: AnyAction) {
+    setEmptyCase(state: DeviceStoreState, { payload }: AnyAction) {
         state.isEmptyCase = payload;
         return state;
     },
@@ -19,7 +20,7 @@ export default {
      * 覆盖设备列表
      * @param {DeviceType[]} payload
      */
-    setDeviceList(state: any, { payload }: AnyAction) {
+    setDeviceList(state: DeviceStoreState, { payload }: AnyAction) {
         state.deviceList = payload;
         return state;
     },
@@ -28,7 +29,7 @@ export default {
      * usb序号从1开始
      * @param {DeviceType} payload 设备(DeviceType)对象
      */
-    setDeviceToList(state: any, { payload }: AnyAction) {
+    setDeviceToList(state: DeviceStoreState, { payload }: AnyAction) {
         state.deviceList[payload.usb - 1] = {
             ...state.deviceList[payload.usb - 1],
             ...payload
@@ -76,7 +77,7 @@ export default {
      * @param {ReturnButton} payload.tipYesButton 是按钮
      * @param {ReturnButton} payload.tipNoButton 否按钮
      */
-    setTip(state: any, { payload }: AnyAction) {
+    setTip(state: DeviceStoreState, { payload }: AnyAction) {
         const {
             usb, tipType, tipTitle, tipContent,
             tipImage, tipYesButton, tipNoButton
@@ -93,7 +94,7 @@ export default {
      * 清除手机提示消息
      * @param {number} payload USB序号（从1开始）
      */
-    clearTip(state: any, { payload }: AnyAction) {
+    clearTip(state: DeviceStoreState, { payload }: AnyAction) {
         state.deviceList[payload - 1].tipType = TipType.Nothing;
         state.deviceList[payload - 1].tipTitle = undefined;
         state.deviceList[payload - 1].tipContent = undefined;

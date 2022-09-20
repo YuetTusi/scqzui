@@ -3,7 +3,6 @@ import { helper } from '@/utils/helper';
 import { DeviceType } from '@/schema/device-type';
 import reducers from './reducers';
 import effects from './effects';
-// import subscriptions from './subscriptions';
 
 //采集路数
 const { max } = helper.readConf()!;
@@ -13,7 +12,7 @@ const { max } = helper.readConf()!;
  */
 interface DeviceStoreState {
     /**
-     * 案件数据是否为空
+     * 案件是否为空
      */
     isEmptyCase: boolean,
     /**
@@ -30,7 +29,6 @@ let model: Model = {
     },
     reducers,
     effects
-    // subscriptions
 };
 
 export { DeviceStoreState };

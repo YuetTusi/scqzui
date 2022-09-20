@@ -4,7 +4,13 @@ import effects from './effects';
 import { Predict } from '@/view/default/case/ai-switch';
 
 interface AiSwitchState {
+    /**
+     * AI配置
+     */
     data: Predict[],
+    /**
+     * 相似度值(0~100)
+     */
     similarity: number
 }
 
