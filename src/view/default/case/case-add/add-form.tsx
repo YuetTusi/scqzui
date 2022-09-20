@@ -309,6 +309,7 @@ const AddForm: FC<FormProp> = ({
                                 }
                             ]}
                             name="officerNo"
+                            tooltip={`无相关人员请在「软件设置」→「${fetchText ?? '取证'}人员信息」中添加`}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
                             label={`${fetchText ?? '取证'}人员`}>
