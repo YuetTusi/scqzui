@@ -612,6 +612,7 @@ const ServerCloudModal: FC<Prop> = ({
 };
 ServerCloudModal.defaultProps = {
     visible: false,
+    device: null,
     saveHandle: () => { },
     cancelHandle: () => { }
 };

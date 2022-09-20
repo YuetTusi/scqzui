@@ -150,8 +150,6 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                             导出BCP
                         </Button>
                     </Auth>
-                </Group>
-                <Group size="small" style={{ marginLeft: '10px' }}>
                     <Button
                         onClick={() => onButtonClick(data, ClickType.Hit)}
                         type="primary">

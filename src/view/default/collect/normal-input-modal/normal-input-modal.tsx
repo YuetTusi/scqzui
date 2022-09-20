@@ -417,6 +417,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 };
 NormalInputModal.defaultProps = {
     visible: false,
+    device: null,
     saveHandle: () => { },
     cancelHandle: () => { }
 };
