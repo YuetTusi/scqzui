@@ -4,6 +4,8 @@ import { ipcRenderer, OpenDialogReturnValue, shell } from 'electron';
 import React, { MouseEvent } from "react";
 import { Dispatch } from "dva";
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
+import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
+import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined';
 import { ColumnsType } from "antd/lib/table";
 import MoreOutlined from '@ant-design/icons/MoreOutlined';
@@ -134,7 +136,7 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                                     content: '正在导出Excel报表，请稍等...',
                                     okText: '确定',
                                     centered: true,
-                                    icon: <CheckCircleOutlined />,
+                                    icon: <LoadingOutlined />,
                                     okButtonProps: { disabled: true }
                                 });
 
@@ -154,6 +156,7 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                                         content: `报表导出失败`,
                                         okText: '确定',
                                         centered: true,
+                                        icon: <CloseCircleOutlined />,
                                         okButtonProps: { disabled: false }
                                     });
                                 });
@@ -166,6 +169,7 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                                         content: `报表导出成功`,
                                         okText: '确定',
                                         centered: true,
+                                        icon: <CheckCircleOutlined />,
                                         okButtonProps: { disabled: false }
                                     });
                                 });
@@ -178,6 +182,7 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                                         content: `报表导出成功`,
                                         okText: '确定',
                                         centered: true,
+                                        icon: <CheckCircleOutlined />,
                                         okButtonProps: { disabled: false }
                                     });
                                 });
