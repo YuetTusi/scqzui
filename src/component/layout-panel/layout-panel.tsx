@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
+import { helper } from '@/utils/helper';
 import DragBar from '../drag-bar';
 import { Center } from './styled/center';
-import { helper } from '@/utils/helper';
 
 /**
  * @description 布局页

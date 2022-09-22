@@ -16,6 +16,7 @@ import { BackgroundBox, Header } from './styled/header';
 import { Center } from './styled/center';
 import { Footer } from './styled/footer';
 import DragBar from '../drag-bar';
+import { Copyright } from './copyright';
 import { BoardMenu, BoardMenuAction } from './board-menu';
 import SofthardwareModal from '../softhardware-modal';
 import InputHistoryModal from '../input-history-modal';
@@ -204,9 +205,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
                 {children}
             </Center>
             <Footer>
-                <div>
-                    Copyright © {new Date().getFullYear()} {manu}
-                </div>
+                <Copyright>{manu}</Copyright>
             </Footer>
         </BackgroundBox>
         <SofthardwareModal
