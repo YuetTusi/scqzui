@@ -2,7 +2,7 @@ import throttle from 'lodash/throttle';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
-import React, { FC, MouseEvent, useState, useCallback } from 'react';
+import React, { FC, MouseEvent, useEffect, useRef, useState, useCallback } from 'react';
 import AutoComplete from 'antd/lib/auto-complete';
 import FileSyncOutlined from '@ant-design/icons/FileSyncOutlined'
 import CloudSyncOutlined from '@ant-design/icons/CloudSyncOutlined'
@@ -11,7 +11,7 @@ import Button from 'antd/lib/button';
 import Checkbox from 'antd/lib/checkbox';
 import Form, { RuleObject } from 'antd/lib/form';
 import Empty from 'antd/lib/empty';
-import Input from 'antd/lib/input';
+import Input, { InputRef } from 'antd/lib/input';
 import InputNumber from 'antd/lib/input-number';
 import Select from 'antd/lib/select';
 import Tooltip from 'antd/lib/tooltip';
@@ -55,6 +55,7 @@ const AddForm: FC<FormProp> = ({
         useState<boolean>(false); //解析App选择框
     const [tokenAppSelectModalVisible, setTokenAppSelectModalVisible] =
         useState<boolean>(false); //云取证App选择框
+    const caseNameRef = useRef<InputRef>(null);
     const [sdCard, setSdCard] = sdCardState;
     const [hasReport, setHasReport] = hasReportState;
     const [autoParse, setAutoParse] = autoParseState;
@@ -64,8 +65,14 @@ const AddForm: FC<FormProp> = ({
     const [isAi, setIsAi] = isAiState;
     const [parseAppList, setParseAppList] = parseAppListState;
     const [tokenAppList, setTokenAppList] = tokenAppListState;
-    const historyUnitNames = UserHistory.get(HistoryKeys.HISTORY_UNITNAME)
+    const historyUnitNames = UserHistory.get(HistoryKeys.HISTORY_UNITNAME);
     const officer = useOfficerList();
+
+    useEffect(() => {
+        if (caseNameRef.current) {
+            caseNameRef.current.focus();
+        }
+    }, []);
 
     /**
      * 选择案件路径Handle
@@ -122,7 +129,7 @@ const AddForm: FC<FormProp> = ({
                     ]}
                         name="currentCaseName"
                         label={`${caseText ?? '案件'}名称`}>
-                        <Search maxLength={30} loading={isCheck} />
+                        <Search ref={caseNameRef} maxLength={30} loading={isCheck} />
                     </Item>
                 </Col>
             </Row>

@@ -1,14 +1,14 @@
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
-import React, { FC, MouseEvent, useEffect, useState } from 'react';
+import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import Col from 'antd/lib/col';
 import Row from 'antd/lib/row';
 import Button from 'antd/lib/button';
-import Input from 'antd/lib/input';
+import Input, { InputRef } from 'antd/lib/input';
 import InputNumber from 'antd/lib/input-number';
 import Form, { RuleObject } from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
@@ -36,11 +36,20 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         data
     } = useSelector<StateTree, EditQuickEventModalState>(state => state.editQuickEventModal);
     const [isCheck, setIsCheck] = useState(false);
+    const eventNameRef = useRef<InputRef>(null);
     const [formRef] = useForm<QuickEvent>();
-    let nameRules: any[] = [
+    let nameRules: RuleObject[] = [
         { required: true, message: `请填写${caseText ?? '案件'}名称` },
         { pattern: AllowCaseName, message: '不允许输入非法字符' }
     ];
+
+    useEffect(() => {
+        setTimeout(() => {
+            if (eventNameRef.current) {
+                eventNameRef.current.focus();
+            }
+        }, 0);
+    }, [eventNameRef.current]);
 
     useEffect(() => {
         const { setFieldsValue } = formRef;
@@ -55,14 +64,13 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
             formRef.resetFields();
             dispatch({ type: 'editQuickEventModal/setData', payload: undefined });
         }
-    }, [visible])
+    }, [visible]);
 
     /**
      * 取消
      */
-    const onCancel = () => {
+    const onCancel = () =>
         dispatch({ type: 'editQuickEventModal/setVisible', payload: false });
-    };
 
     /**
      * 保存
@@ -136,6 +144,11 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         }
     };
 
+    /**
+     * 起始时段联动校验
+     * @param rule 校验规则
+     * @param value 值
+     */
     const ruleToValid = async (rule: RuleObject, value: any) => {
         const from = formRef.getFieldValue('ruleFrom');
         if (from === value) {
@@ -177,7 +190,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
                 hasFeedback={true}
                 validateStatus={isCheck ? 'validating' : undefined}
                 tooltip={helper.isNullOrUndefined(data?._id) ? undefined : `不可修改${caseText ?? '案件'}名称`}>
-                <Input disabled={!helper.isNullOrUndefined(data?._id)} />
+                <Input ref={eventNameRef} disabled={!helper.isNullOrUndefined(data?._id)} />
             </Item>
             <Item
                 rules={[
