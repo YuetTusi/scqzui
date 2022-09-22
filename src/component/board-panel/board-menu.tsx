@@ -21,14 +21,41 @@ interface MenuProp {
 };
 
 enum BoardMenuAction {
+    /**
+     * 清输入历史记录
+     */
     HistoryClear,
+    /**
+     * 软硬件配置
+     */
     Manufaturer,
+    /**
+     * 开发者工具
+     */
     DevTool,
+    /**
+     * 采集日志
+     */
     FetchLog,
+    /**
+     * 解析日志
+     */
     ParseLog,
+    /**
+     * 云取日志
+     */
     CloudLog,
+    /**
+     * 旧nedb数据导入
+     */
     NedbImport,
+    /**
+     * 单位设置
+     */
     UnitClear,
+    /**
+     * 目的单位设置
+     */
     DstUnitClear
 }
 
