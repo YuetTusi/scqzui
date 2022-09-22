@@ -2,6 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Table from 'antd/lib/table';
 import { Key } from 'antd/lib/table/interface';
+import { useDestroy } from '@/hook';
 import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import { QuickEventListState } from '@/model/default/quick-event-list';
@@ -29,12 +30,7 @@ const QuickEventList: FC<EventListProp> = ({ detailHandle }) => {
         query(1, helper.PAGE_SIZE);
     }, []);
 
-    useEffect(() => {
-        return () => {
-            //退出清理选中行
-            dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [] });
-        }
-    }, []);
+    useDestroy(() => dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [] }));
 
     const query = (pageIndex: number, pageSize: number) =>
         dispatch({

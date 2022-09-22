@@ -18,7 +18,7 @@ import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
-import { useQuickEvent, useQuickHit } from '@/hook';
+import { useDestroy, useQuickEvent, useQuickHit } from '@/hook';
 import { helper } from '@/utils/helper';
 import { EmptyBox } from './styled/style';
 import { HitChartModalProp } from './prop';
@@ -50,14 +50,12 @@ const HitChartModal: FC<HitChartModalProp> = ({
     const eventData = useQuickEvent(record?.caseId!);
     const data = useQuickHit(record);
 
-    useEffect(() => {
-        return () => {
-            if (charts !== null) {
-                charts.dispose();
-                charts = null;
-            }
-        };
-    }, []);
+    useDestroy(() => {
+        if (charts !== null) {
+            charts.dispose();
+            charts = null;
+        }
+    });
 
     useEffect(() => {
         const $target = document.getElementById('hit-dom');

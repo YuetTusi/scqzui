@@ -2,6 +2,7 @@ import React, { FC, MouseEvent, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Empty from 'antd/lib/empty';
 import Progress from 'antd/lib/progress';
+import { useDestroy } from '@/hook';
 import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import { CheckingListState } from '@/model/default/checking-list';
@@ -107,12 +108,10 @@ const CheckingList: FC<{}> = () => {
         });
     }, [info, records]);
 
-    useEffect(() => {
-        return () => {
-            dispatch({ type: 'checkingList/setInfo', payload: [] });
-            dispatch({ type: 'checkingList/setRecord', payload: [] });
-        };
-    }, []);
+    useDestroy(() => {
+        dispatch({ type: 'checkingList/setInfo', payload: [] });
+        dispatch({ type: 'checkingList/setRecord', payload: [] });
+    });
 
     /**
      * 面板横向滚动控制

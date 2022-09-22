@@ -4,6 +4,7 @@ import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
 import { Key } from 'antd/lib/table/interface';
 import message from 'antd/lib/message';
+import { useDestroy } from '@/hook';
 import { StateTree } from '@/type/model';
 import { ParseCaseState } from '@/model/default/parse-case';
 import { OperateDoingState } from '@/model/default/operate-doing';
@@ -70,12 +71,7 @@ const CaseList: FC<CaseListProp> = () => {
         }
     }, []);
 
-    useEffect(() => {
-        return () => {
-            //退出清理选中行
-            dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [] });
-        }
-    }, []);
+    useDestroy(() => dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [] }));
 
     /**
      * 翻页Change

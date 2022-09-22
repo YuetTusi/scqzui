@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'dva';
 import Table from 'antd/lib/table';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
+import { useDestroy } from '@/hook';
 import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
 import { OperateDoingState } from '@/model/default/operate-doing';
@@ -44,13 +45,10 @@ const RecordList: FC<RecordListProp> = () => {
         query({ eventId }, pageIndex, 5);
     }, [eventId]);
 
-
-    useEffect(() => {
-        return () => {
-            dispatch({ type: 'quickRecordList/setEventId', payload: undefined });
-            dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [] });
-        };
-    }, []);
+    useDestroy(() => {
+        dispatch({ type: 'quickRecordList/setEventId', payload: undefined });
+        dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [] });
+    });
 
     /**
      * 查询

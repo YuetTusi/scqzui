@@ -47,7 +47,7 @@ export default {
             let count: number = yield call([db, 'count'], null);
             yield put({ type: 'device/setEmptyCase', payload: count === 0 });
         } catch (error) {
-            console.log(`查询案件非空失败 @model/dashboard/Device/effects/queryEmptyCase: ${error.message}`);
+            console.log(`查询案件非空失败: ${error.message}`);
             logger.error(`查询案件非空失败 @model/default/device/*queryEmptyCase: ${error.message}`);
         }
     },

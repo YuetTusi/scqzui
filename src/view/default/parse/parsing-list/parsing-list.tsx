@@ -2,6 +2,7 @@ import React, { FC, MouseEvent, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Empty from 'antd/lib/empty';
 import Progress from 'antd/lib/progress';
+import { useDestroy } from '@/hook';
 import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import { ParsingListState } from '@/model/default/parsing-list';
@@ -112,12 +113,10 @@ const ParsingList: FC<{}> = () => {
         });
     }, [info, devices]);
 
-    useEffect(() => {
-        return () => {
-            dispatch({ type: 'parsingList/setInfo', payload: [] });
-            dispatch({ type: 'parsingList/setDevice', payload: [] });
-        };
-    }, []);
+    useDestroy(() => {
+        dispatch({ type: 'parsingList/setInfo', payload: [] });
+        dispatch({ type: 'parsingList/setDevice', payload: [] });
+    });
 
     /**
      * 面板横向滚动控制

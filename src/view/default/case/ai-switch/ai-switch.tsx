@@ -7,6 +7,7 @@ import Row from 'antd/lib/row';
 import InputNumber from 'antd/lib/input-number';
 import Switch from 'antd/lib/switch';
 import Tooltip from 'antd/lib/tooltip';
+import { useDestroy } from '@/hook';
 import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
 import { AiSwitchState } from '@/model/default/ai-switch';
@@ -22,6 +23,8 @@ const AiSwitch: FC<AiSwitchProp> = ({ casePath }) => {
 
     const dispatch = useDispatch();
     const { data, similarity } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
+
+    useDestroy(() => dispatch({ type: 'aiSwitch/setData', payload: [] }));
 
     useEffect(() => {
         const tempAt = isDev
@@ -61,12 +64,6 @@ const AiSwitch: FC<AiSwitchProp> = ({ casePath }) => {
             }
         })();
     }, [casePath]);
-
-    useEffect(() => {
-        return () => {
-            dispatch({ type: 'aiSwitch/setData', payload: [] });
-        }
-    }, []);
 
     /**
      * AI开关Change
