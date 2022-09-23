@@ -6,7 +6,6 @@ import { AlartMessageInfo } from '@/component/alert-message/prop';
 import reducers from './reducers';
 import effects from './effects';
 import subscriptions from './subscriptions';
-`                                                                                                                                                                                                                                           `
 
 interface AppSetStore {
     /**

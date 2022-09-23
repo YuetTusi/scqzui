@@ -64,7 +64,6 @@ export default {
                 return item;
             }
         });
-        console.log(state.deviceList);
         return state;
     },
     /**

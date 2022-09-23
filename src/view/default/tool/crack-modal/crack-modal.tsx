@@ -162,7 +162,7 @@ const CrackModal: FC<CrackModalProp> = ({
                     </fieldset>
                 </div>
             </div>
-            <Form form={formRef} layout="horizontal" style={{ marginTop: '10px' }}>
+            <Form form={formRef} layout="horizontal" style={{ marginTop: '24px' }}>
                 <Item
                     rules={[
                         { required: true, message: '请选择破解设备' }

@@ -7,7 +7,7 @@ import { helper } from '@/utils/helper';
 import { CaseInfo } from "@/schema/case-info";
 import { TableName } from "@/schema/table-name";
 import { DeviceType } from "@/schema/device-type";
-import BcpEntity from '@/schema/bcp-entity';
+import { BcpEntity } from '@/schema/bcp-entity';
 
 export default {
     /**

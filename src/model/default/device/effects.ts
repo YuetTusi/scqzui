@@ -41,7 +41,7 @@ export default {
     /**
      * 查询案件数据是否为空
      */
-    *queryEmptyCase({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *queryEmptyCase({ }: AnyAction, { call, put }: EffectsCommandMap) {
         const db = getDb<CaseInfo>(TableName.Cases);
         try {
             let count: number = yield call([db, 'count'], null);

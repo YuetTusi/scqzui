@@ -8,9 +8,9 @@ import logger from '@/utils/log';
 export default {
 
     /**
- * 按设备id查询BCP记录
- * @param {string} payload 设备deviceId
- */
+     * 按设备id查询BCP记录
+     * @param {string} payload 设备deviceId
+     */
     *queryBcpHistory({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
         const db = getDb<BcpEntity>(TableName.CreateBcpHistory);
         try {

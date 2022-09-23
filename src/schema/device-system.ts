@@ -1,7 +1,7 @@
 /**
  * 操作系统枚举
  */
- enum DeviceSystem {
+enum DeviceSystem {
     /**
      * 安卓
      */

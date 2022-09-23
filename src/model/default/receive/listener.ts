@@ -226,12 +226,10 @@ export function extraMsg({ msg }: Command<{ usb: number, content: string }>, dis
  */
 export function parseCurinfo({ msg }: Command<ParseDetail[]>, dispatch: Dispatch<any>) {
 
-    console.log(msg);
-
     const grp = groupBy(msg, (item) => item.category);
     //按category分组，将`标准取证`和`快速点验`详情分别派发到对应的model中
     dispatch({ type: 'parsingList/setInfo', payload: grp[ParseCategory.Normal] ?? [] }); //标准
-    dispatch({ type: 'checkingList/setInfo', payload: grp[ParseCategory.Quick] ?? [] }); //快点
+    dispatch({ type: 'checkingList/setInfo', payload: grp[ParseCategory.Quick] ?? [] }); //快采
 }
 
 /**

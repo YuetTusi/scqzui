@@ -1,6 +1,6 @@
 import throttle from 'lodash/throttle';
-import React, { FC, useEffect, useRef } from 'react';
 import { faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
+import React, { FC, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useKeyboardEvent } from '@/hook';
 import Reading from '@/component/loading/reading';
@@ -60,8 +60,8 @@ const Guide: FC<{}> = () => {
     useKeyboardEvent('keydown', throttle(onPanelKeydown, 100));
 
     /**
-     * 向右滚动Click 
-     * @param to 滚动方向
+     * 左右滚动Click 
+     * @param to 方向
      */
     const onScrollToClick = (to: 'left' | 'right') => {
         if (scrollRef.current) {
