@@ -7,6 +7,9 @@ import { PredictComp, PredictJson } from '@/view/default/case/ai-switch/prop';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
+const tempAt = isDev
+    ? join(cwd, './data/predict.json')
+    : join(cwd, './resources/config/predict.json'); //模版路径
 
 export default {
 
@@ -15,9 +18,6 @@ export default {
      * @param {string} payload.casePath 案件路径 （如果案件下无predict.json，读取模版文件）
      */
     *readAiConfig({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const tempAt = isDev
-            ? join(cwd, './data/predict.json')
-            : join(cwd, './resources/config/predict.json'); //模版路径
         const { casePath } = payload as { casePath: string };
         try {
             const temp: PredictComp = yield call([helper, 'readJSONFile'], tempAt);

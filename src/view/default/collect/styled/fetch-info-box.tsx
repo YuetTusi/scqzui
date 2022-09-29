@@ -4,6 +4,7 @@ const FetchInfoBox = styled.div`
     cursor: pointer;
     font-size: 1.2rem;
     width: 280px;
+    text-align: center;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

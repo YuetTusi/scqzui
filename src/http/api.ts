@@ -51,7 +51,7 @@ function api(webContents: WebContents) {
         const deviceDb = getDb<DeviceType>(TableName.Devices);
         try {
             let [caseList, deviceList]: [CaseInfo[], DeviceType[]] = await Promise.all([
-                caseDb.find({}),
+                caseDb.find(null, 'createdAt', -1),
                 deviceDb.find({
                     $or: [{ parseState: ParseState.Finished }, { parseState: ParseState.Error }]
                 })
@@ -73,10 +73,12 @@ function api(webContents: WebContents) {
                         devices: nextDevices.filter((i) => i.caseId === current._id)
                     }
                 ]), [])
-                .map(({ _id, m_strCaseName, m_strCasePath, devices }) => ({
+                .map(({ _id, m_strCaseName, m_strCasePath, ruleFrom, ruleTo, devices }) => ({
                     id: _id,
                     m_strCaseName,
                     m_strCasePath,
+                    ruleFrom,
+                    ruleTo,
                     devices
                 }));
             res.json(nextCases)

@@ -189,9 +189,7 @@ app.whenReady()
         }
     });
 
-
-const instanceLock = app.requestSingleInstanceLock();
-if (!instanceLock) {
+if (!app.requestSingleInstanceLock()) {
     app.quit();
 } else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
