@@ -392,15 +392,15 @@ const Tool: FC<ToolProp> = () => {
                                 华为开机密码破解
                             </div>
                         </div>
+                        <div onClick={() => setAiSimilarModalVisible(true)} className="t-button">
+                            <div className="ico">
+                                <FontAwesomeIcon icon={faUsers} color="#fa983a" />
+                            </div>
+                            <div className="name">
+                                AI相似人像查看
+                            </div>
+                        </div>
                     </Auth>
-                    <div onClick={() => setAiSimilarModalVisible(true)} className="t-button">
-                        <div className="ico">
-                            <FontAwesomeIcon icon={faUsers} color="#fa983a" />
-                        </div>
-                        <div className="name">
-                            AI相似人像查看
-                        </div>
-                    </div>
                     <div onClick={() => miChangeHandle()} className="t-button">
                         <div className="ico">
                             <img src={miChangePng} height={50} />
