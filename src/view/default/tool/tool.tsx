@@ -383,14 +383,16 @@ const Tool: FC<ToolProp> = () => {
                             通话记录导出工具
                         </div>
                     </div>
-                    <div onClick={() => runExeHandle(ExeType.HuaweiPassword)} className="t-button">
-                        <div className="ico">
-                            <FontAwesomeIcon icon={faUnlockKeyhole} color="#94c7a7" />
+                    <Auth deny={!useFakeButton}>
+                        <div onClick={() => runExeHandle(ExeType.HuaweiPassword)} className="t-button">
+                            <div className="ico">
+                                <FontAwesomeIcon icon={faUnlockKeyhole} color="#94c7a7" />
+                            </div>
+                            <div className="name">
+                                华为开机密码破解
+                            </div>
                         </div>
-                        <div className="name">
-                            华为开机密码破解
-                        </div>
-                    </div>
+                    </Auth>
                     <div onClick={() => setAiSimilarModalVisible(true)} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faUsers} color="#fa983a" />

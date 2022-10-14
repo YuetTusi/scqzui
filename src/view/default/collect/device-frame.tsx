@@ -15,6 +15,7 @@ import { MobileIco } from './mobile-ico';
 import { DeivceBox, Nothing } from './styled/device-box';
 import { DeviceFrameProp } from './prop';
 
+const { devText } = helper.readConf()!;
 const { Ribbon } = Badge;
 
 /**
@@ -88,7 +89,11 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
     if (deviceList.every(item => item === undefined)) {
         return <Nothing>
             <Empty
-                description={<div className="nothing-desc">尚未检测到设备，请连接USB</div>}
+                description={
+                    <div className="nothing-desc">
+                        {`尚未检测到${devText ?? '设备'}，请连接USB`}
+                    </div>
+                }
                 image={Empty.PRESENTED_IMAGE_SIMPLE} />
         </Nothing>
     } else {
