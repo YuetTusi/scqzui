@@ -93,7 +93,8 @@ const CaseList: FC<CaseListProp> = () => {
      * 行选择Change
      */
     const onRowSelectChange = (selectedRowKeys: Key[]) =>
-        dispatch({ type: 'parseCase/setSelectedRowKeys', payload: [selectedRowKeys] });
+        dispatch({ type: 'parseCase/setSelectedRowKeys', payload: selectedRowKeys });
+
 
 
     /**
