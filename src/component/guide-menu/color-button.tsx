@@ -5,7 +5,7 @@ import { Color } from './styled/button';
 import { ColorButtonProp } from './prop';
 
 /**
- * 主屏大按钮
+ * 主屏纯色按钮
  */
 const ColorButton: FC<ColorButtonProp> = ({ to, icon, color, description, children }) => {
 

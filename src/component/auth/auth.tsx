@@ -1,13 +1,6 @@
 import React, { FC } from 'react';
+import { Demotion } from './demotion';
 import { AuthProp } from './prop';
-
-/**
- * 降级组件
- */
-const Demotion: FC<{ widget?: JSX.Element | string }> = ({ widget }) =>
-    widget === undefined
-        ? null
-        : <>{widget}</>;
 
 /**
  * 鉴权显示
@@ -23,4 +16,5 @@ Auth.defaultProps = {
     demotion: undefined
 }
 
+export { Demotion };
 export default Auth;

@@ -325,7 +325,7 @@ const GenerateForm: FC<GenerateFormProp> = ({
                         label="检材编号"
                         tooltip={<>
                             <div>单位编号前6位+日期年月</div>
-                            <div>格式举例：110000202201</div>
+                            <div>格式举例：110000202301</div>
                         </>}>
                         <Input maxLength={12} placeholder="12位数字" />
                     </Item>

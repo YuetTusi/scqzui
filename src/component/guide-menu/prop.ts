@@ -4,6 +4,9 @@ type clickHandle = (event: MouseEvent<HTMLElement>) => void;
 
 interface GuideMenuProp { }
 
+/**
+ * 纯色按钮
+ */
 interface ColorButtonProp {
 
     /**
@@ -24,6 +27,9 @@ interface ColorButtonProp {
     description?: string | JSX.Element
 }
 
+/**
+ * 图片按钮
+ */
 interface ImageButtonProp {
     /**
      * 跳转路径

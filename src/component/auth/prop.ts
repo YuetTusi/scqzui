@@ -9,3 +9,10 @@ export interface AuthProp {
      */
     demotion?: JSX.Element | string
 }
+
+export interface DemotionProp {
+    /**
+     * 降级组件或文案
+     */
+    widget?: JSX.Element | string
+}

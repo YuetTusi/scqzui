@@ -8,3 +8,14 @@ export interface InputHistoryModalProp {
      */
     closeHandle: () => void
 }
+
+export interface HistoryListProp {
+    /**
+     * 数据
+     */
+    data: string[],
+    /**
+     * 前缀字符
+     */
+    prefix: string
+}
