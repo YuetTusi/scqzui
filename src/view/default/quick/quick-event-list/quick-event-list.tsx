@@ -53,6 +53,15 @@ const QuickEventList: FC<EventListProp> = ({ detailHandle }) => {
      * @param id id
      */
     const onRowClick = (id: string) => {
+        if (id !== selectedRowKeys[0]) {
+            dispatch({
+                type: 'quickRecordList/setPage', payload: {
+                    pageIndex: 1,
+                    pageSize: helper.PAGE_SIZE,
+                    total: 0
+                }
+            });
+        }
         dispatch({ type: 'quickRecordList/setEventId', payload: id });
         dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [id] });
     };
