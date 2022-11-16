@@ -66,6 +66,11 @@ export const SortBox = styled.div`
             align-items: center;
         }
         &>.name{
+            width: 110px;
+            text-align: center;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
             font-size:1.2rem;
         }
     }
