@@ -51,7 +51,9 @@ const ImageButton: FC<ImageButtonProp> = ({ to, icon, src, description, children
     }, []);
 
     return <Image ref={imageBoxRef}>
-        <div onClick={() => dispatch(routerRedux.push(to))} className="push-img" style={{ backgroundImage: `url(${src})` }}>
+        <div onClick={() => dispatch(routerRedux.push(to))}
+            className="push-img"
+            style={{ backgroundImage: `url(${src})` }}>
             <a>
                 <div className="icon-box">{icon}</div>
                 <div className="text-box">{children}</div>

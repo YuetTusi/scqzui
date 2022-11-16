@@ -10,6 +10,7 @@ import {
     faFileWaveform
 } from '@fortawesome/free-solid-svg-icons';
 import Auth from '@/component/auth';
+import { useAppSerial, useManufacturer } from '@/hook';
 import Manufaturer from '@/schema/manufaturer';
 import { helper } from '@/utils/helper';
 import { MenuPanel, VersionBox } from './styled/menu-panel';
@@ -18,7 +19,6 @@ import ImageButton from './image-button';
 import { GuideMenuProp } from './prop';
 import envidence from './image/1.jpg';
 import tool from './image/2.jpg';
-import { useAppSerial, useManufacturer } from '@/hook';
 
 const {
     useFetch,

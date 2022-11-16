@@ -116,7 +116,7 @@ function api(webContents: WebContents) {
                 .reduce((acc: any[], current: QuickEvent) => acc.concat([
                     {
                         ...current,
-                        devices: nextDevices.filter((i) => i.caseId === current._id)
+                        devices: nextDevices.filter(i => i.caseId === current._id)
                     }
                 ]), [])
                 .map(({ _id, eventName, eventPath, devices, ruleFrom, ruleTo }) => ({
@@ -174,13 +174,10 @@ function api(webContents: WebContents) {
 
         const tempPath = join(cwd, './resources/army'); //默认模板位置
         const userPath = join(cwd, './resources/keywords');//用户模板位置
-        // const tempPath = join('D:/Electronic/ElectronicForensics/qzui/resources/army'); //默认模板位置
-        // const userPath = join('D:/Electronic/ElectronicForensics/qzui/resources/keywords');//用户模板位置
         let data: Record<string, string[]> = {};
 
         try {
             const exist = await helper.existFile(join(cwd, 'resources/config/app.json'));
-            // const exist = await helper.existFile(join(cwd, 'data/app.json'));
 
             if (exist) {
                 const [cfg, tempFiles, userFiles] = await Promise.all([

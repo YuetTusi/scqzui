@@ -340,11 +340,6 @@ export default {
             yield fork([helper, 'writeBcpJson'], phonePath, bcp);
         } catch (error) {
             logger.error(`Bcp.json写入失败 @model/default/device/*startFetch: ${error.message}`);
-        } finally {
-            if (fetchData.mode === DataMode.GuangZhou) {
-                //* 写完Bcp.json清理平台案件，下一次取证前没有推送则不允许采集
-                yield put({ type: 'dashboard/setSendCase', payload: null });
-            }
         }
 
         yield put({

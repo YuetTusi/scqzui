@@ -130,14 +130,14 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
     </MenuBox>
 }
 
-const BoardMenu: FC<MenuProp> = ({ onItemClick, children }) => {
-
-    return <Popover
-        content={<MenuItems onItemClick={onItemClick} />}
-        trigger="click"
-        placement="bottomLeft">
-        {children}
-    </Popover>
-};
+/**
+ * 弹出菜单
+ */
+const BoardMenu: FC<MenuProp> = ({ onItemClick, children }) => <Popover
+    content={<MenuItems onItemClick={onItemClick} />}
+    trigger="click"
+    placement="bottomLeft">
+    {children}
+</Popover>;
 
 export { BoardMenu, BoardMenuAction };
