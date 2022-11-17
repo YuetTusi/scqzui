@@ -18,7 +18,7 @@ import { helper } from '@/utils/helper';
 import AlipayOrderModal from './alipay-order-modal';
 import ImportDataModal from './import-data-modal';
 import CrackModal from './crack-modal';
-import { AiSimilarModal, fakeModal } from './fake-modal';
+import { AiSimilarModal, fakeModal, FakeImportModal } from './fake-modal';
 import MiChangeModal from './mi-change-modal';
 import ButtonDesc from './button-desc';
 import { SortBox, ToolBox } from './styled/style';
@@ -54,6 +54,7 @@ const Tool: FC<ToolProp> = () => {
     const [aiSimilarModalVisible, setAiSimilarModalVisible] = useState<boolean>(false);
     const [crackModalVisible, setCrackModalVisible] = useState<boolean>(false);
     const [miChangeModalVisible, setMiChangeModalVisible] = useState<boolean>(false);
+    const [fakeImportModalVisible, setFakeImportModalVisible] = useState<boolean>(false);
 
     /**
      * 支付宝云取取消handle
@@ -267,7 +268,7 @@ const Tool: FC<ToolProp> = () => {
                                 </ul>
                                 <em>（如需解析 com.tencent.xin 文件夹，路径选择到 com.tencent.xin 的上一层目录）</em>
                             </ButtonDesc>}>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFolder} color="#ffd766" />
                                 </div>
@@ -285,7 +286,7 @@ const Tool: FC<ToolProp> = () => {
                                     <li>导入方式：路径选择到 backup 下一层目录，该文件夹默认路径为 C:\Users\[账户名]\AppData\Roaming\Apple Computer\MobileSync\Backup\目录</li>
                                 </ul>
                             </ButtonDesc>}>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFolder} color="#ffd766" />
                                 </div>
@@ -305,7 +306,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFileZipper} color="#11c111" />
                                 </div>
@@ -325,7 +326,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFileZipper} color="#80b4fb" />
                                 </div>
@@ -351,7 +352,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faAndroid} color="#a6ce3a" />
                                 </div>
@@ -371,7 +372,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFolder} color="#ffd766" />
                                 </div>
@@ -391,7 +392,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFolder} color="#ffd766" />
                                 </div>
@@ -411,7 +412,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFolder} color="#ffd766" />
                                 </div>
@@ -431,7 +432,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFolder} color="#ffd766" />
                                 </div>
@@ -451,7 +452,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFolder} color="#ffd766" />
                                 </div>
@@ -471,7 +472,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFileZipper} color="#80b4fb" />
                                 </div>
@@ -491,7 +492,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFileZipper} color="#11c111" />
                                 </div>
@@ -512,7 +513,7 @@ const Tool: FC<ToolProp> = () => {
                                     <em>（如需解析 com.tencent.mm 文件夹，路径选择到 com.tencent.mm 的上一层目录）</em>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFolder} color="#ffd766" />
                                 </div>
@@ -533,7 +534,7 @@ const Tool: FC<ToolProp> = () => {
                                     <em>（如需解析 com.tencent.mm 文件夹，路径选择到 com.tencent.mm 的上一层目录）</em>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFolder} color="#ffd766" />
                                 </div>
@@ -553,7 +554,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <img src={signalSvg} alt="signal" width={60} height={60} />
                                 </div>
@@ -573,7 +574,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFileZipper} color="#80b4fb" />
                                 </div>
@@ -593,7 +594,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFileZipper} color="#11c111" />
                                 </div>
@@ -613,7 +614,7 @@ const Tool: FC<ToolProp> = () => {
                                     </ul>
                                 </ButtonDesc>
                             }>
-                            <div className="t-button">
+                            <div className="t-button" onClick={() => setFakeImportModalVisible(true)}>
                                 <div className="ico">
                                     <FontAwesomeIcon icon={faFileZipper} color="#80b4fb" />
                                 </div>
@@ -805,6 +806,9 @@ const Tool: FC<ToolProp> = () => {
             onOk={runMiChangeExe}
             onCancel={() => setMiChangeModalVisible(false)}
         />
+        <FakeImportModal
+            visible={fakeImportModalVisible}
+            onCloseClick={() => setFakeImportModalVisible(false)} />
     </SubLayout>
 };
 
