@@ -11,7 +11,7 @@ const mockTime = random(1000, 2500, false);
  * 造假
  * @param brand 品牌
  */
-const fakeModal = (brand: string) => {
+const fakeFeaturePhoneModal = (brand: string) => {
 
     const handle = Modal.info({
         title: '正在检测',
@@ -35,4 +35,4 @@ const fakeModal = (brand: string) => {
     }, mockTime);
 };
 
-export { fakeModal };
+export { fakeFeaturePhoneModal };

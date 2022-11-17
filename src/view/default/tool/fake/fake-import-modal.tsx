@@ -59,6 +59,7 @@ const FakeImportModal: FC<{
                 try {
                     await formRef.validateFields();
                     onCloseClick(true);
+                    message.destroy();
                     message.success('正在导入检材...');
                 } catch (error) {
                     console.warn(error);
