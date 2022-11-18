@@ -6,7 +6,7 @@ export const CaseDataBox = styled.div`
     height: 100%;
 
 	.case-content {
-		padding: 5px;
+		padding: 10px;
 		background-color:#202940;
 		position: absolute;
 		top: 0;
@@ -20,7 +20,6 @@ export const CaseDataBox = styled.div`
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-end;
-		padding-top: 5px;
 		&>:nth-child(2){
 			margin-left: 16px;
 		}
@@ -28,9 +27,9 @@ export const CaseDataBox = styled.div`
 
 	.table-panel{
 		position: absolute;
-		top: 62px;
-		left: 5px;
-		right: 5px;
+		top: 61px;
+		left: 9px;
+		right: 9px;
 		bottom: 0px;
 		overflow-y:auto;
 	}
