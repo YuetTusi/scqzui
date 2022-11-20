@@ -4,6 +4,7 @@ import React, { FC, useEffect, useState, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import debounce from 'lodash/debounce';
 import ExportOutlined from '@ant-design/icons/ExportOutlined';
+import FilePdfOutlined from '@ant-design/icons/FilePdfOutlined';
 import Button from 'antd/lib/button';
 import Checkbox from 'antd/lib/checkbox';
 import Empty from 'antd/lib/empty';
@@ -168,8 +169,12 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
                     附件
                 </span>
                 <Button disabled={isEmpty} onClick={validCheck} type="primary">
+                    <FilePdfOutlined />
+                    <span>导出PDF</span>
+                </Button>
+                <Button disabled={isEmpty} onClick={validCheck} type="primary">
                     <ExportOutlined />
-                    <span>导出</span>
+                    <span>导出报告</span>
                 </Button>
             </ControlBoxes>
         ]}

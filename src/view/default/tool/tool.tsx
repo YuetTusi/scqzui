@@ -1,12 +1,14 @@
 import { join, resolve } from 'path';
 import React, { FC, useState, useCallback, useRef, MouseEvent } from 'react';
 import { useDispatch } from 'dva';
+import FundViewOutlined from '@ant-design/icons/FundViewOutlined';
 import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers
+    faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers, faSimCard, faSdCard, faMobileRetro, faClone
 } from '@fortawesome/free-solid-svg-icons';
+import { } from '@fortawesome/free-regular-svg-icons';
 import {
     faApple, faAndroid, faItunes, faBlackberry, faAlipay
 } from '@fortawesome/free-brands-svg-icons';
@@ -22,6 +24,8 @@ import {
     ImportBak
 } from './fake';
 import MiChangeModal from './mi-change-modal';
+import HuaweiCloneModal from './huawei-clone-modal';
+import { SnapshotModal } from './snapshot-modal';
 import { SortBox, ToolBox } from './styled/style';
 import { ImportTypes } from '@/schema/import-type';
 import huaweiSvg from './styled/images/huawei.svg';
@@ -37,6 +41,7 @@ import windowsphoneSvg from './styled/images/windowsphone.svg';
 import badaSvg from './styled/images/bada.svg';
 import featurephoneSvg from './styled/images/featurephone.svg';
 import meegoSvg from './styled/images/meego.svg';
+import hwcopyPng from './styled/images/hwcopy.png';
 import { CrackTypes } from './crack-modal/prop';
 import { ExeType, ToolProp } from './prop';
 
@@ -54,7 +59,9 @@ const Tool: FC<ToolProp> = () => {
     const [aiSimilarModalVisible, setAiSimilarModalVisible] = useState<boolean>(false);
     const [crackModalVisible, setCrackModalVisible] = useState<boolean>(false);
     const [miChangeModalVisible, setMiChangeModalVisible] = useState<boolean>(false);
+    const [huaweiCloneModalVisible, setHuaweiCloneModalVisible] = useState<boolean>(false);
     const [fakeImportModalVisible, setFakeImportModalVisible] = useState<boolean>(false);
+    const [snapshotModalVisible, setSnapshotModalVisible] = useState<boolean>(false);
 
     /**
      * 支付宝云取取消handle
@@ -153,9 +160,41 @@ const Tool: FC<ToolProp> = () => {
     };
 
     /**
+     * 运行华为手机克隆exe
+     */
+    const runHuaweiCloneExe = (targetPath: string) => {
+        message.info('正在启动工具，请稍等...');
+        const workPath = resolve(cwd, '../tools/mhj');
+        helper.runExe(join(workPath, 'hwclone.exe'), [targetPath], workPath).catch((errMsg: string) => {
+            console.log(errMsg);
+            message.destroy();
+            Modal.error({
+                title: '启动失败',
+                content: '启动失败，请联系技术支持',
+                okText: '确定'
+            });
+        });
+        setHuaweiCloneModalVisible(false);
+    };
+
+    /**
      * 小米换机导入handle
      */
     const miChangeHandle = () => setMiChangeModalVisible(true);
+
+    /**
+     * 华为手机克隆handle
+     */
+    const huaweiCloneHandle = () => setHuaweiCloneModalVisible(true);
+
+    /**
+     * 苹果手机截屏handle
+     */
+    const snapshotHandle = (saveTo: string) => {
+
+        console.log(saveTo);
+        setSnapshotModalVisible(false);
+    };
 
     return <SubLayout title="工具箱">
         <ToolBox>
@@ -193,6 +232,14 @@ const Tool: FC<ToolProp> = () => {
                         </div>
                         <div className="name">
                             华为OTG备份
+                        </div>
+                    </div>
+                    <div onClick={() => onImportClick(ImportTypes.HuaweiClone, '导入数据（华为手机克隆备份）')} className="t-button">
+                        <div className="ico">
+                            <img src={hwcopyPng} width="50" height="50" />
+                        </div>
+                        <div className="name">
+                            华为手机克隆备份
                         </div>
                     </div>
                     <div onClick={() => onImportClick(ImportTypes.Hisuite, '导入数据（荣耀备份）')} className="t-button">
@@ -251,6 +298,22 @@ const Tool: FC<ToolProp> = () => {
                             安卓数据
                         </div>
                     </div>
+                    <div onClick={() => onImportClick(ImportTypes.AndroidData, '导入数据（安卓镜像）')} className="t-button">
+                        <div className="ico">
+                            <FontAwesomeIcon icon={faAndroid} color="#a6ce3a" />
+                        </div>
+                        <div className="name">
+                            安卓镜像
+                        </div>
+                    </div>
+                    <div onClick={() => onImportClick(ImportTypes.SDCardMirror, '导入数据（SD卡镜像）')} className="t-button">
+                        <div className="ico">
+                            <FontAwesomeIcon icon={faSdCard} color="#07b6bf" />
+                        </div>
+                        <div className="name">
+                            SD卡镜像
+                        </div>
+                    </div>
                 </div>
             </SortBox>
             <ImportBak onClick={() => setFakeImportModalVisible(true)} />
@@ -298,7 +361,7 @@ const Tool: FC<ToolProp> = () => {
             </SortBox>
             <Auth deny={!useFakeButton}>
                 <SortBox>
-                    <div className="caption">其他品牌取证</div>
+                    <div className="caption">其他取证</div>
                     <Split />
                     <div className="t-row">
                         <div onClick={() => fakeFeaturePhoneModal('黑莓')} className="t-button">
@@ -355,6 +418,30 @@ const Tool: FC<ToolProp> = () => {
                             </div>
                             <div className="name">
                                 功能机/山寨机
+                            </div>
+                        </div>
+                        <div onClick={() => fakeFeaturePhoneModal('SIM卡')} className="t-button">
+                            <div className="ico">
+                                <FontAwesomeIcon icon={faSimCard} color="#94c7a7" />
+                            </div>
+                            <div className="name">
+                                SIM卡
+                            </div>
+                        </div>
+                        <div onClick={() => fakeFeaturePhoneModal('SD卡')} className="t-button">
+                            <div className="ico">
+                                <FontAwesomeIcon icon={faSdCard} color="#07b6bf" />
+                            </div>
+                            <div className="name">
+                                SD卡
+                            </div>
+                        </div>
+                        <div onClick={() => fakeFeaturePhoneModal('手机镜像')} className="t-button">
+                            <div className="ico">
+                                <FontAwesomeIcon icon={faMobileRetro} />
+                            </div>
+                            <div className="name">
+                                手机镜像
                             </div>
                         </div>
                     </div>
@@ -414,6 +501,22 @@ const Tool: FC<ToolProp> = () => {
                             小米换机采集
                         </div>
                     </div>
+                    <div onClick={() => setSnapshotModalVisible(true)} className="t-button">
+                        <div className="ico" style={{ color: '#23a758' }}>
+                            <FundViewOutlined />
+                        </div>
+                        <div className="name">
+                            截屏获取
+                        </div>
+                    </div>
+                    <div onClick={() => huaweiCloneHandle()} className="t-button">
+                        <div className="ico">
+                            <img src={hwcopyPng} height={50} />
+                        </div>
+                        <div className="name">
+                            华为手机克隆
+                        </div>
+                    </div>
                 </div>
             </SortBox>
         </ToolBox>
@@ -434,9 +537,18 @@ const Tool: FC<ToolProp> = () => {
             onOk={runMiChangeExe}
             onCancel={() => setMiChangeModalVisible(false)}
         />
+        <HuaweiCloneModal
+            visible={huaweiCloneModalVisible}
+            onOk={runHuaweiCloneExe}
+            onCancel={() => setHuaweiCloneModalVisible(false)}
+        />
         <FakeImportModal
             visible={fakeImportModalVisible}
             onCloseClick={() => setFakeImportModalVisible(false)} />
+        <SnapshotModal
+            visible={snapshotModalVisible}
+            cancelHandle={() => setSnapshotModalVisible(false)}
+        />
     </SubLayout >
 };
 

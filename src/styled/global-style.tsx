@@ -268,6 +268,11 @@ span.tmpzTreeMove_arrow {
 				&.type_OTHERS_ico_close {
 					background-image: url(${require('./images/ztree/app/OTHERS.png')}) !important;
 				}
+				&.type_VPN_ico_docu,
+				&.type_VPN_ico_open,
+				&.type_VPN_ico_close {
+					background-image: url(${require('./images/ztree/app/VPN.png')}) !important;
+				}
 				&.app_root_ico_docu,
 				&.app_root_ico_open,
 				&.app_root_ico_close {
@@ -1958,6 +1963,18 @@ span.tmpzTreeMove_arrow {
 				&.app_no_398cce84_ico_open,
 				&.app_no_398cce84_ico_close {
 					background-image: url(${require('./images/ztree/app/no_398cce84.png')}) !important;
+				}
+				//SSR
+				&.app_no_1c16e694_ico_docu,
+				&.app_no_1c16e694_ico_open,
+				&.app_no_1c16e694_ico_close {
+					background-image: url(${require('./images/ztree/app/no_1c16e694.png')}) !important;
+				}
+				//旋风加速器
+				&.app_no_716c64da_ico_docu,
+				&.app_no_716c64da_ico_open,
+				&.app_no_716c64da_ico_close {
+					background-image: url(${require('./images/ztree/app/no_716c64da.png')}) !important;
 				}
 			}
 		}

@@ -103,6 +103,10 @@ enum CommandType {
      */
     StartRecover = 'start_recover',
     /**
+     * 设备截屏（Fetch）
+     */
+    DevSnapshot = 'dev_snapshot',
+    /**
      * 关闭破解框（Fetch）
      */
     CloseCrack = 'close_crack',

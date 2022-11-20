@@ -9,6 +9,8 @@ import { helper } from '@/utils/helper';
 import { SortBox } from '../styled/style';
 import ButtonDesc from '../button-desc';
 import signalSvg from '../styled/images/signal.svg';
+import zipPng from '../styled/images/zip.png';
+import tarPng from '../styled/images/tar.png';
 
 const { useFakeButton } = helper.readConf()!;
 
@@ -68,7 +70,7 @@ const ImportBak: FC<{ onClick: () => void }> = memo(
                     }>
                     <div className="t-button" onClick={onClick}>
                         <div className="ico">
-                            <FontAwesomeIcon icon={faFileZipper} color="#60c160" />
+                            <img src={tarPng} alt="tar" width={50} height={50} />
                         </div>
                         <div className="name">
                             苹果tar文件
@@ -88,7 +90,7 @@ const ImportBak: FC<{ onClick: () => void }> = memo(
                     }>
                     <div className="t-button" onClick={onClick}>
                         <div className="ico">
-                            <FontAwesomeIcon icon={faFileZipper} color="#80b4fb" />
+                            <img src={zipPng} alt="tar" width={50} height={50} />
                         </div>
                         <div className="name">
                             苹果zip文件
@@ -234,7 +236,7 @@ const ImportBak: FC<{ onClick: () => void }> = memo(
                     }>
                     <div className="t-button" onClick={onClick}>
                         <div className="ico">
-                            <FontAwesomeIcon icon={faFileZipper} color="#80b4fb" />
+                            <img src={zipPng} alt="tar" width={50} height={50} />
                         </div>
                         <div className="name">
                             魅族自备份(zip)
@@ -254,7 +256,7 @@ const ImportBak: FC<{ onClick: () => void }> = memo(
                     }>
                     <div className="t-button" onClick={onClick}>
                         <div className="ico">
-                            <FontAwesomeIcon icon={faFileZipper} color="#60c160" />
+                            <img src={tarPng} alt="tar" width={50} height={50} />
                         </div>
                         <div className="name">
                             ADB备份文件
@@ -336,7 +338,7 @@ const ImportBak: FC<{ onClick: () => void }> = memo(
                     }>
                     <div className="t-button" onClick={onClick}>
                         <div className="ico">
-                            <FontAwesomeIcon icon={faFileZipper} color="#80b4fb" />
+                            <img src={zipPng} alt="tar" width={50} height={50} />
                         </div>
                         <div className="name">
                             Signal备份文件(zip)
@@ -356,7 +358,7 @@ const ImportBak: FC<{ onClick: () => void }> = memo(
                     }>
                     <div className="t-button" onClick={onClick}>
                         <div className="ico">
-                            <FontAwesomeIcon icon={faFileZipper} color="#60c160" />
+                            <img src={tarPng} alt="tar" width={50} height={50} />
                         </div>
                         <div className="name">
                             安卓tar文件
@@ -376,13 +378,21 @@ const ImportBak: FC<{ onClick: () => void }> = memo(
                     }>
                     <div className="t-button" onClick={onClick}>
                         <div className="ico">
-                            <FontAwesomeIcon icon={faFileZipper} color="#80b4fb" />
+                            <img src={zipPng} alt="tar" width={50} height={50} />
                         </div>
                         <div className="name">
                             安卓zip文件
                         </div>
                     </div>
                 </Popover>
+                <div className="t-button" onClick={onClick}>
+                    <div className="ico">
+                        <img src={zipPng} alt="tar" width={50} height={50} />
+                    </div>
+                    <div className="name">
+                        SIM卡zip文件
+                    </div>
+                </div>
             </div>
         </SortBox>
     </Auth>

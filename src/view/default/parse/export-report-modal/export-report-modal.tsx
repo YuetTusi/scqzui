@@ -4,6 +4,7 @@ import React, { FC, memo, useEffect, useRef, useState, MouseEvent } from 'react'
 import { useDispatch } from 'dva';
 import debounce from 'lodash/debounce';
 import ExportOutlined from '@ant-design/icons/ExportOutlined';
+import FilePdfOutlined from '@ant-design/icons/FilePdfOutlined';
 import Button from 'antd/lib/button';
 import Checkbox from 'antd/lib/checkbox';
 import Input from 'antd/lib/input';
@@ -13,8 +14,8 @@ import { helper } from '@/utils/helper';
 import log from '@/utils/log';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
 import { expandNodes, filterTree, mapTree, readTxtFile } from './tree-util';
-import { ExportReportModalProp } from './prop';
 import { ExportReportModalBox, ControlBoxes } from './styled/style';
+import { ExportReportModalProp } from './prop';
 
 let ztree: any = null;
 
@@ -160,8 +161,12 @@ const ExportReportModal: FC<ExportReportModalProp> = ({ visible, data, closeHand
                     <span onClick={() => setIsAttach((prev) => !prev)}>附件</span>
                 </div>
                 <Button type="primary" onClick={exportHandle}>
+                    <FilePdfOutlined />
+                    <span>导出PDF</span>
+                </Button>
+                <Button type="primary" onClick={exportHandle}>
                     <ExportOutlined />
-                    <span>导出</span>
+                    <span>导出报告</span>
                 </Button>
             </ControlBoxes>
         ]}

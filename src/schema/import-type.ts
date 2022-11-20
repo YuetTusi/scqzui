@@ -11,6 +11,10 @@ export enum ImportTypes {
      */
     HuaweiOTG = 'huawei_otg',
     /**
+     * 华为克隆备份
+     */
+    HuaweiClone = 'huawei_clone',
+    /**
      * 苹果iTunes备份
      */
     IOS = 'ios',
@@ -37,5 +41,9 @@ export enum ImportTypes {
     /**
      * 苹果镜像导入
      */
-    IOSMirror = 'ios_mirror'
+    IOSMirror = 'ios_mirror',
+    /**
+     * SD卡镜像（Fake）
+     */
+    SDCardMirror = 'sdcard-mirror'
 }

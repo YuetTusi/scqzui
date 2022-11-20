@@ -42,7 +42,11 @@ export enum CrackTypes {
     /**
      * oppo隐私锁
      */
-    OppoMoveLock
+    OppoMoveLock,
+    /**
+     * 截屏
+     */
+    Snapshot
 }
 
 /**
@@ -56,5 +60,9 @@ export enum UserAction {
     /**
      * 恢复
      */
-    Recover
+    Recover,
+    /**
+     * 截屏
+     */
+    Snapshop
 }

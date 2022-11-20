@@ -345,7 +345,7 @@ Fetch 命令：`start_crack`，参数：
 | 参数名 | 类型   | 说明           |
 | ------ | ------ | -------------- |
 | id     | string | 所选设备 value |
-| type   | enum   | 破解方式枚举   |
+| type   | enum   | 方式枚举       |
 
 #### 开始恢复
 
@@ -354,7 +354,17 @@ Fetch 命令：`start_recover`，参数：
 | 参数名 | 类型   | 说明           |
 | ------ | ------ | -------------- |
 | id     | string | 所选设备 value |
-| type   | enum   | 破解方式枚举   |
+| type   | enum   | 方式枚举       |
+
+#### 设备截屏
+
+Fetch 命令：`dev_snapshot`，参数：
+
+| 参数名 | 类型   | 说明           |
+| ------ | ------ | -------------- |
+| id     | string | 所选设备 value |
+| type   | enum   | 枚举           |
+| saveTo | string | 保存位置       |
 
 #### 关闭破解弹框：
 

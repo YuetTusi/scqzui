@@ -97,6 +97,8 @@ const CrackTip: FC<Prop> = memo(({ type }) => {
                     </li>
                 </ul>
             </fieldset>;
+        default:
+            return null;
     }
 });
 
