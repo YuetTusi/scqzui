@@ -161,6 +161,9 @@ const SnapshotModal: FC<SnapshotModalProp> = ({
                         <li>
                             选择截屏设备及保存目录，若无设备请进行刷新，点击按钮截取
                         </li>
+                        <li>
+                            <strong>若为苹果设备，请在手机「设置→隐私和安全性→开发者模式」中手动打开开发者模式，并重启手机，点击打开开发者模式，重新截屏</strong>
+                        </li>
                     </ul>
                 </div>
             </fieldset>
