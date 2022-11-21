@@ -79,7 +79,7 @@ const MiChangeModal: FC<MiChangeModalProp> = ({ visible, onOk, onCancel }) => {
         destroyOnClose={true}
         className="mi-change-modal-root"
     >
-        <Explain title="小米换机采集提示">
+        <Explain title="操作提示">
             <ul>
                 <li>选择数据保存目录</li>
                 <li>使用小米手机连接热点：<strong>abco_apbc5G_MI</strong></li>

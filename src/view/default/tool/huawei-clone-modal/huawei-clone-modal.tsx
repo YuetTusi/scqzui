@@ -78,10 +78,10 @@ const HuaweiCloneModal: FC<HuaweiCloneModalProp> = ({ visible, onOk, onCancel })
         maskClosable={false}
         destroyOnClose={true}
     >
-        <Explain title="华为手机克隆提示">
+        <Explain title="操作提示">
             <ul>
                 <li>选择数据保存目录</li>
-                <li>请创建热点并用华为手机连接，名称形如<strong>TAS-AL00%8888%CloudClone</strong>（其中文字<strong>%8888%</strong>可自行定义）</li>
+                <li>请创建热点并用华为手机连接，名称形如<strong>TAS-AL00%8888%CloudClone</strong>（其中文字<strong>8888</strong>可自行定义）</li>
             </ul>
         </Explain>
         <div style={{ marginTop: '10px' }}>

@@ -24,6 +24,9 @@ import Input from 'antd/lib/input';
 const { Item, useForm } = Form;
 const { Option } = Select;
 
+/**
+ * 截屏窗口
+ */
 const SnapshotModal: FC<SnapshotModalProp> = ({
     visible,
     // type,
@@ -149,6 +152,21 @@ const SnapshotModal: FC<SnapshotModalProp> = ({
         maskClosable={false}
         onCancel={closeHandle}>
         <SnapshotModalBox>
+            <fieldset className="tip-msg full">
+                <legend>
+                    操作提示
+                </legend>
+                <div>
+                    <ul>
+                        <li>
+                            请将截屏设备插入USB接口
+                        </li>
+                        <li>
+                            选择截屏设备及保存目录，若无设备请进行刷新，点击按钮截取
+                        </li>
+                    </ul>
+                </div>
+            </fieldset>
             <Form form={formRef} layout="horizontal" style={{ marginTop: '24px' }}>
                 <Item
                     rules={[
@@ -186,7 +204,7 @@ const SnapshotModal: FC<SnapshotModalProp> = ({
                     />
                 </Item>
             </Form>
-            <div className="crack-msg">
+            <div className="cut-msg">
                 <div className="caption">消息</div>
                 <div className="scroll-dev">{renderMessage()}</div>
             </div>

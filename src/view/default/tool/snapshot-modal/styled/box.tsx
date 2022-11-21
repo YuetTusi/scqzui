@@ -53,7 +53,7 @@ export const SnapshotModalBox = styled.div`
 			margin: 5px;
 		}
 	}
-	.crack-msg {
+	.cut-msg {
 		border: 1px solid ${props => props.theme['primary-color']};
 		border-radius: 3px;
 
