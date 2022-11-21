@@ -15,7 +15,7 @@ const GuideBox = styled.div`
         bottom: 0;
         width: 40px;
         pointer-events: none;
-        /* background-image: linear-gradient(to right, rgba(15, 34, 77, 0),rgba(15, 34, 77, 1)); */
+        /* background-image: linear-gradient(270deg,#f8f8f8,hsla(0,0%,97.3%,0)); */
     }
     .left-opacity{
         position: fixed;

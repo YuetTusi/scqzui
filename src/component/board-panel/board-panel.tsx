@@ -177,6 +177,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
                 dispatch(routerRedux.push('/settings/dst-unit?admin=1'))
                 break;
             default:
+                console.warn('未知菜单项');
                 break;
         }
     };

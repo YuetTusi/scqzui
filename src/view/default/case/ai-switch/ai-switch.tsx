@@ -131,7 +131,7 @@ const AiSwitch: FC<AiSwitchProp> = ({ casePath }) => {
     return <>
         <Row align="middle" style={{ margin: '2rem 0' }}>
             <Col flex="none">
-                <label>相似度：</label>
+                <label>设定阈值：</label>
             </Col>
             <Col flex="auto">
                 <InputNumber
