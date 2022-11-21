@@ -3,23 +3,19 @@ import { ipcRenderer, OpenDialogReturnValue } from 'electron';
 import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import SyncOutlined from '@ant-design/icons/SyncOutlined';
-import KeyOutlined from '@ant-design/icons/KeyOutlined';
 import CameraOutlined from '@ant-design/icons/CameraOutlined';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
+import Form from 'antd/lib/form';
+import Input from 'antd/lib/input';
 import Modal from 'antd/lib/modal';
 import Select from 'antd/lib/select';
-import Form from 'antd/lib/form';
 import { StateTree } from '@/type/model';
-import { CrackModalState } from '@/model/default/crack-modal';
 import { helper } from '@/utils/helper';
-import { CrackModalProp, FormValue, SnapshotModalProp } from './prop';
-import crackImg from './styled/images/crack_1.png';
-import { CrackTypes, UserAction } from '../crack-modal/prop';
+import { CrackModalState } from '@/model/default/crack-modal';
+import { CrackTypes } from '../crack-modal/prop';
 import { SnapshotModalBox } from './styled/box';
-import Input from 'antd/lib/input';
-// import { CrackModalBox } from './styled/style';
-// import CrackTip from './crack-tip';
+import { FormValue, SnapshotModalProp } from './prop';
 
 const { Item, useForm } = Form;
 const { Option } = Select;
@@ -106,6 +102,7 @@ const SnapshotModal: FC<SnapshotModalProp> = ({
      */
     const selectSaveHandle = debounce(
         (event: MouseEvent<HTMLInputElement>) => {
+            event.preventDefault();
             const { setFieldsValue } = formRef;
             ipcRenderer
                 .invoke('open-dialog', {

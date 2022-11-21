@@ -26,17 +26,16 @@ const Index: FC<{}> = () => <LogLayout>
             操作日志
         </div>
         <ul>
-            <li>
-                <Auth deny={!useFetch && !useServerCloud}>
+            <Auth deny={!useFetch && !useServerCloud}>
+                <li>
                     <NavLink to="/log" exact={true} replace={true} className="hvr-sweep-to-right">
                         <div>
                             <span className="ico"><FontAwesomeIcon icon={faMobileScreenButton} /></span>
                             <span className="name">{`${fetchText ?? '取证'}日志`}</span>
                         </div>
                     </NavLink>
-                </Auth>
-
-            </li>
+                </li>
+            </Auth>
             <li>
                 <NavLink to="/log/parse-log" replace={true} className="hvr-sweep-to-right">
                     <div>
@@ -45,16 +44,16 @@ const Index: FC<{}> = () => <LogLayout>
                     </div>
                 </NavLink>
             </li>
-            <li>
-                <Auth deny={!useServerCloud}>
+            <Auth deny={!useServerCloud}>
+                <li>
                     <NavLink to="/log/cloud-log" replace={true} className="hvr-sweep-to-right">
                         <div>
                             <span className="ico"><FontAwesomeIcon icon={faCloud} /></span>
                             <span className="name">云取日志</span>
                         </div>
                     </NavLink>
-                </Auth>
-            </li>
+                </li>
+            </Auth>
         </ul>
     </MenuPanel>
     <Route

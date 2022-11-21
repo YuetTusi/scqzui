@@ -28,7 +28,7 @@ export interface FormValue {
 }
 
 /**
- * 破解方式
+ * 类型
  */
 export enum CrackTypes {
     /**
@@ -50,7 +50,7 @@ export enum CrackTypes {
 }
 
 /**
- * 操作类型
+ * 操作方式
  */
 export enum UserAction {
     /**

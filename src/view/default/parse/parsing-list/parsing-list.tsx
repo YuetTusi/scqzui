@@ -7,8 +7,8 @@ import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import { ParsingListState } from '@/model/default/parsing-list';
 import ParseDetail from '@/schema/parse-detail';
-import DeviceType from '@/schema/device-type';
 import { ListBox } from './styled/style';
+import { ParsingDevProp, ParsingListProp } from './prop';
 
 const { devText } = helper.readConf()!;
 
@@ -20,7 +20,7 @@ const { devText } = helper.readConf()!;
  * | | |
  * +---+
  */
-const ParsingDev: FC<{ info?: ParseDetail, devices: DeviceType[] }> = ({ info, devices }) => {
+const ParsingDev: FC<ParsingDevProp> = ({ info, devices }) => {
 
     const prevDetail = useRef<ParseDetail>();
     const dispatch = useDispatch();
@@ -96,7 +96,7 @@ const ParsingDev: FC<{ info?: ParseDetail, devices: DeviceType[] }> = ({ info, d
 /**
  * 进度列表
  */
-const ParsingList: FC<{}> = () => {
+const ParsingList: FC<ParsingListProp> = () => {
 
     const dispatch = useDispatch();
     const { info, devices } = useSelector<StateTree, ParsingListState>(state => state.parsingList);
@@ -147,12 +147,12 @@ const ParsingList: FC<{}> = () => {
     const renderList = () => {
 
         if (info.length > 0 && devices.length > 0) {
-            return devices.map((item, index) => {
-                const next = info.find(i => i.deviceId === item._id);
+            return devices.map(({ _id }) => {
+                const next = info.find(i => i.deviceId === _id);
                 return <ParsingDev
                     info={next}
                     devices={devices}
-                    key={`PD_${item._id}`} />
+                    key={`PD_${_id}`} />
             });
         } else {
             return <div className="d-empty">

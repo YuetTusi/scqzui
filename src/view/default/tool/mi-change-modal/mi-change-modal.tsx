@@ -28,6 +28,7 @@ const MiChangeModal: FC<MiChangeModalProp> = ({ visible, onOk, onCancel }) => {
      */
     const selectSaveHandle = debounce(
         (event: MouseEvent<HTMLInputElement>) => {
+            event.preventDefault();
             const { setFieldsValue } = formRef;
             ipcRenderer
                 .invoke('open-dialog', {

@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faFileZipper } from '@fortawesome/free-solid-svg-icons';
+import { faFolder } from '@fortawesome/free-solid-svg-icons';
 import { faAndroid } from '@fortawesome/free-brands-svg-icons';
 import Popover from 'antd/lib/popover';
 import Auth from '@/component/auth';
