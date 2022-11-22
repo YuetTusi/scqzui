@@ -13,12 +13,14 @@ import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { ITreeNode } from '@/type/ztree';
 import { helper } from '@/utils/helper';
+import Auth from '@/component/auth';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
 import { BatchExportReportModalState } from '@/model/default/batch-export-report-modal';
 import { toTreeData, filterTree, setDefaultChecked } from './helper';
 import { BatchExportReportModalBox, ControlBoxes } from './styled/style';
 import { BatchExportReportModalProp, ReportExportTask } from './prop';
 
+const { useFakeButton } = helper.readConf()!;
 let ztree: any = null;
 
 /**
@@ -168,10 +170,12 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
                     }}>
                     附件
                 </span>
-                <Button disabled={isEmpty} onClick={validCheck} type="primary">
-                    <FilePdfOutlined />
-                    <span>导出PDF</span>
-                </Button>
+                <Auth deny={!useFakeButton}>
+                    <Button disabled={isEmpty} onClick={validCheck} type="primary">
+                        <FilePdfOutlined />
+                        <span>导出PDF</span>
+                    </Button>
+                </Auth>
                 <Button disabled={isEmpty} onClick={validCheck} type="primary">
                     <ExportOutlined />
                     <span>导出报告</span>

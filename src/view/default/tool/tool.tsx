@@ -298,22 +298,24 @@ const Tool: FC<ToolProp> = () => {
                             安卓数据
                         </div>
                     </div>
-                    <div onClick={() => onImportClick(ImportTypes.AndroidData, '导入数据（安卓镜像）')} className="t-button">
-                        <div className="ico">
-                            <FontAwesomeIcon icon={faAndroid} color="#a6ce3a" />
+                    <Auth deny={!useFakeButton}>
+                        <div onClick={() => onImportClick(ImportTypes.AndroidData, '导入数据（安卓镜像）')} className="t-button">
+                            <div className="ico">
+                                <FontAwesomeIcon icon={faAndroid} color="#a6ce3a" />
+                            </div>
+                            <div className="name">
+                                安卓镜像
+                            </div>
                         </div>
-                        <div className="name">
-                            安卓镜像
+                        <div onClick={() => onImportClick(ImportTypes.SDCardMirror, '导入数据（SD卡镜像）')} className="t-button">
+                            <div className="ico">
+                                <FontAwesomeIcon icon={faSdCard} color="#07b6bf" />
+                            </div>
+                            <div className="name">
+                                SD卡镜像
+                            </div>
                         </div>
-                    </div>
-                    <div onClick={() => onImportClick(ImportTypes.SDCardMirror, '导入数据（SD卡镜像）')} className="t-button">
-                        <div className="ico">
-                            <FontAwesomeIcon icon={faSdCard} color="#07b6bf" />
-                        </div>
-                        <div className="name">
-                            SD卡镜像
-                        </div>
-                    </div>
+                    </Auth>
                 </div>
             </SortBox>
             <ImportBak onClick={() => setFakeImportModalVisible(true)} />

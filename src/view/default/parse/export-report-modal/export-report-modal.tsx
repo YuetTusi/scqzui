@@ -10,6 +10,7 @@ import Checkbox from 'antd/lib/checkbox';
 import Input from 'antd/lib/input';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
+import Auth from '@/component/auth';
 import { helper } from '@/utils/helper';
 import log from '@/utils/log';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
@@ -17,6 +18,7 @@ import { expandNodes, filterTree, mapTree, readTxtFile } from './tree-util';
 import { ExportReportModalBox, ControlBoxes } from './styled/style';
 import { ExportReportModalProp } from './prop';
 
+const { useFakeButton } = helper.readConf()!;
 let ztree: any = null;
 
 /**
@@ -160,10 +162,12 @@ const ExportReportModal: FC<ExportReportModalProp> = ({ visible, data, closeHand
                     <Checkbox checked={isAttach} onChange={() => setIsAttach((prev) => !prev)} />
                     <span onClick={() => setIsAttach((prev) => !prev)}>附件</span>
                 </div>
-                <Button type="primary" onClick={exportHandle}>
-                    <FilePdfOutlined />
-                    <span>导出PDF</span>
-                </Button>
+                <Auth deny={!useFakeButton}>
+                    <Button type="primary" onClick={exportHandle}>
+                        <FilePdfOutlined />
+                        <span>导出PDF</span>
+                    </Button>
+                </Auth>
                 <Button type="primary" onClick={exportHandle}>
                     <ExportOutlined />
                     <span>导出报告</span>
