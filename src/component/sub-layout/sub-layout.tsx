@@ -22,7 +22,7 @@ const SubLayout: FC<{ title?: string }> = ({ title, children }) => {
                 <div>{title ?? ''}</div>
                 <div>
                     <Button
-                        onClick={() => dispatch(routerRedux.push('/'))}
+                        onClick={() => dispatch(routerRedux.push('/guide'))}
                         ghost={true}
                         type="primary"
                         size="small">

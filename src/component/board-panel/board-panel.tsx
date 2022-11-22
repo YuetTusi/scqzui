@@ -7,6 +7,7 @@ import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import WarningOutlined from '@ant-design/icons/WarningOutlined';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
+import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
@@ -52,6 +53,7 @@ const openHelpDocClick = debounce(async (event: MouseEvent<HTMLSpanElement>) => 
     }
 }, 1000, { leading: true, trailing: false });
 
+
 /**
  * @description 首屏按钮面板
  */
@@ -86,6 +88,15 @@ const BoardPanel: FC<{}> = ({ children }) => {
             setIsDebug(await helper.isDebug());
         })();
     }, []);
+
+
+    /**
+ * 用户登出
+ */
+    const logoutClick = (event: MouseEvent<HTMLSpanElement>) => {
+        event.preventDefault();
+        dispatch(routerRedux.push('/'));
+    };
 
     /**
      * 导入旧版数据handle
@@ -196,6 +207,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
                     </em>
                 </div>
                 <div className="header-buttons">
+                    <LogoutOutlined onClick={logoutClick} title="用户登出" />
                     <QuestionCircleOutlined onClick={openHelpDocClick} title="帮助文档" />
                     <BoardMenu onItemClick={onItemClick}>
                         <MenuOutlined />

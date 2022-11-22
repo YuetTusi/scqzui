@@ -9,7 +9,7 @@ import { GlobalStyle } from '@/styled/global-style';
 import Crash from '@/component/crash';
 import NotFound from '@/component/not-found';
 import { LoadView } from '@/component/loading';
-import BoardPanel from '@/component/board-panel';
+import BoardPanel, { LoginPanel } from '@/component/board-panel';
 import LayoutPanel from '@/component/layout-panel/layout-panel';
 import theme from '../../../theme/cyan.json';
 
@@ -30,6 +30,20 @@ const createRouter = (api?: RouterAPI) =>
 					<Switch>
 						<Route
 							path="/"
+							exact={true}
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/login')
+								);
+								return <Suspense fallback={<LoadView />}>
+									<LoginPanel>
+										<Next />
+									</LoginPanel>
+								</Suspense>;
+							}}
+						/>
+						<Route
+							path="/guide"
 							exact={true}
 							render={() => {
 								const Next = lazy<FC<any>>(

@@ -13,7 +13,7 @@ const ContentBox: FC<ContentBoxProp> = ({ title, children }) => {
         <div className="user-log-header">
             <div>{title ?? ''}</div>
             <div>
-                <Button onClick={() => dispatch(routerRedux.push('/'))} ghost={true} type="primary" size="small">
+                <Button onClick={() => dispatch(routerRedux.push('/guide'))} ghost={true} type="primary" size="small">
                     <HomeOutlined />
                     <span>主页</span>
                 </Button>

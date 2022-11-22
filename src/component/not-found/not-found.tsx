@@ -26,7 +26,7 @@ const NotFound: FC<{}> = () => {
             title="您访问的功能仍在建设当中，稍安勿躁"
             subTitle="请返回主页"
             extra={<Button
-                onClick={() => dispatch(routerRedux.push('/'))}
+                onClick={() => dispatch(routerRedux.push('/guide'))}
                 type="primary">
                 <HomeOutlined />
                 <span>主页</span>
