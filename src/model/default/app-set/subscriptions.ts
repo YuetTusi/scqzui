@@ -16,9 +16,16 @@ import { AppCategory } from '@/schema/app-config';
 import { importPrevNedb } from '@/component/nedb-import-modal';
 
 const cwd = process.cwd();
-const { useServerCloud, cloudAppMd5, cloudAppUrl } = helper.readConf()!;
+const { useLogin, useServerCloud, cloudAppMd5, cloudAppUrl } = helper.readConf()!;
 
 export default {
+    toStartView({ dispatch }: SubscriptionAPI) {
+        const login = sessionStorage.getItem('login');
+        if (login === null) {
+            useLogin ? dispatch(routerRedux.push('/')) : dispatch(routerRedux.push('/guide'));
+            sessionStorage.setItem('login', '1');
+        }
+    },
     /**
      * 退出应用
      */

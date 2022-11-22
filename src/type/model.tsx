@@ -114,6 +114,10 @@ interface Conf {
 	 */
 	useAi: boolean;
 	/**
+	 * 是否启用登录
+	 */
+	useLogin: boolean;
+	/**
 	 * 是否启用痕迹查询登录
 	 */
 	useTraceLogin: boolean;

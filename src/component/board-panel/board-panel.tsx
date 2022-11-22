@@ -25,7 +25,7 @@ import NedbImportModal, { importPrevNedb } from '../nedb-import-modal';
 import { UnorderList } from '../style-tool/list';
 
 const cwd = process.cwd();
-const { fetchText, useBcp, max } = helper.readConf()!;
+const { fetchText, useBcp, useLogin, max } = helper.readConf()!;
 
 /**
  * 过滤-字符
@@ -207,7 +207,9 @@ const BoardPanel: FC<{}> = ({ children }) => {
                     </em>
                 </div>
                 <div className="header-buttons">
-                    <LogoutOutlined onClick={logoutClick} title="用户登出" />
+                    <Auth deny={!useLogin}>
+                        <LogoutOutlined onClick={logoutClick} title="用户登出" />
+                    </Auth>
                     <QuestionCircleOutlined onClick={openHelpDocClick} title="帮助文档" />
                     <BoardMenu onItemClick={onItemClick}>
                         <MenuOutlined />
