@@ -7,7 +7,6 @@ import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
-import { useManufacturer } from '@/hook';
 import { Manufaturer } from '@/schema/manufaturer';
 import { SofthardwareModalProp } from './prop';
 import { No } from '@/utils/regex';

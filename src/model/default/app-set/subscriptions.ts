@@ -16,13 +16,20 @@ import { AppCategory } from '@/schema/app-config';
 import { importPrevNedb } from '@/component/nedb-import-modal';
 
 const cwd = process.cwd();
-const { useLogin, useServerCloud, cloudAppMd5, cloudAppUrl } = helper.readConf()!;
+const {
+    useLogin, useServerCloud, cloudAppMd5, cloudAppUrl
+} = helper.readConf()!;
 
 export default {
+    /**
+     * 跳转到第一页
+     */
     toStartView({ dispatch }: SubscriptionAPI) {
+        //NOTE: 如果启用了登录页则跳转到/login，否则直接进入/guide
         const login = sessionStorage.getItem('login');
+        const toView = useLogin ? '/' : '/guide';
         if (login === null) {
-            useLogin ? dispatch(routerRedux.push('/')) : dispatch(routerRedux.push('/guide'));
+            dispatch(routerRedux.push(toView));
             sessionStorage.setItem('login', '1');
         }
     },

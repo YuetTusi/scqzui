@@ -44,7 +44,7 @@ export default {
     *queryEmptyCase({ }: AnyAction, { call, put }: EffectsCommandMap) {
         const db = getDb<CaseInfo>(TableName.Cases);
         try {
-            let count: number = yield call([db, 'count'], null);
+            const count: number = yield call([db, 'count'], null);
             yield put({ type: 'device/setEmptyCase', payload: count === 0 });
         } catch (error) {
             console.log(`查询案件非空失败: ${error.message}`);
@@ -135,10 +135,10 @@ export default {
      */
     *saveFetchLog({ payload }: AnyAction, { select }: EffectsCommandMap) {
         const { usb, state } = payload as { usb: number, state: FetchState };
-        let device: DeviceStoreState = yield select((state: StateTree) => state.device);
-        let current = device.deviceList[usb - 1]; //当前采集完毕的手机
-        let { caseName, spareName } = caseStore.get(usb);
-        let log = new FetchLog();
+        const device: DeviceStoreState = yield select((state: StateTree) => state.device);
+        const current = device.deviceList[usb - 1]; //当前采集完毕的手机
+        const { caseName, spareName } = caseStore.get(usb);
+        const log = new FetchLog();
         log.caseName = helper.isNullOrUndefinedOrEmptyString(spareName) ? caseName.split('_')[0] : spareName;
         log.fetchTime = new Date();
         log.mobileHolder = current.mobileHolder;
