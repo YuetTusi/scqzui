@@ -11,7 +11,11 @@ interface AiSwitchState {
     /**
      * 相似度值(0~100)
      */
-    similarity: number
+    similarity: number,
+    /**
+     * 启用OCR识别
+     */
+    ocr: boolean
 }
 
 
@@ -24,7 +28,8 @@ let model: Model = {
     namespace: 'aiSwitch',
     state: {
         data: [],
-        similarity: 0
+        similarity: 0,
+        ocr: false
     },
     reducers,
     effects

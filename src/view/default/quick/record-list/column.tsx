@@ -367,7 +367,7 @@ export function getColumns(
                             );
                         }}
                         type="primary">
-                        搜索
+                        检索
                     </Button>
                 </Group>
             }

@@ -447,7 +447,7 @@ export default {
             ]);
 
             if (current && caseData.m_bIsAutoParse) {
-                let aiConfig: PredictJson = { config: [], similarity: 0 };
+                let aiConfig: PredictJson = { config: [], similarity: 0, ocr: false };
                 const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
                 let exist: boolean = yield call([helper, 'existFile'], predictAt);
                 if (exist) {

@@ -96,7 +96,7 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
             await helper.writeCaseJson(caseJsonPath, caseData);
         }
 
-        let aiConfig: PredictJson = { similarity: 0, config: [] };
+        let aiConfig: PredictJson = { similarity: 0, ocr: false, config: [] };
         const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
         const exist = await helper.existFile(predictAt);
         if (exist) {
@@ -378,7 +378,7 @@ export function getDevColumns(
                             );
                         }}
                         type="primary">
-                        搜索
+                        检索
                     </Button>
                 </Group>
             }

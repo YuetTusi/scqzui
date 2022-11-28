@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers, faSimCard, faSdCard, faMobileRetro, faClone
 } from '@fortawesome/free-solid-svg-icons';
-import { } from '@fortawesome/free-regular-svg-icons';
 import {
     faApple, faAndroid, faItunes, faBlackberry, faAlipay
 } from '@fortawesome/free-brands-svg-icons';
@@ -225,12 +224,12 @@ const Tool: FC<ToolProp> = () => {
                             华为OTG备份
                         </div>
                     </div>
-                    <div onClick={() => onImportClick(ImportTypes.HuaweiClone, '导入数据（华为手机克隆备份）')} className="t-button">
+                    <div onClick={() => onImportClick(ImportTypes.HuaweiClone, '导入数据（华为克隆备份）')} className="t-button">
                         <div className="ico">
                             <img src={hwcopyPng} width="50" height="50" />
                         </div>
                         <div className="name">
-                            华为手机克隆备份
+                            华为克隆备份
                         </div>
                     </div>
                     <div onClick={() => onImportClick(ImportTypes.Hisuite, '导入数据（荣耀备份）')} className="t-button">

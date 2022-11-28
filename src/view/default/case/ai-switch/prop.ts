@@ -41,7 +41,11 @@ export interface PredictJson {
     /**
      * 相似度
      */
-    similarity: number
+    similarity: number,
+    /**
+     * 开启图像OCR识别
+     */
+    ocr: boolean
 }
 
 /**
