@@ -368,6 +368,18 @@ export function getDevColumns(
                             exportReportClick(record);
                         }}
                         type="primary">导出</Button>
+                    <Button
+                        disabled={parseButtonDisable(record.parseState!)}
+                        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                            event.stopPropagation();
+                            helper.runExe(
+                                join(cwd, '../tools/SearchReport/reporter.exe'),
+                                [record.phonePath ?? '']
+                            );
+                        }}
+                        type="primary">
+                        搜索
+                    </Button>
                 </Group>
             }
         },

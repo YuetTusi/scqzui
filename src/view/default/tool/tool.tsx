@@ -187,15 +187,6 @@ const Tool: FC<ToolProp> = () => {
      */
     const huaweiCloneHandle = () => setHuaweiCloneModalVisible(true);
 
-    /**
-     * 苹果手机截屏handle
-     */
-    const snapshotHandle = (saveTo: string) => {
-
-        console.log(saveTo);
-        setSnapshotModalVisible(false);
-    };
-
     return <SubLayout title="工具箱">
         <ToolBox>
             <SortBox>

@@ -12,6 +12,9 @@ const ColorButton: FC<ColorButtonProp> = ({ to, icon, color, description, childr
     const maskRef = useRef<HTMLDivElement>(null);
     const imageBoxRef = useRef<HTMLDivElement>(null);
 
+    /**
+     * Button划过
+     */
     const onImageBoxMouseover = debounce((event: MouseEvent) => {
         event.preventDefault();
         maskRef.current!.classList.add('open');

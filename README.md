@@ -2,7 +2,7 @@
 
 ### 运行前准备工作
 
--   安装 node 环境版本 v14.x 以上
+-   安装 node 环境版本 v16.x 以上
 -   安装 yarn
 
 从版本库中拉下源码然后进入项目所在目录，使用 yarn 进行安装：
@@ -87,6 +87,7 @@ C:\Users\[你的用户名]\AppData\Local\electron\Cache
 | useFakeButton   | boolean | 是否启用工具箱演示按钮    |
 | useAi           | boolean | 是否启用 AI 功能          |
 | useQuickFetch   | boolean | 是否启用快速取证          |
+| useLogin        | boolean | 是否启用登录              |
 | useTraceLogin   | boolean | 是否启用云点验            |
 | caseText        | string  | 案件文案                  |
 | fetchText       | string  | 取证文案                  |

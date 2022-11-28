@@ -1,6 +1,6 @@
 import throttle from 'lodash/throttle';
-import { faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
 import React, { FC, useEffect, useRef } from 'react';
+import { faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useKeyboardEvent } from '@/hook';
 import Reading from '@/component/loading/reading';
@@ -80,12 +80,18 @@ const Guide: FC<{}> = () => {
             </BoardMenu>
         </ExtendPanel>
         <div className="left-opacity">
-            <div onClick={() => onScrollToClick('left')} className="aim" title="滚动到最左">
+            <div
+                onClick={() => onScrollToClick('left')}
+                className="aim"
+                title="滚动到最左">
                 <FontAwesomeIcon icon={faAnglesLeft} />
             </div>
         </div>
         <div className="right-opacity">
-            <div onClick={() => onScrollToClick('right')} className="aim" title="滚动到最右">
+            <div
+                onClick={() => onScrollToClick('right')}
+                className="aim"
+                title="滚动到最右">
                 <FontAwesomeIcon icon={faAnglesRight} />
             </div>
         </div>

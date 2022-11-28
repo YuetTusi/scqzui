@@ -75,9 +75,9 @@ const Bcp: FC<BcpProp> = () => {
     const onGoBackClick = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         const params = new URLSearchParams(search);
-        dispatch(
-            routerRedux.push(`/parse?cid=${cid}&did=${did}&cp=${params.get('cp')}&dp=${params.get('dp')}`)
-        );
+        dispatch(routerRedux.push(
+            `/parse?cid=${cid}&did=${did}&cp=${params.get('cp')}&dp=${params.get('dp')}`
+        ));
     };
 
     /**

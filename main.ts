@@ -187,11 +187,6 @@ app.whenReady()
                 }
             });
         }
-    })
-    .then(() => {
-        helper
-            .runExe(join(cwd, '../tools/SearchReport/reporter.exe'))
-            .catch(err => console.log(err));
     });
 
 if (!app.requestSingleInstanceLock()) {

@@ -224,7 +224,7 @@ const GenerateForm: FC<GenerateFormProp> = ({
                 <Col span={12} />
             </Row>
             <Split />
-            <div className="blank"></div>
+            <div className="blank" />
             <Row>
                 <Col span={12}>
                     <Item
