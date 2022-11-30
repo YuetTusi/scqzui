@@ -25,6 +25,7 @@ import { FormValue } from './generate-form/prop';
 import { BcpBox, ButtonBar, FormPanel } from './styled/style';
 import { BcpProp } from './prop';
 
+const { devText } = helper.readConf()!;
 const cwd = process.cwd();
 const { useForm } = Form;
 
@@ -75,8 +76,10 @@ const Bcp: FC<BcpProp> = () => {
     const onGoBackClick = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         const params = new URLSearchParams(search);
+        const casePage = params.get('cp'); //案件页码
+        const devPage = params.get('dp'); //设备页码
         dispatch(routerRedux.push(
-            `/parse?cid=${cid}&did=${did}&cp=${params.get('cp')}&dp=${params.get('dp')}`
+            `/parse?cid=${cid}&did=${did}&cp=${casePage}&dp=${devPage}`
         ));
     };
 
@@ -189,7 +192,7 @@ const Bcp: FC<BcpProp> = () => {
                 <div className="inner-box">
                     <SortPanel>
                         <div className="caption">
-                            设备信息
+                            {`${devText ?? '设备'}信息`}
                         </div>
                         <div className="content">
                             <DeviceInfo caseId={cid} deviceId={did} />

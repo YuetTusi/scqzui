@@ -36,6 +36,13 @@ dayjs.locale('zh-cn');
 
 //封装工具函数
 const helper = {
+    /**
+     * 开发模式
+     */
+    IS_DEV: isDev,
+    /**
+     * 默认页尺寸
+     */
     PAGE_SIZE: 10,
     /**
      * 空串
@@ -151,9 +158,10 @@ const helper = {
      * @param {string} exePath exe所在路径
      * @param {string[]} exeParams 参数
      */
-    runProc(handle: ChildProcessWithoutNullStreams | null, exeName: string, exePath: string, exeParams: string[] = []) {
+    runProc(handle: ChildProcessWithoutNullStreams | null, exeName: string, exePath: string, exeParams: string[] = [], options: any = {}) {
         handle = spawn(exeName, exeParams, {
-            cwd: exePath
+            cwd: exePath,
+            ...options
         });
         handle.once('error', () => {
             console.log(`${exeName}启动失败`);

@@ -268,7 +268,7 @@ if (!app.requestSingleInstanceLock()) {
 
         mainWindow.webContents.addListener('new-window', event => event.preventDefault());
 
-        mainWindow.on('close', (event) => {
+        mainWindow.on('close', event => {
             //关闭事件到mainWindow中去处理
             event.preventDefault();
             mainWindow!.webContents.send('will-close');
@@ -295,6 +295,8 @@ if (!app.requestSingleInstanceLock()) {
 
 //启动后台服务（采集，解析，云取证等）
 ipcMain.on('run-service', () => {
+    const quickFetchDir = join(
+        appPath, '../../../', config?.quickFetchPath ?? './QuickFetch');
     helper.runProc(
         fetchProcess,
         config?.fetchExe ?? 'n_fetch.exe',
@@ -309,7 +311,12 @@ ipcMain.on('run-service', () => {
     helper.runProc(
         quickFetchProcess,
         config?.quickFetchExe ?? 'QuickFetchServer.exe',
-        join(appPath, '../../../', config?.quickFetchPath ?? './QuickFetch')
+        quickFetchDir,
+        [],
+        {
+            cwd: quickFetchDir,
+            stdio: 'ignore'
+        }
     );
     if (config!.useServerCloud) {
         //有云取功能，调起云RPC服务

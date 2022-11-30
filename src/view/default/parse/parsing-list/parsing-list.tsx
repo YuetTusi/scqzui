@@ -81,7 +81,6 @@ const ParsingList: FC<ParsingListProp> = () => {
     const { info, devices } = useSelector<StateTree, ParsingListState>(state => state.parsingList);
     const devRef = useRef<HTMLDivElement>(null);
 
-
     useEffect(() => {
         info.forEach(item => {
             const exist = devices.some(dev => item.deviceId === dev._id);

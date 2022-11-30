@@ -37,56 +37,49 @@ const MobileIco: FC<{ device: DeviceType }> = ({ device }) => {
 
     const { fetchState, system, fetchPercent, usb, phoneInfo = [] } = device;
 
-    if (fetchState === FetchState.Fetching) {
-        //`采集中`或`完成`状态时显示进度条组件
-        return <Tooltip
-            title={<InfoList phoneInfo={phoneInfo} usb={usb!} />}
-            placement="top">
-            <Progress
-                percent={fetchPercent}
-                status="normal"
-                type="circle"
-                strokeColor="#26e5dc" />
-        </Tooltip>
-    }
-    else if (fetchState === FetchState.Finished) {
-        //`采集中`或`完成`状态时显示进度条组件
-        return <Tooltip
-            title={<InfoList phoneInfo={phoneInfo} usb={usb!} />}
-            placement="top">
-            <Progress
-                percent={fetchPercent}
-                format={() => '完成'}
-                success={{ percent: 100, strokeColor: '#26e5dc' }}
-                status="success"
-                type="circle"
-                strokeColor="#26e5dc" />
-        </Tooltip>
-    }
-    else if (fetchState === FetchState.HasError) {
-        //`采集中`或`完成`状态时显示进度条组件
-        return <Tooltip
-            title={<InfoList phoneInfo={phoneInfo} usb={usb!} />}
-            placement="top">
-            <Progress
-                percent={fetchPercent}
-                format={() => '失败'}
-                status="success"
-                type="circle"
-                strokeColor="#ff4d4f" />
-        </Tooltip>
-    }
-    else {
-        switch (system) {
-            case DeviceSystem.Android:
-                return <FontAwesomeIcon icon={faAndroid} />;
-            case DeviceSystem.IOS:
+    switch (fetchState) {
+        case FetchState.Fetching:
+            return <Tooltip
+                title={<InfoList phoneInfo={phoneInfo} usb={usb!} />}
+                placement="top">
+                <Progress
+                    percent={fetchPercent}
+                    status="normal"
+                    type="circle"
+                    strokeColor="#26e5dc" />
+            </Tooltip>;
+        case FetchState.Finished:
+            return <Tooltip
+                title={<InfoList phoneInfo={phoneInfo} usb={usb!} />}
+                placement="top">
+                <Progress
+                    percent={fetchPercent}
+                    format={() => '完成'}
+                    success={{ percent: 100, strokeColor: '#26e5dc' }}
+                    status="success"
+                    type="circle"
+                    strokeColor="#26e5dc" />
+            </Tooltip>;
+        case FetchState.HasError:
+            return <Tooltip
+                title={<InfoList phoneInfo={phoneInfo} usb={usb!} />}
+                placement="top">
+                <Progress
+                    percent={fetchPercent}
+                    format={() => '失败'}
+                    status="success"
+                    type="circle"
+                    strokeColor="#ff4d4f" />
+            </Tooltip>;
+        default:
+            if (system === DeviceSystem.IOS) {
                 return <FontAwesomeIcon icon={faApple} />;
-            default:
+            } else if (system === DeviceSystem.Android) {
+                return <FontAwesomeIcon icon={faAndroid} />;
+            } else {
                 return <FontAwesomeIcon icon={faQuestionCircle} />;
-        }
+            }
     }
-
 };
 
 export { MobileIco };

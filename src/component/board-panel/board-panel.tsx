@@ -25,6 +25,7 @@ import NedbImportModal, { importPrevNedb } from '../nedb-import-modal';
 import { UnorderList } from '../style-tool/list';
 
 const cwd = process.cwd();
+const isDev = process.env['NODE_ENV'] === 'development';
 const { fetchText, useBcp, useLogin, max } = helper.readConf()!;
 
 /**
@@ -38,7 +39,9 @@ const filterCharactor = (text?: string) =>
  */
 const openHelpDocClick = debounce(async (event: MouseEvent<HTMLSpanElement>) => {
     event.preventDefault();
-    const url = join(cwd, './data/help/帮助.doc');
+    const url = isDev
+        ? join(cwd, './data/help/帮助.docx')
+        : join(cwd, './resources/help/帮助.docx');
     try {
         const exist = await helper.existFile(url);
         message.destroy();
