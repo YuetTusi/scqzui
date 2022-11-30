@@ -68,12 +68,18 @@ export default {
                     maskClosable: false,
                     centered: true
                 });
-                yield fork([deviceDb, 'update'],
-                    { _id: { $in: devUpdateId } },
-                    { $set: { parseState: payload } }, true);
-                yield fork([recDb, 'update'],
-                    { _id: { $in: recUpdateId } },
-                    { $set: { parseState: payload } }, true);
+                yield all([
+                    fork([deviceDb, 'update'],
+                        { _id: { $in: devUpdateId } },
+                        { $set: { parseState: payload } },
+                        true
+                    ),
+                    fork([recDb, 'update'],
+                        { _id: { $in: recUpdateId } },
+                        { $set: { parseState: payload } },
+                        true
+                    )
+                ]);
             }
         } catch (error) {
             logger.error(`启动应用更新解析状态失败 @modal/default/app-set/*updateAllDeviceParseState: ${error.message}`);
@@ -86,7 +92,7 @@ export default {
     /**
      * 调用HTTP接口
      */
-    *fetchCloudAppData({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *fetchCloudAppData({ }: AnyAction, { call, put }: EffectsCommandMap) {
 
         const url = config?.cloudAppUrl ?? helper.FETCH_CLOUD_APP_URL;
 

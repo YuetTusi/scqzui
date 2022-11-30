@@ -110,7 +110,7 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
                 aiTypes: aiConfig,
                 useDefaultTemp: appJson?.useDefaultTemp ?? true,
                 useKeyword: appJson?.useKeyword ?? false,
-                useDocVerify: false,
+                useDocVerify: [false, false],
                 dataMode: DataMode.Check,
                 tokenAppList: []
             }

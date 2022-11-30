@@ -7,12 +7,17 @@ import { ImageButtonProp } from './prop';
 /**
  * 图片大按钮
  */
-const ImageButton: FC<ImageButtonProp> = ({ to, icon, src, description, children }) => {
+const ImageButton: FC<ImageButtonProp> = ({
+    to, icon, src, description, children
+}) => {
 
     const dispatch = useDispatch();
     const imageBoxRef = useRef<HTMLDivElement>(null);
     const maskRef = useRef<HTMLDivElement>(null);
 
+    /**
+     * 划过Event
+     */
     const onImageBoxMouseover = debounce((event: MouseEvent) => {
         event.preventDefault();
         maskRef.current!.classList.add('open');

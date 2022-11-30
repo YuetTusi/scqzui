@@ -470,7 +470,10 @@ export default {
                     aiTypes,
                     useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                     useKeyword: appConfig?.useKeyword ?? false,
-                    useDocVerify: appConfig?.useDocVerify ?? false,
+                    useDocVerify: [
+                        appConfig?.useDocVerify ?? false,
+                        appConfig?.usePdfOcr ?? false
+                    ],
                     tokenAppList
                 })}`);
                 //# 通知parse开始解析
@@ -491,7 +494,10 @@ export default {
                         aiTypes,
                         useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                         useKeyword: appConfig?.useKeyword ?? false,
-                        useDocVerify: appConfig?.useDocVerify ?? false,
+                        useDocVerify: [
+                            appConfig?.useDocVerify ?? false,
+                            appConfig?.usePdfOcr ?? false
+                        ],
                         tokenAppList
                     }
                 });

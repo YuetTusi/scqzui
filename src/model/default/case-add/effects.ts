@@ -18,7 +18,7 @@ export default {
     /**
      * 保存案件
      * @param {CaseInfo} payload.entity 案件
-     * @param {string} payload.name 
+     * @param {string|null} payload.name 从某页跳转而来
      */
     *saveCase({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
         const db = getDb<CaseInfo>(TableName.Cases);

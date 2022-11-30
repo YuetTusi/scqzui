@@ -118,7 +118,10 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
                 aiTypes: helper.combinePredict(aiTemp, aiConfig),
                 useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                 useKeyword: appConfig?.useKeyword ?? false,
-                useDocVerify: appConfig?.useDocVerify ?? false,
+                useDocVerify: [
+                    appConfig?.useDocVerify ?? false,
+                    appConfig?.usePdfOcr ?? false
+                ],
                 dataMode: data.mode ?? DataMode.Self,
                 tokenAppList: caseData.tokenAppList
                     ? caseData.tokenAppList.map((i) => i.m_strID)

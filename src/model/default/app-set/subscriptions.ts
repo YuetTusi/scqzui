@@ -26,11 +26,11 @@ export default {
      */
     toStartView({ dispatch }: SubscriptionAPI) {
         //NOTE: 如果启用了登录页则跳转到/login，否则直接进入/guide
-        const login = sessionStorage.getItem('login');
+        const login = sessionStorage.getItem(LocalStoreKey.Login);
         const toView = useLogin ? '/' : '/guide';
         if (login === null) {
             dispatch(routerRedux.push(toView));
-            sessionStorage.setItem('login', '1');
+            sessionStorage.setItem(LocalStoreKey.Login, '1');
         }
     },
     /**

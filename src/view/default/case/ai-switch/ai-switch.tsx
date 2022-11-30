@@ -77,7 +77,6 @@ const AiSwitch: FC<AiSwitchProp> = ({ casePath }) => {
      */
     const onSwitchChange = (checked: boolean, type: string) => {
         const next = data.map((item) => {
-
             if (item.type === type) {
                 return { ...item, use: checked };
             } else {
@@ -156,12 +155,10 @@ const AiSwitch: FC<AiSwitchProp> = ({ casePath }) => {
                     addonAfter="%" />
             </Col>
             <Col flex="none">
-                <label style={{ marginLeft: '5rem' }}>OCR识别：</label>
+                <label style={{ marginLeft: '5rem' }}>图片违规分析：</label>
             </Col>
             <Col flex="auto">
-                <Tooltip
-                    title="开启将识别图片中文字信息"
-                >
+                <Tooltip title="开启将识别图片中文字违规信息">
                     <Checkbox
                         onChange={onOcrChange}
                         checked={ocr} />

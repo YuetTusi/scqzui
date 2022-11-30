@@ -52,6 +52,7 @@ const Keywords: FC<KeywordsProp> = () => {
     const [isDefault, setIsDefault] = useState<boolean>(true);//开启默认模版
     const [isUseKeyword, setIsUseKeyword] = useState<boolean>(false); //开启关键词验证
     const [isUseDocVerify, setIsUseDocVerify] = useState<boolean>(false); //开启文档验证
+    const [isPdfOcr, setIsPdfOcr] = useState<boolean>(false); //开启PDF OCR识别
     const [addCategoryModalVisible, setAddCategoryModalVisible] = useState<boolean>(false);
     const [fileList, setFileList] = useState<string[]>([]);
     const appConfig = useAppConfig();
@@ -60,6 +61,7 @@ const Keywords: FC<KeywordsProp> = () => {
         setIsDefault(appConfig?.useDefaultTemp ?? true);
         setIsUseKeyword(appConfig?.useKeyword ?? false);
         setIsUseDocVerify(appConfig?.useDocVerify ?? false);
+        setIsPdfOcr(appConfig?.usePdfOcr ?? false);
     }, [appConfig]);
 
     useEffect(() => {
@@ -202,6 +204,7 @@ const Keywords: FC<KeywordsProp> = () => {
             useDefaultTemp: isDefault,
             useKeyword: isUseKeyword,
             useDocVerify: isUseDocVerify,
+            usePdfOcr: isPdfOcr
         };
         message.destroy();
         try {
@@ -320,10 +323,17 @@ const Keywords: FC<KeywordsProp> = () => {
                         size="small" />
                 </li>
                 <li>
-                    <label>文档验证：</label>
+                    <label>文档违规分析：</label>
                     <Switch
                         onChange={(checked: boolean) => setIsUseDocVerify(checked)}
                         checked={isUseDocVerify}
+                        size="small" />
+                </li>
+                <li>
+                    <label>PDF违规分析：</label>
+                    <Switch
+                        onChange={(checked: boolean) => setIsPdfOcr(checked)}
+                        checked={isPdfOcr}
                         size="small" />
                 </li>
                 <li>

@@ -29,8 +29,20 @@ export default {
       */
     *saveImportDeviceToCase({ payload }: AnyAction, { call, fork, put }: EffectsCommandMap) {
 
-        const { formValue, importType, useDefaultTemp, useDocVerify, useKeyword } = payload as {
-            formValue: FormValue, importType: ImportTypes, useDefaultTemp: boolean, useKeyword: boolean, useDocVerify: boolean
+        const {
+            formValue,
+            importType,
+            useDefaultTemp,
+            useDocVerify,
+            useKeyword,
+            usePdfOcr
+        } = payload as {
+            formValue: FormValue,
+            importType: ImportTypes,
+            useDefaultTemp: boolean,
+            useKeyword: boolean,
+            useDocVerify: boolean,
+            usePdfOcr: boolean
         };
         const caseDb = getDb<CaseInfo>(TableName.Cases);
         const deviceDb = getDb<DeviceType>(TableName.Devices);
@@ -122,7 +134,7 @@ export default {
                 hasReport: caseData?.hasReport ?? false,
                 useDefaultTemp,
                 useKeyword,
-                useDocVerify
+                useDocVerify: [useDocVerify, usePdfOcr]
             });
 
             //#通知Parse开始导入
@@ -145,7 +157,7 @@ export default {
                     hasReport: caseData?.hasReport ?? false,
                     useDefaultTemp,
                     useKeyword,
-                    useDocVerify
+                    useDocVerify: [useDocVerify, usePdfOcr]
                 }
             });
 
@@ -167,7 +179,7 @@ export default {
                     hasReport: caseData?.hasReport ?? false,
                     useDefaultTemp,
                     useKeyword,
-                    useDocVerify
+                    useDocVerify: [useDocVerify, usePdfOcr]
                 }
             })}`);
             yield put({ type: 'setVisible', payload: false });

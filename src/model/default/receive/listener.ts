@@ -485,7 +485,10 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
                 aiTypes: aiConfig,
                 useDefaultTemp: appJson?.useDefaultTemp ?? true,
                 useKeyword: appJson?.useKeyword ?? false,
-                useDocVerify: appJson?.useDocVerify ?? false,
+                useDocVerify: [
+                    appJson?.useDocVerify ?? false,
+                    appJson?.usePdfOcr ?? false
+                ],
                 tokenAppList: []
             }
         });

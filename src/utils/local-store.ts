@@ -33,7 +33,11 @@ enum LocalStoreKey {
     /**
      * 是否备份旧版本数据
      */
-    BakPrevNedb = 'BakPrevNedb'
+    BakPrevNedb = 'BakPrevNedb',
+    /**
+     * 已登录标记
+     */
+    Login = 'Login'
 }
 
 /**

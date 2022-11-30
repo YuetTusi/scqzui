@@ -12,7 +12,11 @@ export interface AppJson {
      */
     useKeyword: boolean,
     /**
-     * 是否开启文档验证
+     * 是否开启文档违规分析
      */
-    useDocVerify: boolean
+    useDocVerify: boolean,
+    /**
+     * 是否开启PDF违规分析
+     */
+    usePdfOcr: boolean
 }

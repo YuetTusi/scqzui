@@ -52,7 +52,8 @@ const ImportDataModal: FC<ImportModalProp> = () => {
                     importType,
                     useDefaultTemp: appConfig?.useKeyword ?? true,
                     useKeyword: appConfig?.useKeyword ?? false,
-                    useDocVerify: appConfig?.useDocVerify ?? false
+                    useDocVerify: appConfig?.useDocVerify ?? false,
+                    usePdfOcr: appConfig?.usePdfOcr ?? false
                 }
             });
         } catch (error) {

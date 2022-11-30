@@ -8,6 +8,7 @@ import { helper } from '@/utils/helper';
 import { ParsingListState } from '@/model/default/parsing-list';
 import ParseDetail from '@/schema/parse-detail';
 import { ListBox } from './styled/style';
+import { ParseDev } from './parse-dev';
 import { ParsingDevProp, ParsingListProp } from './prop';
 
 const { devText } = helper.readConf()!;
@@ -46,28 +47,6 @@ const ParsingDev: FC<ParsingDevProp> = ({ info, devices }) => {
         }
     };
 
-    const renderLi = () => {
-        const dev = devices.find(item => item._id === info?.deviceId);
-        return <ul>
-            <li>
-                <label>{`${devText ?? '设备'}名称`}</label>
-                <span>{dev?.mobileName === undefined ? '' : dev?.mobileName.split('_')[0]}</span>
-            </li>
-            <li>
-                <label>持有人</label>
-                <span>{dev?.mobileHolder ?? ''}</span>
-            </li>
-            <li>
-                <label>编号</label>
-                <span>{dev?.mobileNo ?? ''}</span>
-            </li>
-            <li>
-                <label>备注</label>
-                <span>{dev?.note ?? ''}</span>
-            </li>
-        </ul>;
-    }
-
     const progFormatter = (percent?: number) => {
         if (percent === 100) {
             return <span style={{ color: '#0fb9b1' }}>完成</span>;
@@ -88,7 +67,7 @@ const ParsingDev: FC<ParsingDevProp> = ({ info, devices }) => {
             <div className="live" title={info?.curinfo}>
                 {info?.curinfo ?? prevDetail.current?.curinfo}
             </div>
-            {renderLi()}
+            <ParseDev devices={devices} detail={info} />
         </div>
     </div>;
 };

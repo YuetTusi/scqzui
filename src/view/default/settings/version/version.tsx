@@ -11,12 +11,12 @@ import QuickCopy from '@/component/quick-copy';
 import { Manufaturer } from '@/schema/manufaturer';
 import { VersionBox } from './styled/style';
 import LogList from './log-list';
-import logo from './images/icon.png';
+import logoPng from './images/icon.png';
 import { LogItem } from './prop';
 // import { useDispatch } from 'dva';
 
 const cwd = process.cwd();
-const config = helper.readConf();
+const conf = helper.readConf()!;
 const jsonPath =
     process.env['NODE_ENV'] === 'development'
         ? join(cwd, './data/manufaturer.json')
@@ -69,10 +69,9 @@ const Version: FC<{}> = () => {
      */
     const getLogo = () => {
         if (process.env.NODE_ENV === 'development') {
-            return logo;
+            return logoPng;
         } else {
-            const logo = join(cwd, `./resources/config/${config?.logo}`);
-            return logo;
+            return join(cwd, `./resources/config/${conf.logo}`);
         }
     };
 
@@ -88,7 +87,9 @@ const Version: FC<{}> = () => {
                     width={300}
                     height={300}
                     onDoubleClick={() => {
+                        console.clear();
                         console.table(process.versions);
+                        console.table(conf);
                     }}
                 />
             </div>
