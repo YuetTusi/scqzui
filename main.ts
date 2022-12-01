@@ -150,6 +150,9 @@ app.on('render-process-gone', (event, webContents, { reason }) => {
         case 'killed':
             errMsg = '渲染进程被外部终止';
             break;
+        default:
+            errMsg = `程序已崩溃 reason:${reason}`;
+            break;
     }
     if (errMsg !== null) {
         log.error(
