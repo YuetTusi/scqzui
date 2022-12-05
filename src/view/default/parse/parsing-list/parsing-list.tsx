@@ -23,8 +23,8 @@ const { devText } = helper.readConf()!;
  */
 const ParsingDev: FC<ParsingDevProp> = ({ info, devices }) => {
 
-    const prevDetail = useRef<ParseDetail>();
     const dispatch = useDispatch();
+    const prevDetail = useRef<ParseDetail>();//上一条消息
 
     useEffect(() => {
         if (info !== undefined) {

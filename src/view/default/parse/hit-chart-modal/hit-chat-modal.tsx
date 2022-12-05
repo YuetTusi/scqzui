@@ -35,10 +35,11 @@ echars.use([
     CanvasRenderer
 ]);
 
-
-const openFileInBrowser = (target: string) => {
-    shell.openPath(target);
-};
+/**
+ * 使用默认应用打开文件
+ * @param target 文件路径
+ */
+const openFileInBrowser = (target: string) => shell.openPath(target);
 
 /**
  * 命中数量饼图展示

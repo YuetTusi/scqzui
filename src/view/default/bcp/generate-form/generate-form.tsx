@@ -206,12 +206,13 @@ const GenerateForm: FC<GenerateFormProp> = ({
         <Form form={formRef} {...formItemLayout}>
             <Row>
                 <Col span={12}>
-                    <Item rules={[
-                        {
-                            required: true,
-                            message: '请确定有无附件'
-                        }
-                    ]}
+                    <Item
+                        rules={[
+                            {
+                                required: true,
+                                message: '请确定有无附件'
+                            }
+                        ]}
                         initialValue={false}
                         name="attachment"
                         label="BCP附件">

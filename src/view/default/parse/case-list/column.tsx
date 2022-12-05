@@ -79,7 +79,6 @@ export function getCaseColumns(
                                 BCP
                             </Button>
                         </Auth>
-
                     </Group>
                 </div>;
             }
