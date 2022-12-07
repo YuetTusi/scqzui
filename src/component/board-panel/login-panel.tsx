@@ -31,7 +31,9 @@ const LoginPanel: FC<{}> = ({ children }) => {
     useEffect(() => {
         (async () => {
             try {
-                const { manufacturer, materials_name, materials_software_version } = await helper.readManufaturer();
+                const {
+                    manufacturer, materials_name, materials_software_version
+                } = await helper.readManufaturer();
                 setManu(manufacturer ?? '北京万盛华通科技有限公司');
                 setTitle(materials_name ?? '智能终端取证系统');
                 setVersion(materials_software_version ?? 'v0.0.1');

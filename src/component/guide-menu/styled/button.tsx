@@ -8,6 +8,9 @@ const Color = styled.div<{ color: string }>`
     position: relative;
     cursor: pointer;
     color:#fff;
+    @media screen and (min-height:980px){
+        width:380px;
+    }
     width:350px;
     height:100%;
     border-radius: ${props => props.theme['border-radius-base']};

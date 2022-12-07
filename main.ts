@@ -342,10 +342,10 @@ ipcMain.on('run-service', () => {
 
 
 //退出应用
-ipcMain.on('do-close', (event: IpcMainEvent) => {
+ipcMain.on('do-close', (event: IpcMainEvent) =>
     //mainWindow通知退出程序
-    exitApp(platform);
-});
+    exitApp(platform)
+);
 
 /**
  * 重启应用
@@ -512,9 +512,9 @@ ipcMain.on('show-notice', (event: IpcMainEvent, { title, message }) =>
 );
 
 //显示notification消息,参数为消息文本
-ipcMain.on('show-notification', (event, args) => {
-    mainWindow!.webContents.send('show-notification', args);
-});
+ipcMain.on('show-notification', (event, args) =>
+    mainWindow!.webContents.send('show-notification', args)
+);
 
 //显示窗口进度
 ipcMain.on('show-progress', (event, show: boolean) => {

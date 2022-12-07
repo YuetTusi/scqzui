@@ -52,13 +52,15 @@ export default {
             let devUpdateId: string[] = [];
             let recUpdateId: string[] = [];
             for (let i = 0; i < deviceData.length; i++) {
-                if (deviceData[i].parseState === ParseState.Fetching || deviceData[i].parseState === ParseState.Parsing) {
-                    devUpdateId.push(deviceData[i]._id!);
+                const { _id, parseState } = deviceData[i];
+                if (parseState === ParseState.Fetching || parseState === ParseState.Parsing) {
+                    devUpdateId.push(_id!);
                 }
             }
             for (let i = 0; i < recData.length; i++) {
-                if (recData[i].parseState === ParseState.Fetching || recData[i].parseState === ParseState.Parsing) {
-                    recUpdateId.push(recData[i]._id!);
+                const { _id, parseState } = recData[i];
+                if (parseState === ParseState.Fetching || parseState === ParseState.Parsing) {
+                    recUpdateId.push(_id!);
                 }
             }
             if (devUpdateId.length > 0 || recUpdateId.length > 0) {

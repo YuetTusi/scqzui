@@ -7,6 +7,9 @@ const MenuPanel = styled.div`
     width: auto;
     /* overflow-x: auto; */
     /* grid-template-rows: 50% 50%; */
+    @media screen and (min-height:980px){
+        grid-template-columns: repeat(4, minmax(380px, 380px));
+    }
     grid-template-columns: repeat(4, minmax(350px, 350px));
     grid-auto-flow: column;
     grid-gap: 20px;
