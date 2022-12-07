@@ -50,7 +50,6 @@ const fnButtonDisable = (parseState?: ParseState) => {
 const delButtonDisable = (parseState?: ParseState) => {
     switch (parseState) {
         case ParseState.Fetching:
-        case ParseState.Exception:
         case ParseState.Parsing:
             return true
         case ParseState.Error:
