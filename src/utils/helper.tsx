@@ -41,6 +41,10 @@ const helper = {
      */
     IS_DEV: isDev,
     /**
+     * 应用当前工作目录
+     */
+    APP_CWD: cwd,
+    /**
      * 默认页尺寸
      */
     PAGE_SIZE: 10,

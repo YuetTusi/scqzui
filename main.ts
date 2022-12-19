@@ -1,6 +1,6 @@
 /**
  * 取证UI主进程入口文件
- * @author Yuet
+ * @author Yuet.Tusi
  * @date 2022-08-16
  */
 import { join } from 'path';

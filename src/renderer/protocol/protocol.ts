@@ -8,9 +8,9 @@ let fetchDataReceive: FetchData | null = null;
 var $btnAgree = document.getElementById('btnAgree');
 var $btnDisagree = document.getElementById('btnDisagree');
 
-ipcRenderer.on('show-protocol', (event, fetchData: FetchData) => {
-    fetchDataReceive = fetchData;
-});
+ipcRenderer.on('show-protocol', (event, fetchData: FetchData) =>
+    fetchDataReceive = fetchData
+);
 
 (function (wait) {
     timer = setInterval(() => {

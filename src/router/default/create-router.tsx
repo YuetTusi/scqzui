@@ -2,7 +2,7 @@ import React, { FC, lazy, Suspense } from 'react';
 import { RouterAPI } from 'dva';
 import { Router, Route, Switch } from 'dva/router';
 import Empty from 'antd/lib/empty';
-import localeCN from 'antd/es/locale/zh_CN';
+import zhCN from 'antd/es/locale/zh_CN';
 import ConfigProvider from 'antd/lib/config-provider';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '@/styled/global-style';
@@ -20,7 +20,7 @@ import theme from '../../../theme/cyan.json';
  */
 const createRouter = (api?: RouterAPI) =>
 	<ConfigProvider
-		locale={localeCN}
+		locale={zhCN}
 		autoInsertSpaceInButton={false}
 		renderEmpty={() => <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无数据" />}
 		componentSize="middle">

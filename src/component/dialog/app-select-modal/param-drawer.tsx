@@ -78,16 +78,13 @@ const ParamDrawer: FC<{
         }
     }, [currentApp]);
 
-    const renderItem = () => {
-        return ext.map((item, index) => {
-            return <Item
-                label={item.title}
-                name={item.name}
-                key={`CP_${index}`}>
-                <Input />
-            </Item>;
-        })
-    };
+    const renderItem = () => ext
+        .map(({ title, name }, index) => <Item
+            label={title}
+            name={name}
+            key={`CP_${index}`}>
+            <Input />
+        </Item>);
 
     /**
      * 确定Click
