@@ -259,6 +259,8 @@ if (!app.requestSingleInstanceLock()) {
             mainWindow.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/default.html'));
         }
 
+        mainWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+
         mainWindow.webContents.on('did-finish-load', () => {
             mainWindow!.show();
             timerWindow!.loadFile(join(__dirname, './renderer/timer.html'));
@@ -268,8 +270,6 @@ if (!app.requestSingleInstanceLock()) {
                 fetchRecordWindow!.webContents.openDevTools();
             }
         });
-
-        mainWindow.webContents.addListener('new-window', event => event.preventDefault());
 
         mainWindow.on('close', event => {
             //关闭事件到mainWindow中去处理
