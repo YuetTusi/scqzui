@@ -101,5 +101,32 @@ export const ListBox = styled.div`
             }
         }
     }
+
+    .scroll-button{
+        cursor: pointer;
+        position: absolute;
+        top:50%;
+        margin-top: 2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.4rem;
+        border-radius: 50%;
+        border:1px solid #fff;
+        background-color: #202940;
+        opacity: 0.33;
+        &.left{
+            left:5px;
+        }
+        &.right{
+            right:5px;
+        }
+    }
+    &:hover{
+        .scroll-button{
+            transition: opacity .3s;
+            opacity: 1;
+        }
+    }
 `;
 

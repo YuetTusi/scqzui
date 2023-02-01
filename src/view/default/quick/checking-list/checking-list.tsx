@@ -1,5 +1,7 @@
 import React, { FC, MouseEvent, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'dva';
+import DoubleLeftOutlined from '@ant-design/icons/DoubleLeftOutlined';
+import DoubleRightOutlined from '@ant-design/icons/DoubleRightOutlined';
 import Empty from 'antd/lib/empty';
 import Progress from 'antd/lib/progress';
 import { useDestroy } from '@/hook';
@@ -61,7 +63,7 @@ const CheckingRec: FC<{ info?: ParseDetail, records: QuickRecord[] }> = ({ info,
                 <span>{dev?.note ?? ''}</span>
             </li>
         </ul>;
-    }
+    };
 
     const progFormatter = (percent?: number) => {
         if (percent === 100) {
@@ -97,7 +99,6 @@ const CheckingList: FC<{}> = () => {
     const { info, records } = useSelector<StateTree, CheckingListState>(state => state.checkingList);
     const devRef = useRef<HTMLDivElement>(null);
 
-
     useEffect(() => {
         info.forEach(item => {
             const exist = records.some(rec => item.deviceId === rec._id);
@@ -121,9 +122,30 @@ const CheckingList: FC<{}> = () => {
         const { current } = devRef;
         const { deltaY } = event;
         if (current) {
+            current.style.scrollBehavior = 'auto';
             current.scrollLeft += deltaY - 10;
         }
     }
+
+    /**
+     * 滚动按钮Click
+     */
+    const onScrollButtonClick = (to: 'left' | 'right') => {
+        const { current } = devRef;
+        if (current) {
+            current.style.scrollBehavior = 'smooth';
+            switch (to) {
+                case 'left':
+                    current.scrollLeft -= 120;
+                    break;
+                case 'right':
+                    current.scrollLeft += 120;
+                    break;
+                default:
+                    console.warn(`Unknow ${to}`);
+            }
+        }
+    };
 
 
     useEffect(() => {
@@ -158,6 +180,21 @@ const CheckingList: FC<{}> = () => {
         }
     };
 
+    const renderScrollButton = () => {
+        if (info.length > 0 && records.length > 0) {
+            return <>
+                <div onClick={() => onScrollButtonClick('left')} className="scroll-button left" title="向左滚动">
+                    <DoubleLeftOutlined />
+                </div>
+                <div onClick={() => onScrollButtonClick('right')} className="scroll-button right" title="向右滚动">
+                    <DoubleRightOutlined />
+                </div>
+            </>;
+        } else {
+            return null;
+        }
+    };
+
     return <ListBox>
         <div className="title">
             {fetchText ?? '点验'}列表
@@ -165,6 +202,7 @@ const CheckingList: FC<{}> = () => {
         <div ref={devRef} className="dev">
             {renderList()}
         </div>
+        {renderScrollButton()}
     </ListBox>;
 }
 
