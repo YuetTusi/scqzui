@@ -1,5 +1,7 @@
 import React, { FC, MouseEvent, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'dva';
+import DoubleLeftOutlined from '@ant-design/icons/DoubleLeftOutlined';
+import DoubleRightOutlined from '@ant-design/icons/DoubleRightOutlined';
 import Empty from 'antd/lib/empty';
 import Progress from 'antd/lib/progress';
 import { useDestroy } from '@/hook';
@@ -23,6 +25,8 @@ const { devText } = helper.readConf()!;
  */
 const ParsingDev: FC<ParsingDevProp> = ({ info, devices }) => {
 
+    console.log(devices);
+
     const dispatch = useDispatch();
     const prevDetail = useRef<ParseDetail>();//上一条消息
 
@@ -30,7 +34,7 @@ const ParsingDev: FC<ParsingDevProp> = ({ info, devices }) => {
         if (info !== undefined) {
             //有进度消息则记忆，当进度为空时展示上一次的进度值
             prevDetail.current = info;
-        }
+        } 0
     }, [info]);
 
     /**
@@ -104,10 +108,30 @@ const ParsingList: FC<ParsingListProp> = () => {
         const { current } = devRef;
         const { deltaY } = event;
         if (current) {
+            current.style.scrollBehavior = 'auto';
             current.scrollLeft += deltaY - 10;
         }
     }
 
+    /**
+     * 滚动按钮Click
+     */
+    const onScrollButtonClick = (to: 'left' | 'right') => {
+        const { current } = devRef;
+        if (current) {
+            current.style.scrollBehavior = 'smooth';
+            switch (to) {
+                case 'left':
+                    current.scrollLeft -= 120;
+                    break;
+                case 'right':
+                    current.scrollLeft += 120;
+                    break;
+                default:
+                    console.warn(`Unknow ${to}`);
+            }
+        }
+    };
 
     useEffect(() => {
         const { current } = devRef;
@@ -147,6 +171,12 @@ const ParsingList: FC<ParsingListProp> = () => {
         </div>
         <div ref={devRef} className="dev">
             {renderList()}
+        </div>
+        <div onClick={() => onScrollButtonClick('left')} className="scroll-button left" title="向左滚动">
+            <DoubleLeftOutlined />
+        </div>
+        <div onClick={() => onScrollButtonClick('right')} className="scroll-button right" title="向右滚动">
+            <DoubleRightOutlined />
         </div>
     </ListBox>;
 }
