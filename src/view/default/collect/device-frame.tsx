@@ -155,6 +155,15 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
             })
         }</>
     }
-}
+};
+
+DeviceFrame.defaultProps = {
+    onHelpHandle: () => { },
+    onNormalHandle: () => { },
+    onServerCloudHandle: () => { },
+    onRecordHandle: () => { },
+    onStopHandle: () => { },
+    onTipHandle: () => { }
+};
 
 export { DeviceFrame };

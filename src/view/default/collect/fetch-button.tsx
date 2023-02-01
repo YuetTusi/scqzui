@@ -103,4 +103,12 @@ const FetchButton: FC<FetchButtonProp> = ({
     }
 };
 
+FetchButton.defaultProps = {
+    device: {},
+    onHelpHandle: () => { },
+    onNormalHandle: () => { },
+    onServerCloudHandle: () => { },
+    onStopHandle: () => { }
+};
+
 export { FetchButton };

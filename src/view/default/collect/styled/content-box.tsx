@@ -45,6 +45,35 @@ const DevicePanel = styled.div`
     background-color:#202940;
     border-radius: ${props => props.theme['border-radius-base']};
 
+    .scroll-button{
+        cursor: pointer;
+        position: fixed;
+        bottom: 20px;
+        margin-top: 2px;
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.4rem;
+        border-radius: 50%;
+        opacity: 0.33;
+        font-size: 2.4rem;
+        &.left{
+            left:20px;
+            &:hover{
+                opacity: 1;
+            }
+        }
+        &.right{
+            right:20px;
+            &:hover{
+                opacity: 1;
+            }
+        }
+    }
+
     & > div{
         &:first-child{
             margin-left: 10px;

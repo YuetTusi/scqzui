@@ -110,4 +110,9 @@ const FetchInfo: FC<FetchInfoProp> = memo(({ device, recordHandle }) => {
     </FetchInfoBox>;
 });
 
+FetchInfo.defaultProps = {
+    device: null,
+    recordHandle: () => { }
+};
+
 export { FetchInfo };

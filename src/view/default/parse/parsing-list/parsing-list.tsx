@@ -25,8 +25,6 @@ const { devText } = helper.readConf()!;
  */
 const ParsingDev: FC<ParsingDevProp> = ({ info, devices }) => {
 
-    console.log(devices);
-
     const dispatch = useDispatch();
     const prevDetail = useRef<ParseDetail>();//上一条消息
 

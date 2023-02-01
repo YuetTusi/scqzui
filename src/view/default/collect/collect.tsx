@@ -6,6 +6,8 @@ import { routerRedux, useDispatch, useSelector } from 'dva';
 import AndroidOutlined from '@ant-design/icons/AndroidOutlined';
 import AppleOutlined from '@ant-design/icons/AppleOutlined';
 import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
+import DoubleLeftOutlined from '@ant-design/icons/DoubleLeftOutlined';
+import DoubleRightOutlined from '@ant-design/icons/DoubleRightOutlined';
 import message from 'antd/lib/message';
 import Button from 'antd/lib/button';
 import { useDstUnit, useUnit } from '@/hook/unit';
@@ -101,16 +103,6 @@ const Collect: FC<CollectProp> = ({ }) => {
     //     });
     // }, []);
 
-    /**
-     * 面板横向滚动控制
-     */
-    const onDevicePanelWheel = ({ deltaY }: WheelEvent) => {
-        const { current } = devicePanelRef;
-        if (current) {
-            current.scrollLeft += deltaY - 10;
-        }
-    }
-
     useEffect(() => {
         const { current } = devicePanelRef;
         if (current !== null) {
@@ -120,6 +112,39 @@ const Collect: FC<CollectProp> = ({ }) => {
             current!.removeEventListener('wheel', onDevicePanelWheel);
         };
     }, []);
+
+    /**
+     * 面板横向滚动控制
+     */
+    const onDevicePanelWheel = ({ deltaY }: WheelEvent) => {
+        const { current } = devicePanelRef;
+        if (current) {
+            current.style.scrollBehavior = 'auto';
+            current.scrollLeft += deltaY - 10;
+        }
+    };
+
+    /**
+     * 滚动按钮Click
+     * @param to 方向
+     */
+    const onScrollButtonClick = (to: 'left' | 'right') => {
+        const { current } = devicePanelRef;
+        if (current) {
+            current.style.scrollBehavior = 'smooth';
+            switch (to) {
+                case 'left':
+                    current.scrollLeft -= 200;
+                    break;
+                case 'right':
+                    current.scrollLeft += 200;
+                    break;
+                default:
+                    console.warn(`Unknow ${to}`);
+                    break;
+            }
+        }
+    };
 
     /**
      * 设备帮助handle
@@ -137,7 +162,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                 console.warn(`未知设备系统:${os}`);
                 break;
         }
-    }
+    };
 
     /**
      * 采集前验证相关设置
@@ -469,9 +494,23 @@ const Collect: FC<CollectProp> = ({ }) => {
                     onStopHandle={stopHandle}
                     onTipHandle={tipHandle}
                 />
+                <div
+                    onClick={() => onScrollButtonClick('left')}
+                    className="scroll-button left"
+                    title="向左滚动">
+                    <DoubleLeftOutlined />
+                </div>
+                <div
+                    onClick={() => onScrollButtonClick('right')}
+                    className="scroll-button right"
+                    title="向右滚动">
+                    <DoubleRightOutlined />
+                </div>
             </DevicePanel>
         </ContentBox>
-        <UsbDebugModal visible={usbDebugModalVisible} okHandle={() => setUsbDebugModalVisible(false)} />
+        <UsbDebugModal
+            visible={usbDebugModalVisible}
+            okHandle={() => setUsbDebugModalVisible(false)} />
         <AppleCreditModal
             visible={appCreditModalVisible}
             okHandle={() => setAppCreditModalVisible(false)} />
