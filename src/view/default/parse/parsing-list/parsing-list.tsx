@@ -165,6 +165,21 @@ const ParsingList: FC<ParsingListProp> = () => {
         }
     };
 
+    const renderScrollButton = () => {
+        if (info.length > 0 && devices.length > 0) {
+            return <>
+                <div onClick={() => onScrollButtonClick('left')} className="scroll-button left" title="向左滚动">
+                    <DoubleLeftOutlined />
+                </div>
+                <div onClick={() => onScrollButtonClick('right')} className="scroll-button right" title="向右滚动">
+                    <DoubleRightOutlined />
+                </div>
+            </>;
+        } else {
+            return null;
+        }
+    }
+
     return <ListBox>
         <div className="title">
             解析列表
@@ -172,12 +187,7 @@ const ParsingList: FC<ParsingListProp> = () => {
         <div ref={devRef} className="dev">
             {renderList()}
         </div>
-        <div onClick={() => onScrollButtonClick('left')} className="scroll-button left" title="向左滚动">
-            <DoubleLeftOutlined />
-        </div>
-        <div onClick={() => onScrollButtonClick('right')} className="scroll-button right" title="向右滚动">
-            <DoubleRightOutlined />
-        </div>
+        {renderScrollButton()}
     </ListBox>;
 }
 
