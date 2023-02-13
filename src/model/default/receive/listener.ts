@@ -114,7 +114,7 @@ export function deviceOut({ msg }: Command<DeviceType>, dispatch: Dispatch<any>)
     caseStore.remove(usb!);
     dispatch({ type: 'device/checkWhenDeviceIn', payload: { usb } });
     dispatch({ type: 'device/removeDevice', payload: usb });
-    dispatch({ type: 'device/cloudCodeModal/clearApps', payload: usb });
+    dispatch({ type: 'cloudCodeModal/clearApps', payload: usb });
 }
 
 /**
@@ -218,7 +218,10 @@ export function humanVerify({ msg }: Command<{
  * 接收手机多用户/隐私空间消息
  */
 export function extraMsg({ msg }: Command<{ usb: number, content: string }>, dispatch: Dispatch<any>) {
-    dispatch({ type: 'device/updateProp', payload: { usb: msg.usb, name: 'extra', value: msg.content } });
+    dispatch({
+        type: 'device/updateProp',
+        payload: { usb: msg.usb, name: 'extra', value: msg.content }
+    });
 }
 
 /**
@@ -227,7 +230,7 @@ export function extraMsg({ msg }: Command<{ usb: number, content: string }>, dis
 export function parseCurinfo({ msg }: Command<ParseDetail[]>, dispatch: Dispatch<any>) {
 
     const grp = groupBy(msg, (item) => item.category);
-    //按category分组，将`标准取证`和`快速点验`详情分别派发到对应的model中
+    //# 按category分组，将`标准取证`和`快速点验`详情分别派发到对应的model中
     dispatch({ type: 'parsingList/setInfo', payload: grp[ParseCategory.Normal] ?? [] }); //标准
     dispatch({ type: 'checkingList/setInfo', payload: grp[ParseCategory.Quick] ?? [] }); //快采
 }

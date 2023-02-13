@@ -1,5 +1,5 @@
-import { Organization } from '@/schema/organization';
 import { AnyAction } from 'redux';
+import { Organization } from '@/schema/organization';
 
 export default {
 
