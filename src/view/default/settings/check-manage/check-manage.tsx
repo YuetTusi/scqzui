@@ -8,7 +8,9 @@ import Tag from 'antd/lib/tag';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
-import FetchData from '@/schema/fetch-data';
+import { FetchData } from '@/schema/fetch-data';
+import { CheckJson } from '@/schema/check-json';
+import { DataMode } from '@/schema/data-mode';
 import { StateTree } from '@/type/model';
 import { CheckManageTableState } from '@/model/default/check-manage-table';
 import { helper } from '@/utils/helper';
@@ -19,7 +21,6 @@ import { getColumns } from './column';
 import CheckModal from './check-modal';
 import EditModal from './edit-modal';
 import { CheckManageProp } from './prop';
-import { CheckJson } from '@/schema/check-json';
 
 const { useForm } = Form;
 /**
@@ -138,6 +139,10 @@ const CheckManage: FC<CheckManageProp> = () => {
             await helper.writeCheckJson(data);
             setCheckData(data);
             setCheckModalVisible(false);
+            dispatch({
+                type: 'appSet/setDataMode',
+                payload: data.isCheck ? DataMode.Check : DataMode.Self
+            });
             message.success('配置成功');
         } catch (error) {
             message.error('配置失败');

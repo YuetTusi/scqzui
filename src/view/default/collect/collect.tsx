@@ -249,6 +249,7 @@ const Collect: FC<CollectProp> = ({ }) => {
      */
     const startFetchHandle = (fetchData: FetchData) => {
         setNormalInputModal(false);
+        setCheckInputModalVisible(false);
         setServerCloudModalVisible(false);
         //TODO: 关闭另两个输入框
 

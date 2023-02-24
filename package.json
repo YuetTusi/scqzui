@@ -17,7 +17,8 @@
 		"prepack": "yarn run build:prod",
 		"pack": "electron-builder --dir",
 		"predist": "rimraf dist/**/* && tsc && yarn run build:prod",
-		"dist": "electron-builder"
+		"dist": "electron-builder",
+		"dist:linux": "electron-packager . 智能检测系统 --platform=linux --arch=x64 --icon=icon.png --out=./linux --app-version=0.0.1 --overwrite --ignore=node_modules"
 	},
 	"build": {
 		"appId": "4c9e34def3049532",
@@ -97,6 +98,7 @@
 		"echarts": "^5.3.2",
 		"electron": "^22.1.0",
 		"electron-builder": "^23.6.0",
+		"electron-packager": "^17.1.1",
 		"ftp": "^0.3.10",
 		"html-webpack-plugin": "^5.5.0",
 		"jquery": "^3.6.0",
