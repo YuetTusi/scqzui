@@ -12,13 +12,12 @@
 		"build:prod": "webpack --config webpack.prod.js",
 		"prego": "tsc",
 		"serve": "webpack serve --config webpack.dev.js",
-		"go": "electron .",
+		"go": "electron . --no-sandbox",
 		"start": "cross-env NODE_ENV=development concurrently \"yarn run build\" \"yarn run serve\" \"yarn run go\"",
 		"prepack": "yarn run build:prod",
 		"pack": "electron-builder --dir",
 		"predist": "rimraf dist/**/* && tsc && yarn run build:prod",
-		"dist": "electron-builder",
-		"dist:linux": "electron-packager . 智能检测系统 --platform=linux --arch=x64 --icon=icon.png --out=./linux --app-version=0.0.1 --overwrite --ignore=node_modules"
+		"dist": "electron-builder"
 	},
 	"build": {
 		"appId": "4c9e34def3049532",
@@ -61,6 +60,18 @@
 			"allowToChangeInstallationDirectory": true,
 			"installerIcon": "installer.ico",
 			"perMachine": true
+		},
+		"linux": {
+			"target": [
+				{
+					"target": "AppImage",
+					"arch": "x64"
+				},
+				{
+					"target": "deb",
+					"arch": "x64"
+				}
+			]
 		}
 	},
 	"devDependencies": {
@@ -98,7 +109,6 @@
 		"echarts": "^5.3.2",
 		"electron": "^22.1.0",
 		"electron-builder": "^23.6.0",
-		"electron-packager": "^17.1.1",
 		"ftp": "^0.3.10",
 		"html-webpack-plugin": "^5.5.0",
 		"jquery": "^3.6.0",
