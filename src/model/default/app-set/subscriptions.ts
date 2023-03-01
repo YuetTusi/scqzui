@@ -141,9 +141,9 @@ export default {
         const [disk] = root.split(sep);
 
         try {
-            const { FreeSpace } = await helper.getDiskInfo(disk, true);
-            if (FreeSpace <= 5) {
-                logger.warn(`取证程序所在磁盘空间不足，${disk}剩余${round(FreeSpace, 2)}GB，强制退出`);
+            const { free } = await helper.getDiskSpace(disk, true);
+            if (free <= 5) {
+                logger.warn(`取证程序所在磁盘空间不足，${disk}剩余${round(free, 2)}GB，强制退出`);
                 Modal.warn({
                     title: '磁盘空间不足',
                     content: `软件所在磁盘（${disk}）空间不足，请清理数据`,
@@ -155,7 +155,7 @@ export default {
                 });
             }
         } catch (error) {
-            logger.error(`查询磁盘容量失败,盘符:${disk},错误消息：${error.message}`);
+            logger.error(`查询磁盘容量失败,目录:${disk},错误消息：${error.message}`);
         }
     },
     /**

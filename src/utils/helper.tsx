@@ -11,6 +11,7 @@ import glob from 'glob';
 import memoize from 'lodash/memoize';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/zh-cn';
+import diskSpace, { DiskSpace } from 'check-disk-space';
 import { exec, execFile, spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import React from 'react';
 import Select from 'antd/lib/select';
@@ -421,7 +422,7 @@ const helper = {
         return v4().replace(/-/g, '').substring(len);
     },
     /**
-     * 取磁盘容量信息
+     * @deprecated 使用getDiskSpace()代替
      * @param {string} diskName 盘符（如：`C:`）
      * @param {boolean} convert2GB 是否转为GB单位
      */
@@ -448,6 +449,27 @@ const helper = {
                 }
             });
         });
+    },
+    /**
+     * 检查磁盘容量
+     * @param dir 目录
+     */
+    async getDiskSpace(dir: string, convert2GB: boolean = false): Promise<DiskSpace> {
+        try {
+            const space = await diskSpace(dir);
+            if (convert2GB) {
+                return {
+                    ...space,
+                    free: space.free / Math.pow(1024, 3),
+                    size: space.size / Math.pow(1024, 3),
+                }
+            } else {
+                return space;
+            }
+            return space;
+        } catch (error) {
+            throw error;
+        }
     },
     /**
      * 返回应用id对应的名称

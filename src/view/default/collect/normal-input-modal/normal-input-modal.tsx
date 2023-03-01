@@ -169,17 +169,17 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
             try {
                 let disk = currentCase.current!.m_strCasePath.substring(0, 2);
-                const { FreeSpace } = await helper.getDiskInfo(disk, true);
-                if (FreeSpace < 100) {
+                const { free } = await helper.getDiskSpace(disk, true);
+                if (free < 100) {
                     Modal.confirm({
                         onOk() {
-                            log.warn(`磁盘空间不足, ${disk}剩余: ${round(FreeSpace, 2)}GB`);
+                            log.warn(`磁盘空间不足, ${disk}剩余: ${round(free, 2)}GB`);
                             saveHandle!(entity);
                         },
                         title: '磁盘空间不足',
                         content: <Instruction>
                             <p>
-                                磁盘空间仅存<strong>{round(FreeSpace, 1)}GB</strong>
+                                磁盘空间仅存<strong>{round(free, 1)}GB</strong>
                                 ，建议清理数据
                             </p>
                             <p>设备数据过大可能会采集失败，继续取证？</p>

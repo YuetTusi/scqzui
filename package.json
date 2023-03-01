@@ -130,6 +130,7 @@
 	"dependencies": {
 		"antd": "^4.22.7",
 		"archiver": "^5.3.0",
+		"check-disk-space": "^3.3.1",
 		"cors": "^2.8.5",
 		"cpy": "^8.1.2",
 		"dayjs": "^1.10.7",
