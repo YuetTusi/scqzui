@@ -9,8 +9,8 @@ import { FetchData } from '@/schema/fetch-data';
  * 表头定义
  * @param dispatch 派发方法
  */
-export function getColumns<T = any>(dispatch: Dispatch, onAction: (action: string, data: FetchData) => void): ColumnsType<T> {
-    const columns: ColumnType<T>[] = [
+export function getColumns(dispatch: Dispatch, onAction: (action: string, data: FetchData) => void): ColumnsType<FetchData> {
+    const columns: ColumnType<FetchData>[] = [
         {
             title: '序列号',
             dataIndex: 'serial',

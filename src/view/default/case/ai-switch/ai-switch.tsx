@@ -90,7 +90,7 @@ const AiSwitch: FC<AiSwitchProp> = ({ casePath }) => {
      * 相似度Change
      * @param value 值
      */
-    const onSimilarChange = (value: number) =>
+    const onSimilarChange = (value: number | null) =>
         dispatch({ type: 'aiSwitch/setSimilarity', payload: value });
 
     /**

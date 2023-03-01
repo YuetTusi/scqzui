@@ -170,7 +170,7 @@ const CheckManage: FC<CheckManageProp> = () => {
         </FormBox>
         <Split />
         <Table<FetchData>
-            columns={getColumns<FetchData>(dispatch, onAction)}
+            columns={getColumns(dispatch, onAction)}
             loading={loading}
             dataSource={data}
             rowKey="_id"
