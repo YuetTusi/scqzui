@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
     body{
         height: 100%;
         font-size: 1.4rem;
-		font-family:"Microsoft Yahei","NSimSun","Arial";
+		font-family:"Microsoft Yahei","CESI黑体-GB13000","Noto Sans CJK SC","NSimSun","Arial";
     }
 	#root{
 		position: relative;

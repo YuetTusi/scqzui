@@ -28,14 +28,8 @@ import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { LiveModal } from '@/component/dialog/fetch-record-modal';
 import {
-    AppleCreditModal,
-    UsbDebugModal,
-    HelpModal,
-    ApplePasswordModal,
-    UMagicCodeModal,
-    GuideModal,
-    CloudCodeModal,
-    CloudHistoryModal
+    AppleCreditModal, UsbDebugModal, HelpModal, ApplePasswordModal,
+    UMagicCodeModal, GuideModal, CloudCodeModal, CloudHistoryModal
 } from '@/component/dialog';
 import NormalInputModal from './normal-input-modal';
 import CheckInputModal from './check-input-modal';
