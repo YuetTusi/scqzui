@@ -102,41 +102,41 @@ C:\Users\[你的用户名]\AppData\Local\electron\Cache
 
 ### ui.yaml 配置说明
 
-| 参数            | 类型    | 说明                      |
-| --------------- | ------- | ------------------------- |
-| max             | number  | 采集路数（建议 1~20）     |
-| useFetch        | boolean | 是否启用采集功能          |
-| useServerCloud  | boolean | 是否启用云取证功能        |
-| useBcp          | boolean | 是否启用 BCP 相关功能     |
-| useToolBox      | boolean | 是否启用工具箱            |
-| useFakeButton   | boolean | 是否启用工具箱演示按钮    |
-| useAi           | boolean | 是否启用 AI 功能          |
-| useQuickFetch   | boolean | 是否启用快速取证          |
-| useLogin        | boolean | 是否启用登录              |
-| useTraceLogin   | boolean | 是否启用云点验            |
-| caseText        | string  | 案件文案                  |
-| fetchText       | string  | 取证文案                  |
-| devText         | string  | 设备文案                  |
-| parseText       | string  | 解析文案                  |
-| fetchButtonText | string  | 取证按钮文字              |
-| cloudButtonText | string  | 云取证按钮文字            |
-| cloudAppUrl     | string  | 云取应用查询接口地址      |
-| cloudAppMd5     | string  | 云取应用 MD5 校验接口地址 |
-| logo            | string  | 应用 LOGO 文件名          |
-| windowHeight    | number  | 窗口默认高度              |
-| windowWidth     | number  | 窗口默认宽度              |
-| minHeight       | number  | 窗口最小高度              |
-| minWidth        | number  | 窗口最小宽度              |
-| center          | boolean | 窗口是否居中              |
-| tcpPort         | number  | TCP 通讯端口              |
-| httpPort        | number  | HTTP 端口                 |
-| fetchPath       | string  | 采集程序路径              |
-| fetchExe        | string  | 采集程序名称              |
-| parsePath       | string  | 解析程序路径              |
-| parseExe        | string  | 解析程序名称              |
-| yqPath          | string  | 云取程序路径              |
-| yqExe           | string  | 云取程序名称              |
-| appQueryPath    | string  | 应用查询程序路径          |
-| appQueryExe     | string  | 应用查询程序名称          |
-| logFile         | string  | 程序 LOGO 路径            |
-| devPageUrl      | string  | 开发页 URL                |
+| 参数            | 类型    | 说明                      | 默认值                      |
+| --------------- | ------- | ------------------------- | --------------------------- |
+| max             | number  | 采集路数（建议 1~20）     | 8                           |
+| useFetch        | boolean | 是否启用采集功能          | true                        |
+| useServerCloud  | boolean | 是否启用云取证功能        | true                        |
+| useBcp          | boolean | 是否启用 BCP 相关功能     | true                        |
+| useToolBox      | boolean | 是否启用工具箱            | true                        |
+| useFakeButton   | boolean | 是否启用工具箱演示按钮    | true                        |
+| useAi           | boolean | 是否启用 AI 功能          | true                        |
+| useQuickFetch   | boolean | 是否启用快速取证          | true                        |
+| useLogin        | boolean | 是否启用登录              | true                        |
+| useTraceLogin   | boolean | 是否启用云点验            | true                        |
+| caseText        | string  | 案件文案                  | 案件                        |
+| fetchText       | string  | 取证文案                  | 取证                        |
+| devText         | string  | 设备文案                  | 设备                        |
+| parseText       | string  | 解析文案                  | 解析                        |
+| fetchButtonText | string  | 取证按钮文字              | 取证                        |
+| cloudButtonText | string  | 云取证按钮文字            | 云取证                      |
+| cloudAppUrl     | string  | 云取应用查询接口地址      | http://139.9.112.8:9699/app |
+| cloudAppMd5     | string  | 云取应用 MD5 校验接口地址 | http://139.9.112.8:9699/md5 |
+| logo            | string  | 应用 LOGO 文件名          | logo.png                    |
+| windowHeight    | number  | 窗口默认高度              | 960                         |
+| windowWidth     | number  | 窗口默认宽度              | 1460                        |
+| minHeight       | number  | 窗口最小高度              | 800                         |
+| minWidth        | number  | 窗口最小宽度              | 1280                        |
+| center          | boolean | 窗口是否居中              | true                        |
+| tcpPort         | number  | TCP 通讯端口              | 65222                       |
+| httpPort        | number  | HTTP 端口                 | 9900                        |
+| fetchPath       | string  | 采集程序路径              |                             |
+| fetchExe        | string  | 采集程序名称              |                             |
+| parsePath       | string  | 解析程序路径              |                             |
+| parseExe        | string  | 解析程序名称              |                             |
+| yqPath          | string  | 云取程序路径              |                             |
+| yqExe           | string  | 云取程序名称              |                             |
+| appQueryPath    | string  | 应用查询程序路径          |                             |
+| appQueryExe     | string  | 应用查询程序名称          |                             |
+| logFile         | string  | 程序 LOGO 路径            |                             |
+| devPageUrl      | string  | 开发页 URL                |                             |
