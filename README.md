@@ -41,6 +41,8 @@ azjm
 
 ui.yaml 无变化不需要上述操作
 
+#### Windows
+
 在命令行使用 yarn 命令来发布：
 
 ```bash
@@ -50,6 +52,29 @@ yarn run dist
 打包成功后即可在 dist 目录找到 zip 包及 Windows 安装包。
 
 > 后续升级中，如果只改动了渲染进程代码（`renderer/default`和`renderer/protocol`），那么打包发布不需要全量更新，只需发布`app.asar.unpacked\dist\renderer`下的相关文件即可。
+
+#### KylinLinux
+
+在银河麒麟平台上首次发布前要安装 fpm
+
+```bash
+sudo apt update
+sudo apt install ruby -y
+sudo gem install fpm
+export USE_SYSTEM_FPM=true
+```
+
+全局安装`node-pre-gyp`包：
+
+```bash
+sudo npm install node-pre-gyp -g
+```
+
+然后使用`yarn run dist`打包即可，如果出现拉取 electron 包错误，使用国内镜像源：
+
+```bash
+export ELECTRON_BUILDER_BINARIES_MIRROR=https://mirrors.huaweicloud.com/electron-builder-binaries
+```
 
 ### 可能出现的错误
 
