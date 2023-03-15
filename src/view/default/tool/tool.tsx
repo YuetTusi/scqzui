@@ -110,7 +110,7 @@ const Tool: FC<ToolProp> = () => {
      */
     const runExeHandle = (type: ExeType) => {
         let exePath: string | null = null;
-        const hide = message.loading('正在启动工具，请稍等...', 0);
+        message.info('正在启动工具，请稍等...', 0);
         switch (type) {
             case ExeType.ChatDownload:
                 exePath = join(cwd, '../tools/export_chat/export_chat.exe');
@@ -128,12 +128,8 @@ const Tool: FC<ToolProp> = () => {
         if (exePath) {
             helper
                 .runExe(exePath)
-                .then(() => {
-                    hide();
-                })
                 .catch((errMsg: string) => {
                     console.log(errMsg);
-                    hide();
                     message.destroy();
                     message.error('启动失败');
                 });
@@ -148,7 +144,6 @@ const Tool: FC<ToolProp> = () => {
         const workPath = resolve(cwd, '../tools/mhj');
         helper.runExe(join(workPath, 'mhj.exe'), [targetPath], workPath).catch((errMsg: string) => {
             console.log(errMsg);
-            message.destroy();
             Modal.error({
                 title: '启动失败',
                 content: '启动失败，请联系技术支持',
@@ -166,7 +161,6 @@ const Tool: FC<ToolProp> = () => {
         const workPath = resolve(cwd, '../tools/mhj');
         helper.runExe(join(workPath, 'hwclone.exe'), [targetPath], workPath).catch((errMsg: string) => {
             console.log(errMsg);
-            message.destroy();
             Modal.error({
                 title: '启动失败',
                 content: '启动失败，请联系技术支持',
