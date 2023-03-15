@@ -88,159 +88,163 @@ interface Conf {
 	/**
 	 * 采集路数
 	 */
-	max: number;
+	max: number,
 	/**
 	 * 是否启用标准取证
 	 */
-	useFetch: boolean;
+	useFetch: boolean,
 	/**
 	 * 是否启用云取证
 	 */
-	useServerCloud: boolean;
+	useServerCloud: boolean,
 	/**
 	 * 是否启用BCP
 	 */
-	useBcp: boolean;
+	useBcp: boolean,
 	/**
 	 * 是否启用工具箱
 	 */
-	useToolBox: boolean;
+	useToolBox: boolean,
 	/**
 	 * 是否显示工具箱假按钮
 	 */
-	useFakeButton: boolean;
+	useFakeButton: boolean,
 	/**
 	 * 是否启用AI分析
 	 */
-	useAi: boolean;
+	useAi: boolean,
 	/**
 	 * 是否启用登录
 	 */
-	useLogin: boolean;
+	useLogin: boolean,
 	/**
 	 * 是否启用痕迹查询登录
 	 */
-	useTraceLogin: boolean;
+	useTraceLogin: boolean,
 	/**
 	 * 是否启用快速点验
 	 */
-	useQuickFetch: boolean;
+	useQuickFetch: boolean,
+	/**
+	 * 是否隐藏报告CAD节点
+	 */
+	hideCad: boolean,
 	/**
 	 * 案件文案（默认`案件`）
 	 */
-	caseText: string;
+	caseText: string,
 	/**
 	 * 采集文案（默认`取证`）
 	 */
-	fetchText: string;
+	fetchText: string,
 	/**
 	 * 设备文案（默认`设备`）
 	 */
-	devText: string;
+	devText: string,
 	/**
 	 * 解析文案（默认`解析`）
 	 */
-	parseText: string;
+	parseText: string,
 	/**
 	 * 取证按钮文案（默认`取证`）
 	 */
-	fetchButtonText: string;
+	fetchButtonText: string,
 	/**
 	 * 云取证按钮文案（默认`云取证`）
 	 */
-	cloudButtonText: string;
+	cloudButtonText: string,
 	/**
 	 * 云取应用HTTP接口地址
 	 */
-	cloudAppUrl: string;
+	cloudAppUrl: string,
 	/**
 	 * 云取应用MD5验证接口地址
 	 */
-	cloudAppMd5: string;
+	cloudAppMd5: string,
 	/**
 	 * 应用LOGO文件名
 	 */
-	logo: string;
+	logo: string,
 	/**
 	 * 窗口高度
 	 */
-	windowHeight: number;
+	windowHeight: number,
 	/**
 	 * 窗口宽度
 	 */
-	windowWidth: number;
+	windowWidth: number,
 	/**
 	 * 最小高度
 	 */
-	minHeight: number;
+	minHeight: number,
 	/**
 	 * 最小宽度
 	 */
-	minWidth: number;
+	minWidth: number,
 	/**
 	 * 是否居中显示
 	 */
-	center: boolean;
+	center: boolean,
 	/**
 	 * TCP端口
 	 */
-	tcpPort: number;
+	tcpPort: number,
 	/**
 	 * HTTP端口
 	 */
-	httpPort: number;
+	httpPort: number,
 	/**
 	 * 采集程序路径
 	 */
-	fetchPath: string;
+	fetchPath: string,
 	/**
 	 * 采集程序名称
 	 */
-	fetchExe: string;
+	fetchExe: string,
 	/**
 	 * 解析程序路径
 	 */
-	parsePath: string;
+	parsePath: string,
 	/**
 	 * 解析程序名称
 	 */
-	parseExe: string;
+	parseExe: string,
 	/**
 	 * 日志路径
 	 */
-	logFile: string;
+	logFile: string,
 	/**
 	 * 本地开发页面
 	 */
-	devPageUrl: string;
+	devPageUrl: string,
 	/**
 	 * 应用痕迹查询路径
 	 */
-	appQueryPath: string;
+	appQueryPath: string,
 	/**
 	 * 应用痕迹查询exe名称
 	 */
-	appQueryExe: string;
+	appQueryExe: string,
 	/**
 	 * 云取服务名称
 	 */
-	yqExe: string;
+	yqExe: string,
 	/**
 	 * 云取服务路径
 	 */
-	yqPath: string;
+	yqPath: string,
 	/**
 	 * 快速点验服务路径
 	 */
-	quickFetchPath: string;
+	quickFetchPath: string,
 	/**
 	 * 快速点验服务名称
 	 */
-	quickFetchExe: string;
+	quickFetchExe: string,
 	/**
 	 * 报告显示方式
 	 */
-	reportType: number;
+	reportType: number
 }
 
 export { StateTree, Conf };

@@ -8,6 +8,7 @@ useAi: true
 useQuickFetch: true
 useTraceLogin: true
 useLogin: false
+hideCad: true
 caseText: 案件
 fetchText: 取证
 devText: 设备

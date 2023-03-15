@@ -114,6 +114,7 @@ C:\Users\[你的用户名]\AppData\Local\electron\Cache
 | useQuickFetch   | boolean | 是否启用快速取证          | true                        |
 | useLogin        | boolean | 是否启用登录              | true                        |
 | useTraceLogin   | boolean | 是否启用云点验            | true                        |
+| hideCad         | boolean | 是否隐藏报告 CAD 相关节点 | false                       |
 | caseText        | string  | 案件文案                  | 案件                        |
 | fetchText       | string  | 取证文案                  | 取证                        |
 | devText         | string  | 设备文案                  | 设备                        |

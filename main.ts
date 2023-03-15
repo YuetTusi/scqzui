@@ -85,7 +85,10 @@ if (!helper.useGPURender()) {
     log.info('启用GPU渲染');
 }
 
-helper.writeReportJson(config?.reportType === undefined ? 0 : config.reportType); //写report.json
+helper.writeReportJson(
+    config?.reportType,
+    config?.hideCad
+); //写report.json
 
 /**
  * 销毁所有窗口
