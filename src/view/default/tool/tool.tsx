@@ -110,7 +110,7 @@ const Tool: FC<ToolProp> = () => {
      */
     const runExeHandle = (type: ExeType) => {
         let exePath: string | null = null;
-        message.info('正在启动工具，请稍等...', 0);
+        message.info('正在启动工具，请稍等...');
         switch (type) {
             case ExeType.ChatDownload:
                 exePath = join(cwd, '../tools/export_chat/export_chat.exe');
