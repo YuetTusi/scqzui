@@ -510,15 +510,22 @@ const helper = {
     convert2GB: boolean = false
   ): Promise<DiskSpace> {
     try {
-      const space = await diskSpace(dir);
-      if (convert2GB) {
-        return {
-          ...space,
-          free: space.free / Math.pow(1024, 3),
-          size: space.size / Math.pow(1024, 3),
-        };
+      if (this.os() === 'linux') {
+        const { diskPath, size, free } = await diskSpace(dir);
+        return convert2GB
+          ? {
+            diskPath,
+            free: free / Math.pow(1024, 3),
+            size: size / Math.pow(1024, 3),
+          }
+          : { diskPath, size, free };
       } else {
-        return space;
+        const { FreeSpace, Size } = await this.getDiskInfo(dir, convert2GB);
+        return {
+          diskPath: dir,
+          free: FreeSpace,
+          size: Size
+        }
       }
     } catch (error) {
       throw error;
