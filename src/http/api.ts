@@ -23,29 +23,34 @@ const isDev = process.env['NODE_ENV'] === 'development';
 function api(webContents: WebContents) {
     const router = Router();
 
-    router.get('/', (req, res) =>
+    router.get('/', (_, res) =>
         res.json({
             data: 'HTTP接口',
             routes: [{
                 path: '/case',
+                method: 'GET',
                 desc: '案件数据（解析完成&解析异常）'
             }, {
                 path: '/app/:type',
+                method: 'GET',
                 desc: '解析应用（parse-app），Token云取应用（token-app）'
             }, {
                 path: '/wifi-case',
+                method: 'GET',
                 desc: '快速取证案件'
             }, {
                 path: '/keyword',
+                method: 'GET',
                 desc: '当前关键词'
             }, {
                 path: '/check/:id',
+                method: 'GET',
                 desc: '下载取证APK'
             }]
         })
     );
 
-    router.get('/case', async (req, res) => {
+    router.get('/case', async (_, res) => {
 
         const caseDb = getDb<CaseInfo>(TableName.Cases);
         const deviceDb = getDb<DeviceType>(TableName.Devices);
@@ -88,7 +93,7 @@ function api(webContents: WebContents) {
         }
     });
 
-    router.get<{ id: string }>('/wifi-case', async (req, res) => {
+    router.get<{ id: string }>('/wifi-case', async (_, res) => {
         const eventDb = getDb<QuickEvent>(TableName.QuickEvent);
         const recDb = getDb<QuickRecord>(TableName.QuickRecord);
         try {
@@ -140,17 +145,14 @@ function api(webContents: WebContents) {
         webContents.send('read-app-yaml', type);
     });
 
-    router.get('/cwd', (req, res) => {
+    router.get('/cwd', (_, res) => {
         res.json({ cwd });
     });
 
-    router.get<{ cid: string }>('/check/:cid', async (req, res) => {
-        let target = null;
-        if (isDev) {
-            target = join(cwd, 'data/TZSafe.apk');
-        } else {
-            target = join(cwd, '../n_fetch/config/android/TZSafe.apk');
-        }
+    router.get<{ cid: string }>('/check/:cid', async (_, res) => {
+        const target = isDev
+            ? join(cwd, 'data/TZSafe.apk')
+            : join(cwd, '../n_fetch/config/android/TZSafe.apk');
 
         try {
             const { size } = await stat(target);
@@ -170,7 +172,7 @@ function api(webContents: WebContents) {
         });
     });
 
-    router.get('/keyword', async (req, res) => {
+    router.get('/keyword', async (_, res) => {
 
         const tempPath = join(cwd, './resources/army'); //默认模板位置
         const userPath = join(cwd, './resources/keywords');//用户模板位置
