@@ -75,9 +75,7 @@ const Guide: FC<{}> = () => {
 
     return <GuideBox>
         <ExtendPanel ref={scrollRef}>
-            <BoardMenu>
-                Dashboard
-            </BoardMenu>
+            <BoardMenu />
         </ExtendPanel>
         <div className="left-opacity">
             <div

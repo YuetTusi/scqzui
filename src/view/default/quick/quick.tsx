@@ -27,7 +27,7 @@ const { fetchText, caseText, devText } = helper.readConf()!;
 const Quick: FC<{}> = () => {
 
     const dispatch = useDispatch();
-    const ipWhiteList = useRef<string[]>(helper.QUICK_QR_IP);//IP白名单
+    const ipList = useRef<string[]>(helper.QUICK_QR_IP);//IP列表
     const portOccupy = useRef<boolean>(false); //端口占用
     const [detailId, setDetailId] = useState<string>('');
     const [ip, setIp] = useState<string>('127.0.0.1');
@@ -59,7 +59,7 @@ const Quick: FC<{}> = () => {
      */
     const detailHandle = debounce(({ _id }: QuickEvent) => {
 
-        const allowIp = ipWhiteList.current.reduce<string[]>((acc, current) => {
+        const allowIp = ipList.current.reduce<string[]>((acc, current) => {
             if (helper.hasIP(current)) {
                 acc.push(current);
             }

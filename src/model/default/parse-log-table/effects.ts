@@ -15,7 +15,11 @@ export default {
     */
     *queryParseLog({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
         const db = getDb<ParseLog>(TableName.ParseLog);
-        const { condition, current, pageSize } = payload;
+        const { condition, current, pageSize } = payload as {
+            current: number,
+            pageSize: number,
+            condition: any
+        };
 
         let q: any = {};
         if (Db.isEmptyCondition(condition)) {
@@ -118,7 +122,7 @@ export default {
     /**
      * 清空所有日志记录(管理员)
      */
-    *dropAllLog({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *dropAllLog(_: AnyAction, { call, put }: EffectsCommandMap) {
         const db = getDb<ParseLog>(TableName.ParseLog);
         try {
             yield call([db, 'remove'], {}, true);

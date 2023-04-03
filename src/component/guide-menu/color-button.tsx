@@ -7,7 +7,9 @@ import { ColorButtonProp } from './prop';
 /**
  * 主屏纯色按钮
  */
-const ColorButton: FC<ColorButtonProp> = ({ to, icon, color, description, children }) => {
+const ColorButton: FC<ColorButtonProp> = ({
+    to, icon, color, description, children
+}) => {
 
     const maskRef = useRef<HTMLDivElement>(null);
     const imageBoxRef = useRef<HTMLDivElement>(null);

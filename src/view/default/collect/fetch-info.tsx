@@ -31,7 +31,6 @@ interface EventMessage {
 
 /**
  * 采集进度消息组件
- * @param props
  */
 const FetchInfo: FC<FetchInfoProp> = memo(({ device, recordHandle }) => {
     const [data, setData] = useState<FetchRecord>();

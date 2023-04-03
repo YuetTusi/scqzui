@@ -9,6 +9,9 @@ import { ReadingProp } from './prop';
 var readHandle: NodeJS.Timer | null = null;
 var fetchDataReceive: FetchData | null = null;
 
+/**
+ * 阅读云取证协议
+ */
 const Reading: FC<ReadingProp> = ({ }) => {
 
     const [second, setSecond] = useState<number>(3);
@@ -34,16 +37,27 @@ const Reading: FC<ReadingProp> = ({ }) => {
         }
     }, [second]);
 
-    useSubscribe('show-protocol', (event, fetchData: FetchData) =>
+    /**
+     * 订阅接收主进程消息
+     */
+    useSubscribe('show-protocol', (_, fetchData: FetchData) =>
         fetchDataReceive = fetchData
     );
 
+    /**
+     * 同意Click
+     * @param e MouseEvent
+     */
     const onAgreeClick = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         ipcRenderer.send('protocol-read', fetchDataReceive, true);
         fetchDataReceive = null;
     };
 
+    /**
+     * 不同意Click
+     * @param e MouseEvent
+     */
     const onDisagreeClick = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         ipcRenderer.send('protocol-read', fetchDataReceive, false);

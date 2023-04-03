@@ -795,8 +795,8 @@ const helper = {
    */
   combinePredict(temp: PredictJson, caseAi: PredictJson): PredictJson {
     return {
-      similarity: caseAi.similarity ?? 0,
       ocr: caseAi.ocr ?? false,
+      similarity: caseAi.similarity ?? 0,
       config: temp.config.reduce((total: Predict[], current: Predict) => {
         const has = (caseAi.config ?? []).find((i) => i.type === current.type);
         if (has) {

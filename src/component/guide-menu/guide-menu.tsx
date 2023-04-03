@@ -33,7 +33,7 @@ const {
 } = helper.readConf()!;
 
 /**
- * 渲染色块按钮
+ * 渲染纯色按钮
  * @param {Manufaturer|null} manufaturer.json
  * @param {string} serial 软件序列号
  */
