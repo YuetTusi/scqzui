@@ -1,7 +1,8 @@
-import React, { FC, MouseEvent, useCallback, useRef, memo, useEffect } from 'react';
+import React, { FC, MouseEvent, useRef, memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import { routerRedux } from 'dva/router';
 import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined';
+import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import round from 'lodash/round';
@@ -39,6 +40,7 @@ const formItemLayout = {
 const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }) => {
 
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
     const { caseList } = useSelector<StateTree, CheckInputModalState>((state) => state.checkInputModal);
     const [formRef] = useForm<FormValue>();
     const currentCase = useRef<CaseInfo>(); //当前案件数据
@@ -122,6 +124,7 @@ const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }
         }
 
         if (entity !== null) {
+            setLoading(true);
             try {
                 let disk = currentCase.current?.m_strCasePath.substring(0, 2);
                 const { free } = await helper.getDiskSpace(disk!, true);
@@ -153,10 +156,12 @@ const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }
                     dispatch({ type: 'checkInputModal/insertCheckData', payload: entity });
                     saveHandle(entity);
                 }
+                setLoading(false);
             } catch (error) {
                 //点验设备入库
                 dispatch({ type: 'checkInputModal/insertCheckData', payload: entity });
                 saveHandle(entity);
+                setLoading(false);
                 log.error(`读取磁盘信息失败:${(error as any).message}`);
             }
         }
@@ -293,7 +298,7 @@ const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }
                 <Button
                     type="primary"
                     onClick={formSubmit}>
-                    <CheckCircleOutlined />
+                    {loading ? <LoadingOutlined /> : <CheckCircleOutlined />}
                     <span>确定</span>
                 </Button>
             </Tooltip>

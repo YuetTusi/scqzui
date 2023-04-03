@@ -520,7 +520,6 @@ const helper = {
       } else {
         return space;
       }
-      return space;
     } catch (error) {
       throw error;
     }

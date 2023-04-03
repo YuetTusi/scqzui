@@ -4,6 +4,7 @@ import round from 'lodash/round';
 import { useDispatch, useSelector } from 'dva';
 import { routerRedux } from 'dva/router';
 import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
+import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import PlusSquareOutlined from '@ant-design/icons/PlusSquareOutlined';
@@ -109,6 +110,7 @@ const ServerCloudModal: FC<Prop> = ({
     const dispatch = useDispatch();
     const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
     const [formRef] = useForm<FormValue>();
+    const [loading, setLoading] = useState(false);
     const [appSelectModalVisible, setAppSelectModalVisible] = useState(false);
     const [selectedApps, setSelectedApps] = useState<CloudApp[]>([]);
     const [activePanelKey, setActivePanelKey] = useState('0'); //当前
@@ -210,6 +212,7 @@ const ServerCloudModal: FC<Prop> = ({
                 message.destroy();
                 message.info('请选择云取证App');
             } else {
+                setLoading(true);
                 let entity = new FetchData(); //采集数据
                 entity.caseName = currentCase.current?.m_strCaseName;
                 entity.spareName = currentCase.current?.spareName;
@@ -258,6 +261,7 @@ const ServerCloudModal: FC<Prop> = ({
                 } else {
                     ipcRenderer.send('show-protocol', entity);
                 }
+                setLoading(false);
             }
         } catch (error) {
             console.warn(error);
@@ -268,6 +272,7 @@ const ServerCloudModal: FC<Prop> = ({
             ) {
                 setActivePanelKey('1');
             }
+            setLoading(false);
         } finally {
             dispatch({ type: 'appSet/clearExtValue' });
         }
@@ -585,8 +590,11 @@ const ServerCloudModal: FC<Prop> = ({
                     <span>取消</span>
                 </Button>,
                 <Tooltip title={`确定后开始${fetchText ?? '取证'}数据`} key="B_1">
-                    <Button type="primary" onClick={formSubmit}>
-                        <CheckCircleOutlined />
+                    <Button
+                        type="primary"
+                        disabled={loading}
+                        onClick={formSubmit}>
+                        {loading ? <LoadingOutlined /> : <CheckCircleOutlined />}
                         <span>确定</span>
                     </Button>
                 </Tooltip>
