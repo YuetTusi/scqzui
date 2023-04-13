@@ -6,7 +6,7 @@ import { ImportTypes } from "@/schema/import-type";
 /**
  * 属性
  */
-interface ImportModalProp {};
+interface ImportModalProp { };
 
 interface ImportFormProp {
     /**

@@ -45,5 +45,9 @@ export enum ImportTypes {
     /**
      * SD卡镜像（Fake）
      */
-    SDCardMirror = 'sdcard-mirror'
+    SDCardMirror = 'sdcard-mirror',
+    /**
+     * 三星换机导入
+     */
+    Samsung_Smartswitch = 'samsung_smartswitch'
 }

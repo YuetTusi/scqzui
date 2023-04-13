@@ -41,6 +41,7 @@ import badaSvg from './styled/images/bada.svg';
 import featurephoneSvg from './styled/images/featurephone.svg';
 import meegoSvg from './styled/images/meego.svg';
 import hwcopyPng from './styled/images/hwcopy.png';
+import samsungSmartswitch from './styled/images/samsung_smartswitch.png';
 import { CrackTypes } from './crack-modal/prop';
 import { ExeType, ToolProp } from './prop';
 
@@ -100,6 +101,20 @@ const Tool: FC<ToolProp> = () => {
      * @param title 标题
      */
     const onImportClick = (type: ImportTypes, title: string) => {
+        switch (type) {
+            case ImportTypes.Samsung_Smartswitch:
+                dispatch({
+                    type: 'importDataModal/setTips',
+                    payload: ['导入包含「backupHistoryInfo.xml」文件的目录']
+                });
+                break;
+            default:
+                dispatch({
+                    type: 'importDataModal/setTips',
+                    payload: []
+                });
+                break;
+        }
         dispatch({ type: 'importDataModal/setTitle', payload: title });
         dispatch({ type: 'importDataModal/setImportType', payload: type });
         dispatch({ type: 'importDataModal/setVisible', payload: true });
@@ -272,6 +287,14 @@ const Tool: FC<ToolProp> = () => {
                         </div>
                         <div className="name">
                             小米换机备份
+                        </div>
+                    </div>
+                    <div onClick={() => onImportClick(ImportTypes.Samsung_Smartswitch, '导入数据（三星换机）')} className="t-button">
+                        <div className="ico">
+                            <img src={samsungSmartswitch} height="50" />
+                        </div>
+                        <div className="name">
+                            三星换机备份
                         </div>
                     </div>
                     <div onClick={() => onImportClick(ImportTypes.AndroidData, '导入数据（安卓数据）')} className="t-button">

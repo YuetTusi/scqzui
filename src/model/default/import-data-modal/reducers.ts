@@ -24,5 +24,12 @@ export default {
     setImportType(state: ImportDataModalState, { payload }: AnyAction) {
         state.importType = payload;
         return state;
+    },
+    /**
+     * 更新提示信息(空数组为不显示)
+     */
+    setTips(state: ImportDataModalState, { payload }: AnyAction) {
+        state.tips = payload;
+        return state;
     }
 };

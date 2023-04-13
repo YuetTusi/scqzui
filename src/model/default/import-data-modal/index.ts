@@ -15,7 +15,11 @@ interface ImportDataModalState {
     /**
      * 导入数据类型
      */
-    importType: ImportTypes
+    importType: ImportTypes,
+    /**
+     * 提示信息
+     */
+    tips: string[]
 };
 
 let model: Model = {

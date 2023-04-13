@@ -11,13 +11,14 @@ import { StateTree } from '@/type/model';
 import { ImportDataModalState } from '@/model/default/import-data-modal';
 import { ImportForm } from './import-form';
 import { FormValue, ImportModalProp } from './prop';
+import { ImportDataModalBox } from './styled/box';
 
 const { useForm } = Form;
 
 /**
  * 导入
  */
-const ImportDataModal: FC<ImportModalProp> = () => {
+const ImportDataModal: FC<ImportModalProp> = ({ }) => {
 
     const dispatch = useDispatch();
     const [formRef] = useForm<FormValue>();
@@ -25,7 +26,8 @@ const ImportDataModal: FC<ImportModalProp> = () => {
     const {
         visible,
         title,
-        importType
+        importType,
+        tips
     } = useSelector<StateTree, ImportDataModalState>(state => state.importDataModal);
 
     /**
@@ -34,7 +36,28 @@ const ImportDataModal: FC<ImportModalProp> = () => {
     const onCancelClick = (event: MouseEvent<HTMLElement>) => {
         const { resetFields } = formRef;
         resetFields();
+        dispatch({ type: 'importDataModal/setTips', payload: [] });
         dispatch({ type: 'importDataModal/setVisible', payload: false });
+    };
+
+    /**
+     * 渲染提示信息（如果有）
+     */
+    const renderTips = () => {
+        if (tips && tips.length > 0) {
+            return <fieldset className="tip-msg full">
+                <legend>
+                    操作提示
+                </legend>
+                <div>
+                    <ul>
+                        {tips.map((item, index) => <li key={`IDMT_${index}`}>{item}</li>)}
+                    </ul>
+                </div>
+            </fieldset>
+        } else {
+            return null;
+        }
     };
 
     /**
@@ -80,10 +103,13 @@ const ImportDataModal: FC<ImportModalProp> = () => {
         destroyOnClose={true}
         forceRender={true}
         maskClosable={false}>
-        <ImportForm
-            formRef={formRef}
-            type={importType} />
+        <ImportDataModalBox>
+            {renderTips()}
+            <ImportForm
+                formRef={formRef}
+                type={importType} />
+        </ImportDataModalBox>
     </Modal>
-}
+};
 
 export default ImportDataModal;
