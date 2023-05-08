@@ -6,14 +6,12 @@ import logger from '@/utils/log';
 import { getDb } from '@/utils/db';
 import server, { send } from '@/utils/tcp-server';
 import { LocalStoreKey } from '@/utils/local-store';
-import TipType from '@/schema/tip-type';
 import { TableName } from '@/schema/table-name';
 import { FetchLog } from '@/schema/fetch-log';
 import { CommandType, SocketType, Command } from '@/schema/command';
-import { ParseState } from '@/schema/device-state';
 import {
-    deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg, smsMsg,
-    parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
+    deviceIn, deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg,
+    smsMsg, parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
     appRecFinish, fetchPercent, importErr, backDatapass, checkFinishToParse
 } from './listener';
 
@@ -42,15 +40,7 @@ export default {
                 case CommandType.DeviceIn:
                     console.log(`接收到设备连入:${JSON.stringify(command.msg)}`);
                     logger.info(`设备连入(DeviceIn)：${JSON.stringify(command.msg)}`);
-                    dispatch({ type: 'device/checkWhenDeviceIn', payload: { usb: command.msg?.usb } });
-                    dispatch({
-                        type: 'device/setDeviceToList', payload: {
-                            ...command.msg,
-                            tipType: TipType.Nothing,
-                            parseState: ParseState.NotParse,
-                            isStopping: false
-                        }
-                    });
+                    deviceIn(command, dispatch);
                     break;
                 case CommandType.DeviceChange:
                     console.log(`设备状态更新:${JSON.stringify(command.msg)}`);

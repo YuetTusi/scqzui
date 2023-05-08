@@ -37,6 +37,29 @@ const { fetchText, parseText } = helper.readConf()!;
 const appPath = process.cwd();
 
 /**
+ * 设备连入
+ */
+export function deviceIn({ msg }: Command<DeviceType>, dispatch: Dispatch<any>) {
+
+    let samsungTip: string | undefined;
+    let info = msg.phoneInfo?.find((i) => i.name === '系统版本');
+    if ('samsung' === msg.manufacturer?.toLocaleLowerCase() && Number(info?.value) > 12) {
+        samsungTip = '请在工具箱使用「三星换机备份」导入';
+    }
+
+    dispatch({ type: 'device/checkWhenDeviceIn', payload: { usb: msg.usb } });
+    dispatch({
+        type: 'device/setDeviceToList', payload: {
+            ...msg,
+            tipType: TipType.Nothing,
+            parseState: ParseState.NotParse,
+            isStopping: false,
+            extra: samsungTip
+        }
+    });
+}
+
+/**
  * 设备状态变化
  */
 export function deviceChange({ msg }: Command<{

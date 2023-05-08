@@ -1,15 +1,14 @@
 import React, { FC, MouseEvent } from 'react';
+import { routerRedux, useDispatch } from 'dva';
 import KeyOutlined from '@ant-design/icons/KeyOutlined';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Form from 'antd/lib/form';
 import Button from 'antd/lib/button';
 import message from 'antd/lib/message';
-import { FormValue, LoginProp } from './prop';
 import { LoginBox } from './styled/box';
+import { FormValue, LoginProp } from './prop';
 import Input from 'antd/lib/input';
-import { routerRedux, useDispatch } from 'dva';
-
 
 const { Item, useForm } = Form;
 const { Password } = Input;

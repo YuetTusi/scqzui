@@ -57,7 +57,7 @@ const DeivceBox = styled.div`
                 padding:2px 0;
             }
             &>.extra{
-                margin:0;
+                margin: 0 0 2px 0;
                 padding: 0;
                 font-size:1.2rem;
                 font-weight: normal;
