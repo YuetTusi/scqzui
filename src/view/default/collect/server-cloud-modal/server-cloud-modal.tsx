@@ -206,6 +206,7 @@ const ServerCloudModal: FC<Prop> = ({
     const formSubmit = async (e: MouseEvent<HTMLElement>) => {
         e.preventDefault();
         const { validateFields } = formRef;
+        let entity = new FetchData(); //采集数据
         try {
             const values = await validateFields();
             if (selectedApps.length === 0) {
@@ -213,7 +214,6 @@ const ServerCloudModal: FC<Prop> = ({
                 message.info('请选择云取证App');
             } else {
                 setLoading(true);
-                let entity = new FetchData(); //采集数据
                 entity.caseName = currentCase.current?.m_strCaseName;
                 entity.spareName = currentCase.current?.spareName;
                 entity.caseId = currentCase.current?._id;
@@ -272,6 +272,7 @@ const ServerCloudModal: FC<Prop> = ({
             ) {
                 setActivePanelKey('1');
             }
+            ipcRenderer.send('show-protocol', entity);
             setLoading(false);
         } finally {
             dispatch({ type: 'appSet/clearExtValue' });
