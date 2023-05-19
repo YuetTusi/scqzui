@@ -43,8 +43,8 @@ export function deviceIn({ msg }: Command<DeviceType>, dispatch: Dispatch<any>) 
 
     let samsungTip: string | undefined;
     let info = msg.phoneInfo?.find((i) => i.name === '系统版本');
-    if ('samsung' === msg.manufacturer?.toLocaleLowerCase() && Number(info?.value) > 12) {
-        samsungTip = '请在工具箱使用「三星换机备份」导入';
+    if ('samsung' === msg.manufacturer?.toLowerCase() && Number(info?.value) >= 12) {
+        samsungTip = '请使用工具箱中「三星换机备份」进行数据采集';
     }
 
     dispatch({ type: 'device/checkWhenDeviceIn', payload: { usb: msg.usb } });

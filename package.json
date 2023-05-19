@@ -44,7 +44,15 @@
 			"icon.png",
 			"package.json"
 		],
-		"extraResources": [],
+		"extraResources": [
+			{
+				"from": "./data/help",
+				"to": "./help",
+				"filter": [
+					"**/*"
+				]
+			}
+		],
 		"win": {
 			"target": [
 				"nsis",

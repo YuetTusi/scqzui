@@ -19,7 +19,7 @@ interface ImportDataModalState {
     /**
      * 提示信息
      */
-    tips: string[]
+    tips: string[] | JSX.Element[]
 };
 
 let model: Model = {

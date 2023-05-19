@@ -1,7 +1,10 @@
+import debounce from 'lodash/debounce';
+import { shell } from 'electron';
 import { join, resolve } from 'path';
 import React, { FC, useState, useCallback, useRef, MouseEvent } from 'react';
 import { useDispatch } from 'dva';
 import FundViewOutlined from '@ant-design/icons/FundViewOutlined';
+import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -96,6 +99,28 @@ const Tool: FC<ToolProp> = () => {
     };
 
     /**
+     * 打开三星帮助文档
+     */
+    const showPdfHelpClick = debounce(async (event: MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault();
+        const url = helper.IS_DEV
+            ? join(cwd, './data/help/三星手机操作说明.pdf')
+            : join(cwd, './resources/help/三星手机操作说明.pdf');
+        try {
+            const exist = await helper.existFile(url);
+            message.destroy();
+            if (exist) {
+                message.info('正在打开帮助文档...');
+                await shell.openPath(url);
+            } else {
+                message.info('暂未提供帮助文档');
+            }
+        } catch (error) {
+            console.warn(error);
+        }
+    }, 1000, { leading: true, trailing: false });
+
+    /**
      * 导入按钮click
      * @param type 类型
      * @param title 标题
@@ -105,7 +130,17 @@ const Tool: FC<ToolProp> = () => {
             case ImportTypes.Samsung_Smartswitch:
                 dispatch({
                     type: 'importDataModal/setTips',
-                    payload: ['导入包含「backupHistoryInfo.xml」文件的目录']
+                    payload: [
+                        <a onClick={showPdfHelpClick}>
+                            请先使用S换机助手并按照「提示」
+                            备份数据后进行导入
+                            <strong title="点击打开帮助文档">
+                                <QuestionCircleOutlined style={{ marginLeft: '5px' }} />查看帮助
+                            </strong>
+                        </a>,
+                        <span>导入<strong>包含「backupHistoryInfo.xml」文件</strong>的目录</span>,
+                        <span>目前仅支持<strong>Android12及以上</strong></span>
+                    ]
                 });
                 break;
             default:

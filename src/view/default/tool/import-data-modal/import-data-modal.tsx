@@ -1,4 +1,4 @@
-
+import { join } from 'path';
 import React, { FC, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
@@ -8,6 +8,7 @@ import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
 import { useAppConfig } from '@/hook';
 import { StateTree } from '@/type/model';
+import { ImportTypes } from '@/schema/import-type';
 import { ImportDataModalState } from '@/model/default/import-data-modal';
 import { ImportForm } from './import-form';
 import { FormValue, ImportModalProp } from './prop';
@@ -33,7 +34,7 @@ const ImportDataModal: FC<ImportModalProp> = ({ }) => {
     /**
      * 取消Click
      */
-    const onCancelClick = (event: MouseEvent<HTMLElement>) => {
+    const onCancelClick = (_: MouseEvent<HTMLElement>) => {
         const { resetFields } = formRef;
         resetFields();
         dispatch({ type: 'importDataModal/setTips', payload: [] });
@@ -67,7 +68,15 @@ const ImportDataModal: FC<ImportModalProp> = ({ }) => {
         event.preventDefault();
         const { validateFields } = formRef;
         try {
-            const values = await validateFields();
+            let values = await validateFields();
+
+            if (importType === ImportTypes.Samsung_Smartswitch) {
+                //# 因为三星换机让用户选择backupHistoryInfo.xml文件，因此要回退一级只传目录
+                values = {
+                    ...values,
+                    packagePath: join(values.packagePath, '../')
+                }
+            }
 
             dispatch({
                 type: 'importDataModal/saveImportDeviceToCase', payload: {

@@ -57,6 +57,9 @@ const ImportForm: FC<ImportFormProp> = ({
             case ImportTypes.IOSMirror:
                 filter = [{ name: 'iOS镜像', extensions: ['tar', 'zip'] }];
                 break;
+            case ImportTypes.Samsung_Smartswitch:
+                filter = [{ name: 'XML文件', extensions: ['xml'] }];
+                break;
             default:
                 filter = undefined;
                 break;
@@ -72,6 +75,7 @@ const ImportForm: FC<ImportFormProp> = ({
         let properties: Array<'openFile' | 'openDirectory'> = [];
         switch (type) {
             case ImportTypes.IOSMirror:
+            case ImportTypes.Samsung_Smartswitch:
                 properties = ['openFile'];
                 break;
             default:
