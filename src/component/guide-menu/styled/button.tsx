@@ -8,10 +8,13 @@ const Color = styled.div<{ color: string }>`
     position: relative;
     cursor: pointer;
     color:#fff;
-    @media screen and (min-height:980px){
+    width:350px;
+    @media screen and (min-height:980px) and (max-height:1080px){
         width:380px;
     }
-    width:350px;
+    @media screen and (min-height:1080px){
+        width:410px;
+    }
     height:100%;
     border-radius: ${props => props.theme['border-radius-base']};
     background-color: ${props => props.color};

@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
 import QRCode from 'qrcode';
+import debounce from 'lodash/debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { IpcRendererEvent } from 'electron';
-import React, { FC, useEffect, useState } from 'react';
+import { shell, IpcRendererEvent } from 'electron';
+import React, { FC, useEffect, useState, MouseEvent } from 'react';
 import CheckCircleFilled from '@ant-design/icons/CheckCircleFilled';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import Button from 'antd/lib/button';
@@ -86,6 +87,26 @@ const EventDescModal: FC<EventDescModalProp> = ({
     useSubscribe('quick-scanned', quickScannedHandle);
 
     /**
+     * 在系统中打开目录
+     * @param event 
+     */
+    const openFolderClick = debounce(async (event: MouseEvent<HTMLAnchorElement>, data: QuickEvent) => {
+        event.preventDefault();
+        const { eventPath } = data;
+        message.destroy();
+        try {
+            const exist = await helper.existFile(eventPath);
+            if (exist) {
+                shell.openPath(eventPath);
+            } else {
+                message.warn('案件目录不存在');
+            }
+        } catch (error) {
+            console.warn(error.message);
+        }
+    }, 500, { leading: true, trailing: false });
+
+    /**
      * 渲染案件
      */
     const renderEvent = (data: QuickEvent | null) => {
@@ -94,12 +115,20 @@ const EventDescModal: FC<EventDescModalProp> = ({
         }
         return <Descriptions bordered={true} size="small">
             <Item label={`${caseText ?? '案件'}名称`} span={3}>{data.eventName.split('_')[0]}</Item>
-            <Item label="存储位置" span={3}>{data.eventPath}</Item>
+            <Item label="存储位置" span={3}>
+                <a
+                    onClick={(event: MouseEvent<HTMLAnchorElement>) => openFolderClick(event, data)}
+                    type="link">
+                    {data.eventPath}
+                </a>
+            </Item>
             <Item label="违规时段">{data.ruleFrom} 时 ~ {data.ruleTo} 时</Item>
             <Item label="创建时间">{dayjs(data.createdAt).format('YYYY年MM月DD日 HH:mm:ss')}</Item>
             <Item label="IP地址">{ip ?? ''}</Item>
         </Descriptions>
-    }
+    };
+
+
 
     return <Modal
         footer={[
@@ -142,7 +171,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
                             indicator={<CheckCircleFilled style={{ color: '#52c41a' }} />}
                             tip={<span style={{ color: '#52c41a' }}>扫码成功</span>}
                         >
-                            <canvas width="300" height="300" id="qrcode" />
+                            <canvas width="280" height="280" id="qrcode" />
                         </Spin>
                     </HorBox>
                 </div>

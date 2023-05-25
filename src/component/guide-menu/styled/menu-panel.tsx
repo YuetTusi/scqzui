@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
 const MenuPanel = styled.div`
-
     display: grid;
-    height: 100%;
     width: auto;
-    /* overflow-x: auto; */
-    /* grid-template-rows: 50% 50%; */
-    @media screen and (min-height:980px){
+    height: 100%;
+    grid-template-columns: repeat(4, minmax(350px, 350px));
+    @media screen and (min-height:980px) and (max-height:1080px){
         grid-template-columns: repeat(4, minmax(380px, 380px));
     }
-    grid-template-columns: repeat(4, minmax(350px, 350px));
+    @media screen and (min-height:1080px){
+        grid-template-columns: repeat(4, minmax(410px, 410px));
+    }
     grid-auto-flow: column;
     grid-gap: 20px;
 

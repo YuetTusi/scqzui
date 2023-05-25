@@ -73,4 +73,10 @@ const ColorButton: FC<ColorButtonProp> = ({
     }
 };
 
+ColorButton.defaultProps = {
+    to: '/',
+    color: '#4b6584',
+    description: ''
+};
+
 export default ColorButton;

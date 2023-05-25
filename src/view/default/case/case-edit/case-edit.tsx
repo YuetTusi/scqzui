@@ -158,7 +158,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
         }
     }, 500, { leading: true, trailing: false });
 
-    return <SubLayout title={`案件编辑 - ${getCaseName(data?.m_strCaseName)[0]}`}>
+    return <SubLayout title={`案件编辑 / ${getCaseName(data?.m_strCaseName)[0]}`}>
         <CaseBox>
             <div className="button-bar">
                 <Button onClick={onBackClick} type="primary">
