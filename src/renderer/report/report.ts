@@ -194,11 +194,11 @@ function compressReport(
  * @param {string[]} attachFiles 附件JSON文件
  */
 async function copyAttach(source: string, distination: string, folderName: string, attachFiles: string[]) {
-    let copyPath: string[] = [];
+    let copyPath: Array<{ from: string, to: string, rename: string }[]> = [];
     console.log(`attachFiles文件数量：${attachFiles.length}`);
     try {
         for (let i = 0, l = attachFiles.length; i < l; i++) {
-            const attach: any = await readJSONFile(join(source, 'public/data', attachFiles[i]));
+            const attach = await readJSONFile(join(source, 'public/data', attachFiles[i]));
             copyPath = copyPath.concat([attach]);
         }
         const copyList = copyPath.flat();
@@ -213,7 +213,7 @@ async function copyAttach(source: string, distination: string, folderName: strin
         log.info(`开始拷贝附件，共：${copyList.length}`);
 
         for (let i = 0, l = copyList.length; i < l; i++) {
-            const { from, to, rename } = copyList[i] as any;
+            const { from, to, rename } = copyList[i];
             const target = join(distination, folderName, to, rename); //拷贝到
             if (extname(rename) === '.heic') {
                 //转码HEIC图像

@@ -110,8 +110,8 @@ function writeJSONfile(filePath: string, data: any) {
  * 读取JSON文件
  * @param filePath 文件路径
  */
-function readJSONFile(filePath: string) {
-    return new Promise((resolve, reject) => {
+function readJSONFile<T = any>(filePath: string) {
+    return new Promise<T>((resolve, reject) => {
         fs.readFile(filePath, { encoding: 'utf8' }, (err: any, chunk: any) => {
             if (err) {
                 reject(err);
