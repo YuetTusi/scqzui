@@ -1,6 +1,7 @@
 import debounce from 'lodash/debounce';
 import React, { FC, useEffect, useRef } from 'react';
 import { routerRedux, useDispatch } from 'dva';
+import { helper } from '@/utils/helper';
 import { Image } from './styled/button';
 import { ImageButtonProp } from './prop';
 
@@ -31,14 +32,11 @@ const ImageButton: FC<ImageButtonProp> = ({
     /**
      * 文案遮罩层
      */
-    const renderDescMask = () => {
-        if (description === undefined) {
-            return null;
-        }
-        return <div ref={maskRef} className="desc-mask">
+    const renderDescMask = () => helper.isNullOrUndefined(description)
+        ? null
+        : <div ref={maskRef} className="desc-mask">
             {description}
-        </div>
-    }
+        </div>;
 
     useEffect(() => {
         if (description !== undefined) {
@@ -68,4 +66,4 @@ const ImageButton: FC<ImageButtonProp> = ({
     </Image>;
 };
 
-export default ImageButton;
+export { ImageButton };

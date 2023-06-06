@@ -18,7 +18,7 @@ for (let i = 0; i < max; i++) {
 const Clock: FC<ClockProp> = ({ usb }) => {
     const [timeString, setTimeString] = useState<string>(prevTimeStringMap.get(usb)!);
 
-    const timeHandle = (event: IpcRendererEvent, currentUsb: number, timeString: string) => {
+    const timeHandle = (_: IpcRendererEvent, currentUsb: number, timeString: string) => {
         if (usb === currentUsb) {
             setTimeString(timeString);
             prevTimeStringMap.set(usb, timeString);

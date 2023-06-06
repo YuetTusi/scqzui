@@ -10,7 +10,7 @@ export default {
     /**
      * 查询全部检验员
      */
-    *fetchOfficer({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *fetchOfficer(_: AnyAction, { call, put }: EffectsCommandMap) {
         const db = getDb<Officer>(TableName.Officer);
         try {
             let result: Officer[] = yield call([db, 'find'], null, 'createdAt', -1);

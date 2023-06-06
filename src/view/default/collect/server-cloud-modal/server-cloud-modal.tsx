@@ -36,8 +36,8 @@ import { DataMode } from '@/schema/data-mode';
 import { CloudApp } from '@/schema/cloud-app';
 import { StateTree } from '@/type/model';
 import { CaseDataState } from '@/model/default/case-data';
+import { Instruction } from '../instruction';
 import PanelHeader from './panel-hader';
-import Instruction from '../instruction';
 import { ServerCloudModalBox } from './styled/style';
 import { FormValue, Prop } from './prop';
 

@@ -76,7 +76,7 @@ const CloudAppDetailModal: FC<DetailModalProps> = ({
                     $('#detail-app-tree'),
                     {
                         callback: {
-                            onClick: (event: any, treeId: string, treeNode: ITreeNode) => {
+                            onClick: (_: any, treeId: string, treeNode: ITreeNode) => {
                                 const { appId } = treeNode;
                                 const clickApp = cloudApps.find((item) => item.m_strID === appId);
                                 if (clickApp && clickApp.message) {

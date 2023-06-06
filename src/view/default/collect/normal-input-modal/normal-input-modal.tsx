@@ -30,7 +30,7 @@ import { ParseApp } from '@/schema/parse-app';
 import { StateTree } from '@/type/model';
 import { CaseDataState } from '@/model/default/case-data';
 import parseApp from '@/config/parse-app.yaml';
-import Instruction from '../instruction';
+import { Instruction } from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
 

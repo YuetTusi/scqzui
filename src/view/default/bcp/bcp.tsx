@@ -139,9 +139,10 @@ const Bcp: FC<BcpProp> = () => {
             message.loading('正在生成BCP...', 0);
             await helper.writeBcpJson(currentDev?.phonePath!, bcp);
             const bcpExe = join(cwd, '../tools/BcpTools/BcpGen.exe');
+            const attachment = typeof bcp.attachment === 'boolean' ? Number(bcp.attachment) : bcp.attachment;
             const process = execFile(
                 bcpExe,
-                [currentDev?.phonePath!, bcp.attachment ? '1' : '0'],
+                [currentDev?.phonePath!, attachment.toString()],
                 {
                     windowsHide: true,
                     cwd: join(cwd, '../tools/BcpTools')

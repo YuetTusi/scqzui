@@ -1,15 +1,32 @@
+enum AttachmentType {
+
+    /**
+     * 无附件
+     */
+    Nothing,
+    /**
+     * 语音附件
+     */
+    Audio,
+    /**
+     * 语音，图片，视频附件
+     */
+    Media
+}
+
 /**
  * BCP
  */
- class BcpEntity {
+class BcpEntity {
     /**
      * 手机绝对路径
      */
     mobilePath: string;
     /**
      * 有无附件
+     * !旧版本此参数为布尔值，要做容错
      */
-    attachment: boolean;
+    attachment: AttachmentType;
     /**
      * 检验单位（案件数据中用户手动输入的字段）
      */
@@ -136,5 +153,5 @@
     }
 }
 
-export { BcpEntity }
+export { BcpEntity, AttachmentType }
 export default BcpEntity;

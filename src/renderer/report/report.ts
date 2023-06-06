@@ -12,7 +12,7 @@ import { mkdir, copy, copyFiles, readJSONFile, writeJSONfile, updateFileTime, he
 /**
  * 接收main.js导出消息
  */
-ipcRenderer.on('report-export', async (event: IpcRendererEvent, exportCondition: ExportCondition, treeParams: TreeParam, msgId: string) => {
+ipcRenderer.on('report-export', async (_: IpcRendererEvent, exportCondition: ExportCondition, treeParams: TreeParam, msgId: string) => {
     const { isZip } = exportCondition;
 
     try {
@@ -32,7 +32,7 @@ ipcRenderer.on('report-export', async (event: IpcRendererEvent, exportCondition:
 /**
  * 接收main.js批量导出消息
  */
-ipcRenderer.on('report-batch-export', async (event, batchExportTasks: BatchExportTask[], isAttach: boolean, isZip: boolean, msgId: string) => {
+ipcRenderer.on('report-batch-export', async (_, batchExportTasks: BatchExportTask[], isAttach: boolean, isZip: boolean, msgId: string) => {
     try {
         for (let i = 0, l = batchExportTasks.length; i < l; i++) {
             const { reportRoot, saveTarget, reportName, tree, files, attaches } =

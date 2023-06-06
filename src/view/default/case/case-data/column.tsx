@@ -78,15 +78,15 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             render: (val: boolean) =>
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
-        {
-            title: 'BCP包含附件',
-            dataIndex: 'attachment',
-            key: 'attachment',
-            width: '80px',
-            align: 'center',
-            render: (val: boolean) =>
-                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
-        },
+        // {
+        //     title: 'BCP包含附件',
+        //     dataIndex: 'attachment',
+        //     key: 'attachment',
+        //     width: '80px',
+        //     align: 'center',
+        //     render: (val: boolean) =>
+        //         val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
+        // },
         {
             title: '删除原数据',
             dataIndex: 'isDel',

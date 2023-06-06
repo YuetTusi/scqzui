@@ -9,7 +9,7 @@ let helper = new Helper();
  * 接收主进程参数
  * @param {any[]} args 参数数组
  */
-ipcRenderer.on('query-db', async (event: IpcRendererEvent, args: [any, number, number]) => {
+ipcRenderer.on('query-db', async (_: IpcRendererEvent, args: [any, number, number]) => {
 	let result = null;
 	try {
 		let [rows, total] = await queryUnit(...args);

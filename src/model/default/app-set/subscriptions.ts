@@ -36,7 +36,7 @@ export default {
    * 退出应用
    */
   exitApp({ dispatch }: SubscriptionAPI) {
-    ipcRenderer.on('will-close', (event: IpcRendererEvent) => {
+    ipcRenderer.on('will-close', (_: IpcRendererEvent) => {
       dispatch({ type: 'fetchingAndParsingState' });
     });
   },
@@ -74,7 +74,7 @@ export default {
   /**
    * 备份旧版本数据表
    */
-  async backupPrevNedb({ dispatch }: SubscriptionAPI) {
+  async backupPrevNedb(_: SubscriptionAPI) {
     const hasBackup = localStorage.getItem(LocalStoreKey.BakPrevNedb) === '1'; //是否已备份过旧表数据
     if (!hasBackup) {
       try {
@@ -98,7 +98,7 @@ export default {
     ipcRenderer.on(
       'report-export-finish',
       (
-        event: IpcRendererEvent,
+        _: IpcRendererEvent,
         success: boolean,
         exportCondition: Record<string, any>,
         isBatch: boolean,
@@ -145,7 +145,7 @@ export default {
 
     ipcRenderer.on(
       'update-export-msg',
-      (event: IpcRendererEvent, args: any) => {
+      (_: IpcRendererEvent, args: any) => {
         dispatch({ type: 'alartMessage/updateAlertMessage', payload: args });
       }
     );
@@ -221,7 +221,7 @@ export default {
   gotoUrl({ dispatch }: SubscriptionAPI) {
     ipcRenderer.on(
       'go-to-url',
-      (event: IpcRendererEvent, url: string, state: any) => {
+      (_: IpcRendererEvent, url: string, state: any) => {
         dispatch(routerRedux.push(url, state));
       }
     );
@@ -230,7 +230,7 @@ export default {
    * 读取本地存储发送给主进程
    */
   getStorage() {
-    ipcRenderer.on('get-storage', (event: IpcRendererEvent, key: string) => {
+    ipcRenderer.on('get-storage', (_: IpcRendererEvent, key: string) => {
       ipcRenderer.send('get-storage', localStorage.getItem(key));
     });
   },

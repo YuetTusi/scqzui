@@ -1,7 +1,6 @@
-import React, { FC, memo } from 'react';
-import styled from 'styled-components';
+import styled from "styled-components";
 
-const InstructionBox = styled.div`
+export const InstructionBox = styled.div`
     p {
 		margin: 0;
 		padding-bottom: 0 0 2px 0;
@@ -19,14 +18,4 @@ const InstructionBox = styled.div`
 			text-decoration: none;
 		}
 	}
-
 `;
-
-/**
- * 文案说明
- */
-const Instruction: FC<{}> = memo(({ children }) =>
-	<InstructionBox>{children}</InstructionBox>
-);
-
-export default Instruction;

@@ -32,7 +32,6 @@ const CaseAdd: FC<CaseAddProp> = () => {
     const hasReport = useState<boolean>(true);
     const autoParse = useState<boolean>(true);
     const generateBcp = useState<boolean>(false);
-    const attachment = useState<boolean>(false);
     const isDel = useState<boolean>(false);
     const isAi = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
@@ -94,7 +93,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
             entity.m_Applist = parseAppList[0] as ParseApp[];
             entity.tokenAppList = tokenAppList[0] as TokenApp[];
             entity.generateBcp = generateBcp[0];
-            entity.attachment = attachment[0];
+            entity.attachment = values.attachment;
             entity.isDel = isDel[0];
             entity.officerNo = values.officerNo;
             entity.securityCaseNo = values.securityCaseNo;
@@ -129,7 +128,6 @@ const CaseAdd: FC<CaseAddProp> = () => {
                 hasReportState={hasReport}
                 autoParseState={autoParse}
                 generateBcpState={generateBcp}
-                attachmentState={attachment}
                 isDelState={isDel}
                 isAiState={isAi}
                 parseAppListState={parseAppList}

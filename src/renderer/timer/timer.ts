@@ -14,7 +14,7 @@ for (let i = 0; i < max; i++) {
     list.push('00:00:00');
 }
 
-ipcRenderer.on('time', (event: IpcRendererEvent, usb: number, isStart: boolean) => {
+ipcRenderer.on('time', (_: IpcRendererEvent, usb: number, isStart: boolean) => {
     if (isStart) {
         if (timerMap.get(`timer_${usb}`) === undefined) {
             timerMap.set(

@@ -290,7 +290,10 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
                 //# 解析`成功`且`是`自动生成BCP
                 logger.info(`解析结束开始自动生成BCP, 手机路径：${deviceData.phonePath}`);
                 const bcpExe = join(appPath, '../tools/BcpTools/BcpGen.exe');
-                const proc = execFile(bcpExe, [deviceData.phonePath!, caseData.attachment ? '1' : '0'], {
+                const attachment = typeof caseData.attachment === 'boolean'
+                    ? Number(caseData.attachment)
+                    : caseData.attachment;
+                const proc = execFile(bcpExe, [deviceData.phonePath!, attachment.toString()], {
                     windowsHide: true,
                     cwd: join(appPath, '../tools/BcpTools')
                 });
@@ -304,7 +307,7 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
                 //     });
                 // });
                 proc.once('error', (err) => {
-                    logger.error(`生成BCP错误 @model/default/receive/listener/parseEnd: ${err.message}`);
+                    logger.error(`自动生成BCP错误 @model/default/receive/listener/parseEnd: ${err.message}`);
                 });
             }
             if (!isparseok && !helper.isNullOrUndefined(errmsg)) {

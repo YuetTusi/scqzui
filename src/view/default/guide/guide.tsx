@@ -7,11 +7,12 @@ import Reading from '@/component/loading/reading';
 import BoardMenu from '@/component/guide-menu';
 import { ExtendPanel } from './styled/extend-panel';
 import { GuideBox } from './styled/box';
+import { GuideProp } from './prop';
 
 /**
  * 首屏按钮页
  */
-const Guide: FC<{}> = () => {
+const Guide: FC<GuideProp> = () => {
 
     const scrollRef = useRef<HTMLDivElement>(null); //滚动div
 

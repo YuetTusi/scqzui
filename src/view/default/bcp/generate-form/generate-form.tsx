@@ -19,6 +19,7 @@ import { No } from '@/utils/regex';
 import { certificateType } from '@/schema/certificate-type';
 import { ethnicity } from '@/schema/ethnicity';
 import { sexCode } from '@/schema/sex-code';
+import { AttachmentType } from '@/schema/bcp-entity';
 import { Split } from '@/component/style-tool';
 import { GenerateFormBox } from './styled/style';
 import { GenerateFormProp } from './prop';
@@ -90,7 +91,7 @@ const GenerateForm: FC<GenerateFormProp> = ({
     const [bcpRequired, setBcpRequired] = useState<boolean>(false);
     const officerList = useOfficerList();
 
-    const queryUnitHandle = (event: IpcRendererEvent, result: Record<string, any>) => {
+    const queryUnitHandle = (_: IpcRendererEvent, result: Record<string, any>) => {
         const { data } = result;
         if (data.rows && data.rows.length > 0) {
             setUnitData(data.rows);
@@ -103,8 +104,12 @@ const GenerateForm: FC<GenerateFormProp> = ({
     useEffect(() => {
 
         if (caseData !== null && deviceData !== null) {
+
+            const attachment = typeof history?.attachment === 'boolean'
+                ? Number(history.attachment)
+                : history?.attachment; //note: 旧版本为布尔值，此处做容错处理
             setFieldsValue({
-                attachment: caseData?.attachment ?? false,
+                attachment: attachment ?? AttachmentType.Nothing,
                 unitCode: unit[0] ?? '',
                 dstUnitCode: dstUnit[0] ?? '',
                 officerNo: caseData?.officerNo ?? '',
@@ -213,12 +218,13 @@ const GenerateForm: FC<GenerateFormProp> = ({
                                 message: '请确定有无附件'
                             }
                         ]}
-                        initialValue={false}
+                        initialValue={AttachmentType.Nothing}
                         name="attachment"
                         label="BCP附件">
                         <Group>
-                            <Radio value={false}>无附件</Radio>
-                            <Radio value={true}>有附件</Radio>
+                            <Radio value={AttachmentType.Nothing}>无附件</Radio>
+                            <Radio value={AttachmentType.Audio}>语音附件</Radio>
+                            <Radio value={AttachmentType.Media}>语音，图片，视频附件</Radio>
                         </Group>
                     </Item>
                 </Col>

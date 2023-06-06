@@ -300,7 +300,7 @@ const helper = {
         target,
         JSON.stringify({
           ...bcp,
-          attachment: bcp.attachment ? '1' : '0',
+          attachment: typeof bcp.attachment === 'boolean' ? Number(bcp.attachment).toString() : bcp.attachment.toString(),
           manufacturer: manu.manufacturer ?? '',
           security_software_orgcode: manu.security_software_orgcode ?? '',
           materials_name: manu.materials_name ?? '',

@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { FormInstance } from "antd/lib/form";
 import { BaseApp } from '@/schema/base-app';
+import { AttachmentType } from '@/schema/bcp-entity';
 
 export interface CaseAddProp { }
 
@@ -25,10 +26,6 @@ export interface FormProp {
      * 生成BCPstate
      */
     generateBcpState: [boolean, Dispatch<SetStateAction<boolean>>],
-    /**
-    * BCP附件state
-    */
-    attachmentState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
      * 是否删除state
      */
@@ -59,6 +56,10 @@ export interface FormValue {
      * 案件存储路径
      */
     m_strCasePath: string;
+    /**
+     * BCP附件
+     */
+    attachment: AttachmentType;
     /**
      * 检验单位
      */

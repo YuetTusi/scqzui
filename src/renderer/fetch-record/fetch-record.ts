@@ -12,7 +12,7 @@ const dataMap = new Map<number, FetchRecord[]>();
  * @param {number} arg.usb USB序号
  * @param {FetchRecord} arg.fetchRecord FetchRecord记录
  */
-const progressHandle = (event: IpcRendererEvent, { usb, fetchRecord }: { usb: number, fetchRecord: FetchRecord }) => {
+const progressHandle = (_: IpcRendererEvent, { usb, fetchRecord }: { usb: number, fetchRecord: FetchRecord }) => {
     if (dataMap.has(usb)) {
         dataMap.get(usb)!.push(fetchRecord);
     } else {
@@ -24,7 +24,7 @@ const progressHandle = (event: IpcRendererEvent, { usb, fetchRecord }: { usb: nu
  * 获取当前USB序号的采集进度数据
  * @param {number} usb USB序号
  */
-const getFetchProgress = (event: IpcRendererEvent, usb: number) => {
+const getFetchProgress = (_: IpcRendererEvent, usb: number) => {
     console.log(`获取进度消息,usb:${usb}`);
     if (dataMap.has(usb)) {
         ipcRenderer.send('receive-fetch-progress', dataMap.get(usb));
@@ -37,7 +37,7 @@ const getFetchProgress = (event: IpcRendererEvent, usb: number) => {
  * 获取当前USB的最后（最新）一条进度消息
  * @param {number} usb USB序号
  */
-const getLastProgress = (event: IpcRendererEvent, usb: number) => {
+const getLastProgress = (_: IpcRendererEvent, usb: number) => {
     console.log(`取最后一条进度,usb:${usb}`);
     if (dataMap.has(usb)) {
         let fetchRecords = dataMap.get(usb);
@@ -62,7 +62,7 @@ const getLastProgress = (event: IpcRendererEvent, usb: number) => {
  * @param usb 完成设备的USB序号
  * @param log 日志对象
  */
-const finishHandle = (event: IpcRendererEvent, usb: number, log: FetchLog) => {
+const finishHandle = (_: IpcRendererEvent, usb: number, log: FetchLog) => {
     console.log(`完成发送日志数据,usb:${usb}`);
     if (dataMap.has(usb)) {
         log.record = dataMap.get(usb)!.filter((item) => item.type != 0);
@@ -77,7 +77,7 @@ const finishHandle = (event: IpcRendererEvent, usb: number, log: FetchLog) => {
  * @param event
  * @param usb 序号
  */
-const clearHandle = (event: IpcRendererEvent, usb: number) => {
+const clearHandle = (_: IpcRendererEvent, usb: number) => {
     console.clear();
     console.log(`清理进度消息,usb:${usb}`);
     dataMap.delete(usb);

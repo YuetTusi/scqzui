@@ -16,6 +16,7 @@ import CaseInfo from '@/schema/case-info';
 import { BaseApp } from '@/schema/base-app';
 import { ParseApp } from '@/schema/parse-app';
 import { TokenApp } from '@/schema/token-app';
+import { AttachmentType } from '@/schema/bcp-entity';
 import EditForm from './edit-form';
 import { CaseBox } from './styled/styled';
 import { CaseEditProp } from './prop';
@@ -50,7 +51,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
     const hasReport = useState<boolean>(true);
     const autoParse = useState<boolean>(true);
     const generateBcp = useState<boolean>(false);
-    const attachment = useState<boolean>(false);
+    // const attachment = useState<boolean>(false);
     const isDel = useState<boolean>(false);
     const isAi = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
@@ -81,6 +82,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
         if (data !== null) {
             formRef.setFieldsValue({
                 ...data,
+                attachment: typeof data.attachment === 'boolean' ? Number(data.attachment) : data.attachment,
                 ruleFrom: data.ruleFrom ?? 0,
                 ruleTo: data.ruleTo ?? 8,
                 m_strCaseName: getCaseName(data.m_strCaseName)[0]
@@ -89,7 +91,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
             hasReport[1](data?.hasReport ?? true);
             autoParse[1](data?.m_bIsAutoParse ?? true);
             generateBcp[1](data?.generateBcp ?? false);
-            attachment[1](data?.attachment ?? false);
+            // attachment[1](data?.attachment ?? AttachmentType.Nothing);
             isDel[1](data?.isDel ?? false);
             isAi[1](data?.isAi ?? false);
             dispatch({
@@ -137,7 +139,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
             entity.hasReport = hasReport[0];
             entity.m_bIsAutoParse = autoParse[0];
             entity.generateBcp = generateBcp[0];
-            entity.attachment = attachment[0];
+            entity.attachment = values.attachment;
             entity.isDel = isDel[0];
             entity.ruleFrom = values.ruleFrom;
             entity.ruleTo = values.ruleTo;
@@ -177,7 +179,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
                 hasReportState={hasReport}
                 autoParseState={autoParse}
                 generateBcpState={generateBcp}
-                attachmentState={attachment}
+                attachment={data?.attachment ?? AttachmentType.Nothing}
                 isDelState={isDel}
                 isAiState={isAi}
                 parseAppListState={parseAppList}

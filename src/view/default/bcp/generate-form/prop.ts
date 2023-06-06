@@ -1,7 +1,6 @@
 import { Dayjs } from 'dayjs';
-import { ReactNode } from 'react';
 import { FormInstance } from 'antd/lib/form';
-import BcpEntity from '@/schema/bcp-entity';
+import BcpEntity, { AttachmentType } from '@/schema/bcp-entity';
 import CaseInfo from '@/schema/case-info';
 import DeviceType from '@/schema/device-type';
 
@@ -47,7 +46,7 @@ export interface FormValue {
     /**
      * 有无附件
      */
-    attachment: boolean;
+    attachment: AttachmentType;
     /**
      * 采集单位编号
      */

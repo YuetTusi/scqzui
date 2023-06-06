@@ -21,7 +21,7 @@ import { Backslashe, UnderLine } from '@/utils/regex';
 import { CaseInfo } from '@/schema/case-info';
 import { FetchData } from '@/schema/fetch-data';
 import { DataMode } from '@/schema/data-mode';
-import Instruction from '../instruction';
+import { Instruction } from '../instruction';
 import { CheckInputModalBox } from './styled/style';
 import { FormValue, Prop } from './prop';
 import { CheckInputModalState } from '@/model/default/check-input-modal';

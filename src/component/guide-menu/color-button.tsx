@@ -1,6 +1,7 @@
 import debounce from 'lodash/debounce';
 import React, { FC, useEffect, useRef } from 'react';
 import { NavLink } from 'dva/router';
+import { helper } from '@/utils/helper';
 import { Color } from './styled/button';
 import { ColorButtonProp } from './prop';
 
@@ -45,14 +46,11 @@ const ColorButton: FC<ColorButtonProp> = ({
     /**
      * 文案遮罩层
      */
-    const renderDescMask = () => {
-        if (description === undefined) {
-            return null;
-        }
-        return <div ref={maskRef} className="desc-mask">
+    const renderDescMask = () => helper.isNullOrUndefined(description)
+        ? null
+        : <div ref={maskRef} className="desc-mask">
             {description}
-        </div>
-    }
+        </div>;
 
     if (typeof to === 'string') {
         return <Color color={color} ref={imageBoxRef}>
@@ -76,7 +74,7 @@ const ColorButton: FC<ColorButtonProp> = ({
 ColorButton.defaultProps = {
     to: '/',
     color: '#4b6584',
-    description: ''
+    description: undefined
 };
 
-export default ColorButton;
+export { ColorButton };

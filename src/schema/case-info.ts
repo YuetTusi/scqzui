@@ -1,6 +1,7 @@
 import { ParseApp } from './parse-app';
 import { TokenApp } from './token-app';
 import { BaseEntity } from './base-entity';
+import { AttachmentType } from './bcp-entity';
 
 /**
  * 案件（维护时）
@@ -38,7 +39,7 @@ class CaseInfo extends BaseEntity {
     /**
      * 是否有附件
      */
-    public attachment: boolean;
+    public attachment: AttachmentType;
     /**
      * 是否删除原数据
      */

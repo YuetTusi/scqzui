@@ -13,6 +13,7 @@ import Form, { RuleObject } from 'antd/lib/form';
 import Empty from 'antd/lib/empty';
 import Input, { InputRef } from 'antd/lib/input';
 import InputNumber from 'antd/lib/input-number';
+import Radio from 'antd/lib/radio';
 import Select from 'antd/lib/select';
 import Tooltip from 'antd/lib/tooltip';
 import Col from 'antd/lib/col';
@@ -22,6 +23,7 @@ import { helper } from '@/utils/helper';
 import { AllowCaseName } from '@/utils/regex';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { caseType } from '@/schema/case-type';
+import { AttachmentType } from '@/schema/bcp-entity';
 import parseAppData from '@/config/parse-app.yaml';
 import tokenAppData from '@/config/token-app.yaml';
 import Auth from '@/component/auth';
@@ -31,7 +33,6 @@ import { filterToParseApp } from '../helper';
 import { FormBox } from './styled/styled';
 import AiSwitch from '../ai-switch';
 import { FormProp } from './prop';
-
 
 const { Group } = Button;
 const { Search } = Input;
@@ -48,7 +49,7 @@ const { useBcp, useAi, caseText, fetchText, parseText } = helper.readConf()!;
  */
 const AddForm: FC<FormProp> = ({
     formRef, sdCardState, hasReportState, autoParseState, generateBcpState,
-    attachmentState, isDelState, isAiState, parseAppListState, tokenAppListState
+    isDelState, isAiState, parseAppListState, tokenAppListState
 }) => {
     const [isCheck, setIsCheck] = useState(false);
     const [parseAppSelectModalVisible, setParseAppSelectModalVisible] =
@@ -60,7 +61,6 @@ const AddForm: FC<FormProp> = ({
     const [hasReport, setHasReport] = hasReportState;
     const [autoParse, setAutoParse] = autoParseState;
     const [generateBcp, setGenerateBcp] = generateBcpState;
-    const [attachment, setAttachment] = attachmentState;
     const [isDel, setIsDel] = isDelState;
     const [isAi, setIsAi] = isAiState;
     const [parseAppList, setParseAppList] = parseAppListState;
@@ -255,7 +255,7 @@ const AddForm: FC<FormProp> = ({
                             const { checked } = event.target;
                             if (!checked) {
                                 setGenerateBcp(false);
-                                setAttachment(false);
+                                // setAttachment(false);
                             }
                             setAutoParse(checked);
                         }}
@@ -267,24 +267,24 @@ const AddForm: FC<FormProp> = ({
                         <span>生成BCP：</span>
                         <Checkbox
                             onChange={(event) => {
-                                const { checked } = event.target;
-                                if (!checked) {
-                                    setAttachment(false);
-                                }
+                                // const { checked } = event.target;
+                                // if (!checked) {
+                                //     setAttachment(false);
+                                // }
                                 setGenerateBcp(event.target.checked);
                             }}
                             checked={generateBcp}
                             disabled={!autoParse}
                         />
                     </Col>
-                    <Col span={3}>
+                    {/* <Col span={3}>
                         <span>BCP包含附件：</span>
                         <Checkbox
                             onChange={(event) => setAttachment(event.target.checked)}
                             checked={attachment}
                             disabled={!generateBcp}
                         />
-                    </Col>
+                    </Col> */}
                 </Auth>
                 <Col span={3}>
                     <span>删除原数据：</span>
@@ -306,7 +306,23 @@ const AddForm: FC<FormProp> = ({
                     <FontAwesomeIcon icon={faAnglesDown} />
                     <span>BCP信息</span>
                 </div>
-                <Row style={{ marginTop: '32px' }}>
+                <Row style={{ marginTop: '30px' }}>
+                    <Col span={12}>
+                        <Item
+                            name="attachment"
+                            label="BCP附件"
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                            initialValue={AttachmentType.Nothing}>
+                            <Radio.Group>
+                                <Radio value={AttachmentType.Nothing}>无附件</Radio>
+                                <Radio value={AttachmentType.Audio}>语音附件</Radio>
+                                <Radio value={AttachmentType.Media}>语音，图片，视频附件</Radio>
+                            </Radio.Group>
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
                     <Col span={12}>
                         <Item
                             rules={[
