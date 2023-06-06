@@ -1,3 +1,4 @@
+import React, { FC, memo } from 'react';
 import styled from "styled-components";
 
 export const InstructionBox = styled.div`
@@ -19,3 +20,13 @@ export const InstructionBox = styled.div`
 		}
 	}
 `;
+
+
+/**
+ * 文案说明
+ */
+const Instruction: FC<{}> = memo(({ children }) =>
+    <InstructionBox>{children}</InstructionBox>
+);
+
+export { Instruction };
