@@ -36,4 +36,22 @@ export interface TreeParam {
     attaches: string[]
 }
 
+/**
+ * 附件拷贝路径
+ */
+export interface CopyParam {
+    /**
+     * 从
+     */
+    from: string,
+    /**
+     * 至
+     */
+    to: string,
+    /**
+     * 重命名
+     */
+    rename: string
+}
+
 export type BatchExportTask = ExportCondition & TreeParam;

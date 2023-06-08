@@ -119,6 +119,12 @@ const SofthardwareModal: FC<SofthardwareModalProp> = ({ visible, closeHandle }) 
             <Item label="开发方（制造商名称）" name="manufacturer">
                 <Input maxLength={128} />
             </Item>
+            <Item label="客服电话" name="hotline">
+                <Input maxLength={100} />
+            </Item>
+            <Item label="联系电话" name="telephone">
+                <Input maxLength={100} />
+            </Item>
             <Item label="厂商组织机构代码" name="security_software_orgcode">
                 <Input maxLength={9} />
             </Item>

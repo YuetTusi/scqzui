@@ -11,9 +11,9 @@ import QuickCopy from '@/component/quick-copy';
 import { Manufaturer } from '@/schema/manufaturer';
 import { VersionBox } from './styled/style';
 import LogList from './log-list';
+import { ListOption } from './list-option';
 import logoPng from './images/icon.png';
 import { LogItem } from './prop';
-// import { useDispatch } from 'dva';
 
 const cwd = process.cwd();
 const conf = helper.readConf()!;
@@ -94,19 +94,12 @@ const Version: FC<{}> = () => {
                 />
             </div>
             <div className="info">
-                <div>
-                    <label>产品名称</label>
-                    <span className="text">{data?.materials_name ?? ''}</span>
-                </div>
-                <div>
-                    <label>产品型号</label>
-                    <span className="text">{data?.materials_model ?? ''}</span>
-                </div>
-                <div>
-                    <label>开发方</label>
-                    <span className="text">{data?.manufacturer ?? ''}</span>
-                </div>
-                <div>
+                <ListOption label="产品名称">{data?.materials_name}</ListOption>
+                <ListOption label="产品型号">{data?.materials_model}</ListOption>
+                <ListOption label="开发方">{data?.manufacturer}</ListOption>
+                <ListOption label="客服电话">{data?.hotline}</ListOption>
+                <ListOption label="联系电话">{data?.telephone}</ListOption>
+                <div style={{ padding: 0 }}>
                     <label>序列号</label>
                     <span className="text">
                         <QuickCopy desc="拷贝序列号">
@@ -114,14 +107,13 @@ const Version: FC<{}> = () => {
                         </QuickCopy>
                     </span>
                 </div>
-                <div>
-                    <label>当前版本</label>
-                    <span className="text">
-                        {helper.isNullOrUndefinedOrEmptyString(data?.materials_software_version)
+                <ListOption label="当前版本">
+                    {
+                        helper.isNullOrUndefinedOrEmptyString(data?.materials_software_version)
                             ? 'v0.0.1'
-                            : filterString(data?.materials_software_version!)}
-                    </span>
-                </div>
+                            : filterString(data?.materials_software_version!)
+                    }
+                </ListOption>
                 <div style={{ padding: 0 }}>
                     <label>发行日志</label>
                     <span className="text">

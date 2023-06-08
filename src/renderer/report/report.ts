@@ -5,14 +5,31 @@ import { ipcRenderer, IpcRendererEvent } from 'electron';
 import groupBy from 'lodash/groupBy';
 import archiver from 'archiver';
 import log from '@/utils/log';
-import { BatchExportTask, ExportCondition, TreeParam } from './types';
-
-import { mkdir, copy, copyFiles, readJSONFile, writeJSONfile, updateFileTime, heicToJpeg } from './helper';
+import {
+    BatchExportTask,
+    CopyParam,
+    ExportCondition,
+    TreeParam
+} from './types';
+import {
+    mkdir,
+    copy,
+    copyFiles,
+    readJSONFile,
+    writeJSONfile,
+    updateFileTime,
+    heicToJpeg
+} from './helper';
 
 /**
  * 接收main.js导出消息
  */
-ipcRenderer.on('report-export', async (_: IpcRendererEvent, exportCondition: ExportCondition, treeParams: TreeParam, msgId: string) => {
+ipcRenderer.on('report-export', async (
+    _: IpcRendererEvent,
+    exportCondition: ExportCondition,
+    treeParams: TreeParam,
+    msgId: string
+) => {
     const { isZip } = exportCondition;
 
     try {
@@ -32,14 +49,17 @@ ipcRenderer.on('report-export', async (_: IpcRendererEvent, exportCondition: Exp
 /**
  * 接收main.js批量导出消息
  */
-ipcRenderer.on('report-batch-export', async (_, batchExportTasks: BatchExportTask[], isAttach: boolean, isZip: boolean, msgId: string) => {
+ipcRenderer.on('report-batch-export', async (
+    _,
+    batchExportTasks: BatchExportTask[],
+    isAttach: boolean,
+    isZip: boolean,
+    msgId: string
+) => {
     try {
         for (let i = 0, l = batchExportTasks.length; i < l; i++) {
             const { reportRoot, saveTarget, reportName, tree, files, attaches } =
                 batchExportTasks[i];
-
-            // console.log({ reportRoot, saveTarget, reportName, isAttach });
-            // console.log({ tree, files, attaches });
 
             ipcRenderer.send('update-export-msg', {
                 id: msgId,
@@ -194,7 +214,7 @@ function compressReport(
  * @param {string[]} attachFiles 附件JSON文件
  */
 async function copyAttach(source: string, distination: string, folderName: string, attachFiles: string[]) {
-    let copyPath: Array<{ from: string, to: string, rename: string }[]> = [];
+    let copyPath: Array<CopyParam[]> = [];
     console.log(`attachFiles文件数量：${attachFiles.length}`);
     try {
         for (let i = 0, l = attachFiles.length; i < l; i++) {
