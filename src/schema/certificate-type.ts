@@ -1,7 +1,7 @@
 /**
  * 检材持有人证件类型数据
  */
- export const certificateType = [
+export const certificateType = [
     { name: '未知', value: '0' },
     { name: '身份证', value: '111' },
     { name: '临时身份证', value: '112' },

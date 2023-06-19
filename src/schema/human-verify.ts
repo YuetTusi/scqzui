@@ -1,7 +1,7 @@
 /**
  * 图形验证参数
  */
- interface HumanVerify {
+interface HumanVerify {
     /**
      * 时间戳
      */

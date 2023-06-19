@@ -1,7 +1,7 @@
 /**
  * 案件类型数据
  */
- export const caseType = [
+export const caseType = [
     { name: '---', value: '' },
     { name: '黑客', value: '0100' },
     { name: '淫秽色情', value: '0200' },

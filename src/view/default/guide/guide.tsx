@@ -22,9 +22,10 @@ const Guide: FC<GuideProp> = () => {
     const onPanelWheel = (event: WheelEvent) => {
         event.preventDefault();
         const { deltaY } = event;
-        if (scrollRef.current !== null) {
-            scrollRef.current.style.scrollBehavior = 'auto';
-            scrollRef.current.scrollLeft += deltaY - 10;
+        const { current: scrollDom } = scrollRef;
+        if (scrollDom !== null) {
+            scrollDom.style.scrollBehavior = 'auto';
+            scrollDom.scrollLeft += deltaY - 10;
         }
     };
 
@@ -32,16 +33,18 @@ const Guide: FC<GuideProp> = () => {
      * 左右滚动键盘事件
      */
     const onPanelKeydown = ({ code }: KeyboardEvent) => {
-        if (scrollRef.current !== null) {
-            scrollRef.current.style.scrollBehavior = 'smooth';
+        const { current: scrollDom } = scrollRef;
+        if (scrollDom !== null) {
+            scrollDom.style.scrollBehavior = 'smooth';
             switch (code) {
                 case 'ArrowRight':
-                    scrollRef.current.scrollLeft += 200;
+                    scrollDom.scrollLeft += 200;
                     break;
                 case 'ArrowLeft':
-                    scrollRef.current.scrollLeft -= 200;
+                    scrollDom.scrollLeft -= 200;
                     break;
                 default:
+                    console.clear();
                     console.warn(`未知KeyCode:${code}`);
                     break;
             }
@@ -49,12 +52,13 @@ const Guide: FC<GuideProp> = () => {
     };
 
     useEffect(() => {
-        if (scrollRef.current !== null) {
-            scrollRef.current.style.scrollBehavior = 'smooth';
-            scrollRef.current.addEventListener('wheel', onPanelWheel);
+        const { current: scrollDom } = scrollRef;
+        if (scrollDom !== null) {
+            scrollDom.style.scrollBehavior = 'smooth';
+            scrollDom.addEventListener('wheel', onPanelWheel);
         }
         return () => {
-            scrollRef.current?.removeEventListener('wheel', onPanelWheel);
+            scrollDom?.removeEventListener('wheel', onPanelWheel);
         };
     }, []);
 

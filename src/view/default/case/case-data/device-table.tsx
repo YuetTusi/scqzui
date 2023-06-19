@@ -41,13 +41,15 @@ const DeviceTable: FC<DeviceTableProp> = ({ caseId }) => {
                 total: data ? data.length : 0,
                 showSizeChanger: false
             }}
-            size="small"
             locale={{
-                emptyText: <Empty description={`无${fetchText ?? '取证'}数据`} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                emptyText: <Empty
+                    description={`无${fetchText ?? '取证'}数据`}
+                    image={Empty.PRESENTED_IMAGE_SIMPLE} />
             }}
             rowKey={(record: DeviceType) => record._id!}
             bordered={true}
-            className="inner-device-table"></Table>
+            size="small"
+            className="inner-device-table" />
     </div>;
 };
 

@@ -117,6 +117,22 @@ const renderColorButtons = (manu: Manufaturer | null, serial: string) => {
                                     <label>开发方</label>
                                     <span>{manu?.manufacturer ?? ''}</span>
                                 </p>
+                                {
+                                    helper.isNullOrUndefinedOrEmptyString(manu?.hotline)
+                                        ? null
+                                        : <p>
+                                            <label>客服电话</label>
+                                            <span>{manu?.hotline ?? ''}</span>
+                                        </p>
+                                }
+                                {
+                                    helper.isNullOrUndefinedOrEmptyString(manu?.telephone)
+                                        ? null
+                                        : <p>
+                                            <label>联系电话</label>
+                                            <span>{manu?.telephone ?? ''}</span>
+                                        </p>
+                                }
                                 <p>
                                     <label>序列号</label>
                                     <span>{serial}</span>

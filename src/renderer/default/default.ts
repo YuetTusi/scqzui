@@ -80,7 +80,7 @@ const app = dva({
     }
 })();
 
-ipcRenderer.on('show-notification', (event: IpcRendererEvent, info: { message: string, description: string, type: string }) => {
+ipcRenderer.on('show-notification', (_: IpcRendererEvent, info: { message: string, description: string, type: string }) => {
     //显示notification消息
     let { message, description, type = 'info' } = info;
 

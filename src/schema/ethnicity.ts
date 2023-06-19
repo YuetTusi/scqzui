@@ -1,7 +1,7 @@
 /**
  * 民族数据
  */
- export const ethnicity = [
+export const ethnicity = [
     { name: '未知', value: '00' },
     { name: '汉族', value: '01' },
     { name: '满族', value: '11' },
