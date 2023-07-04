@@ -20,7 +20,9 @@ import {
  * 应用验证码输入（一条应用）
  * @param props
  */
-const CodeItem: FC<CodeItemProps> = ({ usb, app, humanVerifyDataHandle, cloudApps }) => {
+const CodeItem: FC<CodeItemProps> = ({
+	usb, app, cloudApps, humanVerifyDataHandle
+}) => {
 
 	const dispatch = useDispatch();
 	const inputRef = useRef<any>(null);
@@ -30,7 +32,7 @@ const CodeItem: FC<CodeItemProps> = ({ usb, app, humanVerifyDataHandle, cloudApp
 	 * 重新发送验证码Click
 	 */
 	const resendClick = debounce(
-		(e: MouseEvent<HTMLButtonElement>) => {
+		(_: MouseEvent<HTMLButtonElement>) => {
 			if (inputRef.current) {
 				send(SocketType.Fetch, {
 					type: SocketType.Fetch,
@@ -61,7 +63,7 @@ const CodeItem: FC<CodeItemProps> = ({ usb, app, humanVerifyDataHandle, cloudApp
 	/**
 	 * 取消Click
 	 */
-	const cancelClick = (e: MouseEvent<HTMLButtonElement>) => {
+	const cancelClick = (_: MouseEvent<HTMLButtonElement>) => {
 		Modal.confirm({
 			onOk() {
 				if (inputRef.current) {

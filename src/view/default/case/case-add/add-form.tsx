@@ -77,7 +77,7 @@ const AddForm: FC<FormProp> = ({
     /**
      * 选择案件路径Handle
      */
-    const selectDirHandle = useCallback((event: MouseEvent<HTMLInputElement>) => {
+    const selectDirHandle = useCallback((_: MouseEvent<HTMLInputElement>) => {
         const { setFieldsValue } = formRef;
         ipcRenderer
             .invoke('open-dialog', {
@@ -93,7 +93,7 @@ const AddForm: FC<FormProp> = ({
     /**
      * 验证案件重名
      */
-    const validCaseNameExists = throttle(async (rule: any, value: string) => {
+    const validCaseNameExists = throttle(async (_: any, value: string) => {
         setIsCheck(true);
         let next = value === '..' ? '.' : value;
         try {
@@ -108,7 +108,7 @@ const AddForm: FC<FormProp> = ({
         }
     }, 400);
 
-    const ruleToValid = async (rule: RuleObject, value: any) => {
+    const ruleToValid = async (_: RuleObject, value: any) => {
         const from = formRef.getFieldValue('ruleFrom');
         if (from === value) {
             throw new Error('不要等于起始时段');

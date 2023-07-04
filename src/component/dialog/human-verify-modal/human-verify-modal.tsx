@@ -59,26 +59,26 @@ const HumanVerifyModal: FC<Prop> = ({
 	 * 选字handle
 	 * @param values 坐标值
 	 */
-	const onValid = (
-		values: {
-			x: number;
-			y: number;
-		}[]
-	) => {
-		send(SocketType.Fetch, {
-			type: SocketType.Fetch,
-			cmd: CommandType.HumanReply,
-			msg: {
-				usb,
-				appId,
-				value: values
-			}
-		});
-		message.info('验证结果已发送...');
-		setTimeout(() => {
-			closeHandle();
-		}, 500);
-	};
+	// const onValid = (
+	// 	values: {
+	// 		x: number;
+	// 		y: number;
+	// 	}[]
+	// ) => {
+	// 	send(SocketType.Fetch, {
+	// 		type: SocketType.Fetch,
+	// 		cmd: CommandType.HumanReply,
+	// 		msg: {
+	// 			usb,
+	// 			appId,
+	// 			value: values
+	// 		}
+	// 	});
+	// 	message.info('验证结果已发送...');
+	// 	setTimeout(() => {
+	// 		closeHandle();
+	// 	}, 500);
+	// };
 
 	const renderByType = (verifyData: HumanVerify | null) => {
 		if (verifyData === null) {
