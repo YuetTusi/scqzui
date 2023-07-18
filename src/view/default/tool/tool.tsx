@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce';
 import { shell } from 'electron';
 import { join, resolve } from 'path';
-import React, { FC, useState, useCallback, useRef, MouseEvent } from 'react';
+import React, { FC, useCallback, useRef, useReducer, MouseEvent } from 'react';
 import { useDispatch } from 'dva';
 import FundViewOutlined from '@ant-design/icons/FundViewOutlined';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
@@ -9,10 +9,10 @@ import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers, faSimCard, faSdCard, faMobileRetro, faClone
+    faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers, faSimCard, faSdCard, faMobileRetro
 } from '@fortawesome/free-solid-svg-icons';
 import {
-    faApple, faAndroid, faItunes, faBlackberry, faAlipay
+    faApple, faAndroid, faItunes, faBlackberry, faAlipay, faWeixin
 } from '@fortawesome/free-brands-svg-icons';
 import Auth from '@/component/auth';
 import SubLayout from '@/component/sub-layout';
@@ -46,7 +46,7 @@ import meegoSvg from './styled/images/meego.svg';
 import hwcopyPng from './styled/images/hwcopy.png';
 import samsungSmartswitch from './styled/images/samsung_smartswitch.png';
 import { CrackTypes } from './crack-modal/prop';
-import { ExeType, ToolProp } from './prop';
+import { ExeType, Action, ModalOpenState, ToolProp } from './prop';
 
 const cwd = process.cwd();
 const { useFakeButton } = helper.readConf()!;
@@ -58,20 +58,25 @@ const Tool: FC<ToolProp> = () => {
 
     const dispatch = useDispatch();
     const currentCrackType = useRef(CrackTypes.VivoAppLock);
-    const [alipayOrderModalVisible, setAlipayOrderModalVisible] = useState<boolean>(false);
-    const [aiSimilarModalVisible, setAiSimilarModalVisible] = useState<boolean>(false);
-    const [crackModalVisible, setCrackModalVisible] = useState<boolean>(false);
-    const [miChangeModalVisible, setMiChangeModalVisible] = useState<boolean>(false);
-    const [huaweiCloneModalVisible, setHuaweiCloneModalVisible] = useState<boolean>(false);
-    const [fakeImportModalVisible, setFakeImportModalVisible] = useState<boolean>(false);
-    const [snapshotModalVisible, setSnapshotModalVisible] = useState<boolean>(false);
+    const [modalState, dispatchModal] = useReducer(
+        (state: ModalOpenState, { type, payload }: Action) => ({
+            ...state, [type]: payload
+        }), {
+        alipayOrderModalVisible: false,
+        aiSimilarModalVisible: false,
+        crackModalVisible: false,
+        miChangeModalVisible: false,
+        huaweiCloneModalVisible: false,
+        fakeImportModalVisible: false,
+        snapshotModalVisible: false
+    });
 
-    /**
+    /** 
      * 支付宝云取取消handle
      */
     const alipayOrderModalCancelHandle = useCallback(() => {
-        setAlipayOrderModalVisible(false);
-    }, [alipayOrderModalVisible]);
+        dispatchModal({ type: 'alipayOrderModalVisible', payload: false });
+    }, [modalState.alipayOrderModalVisible]);
 
     /**
      * 支付宝云取确定handle
@@ -85,17 +90,17 @@ const Tool: FC<ToolProp> = () => {
                 message.destroy();
                 message.error(`启动云取程序失败: ${err.message}`);
             });
-        setAlipayOrderModalVisible(false);
-    }, [alipayOrderModalVisible]);
+        dispatchModal({ type: 'alipayOrderModalVisible', payload: false });
+    }, [modalState.alipayOrderModalVisible]);
 
     /**
      * 应用锁破解按钮Click
      * @param event 事件对象
      * @param type 破解类型
      */
-    const crackLiClick = (event: MouseEvent<HTMLDivElement>, type: CrackTypes) => {
+    const crackLiClick = (_: MouseEvent<HTMLDivElement>, type: CrackTypes) => {
         currentCrackType.current = type;
-        setCrackModalVisible(true);
+        dispatchModal({ type: 'crackModalVisible', payload: true });
     };
 
     /**
@@ -200,7 +205,8 @@ const Tool: FC<ToolProp> = () => {
                 okText: '确定'
             });
         });
-        setMiChangeModalVisible(false);
+
+        dispatchModal({ type: 'miChangeModalVisible', payload: false });
     };
 
     /**
@@ -217,18 +223,18 @@ const Tool: FC<ToolProp> = () => {
                 okText: '确定'
             });
         });
-        setHuaweiCloneModalVisible(false);
+        dispatchModal({ type: 'huaweiCloneModalVisible', payload: false });
     };
 
     /**
      * 小米换机导入handle
      */
-    const miChangeHandle = () => setMiChangeModalVisible(true);
+    const miChangeHandle = () => dispatchModal({ type: 'miChangeModalVisible', payload: true });
 
     /**
      * 华为手机克隆handle
      */
-    const huaweiCloneHandle = () => setHuaweiCloneModalVisible(true);
+    const huaweiCloneHandle = () => dispatchModal({ type: 'huaweiCloneModalVisible', payload: true });
 
     return <SubLayout title="工具箱">
         <ToolBox>
@@ -360,7 +366,7 @@ const Tool: FC<ToolProp> = () => {
                     </Auth>
                 </div>
             </SortBox>
-            <ImportBak onClick={() => setFakeImportModalVisible(true)} />
+            <ImportBak onClick={() => dispatchModal({ type: 'fakeImportModalVisible', payload: true })} />
             <SortBox>
                 <div className="caption">应用锁破解</div>
                 <Split />
@@ -495,7 +501,7 @@ const Tool: FC<ToolProp> = () => {
                 <div className="caption">其他功能</div>
                 <Split />
                 <div className="t-row">
-                    <div onClick={() => setAlipayOrderModalVisible(true)} className="t-button">
+                    <div onClick={() => dispatchModal({ type: 'alipayOrderModalVisible', payload: true })} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faAlipay} color="#1477fe" />
                         </div>
@@ -503,6 +509,14 @@ const Tool: FC<ToolProp> = () => {
                             支付宝账单云取
                         </div>
                     </div>
+                    {/* <div onClick={() => { }} className="t-button">
+                        <div className="ico">
+                            <FontAwesomeIcon icon={faWeixin} color="#51c332" />
+                        </div>
+                        <div className="name">
+                            微信扫码
+                        </div>
+                    </div> */}
                     <div onClick={() => runExeHandle(ExeType.ChatDownload)} className="t-button">
                         <div className="ico">
                             <FontAwesomeIcon icon={faFileArrowDown} color="#CAD3C8" />
@@ -528,7 +542,7 @@ const Tool: FC<ToolProp> = () => {
                                 华为开机密码破解
                             </div>
                         </div>
-                        <div onClick={() => setAiSimilarModalVisible(true)} className="t-button">
+                        <div onClick={() => dispatchModal({ type: 'aiSimilarModalVisible', payload: true })} className="t-button">
                             <div className="ico">
                                 <FontAwesomeIcon icon={faUsers} color="#fa983a" />
                             </div>
@@ -545,7 +559,7 @@ const Tool: FC<ToolProp> = () => {
                             小米换机采集
                         </div>
                     </div>
-                    <div onClick={() => setSnapshotModalVisible(true)} className="t-button">
+                    <div onClick={() => dispatchModal({ type: 'snapshotModalVisible', payload: true })} className="t-button">
                         <div className="ico" style={{ color: '#23a758' }}>
                             <FundViewOutlined />
                         </div>
@@ -566,33 +580,30 @@ const Tool: FC<ToolProp> = () => {
         </ToolBox>
         <ImportDataModal />
         <AlipayOrderModal
-            visible={alipayOrderModalVisible}
+            visible={modalState.alipayOrderModalVisible}
             cancelHandle={alipayOrderModalCancelHandle}
             saveHandle={alipayOrderModalSaveHandle} />
         <AiSimilarModal
-            visible={aiSimilarModalVisible}
-            closeHandle={() => setAiSimilarModalVisible(false)} />
+            visible={modalState.aiSimilarModalVisible}
+            closeHandle={() => dispatchModal({ type: 'aiSimilarModalVisible', payload: false })} />
         <CrackModal
-            visible={crackModalVisible}
+            visible={modalState.crackModalVisible}
             type={currentCrackType.current}
-            cancelHandle={() => setCrackModalVisible(false)} />
+            cancelHandle={() => dispatchModal({ type: 'crackModalVisible', payload: false })} />
         <MiChangeModal
-            visible={miChangeModalVisible}
+            visible={modalState.miChangeModalVisible}
             onOk={runMiChangeExe}
-            onCancel={() => setMiChangeModalVisible(false)}
-        />
+            onCancel={() => dispatchModal({ type: 'miChangeModalVisible', payload: false })} />
         <HuaweiCloneModal
-            visible={huaweiCloneModalVisible}
+            visible={modalState.huaweiCloneModalVisible}
             onOk={runHuaweiCloneExe}
-            onCancel={() => setHuaweiCloneModalVisible(false)}
-        />
+            onCancel={() => dispatchModal({ type: 'huaweiCloneModalVisible', payload: false })} />
         <FakeImportModal
-            visible={fakeImportModalVisible}
-            onCloseClick={() => setFakeImportModalVisible(false)} />
+            visible={modalState.fakeImportModalVisible}
+            onCloseClick={() => dispatchModal({ type: 'fakeImportModalVisible', payload: false })} />
         <SnapshotModal
-            visible={snapshotModalVisible}
-            cancelHandle={() => setSnapshotModalVisible(false)}
-        />
+            visible={modalState.snapshotModalVisible}
+            cancelHandle={() => dispatchModal({ type: 'snapshotModalVisible', payload: false })} />
     </SubLayout >
 };
 
