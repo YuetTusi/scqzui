@@ -6,13 +6,13 @@ import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
+import Explain from '@/component/explain';
 import { useAppConfig } from '@/hook';
 import { StateTree } from '@/type/model';
 import { ImportTypes } from '@/schema/import-type';
 import { ImportDataModalState } from '@/model/default/import-data-modal';
 import { ImportForm } from './import-form';
 import { FormValue, ImportModalProp } from './prop';
-import { ImportDataModalBox } from './styled/box';
 
 const { useForm } = Form;
 
@@ -46,16 +46,12 @@ const ImportDataModal: FC<ImportModalProp> = ({ }) => {
      */
     const renderTips = () => {
         if (tips && tips.length > 0) {
-            return <fieldset className="tip-msg full">
-                <legend>
-                    操作提示
-                </legend>
-                <div>
-                    <ul>
-                        {tips.map((item, index) => <li key={`IDMT_${index}`}>{item}</li>)}
-                    </ul>
-                </div>
-            </fieldset>
+            return <Explain
+                title="操作提示">
+                <ul>
+                    {tips.map((item, index) => <li key={`IDMT_${index}`}>{item}</li>)}
+                </ul>
+            </Explain>;
         } else {
             return null;
         }
@@ -112,12 +108,10 @@ const ImportDataModal: FC<ImportModalProp> = ({ }) => {
         destroyOnClose={true}
         forceRender={true}
         maskClosable={false}>
-        <ImportDataModalBox>
-            {renderTips()}
-            <ImportForm
-                formRef={formRef}
-                type={importType} />
-        </ImportDataModalBox>
+        {renderTips()}
+        <ImportForm
+            formRef={formRef}
+            type={importType} />
     </Modal>
 };
 

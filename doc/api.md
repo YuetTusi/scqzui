@@ -12,7 +12,7 @@ Socket 分类使用枚举区分：
 | 解析     | parse | 解析程序的 Socket 名称 |
 | 痕迹查询 | trace | 痕迹查询 Socket 名称   |
 
-所有 Socket 通讯均有 3 个固定参数不可缺少，举例：
+所有 Socket 通讯有 3 个固定参数不可缺少，举例：
 
 ```json
 {

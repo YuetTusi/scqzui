@@ -27,6 +27,7 @@ export const ExplainBox = styled.fieldset`
         font-weight: normal;
         font-style: normal;
         text-decoration: none;
+        font-weight: bold;
         color:${(props) => props.theme['error-color']};
     }
     ol{

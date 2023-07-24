@@ -71,7 +71,9 @@ if (!existManuJson) {
     app.exit(0);
 }
 
-if (!helper.useGPURender()) {
+if (helper.useGPURender()) {
+    log.info('启用GPU渲染');
+} else {
     app.commandLine.appendSwitch('no-sandbox');
     app.commandLine.appendSwitch('disable-gpu');
     app.commandLine.appendSwitch('disable-gpu-compositing');
@@ -81,8 +83,6 @@ if (!helper.useGPURender()) {
     app.commandLine.appendSwitch('--no-sandbox');
     app.disableHardwareAcceleration();
     log.info('禁用GPU渲染');
-} else {
-    log.info('启用GPU渲染');
 }
 
 helper.writeReportJson(

@@ -102,7 +102,6 @@ const ParsingList: FC<ParsingListProp> = () => {
      * 面板横向滚动控制
      */
     const onDevWheel = (event: WheelEvent) => {
-        event.preventDefault();
         const { current } = devRef;
         const { deltaY } = event;
         if (current) {
@@ -134,7 +133,7 @@ const ParsingList: FC<ParsingListProp> = () => {
     useEffect(() => {
         const { current } = devRef;
         if (current !== null) {
-            current.addEventListener('wheel', onDevWheel);
+            current.addEventListener('wheel', onDevWheel, { passive: true });
         }
         return () => {
             current?.removeEventListener('wheel', onDevWheel);

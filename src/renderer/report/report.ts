@@ -1,7 +1,8 @@
 import { createWriteStream } from 'fs';
-import { stat, writeFile } from 'fs/promises';
-import { basename, extname, join } from 'path';
+import { stat } from 'fs/promises';
+import { basename, join } from 'path';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
+import { mapLimit } from 'async';
 import groupBy from 'lodash/groupBy';
 import archiver from 'archiver';
 import log from '@/utils/log';
@@ -17,8 +18,7 @@ import {
     copyFiles,
     readJSONFile,
     writeJSONfile,
-    updateFileTime,
-    heicToJpeg
+    updateFileTime
 } from './helper';
 
 /**
@@ -114,30 +114,25 @@ async function copyReport(
         )
     ]);
 
-    console.log('静态文件拷贝完成...');
-
     await mkdir(join(saveTarget, reportName, 'public/data'));
 
     for (let i = 0, l = files.length; i < l; i++) {
         const jsonName = basename(files[i]);
-
         await copy(
             join(reportRoot, 'public/data', files[i]),
             join(saveTarget, reportName, 'public/data', jsonName)
         );
     }
 
-    console.log('JSON数据拷贝完成...');
-
     await writeJSONfile(
         join(saveTarget, reportName, 'public/data/tree.json'),
         `;var data=${JSON.stringify(tree)}`
     );
 
-    console.log('tree.json已写入...');
-
     if (isAttach) {
+        const tick = new Date().getTime();
         await copyAttach(reportRoot, saveTarget, reportName, attaches);
+        log.info(`耗时: ${new Date().getTime() - tick} ms`);
     }
 
     log.info(`${reportName} 导出结束`);
@@ -207,6 +202,33 @@ function compressReport(
 }
 
 /**
+ * 并发执行拷贝附件任务
+ * @param distination 保存到
+ * @param folderName 目录名
+ * @param copyList 附件列表
+ * @param concurrent 并发数
+ */
+function copyTask(distination: string, folderName: string, copyList: CopyParam[], concurrent = 16) {
+    return new Promise<string[]>((resolve, reject) => {
+        mapLimit(copyList, concurrent,
+            async ({ from, to, rename }: CopyParam) => {
+                log.info(`Copy -> ${rename}`);
+                const target = join(distination, folderName, to, rename); //拷贝到
+                const [attachStat] = await Promise.all([stat(from), copy(from, target)]);
+                await updateFileTime(target, attachStat.atime, attachStat.mtime);
+                return target;
+            },
+            (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results as string[]);
+                }
+            });
+    });
+}
+
+/**
  * 拷贝附件
  * @param {string} source 报告源路径
  * @param {string} distination 目标路径
@@ -215,7 +237,6 @@ function compressReport(
  */
 async function copyAttach(source: string, distination: string, folderName: string, attachFiles: string[]) {
     let copyPath: Array<CopyParam[]> = [];
-    console.log(`attachFiles文件数量：${attachFiles.length}`);
     try {
         for (let i = 0, l = attachFiles.length; i < l; i++) {
             const attach = await readJSONFile(join(source, 'public/data', attachFiles[i]));
@@ -223,36 +244,36 @@ async function copyAttach(source: string, distination: string, folderName: strin
         }
         const copyList = copyPath.flat();
         const grp = groupBy(copyList, 'to'); //分组
-
+        log.info(`附件数量：${copyList.length}`);
         //创建附件目录
         await Promise.allSettled(
             Object.keys(grp).map((dir) => mkdir(join(distination, folderName, dir)))
         );
-        console.log('创建附件目录完成...');
-
-        log.info(`开始拷贝附件，共：${copyList.length}`);
-
-        for (let i = 0, l = copyList.length; i < l; i++) {
-            const { from, to, rename } = copyList[i];
-            const target = join(distination, folderName, to, rename); //拷贝到
-            if (extname(rename) === '.heic') {
-                //转码HEIC图像
-                const buf = await heicToJpeg(from);
-                if (buf !== null) {
-                    await writeFile(target, buf);
-                }
-            } else {
-                const [attachStat] = await Promise.all([stat(from), copy(from, target)]);
-                await updateFileTime(target, attachStat.atime, attachStat.mtime);
-            }
-        }
-        console.log(`${folderName}拷贝附件结束,共:${copyList.length}个`);
-        log.info(`${folderName}拷贝附件结束,共:${copyList.length}个`);
+        await copyTask(distination, folderName, copyList);
     } catch (error) {
-        console.log(error);
-        log.error(`拷贝附件出错,错误消息:${error.message}`);
+        log.error(`拷贝附件出错, 错误消息:${error.message}`);
         throw error;
     }
+    // try {
+    //     for (let i = 0, l = copyList.length; i < l; i++) {
+    //         const { from, to, rename } = copyList[i];
+    //         const target = join(distination, folderName, to, rename); //拷贝到
+    //         if (extname(rename) === '.heic') {
+    //             //转码HEIC图像
+    //             const buf = await heicToJpeg(from);
+    //             if (buf !== null) {
+    //                 await writeFile(target, buf);
+    //             }
+    //         } else {
+    //             const [attachStat] = await Promise.all([stat(from), copy(from, target)]);
+    //             await updateFileTime(target, attachStat.atime, attachStat.mtime);
+    //         }
+    //     }
+    //     console.log(`${folderName}拷贝附件结束,共:${copyList.length}个`);
+    //     log.info(`${folderName}拷贝附件结束,共:${copyList.length}个`);
+    // } catch (error) {
+
+    // }
 }
 
 /**

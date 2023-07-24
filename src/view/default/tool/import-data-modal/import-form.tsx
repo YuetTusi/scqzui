@@ -134,7 +134,11 @@ const ImportForm: FC<ImportFormProp> = ({
         { leading: true, trailing: false }
     );
 
-    return <Form form={formRef} layout="horizontal" {...formItemLayout}>
+    return <Form
+        form={formRef}
+        layout="horizontal"
+        style={{ paddingTop: '20px' }}
+        {...formItemLayout}>
         <Row>
             <Col span={24}>
                 <Item

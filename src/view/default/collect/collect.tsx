@@ -100,7 +100,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     useEffect(() => {
         const { current } = devicePanelRef;
         if (current !== null) {
-            current.addEventListener('wheel', onDevicePanelWheel);
+            current.addEventListener('wheel', onDevicePanelWheel, { passive: true });
         }
         return () => {
             current!.removeEventListener('wheel', onDevicePanelWheel);

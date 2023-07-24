@@ -20,7 +20,6 @@ const Guide: FC<GuideProp> = () => {
      * 按钮面板Wheel
      */
     const onPanelWheel = (event: WheelEvent) => {
-        event.preventDefault();
         const { deltaY } = event;
         const { current: scrollDom } = scrollRef;
         if (scrollDom !== null) {
@@ -55,7 +54,7 @@ const Guide: FC<GuideProp> = () => {
         const { current: scrollDom } = scrollRef;
         if (scrollDom !== null) {
             scrollDom.style.scrollBehavior = 'smooth';
-            scrollDom.addEventListener('wheel', onPanelWheel);
+            scrollDom.addEventListener('wheel', onPanelWheel, { passive: true });
         }
         return () => {
             scrollDom?.removeEventListener('wheel', onPanelWheel);

@@ -1,7 +1,6 @@
 import fs from 'fs';
-import { readFile } from 'fs/promises';
 import cpy from 'cpy';
-import convert from 'heic-convert';
+// import convert from 'heic-convert';
 import log from '@/utils/log';
 
 /**
@@ -33,13 +32,12 @@ function copy(from: string, to: string) {
         ws.once('error', (e: any) => {
             if (e.stack.includes('ENOSPC')) {
                 //磁盘空间不足任务失败
-                log.error(`拷贝失败,磁盘空间不足:${e.message}`);
+                log.error(`拷贝失败, 磁盘空间不足:${e.message}`);
                 reject(e);
             }
         });
         rs.once('error', (e: Error) => {
             log.error(`拷贝失败: ${e.message}`);
-            console.error(e);
             resolve(undefined);
         });
         rs.once('end', () => {
@@ -64,20 +62,20 @@ function copyFiles(fileList: string[], destination: string, options: Record<stri
  * heic转码jpeg
  * @param heicPath heic图像路径
  */
-async function heicToJpeg(heicPath: string): Promise<Buffer | null> {
-    try {
-        const chunk = await readFile(heicPath);
-        const jpegBuf: Buffer = await convert({
-            buffer: chunk, // the HEIC file buffer
-            format: 'JPEG',      // output format
-            quality: 1           // the jpeg compression quality, between 0 and 1
-        });
-        return jpegBuf;
-    } catch (error) {
-        log.error(`HEIC转码失败(${heicPath})：${error.message}`);
-        return null;
-    }
-}
+// async function heicToJpeg(heicPath: string): Promise<Buffer | null> {
+//     try {
+//         const chunk = await readFile(heicPath);
+//         const jpegBuf: Buffer = await convert({
+//             buffer: chunk, // the HEIC file buffer
+//             format: 'JPEG',      // output format
+//             quality: 1           // the jpeg compression quality, between 0 and 1
+//         });
+//         return jpegBuf;
+//     } catch (error) {
+//         log.error(`HEIC转码失败(${heicPath})：${error.message}`);
+//         return null;
+//     }
+// }
 
 /**
  * 写入JSON文件，原文件会覆盖
@@ -144,7 +142,7 @@ export {
     mkdir,
     copy,
     copyFiles,
-    heicToJpeg,
+    // heicToJpeg,
     readJSONFile,
     writeJSONfile,
     updateFileTime
