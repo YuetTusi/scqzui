@@ -71,6 +71,20 @@ const createRouter = (api?: RouterAPI) =>
 							}}
 						/>
 						<Route
+							path="/cloud"
+							exact={true}
+							render={() => {
+								const Next = lazy<FC<any>>(
+									() => import('@/view/default/cloud')
+								);
+								return <Suspense fallback={<LoadView />}>
+									<LayoutPanel>
+										<Next />
+									</LayoutPanel>
+								</Suspense>;
+							}}
+						/>
+						<Route
 							path="/quick"
 							render={() => {
 								const Next = lazy<FC<any>>(

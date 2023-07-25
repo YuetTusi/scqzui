@@ -35,7 +35,18 @@ export default {
                 yield put(routerRedux.push('/case-data'));
             } else {
                 //# 如果是从取证页面跳转过来，name即有值，跳回取证页面
-                yield put(routerRedux.push('/collect'));
+                switch (name) {
+                    case 'case-input':
+                    case 'check-input':
+                        yield put(routerRedux.push('/collect'));
+                        break;
+                    case 'cloud-input':
+                        yield put(routerRedux.push('/cloud'));
+                        break;
+                    default:
+                        yield put(routerRedux.push('/collect'));
+                        break;
+                }
             }
             let exist: boolean = yield helper.existFile(casePath);
             if (!exist) {

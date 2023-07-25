@@ -14,11 +14,7 @@ const MenuPanel = styled.div`
     grid-auto-flow: column;
     grid-gap: 20px;
 
-    .evidence{
-        grid-row-start: 1;
-        grid-row-end:3;
-    }
-    .tool{
+    .evidence,.cloud,.tool{
         grid-row-start: 1;
         grid-row-end:3;
     }

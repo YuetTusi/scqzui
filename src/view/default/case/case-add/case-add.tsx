@@ -47,11 +47,22 @@ const CaseAdd: FC<CaseAddProp> = () => {
      */
     const onBackClick = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        const params = new URLSearchParams(search);
-        if (helper.isNullOrUndefined(params.get('name'))) {
+        const viewName = new URLSearchParams(search).get('name');
+        if (helper.isNullOrUndefined(viewName)) {
             dispatch(routerRedux.push('/case-data'));
         } else {
-            dispatch(routerRedux.push('/collect'));
+            switch (viewName) {
+                case 'case-input':
+                case 'check-input':
+                    dispatch(routerRedux.push('/collect'));
+                    break;
+                case 'cloud-input':
+                    dispatch(routerRedux.push('/cloud'));
+                    break;
+                default:
+                    dispatch(routerRedux.push('/collect'));
+                    break;
+            }
         }
     };
 
