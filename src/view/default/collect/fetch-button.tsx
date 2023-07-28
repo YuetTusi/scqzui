@@ -9,10 +9,8 @@ import { FetchButtonProp } from './prop';
 
 const {
     useFetch,
-    useServerCloud,
     fetchText,
-    fetchButtonText,
-    cloudButtonText
+    fetchButtonText
 } = helper.readConf()!;
 const { Group } = Button;
 
@@ -23,7 +21,6 @@ const FetchButton: FC<FetchButtonProp> = ({
     device,
     onHelpHandle,
     onNormalHandle,
-    onServerCloudHandle,
     onStopHandle
 }) => {
 
@@ -63,14 +60,6 @@ const FetchButton: FC<FetchButtonProp> = ({
                         {fetchButtonText ?? '取证'}
                     </Button>
                 </Auth>
-                <Auth deny={!useServerCloud}>
-                    <Button
-                        onClick={() => onServerCloudHandle(device)}
-                        style={{ width: '100px' }}
-                        type="primary">
-                        {cloudButtonText ?? '云取证'}
-                    </Button>
-                </Auth>
             </Group>
         case FetchState.Fetching:
             return <Group>
@@ -91,14 +80,6 @@ const FetchButton: FC<FetchButtonProp> = ({
                         {fetchButtonText ?? '取证'}
                     </Button>
                 </Auth>
-                <Auth deny={!useServerCloud}>
-                    <Button
-                        type="primary"
-                        style={{ width: '100px' }}
-                        disabled={true}>
-                        {cloudButtonText ?? '云取证'}
-                    </Button>
-                </Auth>
             </Group>;
     }
 };
@@ -107,7 +88,6 @@ FetchButton.defaultProps = {
     device: {},
     onHelpHandle: () => { },
     onNormalHandle: () => { },
-    onServerCloudHandle: () => { },
     onStopHandle: () => { }
 };
 

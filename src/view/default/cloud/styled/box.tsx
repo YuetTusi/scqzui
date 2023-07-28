@@ -34,8 +34,14 @@ export const ItemPanel = styled.div`
 `;
 
 export const EmptyBox = styled.div`
+    position: absolute;
+    width: 150px;
+    height: 120px;
+    margin-top: -60px;
+    margin-left: -75px;
+    top:50%;
+    left:50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
 `;

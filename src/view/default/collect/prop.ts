@@ -13,10 +13,6 @@ interface DeviceFrameProp {
      */
     onNormalHandle: (arg0: DeviceType) => void,
     /**
-     * 云取证
-     */
-    onServerCloudHandle: (arg0: DeviceType) => void,
-    /**
      * 采集记录handle
      */
     onRecordHandle: (arg0: DeviceType) => void,
@@ -43,10 +39,6 @@ interface FetchButtonProp {
      * 标准取证handle
      */
     onNormalHandle: (arg0: DeviceType) => void,
-    /**
-     * 云取证handle
-     */
-    onServerCloudHandle: (arg0: DeviceType) => void,
     /**
      * 停止采集handle
      */

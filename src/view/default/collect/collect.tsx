@@ -29,11 +29,10 @@ import { Split } from '@/component/style-tool';
 import { LiveModal } from '@/component/dialog/fetch-record-modal';
 import {
     AppleCreditModal, UsbDebugModal, HelpModal, ApplePasswordModal,
-    UMagicCodeModal, GuideModal, CloudCodeModal, CloudHistoryModal
+    UMagicCodeModal, GuideModal
 } from '@/component/dialog';
 import NormalInputModal from './normal-input-modal';
 import CheckInputModal from './check-input-modal';
-import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
 import { CollectProp } from './prop';
@@ -52,13 +51,11 @@ const Collect: FC<CollectProp> = ({ }) => {
     const [usbDebugModalVisible, setUsbDebugModalVisible] = useState<boolean>(false);
     const [helpModalVisible, setHelpModalVisible] = useState<boolean>(false);
     const [normalInputModal, setNormalInputModal] = useState<boolean>(false);
-    const [serverCloudModalVisible, setServerCloudModalVisible] = useState<boolean>(false);
     const [liveModalVisible, setLiveModalVisible] = useState<boolean>(false);
     const [applePasswordVisible, setApplePasswordVisible] = useState<boolean>(false);
     const [uMagicCodeModalVisible, setUMagicCodeModalVisible] = useState<boolean>(false);
     const [guideModalVisible, setGuideModalVisible] = useState<boolean>(false);
     const [checkInputModalVisible, setCheckInputModalVisible] = useState<boolean>(false);
-    const [cloudHistoryModalVisible, setCloudHistoryModalVisible] = useState<boolean>(false);
     const { dataMode } = useSelector<StateTree, AppSetStore>(state => state.appSet);
     const [unitCode] = useUnit();
     const [dstUnitCode] = useDstUnit();
@@ -225,17 +222,6 @@ const Collect: FC<CollectProp> = ({ }) => {
         currentDevice.current = data; //寄存手机数据，采集时会使用
         getCaseDataFromUser(data);
     };
-    /**
-     * 云取证回调
-     * @param {DeviceType} data 设备数据
-     */
-    const serverCloudHandle = (data: DeviceType) => {
-        if (!validateBeforeFetch()) {
-            return;
-        }
-        currentDevice.current = data; //寄存手机数据，采集时会使用
-        setServerCloudModalVisible(true);
-    };
 
     /**
      * 开始采集（3种取证入口共用此回调）
@@ -244,7 +230,6 @@ const Collect: FC<CollectProp> = ({ }) => {
     const startFetchHandle = (fetchData: FetchData) => {
         setNormalInputModal(false);
         setCheckInputModalVisible(false);
-        setServerCloudModalVisible(false);
         //TODO: 关闭另两个输入框
 
         if (fetchData.mode === DataMode.ServerCloud) {
@@ -276,9 +261,6 @@ const Collect: FC<CollectProp> = ({ }) => {
     const recordHandle = (data: DeviceType) => {
         currentDevice.current = data;
         switch (data.mode) {
-            case DataMode.ServerCloud:
-                setCloudHistoryModalVisible(true);
-                break;
             default:
                 setLiveModalVisible(true);
                 break;
@@ -440,11 +422,11 @@ const Collect: FC<CollectProp> = ({ }) => {
     /**
      * 关闭短信验证码弹框
      */
-    const cloudCodeModalCancelHandle = () =>
-        dispatch({
-            type: 'cloudCodeModal/setVisible',
-            payload: { visible: false }
-        });
+    // const cloudCodeModalCancelHandle = () =>
+    //     dispatch({
+    //         type: 'cloudCodeModal/setVisible',
+    //         payload: { visible: false }
+    //     });
 
     /**
      * 点验输入框取消Click
@@ -484,7 +466,6 @@ const Collect: FC<CollectProp> = ({ }) => {
                 <DeviceFrame
                     onHelpHandle={onHelpHandle}
                     onNormalHandle={collectHandle}
-                    onServerCloudHandle={serverCloudHandle}
                     onRecordHandle={recordHandle}
                     onStopHandle={stopHandle}
                     onTipHandle={tipHandle}
@@ -520,12 +501,6 @@ const Collect: FC<CollectProp> = ({ }) => {
             saveHandle={startFetchHandle}
             cancelHandle={() => setNormalInputModal(false)}
         />
-        <ServerCloudModal
-            visible={serverCloudModalVisible}
-            device={currentDevice.current}
-            saveHandle={startFetchHandle}
-            cancelHandle={() => setServerCloudModalVisible(false)}
-        />
         <LiveModal
             visible={liveModalVisible}
             device={currentDevice.current}
@@ -556,15 +531,6 @@ const Collect: FC<CollectProp> = ({ }) => {
             device={currentDevice.current}
             saveHandle={startFetchHandle}
             cancelHandle={checkInputModalCancelHandle}
-        />
-        <CloudCodeModal
-            device={currentDevice.current}
-            cancelHandle={cloudCodeModalCancelHandle}
-        />
-        <CloudHistoryModal
-            device={currentDevice.current}
-            visible={cloudHistoryModalVisible}
-            cancelHandle={() => setCloudHistoryModalVisible(false)}
         />
     </SubLayout>
 };

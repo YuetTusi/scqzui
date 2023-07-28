@@ -10,12 +10,12 @@ import Row from 'antd/lib/row';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
+import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import FetchData from '@/schema/fetch-data';
 import { CloudApp } from '@/schema/cloud-app';
-import { StateTree } from '@/type/model';
 import { CloudState } from '@/model/default/cloud';
 import AppEvi from './app-evi';
 import FetchInfo from './fetch-info';
@@ -64,7 +64,7 @@ const Cloud: FC<CloudProp> = () => {
         if (helper.isNullOrUndefined(data) || data!.cloudAppList?.length === 0) {
             return <EmptyBox>
                 <Empty
-                    description="暂无云取应用"
+                    description="暂无云取应用，请添加"
                     image={Empty.PRESENTED_IMAGE_SIMPLE} />
             </EmptyBox>;
         } else {
@@ -74,7 +74,11 @@ const Cloud: FC<CloudProp> = () => {
                 <AppEvi
                     app={item}
                     onDelete={onAppDelete} />
-            </Col>), 4).map((cols, index) => <Row key={`R_${index}`}>{...cols}</Row>);
+            </Col>), 4)
+                .map((cols, index) => <Row
+                    key={`R_${index}`}>
+                    {...cols}
+                </Row>);
 
             // return data!.cloudAppList?.map((item) => <AppEvi
             //     app={item}

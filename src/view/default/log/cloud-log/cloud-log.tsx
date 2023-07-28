@@ -7,7 +7,7 @@ import { DelLogType } from '@/schema/del-log-type';
 import { MainBox } from '../styled/sub-layout';
 import LogTable from './log-table';
 import { SearchForm } from './search-form';
-import DetailModal from './detail-modal';
+// import DetailModal from './detail-modal';
 import DelAskModal from '../del-ask-modal';
 import { CloudLogProp, FormValue } from './prop';
 
@@ -73,8 +73,8 @@ const CloudLog: FC<CloudLogProp> = () => {
             formRef={formRef} />
         <Split />
         <LogTable formRef={formRef} />
-        <DetailModal
-            cancelHandle={cancelHandle} />
+        {/* <DetailModal
+            cancelHandle={cancelHandle} /> */}
         <DelAskModal
             visible={delAskModalVisible}
             okHandle={delHandle}

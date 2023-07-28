@@ -78,7 +78,6 @@ const getTipTxt = (device: DeviceType) => {
 const DeviceFrame: FC<DeviceFrameProp> = ({
     onHelpHandle,
     onNormalHandle,
-    onServerCloudHandle,
     onRecordHandle,
     onStopHandle,
     onTipHandle
@@ -121,8 +120,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
                                                 device={item}
                                                 onHelpHandle={onHelpHandle}
                                                 onNormalHandle={onNormalHandle}
-                                                onStopHandle={onStopHandle}
-                                                onServerCloudHandle={onServerCloudHandle} />
+                                                onStopHandle={onStopHandle} />
                                         </div>
                                     </div>
                                 </DeivceBox>
@@ -144,8 +142,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
                                                 device={item}
                                                 onHelpHandle={onHelpHandle}
                                                 onNormalHandle={onNormalHandle}
-                                                onStopHandle={onStopHandle}
-                                                onServerCloudHandle={onServerCloudHandle} />
+                                                onStopHandle={onStopHandle} />
                                         </div>
                                     </div>
                                 </DeivceBox>
@@ -160,7 +157,6 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
 DeviceFrame.defaultProps = {
     onHelpHandle: () => { },
     onNormalHandle: () => { },
-    onServerCloudHandle: () => { },
     onRecordHandle: () => { },
     onStopHandle: () => { },
     onTipHandle: () => { }

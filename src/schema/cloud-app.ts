@@ -35,6 +35,10 @@ interface FetchOption {
      * 结束时间
      */
     endTime: Date,
+    /**
+     * 二维码
+     */
+    qrcode: string,
 
     item1: boolean,
     item2: boolean,
@@ -79,6 +83,7 @@ class CloudApp extends BaseApp {
         super(props);
         this.name = props.name ?? '';
         this.key = props.key ?? '';
+        this.qrcode = props.qrcode ?? '';
         this.ext = props.ext ?? [];
         this.option = props.option;
         this.qrcode = props.qrcode ?? '';
