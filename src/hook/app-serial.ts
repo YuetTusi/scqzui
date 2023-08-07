@@ -1,10 +1,8 @@
 import { join } from 'path';
 import { readFile } from 'fs/promises';
+import { useState } from 'react';
 import log from '@/utils/log';
 import { helper } from '@/utils/helper';
-import { useState } from 'react';
-
-const cwd = process.cwd();
 
 /**
  * 读取软件序列号
@@ -12,7 +10,7 @@ const cwd = process.cwd();
 function useAppSerial() {
 
     const [appSerial, setAppSerial] = useState<string>('');
-    const serialPath = join(cwd, '../update/__hardware__.txt');
+    const serialPath = join(helper.APP_CWD, '../update/__hardware__.txt');
 
     try {
         (async () => {

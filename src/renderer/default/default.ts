@@ -49,8 +49,8 @@ import selfUnitModel from '@/model/default/self-unit';
 import cloudModel from '@/model/default/cloud';
 import 'jquery';
 import '@ztree/ztree_v3/js/jquery.ztree.all.min';
-import 'antd/dist/antd.dark.less';
 import '@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css';
+import 'antd/dist/antd.dark.less';
 dayjs.locale('zh-cn');
 dayjs.extend(customParseFormat);
 dayjs.extend(localeData);
@@ -80,7 +80,8 @@ const app = dva({
     }
 })();
 
-ipcRenderer.on('show-notification', (_: IpcRendererEvent, info: { message: string, description: string, type: string }) => {
+ipcRenderer.on('show-notification', (_: IpcRendererEvent,
+    info: { message: string, description: string, type: string }) => {
     //显示notification消息
     let { message, description, type = 'info' } = info;
 

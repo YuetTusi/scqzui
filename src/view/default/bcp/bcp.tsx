@@ -166,13 +166,13 @@ const Bcp: FC<BcpProp> = () => {
     /**
      * 表单采集单位Change
      */
-    const onUnitChange = (value: string, name: string) =>
+    const onUnitChange = (_: string, name: string) =>
         unitNameRef.current = name;
 
     /**
      * 表单目的检验单位Change
      */
-    const onDstUnitChange = (value: string, name: string) =>
+    const onDstUnitChange = (_: string, name: string) =>
         dstUnitNameRef.current = name;
 
 

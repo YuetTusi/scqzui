@@ -26,7 +26,7 @@ export const useHitCount = (data: DeviceType) => {
                     }
                 } catch (error) {
                     setCount(0);
-                    log.error(`读取设备命中数量失败 @hook/hit-data/useHitCount:${error.message}`);
+                    log.error(`读取设备命中数量失败 @hook/hit-data/useHitCount:${error.message}, 设备id: ${data._id}`);
                 }
             })();
         }
@@ -63,7 +63,7 @@ export const useHitData = (record: DeviceType) => {
                     }
                 } catch (error) {
                     setData(undefined);
-                    log.error(`读取设备命中数量失败 @hook/hit-data/useHitData:${error.message}`);
+                    log.error(`读取设备命中数据失败 @hook/hit-data/useHitData:${error.message}, 设备id: ${record._id}`);
                 }
             })();
         }
@@ -93,7 +93,7 @@ export const useQuickHitCount = (data: QuickRecord) => {
                     }
                 } catch (error) {
                     setCount(0);
-                    log.error(`读取点验命中数量失败 @hook/hit-data/useQuickHitCount:${error.message}`);
+                    log.error(`读取点验命中数量失败 @hook/hit-data/useQuickHitCount:${error.message}, id:${data._id}`);
                 }
             })();
         }
@@ -129,7 +129,7 @@ export const useQuickHit = (record: QuickRecord) => {
                     }
                 } catch (error) {
                     setData(undefined);
-                    log.error(`读取点验命中数量失败 @hook/hit-data/useQuickHit:${error.message}`);
+                    log.error(`读取快速点验命中数据失败 @hook/hit-data/useQuickHit:${error.message}, id:${record._id}`);
                 }
             })();
         }

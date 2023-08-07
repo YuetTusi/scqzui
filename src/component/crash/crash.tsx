@@ -17,11 +17,13 @@ class Crash extends Component<CrashProp, CrashState> {
 		super(props);
 		this.state = { hasError: false };
 	}
-	static getDerivedStateFromError(error: any) {
+	static getDerivedStateFromError() {
 		return { hasError: true };
 	}
 	componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-		log.error(`页面崩溃: ${error.message}, ErrorInfo: ${errorInfo.componentStack}`);
+		log.error(`页面崩溃: ${error.message}`);
+		log.error('Error Stack:', error.stack);
+		log.error('Component Stack:', errorInfo.componentStack);
 		this.setState({ err: error, errInfo: errorInfo });
 	}
 	render() {

@@ -17,7 +17,7 @@ const Header = styled.div`
     height:50px;
 
     &>div{
-        padding: 0 14px;
+        padding: 0 15px;
         font-size: 2rem;
     }
     .header-caption{

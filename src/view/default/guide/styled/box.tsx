@@ -4,7 +4,7 @@ const GuideBox = styled.div`
 
     position: absolute;
     top:20px;
-    left:100px;
+    left:60px;
     bottom:20px;
     right:0;
 
@@ -20,7 +20,7 @@ const GuideBox = styled.div`
     .left-opacity{
         position: fixed;
         top:94px;
-        left:80px;
+        left:40px;
         bottom: 0;
         width: 40px;
         pointer-events: none;
