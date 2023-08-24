@@ -39,6 +39,10 @@ interface FetchOption {
      * 二维码
      */
     qrcode: string,
+    /**
+     * 取证中
+     */
+    fetching: boolean,
 
     item1: boolean,
     item2: boolean,
@@ -73,7 +77,7 @@ class CloudApp extends BaseApp {
     /**
      * 云取选项
      */
-    public option?: FetchOption;
+    public option: FetchOption;
     /**
      * 二维码图片
      */
@@ -85,7 +89,7 @@ class CloudApp extends BaseApp {
         this.key = props.key ?? '';
         this.qrcode = props.qrcode ?? '';
         this.ext = props.ext ?? [];
-        this.option = props.option;
+        this.option = props.option ?? {};
         this.qrcode = props.qrcode ?? '';
     }
 }

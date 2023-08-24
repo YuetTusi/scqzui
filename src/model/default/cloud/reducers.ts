@@ -23,6 +23,24 @@ export default {
         return state;
     },
     /**
+     * 设置取证状态
+     * @param {string} payload.m_strID 应用id
+     * @param {boolean} payload.fetching 取证中
+     */
+    setAppFetching(state: CloudState, { payload }: AnyAction) {
+        if (state.data !== null) {
+            state.data.cloudAppList =
+                (state.data.cloudAppList ?? [])
+                    .map((item) => {
+                        if (item.m_strID === payload.m_strID) {
+                            item.option.fetching = payload.fetching;
+                        }
+                        return item;
+                    });
+        }
+        return state;
+    },
+    /**
      * 设置云应用
      * @param {CloudApp} payload 云应用
      */

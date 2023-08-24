@@ -13,7 +13,8 @@ import {
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
-import DownloadOutlined from '@ant-design/icons/DownloadOutlined';
+import FileExcelOutlined from '@ant-design/icons/FileExcelOutlined';
+import FilePdfOutlined from '@ant-design/icons/FilePdfOutlined';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
@@ -21,6 +22,7 @@ import message from 'antd/lib/message';
 import { useDestroy, useQuickEvent, useQuickHit } from '@/hook';
 import { helper } from '@/utils/helper';
 import { EmptyBox } from './styled/style';
+import { ExportFile } from '../prop';
 import { HitChartModalProp } from './prop';
 
 const cwd = process.cwd();
@@ -101,11 +103,10 @@ const HitChartModal: FC<HitChartModalProp> = ({
         }
     }, [data, visible]);
 
-    const onDirSelect = async (event: MouseEvent<HTMLButtonElement>) => {
+    const onDirSelect = async (fileType: ExportFile) => {
 
-        const exeDir = join(cwd, '../tools/create_excel_report');
-
-        event.preventDefault();
+        let exeDir = join(cwd, '../tools');
+        let exeName = '';
 
         if (eventData === undefined) {
             message.destroy();
@@ -122,20 +123,28 @@ const HitChartModal: FC<HitChartModalProp> = ({
             const [saveTarget] = selectVal.filePaths; //用户所选目标目录
             const casePath = join(eventData!.eventPath, eventData!.eventName);
 
-            // console.log(casePath);
-            // console.log(device?.phonePath);
-            // console.log(saveTarget);
+            console.log(casePath);
+            console.log(record?.phonePath);
+            console.log(saveTarget);
 
             const handle = Modal.info({
                 title: '导出',
-                content: '正在导出Excel报表，请稍等...',
+                content: '正在导出报表，请稍等...',
                 okText: '确定',
                 centered: true,
                 icon: <LoadingOutlined />,
                 okButtonProps: { disabled: true }
             });
 
-            const proc = execFile(join(exeDir, 'create_excel_report.exe'),
+            if (fileType === ExportFile.Excel) {
+                exeDir = join(exeDir, 'create_excel_report');
+                exeName = 'create_excel_report.exe';
+            } else {
+                exeDir = join(exeDir, 'create_excel_report');
+                exeName = 'create_pdf_report.exe';
+            }
+
+            const proc = execFile(join(exeDir, exeName),
                 [
                     casePath,
                     record!.phonePath!,
@@ -189,16 +198,28 @@ const HitChartModal: FC<HitChartModalProp> = ({
 
     return <Modal
         footer={[
-            <Button onClick={onDirSelect}
+            <Button onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                event.preventDefault();
+                onDirSelect(ExportFile.Excel)
+            }}
                 type="primary"
                 key="HCM_0">
-                <DownloadOutlined />
+                <FileExcelOutlined />
                 <span>导出Excel报表</span>
+            </Button>,
+            <Button onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                event.preventDefault();
+                onDirSelect(ExportFile.Pdf)
+            }}
+                type="primary"
+                key="HCM_1">
+                <FilePdfOutlined />
+                <span>导出PDF报表</span>
             </Button>,
             <Button onClick={() => {
                 closeHandle();
             }}
-                key="HCM_1"
+                key="HCM_2"
                 type="default">
                 <CloseCircleOutlined />
                 <span>取消</span>

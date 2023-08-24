@@ -7,13 +7,14 @@ import ParsingList from './parsing-list';
 import CaseList from './case-list';
 import DevList from './dev-list';
 import { TableBox, ParseBox, ParsingPanel } from './styled/style';
+import { ParseProp } from './prop';
 
 const { caseText, devText, parseText } = helper.readConf()!;
 
 /**
  * 数据解析页
  */
-const Parse: FC<{}> = () => {
+const Parse: FC<ParseProp> = () => {
 
     const dispatch = useDispatch();
     const { search } = useLocation();

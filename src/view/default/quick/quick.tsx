@@ -18,13 +18,14 @@ import EventDescModal from './event-desc-modal';
 import CheckingList from './checking-list';
 import RecordList from './record-list';
 import { getEventByName, importRec, readCaseJson, readDirOnly } from './util';
+import { QuickProp } from './prop';
 
 const { fetchText, caseText, devText } = helper.readConf()!;
 
 /**
  * 快速点验
  */
-const Quick: FC<{}> = () => {
+const Quick: FC<QuickProp> = () => {
 
     const dispatch = useDispatch();
     const ipList = useRef<string[]>(helper.QUICK_QR_IP);//IP列表

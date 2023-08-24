@@ -78,6 +78,7 @@ const AppEvi: FC<AppEviProp> = ({ app, onDelete }) => {
             <span>{name}</span>
             <Button
                 onClick={onDeleteClick}
+                disabled={option?.fetching ?? false}
                 size="large"
                 type="link"
                 danger={true}>

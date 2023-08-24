@@ -21,6 +21,7 @@ import message from 'antd/lib/message';
 import { useCase, useQuickHit } from '@/hook';
 import { helper } from '@/utils/helper';
 import { EmptyBox } from './styled/style';
+import { ExportFile } from '../prop';
 import { HitChartModalProp } from './prop';
 
 const cwd = process.cwd();
@@ -104,11 +105,10 @@ const HitChartModal: FC<HitChartModalProp> = ({
         }
     }, [data, visible]);
 
-    const onDirSelect = async (event: MouseEvent<HTMLButtonElement>) => {
+    const onDirSelect = async (exportFile: ExportFile) => {
 
-        const exeDir = join(cwd, '../tools/create_excel_report');
-
-        event.preventDefault();
+        let exeDir = join(cwd, '../tools');
+        let exeName = '';
 
         if (caseData === undefined) {
             message.destroy();
@@ -121,20 +121,37 @@ const HitChartModal: FC<HitChartModalProp> = ({
             properties: ['openDirectory', 'createDirectory']
         });
 
+        if (exportFile === ExportFile.Excel) {
+            exeDir = join(exeDir, 'create_excel_report');
+            exeName = 'create_excel_report.exe';
+        } else {
+            exeDir = join(exeDir, 'create_excel_report');
+            exeName = 'create_pdf_report.exe';
+        }
+
         if (selectVal.filePaths && selectVal.filePaths.length > 0) {
             const [saveTarget] = selectVal.filePaths; //用户所选目标目录
             const casePath = join(caseData?.m_strCasePath!, caseData?.m_strCaseName!);
 
+
             const handle = Modal.info({
                 title: '导出',
-                content: '正在导出Excel报表，请稍等...',
+                content: '正在导出报表，请稍等...',
                 okText: '确定',
                 centered: true,
                 icon: <LoadingOutlined />,
                 okButtonProps: { disabled: true }
             });
 
-            const proc = execFile(join(exeDir, 'create_excel_report.exe'),
+            console.log(exeDir, exeName);
+            console.log([
+                casePath,
+                record!.phonePath!,
+                saveTarget,
+                '2'
+            ]);
+
+            const proc = execFile(join(exeDir, exeName),
                 [
                     casePath,
                     record!.phonePath!,
@@ -188,16 +205,22 @@ const HitChartModal: FC<HitChartModalProp> = ({
 
     return <Modal
         footer={[
-            <Button onClick={onDirSelect}
+            <Button onClick={() => onDirSelect(ExportFile.Excel)}
                 type="primary"
                 key="HCM_0">
                 <DownloadOutlined />
                 <span>导出Excel报表</span>
             </Button>,
+            <Button onClick={() => onDirSelect(ExportFile.Pdf)}
+                type="primary"
+                key="HCM_1">
+                <DownloadOutlined />
+                <span>导出PDF报表</span>
+            </Button>,
             <Button onClick={() => {
                 closeHandle();
             }}
-                key="HCM_1"
+                key="HCM_2"
                 type="default">
                 <CloseCircleOutlined />
                 <span>取消</span>

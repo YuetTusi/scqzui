@@ -19,9 +19,106 @@ import message from 'antd/lib/message';
 import { getDb } from '@/utils/db';
 import { TableName } from '@/schema/table-name';
 import { QuickRecord } from '@/schema/quick-record';
+import { ExportFile } from '../prop';
 
 const cwd = process.cwd();
 const { caseText, fetchText, devText } = helper.readConf()!;
+const { Group } = Button;
+
+const onExport = async (data: QuickEvent, exportType: ExportFile) => {
+    const db = getDb<QuickRecord>(TableName.QuickRecord);
+    let exeDir = join(cwd, '../tools');
+    let exeName = '';
+    let fileName = '';
+    let recList: QuickRecord[] = [];
+    try {
+        recList = await db.find({ caseId: data._id });
+    } catch (error) {
+        console.log(error);
+    }
+
+    if (recList.length === 0) {
+        message.destroy();
+        message.info(`查无${devText ?? '设备'}数据`);
+        return;
+    }
+
+    const selectVal: OpenDialogReturnValue = await ipcRenderer.invoke('open-dialog', {
+        title: '请选择目录',
+        properties: ['openDirectory', 'createDirectory']
+    });
+
+    if (selectVal.filePaths && selectVal.filePaths.length > 0) {
+        const [saveTarget] = selectVal.filePaths; //用户所选目标目录
+        const casePath = join(data.eventPath, data.eventName);
+
+        const handle = Modal.info({
+            title: '导出',
+            content: '正在导出报表，请稍等...',
+            okText: '确定',
+            centered: true,
+            icon: <LoadingOutlined />,
+            okButtonProps: { disabled: true }
+        });
+
+        if (exportType === ExportFile.Excel) {
+            exeDir = join(exeDir, 'create_excel_report');
+            exeName = 'create_excel_report.exe';
+            fileName = '违规检测结果报告.xlsx';
+        } else {
+            exeDir = join(exeDir, 'create_excel_report');
+            exeName = 'create_pdf_report.exe';
+            fileName = '违规检测结果报告.pdf';
+        }
+
+        const proc = execFile(join(exeDir, exeName),
+            [
+                casePath,
+                recList.map(item => item.phonePath).join('|'),
+                saveTarget,
+                '1'
+            ], {
+            cwd: exeDir,
+            windowsHide: true
+        });
+        proc.once('error', () => {
+            handle.update({
+                title: '导出',
+                content: `报表导出失败`,
+                okText: '确定',
+                centered: true,
+                icon: <CloseCircleOutlined />,
+                okButtonProps: { disabled: false }
+            });
+        });
+        proc.once('exit', () => {
+            handle.update({
+                onOk() {
+                    shell.showItemInFolder(join(saveTarget, fileName));
+                },
+                title: '导出',
+                content: `报表导出成功`,
+                okText: '确定',
+                centered: true,
+                icon: <CheckCircleOutlined />,
+                okButtonProps: { disabled: false }
+            });
+        });
+        proc.once('close', () => {
+            handle.update({
+                onOk() {
+                    shell.showItemInFolder(join(saveTarget, fileName));
+                },
+                title: '导出',
+                content: `报表导出成功`,
+                okText: '确定',
+                centered: true,
+                icon: <CheckCircleOutlined />,
+                okButtonProps: { disabled: false }
+            });
+        });
+    }
+};
 
 const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEvent> => {
 
@@ -100,96 +197,26 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
             align: 'center',
             width: 10,
             // render: () => <MoreOutlined style={{ cursor: 'not-allowed' }} />
-            render: (id: string, { eventPath, eventName, _id }: QuickEvent) => <Popover
+            render: (id: string, record: QuickEvent) => <Popover
                 zIndex={9}
                 trigger="click"
                 content={
-                    <Button
-                        onClick={async (event: MouseEvent<HTMLButtonElement>) => {
-                            const db = getDb<QuickRecord>(TableName.QuickRecord);
-                            event.stopPropagation();
-                            const exeDir = join(cwd, '../tools/create_excel_report');
-                            let recList: QuickRecord[] = [];
-                            try {
-                                recList = await db.find({ caseId: _id });
-                            } catch (error) {
-                                console.log(error);
-                            }
-
-                            if (recList.length === 0) {
-                                message.destroy();
-                                message.info(`查无${devText ?? '设备'}数据`);
-                                return;
-                            }
-
-                            const selectVal: OpenDialogReturnValue = await ipcRenderer.invoke('open-dialog', {
-                                title: '请选择目录',
-                                properties: ['openDirectory', 'createDirectory']
-                            });
-
-                            if (selectVal.filePaths && selectVal.filePaths.length > 0) {
-                                const [saveTarget] = selectVal.filePaths; //用户所选目标目录
-                                const casePath = join(eventPath, eventName);
-
-                                const handle = Modal.info({
-                                    title: '导出',
-                                    content: '正在导出Excel报表，请稍等...',
-                                    okText: '确定',
-                                    centered: true,
-                                    icon: <LoadingOutlined />,
-                                    okButtonProps: { disabled: true }
-                                });
-
-                                const proc = execFile(join(exeDir, 'create_excel_report.exe'),
-                                    [
-                                        casePath,
-                                        recList.map(item => item.phonePath).join('|'),
-                                        saveTarget,
-                                        '1'
-                                    ], {
-                                    cwd: exeDir,
-                                    windowsHide: true
-                                });
-                                proc.once('error', () => {
-                                    handle.update({
-                                        title: '导出',
-                                        content: `报表导出失败`,
-                                        okText: '确定',
-                                        centered: true,
-                                        icon: <CloseCircleOutlined />,
-                                        okButtonProps: { disabled: false }
-                                    });
-                                });
-                                proc.once('exit', () => {
-                                    handle.update({
-                                        onOk() {
-                                            shell.showItemInFolder(join(saveTarget, '违规检测结果报告.xlsx'));
-                                        },
-                                        title: '导出',
-                                        content: `报表导出成功`,
-                                        okText: '确定',
-                                        centered: true,
-                                        icon: <CheckCircleOutlined />,
-                                        okButtonProps: { disabled: false }
-                                    });
-                                });
-                                proc.once('close', () => {
-                                    handle.update({
-                                        onOk() {
-                                            shell.showItemInFolder(join(saveTarget, '违规检测结果报告.xlsx'));
-                                        },
-                                        title: '导出',
-                                        content: `报表导出成功`,
-                                        okText: '确定',
-                                        centered: true,
-                                        icon: <CheckCircleOutlined />,
-                                        okButtonProps: { disabled: false }
-                                    });
-                                });
-                            }
-                        }}
-                        type="primary"
-                        size="small">导出报表</Button>
+                    <Group>
+                        <Button
+                            onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                                event.stopPropagation();
+                                onExport(record, ExportFile.Excel);
+                            }}
+                            type="primary"
+                            size="small">导出Excel报表</Button>
+                        <Button
+                            onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                                event.stopPropagation();
+                                onExport(record, ExportFile.Pdf);
+                            }}
+                            type="primary"
+                            size="small">导出PDF报表</Button>
+                    </Group>
                 }>
                 <MoreOutlined style={{ color: '#0fb9b1', fontWeight: 'bold' }} />
             </Popover>

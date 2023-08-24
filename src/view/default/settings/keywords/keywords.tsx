@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import { ipcRenderer, OpenDialogReturnValue, shell } from 'electron';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
-import React, { FC, useEffect, useState, MouseEvent } from 'react';
+import React, { FC, useEffect, useState, MouseEvent, memo } from 'react';
 import EditOutlined from '@ant-design/icons/EditOutlined';
 import ImportOutlined from '@ant-design/icons/ImportOutlined';
 import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined';
@@ -15,6 +15,7 @@ import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Switch from 'antd/lib/switch';
+import Tooltip from 'antd/lib/tooltip';
 import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
 import { useAppConfig } from '@/hook';
@@ -40,6 +41,13 @@ if (process.env['NODE_ENV'] === 'development') {
     armyFolder = join(cwd, 'resources/army');
     saveFolder = join(cwd, 'resources/keywords');
 }
+
+const DocTip = memo(() =>
+    <div>
+        <div>文档类：txt，doc，docx</div>
+        <div>压缩包：rar，zip，tar，gz</div>
+    </div>
+);
 
 /**
  * 关键词碰撞设置
@@ -323,11 +331,13 @@ const Keywords: FC<KeywordsProp> = () => {
                         size="small" />
                 </li>
                 <li>
-                    <label>文档违规分析：</label>
-                    <Switch
-                        onChange={(checked: boolean) => setIsUseDocVerify(checked)}
-                        checked={isUseDocVerify}
-                        size="small" />
+                    <Tooltip placement="topLeft" title={<DocTip />}>
+                        <label>文档违规分析：</label>
+                        <Switch
+                            onChange={(checked: boolean) => setIsUseDocVerify(checked)}
+                            checked={isUseDocVerify}
+                            size="small" />
+                    </Tooltip>
                 </li>
                 <li>
                     <label>PDF违规分析：</label>

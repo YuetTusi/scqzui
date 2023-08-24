@@ -1,5 +1,5 @@
 import chunk from 'lodash/chunk';
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'dva';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faFileWaveform } from '@fortawesome/free-solid-svg-icons';
@@ -35,6 +35,12 @@ const Cloud: FC<CloudProp> = () => {
     const dispatch = useDispatch();
     const { data } = useSelector<StateTree, CloudState>(state => state.cloud);
     const [cloudAppModalVisible, setCloudAppModalVisible] = useState(false);
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         dispatch({ type: 'cloud/setAppFetching', payload: { m_strID: '1030063', fetching: true } })
+    //     }, 3000);
+    // }, []);
 
     const onCloudAppModalSave = (data: FetchData) => {
         dispatch({ type: 'cloud/setData', payload: data });

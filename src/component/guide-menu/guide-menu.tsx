@@ -184,7 +184,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                 </ImageButton>
             </div>
         </Auth>
-        <Auth deny={!useServerCloud}>
+        {/* <Auth deny={!useServerCloud}>
             <div className="cloud">
                 <ImageButton
                     to="/cloud"
@@ -192,7 +192,7 @@ const GuideMenu: FC<GuideMenuProp> = () => {
                     {`云${fetchText ?? '取证'}`}
                 </ImageButton>
             </div>
-        </Auth>
+        </Auth> */}
         <Auth deny={!useToolBox}>
             <div className="tool">
                 <ImageButton

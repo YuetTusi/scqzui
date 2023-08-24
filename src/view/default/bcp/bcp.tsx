@@ -20,8 +20,7 @@ import { SortPanel } from '@/component/style-tool/split';
 import { BcpEntity } from '@/schema/bcp-entity';
 import { Officer } from '@/schema/officer';
 import { TableName } from '@/schema/table-name';
-import GenerateForm from './generate-form';
-import { FormValue } from './generate-form/prop';
+import GenerateForm, { FormValue } from './generate-form';
 import { BcpBox, ButtonBar, FormPanel } from './styled/style';
 import { BcpProp } from './prop';
 
