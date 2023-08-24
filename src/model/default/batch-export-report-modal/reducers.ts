@@ -10,5 +10,13 @@ export default {
         // console.log(payload);
         state.devices = payload;
         return state;
+    },
+    setEventName(state: BatchExportReportModalState, { payload }: AnyAction) {
+        state.eventName = payload;
+        return state;
+    },
+    setRecords(state: BatchExportReportModalState, { payload }: AnyAction) {
+        state.records = payload;
+        return state;
     }
 }

@@ -14,7 +14,7 @@ import { EventListProp } from './prop';
 /**
  * 快速点验案件表格
  */
-const QuickEventList: FC<EventListProp> = ({ detailHandle }) => {
+const QuickEventList: FC<EventListProp> = ({ detailHandle, batchExportReportHandle }) => {
 
     const dispatch = useDispatch();
     const {
@@ -76,7 +76,7 @@ const QuickEventList: FC<EventListProp> = ({ detailHandle }) => {
                     total,
                 }
             }
-            columns={getColumns(dispatch, detailHandle)}
+            columns={getColumns(dispatch, detailHandle, batchExportReportHandle)}
             onRow={({ _id }) => ({
                 onClick: () => onRowClick(_id!)
             })}

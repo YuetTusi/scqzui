@@ -122,7 +122,7 @@ const onExport = async (data: QuickEvent, exportType: ExportFile) => {
 
 const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEvent> => {
 
-    const [detailHandle] = handles;
+    const [detailHandle, batchExportReportHandle] = handles;
 
     return [
         {
@@ -197,11 +197,18 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
             align: 'center',
             width: 10,
             // render: () => <MoreOutlined style={{ cursor: 'not-allowed' }} />
-            render: (id: string, record: QuickEvent) => <Popover
+            render: (_: string, record: QuickEvent) => <Popover
                 zIndex={9}
                 trigger="click"
                 content={
                     <Group>
+                        <Button
+                            onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                                event.stopPropagation();
+                                batchExportReportHandle(record);
+                            }}
+                            type="primary"
+                            size="small">导出报告</Button>
                         <Button
                             onClick={(event: MouseEvent<HTMLButtonElement>) => {
                                 event.stopPropagation();

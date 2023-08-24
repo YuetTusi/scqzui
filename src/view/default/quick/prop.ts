@@ -11,5 +11,9 @@ export enum ExportFile {
     /**
      * PDF报表
      */
-    Pdf
+    Pdf,
+    /**
+     * 报告
+     */
+    Report
 }

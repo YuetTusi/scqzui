@@ -19,6 +19,7 @@ import CheckingList from './checking-list';
 import RecordList from './record-list';
 import { getEventByName, importRec, readCaseJson, readDirOnly } from './util';
 import { QuickProp } from './prop';
+import BatchExportReportModal from './batch-export-report-modal';
 
 const { fetchText, caseText, devText } = helper.readConf()!;
 
@@ -33,6 +34,7 @@ const Quick: FC<QuickProp> = () => {
     const [detailId, setDetailId] = useState<string>('');
     const [ip, setIp] = useState<string>('127.0.0.1');
     const [eventDescVisible, setEventDescVisible] = useState<boolean>(false);
+    const [batchExportReportModalVisible, setBatchExportReportModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         let nextHttp = 9900;
@@ -86,6 +88,18 @@ const Quick: FC<QuickProp> = () => {
             setEventDescVisible(true);
         }
     }, 500, { leading: true, trailing: false });
+
+    /**
+     * 批量导出报告handle
+     * @param param0 
+     */
+    const batchExportReportHandle = ({ _id }: QuickEvent) => {
+        dispatch({
+            type: 'batchExportReportModal/queryRecordsByEventId',
+            payload: _id
+        });
+        setBatchExportReportModalVisible(true);
+    };
 
     /**
     * 导入
@@ -211,7 +225,8 @@ const Quick: FC<QuickProp> = () => {
                     </div>
                     <div>
                         <EventList
-                            detailHandle={detailHandle} />
+                            detailHandle={detailHandle}
+                            batchExportReportHandle={batchExportReportHandle} />
                     </div>
                 </div>
                 <div className="dev-list">
@@ -233,6 +248,12 @@ const Quick: FC<QuickProp> = () => {
             id={detailId}
             ip={ip}
         />
+        <BatchExportReportModal
+            visible={batchExportReportModalVisible}
+            cancelHandle={() => {
+                dispatch({ type: 'batchExportReportModal/setDevices', payload: [] });
+                setBatchExportReportModalVisible(false);
+            }} />
     </SubLayout>;
 }
 
