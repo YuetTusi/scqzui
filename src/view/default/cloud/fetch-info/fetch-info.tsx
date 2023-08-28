@@ -9,6 +9,8 @@ const { caseText, devText } = helper.readConf()!;
 
 const FetchInfo: FC<FetchInfoProp> = ({ data }) => {
 
+    console.log(data);
+
     if (data === null) {
         // return <Empty description="未录入取证信息" image={Empty.PRESENTED_IMAGE_SIMPLE} />;
         return null;

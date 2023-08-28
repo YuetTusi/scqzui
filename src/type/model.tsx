@@ -5,6 +5,7 @@ import { AlartMessageState } from '@/model/default/alart-message';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { CaseDataState } from '@/model/default/case-data';
 import { CheckInputModalState } from '@/model/default/check-input-modal';
+import { CloudCodeModalStoreState } from '@/model/default/cloud-code-modal';
 import { OfficerState } from '@/model/default/officer';
 import { CaseAddState } from '@/model/default/case-add';
 import { CaseEditState } from '@/model/default/case-edit';
@@ -55,6 +56,7 @@ interface StateTree {
 	caseEdit: CaseEditState,
 	aiSwitch: AiSwitchState,
 	checkInputModal: CheckInputModalState,
+	cloudCodeModal: CloudCodeModalStoreState,
 	officer: OfficerState,
 	organization: Organization,
 	parseCase: ParseCaseState,

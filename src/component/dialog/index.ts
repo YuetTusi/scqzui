@@ -5,6 +5,8 @@ import AppleCreditModal from './apple-credit-modal';
 import AppSelectModal from './app-select-modal';
 import ApplePasswordModal from './apple-password-modal';
 import UMagicCodeModal from './umagic-code-modal';
+import CloudCodeModal from './cloud-code-modal';
+import CloudHistoryModal from './cloud-history-modal';
 
 export {
     UsbDebugModal,
@@ -13,5 +15,7 @@ export {
     GuideModal,
     AppSelectModal,
     ApplePasswordModal,
-    UMagicCodeModal
+    UMagicCodeModal,
+    CloudCodeModal,
+    CloudHistoryModal
 };

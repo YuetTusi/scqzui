@@ -1,22 +1,49 @@
+import React, { FC, useEffect, useState } from 'react';
+import { useSelector } from 'dva';
 import dayjs from 'dayjs';
-import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'dva';
-import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
+import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
 import { helper } from '@/utils/helper';
-import { App } from '@/schema/app-config';
-import { CaptchaMsg, CloudAppMessages, CloudAppState } from '@/schema/cloud-app-messages';
-import { ITreeNode } from '@/type/ztree';
 import { StateTree } from '@/type/model';
+import { ITreeNode } from '@/type/ztree';
 import { AppSetStore } from '@/model/default/app-set';
-import { CloudLogModalState } from '@/model/default/cloud-log-modal';
-import { SmsMessageType } from '@/component/dialog/cloud-code-modal/prop';
-import { DetailModalBox } from './styled/style';
-import { DetailModalProps } from './prop';
+import { App, AppCategory } from '@/schema/app-config';
+import { CaptchaMsg, CloudAppMessages, CloudAppState } from '@/schema/cloud-app-messages';
+import { SmsMessageType } from '../cloud-code-modal/prop';
+import { CloudCodeModalStoreState } from '@/model/default/cloud-code-modal';
+import { CloudHistoryModalBox } from './styled/style';
+import { CloudHistoryModalProp } from './prop';
 
 const { fetchText } = helper.readConf()!;
+let ztree: any = null;
+
+/**
+ * 将接口JSON数据转为zTree格式
+ * @param arg0 属性
+ */
+function toTreeData(allCloudApps: AppCategory[], cloudApps: CloudAppMessages[]) {
+    let rootNode: ITreeNode = {
+        name: 'App',
+        iconSkin: 'app_root',
+        open: true,
+        children: []
+    };
+
+    for (let i = 0; i < allCloudApps.length; i++) {
+        const children = findApp(allCloudApps[i].app_list, cloudApps);
+        if (children.length !== 0) {
+            rootNode.children?.push({
+                name: allCloudApps[i].desc,
+                iconSkin: `type_${allCloudApps[i].name}`,
+                open: true,
+                children
+            });
+        }
+    }
+    return [rootNode];
+}
 
 /**
  * 查找云取应用结果中存在的应用，如果没有返回空数组
@@ -45,93 +72,65 @@ function findApp(appsInCategory: App[], cloudApps: CloudAppMessages[]) {
 function addColor(state: CloudAppState, text: string) {
     switch (state) {
         case CloudAppState.Fetching:
-            return `<span style="color:#222;">${text}</span>`;
+            return `<span style="color:#fff;">${text}</span>`;
         case CloudAppState.Error:
             return `<span style="color:#dc143c;font-weight:bold;">${text}(失败)</span>`;
         case CloudAppState.Success:
-            return `<span style="color:#00ff2b;font-weight:bold;">${text}(成功)</span>`;
+            return `<span style="color:#23bb07;font-weight:bold;">${text}(成功)</span>`;
         default:
-            return `<span style="color:#222;">${text}</span>`;
+            return `<span style="color:#fff;">${text}</span>`;
     }
 }
 
 /**
- * 云取应用详情框
+ * 云取证采集记录框
+ * @param props
  */
-const CloudAppDetailModal: FC<DetailModalProps> = ({
+const CloudHistoryModal: FC<CloudHistoryModalProp> = ({
+    visible,
+    device,
     cancelHandle
 }) => {
-    // const dispatch = useDispatch();
+
     const { cloudAppData } = useSelector<StateTree, AppSetStore>(state => state.appSet);
-    const { visible, cloudApps } = useSelector<StateTree, CloudLogModalState>(state => state.cloudLogModal);
+    const { devices } = useSelector<StateTree, CloudCodeModalStoreState>(state => state.cloudCodeModal);
     const [records, setRecords] = useState<CaptchaMsg[]>([]);
 
     /**
      * 处理树组件数据
      */
     useEffect(() => {
-        if (visible) {
-            setTimeout(() => {
-                ($.fn as any).zTree.init(
-                    $('#detail-app-tree'),
-                    {
-                        callback: {
-                            onClick: (_: any, treeId: string, treeNode: ITreeNode) => {
-                                const { appId } = treeNode;
-                                const clickApp = cloudApps.find((item) => item.m_strID === appId);
-                                if (clickApp && clickApp.message) {
-                                    setRecords(clickApp.message);
-                                } else {
-                                    setRecords([]);
-                                }
+        const current = devices[device?.usb! - 1];
+        if (current && current.apps && visible) {
+            ztree = ($.fn as any).zTree.init(
+                $('#cloud-history-tree'),
+                {
+                    callback: {
+                        onClick: (event: any, treeId: string, treeNode: ITreeNode) => {
+                            const { appId } = treeNode;
+                            const clickApp = current.apps.find((item) => item.m_strID === appId);
+                            if (clickApp && clickApp.message) {
+                                setRecords(clickApp.message);
+                            } else {
+                                setRecords([]);
                             }
-                        },
-                        check: {
-                            enable: false
-                        },
-                        view: {
-                            nameIsHTML: true,
-                            showIcon: true
                         }
                     },
-                    toTreeData(cloudApps)
-                );
-            }, 0);
+                    check: {
+                        enable: false
+                    },
+                    view: {
+                        nameIsHTML: true,
+                        showIcon: true
+                    }
+                },
+                toTreeData(cloudAppData, current.apps)
+            );
         }
         return () => {
             setRecords([]);
         };
     }, [visible]);
-
-    /**
-     * 将yaml中JSON数据转为zTree格式
-     * @param arg0 属性
-     */
-    const toTreeData = useCallback(
-        (cloudApps: CloudAppMessages[]) => {
-
-            let rootNode: ITreeNode = {
-                name: 'App',
-                iconSkin: 'app_root',
-                open: true,
-                children: []
-            };
-
-            for (let i = 0, l = cloudAppData.length; i < l; i++) {
-                const children = findApp(cloudAppData[i].app_list, cloudApps);
-                if (children.length !== 0) {
-                    rootNode.children?.push({
-                        name: cloudAppData[i].desc,
-                        iconSkin: `type_${cloudAppData[i].name}`,
-                        open: true,
-                        children
-                    });
-                }
-            }
-            return [rootNode];
-        },
-        [cloudAppData]
-    );
 
     const renderRecords = (msg: CaptchaMsg[]) => {
         if (msg && msg.length > 0) {
@@ -142,14 +141,14 @@ const CloudAppDetailModal: FC<DetailModalProps> = ({
                             <label>
                                 【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
                             </label>
-                            <span style={{ color: '#fff' }}>{item.content}</span>
+                            <span style={{ color: '#ffffffd9' }}>{item.content}</span>
                         </li>;
                     case SmsMessageType.Warning:
                         return <li key={`L_${i}`} className="history-list-item">
                             <label>
                                 【{dayjs(item.actionTime).format('YYYY-MM-DD HH:mm:ss')}】
                             </label>
-                            <span style={{ color: '#f5222d' }}>{item.content}</span>
+                            <span style={{ color: '#f5222d', fontWeight: 'bold' }}>{item.content}</span>
                         </li>;
                     case SmsMessageType.Important:
                         return <li key={`L_${i}`} className="history-list-item">
@@ -178,32 +177,35 @@ const CloudAppDetailModal: FC<DetailModalProps> = ({
     };
 
     return <Modal
-        visible={visible}
         footer={[
-            <Button
-                onClick={cancelHandle}
-                type="default"
-                key="CDM_0">
-                <CloseCircleOutlined />
+            <Button onClick={cancelHandle} type="default" key="CHM_0">
+                <CheckCircleOutlined />
                 <span>取消</span>
             </Button>
         ]}
-        title={`${fetchText ?? '采集'}记录`}
         onCancel={cancelHandle}
-        centered={true}
+        visible={visible}
+        className="zero-padding-body"
         destroyOnClose={true}
+        forceRender={true}
         maskClosable={false}
         width={850}
-        className="zero-padding-body">
-        <DetailModalBox>
+        title={`${fetchText ?? '取证'}记录`}>
+        <CloudHistoryModalBox>
             <div className="cloud-panel">
                 <div className="left-tree">
-                    <ul id="detail-app-tree" className="ztree"></ul>
+                    <ul className="ztree" id="cloud-history-tree"></ul>
                 </div>
                 {renderRecords(records)}
             </div>
-        </DetailModalBox>
+        </CloudHistoryModalBox>
     </Modal>;
 };
 
-export default CloudAppDetailModal;
+CloudHistoryModal.defaultProps = {
+    visible: false,
+    cancelHandle: () => { }
+};
+
+//共用CloudCodeModal组件的Model
+export default CloudHistoryModal;
