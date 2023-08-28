@@ -41,7 +41,15 @@ enum ClickType {
     /**
      * 命中数量
      */
-    Hit
+    Hit,
+    /**
+     * 百度网盘
+     */
+    BaiduDisk,
+    /**
+     * WPS云盘
+     */
+    WPSDisk
 }
 
 export { DevInfoProp, ClickType };

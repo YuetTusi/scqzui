@@ -63,6 +63,15 @@ const delButtonDisable = (parseState?: ParseState) => {
 };
 
 /**
+ * 是否隐藏网盘按钮
+ */
+const isShowNetDiskButton = (data: DeviceType, appId: string) => {
+    const { cloudAppList, parseState } = data;
+    return parseState === ParseState.Finished
+        && (cloudAppList ?? []).some(item => item.m_strID === appId);
+};
+
+/**
  * 状态点
  * @param state 解析状态
  */
@@ -160,6 +169,20 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                             onClick={() => onButtonClick(data, ClickType.CloudSearch)}>
                             云点验
                         </CloudSearchButton>
+                    </Auth>
+                    <Auth deny={!isShowNetDiskButton(data, '1280015')}>
+                        <Button
+                            onClick={() => onButtonClick(data, ClickType.BaiduDisk)}
+                            type="primary">
+                            百度网盘
+                        </Button>
+                    </Auth>
+                    <Auth deny={!isShowNetDiskButton(data, '1280028')}>
+                        <Button
+                            onClick={() => onButtonClick(data, ClickType.WPSDisk)}
+                            type="primary">
+                            WPS云盘
+                        </Button>
                     </Auth>
                 </Group>
             </div>

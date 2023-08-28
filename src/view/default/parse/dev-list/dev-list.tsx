@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { ChildProcessWithoutNullStreams } from 'child_process';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector, useLocation } from 'dva';
 import Table from 'antd/lib/table';
@@ -20,6 +21,26 @@ import { getDevColumns } from './column';
 import { DevListProp } from './prop';
 
 const { parseText } = helper.readConf()!;
+
+const runDiskExe = (data: DeviceType, appId: string) => {
+    const doHide = message.loading('正在打开，请稍等...', 0);
+    let handle: any = null;
+    helper.runProc(handle, 'web_selenium.exe', join(helper.APP_CWD, '../yq'), [
+        '-i',
+        data.phonePath ?? '',
+        '-a',
+        appId
+    ]);
+    if (handle !== null) {
+        handle.once('close', doHide());
+    }
+    setTimeout(() => {
+        doHide();
+        if (handle === null) {
+            message.warn('打开失败')
+        }
+    }, 3000);
+};
 
 /**
  * 设备表格
@@ -134,6 +155,12 @@ const DevList: FC<DevListProp> = ({ }) => {
                 //命中统计
                 currentDev.current = data;
                 setHitChartModalVisible(true);
+                break;
+            case ClickType.BaiduDisk:
+                runDiskExe(data, '1280015');
+                break;
+            case ClickType.WPSDisk:
+                runDiskExe(data, '1280028');
                 break;
             default:
                 console.warn(`未知Click类型:${fn}`);
