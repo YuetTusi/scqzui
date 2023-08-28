@@ -272,7 +272,7 @@ const ServerCloudModal: FC<Prop> = ({
             ) {
                 setActivePanelKey('1');
             }
-            ipcRenderer.send('show-protocol', entity);
+            // ipcRenderer.send('show-protocol', entity);
             setLoading(false);
         } finally {
             dispatch({ type: 'appSet/clearExtValue' });
