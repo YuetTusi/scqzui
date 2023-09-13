@@ -6,6 +6,8 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
+import { StateTree } from '@/type/model';
+import { AiSwitchState } from '../ai-switch';
 
 const { caseText } = helper.readConf()!;
 
@@ -13,12 +15,13 @@ export default {
     /**
      * 点验案件保存
      */
-    *saveOrUpdate({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *saveOrUpdate({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
 
         const db = getDb<QuickEvent>(TableName.QuickEvent);
         const { _id, eventName, eventPath } = payload as QuickEvent;
         const targetPath = join(eventPath, eventName);
         try {
+            const aiSwitch: AiSwitchState = yield select((state: StateTree) => state.aiSwitch);
             if (helper.isNullOrUndefined(_id)) {
                 yield helper.mkDir(targetPath);
                 yield call([db, 'insert'], payload);
@@ -49,6 +52,11 @@ export default {
                 "caseName": payload.eventName,
                 "checkUnitName": ""
             });
+            yield fork([helper, 'writeJSONfile'], join(targetPath, 'predict.json'), {
+                config: aiSwitch.data,
+                similarity: aiSwitch.similarity,
+                ocr: aiSwitch.ocr
+            }); //写ai配置JSON
             yield put({ type: 'setData', payload: undefined });
             yield put({
                 type: 'quickEventList/query', payload: {

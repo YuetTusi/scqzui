@@ -46,6 +46,14 @@ function api(webContents: WebContents) {
                 path: '/check/:id',
                 method: 'GET',
                 desc: '下载取证APK'
+            }, {
+                path: '/predict/:id',
+                method: 'GET',
+                desc: '案件AI配置'
+            }, {
+                path: '/ai-model',
+                method: 'GET',
+                desc: '下载AI模型文件'
             }]
         })
     );
@@ -235,6 +243,47 @@ function api(webContents: WebContents) {
         res.json({
             success: true,
             data: req.body
+        });
+    });
+
+    //返回案件下predict.json配置
+    router.get<{ id: string }>('/predict/:id', async (req, res) => {
+        const eventDb = getDb<QuickEvent>(TableName.QuickEvent);
+        try {
+            const data = await eventDb.findOne({ _id: req.params.id });
+            const predictAt = join(data.eventPath, data.eventName, 'predict.json');
+            const exist = await helper.existFile(predictAt);
+            if (exist) {
+                const ai = await helper.readJSONFile(predictAt);
+                res.json(ai);
+            } else {
+                res.json(null);
+            }
+        } catch (error) {
+            res.json(null);
+        }
+    });
+
+    router.get('/ai-model', async (req, res) => {
+        const target = isDev
+            ? join(cwd, 'data/mobilev2.pt')
+            : join(cwd, 'resources/data/mobilev2.pt');
+
+        try {
+            const { size } = await stat(target);
+            webContents.send('quick-scanned', true);
+            res.setHeader('Content-Length', size);
+            log.info(`下载AI模型文件(${target}), 附件大小:${size}`);
+        } catch (error) {
+            log.error(`HTTP下载AI模型文件失败 /ai-model: ${error.message}`);
+        } finally {
+            res.setHeader('Content-type', 'application/octet-stream');
+        }
+
+        res.download(target, 'mobilev2.pt', (err) => {
+            if (err) {
+                res.end(err.message);
+            }
         });
     });
 

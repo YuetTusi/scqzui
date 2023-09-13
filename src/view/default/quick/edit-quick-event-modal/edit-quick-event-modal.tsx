@@ -1,8 +1,11 @@
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
+import { join } from 'path';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
 import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import Col from 'antd/lib/col';
@@ -17,6 +20,8 @@ import { helper } from '@/utils/helper';
 import { AllowCaseName } from '@/utils/regex';
 import { QuickEvent } from '@/schema/quick-event';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
+import AiSwitch from '../ai-switch';
+import { CategoryBox, ItemBox } from './styled/box';
 
 const { caseText, fetchText } = helper.readConf()!;
 const { Item, useForm } = Form;
@@ -56,6 +61,9 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         if (data) {
             const [eventName] = data.eventName.split('_');
             setFieldsValue({ ...data, eventName });
+            dispatch({ type: 'aiSwitch/readAiConfig', payload: { casePath: join(data.eventPath, data.eventName) } });
+        } else {
+            dispatch({ type: 'aiSwitch/readAiConfig', payload: { casePath: undefined } });
         }
     }, [data]);
 
@@ -176,65 +184,79 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         onCancel={onCancel}
         visible={visible}
         title={helper.isNullOrUndefined(data?._id) ? `添加${fetchText ?? '点验'}${caseText ?? '案件'}` : `编辑${fetchText ?? '点验'}${caseText ?? '案件'}`}
-        width={600}
+        width={860}
         centered={true}
         maskClosable={false}
         destroyOnClose={false}
         forceRender={true}
+        className="zero-padding-body"
     >
-        <Form form={formRef} layout="horizontal" {...fromLayout}>
-            <Item
-                rules={nameRules}
-                label={`${caseText ?? '案件'}名称`}
-                name="eventName"
-                hasFeedback={true}
-                validateStatus={isCheck ? 'validating' : undefined}
-                tooltip={helper.isNullOrUndefined(data?._id) ? undefined : `不可修改${caseText ?? '案件'}名称`}>
-                <Input ref={eventNameRef} disabled={!helper.isNullOrUndefined(data?._id)} />
-            </Item>
-            <Item
-                rules={[
-                    { required: true, message: '请选择存储位置' }
-                ]}
-                label="存储位置"
-                name="eventPath"
-                tooltip={helper.isNullOrUndefined(data?._id) ? undefined : "不可修改存储位置"}>
-                <Input
-                    onClick={onDirSelect}
-                    disabled={!helper.isNullOrUndefined(data?._id)}
-                    readOnly={true}
-                    placeholder="请选择存储位置" />
-            </Item>
+        <ItemBox padding="20px 20px 0 20px">
+            <Form form={formRef} layout="horizontal" {...fromLayout}>
+                <Item
+                    rules={nameRules}
+                    label={`${caseText ?? '案件'}名称`}
+                    name="eventName"
+                    hasFeedback={true}
+                    validateStatus={isCheck ? 'validating' : undefined}
+                    tooltip={helper.isNullOrUndefined(data?._id) ? undefined : `不可修改${caseText ?? '案件'}名称`}>
+                    <Input ref={eventNameRef} disabled={!helper.isNullOrUndefined(data?._id)} />
+                </Item>
+                <Item
+                    rules={[
+                        { required: true, message: '请选择存储位置' }
+                    ]}
+                    label="存储位置"
+                    name="eventPath"
+                    tooltip={helper.isNullOrUndefined(data?._id) ? undefined : "不可修改存储位置"}>
+                    <Input
+                        onClick={onDirSelect}
+                        disabled={!helper.isNullOrUndefined(data?._id)}
+                        readOnly={true}
+                        placeholder="请选择存储位置" />
+                </Item>
+                <Row>
+                    <Col span={12}>
+                        <Item
+                            rules={[
+                                { required: true, message: '请填写违规时段' }
+                            ]}
+                            label="违规时段 起"
+                            name="ruleFrom"
+                            initialValue={0}
+                            labelCol={{ span: 10 }}
+                            wrapperCol={{ span: 12 }}>
+                            <InputNumber min={0} max={24} style={{ width: '100%' }} />
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Item
+                            rules={[
+                                { required: true, message: '请填写违规时段' },
+                                { validator: ruleToValid }
+                            ]}
+                            label="违规时段 止"
+                            name="ruleTo"
+                            initialValue={8}
+                            labelCol={{ span: 10 }}
+                            wrapperCol={{ span: 12 }}>
+                            <InputNumber min={0} max={24} style={{ width: '100%' }} />
+                        </Item>
+                    </Col>
+                </Row>
+            </Form>
+        </ItemBox>
+        <CategoryBox>
+            <FontAwesomeIcon icon={faAnglesDown} />
+            <span>AI信息</span>
+        </CategoryBox>
+        <ItemBox padding='0 40px 20px 40px'>
             <Row>
-                <Col span={12}>
-                    <Item
-                        rules={[
-                            { required: true, message: '请填写违规时段' }
-                        ]}
-                        label="违规时段 起"
-                        name="ruleFrom"
-                        initialValue={0}
-                        labelCol={{ span: 10 }}
-                        wrapperCol={{ span: 12 }}>
-                        <InputNumber min={0} max={24} style={{ width: '100%' }} />
-                    </Item>
-                </Col>
-                <Col span={12}>
-                    <Item
-                        rules={[
-                            { required: true, message: '请填写违规时段' },
-                            { validator: ruleToValid }
-                        ]}
-                        label="违规时段 止"
-                        name="ruleTo"
-                        initialValue={8}
-                        labelCol={{ span: 10 }}
-                        wrapperCol={{ span: 12 }}>
-                        <InputNumber min={0} max={24} style={{ width: '100%' }} />
-                    </Item>
+                <Col span={24}>
+                    <AiSwitch casePath={data?.eventPath} />
                 </Col>
             </Row>
-        </Form>
+        </ItemBox>
     </Modal>
 };
 

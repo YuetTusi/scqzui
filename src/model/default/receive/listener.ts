@@ -31,8 +31,6 @@ import { QuickRecord } from '@/schema/quick-record';
 import { DeviceSystem } from '@/schema/device-system';
 import { LoginState } from '../trace-login';
 
-const cwd = process.cwd();
-const isDev = process.env['NODE_ENV'] === 'development';
 const { fetchText, parseText } = helper.readConf()!;
 const appPath = process.cwd();
 
@@ -440,21 +438,17 @@ export function appRecFinish({ msg }: Command<{
  */
 export function checkFinishToParse(dispatch: Dispatch<any>) {
     const db = getDb<QuickEvent>(TableName.QuickEvent);
-    ipcRenderer.on('check-parse', async (event: IpcRendererEvent, args: Record<string, any>) => {
+    ipcRenderer.on('check-parse', async (_: IpcRendererEvent, args: Record<string, any>) => {
 
         ipcRenderer.send('show-notice', {
             message: `「${args.mobileName ?? '未知设备'}」${fetchText ?? '取证'}结束，开始${parseText ?? '解析'}${fetchText ?? '点验'}数据`
         });
 
-        const aiTempPath = isDev
-            ? join(cwd, './data/predict.json')
-            : join(cwd, './resources/config/predict.json');
-
-        const [appJson, aiConfig, eventData] = await Promise.all([
+        const [appJson, eventData] = await Promise.all([
             helper.readAppJson(),
-            helper.readJSONFile(aiTempPath),
             db.findOne({ _id: args.caseId })
         ]);
+        const aiConfig = await helper.readJSONFile(join(eventData.eventPath, eventData.eventName, 'predict.json'));
 
         //NOTE:将设备数据入库
         let next = new QuickRecord();
