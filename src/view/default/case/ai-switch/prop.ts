@@ -45,7 +45,11 @@ export interface PredictJson {
     /**
      * 开启图像OCR识别
      */
-    ocr: boolean
+    ocr: boolean,
+    /**
+     * 其他属性
+     */
+    [others: string]: any
 }
 
 /**

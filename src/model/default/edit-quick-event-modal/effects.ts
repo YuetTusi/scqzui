@@ -8,7 +8,9 @@ import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
 import { StateTree } from '@/type/model';
 import { AiSwitchState } from '../ai-switch';
+import { PredictJson } from '@/view/default/quick/ai-switch/prop';
 
+const cwd = process.cwd();
 const { caseText } = helper.readConf()!;
 
 export default {
@@ -17,6 +19,9 @@ export default {
      */
     *saveOrUpdate({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
 
+        const tempAt = helper.IS_DEV
+            ? join(cwd, './data/predict.json')
+            : join(cwd, './resources/config/predict.json'); //模版路径
         const db = getDb<QuickEvent>(TableName.QuickEvent);
         const { _id, eventName, eventPath } = payload as QuickEvent;
         const targetPath = join(eventPath, eventName);
@@ -52,7 +57,9 @@ export default {
                 "caseName": payload.eventName,
                 "checkUnitName": ""
             });
+            const temp: PredictJson = yield call([helper, 'readJSONFile'], tempAt);
             yield fork([helper, 'writeJSONfile'], join(targetPath, 'predict.json'), {
+                ...temp,
                 config: aiSwitch.data,
                 similarity: aiSwitch.similarity,
                 ocr: aiSwitch.ocr
