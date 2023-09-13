@@ -75,13 +75,16 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
                         deviceId: d.deviceId as string,
                         phonePath: d.phonePath as string,
                         mobileName: d.mobileName as string,
-                        mobileHolder: d.mobileHolder as string
+                        mobileHolder: d.mobileHolder as string,
+                        mobileNo: d.mobileNo as string
                     };
                     return next;
                 });
 
                 for (let i = 0, l = prepared.length; i < l; i++) {
-                    const { tId, deviceId, phonePath, mobileHolder, mobileName } = prepared[i];
+                    const {
+                        tId, deviceId, phonePath, mobileHolder, mobileName, mobileNo
+                    } = prepared[i];
                     const nodes = ztree.getNodeByTId(tId);
                     const [tree, files, attaches] = filterTree(nodes.children);
                     const [name, timestamp] = mobileName.split('_');
@@ -96,7 +99,7 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
                         deviceId,
                         reportRoot: join(phonePath, './report'),
                         saveTarget,
-                        reportName: `${mobileHolder}-${name}分析报告-${timestamp}`,
+                        reportName: `${mobileHolder}-${name}${helper.isNullOrUndefinedOrEmptyString(mobileNo) ? '' : '-' + mobileNo}-${timestamp}`,
                         tree,
                         files,
                         attaches

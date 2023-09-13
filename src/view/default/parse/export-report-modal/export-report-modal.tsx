@@ -79,10 +79,10 @@ const ExportReportModal: FC<ExportReportModalProp> = ({ visible, data, closeHand
             title: '请选择保存目录',
             properties: ['openDirectory', 'createDirectory']
         });
-        const { mobileHolder, mobileName, _id } = data!;
+        const { mobileHolder, mobileName, mobileNo, _id } = data!;
 
         let reportName = `${mobileHolder}-${mobileName?.split('_')[0]
-            }分析报告-${helper.timestamp()}`;
+            }${helper.isNullOrUndefinedOrEmptyString(mobileNo) ? '' : '-' + mobileNo}-${helper.timestamp()}`;
         if (value.trim() !== '') {
             //若输入了报告名称，则使用输入内容
             reportName = value;

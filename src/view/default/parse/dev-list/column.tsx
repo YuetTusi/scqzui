@@ -147,10 +147,11 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
  * @param exePath create_report.exe所在路径
  * @param device 设备
  */
-const runCreateReport = async (dispatch: Dispatch, exePath: string, device: DeviceType) => {
-    const {
+const runCreateReport = async (
+    dispatch: Dispatch,
+    exePath: string, {
         _id, caseId, mobileHolder, mobileName, mobileNo, mode, phonePath, note
-    } = device;
+    }: DeviceType) => {
     const db = getDb<CaseInfo>(TableName.Cases);
     const casePath = join(phonePath!, '../../'); //案件路径
     const exeCwd = join(cwd, '../tools/CreateReport');
@@ -197,7 +198,7 @@ const runCreateReport = async (dispatch: Dispatch, exePath: string, device: Devi
         );
     }
 
-    const proc = execFile(exePath, [casePath, device.phonePath!], { cwd: exeCwd });
+    const proc = execFile(exePath, [casePath, phonePath!], { cwd: exeCwd });
     proc.once('error', () => {
         message.destroy();
         notification.error({

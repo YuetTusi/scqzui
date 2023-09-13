@@ -92,7 +92,7 @@ const EditDevModal: FC<EditDevModalProp> = ({
                 <Input maxLength={20} />
             </Item>
             <Item name="mobileNo" label={`${devText ?? '设备'}编号`}>
-                <Input maxLength={10} />
+                <Input maxLength={100} />
             </Item>
             <Item name="note" label="备注">
                 <Input maxLength={100} />
