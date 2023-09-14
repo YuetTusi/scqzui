@@ -83,8 +83,18 @@ const MiChangeModal: FC<MiChangeModalProp> = ({ visible, onOk, onCancel }) => {
         <Explain title="操作提示">
             <ul>
                 <li>选择数据保存目录</li>
-                <li>使用小米手机连接热点：<strong>abco_apbc5G_MI</strong></li>
-                <li>打开小米换机，点击<strong>旧手机</strong>，选择热点<strong>abco_apbc5G_MI</strong>开始采集</li>
+                <li>
+                    使用小米手机连接热点：
+                    <strong>abco_apbc5G_MI</strong>
+                    ，密码：<strong>XAQWbDffRT</strong>
+                </li>
+                <li>
+                    打开小米换机，点击
+                    <strong>旧手机</strong>
+                    ，选择热点
+                    <strong>abco_apbc5G_MI</strong>
+                    开始采集
+                </li>
             </ul>
         </Explain>
         <div style={{ marginTop: '10px' }}>
