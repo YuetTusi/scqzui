@@ -17,6 +17,7 @@ import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import notification from 'antd/lib/notification';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
+import { PredictJson } from '@/component/ai-switch/prop';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { CaseInfo } from '@/schema/case-info';
 import { DeviceType } from "@/schema/device-type";
@@ -31,7 +32,6 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import logger from '@/utils/log';
-import { PredictJson } from '../../case/ai-switch/prop';
 
 const { devText, fetchText, parseText } = helper.readConf()!;
 const cwd = process.cwd();

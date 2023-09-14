@@ -1,7 +1,8 @@
 import { Model } from 'dva';
+import { Predict } from '@/component/ai-switch';
 import reducers from './reducers';
 import effects from './effects';
-import { Predict } from '@/view/default/case/ai-switch';
+
 
 interface AiSwitchState {
     /**

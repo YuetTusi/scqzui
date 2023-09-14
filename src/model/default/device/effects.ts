@@ -28,7 +28,7 @@ import { AppJson } from '@/schema/app-json';
 import { ParseCategory } from '@/schema/parse-detail';
 import { QuickRecord } from '@/schema/quick-record';
 import { QuickEvent } from '@/schema/quick-event';
-import { PredictJson } from '@/view/default/case/ai-switch/prop';
+import { PredictJson } from '@/component/ai-switch/prop';
 import { DeviceStoreState } from './index';
 
 const cwd = process.cwd();

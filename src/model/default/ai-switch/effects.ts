@@ -1,9 +1,11 @@
 import { join } from 'path';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import { Predict } from '@/view/default/case/ai-switch';
+import {
+    Predict, PredictComp, PredictJson
+} from '@/component/ai-switch/prop';
 import { helper } from '@/utils/helper';
-import { PredictComp, PredictJson } from '@/view/default/case/ai-switch/prop';
+
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';

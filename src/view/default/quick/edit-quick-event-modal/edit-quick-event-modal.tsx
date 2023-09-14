@@ -20,7 +20,7 @@ import { helper } from '@/utils/helper';
 import { AllowCaseName } from '@/utils/regex';
 import { QuickEvent } from '@/schema/quick-event';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
-import AiSwitch from '../ai-switch';
+import AiSwitch from '@/component/ai-switch';
 import { CategoryBox, ItemBox } from './styled/box';
 
 const { caseText, fetchText } = helper.readConf()!;
@@ -253,7 +253,9 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         <ItemBox padding='0 40px 20px 40px'>
             <Row>
                 <Col span={24}>
-                    <AiSwitch casePath={data?.eventPath} />
+                    <AiSwitch
+                        casePath={data?.eventPath}
+                        columnCount={5} />
                 </Col>
             </Row>
         </ItemBox>

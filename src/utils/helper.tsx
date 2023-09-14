@@ -33,6 +33,7 @@ import React from 'react';
 import Select from 'antd/lib/select';
 import log from './log';
 import { Conf } from '../type/model';
+import { Predict, PredictJson } from '../component/ai-switch/prop';
 import { BcpEntity } from '../schema/bcp-entity';
 import { AppCategory } from '../schema/app-config';
 import { TableName } from '../schema/table-name';
@@ -41,8 +42,6 @@ import { Manufaturer } from '../schema/manufaturer';
 import { AppJson } from '../schema/app-json';
 import { CheckJson } from '../schema/check-json';
 import { QuickEvent } from '../schema/quick-event';
-import { Predict } from '../view/default/case/ai-switch';
-import { PredictJson } from '@/view/default/case/ai-switch/prop';
 import { getDb } from './db';
 
 const cwd = process.cwd(); //应用的根目录

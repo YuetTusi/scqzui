@@ -6,9 +6,9 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
+import { PredictJson } from '@/component/ai-switch/prop';
 import { StateTree } from '@/type/model';
 import { AiSwitchState } from '../ai-switch';
-import { PredictJson } from '@/view/default/quick/ai-switch/prop';
 
 const cwd = process.cwd();
 const { caseText } = helper.readConf()!;
