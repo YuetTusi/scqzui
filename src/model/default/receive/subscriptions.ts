@@ -12,7 +12,7 @@ import { CommandType, SocketType, Command } from '@/schema/command';
 import {
     deviceIn, deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg,
     smsMsg, parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
-    appRecFinish, fetchPercent, importErr, backDatapass, checkFinishToParse
+    appRecFinish, fetchPercent, importErr, backDatapass, checkFinishToParse, apkMsg
 } from './listener';
 
 const { Fetch, Parse, Trace, Error } = SocketType;
@@ -103,6 +103,18 @@ export default {
                     console.log(`接收到破解消息: ${command.msg}`);
                     dispatch({ type: 'crackModal/setMessage', payload: command.msg });
                     break;
+                case CommandType.ApkPhoneList:
+                    dispatch({ type: 'apkModal/setPhone', payload: command.msg });
+                    break;
+                case CommandType.ApkList:
+                    //# 接收apk列表消息
+                    console.log(`接收到apk列表消息: ${command.msg}`);
+                    dispatch({ type: 'apkModal/setApk', payload: command.msg });
+                    break;
+                case CommandType.ApkMsg:
+                    //# 接收到apk提取消息
+                    console.log(`接收到apk提取消息: ${command.msg}`);
+                    apkMsg(command, dispatch);
                 default:
                     console.log('未知命令:', command.cmd);
                     break;

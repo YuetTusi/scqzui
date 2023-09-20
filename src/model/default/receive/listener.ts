@@ -517,3 +517,11 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
         });
     });
 }
+
+/**
+ * 提取apk消息
+ */
+export function apkMsg({ msg }: Command<string>, dispatch: Dispatch<any>) {
+    message.destroy();
+    message.info(msg);
+}

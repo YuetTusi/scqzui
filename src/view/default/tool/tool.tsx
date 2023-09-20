@@ -21,6 +21,7 @@ import { helper } from '@/utils/helper';
 import AlipayOrderModal from './alipay-order-modal';
 import ImportDataModal from './import-data-modal';
 import CrackModal from './crack-modal';
+import ApkModal from './apk-modal';
 import {
     AiSimilarModal, fakeFeaturePhoneModal, FakeImportModal,
     ImportBak
@@ -45,6 +46,7 @@ import featurephoneSvg from './styled/images/featurephone.svg';
 import meegoSvg from './styled/images/meego.svg';
 import hwcopyPng from './styled/images/hwcopy.png';
 import samsungSmartswitch from './styled/images/samsung_smartswitch.png';
+import apkSvg from './styled/images/apk.svg';
 import { CrackTypes } from './crack-modal/prop';
 import { ExeType, Action, ModalOpenState, ToolProp } from './prop';
 
@@ -68,7 +70,8 @@ const Tool: FC<ToolProp> = () => {
         miChangeModalVisible: false,
         huaweiCloneModalVisible: false,
         fakeImportModalVisible: false,
-        snapshotModalVisible: false
+        snapshotModalVisible: false,
+        apkModalVisible: false
     });
 
     /** 
@@ -235,6 +238,11 @@ const Tool: FC<ToolProp> = () => {
      * 华为手机克隆handle
      */
     const huaweiCloneHandle = () => dispatchModal({ type: 'huaweiCloneModalVisible', payload: true });
+
+    /**
+     * APK提取handle
+     */
+    const apkHandle = () => dispatchModal({ type: 'apkModalVisible', payload: true });
 
     return <SubLayout title="工具箱">
         <ToolBox>
@@ -575,6 +583,14 @@ const Tool: FC<ToolProp> = () => {
                             华为手机克隆
                         </div>
                     </div>
+                    <div onClick={() => apkHandle()} className="t-button">
+                        <div className="ico">
+                            <img src={apkSvg} height={50} />
+                        </div>
+                        <div className="name">
+                            安卓apk提取
+                        </div>
+                    </div>
                 </div>
             </SortBox>
         </ToolBox>
@@ -586,6 +602,9 @@ const Tool: FC<ToolProp> = () => {
         <AiSimilarModal
             visible={modalState.aiSimilarModalVisible}
             closeHandle={() => dispatchModal({ type: 'aiSimilarModalVisible', payload: false })} />
+        <ApkModal
+            visible={modalState.apkModalVisible}
+            cancelHandle={() => dispatchModal({ type: 'apkModalVisible', payload: false })} />
         <CrackModal
             visible={modalState.crackModalVisible}
             type={currentCrackType.current}

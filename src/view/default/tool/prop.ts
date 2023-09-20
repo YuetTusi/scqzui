@@ -48,5 +48,9 @@ export interface ModalOpenState {
     /**
      * 屏幕截图
      */
-    snapshotModalVisible: boolean
+    snapshotModalVisible: boolean,
+    /**
+     * 安卓apk提取
+     */
+    apkModalVisible: boolean,
 }
