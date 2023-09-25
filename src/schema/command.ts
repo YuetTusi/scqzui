@@ -127,6 +127,10 @@ enum CommandType {
      */
     ApkExtract = 'apk_extract',
     /**
+     * 提取当前apk（Fetch）
+     */
+    ActiveExtract = 'active_extract',
+    /**
      * 设备截屏（Fetch）
      */
     DevSnapshot = 'dev_snapshot',

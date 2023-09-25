@@ -1,6 +1,6 @@
 import electron, { OpenDialogReturnValue } from 'electron';
 import debounce from 'lodash/debounce';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import SyncOutlined from '@ant-design/icons/SyncOutlined';
 import AndroidOutlined from '@ant-design/icons/AndroidOutlined';
@@ -10,16 +10,15 @@ import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
 import Select from 'antd/lib/select';
 import Table from 'antd/lib/table';
+import { Key } from 'antd/lib/table/interface';
 import Form from 'antd/lib/form';
 import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { ApkModalState } from '@/model/default/apk-modal';
 import { helper } from '@/utils/helper';
-import { ApkModalProp, FormValue } from './prop';
-// import crackImg from './styled/images/crack_1.png';
-import { ApkModalBox } from './styled/box';
 import ApkTip from './apk-tip';
-import { Key } from 'antd/lib/table/interface';
+import { ApkModalProp, FormValue } from './prop';
+import { ApkModalBox } from './styled/box';
 
 const { ipcRenderer } = electron;
 const { Item, useForm } = Form;
@@ -47,6 +46,15 @@ const ApkModal: FC<ApkModalProp> = ({
     }, [visible]);
 
     /**
+     * 提取当前活动apk Click
+     * @param event 
+     */
+    const onActiveExtractClick = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        dispatch({ type: 'apkModal/activeExtract' });
+    };
+
+    /**
     * 表单Submit
     */
     const formSubmit = async () => {
@@ -58,7 +66,7 @@ const ApkModal: FC<ApkModalProp> = ({
                 message.warn('请勾选提取应用');
             } else {
                 dispatch({
-                    type: 'apkModal/extract',
+                    type: 'apkModal/apkExtract',
                     payload: {
                         phone: values.phone,
                         apk: checkedKeys,
@@ -130,13 +138,20 @@ const ApkModal: FC<ApkModalProp> = ({
                 <span>刷新设备</span>
             </Button>,
             <Button
+                onClick={onActiveExtractClick}
+                type="primary"
+                key="APKM_2">
+                <AndroidOutlined />
+                <span>提取当前apk</span>
+            </Button>,
+            <Button
                 onClick={() => {
                     formSubmit();
                 }}
                 type="primary"
-                key="APKM_2">
+                key="APKM_3">
                 <AndroidOutlined />
-                <span>提取apk</span>
+                <span>提取选择apk</span>
             </Button>
         ]}
         visible={visible}

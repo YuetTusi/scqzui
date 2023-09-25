@@ -30,11 +30,24 @@ export default {
      * @param payload.saveTo 存储在
      * @param payload.apk 所选apk
      */
-    *extract({ payload }: AnyAction, { fork }: EffectsCommandMap) {
+    *apkExtract({ payload }: AnyAction, { fork }: EffectsCommandMap) {
         yield fork(send, SocketType.Fetch, {
             type: SocketType.Fetch,
             cmd: CommandType.ApkExtract,
             msg: payload
+        });
+    },
+    /**
+     * 提取当前活动的APK
+     * @param payload.phone 所选设备
+     * @param payload.saveTo 存储在
+     * @param payload.apk 所选apk
+     */
+    *activeExtract({ payload }: AnyAction, { fork }: EffectsCommandMap) {
+        yield fork(send, SocketType.Fetch, {
+            type: SocketType.Fetch,
+            cmd: CommandType.ActiveExtract,
+            msg: null
         });
     }
 };

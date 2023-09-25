@@ -132,8 +132,8 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
             type: 'parseDev/updateParseState',
             payload: {
                 id: data._id,
-                parseState: ParseState.Parsing,
-                pageIndex: 1
+                parseState: ParseState.Parsing
+                // pageIndex: 1
             }
         });
     } catch (error) {
