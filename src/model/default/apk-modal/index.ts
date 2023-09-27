@@ -3,6 +3,9 @@ import reducers from './reducers';
 import effects from './effects';
 
 interface Apk {
+    /**
+     * USB号
+     */
     id: string,
     /**
      * 名称
@@ -45,19 +48,29 @@ let model: Model = {
     namespace: 'apkModal',
     state: {
         apk: [
-            // { id: '1001', name: 'test.apk', value: 'test.com' },
-            // { id: '1002', name: 'test2.apk', value: 'test2.com' },
-            // { id: '1003', name: 'test3.apk', value: 'test3.com' }
+            // {
+            //     "id": "2",
+            //     "name": "com.tencent.mm",
+            //     "value": ""
+            // },
+            // {
+            //     "id": "2",
+            //     "name": "com.huawei.hisuite",
+            //     "value": ""
+            // },
+            // {
+            //     "id": "2",
+            //     "name": "com.woyue.batchat",
+            //     "value": "test"
+            // }
         ],
         phone: [
-            // { id: '1001', name: 'oneplus', value: 'oneplus' },
-            // { id: '1002', name: 'samsung', value: 'samsung' },
-            // { id: '1003', name: 'mi', value: 'mi' }
+            // { "name": "usb: 1, EVA-AL10", "value": 1, "id": '2' }
         ]
     },
     reducers,
     effects
 };
 
-export { Apk, ApkModalState };
+export { Apk, Phone, ApkModalState };
 export default model;

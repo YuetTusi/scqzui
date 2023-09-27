@@ -26,11 +26,13 @@ export default {
     },
     /**
      * 开始提取apk
+     * @param payload.id USB号
      * @param payload.phone 所选设备
      * @param payload.saveTo 存储在
      * @param payload.apk 所选apk
      */
     *apkExtract({ payload }: AnyAction, { fork }: EffectsCommandMap) {
+        console.log(payload);
         yield fork(send, SocketType.Fetch, {
             type: SocketType.Fetch,
             cmd: CommandType.ApkExtract,
@@ -46,8 +48,7 @@ export default {
     *activeExtract({ payload }: AnyAction, { fork }: EffectsCommandMap) {
         yield fork(send, SocketType.Fetch, {
             type: SocketType.Fetch,
-            cmd: CommandType.ActiveExtract,
-            msg: null
+            cmd: CommandType.ActiveExtract
         });
     }
 };

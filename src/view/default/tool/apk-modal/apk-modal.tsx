@@ -1,6 +1,6 @@
 import electron, { OpenDialogReturnValue } from 'electron';
 import debounce from 'lodash/debounce';
-import React, { FC, useEffect, useState, MouseEvent } from 'react';
+import React, { FC, useEffect, useRef, useState, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import SyncOutlined from '@ant-design/icons/SyncOutlined';
 import AndroidOutlined from '@ant-design/icons/AndroidOutlined';
@@ -14,7 +14,7 @@ import { Key } from 'antd/lib/table/interface';
 import Form from 'antd/lib/form';
 import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
-import { ApkModalState } from '@/model/default/apk-modal';
+import { Apk, ApkModalState, Phone } from '@/model/default/apk-modal';
 import { helper } from '@/utils/helper';
 import ApkTip from './apk-tip';
 import { ApkModalProp, FormValue } from './prop';
@@ -30,6 +30,8 @@ const ApkModal: FC<ApkModalProp> = ({
 }) => {
 
     const dispatch = useDispatch();
+    const currentPhone = useRef<Phone>();
+    const currentApks = useRef<Apk[]>([]);
     const [checkedKeys, setCheckedKeys] = useState<Key[]>([]);
     const [formRef] = useForm<FormValue>();
     const { phone, apk } = useSelector<StateTree, ApkModalState>(state =>
@@ -65,11 +67,13 @@ const ApkModal: FC<ApkModalProp> = ({
             if (checkedKeys.length === 0) {
                 message.warn('请勾选提取应用');
             } else {
+
                 dispatch({
                     type: 'apkModal/apkExtract',
                     payload: {
+                        id: currentPhone.current?.id,
                         phone: values.phone,
-                        apk: checkedKeys,
+                        apk: currentApks.current ?? [],
                         saveTo: values.saveTo
                     }
                 });
@@ -84,13 +88,18 @@ const ApkModal: FC<ApkModalProp> = ({
     */
     const closeHandle = () => {
         formRef.resetFields();
+        currentPhone.current = undefined;
+        currentApks.current = [];
         dispatch({ type: 'apkModal/setApk', payload: [] });
         dispatch({ type: 'apkModal/setPhone', payload: [] });
         cancelHandle();
     };
 
     const renderOptions = () => {
-        return phone.map(({ name, value }, index) => <Option key={`Dev_${index}`} value={value}>
+        return phone.map(({ name, value, id }, index) => <Option
+            key={`Dev_${index}`}
+            value={value}
+            data-id={id}>
             {name}
         </Option>);
     };
@@ -99,8 +108,13 @@ const ApkModal: FC<ApkModalProp> = ({
      * 设备Change
      * @param value  
      */
-    const onPhoneChange = (value: string) => {
-        dispatch({ type: 'apkModal/queryApk', payload: value });
+    const onPhoneChange = (value: string, options: any) => {
+        currentPhone.current = {
+            id: options['data-id'],
+            name: options['children'],
+            value
+        };
+        dispatch({ type: 'apkModal/queryApk', payload: { id: value } });
     };
 
     /**
@@ -206,17 +220,22 @@ const ApkModal: FC<ApkModalProp> = ({
                 </Item>
             </Form>
 
-            <Table
+            <Table<Apk>
                 columns={[
                     {
                         title: 'apk应用',
-                        dataIndex: 'name',
-                        key: 'name',
+                        dataIndex: 'value',
+                        key: 'value',
+                        render(value: string, record) {
+                            return record.name + ' ' + value;
+                        }
                     }
                 ]}
                 rowSelection={{
                     type: 'checkbox',
-                    onChange: (keys) => {
+
+                    onChange: (keys, rows) => {
+                        currentApks.current = rows;
                         setCheckedKeys(keys);
                     }
                 }}
@@ -224,7 +243,7 @@ const ApkModal: FC<ApkModalProp> = ({
                 pagination={false}
                 bordered={true}
                 scroll={{ y: 160 }}
-                rowKey="value"
+                rowKey={(_, index) => `AT_${index}`}
                 size="small"
             />
         </ApkModalBox>

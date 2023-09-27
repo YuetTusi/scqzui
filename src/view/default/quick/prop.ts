@@ -15,5 +15,9 @@ export enum ExportFile {
     /**
      * 报告
      */
-    Report
+    Report,
+    /**
+     * Word文档
+     */
+    Word
 }

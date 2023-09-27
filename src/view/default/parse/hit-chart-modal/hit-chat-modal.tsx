@@ -121,12 +121,23 @@ const HitChartModal: FC<HitChartModalProp> = ({
             properties: ['openDirectory', 'createDirectory']
         });
 
-        if (exportFile === ExportFile.Excel) {
-            exeDir = join(exeDir, 'create_excel_report');
-            exeName = 'create_excel_report.exe';
-        } else {
-            exeDir = join(exeDir, 'create_excel_report');
-            exeName = 'create_pdf_report.exe';
+        switch (exportFile) {
+            case ExportFile.Excel:
+                exeDir = join(exeDir, 'create_excel_report');
+                exeName = 'create_excel_report.exe';
+                break;
+            case ExportFile.Pdf:
+                exeDir = join(exeDir, 'create_excel_report');
+                exeName = 'create_pdf_report.exe';
+                break;
+            case ExportFile.Word:
+                exeDir = join(exeDir, 'create_excel_report');
+                exeName = 'create_word_report.exe';
+                break;
+            default:
+                console.clear();
+                console.warn('未知导出类型');
+                break;
         }
 
         if (selectVal.filePaths && selectVal.filePaths.length > 0) {
@@ -165,7 +176,7 @@ const HitChartModal: FC<HitChartModalProp> = ({
             proc.once('error', () => {
                 handle.update({
                     title: '导出',
-                    content: `报表导出失败`,
+                    content: `导出失败`,
                     okText: '确定',
                     centered: true,
                     icon: <CheckCircleOutlined />,
@@ -178,7 +189,7 @@ const HitChartModal: FC<HitChartModalProp> = ({
                         openFileInBrowser(saveTarget);
                     },
                     title: '导出',
-                    content: `报表导出成功`,
+                    content: `导出成功`,
                     okText: '确定',
                     centered: true,
                     icon: <CheckCircleOutlined />,
@@ -192,7 +203,7 @@ const HitChartModal: FC<HitChartModalProp> = ({
                         openFileInBrowser(saveTarget);
                     },
                     title: '导出',
-                    content: `报表导出成功`,
+                    content: `导出成功`,
                     okText: '确定',
                     centered: true,
                     icon: <CheckCircleOutlined />,
@@ -217,10 +228,16 @@ const HitChartModal: FC<HitChartModalProp> = ({
                 <DownloadOutlined />
                 <span>导出PDF报表</span>
             </Button>,
+            <Button onClick={() => onDirSelect(ExportFile.Word)}
+                type="primary"
+                key="HCM_2">
+                <DownloadOutlined />
+                <span>导出Word</span>
+            </Button>,
             <Button onClick={() => {
                 closeHandle();
             }}
-                key="HCM_2"
+                key="HCM_3"
                 type="default">
                 <CloseCircleOutlined />
                 <span>取消</span>
