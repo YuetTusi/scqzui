@@ -38,7 +38,8 @@ interface Phone {
 interface ApkModalState {
 
     phone: Phone[],
-    apk: Apk[]
+    apk: Apk[],
+    message: string[]
 }
 
 /**
@@ -51,22 +52,23 @@ let model: Model = {
             // {
             //     "id": "2",
             //     "name": "com.tencent.mm",
-            //     "value": ""
+            //     "value": "微信"
             // },
             // {
-            //     "id": "2",
+            //     "id": "3",
             //     "name": "com.huawei.hisuite",
             //     "value": ""
             // },
             // {
-            //     "id": "2",
+            //     "id": "4",
             //     "name": "com.woyue.batchat",
             //     "value": "test"
             // }
         ],
         phone: [
             // { "name": "usb: 1, EVA-AL10", "value": 1, "id": '2' }
-        ]
+        ],
+        message: []
     },
     reducers,
     effects

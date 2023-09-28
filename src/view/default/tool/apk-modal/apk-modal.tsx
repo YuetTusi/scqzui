@@ -12,7 +12,7 @@ import Select from 'antd/lib/select';
 import Table from 'antd/lib/table';
 import { Key } from 'antd/lib/table/interface';
 import Form from 'antd/lib/form';
-import message from 'antd/lib/message';
+import messageBox from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { Apk, ApkModalState, Phone } from '@/model/default/apk-modal';
 import { helper } from '@/utils/helper';
@@ -34,7 +34,7 @@ const ApkModal: FC<ApkModalProp> = ({
     const currentApks = useRef<Apk[]>([]);
     const [checkedKeys, setCheckedKeys] = useState<Key[]>([]);
     const [formRef] = useForm<FormValue>();
-    const { phone, apk } = useSelector<StateTree, ApkModalState>(state =>
+    const { phone, apk, message } = useSelector<StateTree, ApkModalState>(state =>
         state.apkModal
     );
 
@@ -51,21 +51,21 @@ const ApkModal: FC<ApkModalProp> = ({
      * 提取当前活动apk Click
      * @param event 
      */
-    const onActiveExtractClick = (event: MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        dispatch({ type: 'apkModal/activeExtract' });
-    };
+    // const onActiveExtractClick = (event: MouseEvent<HTMLButtonElement>) => {
+    //     event.preventDefault();
+    //     dispatch({ type: 'apkModal/activeExtract' });
+    // };
 
     /**
     * 表单Submit
     */
     const formSubmit = async () => {
         const { validateFields } = formRef;
-        message.destroy();
+        messageBox.destroy();
         try {
             const values = await validateFields();
             if (checkedKeys.length === 0) {
-                message.warn('请勾选提取应用');
+                messageBox.warn('请勾选提取应用');
             } else {
 
                 dispatch({
@@ -90,6 +90,7 @@ const ApkModal: FC<ApkModalProp> = ({
         formRef.resetFields();
         currentPhone.current = undefined;
         currentApks.current = [];
+        dispatch({ type: 'apkModal/clearMessage' });
         dispatch({ type: 'apkModal/setApk', payload: [] });
         dispatch({ type: 'apkModal/setPhone', payload: [] });
         cancelHandle();
@@ -137,11 +138,22 @@ const ApkModal: FC<ApkModalProp> = ({
         { leading: true, trailing: false }
     );
 
+    const renderMessage = () => {
+        if (helper.isNullOrUndefined(message) || message.length === 0) {
+            return <Empty description="暂无消息" image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+        } else {
+            return <ul>
+                {message.map((item, index) => <li key={`AMM_${index}`}>{item}</li>)}
+            </ul>
+        }
+    };
+
     return <Modal
         footer={[
             <Button
                 onClick={() => {
                     formRef.resetFields(['phone']);
+                    dispatch({ type: 'apkModal/clearMessage' });
                     dispatch({ type: 'apkModal/setApk', payload: [] });
                     dispatch({ type: 'apkModal/setPhone', payload: [] });
                     dispatch({ type: 'apkModal/queryPhone' });
@@ -151,13 +163,13 @@ const ApkModal: FC<ApkModalProp> = ({
                 <SyncOutlined />
                 <span>刷新设备</span>
             </Button>,
-            <Button
-                onClick={onActiveExtractClick}
-                type="primary"
-                key="APKM_2">
-                <AndroidOutlined />
-                <span>提取当前apk</span>
-            </Button>,
+            // <Button
+            //     onClick={onActiveExtractClick}
+            //     type="primary"
+            //     key="APKM_2">
+            //     <AndroidOutlined />
+            //     <span>提取当前apk</span>
+            // </Button>,
             <Button
                 onClick={() => {
                     formSubmit();
@@ -219,33 +231,49 @@ const ApkModal: FC<ApkModalProp> = ({
                         placeholder="请选择存储位置" />
                 </Item>
             </Form>
-
-            <Table<Apk>
-                columns={[
-                    {
-                        title: 'apk应用',
-                        dataIndex: 'value',
-                        key: 'value',
-                        render(value: string, record) {
-                            return record.name + ' ' + value;
+            <div className="table-box">
+                <Table<Apk>
+                    columns={[
+                        {
+                            title: 'apk包名',
+                            dataIndex: 'name',
+                            key: 'name'
+                        }, {
+                            title: '应用名称',
+                            dataIndex: 'value',
+                            key: 'value',
+                            width: 240,
                         }
-                    }
-                ]}
-                rowSelection={{
-                    type: 'checkbox',
-
-                    onChange: (keys, rows) => {
-                        currentApks.current = rows;
-                        setCheckedKeys(keys);
-                    }
-                }}
-                dataSource={apk}
-                pagination={false}
-                bordered={true}
-                scroll={{ y: 160 }}
-                rowKey={(_, index) => `AT_${index}`}
-                size="small"
-            />
+                    ]}
+                    rowSelection={{
+                        type: 'checkbox',
+                        selectedRowKeys: checkedKeys,
+                        onChange: (keys, rows) => {
+                            currentApks.current = rows;
+                            setCheckedKeys(keys);
+                        }
+                    }}
+                    onRow={(record) => ({
+                        onClick(_) {
+                            const has = checkedKeys.some(item => item === record.name);
+                            if (has) {
+                                setCheckedKeys(checkedKeys.filter(item => item !== record.name));
+                            } else {
+                                setCheckedKeys([...checkedKeys, record.name]);
+                            }
+                        }
+                    })}
+                    dataSource={apk}
+                    pagination={false}
+                    scroll={{ y: 155 }}
+                    rowKey={(record) => record.name}
+                    size="small"
+                />
+            </div>
+            <div className="apk-msg">
+                <div className="caption">消息</div>
+                <div className="scroll-dev">{renderMessage()}</div>
+            </div>
         </ApkModalBox>
     </Modal>;
 };

@@ -16,5 +16,20 @@ export default {
     setPhone(state: ApkModalState, { payload }: AnyAction) {
         state.phone = payload;
         return state;
+    },
+    /**
+     * 设置破解消息(追加)
+     * @param {string} payload
+     */
+    setMessage(state: ApkModalState, { payload }: AnyAction) {
+        state.message.unshift(payload);
+        return state;
+    },
+    /**
+     * 清空消息
+     */
+    clearMessage(state: ApkModalState) {
+        state.message = [];
+        return state;
     }
 };

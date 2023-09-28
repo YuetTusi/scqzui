@@ -32,7 +32,6 @@ export default {
      * @param payload.apk 所选apk
      */
     *apkExtract({ payload }: AnyAction, { fork }: EffectsCommandMap) {
-        console.log(payload);
         yield fork(send, SocketType.Fetch, {
             type: SocketType.Fetch,
             cmd: CommandType.ApkExtract,
