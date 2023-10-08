@@ -53,4 +53,8 @@ export interface ModalOpenState {
      * 安卓apk提取
      */
     apkModalVisible: boolean,
+    /**
+     * 二维码云取
+     */
+    qrcodeCloudModalVisible: boolean
 }

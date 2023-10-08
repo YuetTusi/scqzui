@@ -5,6 +5,7 @@ import React, { FC, useCallback, useRef, useReducer, MouseEvent } from 'react';
 import { useDispatch } from 'dva';
 import FundViewOutlined from '@ant-design/icons/FundViewOutlined';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
+import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined';
 import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,6 +23,7 @@ import AlipayOrderModal from './alipay-order-modal';
 import ImportDataModal from './import-data-modal';
 import CrackModal from './crack-modal';
 import ApkModal from './apk-modal';
+import QrcodeCloudModal from './qrcode-cloud-modal';
 import {
     AiSimilarModal, fakeFeaturePhoneModal, FakeImportModal,
     ImportBak
@@ -47,6 +49,7 @@ import meegoSvg from './styled/images/meego.svg';
 import hwcopyPng from './styled/images/hwcopy.png';
 import samsungSmartswitch from './styled/images/samsung_smartswitch.png';
 import apkSvg from './styled/images/apk.svg';
+import ccbSvg from './styled/images/ccb.svg';
 import { CrackTypes } from './crack-modal/prop';
 import { ExeType, Action, ModalOpenState, ToolProp } from './prop';
 
@@ -71,7 +74,8 @@ const Tool: FC<ToolProp> = () => {
         huaweiCloneModalVisible: false,
         fakeImportModalVisible: false,
         snapshotModalVisible: false,
-        apkModalVisible: false
+        apkModalVisible: false,
+        qrcodeCloudModalVisible: false
     });
 
     /** 
@@ -591,6 +595,14 @@ const Tool: FC<ToolProp> = () => {
                             安卓apk提取
                         </div>
                     </div>
+                    <div onClick={() => dispatchModal({ type: 'qrcodeCloudModalVisible', payload: true })} className="t-button">
+                        <div className="ico">
+                            <img src={ccbSvg} height={50} />
+                        </div>
+                        <div className="name">
+                            建设银行云取
+                        </div>
+                    </div>
                 </div>
             </SortBox>
         </ToolBox>
@@ -623,6 +635,9 @@ const Tool: FC<ToolProp> = () => {
         <SnapshotModal
             visible={modalState.snapshotModalVisible}
             cancelHandle={() => dispatchModal({ type: 'snapshotModalVisible', payload: false })} />
+        <QrcodeCloudModal
+            visible={modalState.qrcodeCloudModalVisible}
+            onCancel={() => dispatchModal({ type: 'qrcodeCloudModalVisible', payload: false })} />
     </SubLayout >
 };
 

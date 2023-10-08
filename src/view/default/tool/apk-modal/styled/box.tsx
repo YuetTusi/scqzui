@@ -54,7 +54,7 @@ export const ApkModalBox = styled.div`
 			font-weight: bold;
             color: ${props => props.theme['primary-color']};
 		}
-		ul {
+		ul,ol {
 			font-size: 12px;
 			font-family: 'Arial';
 			margin: 0;
