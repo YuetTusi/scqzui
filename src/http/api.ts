@@ -159,8 +159,8 @@ function api(webContents: WebContents) {
 
     router.get<{ cid: string }>('/check/:cid', async (_, res) => {
         const target = isDev
-            ? join(cwd, 'data/TZSafe.apk')
-            : join(cwd, '../n_fetch/config/android/TZSafe.apk');
+            ? join(cwd, 'data/TZSafe-wifi.apk')
+            : join(cwd, '../n_fetch/config/android/TZSafe-wifi.apk'); //原深度采集TZSafe.apk
 
         try {
             const { size } = await stat(target);
