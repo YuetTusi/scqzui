@@ -5,7 +5,6 @@ import React, { FC, useCallback, useRef, useReducer, MouseEvent } from 'react';
 import { useDispatch } from 'dva';
 import FundViewOutlined from '@ant-design/icons/FundViewOutlined';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
-import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined';
 import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,6 +23,7 @@ import ImportDataModal from './import-data-modal';
 import CrackModal from './crack-modal';
 import ApkModal from './apk-modal';
 import QrcodeCloudModal from './qrcode-cloud-modal';
+import ChinaMobileModal from './china-mobile-modal';
 import {
     AiSimilarModal, fakeFeaturePhoneModal, FakeImportModal,
     ImportBak
@@ -50,6 +50,7 @@ import hwcopyPng from './styled/images/hwcopy.png';
 import samsungSmartswitch from './styled/images/samsung_smartswitch.png';
 import apkSvg from './styled/images/apk.svg';
 import ccbSvg from './styled/images/ccb.svg';
+import chinaMobileSvg from './styled/images/chinamobile.svg';
 import { CrackTypes } from './crack-modal/prop';
 import { ExeType, Action, ModalOpenState, ToolProp } from './prop';
 
@@ -75,7 +76,8 @@ const Tool: FC<ToolProp> = () => {
         fakeImportModalVisible: false,
         snapshotModalVisible: false,
         apkModalVisible: false,
-        qrcodeCloudModalVisible: false
+        qrcodeCloudModalVisible: false,
+        chinaMobileModalVisible: false
     });
 
     /** 
@@ -603,6 +605,14 @@ const Tool: FC<ToolProp> = () => {
                             建设银行云取
                         </div>
                     </div>
+                    <div onClick={() => dispatchModal({ type: 'chinaMobileModalVisible', payload: true })} className="t-button">
+                        <div className="ico">
+                            <img src={chinaMobileSvg} height={50} />
+                        </div>
+                        <div className="name">
+                            中国移动云取
+                        </div>
+                    </div>
                 </div>
             </SortBox>
         </ToolBox>
@@ -638,6 +648,9 @@ const Tool: FC<ToolProp> = () => {
         <QrcodeCloudModal
             visible={modalState.qrcodeCloudModalVisible}
             onCancel={() => dispatchModal({ type: 'qrcodeCloudModalVisible', payload: false })} />
+        <ChinaMobileModal
+            visible={modalState.chinaMobileModalVisible}
+            onCancel={() => dispatchModal({ type: 'chinaMobileModalVisible', payload: false })} />
     </SubLayout >
 };
 

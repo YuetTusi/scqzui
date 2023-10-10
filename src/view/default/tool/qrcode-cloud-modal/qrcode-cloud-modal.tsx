@@ -3,7 +3,6 @@ import { execFile } from 'child_process';
 import { shell } from 'electron';
 import React, { FC, useEffect, useState, MouseEvent } from 'react';
 import { Button, Empty, Modal, message } from 'antd';
-import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import DownloadOutlined from '@ant-design/icons/DownloadOutlined';
 import QrcodeOutlined from '@ant-design/icons/QrcodeOutlined';
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
@@ -26,6 +25,7 @@ const QrcodeCloudModal: FC<QrcodeCloudModalProp> = ({
 
     const [qrCodeBase64, setQrcodeBase64] = useState<string>('');
     const [fetching, setFetching] = useState<boolean>(false);
+    const [reason, setReason] = useState<string>('');
     const [downloading, setDownloading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -86,6 +86,8 @@ const QrcodeCloudModal: FC<QrcodeCloudModalProp> = ({
         timer = setInterval(async () => {
             try {
                 const res = await request('http://127.0.0.1:9000/api/v1/ObtainBilling', 'POST');
+                setReason(res?.data?.reason ?? '');
+                console.log(res);
                 if (res?.data?.result) {
                     setDownloading(false);
                     message.destroy();
@@ -93,8 +95,6 @@ const QrcodeCloudModal: FC<QrcodeCloudModalProp> = ({
                     clearInterval(timer);
                     timer = null;
                     shell.openPath(res?.data?.out_path);
-                } else {
-                    console.log(res);
                 }
             } catch (error) {
                 console.log(error);
@@ -111,50 +111,63 @@ const QrcodeCloudModal: FC<QrcodeCloudModalProp> = ({
         onCancel();
     }
 
-    return <Modal
-        footer={[
-            <Button
-                type="default"
-                key="QC_0"
-                onClick={onCancelClick}>
-                <CloseCircleOutlined />
-                <span>取消</span>
-            </Button>,
-            <Button
-                type="primary"
-                key="QC_1"
-                disabled={fetching}
-                onClick={() => onFetchQrcode()}>
-                {fetching ? <LoadingOutlined /> : <QrcodeOutlined />}
-                <span>获取二维码</span>
-            </Button>,
-            <Button
-                type="primary"
-                key="QC_2"
-                disabled={fetching || downloading}
-                onClick={onOkClick}>
-                {downloading ? <LoadingOutlined /> : <DownloadOutlined />}
-                <span>下载帐单</span>
-            </Button>
-        ]}
-        onCancel={onCancelClick}
-        visible={visible}
-        centered={true}
-        maskClosable={false}
-        destroyOnClose={true}
-        title="建设银行云取"
-        width={600}>
-        <TipBox>
-            <Tip />
-        </TipBox>
-        <QRCodeBox>
-            {
-                qrCodeBase64 === ''
-                    ? <Empty description="暂未获取二维码" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    : <img src={qrCodeBase64} width={200} height={200} />
-            }
-        </QRCodeBox>
-    </Modal>
+    return <>
+        <Modal
+            footer={[
+                <Button
+                    type="primary"
+                    key="QC_1"
+                    disabled={fetching}
+                    onClick={() => onFetchQrcode()}>
+                    {fetching ? <LoadingOutlined /> : <QrcodeOutlined />}
+                    <span>获取二维码</span>
+                </Button>,
+                <Button
+                    type="primary"
+                    key="QC_2"
+                    disabled={fetching || downloading}
+                    onClick={onOkClick}>
+                    {downloading ? <LoadingOutlined /> : <DownloadOutlined />}
+                    <span>下载帐单</span>
+                </Button>
+            ]}
+            onCancel={onCancelClick}
+            visible={visible}
+            centered={true}
+            maskClosable={false}
+            destroyOnClose={true}
+            title="建设银行云取"
+            width={600}>
+            <TipBox>
+                <Tip />
+            </TipBox>
+            <QRCodeBox>
+                {
+                    qrCodeBase64 === ''
+                        ? <Empty description="暂未获取二维码" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        : <img src={qrCodeBase64} width={200} height={200} />
+                }
+            </QRCodeBox>
+        </Modal>
+        <Modal
+            onCancel={() => {
+                if (timer !== null) {
+                    clearInterval(timer);
+                    timer = null;
+                }
+                setDownloading(false);
+            }}
+            title="下载"
+            visible={downloading}
+            confirmLoading={downloading}
+            okButtonProps={{ disabled: downloading }}
+            closable={false}
+            centered={true}
+            okText="确定"
+            cancelText="取消">
+            <p>{helper.isNullOrUndefinedOrEmptyString(reason) ? '正在下载帐单，请稍等' : reason}</p>
+        </Modal>
+    </>
 };
 
 export { QrcodeCloudModal };

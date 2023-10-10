@@ -56,5 +56,9 @@ export interface ModalOpenState {
     /**
      * 二维码云取
      */
-    qrcodeCloudModalVisible: boolean
+    qrcodeCloudModalVisible: boolean,
+    /**
+     * 中国移动云取
+     */
+    chinaMobileModalVisible: boolean
 }
