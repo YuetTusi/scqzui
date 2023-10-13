@@ -12,7 +12,7 @@ import message from 'antd/lib/message';
 import Button from 'antd/lib/button';
 import { useDstUnit, useUnit } from '@/hook/unit';
 import { TipType } from '@/schema/tip-type';
-import { FetchState } from '@/schema/device-state';
+import { FetchState, ParseState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchData } from '@/schema/fetch-data';
 import { DeviceType } from '@/schema/device-type';
@@ -345,7 +345,29 @@ const Collect: FC<CollectProp> = ({ }) => {
                     break;
             }
         }
-    }
+    };
+
+    /**
+     * 投屏handle
+     */
+    const castScreenHandle = (data: DeviceType) => {
+        console.log({
+            type: SocketType.Fetch,
+            cmd: CommandType.DevCast,
+            msg: {
+                id: data.usb ?? 0
+            }
+        });
+        message.destroy();
+        message.info(`终端${data.usb ?? 0}设备投屏`);
+        send(SocketType.Fetch, {
+            type: SocketType.Fetch,
+            cmd: CommandType.DevCast,
+            msg: {
+                id: data.usb ?? 0
+            }
+        });
+    };
 
     /**
      * 用户未知密码放弃（type=2）
@@ -488,6 +510,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                     onRecordHandle={recordHandle}
                     onStopHandle={stopHandle}
                     onTipHandle={tipHandle}
+                    castScreenHandle={castScreenHandle}
                 />
                 <div
                     onClick={() => onScrollButtonClick('left')}
