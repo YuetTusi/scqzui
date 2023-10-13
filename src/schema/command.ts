@@ -59,6 +59,10 @@ enum CommandType {
      */
     TipReply = 'tip_reply',
     /**
+     * 手机投屏（Fetch）
+     */
+    DevCast = 'dev_cast',
+    /**
      * 消息回馈联通验证码结果（Fetch）
      */
     UMagicCodeReply = 'umagic_code_reply',

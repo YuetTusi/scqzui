@@ -1,4 +1,6 @@
+import { join } from 'path';
 import dayjs from 'dayjs';
+import { shell } from 'electron';
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'dva';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
@@ -136,9 +138,17 @@ const CloudSearchButton: FC<{
  */
 const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
 
-    const { caseId, parseState } = data;
+    const { caseId, parseState, phonePath } = data;
     const caseData = useCase(caseId);
     const hitCount = useHitCount(data);
+    const [isEmptyScreenRecord, setIsEmptyScreenRecord] = useState<boolean>(true);
+
+    useEffect(() => {
+        (async () => {
+            const exist = await helper.existFile(join(phonePath!, './screen_record'));
+            setIsEmptyScreenRecord(!exist);
+        })();
+    }, [data]);
 
     return <InfoBox>
         <div className="btn-bar">
@@ -158,6 +168,12 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                             导出BCP
                         </Button>
                     </Auth>
+                    <Button
+                        onClick={() => shell.showItemInFolder(join(phonePath!, './screen_record'))}
+                        disabled={isEmptyScreenRecord}
+                        type="primary">
+                        投屏目录
+                    </Button>
                     <Button
                         onClick={() => onButtonClick(data, ClickType.Hit)}
                         type="primary">

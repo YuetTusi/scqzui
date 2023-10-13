@@ -25,7 +25,9 @@ const ModelList: FC<{ phoneInfo: { name: string, value: string }[] }> = ({ phone
 /**
  * 信息块内容
  */
-const MobileInfo: FC<MobileInfoProp> = ({ device, recordHandle }) => {
+const MobileInfo: FC<MobileInfoProp> = ({
+    device, recordHandle
+}) => {
 
     if (helper.isNullOrUndefined(device)) {
         return <>
@@ -46,7 +48,7 @@ const MobileInfo: FC<MobileInfoProp> = ({ device, recordHandle }) => {
     const onRecordClick = (event: MouseEvent<HTMLElement>) => {
         event.stopPropagation();
         recordHandle(device);
-    }
+    };
 
     switch (fetchState) {
         case FetchState.NotConnected:

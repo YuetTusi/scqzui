@@ -27,7 +27,12 @@ interface DeviceFrameProp {
     /**
      * 操作消息handle
      */
-    onTipHandle: (arg0: DeviceType) => void
+    onTipHandle: (arg0: DeviceType) => void,
+    /**
+     * 设备投屏handle
+     */
+    castScreenHandle: (arg0: DeviceType) => void
+
 };
 
 interface FetchButtonProp {

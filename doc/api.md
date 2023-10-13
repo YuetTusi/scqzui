@@ -100,6 +100,16 @@ Fetch 参数：
 | ------ | ------ | ---- |
 | usb    | number | 序号 |
 
+#### 设备投屏
+
+Fetch 命令：`dev_cast`
+
+Fetch 参数：
+
+| 参数名 | 类型   | 说明   |
+| ------ | ------ | ------ |
+| id     | number | USB 号 |
+
 #### 设备状态更新
 
 Fetch 命令: `device_change`
@@ -355,6 +365,33 @@ Fetch 命令：`start_recover`，参数：
 | ------ | ------ | -------------- |
 | id     | string | 所选设备 value |
 | type   | enum   | 方式枚举       |
+
+#### 查询安卓 apk 列表
+
+Fetch 命令：`apk_query`，参数：无
+
+#### 向 UI 发送设备列表
+
+Fetch 命令：`apkphone_list`，参数:
+
+| 参数名 | 类型   | 说明   |
+| ------ | ------ | ------ |
+| id     | string | USB 号 |
+| name   | string | 名称   |
+| value  | string | 包名   |
+
+> 数组类型 Phone[]
+
+#### 提取 apk
+
+Fetch 命令：`apk_extract`，参数:
+
+| 参数名 | 类型   | 说明     |
+| ------ | ------ | -------- |
+| id     | string | USB 号   |
+| phone  | string | 所选设备 |
+| saveTo | string | 存储在   |
+| apk    | string | 所选 apk |
 
 #### 设备截屏
 

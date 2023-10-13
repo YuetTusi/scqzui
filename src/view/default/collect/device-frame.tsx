@@ -12,6 +12,7 @@ import { DeviceStoreState } from '@/model/default/device';
 import { FetchButton } from './fetch-button';
 import { MobileInfo } from './mobile-info';
 import { MobileIco } from './mobile-ico';
+import { ScreenCastButton } from './screen-cast-button';
 import { DeivceBox, Nothing } from './styled/device-box';
 import { DeviceFrameProp } from './prop';
 
@@ -81,7 +82,8 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
     onServerCloudHandle,
     onRecordHandle,
     onStopHandle,
-    onTipHandle
+    onTipHandle,
+    castScreenHandle
 }) => {
 
     const { deviceList } = useSelector<StateTree, DeviceStoreState>(state => state.device);
@@ -108,6 +110,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
                                 <DeivceBox
                                     onClick={() => onTipHandle(item)}
                                     className={getClassNameByState(item)}>
+                                    <ScreenCastButton data={item} clickHandle={castScreenHandle} />
                                     <div className="ico">
                                         <MobileIco device={item} />
                                     </div>
@@ -131,6 +134,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
                             return <Ribbon text={getTipTxt(item)} key={`USB_${item?.usb ?? index}`}>
                                 <DeivceBox
                                     className={getClassNameByState(item)}>
+                                    <ScreenCastButton data={item} clickHandle={castScreenHandle} />
                                     <div className="ico">
                                         <MobileIco device={item} />
                                     </div>

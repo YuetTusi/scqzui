@@ -3,6 +3,7 @@ import color2 from 'tinycolor2';
 
 const DeivceBox = styled.div`
 
+    position: relative;
     display:flex;
     flex-direction: column;
     justify-content:center;
@@ -107,6 +108,18 @@ const DeivceBox = styled.div`
             text-align: center;
             a{
                 color:#26e5dc;
+            }
+        }
+        .screen-link{
+            text-align: center;
+            .fa-display{
+                color:#f9ca24;
+                font-size: 1.2rem;
+            }
+            span{
+                color:#f9ca24;
+                font-size: 1.2rem;
+                margin-left: 4px;
             }
         }
         .buttons{
