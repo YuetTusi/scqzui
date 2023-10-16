@@ -169,10 +169,10 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                         </Button>
                     </Auth>
                     <Button
-                        onClick={() => shell.showItemInFolder(join(phonePath!, './screen_record'))}
+                        onClick={() => shell.openPath(join(phonePath!, './screen_record'))}
                         disabled={isEmptyScreenRecord}
                         type="primary">
-                        投屏目录
+                        录像目录
                     </Button>
                     <Button
                         onClick={() => onButtonClick(data, ClickType.Hit)}
