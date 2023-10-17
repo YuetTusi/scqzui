@@ -47,11 +47,12 @@ const CaseEdit: FC<CaseEditProp> = () => {
     const { search } = useLocation();
     const { id } = useParams<{ id: string }>();
     const [formRef] = useForm<CaseInfo>();
+    const analysisApp = useState<boolean>(true);
     const sdCard = useState<boolean>(true);
     const hasReport = useState<boolean>(true);
     const autoParse = useState<boolean>(true);
+    const trojan = useState<boolean>(false);
     const generateBcp = useState<boolean>(false);
-    // const attachment = useState<boolean>(false);
     const isDel = useState<boolean>(false);
     const isAi = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
@@ -87,11 +88,12 @@ const CaseEdit: FC<CaseEditProp> = () => {
                 ruleTo: data.ruleTo ?? 8,
                 m_strCaseName: getCaseName(data.m_strCaseName)[0]
             });
+            analysisApp[1](data?.analysisApp ?? true);
             sdCard[1](data?.sdCard ?? true);
             hasReport[1](data?.hasReport ?? true);
             autoParse[1](data?.m_bIsAutoParse ?? true);
+            trojan[1](data?.trojan ?? false);
             generateBcp[1](data?.generateBcp ?? false);
-            // attachment[1](data?.attachment ?? AttachmentType.Nothing);
             isDel[1](data?.isDel ?? false);
             isAi[1](data?.isAi ?? false);
             dispatch({
@@ -135,9 +137,11 @@ const CaseEdit: FC<CaseEditProp> = () => {
             entity.spareName = values.spareName;
             entity.m_strCasePath = values.m_strCasePath;
             entity.m_strCheckUnitName = values.m_strCheckUnitName;
+            entity.analysisApp = analysisApp[0];
             entity.sdCard = sdCard[0];
             entity.hasReport = hasReport[0];
             entity.m_bIsAutoParse = autoParse[0];
+            entity.trojan = trojan[0];
             entity.generateBcp = generateBcp[0];
             entity.attachment = values.attachment;
             entity.isDel = isDel[0];
@@ -175,11 +179,12 @@ const CaseEdit: FC<CaseEditProp> = () => {
             <Split />
             <EditForm
                 formRef={formRef}
+                analysisAppState={analysisApp}
                 sdCardState={sdCard}
                 hasReportState={hasReport}
                 autoParseState={autoParse}
+                trojanState={trojan}
                 generateBcpState={generateBcp}
-                attachment={data?.attachment ?? AttachmentType.Nothing}
                 isDelState={isDel}
                 isAiState={isAi}
                 parseAppListState={parseAppList}

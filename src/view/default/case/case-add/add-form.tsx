@@ -287,8 +287,8 @@ const AddForm: FC<FormProp> = ({
                     </Col> */}
                 </Auth>
                 <Col span={3}>
-                    <span>删除原数据：</span>
-                    <Tooltip title="解析结束自动删除原始数据，可节省磁盘空间，不可再次重新解析">
+                    <span>删除本地缓存：</span>
+                    <Tooltip title="解析结束自动删除缓存，可节省磁盘空间，不可再次重新解析">
                         <Checkbox onChange={(event) => setIsDel(event.target.checked)} checked={isDel} />
                     </Tooltip>
                 </Col>

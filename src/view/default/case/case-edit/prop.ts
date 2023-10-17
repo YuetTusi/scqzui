@@ -12,6 +12,10 @@ interface FormProp {
      */
     formRef: FormInstance<CaseInfo>,
     /**
+     * 解析应用
+     */
+    analysisAppState: [boolean, Dispatch<SetStateAction<boolean>>],
+    /**
      * SD卡state
      */
     sdCardState: [boolean, Dispatch<SetStateAction<boolean>>],
@@ -28,9 +32,9 @@ interface FormProp {
      */
     generateBcpState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
-    * BCP附件
+    * BCP附件 废弃
     */
-    attachment: boolean | AttachmentType,
+    // attachment: boolean | AttachmentType,
     /**
      * 是否删除state
      */
@@ -39,6 +43,10 @@ interface FormProp {
      * AI设置state
      */
     isAiState: [boolean, Dispatch<SetStateAction<boolean>>],
+    /**
+     * 检测木马
+     */
+    trojanState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
      * AI设置state
      */

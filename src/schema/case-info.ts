@@ -21,6 +21,10 @@ class CaseInfo extends BaseEntity {
      */
     public m_strCasePath: string;
     /**
+     * 是否解析应用
+     */
+    public analysisApp: boolean;
+    /**
      * 是否拉取SD卡
      */
     public sdCard: boolean;
@@ -32,6 +36,10 @@ class CaseInfo extends BaseEntity {
      * 是否自动解析
      */
     public m_bIsAutoParse: boolean;
+    /**
+     * 是否检测木马
+     */
+    public trojan: boolean;
     /**
      * 是否生成BCP
      */
@@ -106,9 +114,11 @@ class CaseInfo extends BaseEntity {
         this.m_strCaseName = props.m_strCaseName ?? '';
         this.spareName = props.spareName ?? '';
         this.m_strCasePath = props.m_strCasePath ?? '';
+        this.analysisApp = props.analysisApp ?? false;
         this.sdCard = props.sdCard ?? false;
         this.hasReport = props.hasReport ?? false;
         this.m_bIsAutoParse = props.m_bIsAutoParse ?? false;
+        this.trojan = props.trojan ?? false;
         this.generateBcp = props.generateBcp ?? false;
         this.attachment = props.attachment ?? false;
         this.isDel = props.isDel ?? false;
