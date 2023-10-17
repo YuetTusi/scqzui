@@ -11,6 +11,10 @@ export interface FormProp {
      */
     formRef: FormInstance<FormValue>,
     /**
+     * 解析应用
+     */
+    analysisAppState: [boolean, Dispatch<SetStateAction<boolean>>],
+    /**
      * SD卡state
      */
     sdCardState: [boolean, Dispatch<SetStateAction<boolean>>],
@@ -18,6 +22,10 @@ export interface FormProp {
      * 生成报告state
      */
     hasReportState: [boolean, Dispatch<SetStateAction<boolean>>],
+    /**
+     * 检测木马
+     */
+    trojanState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
     * 自动解析state
     */

@@ -28,9 +28,11 @@ const CaseAdd: FC<CaseAddProp> = () => {
     const dispatch = useDispatch();
     const { search } = useLocation();
     const [formRef] = useForm<FormValue>();
+    const analysisApp = useState<boolean>(true);
     const sdCard = useState<boolean>(true);
     const hasReport = useState<boolean>(true);
     const autoParse = useState<boolean>(true);
+    const trojan = useState<boolean>(false);
     const generateBcp = useState<boolean>(false);
     const isDel = useState<boolean>(false);
     const isAi = useState<boolean>(false);
@@ -96,6 +98,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
             entity.m_strCasePath = values.m_strCasePath;
             entity.spareName = '';
             entity.m_strCheckUnitName = values.checkUnitName;
+            entity.analysisApp = analysisApp[0];
             entity.sdCard = sdCard[0];
             entity.hasReport = hasReport[0];
             entity.m_bIsAutoParse = autoParse[0];
@@ -103,6 +106,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
             entity.ruleTo = values.ruleTo;
             entity.m_Applist = parseAppList[0] as ParseApp[];
             entity.tokenAppList = tokenAppList[0] as TokenApp[];
+            entity.trojan = trojan[0];
             entity.generateBcp = generateBcp[0];
             entity.attachment = values.attachment;
             entity.isDel = isDel[0];
@@ -135,9 +139,11 @@ const CaseAdd: FC<CaseAddProp> = () => {
             <Split />
             <AddForm
                 formRef={formRef}
+                analysisAppState={analysisApp}
                 sdCardState={sdCard}
                 hasReportState={hasReport}
                 autoParseState={autoParse}
+                trojanState={trojan}
                 generateBcpState={generateBcp}
                 isDelState={isDel}
                 isAiState={isAi}

@@ -48,8 +48,9 @@ const { useBcp, useAi, caseText, fetchText, parseText } = helper.readConf()!;
  * 案件表单（添加）
  */
 const AddForm: FC<FormProp> = ({
-    formRef, sdCardState, hasReportState, autoParseState, generateBcpState,
-    isDelState, isAiState, parseAppListState, tokenAppListState
+    formRef, analysisAppState, sdCardState, hasReportState,
+    autoParseState, trojanState, generateBcpState, isDelState,
+    isAiState, parseAppListState, tokenAppListState
 }) => {
     const [isCheck, setIsCheck] = useState(false);
     const [parseAppSelectModalVisible, setParseAppSelectModalVisible] =
@@ -57,9 +58,11 @@ const AddForm: FC<FormProp> = ({
     const [tokenAppSelectModalVisible, setTokenAppSelectModalVisible] =
         useState<boolean>(false); //云取证App选择框
     const caseNameRef = useRef<InputRef>(null);
+    const [analysisApp, setAnalysisApp] = analysisAppState;
     const [sdCard, setSdCard] = sdCardState;
     const [hasReport, setHasReport] = hasReportState;
     const [autoParse, setAutoParse] = autoParseState;
+    const [trojan, setTrojan] = trojanState;
     const [generateBcp, setGenerateBcp] = generateBcpState;
     const [isDel, setIsDel] = isDelState;
     const [isAi, setIsAi] = isAiState;
@@ -240,7 +243,11 @@ const AddForm: FC<FormProp> = ({
             </Row>
             <Split />
             <Row style={{ paddingTop: '30px' }}>
-                <Col offset={2} span={3}>
+                <Col span={3} offset={3}>
+                    <span>解析应用：</span>
+                    <Checkbox onChange={(event) => setAnalysisApp(event.target.checked)} checked={analysisApp} />
+                </Col>
+                <Col span={3}>
                     <span>拉取SD卡：</span>
                     <Checkbox onChange={(event) => setSdCard(event.target.checked)} checked={sdCard} />
                 </Col>
@@ -262,6 +269,19 @@ const AddForm: FC<FormProp> = ({
                             checked={autoParse} />
                     </Tooltip>
                 </Col>
+                <Col span={3}>
+                    <span>删除本地缓存：</span>
+                    <Tooltip title="解析结束自动删除缓存，可节省磁盘空间，不可再次重新解析">
+                        <Checkbox onChange={(event) => setIsDel(event.target.checked)} checked={isDel} />
+                    </Tooltip>
+                </Col>
+                <Col span={3}>
+                    <span>检测木马：</span>
+                    <Checkbox onChange={(event) => setTrojan(event.target.checked)} checked={trojan} />
+                </Col>
+            </Row>
+            <Row style={{ paddingTop: '30px' }}>
+                <Col span={3} />
                 <Auth deny={!useBcp}>
                     <Col span={3}>
                         <span>生成BCP：</span>
@@ -277,21 +297,7 @@ const AddForm: FC<FormProp> = ({
                             disabled={!autoParse}
                         />
                     </Col>
-                    {/* <Col span={3}>
-                        <span>BCP包含附件：</span>
-                        <Checkbox
-                            onChange={(event) => setAttachment(event.target.checked)}
-                            checked={attachment}
-                            disabled={!generateBcp}
-                        />
-                    </Col> */}
                 </Auth>
-                <Col span={3}>
-                    <span>删除本地缓存：</span>
-                    <Tooltip title="解析结束自动删除缓存，可节省磁盘空间，不可再次重新解析">
-                        <Checkbox onChange={(event) => setIsDel(event.target.checked)} checked={isDel} />
-                    </Tooltip>
-                </Col>
                 <Auth deny={!useAi}>
                     <Col span={3}>
                         <span>AI分析：</span>

@@ -43,10 +43,19 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             key: 'spareName'
         },
         {
+            title: '解析应用',
+            dataIndex: 'analysisApp',
+            key: 'analysisApp',
+            width: '70px',
+            align: 'center',
+            render: (val: boolean) =>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
+        },
+        {
             title: '拉取SD卡',
             dataIndex: 'sdCard',
             key: 'sdCard',
-            width: '80px',
+            width: '70px',
             align: 'center',
             render: (val: boolean) =>
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
@@ -55,7 +64,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             title: '生成报告',
             dataIndex: 'hasReport',
             key: 'hasReport',
-            width: '80px',
+            width: '70px',
             align: 'center',
             render: (val: boolean) =>
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
@@ -64,7 +73,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             title: `自动${parseText ?? '解析'}`,
             dataIndex: 'm_bIsAutoParse',
             key: 'm_bIsAutoParse',
-            width: '80px',
+            width: '70px',
             align: 'center',
             render: (val: boolean) =>
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
@@ -73,7 +82,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             title: '生成BCP',
             dataIndex: 'generateBcp',
             key: 'generateBcp',
-            width: '80px',
+            width: '70px',
             align: 'center',
             render: (val: boolean) =>
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
@@ -88,10 +97,19 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
         //         val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         // },
         {
-            title: '删除原数据',
+            title: '删除本地缓存',
             dataIndex: 'isDel',
             key: 'isDel',
-            width: '80px',
+            width: '70px',
+            align: 'center',
+            render: (val: boolean) =>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
+        },
+        {
+            title: '检测木马',
+            dataIndex: 'trojan',
+            key: 'trojan',
+            width: '70px',
             align: 'center',
             render: (val: boolean) =>
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
@@ -100,7 +118,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
             title: 'AI分析',
             dataIndex: 'isAi',
             key: 'isAi',
-            width: '80px',
+            width: '70px',
             align: 'center',
             render: (val: boolean) =>
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
@@ -119,7 +137,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
         {
             title: '编辑',
             key: 'edit',
-            width: '65px',
+            width: '50px',
             align: 'center',
             render: (cell: any, record: CaseInfo) => {
                 return (
@@ -136,7 +154,7 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
         {
             title: '删除',
             key: 'del',
-            width: '65px',
+            width: '50px',
             align: 'center',
             render: (cell: any, record: CaseInfo) => {
                 let pos = record.m_strCaseName.lastIndexOf('\\');
