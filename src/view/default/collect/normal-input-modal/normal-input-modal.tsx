@@ -116,7 +116,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     /**
      * 案件下拉Change
      */
-    const caseChange = (value: string, option: JSX.Element | JSX.Element[]) => {
+    const caseChange = (value: string, _: JSX.Element | JSX.Element[]) => {
 
         currentCase.current = JSON.parse(value) as CaseInfo;
     };
@@ -152,9 +152,11 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.spareName = currentCase.current?.spareName;
             entity.caseId = currentCase.current?._id;
             entity.casePath = currentCase.current?.m_strCasePath;
+            entity.analysisApp = currentCase.current?.analysisApp ?? false;
             entity.sdCard = currentCase.current?.sdCard ?? false;
             entity.hasReport = currentCase.current?.hasReport ?? false;
             entity.isAuto = currentCase.current?.m_bIsAutoParse;
+            entity.trojan = currentCase.current?.trojan ?? false;
             entity.unitName = currentCase.current?.m_strCheckUnitName;
             entity.mobileName = `${values.phoneName}_${helper.timestamp(device?.usb)}`;
             entity.mobileNo = values.deviceNumber ?? '';
@@ -202,6 +204,8 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             } finally {
                 setLoading(false);
             }
+            console.clear();
+            console.log(entity);
         } catch (error) {
             console.warn(error);
         }

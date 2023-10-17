@@ -112,6 +112,8 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
                 phonePath: data.phonePath,
                 ruleFrom: caseData.ruleFrom ?? 0,
                 ruleTo: caseData.ruleTo ?? 8,
+                analysisApp: caseData.analysisApp ?? false,
+                trojan: caseData.trojan ?? false,
                 hasReport: caseData?.hasReport ?? false,
                 isDel: caseData?.isDel ?? false,
                 isAi: caseData?.isAi ?? false,

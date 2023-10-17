@@ -31,6 +31,10 @@ class FetchData {
      */
     cloudAppList?: CloudApp[];
     /**
+     * 是否解析应用
+     */
+    analysisApp?: boolean;
+    /**
      * 是否拉取SD卡
      */
     sdCard?: boolean;
@@ -42,6 +46,10 @@ class FetchData {
      * 是否自动解析
      */
     isAuto?: boolean;
+    /**
+     * 是否检测木马
+     */
+    trojan?: boolean;
     /**
      * 手机号
      */

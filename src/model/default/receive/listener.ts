@@ -502,6 +502,8 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
                 dataMode: DataMode.Check,
                 ruleFrom: eventData?.ruleFrom ?? 0,
                 ruleTo: eventData?.ruleTo ?? 8,
+                analysisApp: true,
+                trojan: false,
                 hasReport: true,
                 isDel: false,
                 isAi: false,
