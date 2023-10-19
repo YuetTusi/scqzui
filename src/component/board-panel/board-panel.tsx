@@ -40,8 +40,8 @@ const filterCharactor = (text?: string) =>
 const openHelpDocClick = debounce(async (event: MouseEvent<HTMLSpanElement>) => {
     event.preventDefault();
     const url = isDev
-        ? join(cwd, './data/help/帮助.docx')
-        : join(cwd, './resources/help/帮助.docx');
+        ? join(cwd, './data/help/帮助.pdf')
+        : join(cwd, './resources/help/帮助.pdf');
     try {
         const exist = await helper.existFile(url);
         message.destroy();

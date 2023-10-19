@@ -43,6 +43,8 @@ import { AppJson } from '../schema/app-json';
 import { CheckJson } from '../schema/check-json';
 import { QuickEvent } from '../schema/quick-event';
 import { getDb } from './db';
+import { SpecialCharactor, Letter, OnlyNumber } from './regex';
+import { User } from '@/schema/user';
 
 const cwd = process.cwd(); //应用的根目录
 const isDev = process.env['NODE_ENV'] === 'development';
@@ -559,6 +561,23 @@ const helper = {
     }
   },
   /**
+   * 验证原登录用户密码是
+   * @returns  原密码，无用户返回null
+   */
+  async oldPasswordEqual() {
+    const db = getDb<User>(TableName.Users);
+    try {
+      const users = await db.all();
+      if (users.length === 0) {
+        return null;
+      } else {
+        return helper.base64ToString(users[0].password);
+      }
+    } catch (error) {
+      return null;
+    }
+  },
+  /**
    * 验证点验案件名称是否存在
    * @param {string} eventName 案件名称
    * @returns {QuickEvent[]} 数组长度>0表示存在
@@ -838,6 +857,23 @@ const helper = {
       log.error(`写入report.json失败:${error.message}`);
     }
   },
+  /**
+   * 返回密码强度值（0~3），大小写英文，数字，特殊字符权重各为1
+   * @param password 密码 
+   */
+  passwordStrength(password: string) {
+    let level = 0;
+    if (OnlyNumber.test(password)) {
+      level++;
+    }
+    if (Letter.test(password)) {
+      level++;
+    }
+    if (SpecialCharactor.test(password)) {
+      level++;
+    }
+    return level;
+  }
 };
 
 export { helper };

@@ -1,14 +1,17 @@
-import React, { FC, MouseEvent } from 'react';
-import { routerRedux, useDispatch } from 'dva';
+import React, { FC, MouseEvent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'dva';
 import KeyOutlined from '@ant-design/icons/KeyOutlined';
+import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Form from 'antd/lib/form';
 import Button from 'antd/lib/button';
-import message from 'antd/lib/message';
-import { LoginBox } from './styled/box';
-import { FormValue, LoginProp } from './prop';
 import Input from 'antd/lib/input';
+import { StateTree } from '@/type/model';
+import { LoginBox } from './styled/box';
+import { RegisterUserModal } from './register-user-modal';
+import { ModifyPasswordModal } from './modify-password-modal';
+import { FormValue, LoginProp } from './prop';
 
 const { Item, useForm } = Form;
 const { Password } = Input;
@@ -19,19 +22,34 @@ const { Password } = Input;
 const Login: FC<LoginProp> = () => {
     const dispatch = useDispatch();
     const [formRef] = useForm<FormValue>();
+    const [modifyPasswordModalVisible, setModifyPasswordModalVisible] = useState<boolean>(false);
+    const {
+        registerUserModalVisible,
+        loading,
+        mistake
+    } = useSelector((state: StateTree) => state.login);
+
+    useEffect(() => {
+        dispatch({ type: 'login/init' });
+    }, []);
 
     const loginSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
         const { validateFields } = formRef;
         e.preventDefault();
+
         try {
             const { userName, password } = await validateFields();
-            if (userName === 'azwx' && password === 'azwx') {
-                message.success('登录成功');
-                dispatch(routerRedux.push('/guide'));
-            } else {
-                message.destroy();
-                message.warn('登录失败，用户名或密码不正确');
-            }
+            dispatch({
+                type: 'login/queryByNameAndPassword',
+                payload: { userName, password }
+            });
+            // if (userName === 'azwx' && password === 'azwx') {
+            //     message.success('登录成功');
+            //     dispatch(routerRedux.push('/guide'));
+            // } else {
+            //     message.destroy();
+            //     message.warn('登录失败，用户名或密码不正确');
+            // }
         } catch (error) {
             console.warn(error);
         }
@@ -51,16 +69,27 @@ const Login: FC<LoginProp> = () => {
                         <Input style={{ borderColor: '#8b8b8b' }} />
                     </Item>
                     <Item
-                        rules={[{ required: true, message: '请输入密码' }]}
+                        rules={[{ required: true, message: '请输入口令' }]}
                         name="password"
-                        label="密码">
+                        label="口令">
                         <Password style={{ borderColor: '#8b8b8b' }} />
                     </Item>
                     <Item>
-                        <Row justify="end">
+                        <Row justify="space-between">
                             <Col>
-                                <Button onClick={loginSubmit} type="primary">
-                                    <KeyOutlined />
+                                <Button
+                                    onClick={() => setModifyPasswordModalVisible(true)}
+                                    type="link"
+                                    style={{ fontSize: '12px', padding: '0' }}>
+                                    修改口令
+                                </Button>
+                            </Col>
+                            <Col>
+                                <Button
+                                    onClick={loginSubmit}
+                                    disabled={loading}
+                                    type="primary">
+                                    {loading ? <LoadingOutlined /> : <KeyOutlined />}
                                     <span>登录</span>
                                 </Button>
                             </Col>
@@ -69,6 +98,24 @@ const Login: FC<LoginProp> = () => {
                 </Form>
             </div>
         </div>
+        <RegisterUserModal
+            visible={registerUserModalVisible}
+            onCancel={() => dispatch({ type: 'login/setRegisterUserModalVisible', payload: false })}
+            onOk={(userName, password) => {
+                dispatch({
+                    type: 'login/saveOrUpdateUser', payload: { userName, password }
+                });
+            }} />
+        <ModifyPasswordModal
+            visible={modifyPasswordModalVisible}
+            onCancel={() => setModifyPasswordModalVisible(false)}
+            onOk={(newPassword) => {
+                dispatch({
+                    type: 'login/updatePassword', payload: newPassword
+                });
+                setModifyPasswordModalVisible(false)
+            }}
+        />
     </LoginBox>
 };
 

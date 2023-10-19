@@ -33,6 +33,7 @@ import { CheckingListState } from '@/model/default/checking-list';
 import { SelfUnitState } from '@/model/default/self-unit';
 import { CloudState } from '@/model/default/cloud';
 import { ApkModalState } from '@/model/default/apk-modal';
+import { LoginState } from '@/model/default/login';
 
 declare global {
 	interface Window {
@@ -82,6 +83,7 @@ interface StateTree {
 	selfUnit: SelfUnitState,
 	cloud: CloudState,
 	apkModal: ApkModalState,
+	login: LoginState,
 	[modelName: string]: any
 }
 

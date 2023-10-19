@@ -55,6 +55,10 @@ enum TableName {
      * 快速点验手机记录
      */
     QuickRecord = 'quick-record',
+    /**
+     * 用户表
+     */
+    Users = 'users'
 }
 
 export { TableName };
