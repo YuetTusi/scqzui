@@ -58,7 +58,7 @@ const ModifyPasswordModal: FC<ModifyPasswordModalProp> = ({
         } catch (error) {
             throw error;
         }
-    }, 200);
+    }, 100);
 
     /**
      * 验证新密码必须更换
@@ -72,7 +72,7 @@ const ModifyPasswordModal: FC<ModifyPasswordModalProp> = ({
         } catch (error) {
             throw error;
         }
-    }, 200);
+    }, 100);
 
     return <Modal
         footer={[

@@ -7,6 +7,7 @@ import RollbackOutlined from '@ant-design/icons/RollbackOutlined'
 import SaveOutlined from '@ant-design/icons/SaveOutlined'
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
+import Modal from 'antd/lib/modal';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { StateTree } from '@/type/model';
@@ -16,7 +17,6 @@ import CaseInfo from '@/schema/case-info';
 import { BaseApp } from '@/schema/base-app';
 import { ParseApp } from '@/schema/parse-app';
 import { TokenApp } from '@/schema/token-app';
-import { AttachmentType } from '@/schema/bcp-entity';
 import EditForm from './edit-form';
 import { CaseBox } from './styled/styled';
 import { CaseEditProp } from './prop';
@@ -131,33 +131,42 @@ const CaseEdit: FC<CaseEditProp> = () => {
         const { validateFields } = formRef;
         try {
             const values = await validateFields();
-            let entity = new CaseInfo();
-            entity._id = id;
-            entity.m_strCaseName = values.m_strCaseName;
-            entity.spareName = values.spareName;
-            entity.m_strCasePath = values.m_strCasePath;
-            entity.m_strCheckUnitName = values.m_strCheckUnitName;
-            entity.analysisApp = analysisApp[0];
-            entity.sdCard = sdCard[0];
-            entity.hasReport = hasReport[0];
-            entity.m_bIsAutoParse = autoParse[0];
-            entity.trojan = trojan[0];
-            entity.generateBcp = generateBcp[0];
-            entity.attachment = values.attachment;
-            entity.isDel = isDel[0];
-            entity.ruleFrom = values.ruleFrom;
-            entity.ruleTo = values.ruleTo;
-            entity.m_Applist = parseAppList[0] as ParseApp[];
-            entity.tokenAppList = tokenAppList[0] as TokenApp[];
-            entity.officerNo = values.officerNo;
-            entity.securityCaseNo = values.securityCaseNo;
-            entity.securityCaseType = values.securityCaseType;
-            entity.securityCaseName = values.securityCaseName;
-            entity.handleCaseNo = values.handleCaseNo;
-            entity.handleCaseType = values.handleCaseType;
-            entity.handleCaseName = values.handleCaseName;
-            entity.isAi = isAi[0];
-            saveCase(entity);
+            if (!analysisApp[0] && !sdCard[0]) {
+                Modal.warn({
+                    title: '提示',
+                    content: '「获取应用数据」和「获取SD卡数据」必须勾选其中一项',
+                    okText: '确定',
+                    centered: true
+                });
+            } else {
+                let entity = new CaseInfo();
+                entity._id = id;
+                entity.m_strCaseName = values.m_strCaseName;
+                entity.spareName = values.spareName;
+                entity.m_strCasePath = values.m_strCasePath;
+                entity.m_strCheckUnitName = values.m_strCheckUnitName;
+                entity.analysisApp = analysisApp[0];
+                entity.sdCard = sdCard[0];
+                entity.hasReport = hasReport[0];
+                entity.m_bIsAutoParse = autoParse[0];
+                entity.trojan = trojan[0];
+                entity.generateBcp = generateBcp[0];
+                entity.attachment = values.attachment;
+                entity.isDel = isDel[0];
+                entity.ruleFrom = values.ruleFrom;
+                entity.ruleTo = values.ruleTo;
+                entity.m_Applist = parseAppList[0] as ParseApp[];
+                entity.tokenAppList = tokenAppList[0] as TokenApp[];
+                entity.officerNo = values.officerNo;
+                entity.securityCaseNo = values.securityCaseNo;
+                entity.securityCaseType = values.securityCaseType;
+                entity.securityCaseName = values.securityCaseName;
+                entity.handleCaseNo = values.handleCaseNo;
+                entity.handleCaseType = values.handleCaseType;
+                entity.handleCaseName = values.handleCaseName;
+                entity.isAi = isAi[0];
+                saveCase(entity);
+            }
         } catch (error) {
             console.clear();
             console.warn(error);

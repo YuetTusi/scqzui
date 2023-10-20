@@ -30,6 +30,7 @@ import {
 } from './fake';
 import MiChangeModal from './mi-change-modal';
 import HuaweiCloneModal from './huawei-clone-modal';
+import AndroidAuthModal from './android-auth-modal';
 import { SnapshotModal } from './snapshot-modal';
 import { SortBox, ToolBox } from './styled/style';
 import { ImportTypes } from '@/schema/import-type';
@@ -51,6 +52,9 @@ import samsungSmartswitch from './styled/images/samsung_smartswitch.png';
 import apkSvg from './styled/images/apk.svg';
 import ccbSvg from './styled/images/ccb.svg';
 import chinaMobileSvg from './styled/images/chinamobile.svg';
+import androidAuthSvg from './styled/images/android_auth.svg';
+import cloudSearchSvg from './styled/images/cloud-search.svg';
+import userSearchSvg from './styled/images/user-search.svg';
 import { CrackTypes } from './crack-modal/prop';
 import { ExeType, Action, ModalOpenState, ToolProp } from './prop';
 
@@ -77,7 +81,8 @@ const Tool: FC<ToolProp> = () => {
         snapshotModalVisible: false,
         apkModalVisible: false,
         qrcodeCloudModalVisible: false,
-        chinaMobileModalVisible: false
+        chinaMobileModalVisible: false,
+        androidAuthModalVisible: false
     });
 
     /** 
@@ -597,6 +602,14 @@ const Tool: FC<ToolProp> = () => {
                             安卓apk提取
                         </div>
                     </div>
+                    <div onClick={() => dispatchModal({ type: 'androidAuthModalVisible', payload: true })} className="t-button">
+                        <div className="ico">
+                            <img src={androidAuthSvg} height={50} />
+                        </div>
+                        <div className="name">
+                            安卓提权
+                        </div>
+                    </div>
                     <div onClick={() => dispatchModal({ type: 'qrcodeCloudModalVisible', payload: true })} className="t-button">
                         <div className="ico">
                             <img src={ccbSvg} height={50} />
@@ -612,6 +625,18 @@ const Tool: FC<ToolProp> = () => {
                         <div className="name">
                             中国移动云取
                         </div>
+                    </div>
+                    <div onClick={() => shell.openExternal('http://58.48.76.202:12086/')} className="t-button">
+                        <div className="ico">
+                            <img src={cloudSearchSvg} height={50} />
+                        </div>
+                        <div className="name">App云取探测</div>
+                    </div>
+                    <div onClick={() => shell.openExternal('http://58.48.76.202:16688/')} className="t-button">
+                        <div className="ico">
+                            <img src={userSearchSvg} height={50} />
+                        </div>
+                        <div className="name">虚拟身份探测</div>
                     </div>
                 </div>
             </SortBox>
@@ -651,6 +676,9 @@ const Tool: FC<ToolProp> = () => {
         <ChinaMobileModal
             visible={modalState.chinaMobileModalVisible}
             onCancel={() => dispatchModal({ type: 'chinaMobileModalVisible', payload: false })} />
+        <AndroidAuthModal
+            visible={modalState.androidAuthModalVisible}
+            onCancel={() => dispatchModal({ type: 'androidAuthModalVisible', payload: false })} />
     </SubLayout >
 };
 

@@ -47,7 +47,7 @@ export default {
                 //# 错5次在时间之内
                 Modal.warn({
                     title: '用户锁定',
-                    content: '请于10分钟后重新登录',
+                    content: `请于${LockTime}分钟后重新登录`,
                     okText: '确定',
                     centered: true
                 });
@@ -69,7 +69,7 @@ export default {
                 if (prev + 1 >= 5) {
                     Modal.warn({
                         title: '用户锁定',
-                        content: '因密码连续输入错误5次，请于10分钟后重新登录',
+                        content: `因密码连续输入错误5次，请于${LockTime}分钟后重新登录`,
                         okText: '确定',
                         centered: true
                     });
@@ -91,36 +91,6 @@ export default {
             yield put({ type: 'setMistake', payload: 0 });
             message.success('登录成功');
             yield put(routerRedux.push('/guide'));
-            // if (user === null) {
-            //     //登录密码不正确
-            //     const prev: number = yield select((state: StateTree) => state.login.mistake);
-            //     if (prev + 1 >= 5) {
-            //         Modal.warn({
-            //             title: '用户已锁定',
-            //             content: '因密码连续输入错误5次，请于10分钟后重新登录',
-            //             okText: '确定',
-            //             centered: true
-            //         });
-            //     } else {
-            //         message.warn('用户名或密码不正确');
-            //     }
-            //     yield put({ type: 'setMistake', payload: prev + 1 });
-            // } else if (dayjs(new Date()).diff(dayjs(user.modifyTime), 'minute') > 7) {
-            //     //密码超时
-            //     Modal.warn({
-            //         title: '口令失效',
-            //         content: '因长时间未修改用户口令已超时限，请修改口令重新登录',
-            //         okText: '确定',
-            //         centered: true
-            //     })
-            // } else if (user.isLock) {
-
-            // }
-            // else {
-            //     console.clear();
-            //     console.log(user.modifyTime);
-            //     console.log(dayjs(user.modifyTime).diff(new Date(), 'minute'));
-            // }
         } catch (error) {
             console.log(error);
         } finally {
@@ -175,7 +145,8 @@ export default {
                     { _id: users[0]._id },
                     {
                         $set: {
-                            password: helper.stringToBase64(payload)
+                            password: helper.stringToBase64(payload),
+                            modifyTime: new Date()
                         }
                     });
                 yield put({ type: 'setMistake', payload: 0 });

@@ -60,5 +60,9 @@ export interface ModalOpenState {
     /**
      * 中国移动云取
      */
-    chinaMobileModalVisible: boolean
+    chinaMobileModalVisible: boolean,
+    /**
+     * 安卓提权
+     */
+    androidAuthModalVisible: boolean,
 }

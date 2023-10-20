@@ -107,6 +107,26 @@ enum CommandType {
      */
     StartRecover = 'start_recover',
     /**
+     * 查询安卓提权设备列表（Fetch）
+     */
+    AndroidAuthQuery = 'android_auth_query',
+    /**
+     * 接收安卓提权列表（Fetch）
+     */
+    AndroidAuthList = 'android_auth_list',
+    /**
+     * 接收安卓提权消息（Fetch）
+     */
+    AntroidAuthMsg = 'android_auth_msg',
+    /**
+     * 开始安卓提权（Fetch）
+     */
+    AndroidAuthPick = 'android_auth_pick',
+    /**
+     * 关闭安卓提权（Fetch）
+     */
+    AndroidAuthClose = 'android_auth_close',
+    /**
      * 查询设备列表（Fetch）
      */
     ApkPhoneQuery = 'apkphone_query',

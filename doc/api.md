@@ -281,7 +281,9 @@ UI 命令：`start_fetch`，参数：
 | unitName      | string      | 检验单位                                      |
 | hasReport     | boolean     | 是否生成报告                                  |
 | isAuto        | boolean     | 是否自动解析                                  |
+| analysisApp   | boolean     | 是否获取应用数据                              |
 | sdCard        | boolean     | 是否拉取 SD 卡数据                            |
+| trojan        | boolean     | 是否检测木马                                  |
 | cloudTimeout  | number      | 云取超时时间（云取）                          |
 | cloudTimespan | number      | 云取查询间隔（云取）                          |
 | isAlive       | boolean     | 是否保活                                      |
@@ -393,6 +395,39 @@ Fetch 命令：`apk_extract`，参数:
 | saveTo | string | 存储在   |
 | apk    | string | 所选 apk |
 
+#### 查询安卓提权设备列表：
+
+Fetch 命令：`android_auth_query`，无参数
+
+#### 向 UI 发送安卓提权设备列表
+
+Fetch 命令：`android_auth_list`，参数：
+
+| 参数名 | 类型   | 说明     |
+| ------ | ------ | -------- |
+| name   | string | 手机名称 |
+| value  | string | 值       |
+
+#### 向 UI 发送安卓提权消息
+
+Fetch 命令：`android_auth_msg`，参数：
+
+| 参数名 | 类型   | 说明     |
+| ------ | ------ | -------- |
+| msg    | string | 进度消息 |
+
+#### 开始提权
+
+Fetch 命令：`android_auth_pick`，参数：
+
+| 参数名 | 类型   | 说明           |
+| ------ | ------ | -------------- |
+| id     | string | 所选设备 value |
+
+#### 关闭提权窗口
+
+Fetch 命令：`android_auth_close`，无参数
+
 #### 设备截屏
 
 Fetch 命令：`dev_snapshot`，参数：
@@ -423,6 +458,8 @@ UI 命令：`start_parse`，参数：
 | deviceId     | string    | 设备 id                                               |
 | phonePath    | string    | 手机绝对路径                                          |
 | hasReport    | boolean   | 是否生成报告                                          |
+| analysisApp  | boolean   | 是否获取 App 数据                                     |
+| trojan       | boolean   | 是否检测木马                                          |
 | useKeyword   | boolean   | 是否开启过滤敏感词                                    |
 | useDocVerify | boolean[] | 文档验证相关配置                                      |
 | isDel        | boolean   | 解析后是否删除原数据                                  |

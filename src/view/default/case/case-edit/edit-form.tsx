@@ -210,11 +210,11 @@ const EditForm: FC<FormProp> = ({
             <Split />
             <Row style={{ paddingTop: '30px' }}>
                 <Col span={3} offset={3}>
-                    <span>解析应用：</span>
+                    <span>获取应用数据：</span>
                     <Checkbox onChange={(event) => setAnalysisApp(event.target.checked)} checked={analysisApp} />
                 </Col>
                 <Col span={3}>
-                    <span>解析SD卡：</span>
+                    <span>获取SD卡数据：</span>
                     <Checkbox onChange={(event) => setSdCard(event.target.checked)} checked={sdCard} />
                 </Col>
                 <Col span={3}>

@@ -12,6 +12,7 @@ import { LoginBox } from './styled/box';
 import { RegisterUserModal } from './register-user-modal';
 import { ModifyPasswordModal } from './modify-password-modal';
 import { FormValue, LoginProp } from './prop';
+import { useKeyboardEvent } from '@/hook';
 
 const { Item, useForm } = Form;
 const { Password } = Input;
@@ -25,8 +26,7 @@ const Login: FC<LoginProp> = () => {
     const [modifyPasswordModalVisible, setModifyPasswordModalVisible] = useState<boolean>(false);
     const {
         registerUserModalVisible,
-        loading,
-        mistake
+        loading
     } = useSelector((state: StateTree) => state.login);
 
     useEffect(() => {
@@ -43,17 +43,30 @@ const Login: FC<LoginProp> = () => {
                 type: 'login/queryByNameAndPassword',
                 payload: { userName, password }
             });
-            // if (userName === 'azwx' && password === 'azwx') {
-            //     message.success('登录成功');
-            //     dispatch(routerRedux.push('/guide'));
-            // } else {
-            //     message.destroy();
-            //     message.warn('登录失败，用户名或密码不正确');
-            // }
         } catch (error) {
             console.warn(error);
         }
     };
+
+    /**
+     * 登录按钮键盘事件
+     */
+    const onLoginKeydown = async ({ code }: KeyboardEvent) => {
+        const { validateFields } = formRef;
+        if (code === 'Enter' || code === 'NumpadEnter') {
+            try {
+                const { userName, password } = await validateFields();
+                dispatch({
+                    type: 'login/queryByNameAndPassword',
+                    payload: { userName, password }
+                });
+            } catch (error) {
+                console.warn(error);
+            }
+        }
+    };
+
+    useKeyboardEvent('keydown', onLoginKeydown);
 
     return <LoginBox>
         <div className="bg-box">
