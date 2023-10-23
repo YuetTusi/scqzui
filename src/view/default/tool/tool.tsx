@@ -4,6 +4,7 @@ import { join, resolve } from 'path';
 import React, { FC, useCallback, useRef, useReducer, MouseEvent } from 'react';
 import { useDispatch } from 'dva';
 import FundViewOutlined from '@ant-design/icons/FundViewOutlined';
+import UnlockOutlined from '@ant-design/icons/UnlockOutlined';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
@@ -30,7 +31,7 @@ import {
 } from './fake';
 import MiChangeModal from './mi-change-modal';
 import HuaweiCloneModal from './huawei-clone-modal';
-import AndroidAuthModal from './android-auth-modal';
+import AndroidSetModal, { SetType } from './android-set-modal';
 import { SnapshotModal } from './snapshot-modal';
 import { SortBox, ToolBox } from './styled/style';
 import { ImportTypes } from '@/schema/import-type';
@@ -68,6 +69,7 @@ const Tool: FC<ToolProp> = () => {
 
     const dispatch = useDispatch();
     const currentCrackType = useRef(CrackTypes.VivoAppLock);
+    const currentSetType = useRef(SetType.PickAuth);
     const [modalState, dispatchModal] = useReducer(
         (state: ModalOpenState, { type, payload }: Action) => ({
             ...state, [type]: payload
@@ -82,7 +84,7 @@ const Tool: FC<ToolProp> = () => {
         apkModalVisible: false,
         qrcodeCloudModalVisible: false,
         chinaMobileModalVisible: false,
-        androidAuthModalVisible: false
+        androidSetModalVisible: false
     });
 
     /** 
@@ -602,12 +604,26 @@ const Tool: FC<ToolProp> = () => {
                             安卓apk提取
                         </div>
                     </div>
-                    <div onClick={() => dispatchModal({ type: 'androidAuthModalVisible', payload: true })} className="t-button">
+                    <div onClick={() => {
+                        currentSetType.current = SetType.PickAuth;
+                        dispatchModal({ type: 'androidSetModalVisible', payload: true });
+                    }} className="t-button">
                         <div className="ico">
                             <img src={androidAuthSvg} height={50} />
                         </div>
                         <div className="name">
                             安卓提权
+                        </div>
+                    </div>
+                    <div onClick={() => {
+                        currentSetType.current = SetType.Unlock;
+                        dispatchModal({ type: 'androidSetModalVisible', payload: true });
+                    }} className="t-button">
+                        <div className="ico">
+                            <UnlockOutlined style={{ color: '#a6ce3a' }} />
+                        </div>
+                        <div className="name">
+                            安卓解锁
                         </div>
                     </div>
                     <div onClick={() => dispatchModal({ type: 'qrcodeCloudModalVisible', payload: true })} className="t-button">
@@ -676,9 +692,10 @@ const Tool: FC<ToolProp> = () => {
         <ChinaMobileModal
             visible={modalState.chinaMobileModalVisible}
             onCancel={() => dispatchModal({ type: 'chinaMobileModalVisible', payload: false })} />
-        <AndroidAuthModal
-            visible={modalState.androidAuthModalVisible}
-            onCancel={() => dispatchModal({ type: 'androidAuthModalVisible', payload: false })} />
+        <AndroidSetModal
+            visible={modalState.androidSetModalVisible}
+            type={currentSetType.current}
+            onCancel={() => dispatchModal({ type: 'androidSetModalVisible', payload: false })} />
     </SubLayout >
 };
 

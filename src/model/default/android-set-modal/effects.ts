@@ -19,9 +19,29 @@ export default {
      * @param {string} payload.id 所选设备value
      */
     *pick({ payload }: AnyAction, { fork }: EffectsCommandMap) {
+        console.log({
+            type: SocketType.Fetch,
+            cmd: CommandType.AndroidAuthPick,
+            msg: payload
+        });
         yield fork(send, SocketType.Fetch, {
             type: SocketType.Fetch,
             cmd: CommandType.AndroidAuthPick,
+            msg: payload
+        });
+    },
+    /**
+     * 解锁
+     */
+    *unlock({ payload }: AnyAction, { fork }: EffectsCommandMap) {
+        console.log({
+            type: SocketType.Fetch,
+            cmd: CommandType.AndroidUnlock,
+            msg: payload
+        });
+        yield fork(send, SocketType.Fetch, {
+            type: SocketType.Fetch,
+            cmd: CommandType.AndroidUnlock,
             msg: payload
         });
     },

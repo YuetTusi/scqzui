@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const AndroidAuthModalBox = styled.div`
+export const AndroidSetModalBox = styled.div`
 
     .auth-cbox {
 		display: flex;
@@ -65,7 +65,7 @@ export const AndroidAuthModalBox = styled.div`
 			margin: 5px;
 		}
 	}
-	.auth-msg {
+	.set-msg {
 		border: 1px solid ${props => props.theme['primary-color']};
 		border-radius: 3px;
 

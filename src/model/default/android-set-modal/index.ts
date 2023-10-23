@@ -13,7 +13,7 @@ interface Dev {
     value: string
 }
 
-interface AndroidAuthModalState {
+interface AndroidSetModalState {
 
     dev: Dev[],
     message: string[]
@@ -23,7 +23,7 @@ interface AndroidAuthModalState {
  * 设备破解弹框
  */
 let model: Model = {
-    namespace: 'androidAuthModal',
+    namespace: 'androidSetModal',
     state: {
         dev: [],
         message: []
@@ -32,5 +32,5 @@ let model: Model = {
     effects
 };
 
-export { Dev, AndroidAuthModalState };
+export { Dev, AndroidSetModalState };
 export default model;

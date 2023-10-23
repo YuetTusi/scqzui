@@ -118,12 +118,12 @@ export default {
                 case CommandType.AndroidAuthList:
                     //# 接收安卓提权设备列表
                     console.log(`接收到破解列表: ${command.msg}`);
-                    dispatch({ type: 'androidAuthModal/setDev', payload: command.msg });
+                    dispatch({ type: 'androidSetModal/setDev', payload: command.msg });
                     break;
                 case CommandType.AntroidAuthMsg:
                     //# 接收安卓提权消息
                     console.log(`接收到破解消息: ${command.msg}`);
-                    dispatch({ type: 'androidAuthModal/setMessage', payload: command.msg });
+                    dispatch({ type: 'androidSetModal/setMessage', payload: command.msg });
                     break;
                 default:
                     console.log('未知命令:', command.cmd);

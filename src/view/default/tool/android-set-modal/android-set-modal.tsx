@@ -3,38 +3,39 @@ import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import SyncOutlined from '@ant-design/icons/SyncOutlined';
 import KeyOutlined from '@ant-design/icons/KeyOutlined';
+import UnlockOutlined from '@ant-design/icons/UnlockOutlined';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
 import Select from 'antd/lib/select';
 import Form from 'antd/lib/form';
 import { StateTree } from '@/type/model';
-import { AndroidAuthModalState } from '@/model/default/android-auth-modal';
+import { AndroidSetModalState } from '@/model/default/android-set-modal';
 import { helper } from '@/utils/helper';
-import { AndroidAuthModalProp, FormValue } from './prop';
-import { AndroidAuthModalBox } from './styled/style';
-// import CrackTip from './crack-tip';
+import { AndroidSetModalBox } from './styled/style';
+import { AndroidSetModalProp, FormValue, SetType } from './prop';
 
 const { Item, useForm } = Form;
 const { Option } = Select;
 
 /**
- * 安卓提权框
+ * 安卓设备操作框
  */
-const AndroidAuthModal: FC<AndroidAuthModalProp> = ({
+const AndroidSetModal: FC<AndroidSetModalProp> = ({
     visible,
+    type,
     onCancel
 }) => {
 
     const dispatch = useDispatch();
     const [formRef] = useForm<FormValue>();
-    const { dev, message } = useSelector<StateTree, AndroidAuthModalState>(state =>
-        state.androidAuthModal
+    const { dev, message } = useSelector<StateTree, AndroidSetModalState>(state =>
+        state.androidSetModal
     );
 
     const queryDev = debounce(
         () => {
-            dispatch({ type: 'androidAuthModal/queryDev' });
+            dispatch({ type: 'androidSetModal/queryDev' });
         },
         500,
         { leading: true, trailing: false }
@@ -48,10 +49,20 @@ const AndroidAuthModal: FC<AndroidAuthModalProp> = ({
 
         try {
             const values = await validateFields();
-            dispatch({
-                type: 'androidAuthModal/pick',
-                payload: { id: values.id }
-            });
+            switch (type) {
+                case SetType.PickAuth:
+                    dispatch({
+                        type: 'androidSetModal/pick',
+                        payload: { id: values.id }
+                    });
+                    break;
+                case SetType.Unlock:
+                    dispatch({
+                        type: 'androidSetModal/unlock',
+                        payload: { id: values.id }
+                    });
+                    break;
+            }
         } catch (error) {
             console.log(error);
         }
@@ -61,9 +72,9 @@ const AndroidAuthModal: FC<AndroidAuthModalProp> = ({
     * 关闭弹框
     */
     const closeHandle = () => {
-        dispatch({ type: 'androidAuthModal/setDev', payload: [] });
-        dispatch({ type: 'androidAuthModal/closeAndroidAuth' });
-        dispatch({ type: 'androidAuthModal/clearMessage' });
+        dispatch({ type: 'androidSetModal/setDev', payload: [] });
+        dispatch({ type: 'androidSetModal/closeAndroidAuth' });
+        dispatch({ type: 'androidSetModal/clearMessage' });
         onCancel();
     };
 
@@ -83,29 +94,51 @@ const AndroidAuthModal: FC<AndroidAuthModalProp> = ({
         }
     };
 
+    /**
+     * 渲染功能按钮
+     * @returns 
+     */
+    const renderButton = () => {
+        switch (type) {
+            case SetType.PickAuth:
+                return <Button
+                    onClick={() => {
+                        formSubmit();
+                    }}
+                    type="primary"
+                    key="AAM_Pick">
+                    <KeyOutlined />
+                    <span>提权</span>
+                </Button>;
+            case SetType.Unlock:
+                return <Button
+                    onClick={() => {
+                        formSubmit();
+                    }}
+                    type="primary"
+                    key="AAM_Unlock">
+                    <UnlockOutlined />
+                    <span>解锁</span>
+                </Button>;
+        }
+    };
+
     return <Modal
-        footer={[
-            <Button
-                onClick={() => {
-                    dispatch({ type: 'androidAuthModal/clearMessage' });
-                    queryDev();
-                }}
-                type="default"
-                key="AAM_0">
-                <SyncOutlined />
-                <span>刷新</span>
-            </Button>,
-            <Button
-                onClick={() => {
-                    dispatch({ type: 'androidAuthModal/clearMessage' });
-                    formSubmit();
-                }}
-                type="primary"
-                key="AAM_1">
-                <KeyOutlined />
-                <span>提权</span>
-            </Button>
-        ]}
+        footer={
+            <>
+                <Button
+                    onClick={() => {
+                        dispatch({ type: 'androidSetModal/clearMessage' });
+                        queryDev();
+                    }}
+                    type="default"
+                    key="AAM_0">
+                    <SyncOutlined />
+                    <span>刷新</span>
+                </Button>
+                {renderButton()}
+            </>
+        }
         onCancel={closeHandle}
         visible={visible}
         width={650}
@@ -113,8 +146,8 @@ const AndroidAuthModal: FC<AndroidAuthModalProp> = ({
         destroyOnClose={true}
         maskClosable={false}
         getContainer="#root"
-        title="安卓提权">
-        <AndroidAuthModalBox>
+        title={type === SetType.PickAuth ? '安卓提权' : '安卓解锁'}>
+        <AndroidSetModalBox>
             <div className="auth-cbox">
                 <fieldset className="tip-msg full">
                     <legend>
@@ -148,12 +181,18 @@ const AndroidAuthModal: FC<AndroidAuthModalProp> = ({
                     }
                 </Item>
             </Form>
-            <div className="auth-msg">
+            <div className="set-msg">
                 <div className="caption">消息</div>
                 <div className="scroll-dev">{renderMessage()}</div>
             </div>
-        </AndroidAuthModalBox>
+        </AndroidSetModalBox>
     </Modal>;
 };
 
-export default AndroidAuthModal;
+AndroidSetModal.defaultProps = {
+    visible: false,
+    type: SetType.PickAuth,
+    onCancel: () => { }
+};
+
+export default AndroidSetModal;

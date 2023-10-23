@@ -123,7 +123,11 @@ enum CommandType {
      */
     AndroidAuthPick = 'android_auth_pick',
     /**
-     * 关闭安卓提权（Fetch）
+     * 安卓解锁
+     */
+    AndroidUnlock = 'android_unlock',
+    /**
+     * 关闭安卓设置框（Fetch）
      */
     AndroidAuthClose = 'android_auth_close',
     /**
