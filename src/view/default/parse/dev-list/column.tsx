@@ -337,7 +337,6 @@ export function getDevColumns(
                                 './report/public/data/tree.json'
                             );
                             const reportPath = join(record.phonePath!, './report/index.html');
-                            console.log(reportPath);
                             let exist = await helper.existFile(treeJsonPath);
                             if (exist) {
                                 shell.openPath(reportPath);

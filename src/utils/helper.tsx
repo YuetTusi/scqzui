@@ -206,6 +206,7 @@ const helper = {
       cwd: exePath,
       ...options,
     });
+
     handle.once('error', () => {
       console.log(`${exeName}启动失败`);
       if (!isDev) {

@@ -34,6 +34,13 @@ interface DeviceJson {
     mode: DataMode
 }
 
+enum ColumnAction {
+    Edit,
+    Delete,
+    Import,
+    Export
+}
+
 /**
  * Case.json
  */
@@ -48,4 +55,4 @@ interface CaseJson extends CaseInfo {
     checkUnitName: string
 }
 
-export { DeviceTableProp, DeviceJson, CaseJson };
+export { DeviceTableProp, DeviceJson, CaseJson, ColumnAction };

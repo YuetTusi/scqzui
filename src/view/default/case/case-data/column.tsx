@@ -18,6 +18,7 @@ import { DataMode } from '@/schema/data-mode';
 import { TableName } from '@/schema/table-name';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
+import { ColumnAction } from './prop';
 
 type SetDataHandle = (data: DeviceType[]) => void;
 type SetLoadingHandle = (loading: boolean) => void;
@@ -27,7 +28,7 @@ const { useAi, useBcp, caseText, fetchText, devText, parseText } = helper.readCo
  * 表头定义
  * @param dispatch 派发方法
  */
-export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
+export function getCaseColumns(dispatch: Dispatch, actionHandle: (type: ColumnAction, data: CaseInfo) => void): ColumnsType<CaseInfo> {
     let columns: ColumnType<CaseInfo>[] = [
         {
             title: `${caseText ?? '案件'}名称`,
@@ -133,6 +134,24 @@ export function getCaseColumns(dispatch: Dispatch): ColumnsType<CaseInfo> {
                 dayjs(m.createdAt).isAfter(dayjs(n.createdAt)) ? 1 : -1,
             render: (val: any, record: DeviceType) =>
                 dayjs(record.createdAt).format('YYYY-MM-DD HH:mm:ss')
+        },
+        {
+            title: '导出',
+            key: 'export',
+            width: '50px',
+            align: 'center',
+            render: (_, record: CaseInfo) => {
+                return (
+                    <a
+                        onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                            e.stopPropagation();
+                            console.log(record);
+                            actionHandle(ColumnAction.Export, record);
+                        }}>
+                        导出
+                    </a>
+                );
+            }
         },
         {
             title: '编辑',

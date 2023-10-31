@@ -5,6 +5,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useSelector } from 'dva';
 import AndroidFilled from '@ant-design/icons/AndroidFilled';
 import AppleFilled from '@ant-design/icons/AppleFilled';
+import message from 'antd/lib/message';
 import Badge from 'antd/lib/badge';
 import Button from 'antd/lib/button';
 import { useCase, useHitCount } from '@/hook';
@@ -16,6 +17,7 @@ import { ParseState } from '@/schema/device-state';
 import DeviceSystem from '@/schema/device-system';
 import { StateTree } from '@/type/model';
 import { LoginState, TraceLoginState } from '@/model/default/trace-login';
+import { ExportFullReportModal } from '../export-full-report-modal';
 import { InfoBox } from './styled/style';
 import { ClickType, DevInfoProp } from './prop';
 
@@ -142,6 +144,7 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
     const caseData = useCase(caseId);
     const hitCount = useHitCount(data);
     const [isEmptyScreenRecord, setIsEmptyScreenRecord] = useState<boolean>(true);
+    const [exportFullReportModalVisible, setExportFullReportModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
@@ -168,6 +171,22 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                             导出BCP
                         </Button>
                     </Auth>
+                    <Button
+                        onClick={async () => {
+                            const exist = await helper.existFile(join(
+                                phonePath!,
+                                './report/public/data/tree.json'
+                            ));
+                            if (exist) {
+                                setExportFullReportModalVisible(true);
+                            } else {
+                                message.destroy();
+                                message.info('未生成报告，请重新生成报告后进行操作');
+                            }
+                        }}
+                        type="primary">
+                        导出全量报告
+                    </Button>
                     <Button
                         onClick={() => shell.openPath(join(phonePath!, './screen_record'))}
                         disabled={isEmptyScreenRecord}
@@ -270,6 +289,45 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                 </ul>
             </div>
         </div>
+        <ExportFullReportModal
+            visible={exportFullReportModalVisible}
+            onCancel={() => setExportFullReportModalVisible(false)}
+            onOk={async (values) => {
+                setExportFullReportModalVisible(false);
+                const hide = message.loading('正在导出报告...', 0);
+                try {
+                    console.log(join(helper.APP_CWD, '../tools/full_report/full_report.exe'));
+                    console.log([phonePath!, values.saveAt, values.suffix]);
+                    await helper.runExe(
+                        join(helper.APP_CWD, '../tools/full_report/full_report.exe'),
+                        [phonePath!, values.saveAt, values.suffix],
+                        join(helper.APP_CWD, '../tools/full_report')
+                    );
+                    console.log(join(values.saveAt,
+                        `${helper.getNameWithoutTime(caseData?.m_strCaseName)}_${values.suffix}`,
+                        `${helper.getNameWithoutTime(caseData?.m_strCaseName)}.${values.suffix}`
+                    ));
+                    hide();
+                    message.destroy();
+                    message.info('导出完成');
+                    shell.showItemInFolder(
+                        // iconv.encode(
+                        //     join(values.saveAt,
+                        //         `${helper.getNameWithoutTime(caseData?.m_strCaseName)}_${values.suffix}`,
+                        //         `${helper.getNameWithoutTime(caseData?.m_strCaseName)}.${values.suffix}`
+                        //     ),
+                        //     'ascii').toString('binary')
+                        join(values.saveAt,
+                            `${helper.getNameWithoutTime(caseData?.m_strCaseName)}_${values.suffix}`,
+                            `${helper.getNameWithoutTime(caseData?.m_strCaseName)}.${values.suffix}`
+                        )
+                    );
+                } catch (error) {
+                    hide();
+                    message.destroy();
+                    message.warn(`导出失败:${error.message}`);
+                }
+            }} />
     </InfoBox>;
 };
 

@@ -1,6 +1,8 @@
 import debounce from 'lodash/debounce';
-import { join } from 'path';
-import { ipcRenderer, OpenDialogReturnValue } from 'electron';
+import iconv from 'iconv-lite';
+import { basename, join } from 'path';
+import { spawn } from 'child_process';
+import { ipcRenderer, OpenDialogReturnValue, shell } from 'electron';
 import React, { FC, useEffect, useState } from 'react';
 import { routerRedux, useDispatch, useSelector } from 'dva';
 import ImportOutlined from '@ant-design/icons/ImportOutlined';
@@ -9,20 +11,24 @@ import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Table from 'antd/lib/table';
 import Modal from 'antd/lib/modal';
+import notification from 'antd/lib/notification';
 import { Key } from 'antd/lib/table/interface';
 import SubLayout from '@/component/sub-layout/sub-layout';
 import { Split } from '@/component/style-tool';
+import { AlartMessageInfo } from '@/component/alert-message/prop';
 import { CaseInfo } from '@/schema/case-info';
 import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import { CaseDataState } from '@/model/default/case-data';
+import DeviceTable from './device-table';
 import { getCaseColumns } from './column';
 import { CaseDataBox } from './styled/style';
-import DeviceTable from './device-table';
 import {
     importDevice, readCaseJson, readDirOnly, getCaseByName
 } from './util';
+import { ColumnAction } from './prop';
 
+let archiveProc: any = null;
 const { caseText } = helper.readConf()!;
 const { Group } = Button;
 
@@ -171,6 +177,183 @@ const CaseData: FC<{}> = ({ }) => {
     );
 
     /**
+     * 解压缩数据
+     */
+    const uncompressData = async () => {
+        const archiveAt = join(helper.APP_CWD, '../tools/archive');
+        const { filePaths }: OpenDialogReturnValue = await ipcRenderer.invoke('open-dialog', {
+            title: '请选择检材数据',
+            properties: ['openFile']
+        });
+        if (helper.isNullOrUndefined(filePaths) || filePaths.length < 1) {
+            return;
+        }
+        const dst = join(filePaths[0], '../');
+        console.log(join(archiveAt, 'archive_tool.exe'));
+        console.log([
+            '--src',
+            filePaths[0],
+            '--dst',
+            dst,
+            '--op',
+            'decompress'
+        ]);
+        archiveProc = spawn('archive_tool.exe', [
+            '--src',
+            filePaths[0],
+            '--dst',
+            dst,
+            '--op',
+            'decompress'
+        ], {
+            cwd: archiveAt
+        });
+
+        if (archiveProc !== null) {
+            const mid = helper.newId()
+            const msg = new AlartMessageInfo({
+                id: mid,
+                msg: '正在解压检材数据，请等待'
+            });
+            dispatch({
+                type: 'alartMessage/addAlertMessage',
+                payload: msg
+            });
+            archiveProc.once('exit', async (code: number) => {
+                if (code === 0) {
+                    dispatch({
+                        type: 'alartMessage/removeAlertMessage',
+                        payload: mid
+                    });
+
+                    await startImportCase(join(dst, basename(filePaths[0], '.zip'), 'Case.json'));
+                } else {
+                    dispatch({
+                        type: 'alartMessage/removeAlertMessage',
+                        payload: mid
+                    });
+                }
+            });
+            archiveProc.on('error', () => {
+                notification.warn({
+                    type: 'warning',
+                    message: '导入失败',
+                    description: `检材数据解压失败`,
+                    duration: 0,
+                });
+                dispatch({
+                    type: 'alartMessage/removeAlertMessage',
+                    payload: mid
+                });
+            });
+        }
+    };
+
+    /**
+     * 压缩数据
+     */
+    const compressData = async (caseData: CaseInfo) => {
+        const { m_strCasePath, m_strCaseName } = caseData;
+        const archiveAt = join(helper.APP_CWD, '../tools/archive');
+        const { filePaths }: OpenDialogReturnValue = await ipcRenderer.invoke('open-dialog', {
+            title: '请选择检材目录',
+            properties: ['openDirectory']
+        });
+        if (helper.isNullOrUndefined(filePaths) || filePaths.length < 1) {
+            return;
+        }
+        const caseAt = join(m_strCasePath, m_strCaseName);
+        console.log(join(archiveAt, 'archive_tool.exe'));
+        console.log([
+            '--src',
+            caseAt,
+            '--dst',
+            filePaths[0],
+            '--op',
+            'compress'
+        ]);
+        archiveProc = spawn('archive_tool.exe', [
+            '--src',
+            caseAt,
+            '--dst',
+            filePaths[0],
+            '--op',
+            'compress'
+        ], {
+            cwd: archiveAt
+        });
+
+        if (archiveProc !== null) {
+            const mid = helper.newId()
+            const msg = new AlartMessageInfo({
+                id: mid,
+                msg: '正在压缩检材数据，请等待'
+            });
+            dispatch({
+                type: 'alartMessage/addAlertMessage',
+                payload: msg
+            });
+            archiveProc.once('exit', (code: any) => {
+                if (code === 0) {
+                    dispatch({
+                        type: 'alartMessage/removeAlertMessage',
+                        payload: mid
+                    });
+                    notification.success({
+                        type: 'success',
+                        message: '导出成功',
+                        description: `检材「${m_strCaseName}」数据压缩成功，请拷贝数据`,
+                        duration: 0,
+                    });
+                    shell.showItemInFolder(iconv.encode(join(filePaths[0], `${m_strCaseName}.zip`), 'ascii').toString('binary'));
+                } else {
+                    notification.warn({
+                        type: 'warning',
+                        message: '导出失败',
+                        description: `检材「${m_strCaseName}」数据压缩失败`,
+                        duration: 0,
+                    });
+                    dispatch({
+                        type: 'alartMessage/removeAlertMessage',
+                        payload: mid
+                    });
+                }
+                archiveProc = null;
+            });
+            archiveProc.on('error', () => {
+                notification.warn({
+                    type: 'warning',
+                    message: '导出失败',
+                    description: `检材「${m_strCaseName}」数据压缩失败`,
+                    duration: 0,
+                });
+                dispatch({
+                    type: 'alartMessage/removeAlertMessage',
+                    payload: mid
+                });
+                archiveProc = null;
+            });
+        }
+    };
+
+    const actionHandle = async (
+        type: ColumnAction, data: CaseInfo) => {
+
+        try {
+            switch (type) {
+                case ColumnAction.Import:
+                    uncompressData();
+                    break;
+                case ColumnAction.Export:
+                    compressData(data);
+                    break;
+            }
+        } catch (error) {
+            console.warn(error);
+        }
+    };
+
+    /**
      * 渲染子表格
      */
     const renderSubTable = ({ _id }: CaseInfo) => <DeviceTable caseId={_id!} />;
@@ -180,6 +363,12 @@ const CaseData: FC<{}> = ({ }) => {
             <div className="case-content">
                 <div className="search-bar">
                     <Group>
+                        <Button
+                            onClick={() => uncompressData()}
+                            type="primary">
+                            <ImportOutlined />
+                            <span>{`导入压缩${caseText ?? '案件'}`}</span>
+                        </Button>
                         <Button
                             onClick={() => selectCaseOrDeviceHandle(true)}
                             type="primary">
@@ -199,7 +388,7 @@ const CaseData: FC<{}> = ({ }) => {
                 <Split />
                 <div className="table-panel">
                     <Table<CaseInfo>
-                        columns={getCaseColumns(dispatch)}
+                        columns={getCaseColumns(dispatch, actionHandle)}
                         expandedRowRender={renderSubTable}
                         dataSource={caseData}
                         rowKey={(record: CaseInfo) => record._id!}

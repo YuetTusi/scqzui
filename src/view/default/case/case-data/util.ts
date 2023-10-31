@@ -1,13 +1,13 @@
 import { statSync } from 'fs';
 import { join, sep } from 'path';
 import { helper } from '@/utils/helper';
+import { getDb } from '@/utils/db';
 import { CaseInfo } from '@/schema/case-info';
 import { TableName } from '@/schema/table-name';
 import { DeviceType } from '@/schema/device-type';
 import { DataMode } from '@/schema/data-mode';
 import { FetchState, ParseState } from '@/schema/device-state';
 import { CaseJson, DeviceJson } from './prop';
-import { getDb } from '@/utils/db';
 
 const { caseText, devText } = helper.readConf()!;
 
@@ -29,7 +29,12 @@ async function importDevice(deviceJsonPath: string, caseData: CaseInfo) {
         }
         const [isParse, current] = await Promise.all([
             helper.existFile(join(devicePath, './out/baseinfo.json')),
-            db.find({ mobileName: deviceJson.mobileName })
+            db.find({
+                $and: {
+                    mobileName: deviceJson.mobileName,
+                    caseId: caseData._id
+                }
+            })
         ]);
 
         if (current.length === 0) {
