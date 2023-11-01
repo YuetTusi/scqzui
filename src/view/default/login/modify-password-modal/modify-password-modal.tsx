@@ -103,7 +103,7 @@ const ModifyPasswordModal: FC<ModifyPasswordModalProp> = ({
                 ]}
                 name="password"
                 label="原口令">
-                <Password placeholder="请输入原口令" />
+                <Password visibilityToggle={false} placeholder="请输入原口令" />
             </Item>
             <Item
                 rules={[
@@ -122,7 +122,7 @@ const ModifyPasswordModal: FC<ModifyPasswordModalProp> = ({
                 ]}
                 name="newPassword"
                 label="新口令">
-                <Password placeholder='8~20位，数字、字母或特殊符号组合' />
+                <Password visibilityToggle={false} placeholder='8~20位，数字、字母或特殊符号组合' />
             </Item>
             <Item
                 rules={[
@@ -138,7 +138,7 @@ const ModifyPasswordModal: FC<ModifyPasswordModalProp> = ({
                 ]}
                 name="confirmPassword"
                 label="确认口令">
-                <Password placeholder="重复输入新口令" />
+                <Password visibilityToggle={false} placeholder="重复输入新口令" />
             </Item>
         </Form>
     </Modal>

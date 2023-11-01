@@ -85,7 +85,7 @@ const Login: FC<LoginProp> = () => {
                         rules={[{ required: true, message: '请输入口令' }]}
                         name="password"
                         label="口令">
-                        <Password style={{ borderColor: '#8b8b8b' }} />
+                        <Password visibilityToggle={false} style={{ borderColor: '#8b8b8b' }} />
                     </Item>
                     <Item>
                         <Row justify="space-between">

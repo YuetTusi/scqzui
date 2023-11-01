@@ -60,7 +60,7 @@ const LoginPanel: FC<{}> = ({ children }) => {
                     <Auth deny={!isDebug}>
                         <span style={{ color: '#f9ca24' }}>{max}路</span>
                     </Auth>
-                    <em onClick={() => dispatch(routerRedux.push('/settings/version'))}>
+                    <em style={{ cursor: 'default' }}>
                         {filterCharactor(version)}
                     </em>
                 </div>

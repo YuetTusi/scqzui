@@ -92,7 +92,7 @@ const RegisterUserModal: FC<RegisterUserModalProp> = ({
                 ]}
                 name="password"
                 label="口令">
-                <Password placeholder="8~20位，数字、字母或特殊符号组合" />
+                <Password visibilityToggle={false} placeholder="8~20位，数字、字母或特殊符号组合" />
             </Item>
             <Item
                 rules={[
@@ -108,7 +108,7 @@ const RegisterUserModal: FC<RegisterUserModalProp> = ({
                 ]}
                 name="confirmPassword"
                 label="确认口令">
-                <Password placeholder="重复输入口令" />
+                <Password visibilityToggle={false} placeholder="重复输入口令" />
             </Item>
         </Form>
     </Modal>
