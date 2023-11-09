@@ -11,6 +11,7 @@ import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Button from 'antd/lib/button';
+import Checkbox from 'antd/lib/checkbox';
 import AutoComplete from 'antd/lib/auto-complete';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
@@ -162,6 +163,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.mobileHolder = values.user;
             entity.handleOfficerNo = values.handleOfficerNo;
             entity.note = values.note ?? '';
+            entity.isRoot = values.isRoot ?? false;
             entity.credential = '';
             entity.serial = device?.serial ?? '';
             entity.mode = DataMode.Self; //标准模式（用户手输取证数据）
@@ -203,8 +205,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             } finally {
                 setLoading(false);
             }
-            console.clear();
-            console.log(entity);
+
         } catch (error) {
             console.warn(error);
         }
@@ -360,10 +361,27 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={24}>
-                        <Item name="note" label="备注">
+                    <Col span={12}>
+                        <Item
+                            name="note"
+                            label="备注"
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}>
                             <Input maxLength={100} />
                         </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Tooltip title="勾选将进行Root备份，部分新设备不支持">
+                            <Item
+                                labelCol={{ span: 6 }}
+                                wrapperCol={{ span: 4 }}
+                                name="isRoot"
+                                label="Root备份"
+                                valuePropName="checked">
+
+                                <Checkbox />
+                            </Item>
+                        </Tooltip>
                     </Col>
                 </Row>
             </Form>

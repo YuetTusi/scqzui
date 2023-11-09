@@ -114,6 +114,7 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
                 ruleTo: caseData.ruleTo ?? 8,
                 analysisApp: caseData.analysisApp ?? false,
                 useAiOcr: caseData.useAiOcr ?? false,
+                isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
                 hasReport: caseData?.hasReport ?? false,
                 isDel: caseData?.isDel ?? false,
                 isAi: caseData?.isAi ?? false,

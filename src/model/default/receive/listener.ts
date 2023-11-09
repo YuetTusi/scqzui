@@ -504,6 +504,7 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
                 ruleTo: eventData?.ruleTo ?? 8,
                 analysisApp: true,
                 useAiOcr: false,
+                isPhotoAnalysis: false,
                 hasReport: true,
                 isDel: false,
                 isAi: false,

@@ -109,6 +109,7 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
                 isDel: false,
                 isAi: false,
                 useAiOcr: false,
+                isPhotoAnalysis: false,
                 aiTypes: aiConfig,
                 useDefaultTemp: appJson?.useDefaultTemp ?? true,
                 useKeyword: appJson?.useKeyword ?? false,

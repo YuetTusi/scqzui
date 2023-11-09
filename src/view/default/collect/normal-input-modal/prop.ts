@@ -48,4 +48,8 @@ export interface FormValue {
      * 备注
      */
     note: string;
+    /**
+     * 是否Root
+     */
+    isRoot: boolean;
 }

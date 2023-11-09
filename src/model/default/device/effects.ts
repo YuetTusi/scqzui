@@ -398,6 +398,7 @@ export default {
                 hasReport: fetchData.hasReport ?? false,
                 isAuto: fetchData.isAuto,
                 serial: fetchData.serial,
+                isRoot: fetchData.isRoot ?? false,
                 cloudTimeout: fetchData.cloudTimeout ?? helper.CLOUD_TIMEOUT,
                 cloudTimespan: fetchData.cloudTimespan ?? helper.CLOUD_TIMESPAN,
                 isAlive: fetchData.isAlive ?? helper.IS_ALIVE
@@ -423,6 +424,7 @@ export default {
             hasReport: fetchData.hasReport ?? false,
             isAuto: fetchData.isAuto,
             serial: fetchData.serial,
+            isRoot: fetchData.isRoot ?? false,
             cloudTimeout: fetchData.cloudTimeout ?? helper.CLOUD_TIMEOUT,
             cloudTimespan: fetchData.cloudTimespan ?? helper.CLOUD_TIMESPAN,
             isAlive: fetchData.isAlive ?? helper.IS_ALIVE
@@ -494,6 +496,7 @@ export default {
                         ruleTo: caseData.ruleTo ?? 8,
                         analysisApp: caseData.analysisApp ?? false,
                         useAiOcr: caseData.useAiOcr ?? false,
+                        isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
                         hasReport: caseData.hasReport ?? false,
                         isDel: caseData.isDel ?? false,
                         isAi: caseData.isAi ?? false,
