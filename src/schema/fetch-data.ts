@@ -47,10 +47,6 @@ class FetchData {
      */
     isAuto?: boolean;
     /**
-     * 是否检测木马
-     */
-    trojan?: boolean;
-    /**
      * 手机号
      */
     mobileNumber?: string;

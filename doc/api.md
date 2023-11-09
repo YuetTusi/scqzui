@@ -283,7 +283,6 @@ UI 命令：`start_fetch`，参数：
 | isAuto        | boolean     | 是否自动解析                                  |
 | analysisApp   | boolean     | 是否获取应用数据                              |
 | sdCard        | boolean     | 是否拉取 SD 卡数据                            |
-| trojan        | boolean     | 是否检测木马                                  |
 | cloudTimeout  | number      | 云取超时时间（云取）                          |
 | cloudTimespan | number      | 云取查询间隔（云取）                          |
 | isAlive       | boolean     | 是否保活                                      |
@@ -459,7 +458,6 @@ UI 命令：`start_parse`，参数：
 | phonePath    | string    | 手机绝对路径                                          |
 | hasReport    | boolean   | 是否生成报告                                          |
 | analysisApp  | boolean   | 是否获取 App 数据                                     |
-| trojan       | boolean   | 是否检测木马                                          |
 | useKeyword   | boolean   | 是否开启过滤敏感词                                    |
 | useDocVerify | boolean[] | 文档验证相关配置                                      |
 | isDel        | boolean   | 解析后是否删除原数据                                  |

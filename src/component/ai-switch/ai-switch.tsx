@@ -20,10 +20,18 @@ const isDev = process.env['NODE_ENV'] === 'development';
 /**
  * AI分析开关组件
  */
-const AiSwitch: FC<AiSwitchProp> = ({ casePath, columnCount }) => {
+const AiSwitch: FC<AiSwitchProp> = ({
+    casePath, columnCount
+}) => {
 
     const dispatch = useDispatch();
-    const { data, similarity, ocr } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
+    const { data, similarity, disableOcr, ocr } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
+
+    useEffect(() => {
+        if (disableOcr) {
+            dispatch({ type: 'aiSwitch/setOcr', payload: false });
+        }
+    }, [disableOcr]);
 
     useDestroy(() => dispatch({ type: 'aiSwitch/setData', payload: [] }));
 
@@ -158,13 +166,14 @@ const AiSwitch: FC<AiSwitchProp> = ({ casePath, columnCount }) => {
                     addonAfter="%" />
             </Col>
             <Col flex="none">
-                <label style={{ marginLeft: '5rem' }}>图片违规分析：</label>
+                <label style={{ marginLeft: '5rem' }}>AI图片识别违规分析：</label>
             </Col>
             <Col flex="auto">
-                <Tooltip title="开启将识别图片中文字违规信息">
+                <Tooltip title={disableOcr ? '使用此功能请关闭「图片违规分析」' : '开启将识别图片中文字违规信息'}>
                     <Checkbox
                         onChange={onOcrChange}
-                        checked={ocr} />
+                        checked={ocr}
+                        disabled={disableOcr} />
                 </Tooltip>
             </Col>
         </Row>

@@ -107,15 +107,6 @@ export function getCaseColumns(dispatch: Dispatch, actionHandle: (type: ColumnAc
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
-            title: '检测木马',
-            dataIndex: 'trojan',
-            key: 'trojan',
-            width: '70px',
-            align: 'center',
-            render: (val: boolean) =>
-                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
-        },
-        {
             title: 'AI分析',
             dataIndex: 'isAi',
             key: 'isAi',

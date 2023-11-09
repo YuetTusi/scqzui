@@ -33,10 +33,10 @@ const CaseAdd: FC<CaseAddProp> = () => {
     const sdCard = useState<boolean>(true);
     const hasReport = useState<boolean>(true);
     const autoParse = useState<boolean>(true);
-    const trojan = useState<boolean>(false);
     const generateBcp = useState<boolean>(false);
     const isDel = useState<boolean>(false);
     const isAi = useState<boolean>(false);
+    const isPhotoAnalysis = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
     const tokenAppList = useState<BaseApp[]>([]);
 
@@ -115,7 +115,6 @@ const CaseAdd: FC<CaseAddProp> = () => {
                 entity.ruleTo = values.ruleTo;
                 entity.m_Applist = parseAppList[0] as ParseApp[];
                 entity.tokenAppList = tokenAppList[0] as TokenApp[];
-                entity.trojan = trojan[0];
                 entity.generateBcp = generateBcp[0];
                 entity.attachment = values.attachment;
                 entity.isDel = isDel[0];
@@ -127,6 +126,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
                 entity.handleCaseType = values.handleCaseType;
                 entity.handleCaseName = values.handleCaseName;
                 entity.isAi = isAi[0];
+                entity.isPhotoAnalysis = isPhotoAnalysis[0];
                 saveCase(entity);
             }
         } catch (error) {
@@ -153,10 +153,10 @@ const CaseAdd: FC<CaseAddProp> = () => {
                 sdCardState={sdCard}
                 hasReportState={hasReport}
                 autoParseState={autoParse}
-                trojanState={trojan}
                 generateBcpState={generateBcp}
                 isDelState={isDel}
                 isAiState={isAi}
+                isPhotoAnalysisState={isPhotoAnalysis}
                 parseAppListState={parseAppList}
                 tokenAppListState={tokenAppList} />
         </CaseBox>

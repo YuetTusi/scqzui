@@ -23,10 +23,6 @@ export interface FormProp {
      */
     hasReportState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
-     * 检测木马
-     */
-    trojanState: [boolean, Dispatch<SetStateAction<boolean>>],
-    /**
     * 自动解析state
     */
     autoParseState: [boolean, Dispatch<SetStateAction<boolean>>],
@@ -42,6 +38,10 @@ export interface FormProp {
      * AI设置state
      */
     isAiState: [boolean, Dispatch<SetStateAction<boolean>>],
+    /**
+    * 图片违规分析state
+    */
+    isPhotoAnalysisState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
      * AI设置state
      */

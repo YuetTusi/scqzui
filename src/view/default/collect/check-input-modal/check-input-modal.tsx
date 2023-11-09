@@ -107,7 +107,6 @@ const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }
             entity.sdCard = currentCase.current?.sdCard ?? false;
             entity.hasReport = currentCase.current?.hasReport ?? false;
             entity.analysisApp = currentCase.current?.analysisApp ?? false;
-            entity.trojan = currentCase.current?.trojan ?? false;
             entity.isAuto = currentCase.current?.m_bIsAutoParse;
             entity.unitName = currentCase.current?.m_strCheckUnitName;
             entity.mobileName = `${values.phoneName}_${helper.timestamp(device?.usb)}`;

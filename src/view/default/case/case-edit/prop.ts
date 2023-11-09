@@ -44,9 +44,9 @@ interface FormProp {
      */
     isAiState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
-     * 检测木马
+     * 图片违规分析state
      */
-    trojanState: [boolean, Dispatch<SetStateAction<boolean>>],
+    isPhotoAnalysisState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
      * AI设置state
      */

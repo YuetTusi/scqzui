@@ -156,7 +156,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.sdCard = currentCase.current?.sdCard ?? false;
             entity.hasReport = currentCase.current?.hasReport ?? false;
             entity.isAuto = currentCase.current?.m_bIsAutoParse;
-            entity.trojan = currentCase.current?.trojan ?? false;
             entity.unitName = currentCase.current?.m_strCheckUnitName;
             entity.mobileName = `${values.phoneName}_${helper.timestamp(device?.usb)}`;
             entity.mobileNo = values.deviceNumber ?? '';

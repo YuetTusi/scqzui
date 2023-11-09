@@ -2,6 +2,7 @@ import throttle from 'lodash/throttle';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch } from 'dva';
 import React, { FC, MouseEvent, useEffect, useRef, useState, useCallback } from 'react';
 import AutoComplete from 'antd/lib/auto-complete';
 import FileSyncOutlined from '@ant-design/icons/FileSyncOutlined'
@@ -49,9 +50,10 @@ const { useBcp, useAi, caseText, fetchText, parseText } = helper.readConf()!;
  */
 const AddForm: FC<FormProp> = ({
     formRef, analysisAppState, sdCardState, hasReportState,
-    autoParseState, trojanState, generateBcpState, isDelState,
-    isAiState, parseAppListState, tokenAppListState
+    autoParseState, generateBcpState, isDelState,
+    isAiState, isPhotoAnalysisState, parseAppListState, tokenAppListState
 }) => {
+    const dispatch = useDispatch();
     const [isCheck, setIsCheck] = useState(false);
     const [parseAppSelectModalVisible, setParseAppSelectModalVisible] =
         useState<boolean>(false); //解析App选择框
@@ -62,10 +64,10 @@ const AddForm: FC<FormProp> = ({
     const [sdCard, setSdCard] = sdCardState;
     const [hasReport, setHasReport] = hasReportState;
     const [autoParse, setAutoParse] = autoParseState;
-    const [trojan, setTrojan] = trojanState;
     const [generateBcp, setGenerateBcp] = generateBcpState;
     const [isDel, setIsDel] = isDelState;
     const [isAi, setIsAi] = isAiState;
+    const [isPhotoAnalysis, setIsPhotoAnalysis] = isPhotoAnalysisState;
     const [parseAppList, setParseAppList] = parseAppListState;
     const [tokenAppList, setTokenAppList] = tokenAppListState;
     const historyUnitNames = UserHistory.get(HistoryKeys.HISTORY_UNITNAME);
@@ -243,19 +245,19 @@ const AddForm: FC<FormProp> = ({
             </Row>
             <Split />
             <Row style={{ paddingTop: '30px' }}>
-                <Col span={3} offset={3}>
+                <Col span={4} offset={3}>
                     <span>获取应用数据：</span>
                     <Checkbox onChange={(event) => setAnalysisApp(event.target.checked)} checked={analysisApp} />
                 </Col>
-                <Col span={3}>
+                <Col span={4}>
                     <span>获取SD卡数据：</span>
                     <Checkbox onChange={(event) => setSdCard(event.target.checked)} checked={sdCard} />
                 </Col>
-                <Col span={3}>
+                <Col span={4}>
                     <span>生成报告：</span>
                     <Checkbox onChange={(event) => setHasReport(event.target.checked)} checked={hasReport} />
                 </Col>
-                <Col span={3}>
+                <Col span={4}>
                     <span>{`自动${parseText ?? '解析'}：`}</span>
                     <Tooltip title={`勾选后, ${fetchText ?? '取证'}完成将自动${parseText ?? '解析'}应用数据`}>
                         <Checkbox onChange={(event) => {
@@ -269,21 +271,17 @@ const AddForm: FC<FormProp> = ({
                             checked={autoParse} />
                     </Tooltip>
                 </Col>
-                <Col span={3}>
+                <Col span={4}>
                     <span>删除本地缓存：</span>
                     <Tooltip title="解析结束自动删除缓存，可节省磁盘空间，不可再次重新解析">
                         <Checkbox onChange={(event) => setIsDel(event.target.checked)} checked={isDel} />
                     </Tooltip>
                 </Col>
-                <Col span={3}>
-                    <span>检测木马：</span>
-                    <Checkbox onChange={(event) => setTrojan(event.target.checked)} checked={trojan} />
-                </Col>
             </Row>
             <Row style={{ paddingTop: '30px' }}>
-                <Col span={3} />
+                <Col offset={3} />
                 <Auth deny={!useBcp}>
-                    <Col span={3}>
+                    <Col span={4}>
                         <span>生成BCP：</span>
                         <Checkbox
                             onChange={(event) => {
@@ -299,11 +297,19 @@ const AddForm: FC<FormProp> = ({
                     </Col>
                 </Auth>
                 <Auth deny={!useAi}>
-                    <Col span={3}>
+                    <Col span={4}>
                         <span>AI分析：</span>
                         <Checkbox onChange={(event) => setIsAi(event.target.checked)} checked={isAi} />
                     </Col>
                 </Auth>
+                <Col span={4}>
+                    <span>图片违规分析：</span>
+                    <Checkbox onChange={(event) => {
+                        setIsPhotoAnalysis(event.target.checked);
+                        dispatch({ type: 'aiSwitch/setDisableOcr', payload: event.target.checked });
+                    }}
+                        checked={isPhotoAnalysis} />
+                </Col>
             </Row>
             <div
                 className="cate"

@@ -22,5 +22,12 @@ export default {
     setOcr(state: AiSwitchState, { payload }: AnyAction) {
         state.ocr = payload ?? false;
         return state;
+    },
+    /**
+     * 设置禁用OCR
+     */
+    setDisableOcr(state: AiSwitchState, { payload }: AnyAction) {
+        state.disableOcr = payload ?? false;
+        return state;
     }
 }

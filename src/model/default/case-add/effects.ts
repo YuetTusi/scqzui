@@ -30,6 +30,7 @@ export default {
 
         try {
             const aiSwitch: AiSwitchState = yield select((state: StateTree) => state.aiSwitch);
+            entity.useAiOcr = !aiSwitch.disableOcr; //如果AI中的ocr没有禁用，则使用当前OCR，否则是全局OCR
             yield call([db, 'insert'], entity);
             if (helper.isNullOrUndefined(name)) {
                 yield put(routerRedux.push('/case-data'));

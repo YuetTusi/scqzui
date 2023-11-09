@@ -48,7 +48,8 @@ export default {
                 { _id: payload._id },
                 {
                     ...payload,
-                    m_strCaseName: prev.m_strCaseName
+                    m_strCaseName: prev.m_strCaseName,
+                    useAiOcr: !aiSwitch.disableOcr
                 }
             );
             yield put({
@@ -57,7 +58,8 @@ export default {
                     sdCard: payload.sdCard,
                     isAuto: payload.m_bIsAutoParse,
                     hasReport: payload.hasReport,
-                    appList: payload.m_Applist
+                    appList: payload.m_Applist,
+                    useAiOcr: !aiSwitch.disableOcr
                 }
             }); //同步更新点验记录
             const casePath = join(payload.m_strCasePath, prev.m_strCaseName);

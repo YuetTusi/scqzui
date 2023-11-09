@@ -51,10 +51,10 @@ const CaseEdit: FC<CaseEditProp> = () => {
     const sdCard = useState<boolean>(true);
     const hasReport = useState<boolean>(true);
     const autoParse = useState<boolean>(true);
-    const trojan = useState<boolean>(false);
     const generateBcp = useState<boolean>(false);
     const isDel = useState<boolean>(false);
     const isAi = useState<boolean>(false);
+    const isPhotoAnalysis = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
     const tokenAppList = useState<BaseApp[]>([]);
 
@@ -92,10 +92,10 @@ const CaseEdit: FC<CaseEditProp> = () => {
             sdCard[1](data?.sdCard ?? true);
             hasReport[1](data?.hasReport ?? true);
             autoParse[1](data?.m_bIsAutoParse ?? true);
-            trojan[1](data?.trojan ?? false);
             generateBcp[1](data?.generateBcp ?? false);
             isDel[1](data?.isDel ?? false);
             isAi[1](data?.isAi ?? false);
+            isPhotoAnalysis[1](data?.isPhotoAnalysis ?? false);
             dispatch({
                 type: 'aiSwitch/readAiConfig',
                 payload: { casePath: join(data.m_strCasePath, data.m_strCaseName) }
@@ -149,7 +149,6 @@ const CaseEdit: FC<CaseEditProp> = () => {
                 entity.sdCard = sdCard[0];
                 entity.hasReport = hasReport[0];
                 entity.m_bIsAutoParse = autoParse[0];
-                entity.trojan = trojan[0];
                 entity.generateBcp = generateBcp[0];
                 entity.attachment = values.attachment;
                 entity.isDel = isDel[0];
@@ -165,6 +164,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
                 entity.handleCaseType = values.handleCaseType;
                 entity.handleCaseName = values.handleCaseName;
                 entity.isAi = isAi[0];
+                entity.isPhotoAnalysis = isPhotoAnalysis[0];
                 saveCase(entity);
             }
         } catch (error) {
@@ -192,10 +192,10 @@ const CaseEdit: FC<CaseEditProp> = () => {
                 sdCardState={sdCard}
                 hasReportState={hasReport}
                 autoParseState={autoParse}
-                trojanState={trojan}
                 generateBcpState={generateBcp}
                 isDelState={isDel}
                 isAiState={isAi}
+                isPhotoAnalysisState={isPhotoAnalysis}
                 parseAppListState={parseAppList}
                 tokenAppListState={tokenAppList} />
         </CaseBox>

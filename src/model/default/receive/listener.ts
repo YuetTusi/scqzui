@@ -503,7 +503,7 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
                 ruleFrom: eventData?.ruleFrom ?? 0,
                 ruleTo: eventData?.ruleTo ?? 8,
                 analysisApp: true,
-                trojan: false,
+                useAiOcr: false,
                 hasReport: true,
                 isDel: false,
                 isAi: false,

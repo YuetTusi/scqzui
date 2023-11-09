@@ -16,7 +16,11 @@ interface AiSwitchState {
     /**
      * 启用OCR识别
      */
-    ocr: boolean
+    ocr: boolean,
+    /**
+     * 禁用OCR识别
+     */
+    disableOcr: boolean
 }
 
 
@@ -30,7 +34,8 @@ let model: Model = {
     state: {
         data: [],
         similarity: 0,
-        ocr: false
+        ocr: false,
+        disableOcr: false
     },
     reducers,
     effects
