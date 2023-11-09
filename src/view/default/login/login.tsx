@@ -7,12 +7,12 @@ import Col from 'antd/lib/col';
 import Form from 'antd/lib/form';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
+import { useKeyboardEvent } from '@/hook';
 import { StateTree } from '@/type/model';
 import { LoginBox } from './styled/box';
 import { RegisterUserModal } from './register-user-modal';
 import { ModifyPasswordModal } from './modify-password-modal';
 import { FormValue, LoginProp } from './prop';
-import { useKeyboardEvent } from '@/hook';
 
 const { Item, useForm } = Form;
 const { Password } = Input;

@@ -16,5 +16,5 @@ Auth.defaultProps = {
     demotion: undefined
 }
 
-export { Demotion };
+export { Auth, Demotion };
 export default Auth;

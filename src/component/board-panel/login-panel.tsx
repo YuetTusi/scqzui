@@ -1,12 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useDispatch, routerRedux } from 'dva';
 import { helper } from '@/utils/helper';
 import Auth from '../auth';
+import DragBar from '../drag-bar';
+import { Copyright } from './copyright';
 import { BackgroundBox, Header } from './styled/header';
 import { Center } from './styled/center';
 import { Footer } from './styled/footer';
-import DragBar from '../drag-bar';
-import { Copyright } from './copyright';
 
 const { max } = helper.readConf()!;
 
@@ -22,7 +21,6 @@ const filterCharactor = (text?: string) =>
  */
 const LoginPanel: FC<{}> = ({ children }) => {
 
-    const dispatch = useDispatch();
     const [title, setTitle] = useState<string>('');
     const [version, setVersion] = useState<string>('');
     const [manu, setManu] = useState<string>('');

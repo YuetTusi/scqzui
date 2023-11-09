@@ -367,6 +367,14 @@ const Tool: FC<ToolProp> = () => {
                             安卓数据
                         </div>
                     </div>
+                    <div onClick={() => onImportClick(ImportTypes.AndroidMirror, '导入数据（安卓物理镜像）')} className="t-button">
+                        <div className="ico">
+                            <FontAwesomeIcon icon={faAndroid} color="#a6ce3a" />
+                        </div>
+                        <div className="name">
+                            安卓物理镜像
+                        </div>
+                    </div>
                     <Auth deny={!useFakeButton}>
                         <div onClick={() => onImportClick(ImportTypes.AndroidData, '导入数据（安卓镜像）')} className="t-button">
                             <div className="ico">

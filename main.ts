@@ -317,17 +317,20 @@ ipcMain.on('run-service', () => {
         config!.parseExe ?? 'parse.exe',
         join(appPath, '../../../', config?.parsePath ?? './parse')
     );
-    //不论开启关闭快速点验功能，都调起服务
-    helper.runProc(
-        quickFetchProcess,
-        config?.quickFetchExe ?? 'QuickFetchServer.exe',
-        quickFetchDir,
-        [],
-        {
-            cwd: quickFetchDir,
-            stdio: 'ignore'
-        }
-    );
+
+    if (config!.useQuickFetch) {
+        //有快速点验功能，调起服务
+        helper.runProc(
+            quickFetchProcess,
+            config?.quickFetchExe ?? 'QuickFetchServer.exe',
+            quickFetchDir,
+            [],
+            {
+                cwd: quickFetchDir,
+                stdio: 'ignore'
+            }
+        );
+    }
     if (config!.useServerCloud) {
         //有云取功能，调起云RPC服务
         helper.runProc(
