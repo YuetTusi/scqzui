@@ -99,7 +99,7 @@ class FetchData {
      */
     isAlive?: boolean;
     /**
-     * Root备份
+     * 尝试Root备份
      */
     isRoot?: boolean
 }

@@ -1,7 +1,6 @@
 import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import { routerRedux } from 'dva/router';
-import round from 'lodash/round';
 import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import SelectOutlined from '@ant-design/icons/SelectOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
@@ -19,7 +18,6 @@ import Select from 'antd/lib/select';
 import Modal from 'antd/lib/modal';
 import Tooltip from 'antd/lib/tooltip';
 import { ITreeNode } from '@/type/ztree';
-import log from '@/utils/log';
 import { helper } from '@/utils/helper';
 import { Backslashe, UnderLine } from '@/utils/regex';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
@@ -31,7 +29,6 @@ import { ParseApp } from '@/schema/parse-app';
 import { StateTree } from '@/type/model';
 import { CaseDataState } from '@/model/default/case-data';
 import parseApp from '@/config/parse-app.yaml';
-import { Instruction } from '../instruction';
 import { NormalInputModalBox, TipBox } from './styled/style';
 import { Prop, FormValue } from './prop';
 
@@ -65,6 +62,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     const currentCase = useRef<CaseInfo>(); //当前案件数据
     const [appSelectModalVisible, setAppSelectModalVisible] = useState(false);
     const [selectedApps, setSelectedApps] = useState<ParseApp[]>([]);
+    const [isRoot, setIsRoot] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const historyDeviceName = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENAME));
     const historyDeviceHolder = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER));
@@ -134,6 +132,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
     const resetValue = () => {
         currentCase.current = undefined;
+        setIsRoot(false);
         formRef.resetFields();
     };
 
@@ -163,48 +162,54 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.mobileHolder = values.user;
             entity.handleOfficerNo = values.handleOfficerNo;
             entity.note = values.note ?? '';
-            entity.isRoot = values.isRoot ?? false;
+            entity.isRoot = isRoot;
             entity.credential = '';
             entity.serial = device?.serial ?? '';
             entity.mode = DataMode.Self; //标准模式（用户手输取证数据）
             entity.appList = selectedApps.length === 0 ? currentCase.current?.m_Applist : selectedApps; //若未选择解析应用，以案件配置的应用为准
             entity.cloudAppList = [];
 
-            try {
-                let disk = currentCase.current!.m_strCasePath.substring(0, 2);
-                const { free } = await helper.getDiskSpace(disk, true);
-                if (free < 100) {
-                    Modal.confirm({
-                        onOk() {
-                            log.warn(`磁盘空间不足, ${disk}剩余: ${round(free, 2)}GB`);
-                            saveHandle!(entity);
-                        },
-                        title: '磁盘空间不足',
-                        content: <Instruction>
-                            <p>
-                                磁盘空间仅存<strong>{round(free, 1)}GB</strong>
-                                ，建议清理数据
-                            </p>
-                            <p>设备数据过大可能会采集失败，继续取证？</p>
-                        </Instruction>,
-                        okText: '是',
-                        cancelText: '否',
-                        icon: <InfoCircleOutlined />,
-                        centered: true
-                    });
-                } else {
-                    setSelectedApps([]);
-                    resetValue();
-                    saveHandle!(entity);
-                }
-            } catch (error) {
-                setSelectedApps([]);
-                resetValue();
-                saveHandle!(entity);
-                log.error(`读取磁盘信息失败:${error.message}`);
-            } finally {
-                setLoading(false);
-            }
+            console.clear();
+            console.log(isRoot);
+            console.log(entity);
+
+            setLoading(false);
+
+            // try {
+            //     let disk = currentCase.current!.m_strCasePath.substring(0, 2);
+            //     const { free } = await helper.getDiskSpace(disk, true);
+            //     if (free < 100) {
+            //         Modal.confirm({
+            //             onOk() {
+            //                 log.warn(`磁盘空间不足, ${disk}剩余: ${round(free, 2)}GB`);
+            //                 saveHandle!(entity);
+            //             },
+            //             title: '磁盘空间不足',
+            //             content: <Instruction>
+            //                 <p>
+            //                     磁盘空间仅存<strong>{round(free, 1)}GB</strong>
+            //                     ，建议清理数据
+            //                 </p>
+            //                 <p>设备数据过大可能会采集失败，继续取证？</p>
+            //             </Instruction>,
+            //             okText: '是',
+            //             cancelText: '否',
+            //             icon: <InfoCircleOutlined />,
+            //             centered: true
+            //         });
+            //     } else {
+            //         setSelectedApps([]);
+            //         resetValue();
+            //         saveHandle!(entity);
+            //     }
+            // } catch (error) {
+            //     setSelectedApps([]);
+            //     resetValue();
+            //     saveHandle!(entity);
+            //     log.error(`读取磁盘信息失败:${error.message}`);
+            // } finally {
+            //     setLoading(false);
+            // }
 
         } catch (error) {
             console.warn(error);
@@ -378,15 +383,15 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                             labelCol={{ span: 6 }}
                             wrapperCol={{ span: 4 }}
                             name="isRoot"
-                            label="Root备份"
+                            label="尝试Root备份"
                             valuePropName="checked">
                             <Tooltip
                                 title={
                                     <TipBox>
-                                        勾选将尝试进行Root备份，<em>部分新设备不支持</em>
+                                        勾选后将尝试执行Root备份，<em>只支持部分低版本安卓手机或已Root的安卓手机</em>
                                     </TipBox>
                                 }>
-                                <Checkbox />
+                                <Checkbox checked={isRoot} onChange={(e) => setIsRoot(e.target.checked)} />
                             </Tooltip>
                         </Item>
                     </Col>
