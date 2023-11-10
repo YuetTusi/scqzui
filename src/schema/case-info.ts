@@ -119,7 +119,7 @@ class CaseInfo extends BaseEntity {
         this.m_strCaseName = props.m_strCaseName ?? '';
         this.spareName = props.spareName ?? '';
         this.m_strCasePath = props.m_strCasePath ?? '';
-        this.analysisApp = props.analysisApp ?? false;
+        this.analysisApp = props.analysisApp ?? true;
         this.sdCard = props.sdCard ?? false;
         this.hasReport = props.hasReport ?? false;
         this.m_bIsAutoParse = props.m_bIsAutoParse ?? false;

@@ -17,6 +17,7 @@ import { FetchState, ParseState } from '@/schema/device-state';
 import { CommandType, SocketType } from '@/schema/command';
 import { ParseCategory } from '@/schema/parse-detail';
 import { FormValue } from '@/view/default/tool/import-data-modal/prop';
+import { PredictJson } from '@/component/ai-switch/prop';
 
 const { parseText } = helper.readConf()!;
 
@@ -95,6 +96,20 @@ export default {
             mode: DataMode.Self
         });
 
+        const aiTempAt = helper.IS_DEV
+            ? join(helper.APP_CWD, './data/predict.json')
+            : join(helper.APP_CWD, './resources/config/predict.json'); //AI配置模版所在路径
+        let aiTypes: PredictJson | undefined = undefined;
+        const temp: PredictJson = yield call([helper, 'readJSONFile'], aiTempAt);
+        let hasPredict: boolean = yield call([helper, 'existFile'], join(caseData.m_strCasePath, './predict.json'));
+        if (hasPredict) {
+            //案件下存在predict.json
+            const next: PredictJson = yield call([helper, 'readJSONFile'], join(caseData.m_strCasePath, './predict.json'));
+            aiTypes = helper.combinePredict(temp, next);
+        } else {
+            aiTypes = temp;
+        }
+
         try {
             yield call([deviceDb, 'insert'], {
                 _id: rec._id,
@@ -119,24 +134,6 @@ export default {
                 system: rec.system
             });
 
-            console.log({
-                caseId: rec.caseId,
-                deviceId: rec._id,
-                phonePath: rec.phonePath,
-                packagePath: formValue.packagePath,
-                sdCardPath: formValue.sdCardPath ?? '',
-                dataType: importType,
-                mobileName: rec.mobileName,
-                mobileHolder: rec.mobileHolder,
-                model: rec.mobileName,
-                mobileNo: [rec.mobileNo ?? ''], //此字段意义换为IMEI
-                note: rec.note ?? '',
-                hasReport: caseData?.hasReport ?? false,
-                useDefaultTemp,
-                useKeyword,
-                useDocVerify: [useDocVerify, usePdfOcr]
-            });
-
             //#通知Parse开始导入
             yield fork(send, SocketType.Parse, {
                 type: SocketType.Parse,
@@ -155,6 +152,9 @@ export default {
                     mobileNo: [rec.mobileNo ?? ''], //此字段意义换为IMEI
                     note: rec.note ?? '',
                     hasReport: caseData?.hasReport ?? false,
+                    useAiOcr: caseData.useAiOcr ?? false,
+                    isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
+                    aiTypes,
                     useDefaultTemp,
                     useKeyword,
                     useDocVerify: [useDocVerify, usePdfOcr]
@@ -177,6 +177,9 @@ export default {
                     mobileNo: [rec.mobileNo ?? ''], //此字段意义换为IMEI
                     note: rec.note ?? '',
                     hasReport: caseData?.hasReport ?? false,
+                    useAiOcr: caseData.useAiOcr ?? false,
+                    isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
+                    aiTypes,
                     useDefaultTemp,
                     useKeyword,
                     useDocVerify: [useDocVerify, usePdfOcr]
