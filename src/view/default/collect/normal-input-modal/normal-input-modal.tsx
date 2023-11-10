@@ -1,3 +1,4 @@
+import round from 'lodash/round';
 import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -18,6 +19,7 @@ import Select from 'antd/lib/select';
 import Modal from 'antd/lib/modal';
 import Tooltip from 'antd/lib/tooltip';
 import { ITreeNode } from '@/type/ztree';
+import log from '@/utils/log';
 import { helper } from '@/utils/helper';
 import { Backslashe, UnderLine } from '@/utils/regex';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
@@ -29,6 +31,7 @@ import { ParseApp } from '@/schema/parse-app';
 import { StateTree } from '@/type/model';
 import { CaseDataState } from '@/model/default/case-data';
 import parseApp from '@/config/parse-app.yaml';
+import { Instruction } from '../instruction';
 import { NormalInputModalBox, TipBox } from './styled/style';
 import { Prop, FormValue } from './prop';
 
@@ -169,47 +172,41 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.appList = selectedApps.length === 0 ? currentCase.current?.m_Applist : selectedApps; //若未选择解析应用，以案件配置的应用为准
             entity.cloudAppList = [];
 
-            console.clear();
-            console.log(isRoot);
-            console.log(entity);
-
-            setLoading(false);
-
-            // try {
-            //     let disk = currentCase.current!.m_strCasePath.substring(0, 2);
-            //     const { free } = await helper.getDiskSpace(disk, true);
-            //     if (free < 100) {
-            //         Modal.confirm({
-            //             onOk() {
-            //                 log.warn(`磁盘空间不足, ${disk}剩余: ${round(free, 2)}GB`);
-            //                 saveHandle!(entity);
-            //             },
-            //             title: '磁盘空间不足',
-            //             content: <Instruction>
-            //                 <p>
-            //                     磁盘空间仅存<strong>{round(free, 1)}GB</strong>
-            //                     ，建议清理数据
-            //                 </p>
-            //                 <p>设备数据过大可能会采集失败，继续取证？</p>
-            //             </Instruction>,
-            //             okText: '是',
-            //             cancelText: '否',
-            //             icon: <InfoCircleOutlined />,
-            //             centered: true
-            //         });
-            //     } else {
-            //         setSelectedApps([]);
-            //         resetValue();
-            //         saveHandle!(entity);
-            //     }
-            // } catch (error) {
-            //     setSelectedApps([]);
-            //     resetValue();
-            //     saveHandle!(entity);
-            //     log.error(`读取磁盘信息失败:${error.message}`);
-            // } finally {
-            //     setLoading(false);
-            // }
+            try {
+                let disk = currentCase.current!.m_strCasePath.substring(0, 2);
+                const { free } = await helper.getDiskSpace(disk, true);
+                if (free < 100) {
+                    Modal.confirm({
+                        onOk() {
+                            log.warn(`磁盘空间不足, ${disk}剩余: ${round(free, 2)}GB`);
+                            saveHandle!(entity);
+                        },
+                        title: '磁盘空间不足',
+                        content: <Instruction>
+                            <p>
+                                磁盘空间仅存<strong>{round(free, 1)}GB</strong>
+                                ，建议清理数据
+                            </p>
+                            <p>设备数据过大可能会采集失败，继续取证？</p>
+                        </Instruction>,
+                        okText: '是',
+                        cancelText: '否',
+                        icon: <InfoCircleOutlined />,
+                        centered: true
+                    });
+                } else {
+                    setSelectedApps([]);
+                    resetValue();
+                    saveHandle!(entity);
+                }
+            } catch (error) {
+                setSelectedApps([]);
+                resetValue();
+                saveHandle!(entity);
+                log.error(`读取磁盘信息失败:${error.message}`);
+            } finally {
+                setLoading(false);
+            }
 
         } catch (error) {
             console.warn(error);
