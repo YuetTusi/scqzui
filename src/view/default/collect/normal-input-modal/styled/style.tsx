@@ -8,6 +8,12 @@ const NormalInputModalBox = styled.div`
         text-indent: 3rem;
         font-size: 1.4rem;
         color: ${(props => props.theme['text-color'])};
+        .anticon{
+            vertical-align: middle;
+        }
+        span{
+            padding-left: 4px;
+        }
     }
 
     .with-btn {
@@ -18,4 +24,12 @@ const NormalInputModalBox = styled.div`
     }
 `;
 
-export { NormalInputModalBox };
+const TipBox = styled.span`
+    em{
+        color:${props => props.theme['warn-color']};
+        text-decoration: none;
+        font-style: normal;
+    }
+`;
+
+export { NormalInputModalBox, TipBox };

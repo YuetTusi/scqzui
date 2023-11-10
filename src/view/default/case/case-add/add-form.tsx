@@ -304,11 +304,13 @@ const AddForm: FC<FormProp> = ({
                 </Auth>
                 <Col span={4}>
                     <span>图片违规分析：</span>
-                    <Checkbox onChange={(event) => {
-                        setIsPhotoAnalysis(event.target.checked);
-                        dispatch({ type: 'aiSwitch/setDisableOcr', payload: event.target.checked });
-                    }}
-                        checked={isPhotoAnalysis} />
+                    <Tooltip title="此功能为全局分析，速度较慢">
+                        <Checkbox onChange={(event) => {
+                            setIsPhotoAnalysis(event.target.checked);
+                            dispatch({ type: 'aiSwitch/setDisableOcr', payload: event.target.checked });
+                        }}
+                            checked={isPhotoAnalysis} />
+                    </Tooltip>
                 </Col>
             </Row>
             <div

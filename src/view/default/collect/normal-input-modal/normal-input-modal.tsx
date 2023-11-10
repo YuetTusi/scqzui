@@ -6,7 +6,7 @@ import InfoCircleOutlined from '@ant-design/icons/InfoCircleOutlined';
 import SelectOutlined from '@ant-design/icons/SelectOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
-import PlusSquareOutlined from '@ant-design/icons/PlusSquareOutlined';
+import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined';
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
@@ -32,7 +32,7 @@ import { StateTree } from '@/type/model';
 import { CaseDataState } from '@/model/default/case-data';
 import parseApp from '@/config/parse-app.yaml';
 import { Instruction } from '../instruction';
-import { NormalInputModalBox } from './styled/style';
+import { NormalInputModalBox, TipBox } from './styled/style';
 import { Prop, FormValue } from './prop';
 
 const { caseText, devText, fetchText, parseText } = helper.readConf()!;
@@ -241,7 +241,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                 type="primary"
                                 size="small"
                                 title={`添加${caseText ?? '案件'}`}
-                            ><PlusSquareOutlined /></Button>
+                            ><PlusCircleOutlined /></Button>
                         </Item>
                     </Col>
                 </Row>
@@ -257,7 +257,10 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                         </Item>
                     </Col>
                     <Col span={12}>
-                        <div className="app-tips">{`未选择App以「所属${caseText ?? '案件'}配置」为准`}</div>
+                        <div className="app-tips">
+                            <InfoCircleOutlined />
+                            <span>{`未选择App以「所属${caseText ?? '案件'}配置」为准`}</span>
+                        </div>
                     </Col>
                 </Row>
                 <Row>
@@ -371,17 +374,21 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                         </Item>
                     </Col>
                     <Col span={12}>
-                        <Tooltip title="勾选将进行Root备份，部分新设备不支持">
-                            <Item
-                                labelCol={{ span: 6 }}
-                                wrapperCol={{ span: 4 }}
-                                name="isRoot"
-                                label="Root备份"
-                                valuePropName="checked">
-
+                        <Item
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 4 }}
+                            name="isRoot"
+                            label="Root备份"
+                            valuePropName="checked">
+                            <Tooltip
+                                title={
+                                    <TipBox>
+                                        勾选将尝试进行Root备份，<em>部分新设备不支持</em>
+                                    </TipBox>
+                                }>
                                 <Checkbox />
-                            </Item>
-                        </Tooltip>
+                            </Tooltip>
+                        </Item>
                     </Col>
                 </Row>
             </Form>
