@@ -39,8 +39,8 @@ export const SortBox = styled.div`
         flex-direction: column;
         align-items: center;
         justify-content: space-evenly;
-        width: 120px;
-        height: 110px;
+        width: 122px;
+        height: 114px;
         padding: 10px 10px;
         margin-right: 10px;
         margin-bottom: 10px;
