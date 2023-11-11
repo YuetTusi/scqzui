@@ -65,8 +65,12 @@ const EditForm: FC<FormProp> = ({
     const officer = useOfficerList();
 
     useEffect(() => {
-        unitNameHistory.current = UserHistory.get(HistoryKeys.HISTORY_UNITNAME)
+        unitNameHistory.current = UserHistory.get(HistoryKeys.HISTORY_UNITNAME);
     }, []);
+
+    useEffect(() => {
+        dispatch({ type: 'aiSwitch/setDisableOcr', payload: isPhotoAnalysis });
+    }, [isPhotoAnalysis]);
 
     const ruleToValid = async (_: RuleObject, value: any) => {
         const from = formRef.getFieldValue('ruleFrom');
@@ -269,7 +273,6 @@ const EditForm: FC<FormProp> = ({
                     <Tooltip title="此功能为全局分析，速度较慢">
                         <Checkbox onChange={(event) => {
                             setIsPhotoAnalysis(event.target.checked);
-                            dispatch({ type: 'aiSwitch/setDisableOcr', payload: event.target.checked });
                         }}
                             checked={isPhotoAnalysis} />
                     </Tooltip>
