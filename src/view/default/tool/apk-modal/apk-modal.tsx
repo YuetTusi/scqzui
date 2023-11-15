@@ -238,11 +238,6 @@ const ApkModal: FC<ApkModalProp> = ({
                             title: 'apk包名',
                             dataIndex: 'name',
                             key: 'name'
-                        }, {
-                            title: '应用名称',
-                            dataIndex: 'value',
-                            key: 'value',
-                            width: 240,
                         }
                     ]}
                     rowSelection={{

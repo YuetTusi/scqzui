@@ -115,6 +115,7 @@ export default {
                     //# 接收到apk提取消息
                     console.log(`接收到apk提取消息: ${command.msg}`);
                     dispatch({ type: 'apkModal/setMessage', payload: command.msg });
+                    break;
                 case CommandType.AndroidAuthList:
                     //# 接收安卓提权设备列表
                     console.log(`接收到破解列表: ${command.msg}`);
