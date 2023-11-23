@@ -30,13 +30,14 @@ async function importDevice(deviceJsonPath: string, caseData: CaseInfo) {
         const [isParse, current] = await Promise.all([
             helper.existFile(join(devicePath, './out/baseinfo.json')),
             db.find({
-                $and: {
-                    mobileName: deviceJson.mobileName,
-                    caseId: caseData._id
-                }
+                $and: [
+                    { mobileName: deviceJson.mobileName },
+                    { caseId: caseData._id }
+                ]
             })
         ]);
 
+        console.log(current.length);
         if (current.length === 0) {
             const nextDevice = new DeviceType();
             nextDevice.caseId = caseData._id;
