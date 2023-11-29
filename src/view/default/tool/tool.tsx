@@ -56,6 +56,7 @@ import chinaMobileSvg from './styled/images/chinamobile.svg';
 import androidAuthSvg from './styled/images/android_auth.svg';
 import cloudSearchSvg from './styled/images/cloud-search.svg';
 import userSearchSvg from './styled/images/user-search.svg';
+import tfCardSvg from './styled/images/tf-card.svg';
 import { CrackTypes } from './crack-modal/prop';
 import { ExeType, Action, ModalOpenState, ToolProp } from './prop';
 
@@ -654,6 +655,12 @@ const Tool: FC<ToolProp> = () => {
                         </div>
                         <div className="name">虚拟身份探测</div>
                     </div>
+                    {/* <div className="t-button">
+                        <div className="ico">
+                            <img src={tfCardSvg} height={50} />
+                        </div>
+                        <div className="name">TF卡镜像</div>
+                    </div> */}
                 </div>
             </SortBox>
         </ToolBox>

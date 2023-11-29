@@ -37,7 +37,6 @@ async function importDevice(deviceJsonPath: string, caseData: CaseInfo) {
             })
         ]);
 
-        console.log(current.length);
         if (current.length === 0) {
             const nextDevice = new DeviceType();
             nextDevice.caseId = caseData._id;

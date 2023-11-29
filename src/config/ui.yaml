@@ -3,7 +3,7 @@ useFetch: true
 useServerCloud: true
 useBcp: true
 useToolBox: true
-useFakeButton: false
+useFakeButton: true
 useAi: true
 useQuickFetch: true
 useTraceLogin: true
@@ -15,8 +15,8 @@ devText: 设备
 parseText: 解析
 fetchButtonText: 取证
 cloudButtonText: 云取证
-cloudAppUrl: http://139.9.112.8:9699/app
-cloudAppMd5: http://139.9.112.8:9699/md5
+cloudAppUrl: http://139.9.112.8:9699/test_app
+cloudAppMd5: http://139.9.112.8:9699/test_md5
 logo: logo.png
 windowHeight: 960
 windowWidth: 1460

@@ -1,5 +1,6 @@
 import { mkdirSync } from 'fs';
 import { join } from 'path';
+import merge from 'lodash/merge';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap, routerRedux } from "dva";
 import message from 'antd/lib/message';
@@ -12,6 +13,10 @@ import logger from '@/utils/log';
 import { helper } from '@/utils/helper';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { AiSwitchState } from '../ai-switch';
+
+const predictTempAt = helper.IS_DEV
+    ? join(helper.APP_CWD, './data/predict.json')
+    : join(helper.APP_CWD, './resources/config/predict.json'); //模版路径
 
 export default {
 
@@ -36,13 +41,16 @@ export default {
      * 保存案件
      * @param {CaseInfo} payload 案件
      */
-    *saveCase({ payload }: AnyAction, { call, fork, put, select }: EffectsCommandMap) {
+    *saveCase({ payload }: AnyAction, { all, call, fork, put, select }: EffectsCommandMap) {
         const db = getDb<CaseInfo>(TableName.Cases);
         yield put({ type: 'setLoading', payload: true });
         UserHistory.set(HistoryKeys.HISTORY_UNITNAME, payload.m_strCheckUnitName);//将用户输入的单位名称记录到本地存储中，下次输入可读取
         try {
             const aiSwitch: AiSwitchState = yield select((state: StateTree) => state.aiSwitch);
-            const prev: CaseInfo = yield call([db, 'findOne'], { _id: payload._id });
+            const [predict, prev]: [Record<string, any>, CaseInfo] = yield all([
+                call([helper, 'readJSONFile'], predictTempAt),
+                call([db, 'findOne'], { _id: payload._id })
+            ]);
             yield call(
                 [db, 'update'],
                 { _id: payload._id },
@@ -69,11 +77,15 @@ export default {
                 mkdirSync(casePath);
             }
             yield fork([helper, 'writeCaseJson'], casePath, payload);
-            yield fork([helper, 'writeJSONfile'], join(casePath, 'predict.json'), {
-                config: aiSwitch.data,
-                similarity: aiSwitch.similarity,
-                ocr: aiSwitch.ocr
-            }); //写ai配置JSON
+            yield fork(
+                [helper, 'writeJSONfile'],
+                join(casePath, 'predict.json'),
+                merge(predict, {
+                    config: aiSwitch.data,
+                    similarity: aiSwitch.similarity,
+                    ocr: aiSwitch.ocr
+                })
+            ); //写ai配置JSON
             yield put(routerRedux.push('/case-data'));
             message.success('保存成功');
         } catch (error) {
