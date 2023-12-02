@@ -40,7 +40,7 @@ const LoginConfig: FC<LoginConfigProp> = () => {
             localStorage.setItem(LocalStoreKey.AllowCount, allowCount.toString());
             localStorage.setItem(LocalStoreKey.LockMinutes, lockMinutes.toString());
             localStorage.setItem(LocalStoreKey.LoginOverTime, loginOverTime.toString());
-            message.success('保存成功');
+            message.success('保存成功，请重启应用生效新配置');
         } catch (error) {
             console.warn(error);
         }

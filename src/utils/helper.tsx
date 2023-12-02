@@ -166,7 +166,7 @@ const helper = {
    * @param filePath 文件路径
    * @param args 命令参数
    */
-  runExe(filePath: string, args: string[] = [], cwd?: string): Promise<string> {
+  runExe(filePath: string, args: any[] = [], cwd?: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       if (extname(filePath) !== '.exe') {
         reject('非exe可执行文件');
@@ -199,7 +199,7 @@ const helper = {
     handle: ChildProcessWithoutNullStreams | null,
     exeName: string,
     exePath: string,
-    exeParams: string[] = [],
+    exeParams: any[] = [],
     options: any = {}
   ) {
     handle = spawn(exeName, exeParams, {

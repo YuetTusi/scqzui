@@ -1,3 +1,4 @@
+import { join } from 'path';
 import dayjs from 'dayjs';
 import { AnyAction } from 'redux';
 import { routerRedux, EffectsCommandMap } from 'dva';
@@ -26,6 +27,10 @@ export default {
         const allowCount =
             localStorage.getItem(LocalStoreKey.AllowCount) === null
                 ? 5 : Number(localStorage.getItem(LocalStoreKey.AllowCount));
+        //空闲超时时间
+        const loginOverTime =
+            localStorage.getItem(LocalStoreKey.LoginOverTime) === null
+                ? 30 : Number(localStorage.getItem(LocalStoreKey.LoginOverTime));
         message.destroy();
         yield put({ type: 'setLoading', payload: true });
         try {
@@ -103,6 +108,13 @@ export default {
                 {
                     $set: { isLock: false }
                 });
+            const handle: any = null;
+            helper.runProc(
+                handle,
+                'monitor.exe',
+                join(helper.APP_CWD, '../tools/monitor'),
+                [loginOverTime * 60, 'http://127.0.0.1:9900/overtime']
+            );
             message.success('登录成功');
             yield put(routerRedux.push('/guide'));
         } catch (error) {

@@ -287,6 +287,12 @@ function api(webContents: WebContents) {
         });
     });
 
+    //被告知已超用户空闲时限
+    router.get('/overtime', (req, res) => {
+        webContents.send('overtime');
+        res.end();
+    });
+
     return router;
 }
 
