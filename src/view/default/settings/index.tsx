@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faBuilding, faRegistered, faBuildingColumns, faUser,
-    faLightbulb, faPenToSquare, faKey, faFileArrowUp
+    faLightbulb, faPenToSquare, faKey, faFileArrowUp, faUserGear
 } from '@fortawesome/free-solid-svg-icons';
 import { NavLink, Route } from 'dva/router';
 import { helper } from '@/utils/helper';
@@ -18,12 +18,13 @@ import Keywords from '@/view/default/settings/keywords';
 import CheckManage from '@/view/default/settings/check-manage';
 import TraceLogin from '@/view/default/settings/trace-login';
 import Ftp from '@/view/default/settings/ftp';
+import LoginConfig from '@/view/default/settings/login-config';
 import Version from '@/view/default/settings/version';
 import { MenuPanel } from './styled/menu';
 import { SettingLayout } from './styled/sub-layout';
 import ContentBox from './content-box';
 
-const { useBcp, useTraceLogin, fetchText } = helper.readConf()!;
+const { useBcp, useLogin, useTraceLogin, fetchText } = helper.readConf()!;
 
 /**
  * 设置布局页
@@ -108,6 +109,16 @@ const Index: FC<{}> = () => <SettingLayout>
                     </NavLink>
                 </li>
             </Auth>
+            <Auth deny={!useLogin}>
+                <li>
+                    <NavLink to="/settings/login-config" replace={true} className="hvr-sweep-to-right">
+                        <div>
+                            <span className="ico"><FontAwesomeIcon icon={faUserGear} /></span>
+                            <span className="name">登录验证配置</span>
+                        </div>
+                    </NavLink>
+                </li>
+            </Auth>
             <li>
                 <NavLink to="/settings/version" replace={true} className="hvr-sweep-to-right">
                     <div>
@@ -150,6 +161,9 @@ const Index: FC<{}> = () => <SettingLayout>
     <Route
         path="/settings/ftp"
         component={() => <ContentBox title="BCP文件上传配置"><Ftp /></ContentBox>} />
+    <Route
+        path="/settings/login-config"
+        component={() => <ContentBox title="登录验证配置"><LoginConfig /></ContentBox>} />
     <Route
         path="/settings/version"
         component={() => <ContentBox title="软件版本"><Version /></ContentBox>} />

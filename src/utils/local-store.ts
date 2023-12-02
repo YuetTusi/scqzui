@@ -37,7 +37,19 @@ enum LocalStoreKey {
     /**
      * 已登录标记
      */
-    Login = 'Login'
+    Login = 'Login',
+    /**
+     * 登录密码最多尝试次数
+     */
+    AllowCount = 'AllowCount',
+    /**
+     * 密码锁定时间（分钟）
+     */
+    LockMinutes = 'LockMinutes',
+    /**
+     * 登录超时时间
+     */
+    LoginOverTime = 'LoginOverTime'
 }
 
 /**
