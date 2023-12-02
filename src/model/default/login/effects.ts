@@ -4,10 +4,11 @@ import { routerRedux, EffectsCommandMap } from 'dva';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
-import { LockTime, PasswordEffectDays, User } from '@/schema/user';
+import { PasswordEffectDays, User } from '@/schema/user';
 import { TableName } from '@/schema/table-name';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
+import { LocalStoreKey } from '@/utils/local-store';
 
 export default {
     /**
@@ -17,6 +18,14 @@ export default {
 
         const userDb = getDb<User>(TableName.Users);
         const { userName, password } = payload;
+        //密码锁定时间
+        const lockMinutes =
+            localStorage.getItem(LocalStoreKey.LockMinutes) === null
+                ? 10 : Number(localStorage.getItem(LocalStoreKey.LockMinutes));
+        //密码错误允许次数
+        const allowCount =
+            localStorage.getItem(LocalStoreKey.AllowCount) === null
+                ? 5 : Number(localStorage.getItem(LocalStoreKey.AllowCount));
         message.destroy();
         yield put({ type: 'setLoading', payload: true });
         try {
@@ -43,17 +52,17 @@ export default {
                 });
                 return;
             }
-            if (users[0].isLock && dayjs().diff(users[0].lockTime, 'minute') < LockTime) {
-                //# 错5次在时间之内
+            if (users[0].isLock && dayjs().diff(users[0].lockTime, 'minute') < lockMinutes) {
+                //# 错n次在时间之内
                 Modal.warn({
                     title: '用户锁定',
-                    content: `请于${LockTime}分钟后重新登录`,
+                    content: `请于${lockMinutes}分钟后重新登录`,
                     okText: '确定',
                     centered: true
                 });
                 return;
             }
-            if (users[0].isLock && dayjs().diff(users[0].lockTime, 'minute') > LockTime) {
+            if (users[0].isLock && dayjs().diff(users[0].lockTime, 'minute') > lockMinutes) {
                 //# 已超过锁定时限，将记录isLock还原为false
                 yield put({ type: 'setMistake', payload: 0 });
                 yield call([userDb, 'update'],
@@ -66,10 +75,10 @@ export default {
 
             if (helper.base64ToString(users[0].password) !== password) {
                 const prev: number = yield select((state: StateTree) => state.login.mistake);
-                if (prev + 1 >= 5) {
+                if (prev + 1 >= allowCount) {
                     Modal.warn({
                         title: '用户锁定',
-                        content: `因密码连续输入错误5次，请于${LockTime}分钟后重新登录`,
+                        content: `因密码连续输入错误${allowCount}次，请于${lockMinutes}分钟后重新登录`,
                         okText: '确定',
                         centered: true
                     });
@@ -89,6 +98,11 @@ export default {
             }
 
             yield put({ type: 'setMistake', payload: 0 });
+            yield call([userDb, 'update'],
+                { _id: users[0]._id },
+                {
+                    $set: { isLock: false }
+                });
             message.success('登录成功');
             yield put(routerRedux.push('/guide'));
         } catch (error) {
