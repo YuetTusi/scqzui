@@ -47,6 +47,10 @@ export enum ImportTypes {
      */
     IOSMirror = 'ios_mirror',
     /**
+     * TF卡镜像
+     */
+    TFCardMirror = 'tfcard_mirror',
+    /**
      * SD卡镜像（Fake）
      */
     SDCardMirror = 'sdcard-mirror',

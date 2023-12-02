@@ -193,13 +193,16 @@ const Tool: FC<ToolProp> = () => {
             case ExeType.HuaweiPassword:
                 exePath = join(cwd, '../tools/Defender/defender.exe');
                 break;
+            case ExeType.TFExtrator:
+                exePath = join(cwd, '../tools/tf_extractor/tf_extrator.exe');
+                break;
             default:
                 console.log(`未知type:${type}`);
                 break;
         }
         if (exePath) {
             helper
-                .runExe(exePath)
+                .runExe(exePath, [], join(exePath, '../'))
                 .catch((errMsg: string) => {
                     console.log(errMsg);
                     message.destroy();
@@ -374,6 +377,14 @@ const Tool: FC<ToolProp> = () => {
                         </div>
                         <div className="name">
                             安卓物理镜像(数据)
+                        </div>
+                    </div>
+                    <div onClick={() => onImportClick(ImportTypes.TFCardMirror, '导入数据（TF卡镜像导入）')} className="t-button">
+                        <div className="ico">
+                            <img src={tfCardSvg} height={50} />
+                        </div>
+                        <div className="name">
+                            TF卡镜像导入
                         </div>
                     </div>
                     <Auth deny={!useFakeButton}>
@@ -655,12 +666,12 @@ const Tool: FC<ToolProp> = () => {
                         </div>
                         <div className="name">虚拟身份探测</div>
                     </div>
-                    {/* <div className="t-button">
+                    <div className="t-button" onClick={() => runExeHandle(ExeType.TFExtrator)}>
                         <div className="ico">
                             <img src={tfCardSvg} height={50} />
                         </div>
                         <div className="name">TF卡镜像</div>
-                    </div> */}
+                    </div>
                 </div>
             </SortBox>
         </ToolBox>

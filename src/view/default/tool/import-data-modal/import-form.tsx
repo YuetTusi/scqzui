@@ -77,6 +77,7 @@ const ImportForm: FC<ImportFormProp> = ({
             case ImportTypes.IOSMirror:
             case ImportTypes.Samsung_Smartswitch:
             case ImportTypes.AndroidMirror:
+            case ImportTypes.TFCardMirror:
                 properties = ['openFile'];
                 break;
             default:

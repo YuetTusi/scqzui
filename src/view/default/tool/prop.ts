@@ -12,7 +12,11 @@ export enum ExeType {
     /**
      * 华为密码破解
      */
-    HuaweiPassword
+    HuaweiPassword,
+    /**
+     * TF卡提取工具
+     */
+    TFExtrator
 }
 
 export type Action = { type: string, payload: boolean };
