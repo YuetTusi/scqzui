@@ -7,7 +7,7 @@ useFakeButton: true
 useAi: true
 useQuickFetch: true
 useTraceLogin: true
-useLogin: true
+useLogin: false
 hideCad: true
 caseText: 案件
 fetchText: 取证

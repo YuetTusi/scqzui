@@ -57,11 +57,12 @@ export default {
                 });
                 return;
             }
-            if (users[0].isLock && dayjs().diff(users[0].lockTime, 'minute') < lockMinutes) {
+            const leftMinute = dayjs().diff(users[0].lockTime, 'minute');
+            if (users[0].isLock && leftMinute < lockMinutes) {
                 //# 错n次在时间之内
                 Modal.warn({
                     title: '用户锁定',
-                    content: `请于${lockMinutes}分钟后重新登录`,
+                    content: `请于${lockMinutes - leftMinute}分钟后重新登录`,
                     okText: '确定',
                     centered: true
                 });

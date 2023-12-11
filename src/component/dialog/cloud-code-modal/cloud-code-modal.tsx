@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron';
 import React, { FC, useState } from 'react';
 import { useSelector } from 'dva';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
@@ -39,8 +40,16 @@ const CloudCodeModal: FC<Prop> = ({ cancelHandle }) => {
 			return currentDevice.apps.map((app, i) => <CodeItem
 				app={app}
 				usb={usb}
-				humanVerifyDataHandle={(data, appId, appDesc) => {
-					setHumanVerifyData(data);
+				humanVerifyDataHandle={(data, isUrl, appId, appDesc) => {
+					console.log(appId);
+					console.log(appDesc);
+					console.log(`isUrl:${isUrl}`);
+					console.log(data);
+					if (isUrl) {
+						ipcRenderer.send('show-image-verify', data as string);
+					} else {
+						setHumanVerifyData(data as HumanVerify);
+					}
 					setAppId(appId);
 					setAppDesc(appDesc);
 				}}

@@ -37,6 +37,7 @@ let sqliteWindow: BrowserWindow | null = null; //SQLite查询
 let fetchRecordWindow: BrowserWindow | null = null; //采集记录
 let reportWindow: BrowserWindow | null = null; //报告
 let protocolWindow: BrowserWindow | null = null; //协议阅读
+let imageVerifyWindow: BrowserWindow | null = null; //选图验证
 let fetchProcess: ChildProcessWithoutNullStreams | null = null; //采集进程
 let parseProcess: ChildProcessWithoutNullStreams | null = null; //解析进程
 let yunProcess: ChildProcessWithoutNullStreams | null = null; //云取服务进程
@@ -104,6 +105,10 @@ function destroyAllWindow() {
     if (protocolWindow !== null) {
         protocolWindow.destroy();
         protocolWindow = null;
+    }
+    if (imageVerifyWindow !== null) {
+        imageVerifyWindow.destroy();
+        imageVerifyWindow = null;
     }
     if (timerWindow !== null) {
         timerWindow.destroy();
@@ -448,6 +453,31 @@ ipcMain.on('show-protocol', (event: IpcMainEvent, fetchData: FetchData) => {
     } else {
         protocolWindow.show();
         protocolWindow.webContents.send('show-protocol', fetchData);
+    }
+});
+
+//显示阅读协议
+ipcMain.on('show-image-verify', (event: IpcMainEvent, url: string) => {
+    event.preventDefault();
+    if (imageVerifyWindow === null || imageVerifyWindow.isDestroyed()) {
+        imageVerifyWindow = new BrowserWindow({
+            width: 800,
+            height: 600,
+            show: true,
+            frame: true,
+            alwaysOnTop: true,
+            parent: mainWindow!,
+            modal: true,
+            webPreferences: {
+                contextIsolation: false,
+                nodeIntegration: true,
+                javascript: true
+            }
+        });
+        imageVerifyWindow.setMenu(null);
+        imageVerifyWindow.loadURL(url);
+    } else {
+        imageVerifyWindow.show();
     }
 });
 

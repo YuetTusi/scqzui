@@ -219,17 +219,20 @@ export function smsMsg({ msg }: Command<{
 
 /**
  * 接收图形验证数据（滑块&点选文字）
+ * 当isUrl为true，表示是一个验证地址，直接打开即可
  */
 export function humanVerify({ msg }: Command<{
     usb: number,
     appId: string,
-    humanVerifyData: HumanVerify | null
+    isUrl: boolean,
+    humanVerifyData: HumanVerify | string | null
 }>, dispatch: Dispatch<any>) {
 
     dispatch({
         type: 'cloudCodeModal/setHumanVerifyData', payload: {
             usb: msg.usb,
             m_strID: msg.appId,
+            isUrl: msg.isUrl,
             humanVerifyData: msg.humanVerifyData
         }
     });
