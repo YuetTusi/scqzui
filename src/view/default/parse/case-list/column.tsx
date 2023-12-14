@@ -20,13 +20,13 @@ import DeviceType from '@/schema/device-type';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { getDb } from '@/utils/db';
 import { NoWrapText } from './styled/style';
-import { ExportFile } from '../prop';
+import { ExtraAction } from '../prop';
 
 const cwd = process.cwd();
 const { Group } = Button;
 const { useBcp, caseText, devText } = helper.readConf()!;
 
-const onExport = async (data: CaseInfo, exportFile: ExportFile) => {
+const onExport = async (data: CaseInfo, exportFile: ExtraAction) => {
     const db = getDb<DeviceType>(TableName.Devices);
     let exeDir = join(cwd, '../tools');
     let exeName = '';
@@ -45,7 +45,7 @@ const onExport = async (data: CaseInfo, exportFile: ExportFile) => {
         return;
     }
 
-    if (exportFile === ExportFile.Excel) {
+    if (exportFile === ExtraAction.Excel) {
         exeDir = join(exeDir, 'create_excel_report');
         exeName = 'create_excel_report.exe';
         fileName = '违规检测结果报告.xlsx';
@@ -130,6 +130,12 @@ const onExport = async (data: CaseInfo, exportFile: ExportFile) => {
 };
 
 /**
+ * 生成报告（案件下的所有设备）
+ * @param data 案件数据
+ */
+const onCreateReport = (data: CaseInfo) => { };
+
+/**
  * 表头定义
  * @param dispatch 派发方法
  * @param operateDoing OperateDoing仓库
@@ -190,7 +196,7 @@ export function getCaseColumns(
             dataIndex: '_id',
             key: 'more',
             align: 'center',
-            render: (id: string, data: CaseInfo) => <Popover
+            render: (_: string, data: CaseInfo) => <Popover
                 zIndex={9}
                 trigger="click"
                 content={
@@ -198,14 +204,30 @@ export function getCaseColumns(
                         <Button
                             onClick={(event: MouseEvent<HTMLButtonElement>) => {
                                 event.stopPropagation();
-                                onExport(data, ExportFile.Excel);
+                                Modal.confirm({
+                                    title: '生成报告',
+                                    content: '可能所需时间较长，确定重新生成报告吗？',
+                                    okText: '是',
+                                    cancelText: '否',
+                                    centered: true,
+                                    onOk() {
+                                        dispatch({ type: 'parseCase/createReport', payload: data });
+                                    }
+                                });
+                            }}
+                            type="primary"
+                            size="small">生成报告</Button>
+                        <Button
+                            onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                                event.stopPropagation();
+                                onExport(data, ExtraAction.Excel);
                             }}
                             type="primary"
                             size="small">导出Excel报表</Button>
                         <Button
                             onClick={(event: MouseEvent<HTMLButtonElement>) => {
                                 event.stopPropagation();
-                                onExport(data, ExportFile.Pdf);
+                                onExport(data, ExtraAction.Pdf);
                             }}
                             type="primary"
                             size="small">导出PDF报表</Button>

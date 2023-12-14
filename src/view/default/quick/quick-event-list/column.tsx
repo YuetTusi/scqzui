@@ -205,6 +205,22 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                         <Button
                             onClick={(event: MouseEvent<HTMLButtonElement>) => {
                                 event.stopPropagation();
+                                Modal.confirm({
+                                    title: '生成报告',
+                                    content: '可能所需时间较长，确定重新生成报告吗？',
+                                    okText: '是',
+                                    cancelText: '否',
+                                    centered: true,
+                                    onOk() {
+                                        dispatch({ type: 'quickEventList/createReport', payload: record });
+                                    }
+                                });
+                            }}
+                            type="primary"
+                            size="small">生成报告</Button>
+                        <Button
+                            onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                                event.stopPropagation();
                                 batchExportReportHandle(record);
                             }}
                             type="primary"

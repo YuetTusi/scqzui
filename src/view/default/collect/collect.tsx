@@ -1,4 +1,5 @@
-import { ipcRenderer } from 'electron';
+import { join } from 'path';
+import { ipcRenderer, shell } from 'electron';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileWaveform } from '@fortawesome/free-solid-svg-icons';
 import React, { FC, useEffect, useRef, useState } from 'react';
@@ -28,7 +29,7 @@ import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
 import { LiveModal } from '@/component/dialog/fetch-record-modal';
 import {
-    AppleCreditModal, UsbDebugModal, HelpModal, ApplePasswordModal,
+    AppleCreditModal, HelpModal, ApplePasswordModal,
     UMagicCodeModal, GuideModal, CloudCodeModal, CloudHistoryModal
 } from '@/component/dialog';
 import NormalInputModal from './normal-input-modal';
@@ -49,7 +50,7 @@ const Collect: FC<CollectProp> = ({ }) => {
 
     const dispatch = useDispatch();
     const [appCreditModalVisible, setAppCreditModalVisible] = useState<boolean>(false);
-    const [usbDebugModalVisible, setUsbDebugModalVisible] = useState<boolean>(false);
+    // const [usbDebugModalVisible, setUsbDebugModalVisible] = useState<boolean>(false);
     const [helpModalVisible, setHelpModalVisible] = useState<boolean>(false);
     const [normalInputModal, setNormalInputModal] = useState<boolean>(false);
     const [serverCloudModalVisible, setServerCloudModalVisible] = useState<boolean>(false);
@@ -144,10 +145,20 @@ const Collect: FC<CollectProp> = ({ }) => {
      * 设备帮助handle
      * @param os 设备系统
      */
-    const onHelpHandle = (os: DeviceSystem) => {
+    const onHelpHandle = async (os: DeviceSystem) => {
         switch (os) {
             case DeviceSystem.Android:
-                setUsbDebugModalVisible(true);
+                try {
+                    const exist = await helper.existFile('');
+                    if (exist) {
+                        await shell.openPath(join(helper.APP_CWD, './resources/help/usb调试.pdf'));
+                    } else {
+                        message.destroy();
+                        message.info('暂未提供帮助文档');
+                    }
+                } catch (error) {
+                    console.warn(error);
+                }
                 break;
             case DeviceSystem.IOS:
                 setAppCreditModalVisible(true);
@@ -351,13 +362,6 @@ const Collect: FC<CollectProp> = ({ }) => {
      * 投屏handle
      */
     const castScreenHandle = (data: DeviceType) => {
-        console.log({
-            type: SocketType.Fetch,
-            cmd: CommandType.DevCast,
-            msg: {
-                id: data.usb ?? 0
-            }
-        });
         message.destroy();
         message.info(`终端${data.usb ?? 0}设备投屏`);
         send(SocketType.Fetch, {
@@ -481,7 +485,7 @@ const Collect: FC<CollectProp> = ({ }) => {
             <div className="hidden-scroll-bar" />
             <div className="button-bar">
                 <Group>
-                    <Button onClick={() => setUsbDebugModalVisible(true)} type="primary">
+                    <Button onClick={() => onHelpHandle(DeviceSystem.Android)} type="primary">
                         <AndroidOutlined />
                         <span>开启USB调试</span>
                     </Button>
@@ -526,9 +530,9 @@ const Collect: FC<CollectProp> = ({ }) => {
                 </div>
             </DevicePanel>
         </ContentBox>
-        <UsbDebugModal
+        {/* <UsbDebugModal
             visible={usbDebugModalVisible}
-            okHandle={() => setUsbDebugModalVisible(false)} />
+            okHandle={() => setUsbDebugModalVisible(false)} /> */}
         <AppleCreditModal
             visible={appCreditModalVisible}
             okHandle={() => setAppCreditModalVisible(false)} />

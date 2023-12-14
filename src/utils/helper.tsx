@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import net from 'net';
 import crypto from 'crypto';
-import { extname, join } from 'path';
+import { dirname, extname, join } from 'path';
 import {
   access,
   accessSync,
@@ -213,6 +213,22 @@ const helper = {
         log.error(`${exeName}启动失败,exePath:${exePath}`);
       }
       handle = null;
+    });
+  },
+  async runTask(exePath: string, params: any[] = []): Promise<number | null> {
+    const cwd = dirname(exePath);
+    return new Promise((resolve, reject) => {
+      const handle = spawn(exePath, params, {
+        cwd,
+        windowsHide: true
+      });
+      handle.once('error', (err) => {
+        reject(err);
+      });
+      handle.once('exit', (code) => {
+        console.log('exit');
+        resolve(code);
+      });
     });
   },
   /**

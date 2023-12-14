@@ -1,9 +1,9 @@
 export interface ParseProp { }
 
 /**
- * 导出类型
+ * 其他功能
  */
-export enum ExportFile {
+export enum ExtraAction {
     /**
      * Excel报表
      */
@@ -15,5 +15,9 @@ export enum ExportFile {
     /**
      * Word文档
      */
-    Word
+    Word,
+    /**
+     * 生成报告
+     */
+    CreateReport
 }

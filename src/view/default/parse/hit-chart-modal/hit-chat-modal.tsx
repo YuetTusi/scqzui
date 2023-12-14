@@ -21,7 +21,7 @@ import message from 'antd/lib/message';
 import { useCase, useQuickHit } from '@/hook';
 import { helper } from '@/utils/helper';
 import { EmptyBox } from './styled/style';
-import { ExportFile } from '../prop';
+import { ExtraAction } from '../prop';
 import { HitChartModalProp } from './prop';
 
 const cwd = process.cwd();
@@ -105,7 +105,7 @@ const HitChartModal: FC<HitChartModalProp> = ({
         }
     }, [data, visible]);
 
-    const onDirSelect = async (exportFile: ExportFile) => {
+    const onDirSelect = async (exportFile: ExtraAction) => {
 
         let exeDir = join(cwd, '../tools');
         let exeName = '';
@@ -122,15 +122,15 @@ const HitChartModal: FC<HitChartModalProp> = ({
         });
 
         switch (exportFile) {
-            case ExportFile.Excel:
+            case ExtraAction.Excel:
                 exeDir = join(exeDir, 'create_excel_report');
                 exeName = 'create_excel_report.exe';
                 break;
-            case ExportFile.Pdf:
+            case ExtraAction.Pdf:
                 exeDir = join(exeDir, 'create_excel_report');
                 exeName = 'create_pdf_report.exe';
                 break;
-            case ExportFile.Word:
+            case ExtraAction.Word:
                 exeDir = join(exeDir, 'create_excel_report');
                 exeName = 'create_word_report.exe';
                 break;
@@ -216,19 +216,19 @@ const HitChartModal: FC<HitChartModalProp> = ({
 
     return <Modal
         footer={[
-            <Button onClick={() => onDirSelect(ExportFile.Excel)}
+            <Button onClick={() => onDirSelect(ExtraAction.Excel)}
                 type="primary"
                 key="HCM_0">
                 <DownloadOutlined />
                 <span>导出Excel报表</span>
             </Button>,
-            <Button onClick={() => onDirSelect(ExportFile.Pdf)}
+            <Button onClick={() => onDirSelect(ExtraAction.Pdf)}
                 type="primary"
                 key="HCM_1">
                 <DownloadOutlined />
                 <span>导出PDF报表</span>
             </Button>,
-            <Button onClick={() => onDirSelect(ExportFile.Word)}
+            <Button onClick={() => onDirSelect(ExtraAction.Word)}
                 type="primary"
                 key="HCM_2">
                 <DownloadOutlined />
