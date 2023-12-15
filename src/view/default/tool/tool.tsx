@@ -196,6 +196,9 @@ const Tool: FC<ToolProp> = () => {
             case ExeType.TFExtrator:
                 exePath = join(cwd, '../tools/tf_extractor/tf_extrator.exe');
                 break;
+            case ExeType.ChinaMobileSearch:
+                exePath = join(cwd, '../tools/yztc/yztc.exe');
+                break;
             default:
                 console.log(`未知type:${type}`);
                 break;
@@ -671,6 +674,12 @@ const Tool: FC<ToolProp> = () => {
                             <img src={tfCardSvg} height={50} />
                         </div>
                         <div className="name">TF卡镜像</div>
+                    </div>
+                    <div className="t-button" onClick={() => runExeHandle(ExeType.ChinaMobileSearch)}>
+                        <div className="ico">
+                            <img src={chinaMobileSvg} height={50} />
+                        </div>
+                        <div className="name">移动一证通查</div>
                     </div>
                 </div>
             </SortBox>

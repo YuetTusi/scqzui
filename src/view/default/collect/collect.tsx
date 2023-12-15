@@ -149,9 +149,9 @@ const Collect: FC<CollectProp> = ({ }) => {
         switch (os) {
             case DeviceSystem.Android:
                 try {
-                    const exist = await helper.existFile('');
+                    const exist = await helper.existFile(join(helper.APP_CWD, './resources/help/手机厂家手机取证操作.pdf'));
                     if (exist) {
-                        await shell.openPath(join(helper.APP_CWD, './resources/help/usb调试.pdf'));
+                        await shell.openPath(join(helper.APP_CWD, './resources/help/手机厂家手机取证操作.pdf'));
                     } else {
                         message.destroy();
                         message.info('暂未提供帮助文档');

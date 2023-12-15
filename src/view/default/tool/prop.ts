@@ -16,7 +16,11 @@ export enum ExeType {
     /**
      * TF卡提取工具
      */
-    TFExtrator
+    TFExtrator,
+    /**
+     * 中国移动一证通查
+     */
+    ChinaMobileSearch
 }
 
 export type Action = { type: string, payload: boolean };
