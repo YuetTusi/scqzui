@@ -10,7 +10,8 @@ import message from 'antd/lib/message';
 import Modal from 'antd/lib/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers, faSimCard, faSdCard, faMobileRetro
+    faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers,
+    faSimCard, faSdCard, faMobileRetro, faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faApple, faAndroid, faItunes, faBlackberry, faAlipay, faWeixin
@@ -649,14 +650,16 @@ const Tool: FC<ToolProp> = () => {
                             建设银行云取
                         </div>
                     </div>
-                    <div onClick={() => dispatchModal({ type: 'chinaMobileModalVisible', payload: true })} className="t-button">
-                        <div className="ico">
-                            <img src={chinaMobileSvg} height={50} />
+                    <Auth deny={!useFakeButton}>
+                        <div onClick={() => dispatchModal({ type: 'chinaMobileModalVisible', payload: true })} className="t-button">
+                            <div className="ico">
+                                <img src={chinaMobileSvg} height={50} />
+                            </div>
+                            <div className="name">
+                                中国移动云取
+                            </div>
                         </div>
-                        <div className="name">
-                            中国移动云取
-                        </div>
-                    </div>
+                    </Auth>
                     <div onClick={() => shell.openExternal('http://58.48.76.202:12086/')} className="t-button">
                         <div className="ico">
                             <img src={cloudSearchSvg} height={50} />
@@ -677,9 +680,9 @@ const Tool: FC<ToolProp> = () => {
                     </div>
                     <div className="t-button" onClick={() => runExeHandle(ExeType.ChinaMobileSearch)}>
                         <div className="ico">
-                            <img src={chinaMobileSvg} height={50} />
+                            <FontAwesomeIcon icon={faMagnifyingGlass} color="#2db5a9" />
                         </div>
-                        <div className="name">移动一证通查</div>
+                        <div className="name">手机号一证通查</div>
                     </div>
                 </div>
             </SortBox>

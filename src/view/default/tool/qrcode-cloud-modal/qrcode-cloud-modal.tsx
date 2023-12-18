@@ -12,8 +12,8 @@ import { request } from '@/utils/request';
 import { QRCodeBox, TipBox } from './styled/box';
 import { Tip } from './tip';
 
-const exePath = join(helper.APP_CWD, '../tools/jsyh_tmp');
-const exeName = join(exePath, 'jsyh_tmp.exe');
+const exePath = join(helper.APP_CWD, '../tools/jsyh');
+const exeName = join(exePath, 'jsyh.exe');
 let timer: any = null;
 
 /**
