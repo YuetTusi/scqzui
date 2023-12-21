@@ -19,6 +19,12 @@ export const CategoryBox = styled.div`
     }
 `;
 
+export const AiLabel = styled.label`
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+`;
+
 export const ItemBox = styled.div<{ padding?: string }>`
     padding: ${(props) => props.padding ?? '20px'};
 `;

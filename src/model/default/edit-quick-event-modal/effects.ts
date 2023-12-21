@@ -23,7 +23,7 @@ export default {
             ? join(cwd, './data/predict.json')
             : join(cwd, './resources/config/predict.json'); //模版路径
         const db = getDb<QuickEvent>(TableName.QuickEvent);
-        const { _id, eventName, eventPath } = payload as QuickEvent;
+        const { _id, eventName, eventPath, isAi } = payload as QuickEvent;
         const targetPath = join(eventPath, eventName);
         try {
             const aiSwitch: AiSwitchState = yield select((state: StateTree) => state.aiSwitch);
@@ -51,7 +51,7 @@ export default {
                 "m_strCheckUnitName": "",
                 "officerName": "",
                 "securityCaseType": "",
-                "isAi": false,
+                "isAi": isAi,
                 "ruleFrom": payload.ruleFrom,
                 "ruleTo": payload.ruleTo,
                 "caseName": payload.eventName,

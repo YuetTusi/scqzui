@@ -132,12 +132,13 @@ function api(webContents: WebContents) {
                         devices: nextDevices.filter(i => i.caseId === current._id)
                     }
                 ]), [])
-                .map(({ _id, eventName, eventPath, devices, ruleFrom, ruleTo }) => ({
+                .map(({ _id, eventName, eventPath, devices, ruleFrom, ruleTo, isAi }) => ({
                     _id,
                     m_strCaseName: eventName,
                     m_strCasePath: eventPath,
                     ruleFrom,
                     ruleTo,
+                    isAi,
                     devices
                 }));
             res.json(next)
