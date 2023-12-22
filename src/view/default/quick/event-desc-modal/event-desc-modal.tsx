@@ -77,7 +77,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
      * 扫描二维码完成响应
      * @param finish 扫码完成
      */
-    const quickScannedHandle = (event: IpcRendererEvent, finish: boolean) => {
+    const quickScannedHandle = (_: IpcRendererEvent, finish: boolean) => {
         setScanned(finish);
         setTimeout(() => {
             setScanned(false);

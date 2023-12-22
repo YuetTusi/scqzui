@@ -69,14 +69,14 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
                 message.info('开始导出报告...');
                 cancelHandle();
 
-                const prepared = devices.map((d) => {
+                const prepared = devices.map(dev => {
                     const next = {
-                        tId: d.tId as string,
-                        deviceId: d.deviceId as string,
-                        phonePath: d.phonePath as string,
-                        mobileName: d.mobileName as string,
-                        mobileHolder: d.mobileHolder as string,
-                        mobileNo: d.mobileNo as string
+                        tId: dev.tId as string,
+                        deviceId: dev.deviceId as string,
+                        phonePath: dev.phonePath as string,
+                        mobileName: dev.mobileName as string,
+                        mobileHolder: dev.mobileHolder as string,
+                        mobileNo: dev.mobileNo as string
                     };
                     return next;
                 });

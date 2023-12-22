@@ -20,7 +20,11 @@ export enum ExeType {
     /**
      * 中国移动一证通查
      */
-    ChinaMobileSearch
+    ChinaMobileSearch,
+    /**
+     * 网络行为查询
+     */
+    WebAction
 }
 
 export type Action = { type: string, payload: boolean };

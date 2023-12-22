@@ -6,23 +6,23 @@ import { LogItem, LogListProp } from './prop';
 
 const LogList: FC<LogListProp> = ({ logs }) => {
 	const renderLogs = (logs: [string, LogItem][]) =>
-		logs.map((log, index) => <div key={`Log_${index}`}>
+		logs.map(([log, item], index) => <div key={`Log_${index}`}>
 			<h2>
 				<FontAwesomeIcon icon={faListAlt} />
-				<span>{log[0].replace(/\-/g, '.')}</span>
+				<span>{log.replace(/\-/g, '.')}</span>
 			</h2>
 			<div className="details">
 				<div>
 					<label>日期：</label>
-					<span>{log[1].Date}</span>
+					<span>{item.Date}</span>
 				</div>
 				<div className="spe">
 					<label>ID：</label>
-					<span>{log[1].ID}</span>
+					<span>{item.ID}</span>
 				</div>
 			</div>
 			<ul>
-				{log[1].Item.map((item, index) => <li key={`L_${index}`}>{item}</li>)}
+				{item.Item.map((item, index) => <li key={`L_${index}`}>{item}</li>)}
 			</ul>
 		</div>);
 	return <LogListBox>{renderLogs(logs)}</LogListBox>;

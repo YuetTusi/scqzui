@@ -150,7 +150,7 @@ function api(webContents: WebContents) {
 
     router.get<{ type: string }>('/app/:type', (req, res) => {
         const { type } = req.params;
-        ipcMain.once('read-app-yaml-result', (event, result) => res.json(result));
+        ipcMain.once('read-app-yaml-result', (_, result) => res.json(result));
         webContents.send('read-app-yaml', type);
     });
 
@@ -265,7 +265,7 @@ function api(webContents: WebContents) {
         }
     });
 
-    router.get('/ai-model', async (req, res) => {
+    router.get('/ai-model', async (_, res) => {
         const target = isDev
             ? join(cwd, 'data/mobilev2.pt')
             : join(cwd, 'resources/data/mobilev2.pt');
@@ -289,7 +289,7 @@ function api(webContents: WebContents) {
     });
 
     //被告知已超用户空闲时限
-    router.get('/overtime', (req, res) => {
+    router.get('/overtime', (_, res) => {
         webContents.send('overtime');
         res.end();
     });

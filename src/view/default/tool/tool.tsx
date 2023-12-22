@@ -58,6 +58,7 @@ import androidAuthSvg from './styled/images/android_auth.svg';
 import cloudSearchSvg from './styled/images/cloud-search.svg';
 import userSearchSvg from './styled/images/user-search.svg';
 import tfCardSvg from './styled/images/tf-card.svg';
+import webActionPng from './styled/images/web-action.png';
 import { CrackTypes } from './crack-modal/prop';
 import { ExeType, Action, ModalOpenState, ToolProp } from './prop';
 
@@ -199,6 +200,9 @@ const Tool: FC<ToolProp> = () => {
                 break;
             case ExeType.ChinaMobileSearch:
                 exePath = join(cwd, '../tools/yztc/yztc.exe');
+                break;
+            case ExeType.WebAction:
+                exePath = 'C:/AggregateQuery/web-action/网络行为查询评估系统.exe';
                 break;
             default:
                 console.log(`未知type:${type}`);
@@ -666,11 +670,11 @@ const Tool: FC<ToolProp> = () => {
                         </div>
                         <div className="name">App云取探测</div>
                     </div>
-                    <div onClick={() => shell.openExternal('http://58.48.76.202:16688/')} className="t-button">
+                    <div onClick={() => runExeHandle(ExeType.WebAction)} className="t-button">
                         <div className="ico">
-                            <img src={userSearchSvg} height={50} />
+                            <img src={webActionPng} height={50} />
                         </div>
-                        <div className="name">虚拟身份探测</div>
+                        <div className="name">网络行为查询评估</div>
                     </div>
                     <div className="t-button" onClick={() => runExeHandle(ExeType.TFExtrator)}>
                         <div className="ico">

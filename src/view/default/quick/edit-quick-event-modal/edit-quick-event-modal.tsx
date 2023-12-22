@@ -118,7 +118,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
     /**
      * 验证案件重名
      */
-    const validEventNameExist = throttle(async (rule: any, value: string) => {
+    const validEventNameExist = throttle(async (_: any, value: string) => {
         setIsCheck(true);
         let next = value === '..' ? '.' : value;
         try {
@@ -163,7 +163,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
      * @param rule 校验规则
      * @param value 值
      */
-    const ruleToValid = async (rule: RuleObject, value: any) => {
+    const ruleToValid = async (_: RuleObject, value: any) => {
         const from = formRef.getFieldValue('ruleFrom');
         if (from === value) {
             throw new Error('不要等于起始时段');
@@ -195,8 +195,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         maskClosable={false}
         destroyOnClose={false}
         forceRender={true}
-        className="zero-padding-body"
-    >
+        className="zero-padding-body">
         <ItemBox padding="20px 20px 0 20px">
             <Form form={formRef} layout="horizontal" {...fromLayout}>
                 <Item

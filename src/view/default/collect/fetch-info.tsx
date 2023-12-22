@@ -44,7 +44,7 @@ const FetchInfo: FC<FetchInfoProp> = memo(({ device, recordHandle }) => {
      * @param event
      * @param arg
      */
-    const progressHandle = (event: IpcRendererEvent, arg: EventMessage) => {
+    const progressHandle = (_: IpcRendererEvent, arg: EventMessage) => {
         if (arg.usb === device?.usb) {
             prev.set(arg.usb, arg.fetchRecord);
             setData(arg.fetchRecord);
@@ -55,13 +55,13 @@ const FetchInfo: FC<FetchInfoProp> = memo(({ device, recordHandle }) => {
      * 采集结束后监听消息，清除USB序号对应的缓存
      * @param usb 序号
      */
-    const fetchOverHandle = (event: IpcRendererEvent, usb: number) => prev.delete(usb);
+    const fetchOverHandle = (_: IpcRendererEvent, usb: number) => prev.delete(usb);
 
     /**
      * 接收当前USB序号的最新一条进度消息
      * # 当用户切回采集页面时，组件要立即加载上（最近）一条进度
      */
-    const receiveFetchLastProgressHandle = (event: IpcRendererEvent, arg: EventMessage) => {
+    const receiveFetchLastProgressHandle = (_: IpcRendererEvent, arg: EventMessage) => {
         if (arg.usb === device?.usb) {
             prev.set(arg.usb, arg.fetchRecord);
             setData(arg.fetchRecord);

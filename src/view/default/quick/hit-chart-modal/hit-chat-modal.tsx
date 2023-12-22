@@ -122,11 +122,6 @@ const HitChartModal: FC<HitChartModalProp> = ({
         if (selectVal.filePaths && selectVal.filePaths.length > 0) {
             const [saveTarget] = selectVal.filePaths; //用户所选目标目录
             const casePath = join(eventData!.eventPath, eventData!.eventName);
-
-            console.log(casePath);
-            console.log(record?.phonePath);
-            console.log(saveTarget);
-
             const handle = Modal.info({
                 title: '导出',
                 content: '正在导出报表，请稍等...',

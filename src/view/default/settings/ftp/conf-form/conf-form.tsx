@@ -6,7 +6,7 @@ import Form from 'antd/lib/form';
 import { IP, Port } from '@/utils/regex';
 import { Split } from '@/component/style-tool';
 import { FormBox } from '../styled/style';
-import { ConfFormProp, FormValue } from './prop';
+import { ConfFormProp } from './prop';
 
 const { Item } = Form;
 const { Password } = Input;
@@ -31,7 +31,7 @@ const ConfForm: FC<ConfFormProp> = ({ formRef, data }) => {
                     <Switch
                         checked={enable}
                         onChange={(value) => setEnable(value)}
-                        
+
                         checkedChildren="开"
                         unCheckedChildren="关" />
                 </Item>

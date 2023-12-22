@@ -5,8 +5,8 @@ import Input from 'antd/lib/input';
 import Officer from '@/schema/officer';
 import { TableName } from '@/schema/table-name';
 import { PoliceNo } from '@/utils/regex';
-import { EditFormProp } from './prop';
 import { getDb } from '@/utils/db';
+import { EditFormProp } from './prop';
 
 const { Item } = Form;
 

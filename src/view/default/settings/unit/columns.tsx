@@ -1,6 +1,5 @@
 import React from 'react';
 import { ColumnsType } from 'antd/lib/table';
-// import { ColumnGroup } from 'antd/lib/table/ColumnGroup';
 
 /**
  * 表头定义
