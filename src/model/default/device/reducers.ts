@@ -40,11 +40,13 @@ export default {
      * 更新列表中某个设备的属性
      * usb序号从1开始
      * @param {number} payload.usb USB序号
-     * @param {string} payload.name 属性名
+     * @param {string} payload.name DeviceType属性名
      * @param {any} payload.value 属性值
      */
-    updateProp(state: any, { payload }: AnyAction) {
-        const { usb, name, value } = payload;
+    updateProp(state: DeviceStoreState, { payload }: AnyAction) {
+        const { usb, name, value } = payload as {
+            usb: number, name: keyof DeviceType, value: any
+        };
         state.deviceList[usb - 1][name] = value;
         return state;
     },
@@ -53,17 +55,18 @@ export default {
      * usb序号从1开始
      * @param payload USB序号
      */
-    removeDevice(state: any, { payload }: AnyAction) {
+    removeDevice(state: DeviceStoreState, { payload }: AnyAction) {
 
-        state.deviceList = state.deviceList.map((item: DeviceType) => {
-            if (helper.isNullOrUndefined(item)) {
-                return undefined;
-            } else if (item.usb == payload) {
-                return undefined;
-            } else {
-                return item;
-            }
-        });
+        (state.deviceList as (DeviceType | undefined)[]) = state
+            .deviceList.map((item: DeviceType) => {
+                if (helper.isNullOrUndefined(item)) {
+                    return undefined;
+                } else if (item.usb == payload) {
+                    return undefined;
+                } else {
+                    return item;
+                }
+            });
         return state;
     },
     /**

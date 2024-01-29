@@ -134,6 +134,14 @@ interface Conf {
 	 */
 	useQuickFetch: boolean,
 	/**
+	 * 是否启用App云取探测
+	 */
+	useCloudSearch: boolean,
+	/**
+	 * 是否启用网络行为查询
+	 */
+	useWebAction: boolean,
+	/**
 	 * 是否隐藏报告CAD节点
 	 */
 	hideCad: boolean,

@@ -14,7 +14,7 @@ import {
     faSimCard, faSdCard, faMobileRetro, faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons';
 import {
-    faApple, faAndroid, faItunes, faBlackberry, faAlipay, faWeixin
+    faApple, faAndroid, faItunes, faBlackberry, faAlipay
 } from '@fortawesome/free-brands-svg-icons';
 import Auth from '@/component/auth';
 import SubLayout from '@/component/sub-layout';
@@ -56,14 +56,15 @@ import ccbSvg from './styled/images/ccb.svg';
 import chinaMobileSvg from './styled/images/chinamobile.svg';
 import androidAuthSvg from './styled/images/android_auth.svg';
 import cloudSearchSvg from './styled/images/cloud-search.svg';
-import userSearchSvg from './styled/images/user-search.svg';
 import tfCardSvg from './styled/images/tf-card.svg';
 import webActionPng from './styled/images/web-action.png';
 import { CrackTypes } from './crack-modal/prop';
 import { ExeType, Action, ModalOpenState, ToolProp } from './prop';
 
 const cwd = process.cwd();
-const { useFakeButton } = helper.readConf()!;
+const {
+    useFakeButton, useCloudSearch, useWebAction
+} = helper.readConf()!;
 
 /**
  * 工具箱
@@ -664,18 +665,22 @@ const Tool: FC<ToolProp> = () => {
                             </div>
                         </div>
                     </Auth>
-                    <div onClick={() => shell.openExternal('http://58.48.76.202:12086/')} className="t-button">
-                        <div className="ico">
-                            <img src={cloudSearchSvg} height={50} />
+                    <Auth deny={!useCloudSearch}>
+                        <div onClick={() => shell.openExternal('http://58.48.76.202:12086/')} className="t-button">
+                            <div className="ico">
+                                <img src={cloudSearchSvg} height={50} />
+                            </div>
+                            <div className="name">App云取探测</div>
                         </div>
-                        <div className="name">App云取探测</div>
-                    </div>
-                    <div onClick={() => runExeHandle(ExeType.WebAction)} className="t-button">
-                        <div className="ico">
-                            <img src={webActionPng} height={50} />
+                    </Auth>
+                    <Auth deny={!useWebAction}>
+                        <div onClick={() => runExeHandle(ExeType.WebAction)} className="t-button">
+                            <div className="ico">
+                                <img src={webActionPng} height={50} />
+                            </div>
+                            <div className="name">网络行为查询评估</div>
                         </div>
-                        <div className="name">网络行为查询评估</div>
-                    </div>
+                    </Auth>
                     <div className="t-button" onClick={() => runExeHandle(ExeType.TFExtrator)}>
                         <div className="ico">
                             <img src={tfCardSvg} height={50} />
