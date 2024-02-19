@@ -86,10 +86,7 @@ if (helper.useGPURender()) {
     log.info('禁用GPU渲染');
 }
 
-helper.writeReportJson(
-    config?.reportType,
-    config?.hideCad
-); //写report.json
+helper.writeReportJson(config!); //写report.json
 
 /**
  * 销毁所有窗口

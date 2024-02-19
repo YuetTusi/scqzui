@@ -858,17 +858,19 @@ const helper = {
   },
   /**
    * 写report.json文件
-   * @param reportType 值
-   * @param hideCad 隐藏CAD节点
+  //  * @param reportType 值
+  //  * @param hideCad 隐藏CAD节点
    */
-  async writeReportJson(reportType?: number, hideCad?: boolean) {
+  async writeReportJson(conf: Conf) {
+    const { reportHideApp, reportType, hideCad } = conf;
     try {
       const saveTo = isDev
         ? join(cwd, 'data/report.json')
         : join(cwd, 'resources/config/report.json');
       return await this.writeJSONfile(saveTo, {
         reportType: reportType === undefined ? 0 : reportType,
-        hideCad: hideCad ?? false
+        hideCad: hideCad ?? false,
+        reportHideApp: reportHideApp === undefined ? 0 : reportHideApp
       });
     } catch (error) {
       log.error(`写入report.json失败:${error.message}`);

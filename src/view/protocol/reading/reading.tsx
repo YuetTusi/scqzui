@@ -6,7 +6,7 @@ import { FetchData } from '@/schema/fetch-data';
 import { AtPanel } from './styled/box';
 import { ReadingProp } from './prop';
 
-var readHandle: NodeJS.Timer | null = null;
+var readHandle: any = null;
 var fetchDataReceive: FetchData | null = null;
 
 /**

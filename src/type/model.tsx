@@ -260,7 +260,11 @@ interface Conf {
 	/**
 	 * 报告显示方式
 	 */
-	reportType: number
+	reportType: number,
+	/**
+	 * 报告隐藏违规App
+	 */
+	reportHideApp: number
 }
 
 export { StateTree, Conf };
