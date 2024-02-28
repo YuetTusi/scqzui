@@ -26,6 +26,11 @@ const cwd = process.cwd();
 const { Group } = Button;
 const { useBcp, caseText, devText } = helper.readConf()!;
 
+/**
+ * 批量导出
+ * @param data 案件
+ * @param exportFile 导出类型
+ */
 const onExport = async (data: CaseInfo, exportFile: ExtraAction) => {
     const db = getDb<DeviceType>(TableName.Devices);
     let exeDir = join(cwd, '../tools');
@@ -45,14 +50,22 @@ const onExport = async (data: CaseInfo, exportFile: ExtraAction) => {
         return;
     }
 
-    if (exportFile === ExtraAction.Excel) {
-        exeDir = join(exeDir, 'create_excel_report');
-        exeName = 'create_excel_report.exe';
-        fileName = '违规检测结果报告.xlsx';
-    } else {
-        exeDir = join(exeDir, 'create_excel_report');
-        exeName = 'create_pdf_report.exe';
-        fileName = '违规检测结果报告.pdf';
+    switch (exportFile) {
+        case ExtraAction.Excel:
+            exeDir = join(exeDir, 'create_excel_report');
+            exeName = 'create_excel_report.exe';
+            fileName = '违规检测结果报告.xlsx';
+            break;
+        case ExtraAction.Pdf:
+            exeDir = join(exeDir, 'create_excel_report');
+            exeName = 'create_pdf_report.exe';
+            fileName = '违规检测结果报告.pdf';
+            break;
+        case ExtraAction.Word:
+            exeDir = join(exeDir, 'create_excel_report');
+            exeName = 'create_word_report.exe';
+            fileName = '违规检测结果报告.docx';
+            break;
     }
 
     const selectVal: OpenDialogReturnValue = await ipcRenderer.invoke('open-dialog', {
@@ -128,12 +141,6 @@ const onExport = async (data: CaseInfo, exportFile: ExtraAction) => {
         });
     }
 };
-
-/**
- * 生成报告（案件下的所有设备）
- * @param data 案件数据
- */
-const onCreateReport = (data: CaseInfo) => { };
 
 /**
  * 表头定义
@@ -231,6 +238,13 @@ export function getCaseColumns(
                             }}
                             type="primary"
                             size="small">导出PDF报表</Button>
+                        <Button
+                            onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                                event.stopPropagation();
+                                onExport(data, ExtraAction.Word);
+                            }}
+                            type="primary"
+                            size="small">导出Word</Button>
                     </Group>
                 }>
                 <MoreOutlined style={{ color: '#0fb9b1', fontWeight: 'bold' }} />

@@ -61,14 +61,22 @@ const onExport = async (data: QuickEvent, exportType: ExportFile) => {
             okButtonProps: { disabled: true }
         });
 
-        if (exportType === ExportFile.Excel) {
-            exeDir = join(exeDir, 'create_excel_report');
-            exeName = 'create_excel_report.exe';
-            fileName = '违规检测结果报告.xlsx';
-        } else {
-            exeDir = join(exeDir, 'create_excel_report');
-            exeName = 'create_pdf_report.exe';
-            fileName = '违规检测结果报告.pdf';
+        switch (exportType) {
+            case ExportFile.Excel:
+                exeDir = join(exeDir, 'create_excel_report');
+                exeName = 'create_excel_report.exe';
+                fileName = '违规检测结果报告.xlsx';
+                break;
+            case ExportFile.Pdf:
+                exeDir = join(exeDir, 'create_excel_report');
+                exeName = 'create_pdf_report.exe';
+                fileName = '违规检测结果报告.pdf';
+                break;
+            case ExportFile.Word:
+                exeDir = join(exeDir, 'create_excel_report');
+                exeName = 'create_word_report.exe';
+                fileName = '违规检测结果报告.docx';
+                break;
         }
 
         const proc = execFile(join(exeDir, exeName),
@@ -239,6 +247,13 @@ const getColumns = (dispatch: Dispatch, ...handles: any[]): ColumnsType<QuickEve
                             }}
                             type="primary"
                             size="small">导出PDF报表</Button>
+                        <Button
+                            onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                                event.stopPropagation();
+                                onExport(record, ExportFile.Word);
+                            }}
+                            type="primary"
+                            size="small">导出Word</Button>
                     </Group>
                 }>
                 <MoreOutlined style={{ color: '#0fb9b1', fontWeight: 'bold' }} />
