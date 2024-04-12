@@ -107,12 +107,15 @@ const Version: FC<{}> = () => {
                         </QuickCopy>
                     </span>
                 </div>
-                <ListOption label="当前版本">
+                <ListOption label="版本号">
                     {
                         helper.isNullOrUndefinedOrEmptyString(data?.materials_software_version)
                             ? 'v0.0.1'
                             : filterString(data?.materials_software_version!)
                     }
+                </ListOption>
+                <ListOption label="到期时间">
+                    
                 </ListOption>
                 <div style={{ padding: 0 }}>
                     <label>发行日志</label>
@@ -128,7 +131,7 @@ const Version: FC<{}> = () => {
                 </div>
             </div>
             <Modal
-                visible={publishModalVisible}
+                open={publishModalVisible}
                 footer={[
                     <Button
                         key="B1"

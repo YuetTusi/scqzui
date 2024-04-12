@@ -1,4 +1,5 @@
 import debounce from 'lodash/debounce';
+import { OpenDialogReturnValue, ipcRenderer } from 'electron';
 import React, { FC, useEffect, useState } from 'react';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
@@ -13,8 +14,6 @@ import Radio from 'antd/lib/radio';
 import Modal from 'antd/lib/modal';
 import { FileSpan } from './styled/box';
 import { ExportFullReportModalProp, ExportType, FormValue } from './prop';
-import { OpenDialogReturnValue, ipcRenderer } from 'electron';
-import { helper } from '@/utils/helper';
 
 const { Group } = Radio;
 const { Item, useForm } = Form;
