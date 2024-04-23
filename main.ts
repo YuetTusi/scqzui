@@ -324,11 +324,12 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
         config!.parseExe ?? 'parse.exe',
         join(appPath, '../../../', config?.parsePath ?? './parse')
     );
+
     helper.runProc(
         imageOcrProcess,
         'ImageOcr.exe',
-        join(cwd, '../tools/ImageOcr'),
-        ['--listen_port', ocrPort]
+        join(appPath, '../../../', './tools/ImageOcr'),
+        ['--listen_port', ocrPort.toString()]
     );
 
     if (config!.useQuickFetch) {
@@ -679,15 +680,6 @@ ipcMain.on('dev-tool', () => {
         mainWindow.webContents.openDevTools();
     }
 });
-
-//写net.json, 将通讯端口写入文件被后台服务读取
-ipcMain.handle('write-net-json', (_, servicePort: number, ocrPort: number) =>
-    helper.writeNetJson(cwd, {
-        apiPort: httpPort,
-        servicePort,
-        ocrPort
-    })
-);
 
 ipcMain.handle('open-dialog', (_, options) => dialog.showOpenDialog(options));
 

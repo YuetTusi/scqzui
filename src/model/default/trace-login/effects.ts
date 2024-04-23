@@ -20,9 +20,13 @@ export default {
 
         try {
             const user: TraceUser[] = yield call([db, 'find'], null);
+            if (user.length === 0) {
+                return;
+            }
+
             let { username, password, remember } = user[0];
 
-            if (user.length > 0 && remember) {
+            if (remember) {
                 //有用户记录且是状态为true
                 logger.info(`自动登录查询账户, 用户名:${username}`);
                 yield put({ type: 'setUser', payload: { username, password } });

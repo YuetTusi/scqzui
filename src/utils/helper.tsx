@@ -207,7 +207,7 @@ const helper = {
       ...options,
     });
 
-    handle.once('error', () => {
+    handle.once('error', (error) => {
       console.log(`${exeName}启动失败`);
       if (!isDev) {
         log.error(`${exeName}启动失败,exePath:${exePath}`);
