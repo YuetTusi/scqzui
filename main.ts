@@ -43,6 +43,7 @@ let parseProcess: ChildProcessWithoutNullStreams | null = null; //解析进程
 let yunProcess: ChildProcessWithoutNullStreams | null = null; //云取服务进程
 let appQueryProcess: ChildProcessWithoutNullStreams | null = null; //应用痕迹进程
 let quickFetchProcess: ChildProcessWithoutNullStreams | null = null; //快速点验进程
+let imageOcrProcess: ChildProcessWithoutNullStreams | null = null; //OCR进程
 let httpServerIsRunning = false; //是否已启动HttpServer
 
 const notifier = new WindowsBalloon({
@@ -94,6 +95,9 @@ helper.writeReportJson(config!); //写report.json
 function destroyAllWindow() {
     if (quickFetchProcess !== null) {
         quickFetchProcess.kill();	//杀掉快速点验进程
+    }
+    if (imageOcrProcess !== null) {
+        imageOcrProcess.kill();
     }
     if (sqliteWindow !== null) {
         sqliteWindow.destroy();
@@ -306,7 +310,8 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 //启动后台服务（采集，解析，云取证等）
-ipcMain.on('run-service', () => {
+ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) => {
+
     const quickFetchDir = join(
         appPath, '../../../', config?.quickFetchPath ?? './QuickFetch');
     helper.runProc(
@@ -318,6 +323,12 @@ ipcMain.on('run-service', () => {
         parseProcess,
         config!.parseExe ?? 'parse.exe',
         join(appPath, '../../../', config?.parsePath ?? './parse')
+    );
+    helper.runProc(
+        imageOcrProcess,
+        'ImageOcr.exe',
+        join(cwd, '../tools/ImageOcr'),
+        ['--listen_port', ocrPort]
     );
 
     if (config!.useQuickFetch) {
@@ -670,8 +681,12 @@ ipcMain.on('dev-tool', () => {
 });
 
 //写net.json, 将通讯端口写入文件被后台服务读取
-ipcMain.handle('write-net-json', (_, servicePort: number) =>
-    helper.writeNetJson(cwd, { apiPort: httpPort, servicePort })
+ipcMain.handle('write-net-json', (_, servicePort: number, ocrPort: number) =>
+    helper.writeNetJson(cwd, {
+        apiPort: httpPort,
+        servicePort,
+        ocrPort
+    })
 );
 
 ipcMain.handle('open-dialog', (_, options) => dialog.showOpenDialog(options));
