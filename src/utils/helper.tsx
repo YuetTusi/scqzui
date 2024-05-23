@@ -93,7 +93,7 @@ const helper = {
   /**
    * 快速点验二维码IP名单
    */
-  QUICK_QR_IP: ['192.168.137.1', '192.168.50.99', '192.168.191.1'],
+  QUICK_QR_IP: ['192.168.137.1', '192.168.50.99', '192.168.191.1', '172.28.1.1'],
   /**
    * 当前操作系统
    */
@@ -208,11 +208,38 @@ const helper = {
     });
 
     handle.once('error', (error) => {
+      console.log(error);
       console.log(`${exeName}启动失败`);
       if (!isDev) {
         log.error(`${exeName}启动失败,exePath:${exePath}`);
       }
       handle = null;
+    });
+  },
+  runProcContinue(
+    handle: ChildProcessWithoutNullStreams | null,
+    exeName: string,
+    exePath: string,
+    exeParams: any[] = [],
+    options: any = {}
+  ) {
+    handle = spawn(exeName, exeParams, {
+      cwd: exePath,
+      ...options,
+    });
+
+    handle.once('exit', () => {
+      handle = null;
+      this.runProcContinue(handle, exeName, exePath, exeParams, options);
+    });
+    handle.once('error', (error) => {
+      console.log(error);
+      console.log(`${exeName}启动失败`);
+      if (!isDev) {
+        log.error(`${exeName}启动失败,exePath:${exePath}`);
+      }
+      handle = null;
+      this.runProcContinue(handle, exeName, exePath, exeParams, options);
     });
   },
   async runTask(exePath: string, params: any[] = []): Promise<number | null> {

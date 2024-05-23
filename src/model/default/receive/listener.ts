@@ -451,6 +451,7 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
             helper.readAppJson(),
             db.findOne({ _id: args.caseId })
         ]);
+
         const aiConfig = await helper.readJSONFile(join(eventData.eventPath, eventData.eventName, 'predict.json'));
 
         //NOTE:将设备数据入库

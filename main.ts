@@ -325,7 +325,7 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
         join(appPath, '../../../', config?.parsePath ?? './parse')
     );
 
-    helper.runProc(
+    helper.runProcContinue(
         imageOcrProcess,
         'ImageOcr.exe',
         join(appPath, '../../../', './tools/ImageOcr'),
