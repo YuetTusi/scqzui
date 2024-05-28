@@ -223,6 +223,14 @@ const helper = {
     exeParams: any[] = [],
     options: any = {}
   ) {
+
+    try {
+      accessSync(join(exePath, exeName));
+    } catch (error) {
+      console.log(error.message);
+      return;
+    }
+
     handle = spawn(exeName, exeParams, {
       cwd: exePath,
       ...options,

@@ -24,7 +24,11 @@ export enum ExeType {
     /**
      * 网络行为查询
      */
-    WebAction
+    WebAction,
+    /**
+     * 证据展示与分析
+     */
+    DataPresentation
 }
 
 export type Action = { type: string, payload: boolean };

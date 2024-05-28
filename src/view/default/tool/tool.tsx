@@ -11,7 +11,7 @@ import Modal from 'antd/lib/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers,
-    faSimCard, faSdCard, faMobileRetro, faMagnifyingGlass
+    faSimCard, faSdCard, faMobileRetro, faMagnifyingGlass, faChartPie
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faApple, faAndroid, faItunes, faBlackberry, faAlipay
@@ -204,6 +204,9 @@ const Tool: FC<ToolProp> = () => {
                 break;
             case ExeType.WebAction:
                 exePath = 'C:/AggregateQuery/web-action/网络行为查询评估系统.exe';
+                break;
+            case ExeType.DataPresentation:
+                exePath = join(cwd, '../Forensic/DataPresentation.exe');
                 break;
             default:
                 console.log(`未知type:${type}`);
@@ -692,6 +695,12 @@ const Tool: FC<ToolProp> = () => {
                             <FontAwesomeIcon icon={faMagnifyingGlass} color="#2db5a9" />
                         </div>
                         <div className="name">手机号一证通查</div>
+                    </div>
+                    <div className="t-button" onClick={() => runExeHandle(ExeType.DataPresentation)}>
+                        <div className="ico">
+                            <FontAwesomeIcon icon={faChartPie} color="#fff200" />
+                        </div>
+                        <div className="name">证据展示与分析</div>
                     </div>
                 </div>
             </SortBox>
