@@ -86,6 +86,7 @@ const ParsingList: FC<ParsingListProp> = () => {
     useEffect(() => {
         info.forEach(item => {
             const exist = devices.some(dev => item.deviceId === dev._id);
+
             if (!exist) {
                 //如果列表中没有对应的设备，查库追加到列表中
                 dispatch({ type: 'parsingList/queryDev', payload: { deviceId: item.deviceId } });

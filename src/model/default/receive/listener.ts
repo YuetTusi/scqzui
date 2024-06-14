@@ -522,5 +522,15 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
                 tokenAppList: []
             }
         });
+        dispatch({
+            type: 'checkingList/setInfo',
+            payload: [{
+                caseId: next.caseId,
+                deviceId: next._id,
+                curinfo: '开始解析数据',
+                curprogress: 0,
+                category: ParseCategory.Quick
+            }]
+        });
     });
 }

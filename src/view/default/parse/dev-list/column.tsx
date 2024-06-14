@@ -132,6 +132,16 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
             }
         });
         dispatch({
+            type: 'parsingList/appendInfo',
+            payload: {
+                caseId: data.caseId,
+                deviceId: data._id,
+                curinfo: '开始解析数据',
+                curprogress: 0,
+                category: ParseCategory.Normal
+            }
+        });
+        dispatch({
             type: 'parseDev/updateParseState',
             payload: {
                 id: data._id,

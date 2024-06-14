@@ -164,6 +164,11 @@ const CheckingList: FC<{}> = () => {
     const renderList = () => {
 
         if (info.length > 0 && records.length > 0) {
+
+            console.log(info);
+            console.log(records);
+            console.log('-------------------------------');
+
             return records.map((item) => {
                 const next = info.find(i => i.deviceId === item._id);
                 return <CheckingRec

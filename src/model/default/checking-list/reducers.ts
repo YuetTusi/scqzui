@@ -1,6 +1,7 @@
 import unionBy from 'lodash/unionBy';
 import { AnyAction } from 'redux';
 import { CheckingListState } from '.';
+import ParseDetail from '@/schema/parse-detail';
 
 export default {
     /**
@@ -8,7 +9,29 @@ export default {
      * @param {ParseDetail[]} payload n条详情
      */
     setInfo(state: CheckingListState, { payload }: AnyAction) {
-        state.info = payload;
+
+        let next = state.info.reduce<ParseDetail[]>((acc, current) => {
+            const has = (payload as ParseDetail[]).find(i => i.deviceId === current.deviceId);
+            if (has) {
+                acc.push({
+                    ...current,
+                    ...has
+                });
+            } else {
+                acc.push(current);
+            }
+            return acc;
+        }, []);
+
+        state.info = next;
+        return state;
+    },
+    /**
+     * 设置解析详情消息
+     * @param {ParseDetail} payload 1条详情
+     */
+    appendInfo(state: CheckingListState, { payload }: AnyAction) {
+        state.info.push(payload);
         return state;
     },
     /**

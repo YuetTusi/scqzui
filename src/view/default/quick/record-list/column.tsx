@@ -36,6 +36,7 @@ const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
 const { fetchText, parseText } = helper.readConf()!;
 const { Group } = Button;
+const { Parse } = SocketType;
 
 /**
  * 解析是否为禁用状态
@@ -94,8 +95,8 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
             caseData.m_strCasePath = eventData.eventPath;
             await helper.writeCaseJson(caseJsonPath, caseData);
         }
-        send(SocketType.Parse, {
-            type: SocketType.Parse,
+        send(Parse, {
+            type: Parse,
             cmd: CommandType.StartParse,
             msg: {
                 caseId: data.caseId,
@@ -116,6 +117,16 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
                 useDocVerify: [false, false],
                 dataMode: DataMode.Check,
                 tokenAppList: []
+            }
+        });
+        dispatch({
+            type: 'checkingList/appendInfo',
+            payload: {
+                caseId: data.caseId,
+                deviceId: data._id,
+                curinfo: '开始解析数据',
+                curprogress: 0,
+                category: ParseCategory.Quick
             }
         });
         dispatch({

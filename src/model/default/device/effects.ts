@@ -511,6 +511,17 @@ export default {
                     }
                 });
 
+                yield put({
+                    type: 'parsingList/setInfo',
+                    payload: [{
+                        caseId: current.caseId,
+                        deviceId: current._id,
+                        curinfo: '开始解析数据',
+                        curprogress: 0,
+                        category: ParseCategory.Normal
+                    }]
+                });
+
                 //# 更新数据记录为`解析中`状态
                 yield put({
                     type: 'parseDev/updateParseState', payload: {

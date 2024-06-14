@@ -1,6 +1,7 @@
 import unionBy from 'lodash/unionBy';
 import { AnyAction } from 'redux';
 import { ParsingListState } from '.';
+import ParseDetail from '@/schema/parse-detail';
 
 export default {
     /**
@@ -8,7 +9,33 @@ export default {
      * @param {ParseDetail[]} payload n条详情
      */
     setInfo(state: ParsingListState, { payload }: AnyAction) {
-        state.info = payload;
+        //为解决进度消息首次过慢
+        //点`解析`后会初始化info数据
+        //进度消息推送要覆盖对应的deviceId的数据
+        let next = state.info.reduce<ParseDetail[]>((acc, current) => {
+            const has = (payload as ParseDetail[]).find(i => i.deviceId === current.deviceId);
+            if (has) {
+                //覆盖初始化info的deviceId
+                acc.push({
+                    ...current,
+                    ...has
+                });
+            } else {
+                //直接添加
+                acc.push(current);
+            }
+            return acc;
+        }, []);
+
+        state.info = next;
+        return state;
+    },
+    /**
+     * 追加解析详情
+     * @param {ParseDetail} payload 1条详情
+     */
+    appendInfo(state: ParsingListState, { payload }: AnyAction) {
+        state.info.push(payload);
         return state;
     },
     /**
