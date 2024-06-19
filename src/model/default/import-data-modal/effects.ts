@@ -185,6 +185,16 @@ export default {
                     useDocVerify: [useDocVerify, usePdfOcr]
                 }
             })}`);
+            yield put({
+                type: 'parsingList/appendInfo',
+                payload: {
+                    caseId: rec.caseId,
+                    deviceId: rec._id,
+                    curinfo: '开始解析数据',
+                    curprogress: 0,
+                    category: ParseCategory.Normal
+                }
+            });
             yield put({ type: 'setVisible', payload: false });
             message.info(`数据已导入，请在「数据${parseText ?? '解析'}」页面查看进度`);
         } catch (error) {

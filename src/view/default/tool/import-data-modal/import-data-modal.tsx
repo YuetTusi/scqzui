@@ -84,6 +84,8 @@ const ImportDataModal: FC<ImportModalProp> = ({ }) => {
                     usePdfOcr: appConfig?.usePdfOcr ?? false
                 }
             });
+
+
         } catch (error) {
             console.warn(error);
         }

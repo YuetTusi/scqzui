@@ -215,40 +215,63 @@ export default {
      */
     socketDisconnect() {
 
-        server.on(Error, (port: number, type: string) => {
+        server.on(Error, async (port: number, type: string) => {
 
             logger.error(`Socket异常断开, port:${port}, type:${type}`);
             let content = '';
             switch (type) {
                 case Fetch:
-                    content = '采集服务通讯中断，请重启应用';
+                    content = '采集服务器通讯异常中断或加密狗被拔出，请重启应用';
                     break;
                 case Parse:
-                    content = '解析服务通讯中断，请重启应用';
+                    content = '解析服务器通讯异常中断或加密狗被拔出，请重启应用';
                     break;
                 case Trace:
-                    content = '应用查询服务中断，请重启应用';
+                    content = '应用查询服务器通讯异常中断或加密狗被拔出，请重启应用';
                     break;
                 default:
-                    content = '后台服务通讯中断，请重启应用';
+                    content = '后台服务异常中断或加密狗被拔出，请重启应用';
                     break;
             }
 
-            if (localStorage.getItem(LocalStoreKey.SocketWarning) === '1') {
-                Modal.destroyAll();
-                Modal.confirm({
-                    title: '服务中断',
-                    content,
-                    centered: true,
-                    okText: '重新启动',
-                    cancelText: '退出',
-                    onOk() {
-                        ipcRenderer.send('do-relaunch');
-                    },
-                    onCancel() {
-                        ipcRenderer.send('do-close');
+            Modal.destroyAll();
+            try {
+                const isDebug = await helper.isDebug();
+
+                if (isDebug) {
+                    if (localStorage.getItem(LocalStoreKey.SocketWarning) === '1') {
+                        Modal.confirm({
+                            title: '警告',
+                            content,
+                            centered: true,
+                            okText: '重新启动',
+                            cancelText: '退出',
+                            onOk() {
+                                ipcRenderer.send('do-relaunch');
+                            },
+                            onCancel() {
+                                ipcRenderer.send('do-close');
+                            }
+                        });
                     }
-                });
+                } else {
+                    Modal.confirm({
+                        title: '警告',
+                        content,
+                        centered: true,
+                        okText: '重新启动',
+                        cancelText: '退出',
+                        onOk() {
+                            ipcRenderer.send('do-relaunch');
+                        },
+                        onCancel() {
+                            ipcRenderer.send('do-close');
+                        }
+                    });
+                }
+
+            } catch (error) {
+                console.error(error);
             }
         });
     },
