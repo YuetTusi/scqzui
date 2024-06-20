@@ -287,5 +287,28 @@ export default {
                 logger.error(`采集进度入库失败 @model/default/receive/subscriptions/saveFetchLog: ${error.message}`);
             }
         });
+    },
+    /**
+     * 加密狗报警
+     */
+    dogWarn() {
+
+        ipcRenderer.on('dog-warn', (_: IpcRendererEvent, msg: string) => {
+
+            Modal.destroyAll();
+            Modal.confirm({
+                title: '警告',
+                content: msg ?? '后台服务异常中断或加密狗被拔出，请重启应用',
+                centered: true,
+                okText: '重新启动',
+                cancelText: '退出',
+                onOk() {
+                    ipcRenderer.send('do-relaunch');
+                },
+                onCancel() {
+                    ipcRenderer.send('do-close');
+                }
+            });
+        });
     }
 }

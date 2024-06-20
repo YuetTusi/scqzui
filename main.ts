@@ -314,11 +314,19 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
 
     const quickFetchDir = join(
         appPath, '../../../', config?.quickFetchPath ?? './QuickFetch');
-    helper.runProc(
+    // helper.runProc(
+    //     fetchProcess,
+    //     config?.fetchExe ?? 'n_fetch.exe',
+    //     join(appPath, '../../../', config?.fetchPath ?? './n_fetch')
+    // );
+
+    helper.runFetch(
         fetchProcess,
         config?.fetchExe ?? 'n_fetch.exe',
-        join(appPath, '../../../', config?.fetchPath ?? './n_fetch')
+        join(appPath, '../../../', config?.fetchPath ?? './n_fetch'),
+        mainWindow!
     );
+
     helper.runProc(
         parseProcess,
         config!.parseExe ?? 'parse.exe',

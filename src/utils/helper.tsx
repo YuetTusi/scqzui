@@ -15,6 +15,7 @@ import {
   readFile as readFilePromise,
   writeFile as writeFilePromise,
 } from 'fs/promises';
+import { BrowserWindow } from 'electron';
 import cpy from 'cpy';
 import { v4 } from 'uuid';
 import yaml from 'js-yaml';
@@ -190,6 +191,29 @@ const helper = {
     });
   },
   /**
+   * 启动采集进程
+   */
+  runFetch(
+    handle: ChildProcessWithoutNullStreams | null,
+    exeName: string,
+    exePath: string,
+    win: BrowserWindow
+  ) {
+    handle = spawn(exeName, [], {
+      cwd: exePath
+    });
+
+    handle.once('error', (error) => {
+      console.log(`${exeName}启动失败, ${error.message}`);
+      if (!isDev) {
+        log.error(`${exeName}启动失败,exePath:${exePath}`);
+      }
+      handle = null;
+    });
+
+    handle.once('close', (_: number) => win.webContents.send('dog-warn'));
+  },
+  /**
    * 启动进程
    * @param {string} exeName exe名称
    * @param {string} exePath exe所在路径
@@ -208,12 +232,16 @@ const helper = {
     });
 
     handle.once('error', (error) => {
-      console.log(error);
+      console.log('error', error);
       console.log(`${exeName}启动失败`);
       if (!isDev) {
         log.error(`${exeName}启动失败,exePath:${exePath}`);
       }
       handle = null;
+    });
+
+    handle.once('close', (code: number) => {
+      console.log('close', code);
     });
   },
   runProcContinue(

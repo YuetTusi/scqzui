@@ -21,11 +21,9 @@ export default {
      */
     *fetchingAndParsingState() {
 
-        let question = `确认退出吗？`;
-        Modal.destroyAll();
         Modal.confirm({
             title: '退出应用',
-            content: question,
+            content: '确认退出吗？',
             okText: '是',
             cancelText: '否',
             zIndex: 9000,
