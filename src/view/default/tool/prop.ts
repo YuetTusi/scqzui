@@ -81,4 +81,8 @@ export interface ModalOpenState {
      * 安卓操作框
      */
     androidSetModalVisible: boolean,
+    /**
+     * 文书生成框
+     */
+    paperworkModalVisible: boolean
 }

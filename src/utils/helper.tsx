@@ -211,7 +211,11 @@ const helper = {
       handle = null;
     });
 
-    handle.once('close', (_: number) => win.webContents.send('dog-warn'));
+    handle.once('close', (_: number) => {
+      if (!isDev) {
+        win.webContents.send('dog-warn');
+      }
+    });
   },
   /**
    * 启动进程

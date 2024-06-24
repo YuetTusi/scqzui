@@ -11,7 +11,7 @@ import Modal from 'antd/lib/modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faSquarePhone, faFileArrowDown, faUnlockKeyhole, faUsers,
-    faSimCard, faSdCard, faMobileRetro, faMagnifyingGlass, faChartPie
+    faSimCard, faSdCard, faMobileRetro, faMagnifyingGlass, faChartPie, faFileWord
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faApple, faAndroid, faItunes, faBlackberry, faAlipay
@@ -34,6 +34,7 @@ import MiChangeModal from './mi-change-modal';
 import HuaweiCloneModal from './huawei-clone-modal';
 import AndroidSetModal, { SetType } from './android-set-modal';
 import { SnapshotModal } from './snapshot-modal';
+import { PaperworkModal } from './paperwork-modal';
 import { SortBox, ToolBox } from './styled/style';
 import { ImportTypes } from '@/schema/import-type';
 import huaweiSvg from './styled/images/huawei.svg';
@@ -88,7 +89,8 @@ const Tool: FC<ToolProp> = () => {
         apkModalVisible: false,
         qrcodeCloudModalVisible: false,
         chinaMobileModalVisible: false,
-        androidSetModalVisible: false
+        androidSetModalVisible: false,
+        paperworkModalVisible: false
     });
 
     /** 
@@ -702,6 +704,12 @@ const Tool: FC<ToolProp> = () => {
                         </div>
                         <div className="name">证据展示与分析</div>
                     </div>
+                    <div className="t-button" onClick={() => dispatchModal({ type: 'paperworkModalVisible', payload: true })}>
+                        <div className="ico">
+                            <FontAwesomeIcon icon={faFileWord} color="#a6ce3a" />
+                        </div>
+                        <div className="name">生成鉴定报告</div>
+                    </div>
                 </div>
             </SortBox>
         </ToolBox>
@@ -744,6 +752,11 @@ const Tool: FC<ToolProp> = () => {
             visible={modalState.androidSetModalVisible}
             type={currentSetType.current}
             onCancel={() => dispatchModal({ type: 'androidSetModalVisible', payload: false })} />
+        <PaperworkModal
+            open={modalState.paperworkModalVisible}
+            onOk={() => { }}
+            onCancel={() => dispatchModal({ type: 'paperworkModalVisible', payload: false })}
+        />
     </SubLayout >
 };
 
