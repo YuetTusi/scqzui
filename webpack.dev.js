@@ -80,7 +80,9 @@ let config = {
 		},
 		port: 8085,
 		open: false,
-		compress: true
+		compress: true,
+		liveReload: true, // 自动刷新
+		hot: false
 	},
 	plugins: [
 		new ProvidePlugin({

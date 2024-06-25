@@ -1,23 +1,22 @@
-import React, { FC, Key, useState } from 'react';
-import FileTextOutlined from '@ant-design/icons/FileTextOutlined';
+import React, { FC } from 'react';
 import { Tree } from 'antd';
-import CaseInfo from '@/schema/case-info';
 import { CaseTreeProp } from './prop';
-import { helper } from '@/utils/helper';
-import { EventDataNode } from 'antd/lib/tree';
-import { getDb } from '@/utils/db';
-import { TableName } from '@/schema/table-name';
-import DeviceType from '@/schema/device-type';
+import { useDispatch, useSelector } from 'dva';
+import { StateTree } from '@/type/model';
+
 
 /**
  * 案件树
  */
 const CaseTree: FC<CaseTreeProp> = ({ data, expandedKeys, onExpand }) => {
 
-
-    console.log(expandedKeys);
+    const dispatch = useDispatch();
 
     return <Tree
+        onCheck={(_, info) => {
+            const holder = info.checkedNodes.map(i => i.mobileHolder);
+            dispatch({ type: 'paperworkModal/setCheckedHolders', payload: holder });
+        }}
         onExpand={onExpand}
         treeData={data}
         // checkedKeys={checkedKeys}

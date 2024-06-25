@@ -18,7 +18,11 @@ export interface StepFormProp {
     /**
      * 第1页表单
      */
-    oneFormRef: FormInstance<StepOneFormValue>
+    oneFormRef: FormInstance<StepOneFormValue>,
+    /**
+     * 第2页表单
+     */
+    twoFormRef: FormInstance<StepTwoFormValue>
 }
 
 export interface StepOneFormValue {
@@ -46,4 +50,39 @@ export interface StepOneFormValue {
      * 保存路径
      */
     savePath: string
+}
+
+export interface StepTwoFormValue {
+    /**
+     * 委托信息
+     */
+    delegation: string,
+    /**
+     * 检查时间
+     */
+    checkFrom: string,
+    /**
+     * 检查时间
+     */
+    checkTo: string,
+    /**
+     * 检查人
+     */
+    checker: string,
+    /**
+     * 检查对象封存固定情况
+     */
+    condition: string,
+    /**
+     * 检查目的
+     */
+    purpose: string,
+    /**
+     * 检查依据方法
+     */
+    standard: string,
+    /**
+     * 检查设备
+     */
+    equipment: string
 }

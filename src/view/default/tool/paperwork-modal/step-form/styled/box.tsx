@@ -14,4 +14,13 @@ export const StepFormBox = styled.div`
         width: 80%;
         margin:20px auto 0 auto;
     }
+    .standard-card{
+        .ant-card-body{
+            height:110px;
+            overflow-y: auto;
+        }
+        p{
+            margin-bottom: 4px;
+        }
+    }
 `;

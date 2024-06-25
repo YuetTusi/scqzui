@@ -16,6 +16,10 @@ interface PaperworkModalState {
      */
     expandedKeys: Key[],
     /**
+     * 勾选的持有人
+     */
+    checkedHolders: Set<string>
+    /**
      * 读取中
      */
     loading: boolean
@@ -27,6 +31,7 @@ const model: Model = {
     state: {
         caseTree: [],
         expandedKeys: [],
+        checkedHolders: new Set<string>(),
         loading: false
     },
     effects,

@@ -47,7 +47,8 @@ export default {
                             title: helper.getNameWithoutTime(j.mobileName),
                             disabled: false,
                             isLeaf: true,
-                            checkable: true
+                            checkable: true,
+                            mobileHolder: j.mobileHolder
                         }))
                     }))
                 });

@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Button, Divider, Form, Steps } from 'antd';
 import { StepOne } from './step-one';
+import { StepTwo } from './step-two';
 import { StepFormBox } from './styled/box';
 import { StepFormProp, StepOneFormValue } from './prop';
 
@@ -9,7 +10,9 @@ const { useForm } = Form;
 /**
  * 表单
  */
-const StepForm: FC<StepFormProp> = ({ step, oneFormRef }) => {
+const StepForm: FC<StepFormProp> = ({
+    step, oneFormRef, twoFormRef
+}) => {
 
     return <StepFormBox>
         <div className="step-box">
@@ -28,6 +31,7 @@ const StepForm: FC<StepFormProp> = ({ step, oneFormRef }) => {
         <Divider />
         <div className="form-box">
             <StepOne formRef={oneFormRef} visible={step === 0} />
+            <StepTwo formRef={twoFormRef} visible={step === 1} />
         </div>
     </StepFormBox >;
 };
