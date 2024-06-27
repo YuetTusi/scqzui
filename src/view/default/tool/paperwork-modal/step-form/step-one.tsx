@@ -14,7 +14,7 @@ const { Option } = Select;
 const StepOne: FC<StepProp> = ({ visible, formRef }) => {
 
     const {
-        checkedHolders
+        checkedDevices
     } = useSelector<StateTree, PaperworkModalState>((state) => state.paperworkModal);
 
     useEffect(() => {
@@ -26,18 +26,19 @@ const StepOne: FC<StepProp> = ({ visible, formRef }) => {
     }, []);
 
     useEffect(() => {
-        if (checkedHolders.size === 0) {
+        if (checkedDevices.length === 0) {
             formRef.resetFields(['mobileHolder']);
         }
-    }, [checkedHolders]);
+    }, [checkedDevices]);
 
     /**
      * 持有人Options
      */
     const bindOptions = () => {
         const options: JSX.Element[] = [];
-        for (let i of checkedHolders.values()) {
-            options.push(<Option value={i} key={`Holder_${i}`}>{i}</Option>)
+        const holders = new Set<string>(checkedDevices.map(i => i.mobileHolder!));
+        for (let item of holders.values()) {
+            options.push(<Option value={item} key={`Holder_${item}`}>{item}</Option>);
         }
         return options;
     };

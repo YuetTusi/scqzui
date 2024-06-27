@@ -1,17 +1,17 @@
-import React, { FC, useState } from 'react';
-import { Button, Divider, Form, Steps } from 'antd';
+import React, { FC } from 'react';
+import { Divider, Steps } from 'antd';
 import { StepOne } from './step-one';
 import { StepTwo } from './step-two';
+import { StepThree } from './step-three';
+import { StepFour } from './step-four';
 import { StepFormBox } from './styled/box';
-import { StepFormProp, StepOneFormValue } from './prop';
-
-const { useForm } = Form;
+import { StepFormProp } from './prop';
 
 /**
  * 表单
  */
 const StepForm: FC<StepFormProp> = ({
-    step, oneFormRef, twoFormRef
+    step, oneFormRef, twoFormRef, threeFormRef, fourFormRef
 }) => {
 
     return <StepFormBox>
@@ -22,8 +22,7 @@ const StepForm: FC<StepFormProp> = ({
                     { title: '填写报告信息' },
                     { title: '填写检查信息' },
                     { title: '设置检查信息' },
-                    { title: '设置检查记录' },
-                    { title: '报告预览' }
+                    { title: '设置检查记录' }
                 ]}
                 size="small"
             />
@@ -32,6 +31,8 @@ const StepForm: FC<StepFormProp> = ({
         <div className="form-box">
             <StepOne formRef={oneFormRef} visible={step === 0} />
             <StepTwo formRef={twoFormRef} visible={step === 1} />
+            <StepThree formRef={threeFormRef} visible={step === 2} />
+            <StepFour formRef={fourFormRef} visible={step === 3} />
         </div>
     </StepFormBox >;
 };

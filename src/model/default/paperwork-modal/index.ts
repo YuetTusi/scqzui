@@ -1,10 +1,13 @@
+import { Key } from 'react';
+import { TreeNodeProps } from 'antd';
 import { Model } from 'dva';
-import CaseInfo from '@/schema/case-info';
 import effects from './effects';
 import reducers from './reducers';
-import { TreeNodeProps } from 'antd';
-import { Key } from 'react';
-
+import DeviceType from '@/schema/device-type';
+import {
+    StepThreeFormValue,
+    StepFourFormValue
+} from '@/view/default/tool/paperwork-modal/step-form/prop';
 
 interface PaperworkModalState {
     /**
@@ -16,9 +19,17 @@ interface PaperworkModalState {
      */
     expandedKeys: Key[],
     /**
-     * 勾选的持有人
+     * 勾选的设备
      */
-    checkedHolders: Set<string>
+    checkedDevices: DeviceType[],
+    /**
+     * 第3步表单设备值
+     */
+    threeFormValue: StepThreeFormValue[],
+    /**
+     * 第4步表单设备值
+     */
+    fourFormValue: StepFourFormValue,
     /**
      * 读取中
      */
@@ -31,7 +42,9 @@ const model: Model = {
     state: {
         caseTree: [],
         expandedKeys: [],
-        checkedHolders: new Set<string>(),
+        checkedDevices: [],
+        threeFormValue: [],
+        fourFormValue: {},
         loading: false
     },
     effects,

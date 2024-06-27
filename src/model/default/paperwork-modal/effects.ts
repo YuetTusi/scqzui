@@ -36,19 +36,27 @@ export default {
                     disabled: false,
                     isLeaf: false,
                     checkable: false,
+                    selectable: false,
                     children: Object.keys(holder).map((i, index) => ({
                         key: `holder_${helper.newId()}`,
                         title: i,
                         disabled: false,
                         isLeaf: holder[i].length === 0,
-                        checkable: false,
+                        checkable: true,
+                        selectable: false,
                         children: holder[i].map(j => ({
                             key: j._id,
                             title: helper.getNameWithoutTime(j.mobileName),
                             disabled: false,
                             isLeaf: true,
                             checkable: true,
-                            mobileHolder: j.mobileHolder
+                            selectable: true,
+                            _id: j._id,
+                            mobileHolder: j.mobileHolder,
+                            mobileName: j.mobileName,
+                            mobileNumber: j.mobileNumber,
+                            model: j.model,
+                            serial: j.serial
                         }))
                     }))
                 });

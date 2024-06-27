@@ -22,7 +22,15 @@ export interface StepFormProp {
     /**
      * 第2页表单
      */
-    twoFormRef: FormInstance<StepTwoFormValue>
+    twoFormRef: FormInstance<StepTwoFormValue>,
+    /**
+    * 第3页表单
+    */
+    threeFormRef: FormInstance<StepThreeFormValue>,
+    /**
+    * 第4页表单
+    */
+    fourFormRef: FormInstance<StepFourFormValue>,
 }
 
 export interface StepOneFormValue {
@@ -85,4 +93,62 @@ export interface StepTwoFormValue {
      * 检查设备
      */
     equipment: string
+}
+
+export interface StepThreeFormValue {
+    /**
+     * 检材名称
+     */
+    mobileName: string,
+    /**
+     * 检材型号
+     */
+    model: string,
+    /**
+     * 持有人
+     */
+    mobileHolder: string,
+    /**
+     * IMEI
+     */
+    imei: string,
+    /**
+     * 手机号
+     */
+    mobileNumber: string,
+    /**
+     * 前面照片路径
+     */
+    frontPath: string,
+    /**
+     * 背面照片路径
+     */
+    backPath: string,
+    /**
+     * 其他
+     */
+    [others: string]: any
+}
+
+export interface StepFourFormValue {
+    /**
+     * 检查步骤
+     */
+    checkStep: string,
+    /**
+     * 结语
+     */
+    summary: string,
+    /**
+     * 附件路径列表
+     */
+    attachments: string[],
+    /**
+     * 截图路径
+     */
+    reportCapture: string,
+    /**
+     * 其他
+     */
+    [others: string]: any
 }

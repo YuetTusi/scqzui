@@ -13,17 +13,25 @@ export default {
         state.expandedKeys = payload;
         return state;
     },
-    setCheckedHolders(state: PaperworkModalState, { payload }: AnyAction) {
+    setCheckedDevices(state: PaperworkModalState, { payload }: AnyAction) {
 
-        if (typeof payload === 'string') {
-            state.checkedHolders.add(payload);
-        } else {
-            state.checkedHolders = new Set(payload);
-        }
+        state.checkedDevices = payload;
         return state;
     },
-    clearCheckedHolders(state: PaperworkModalState, { payload }: AnyAction) {
-        state.checkedHolders = new Set<string>();
+    setThreeFormValue(state: PaperworkModalState, { payload }: AnyAction) {
+        state.threeFormValue = payload;
+        return state;
+    },
+    setFourFormValue(state: PaperworkModalState, { payload }: AnyAction) {
+        state.fourFormValue = payload;
+        return state;
+    },
+    clearThreeFormValue(state: PaperworkModalState, { }: AnyAction) {
+        state.threeFormValue = [];
+        return state;
+    },
+    clearCheckedDevices(state: PaperworkModalState, { }: AnyAction) {
+        state.checkedDevices = [];
         return state;
     },
     setLoading(state: PaperworkModalState, { payload }: AnyAction) {

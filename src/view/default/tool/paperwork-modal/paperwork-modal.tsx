@@ -2,15 +2,16 @@ import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import RightCircleOutlined from '@ant-design/icons/RightCircleOutlined';
 import LeftCircleOutlined from '@ant-design/icons/LeftCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
+import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import { Button, Form, Modal } from 'antd';
-import { PaperworkModalProp } from './prop';
 import { useDispatch, useSelector } from 'dva';
 import { StateTree } from '@/type/model';
 import { PaperworkModalState } from '@/model/default/paperwork-modal';
 import { CaseTree } from './case-tree';
 import { StepForm } from './step-form';
+import { StepOneFormValue, StepTwoFormValue, StepThreeFormValue, StepFourFormValue } from './step-form/prop';
 import { PaperworkModalBox } from './styled/box';
-import { StepOneFormValue, StepTwoFormValue } from './step-form/prop';
+import { PaperworkModalProp } from './prop';
 
 const { Item, useForm } = Form;
 
@@ -24,11 +25,13 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
     const oneFormValue = useRef<StepOneFormValue>();
     const [oneFormRef] = useForm<StepOneFormValue>();
     const [twoFormRef] = useForm<StepTwoFormValue>();
+    const [threeFormRef] = useForm<StepThreeFormValue>();
+    const [fourFormRef] = useForm<StepFourFormValue>();
     const {
         caseTree,
         expandedKeys
     } = useSelector<StateTree, PaperworkModalState>((state) => state.paperworkModal);
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(3);
 
     useEffect(() => {
         if (open) {
@@ -55,7 +58,13 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
                 case 0:
                     const values = await oneFormRef.validateFields();
                     oneFormValue.current = values;
-                    setStep(prev => prev + 1);
+                    setStep(1);
+                    break;
+                case 1:
+                    setStep(2);
+                    break;
+                case 2:
+                    setStep(3);
                     break;
             }
         } catch (error) {
@@ -70,7 +79,7 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
      */
     const onCancelClick = (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        dispatch({ type: 'paperworkModal/clearCheckedHolders' });
+        dispatch({ type: 'paperworkModal/clearCheckedDevices' });
         onCancel();
     };
 
@@ -92,11 +101,10 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
             </Button>,
             <Button
                 onClick={onNextClick}
-                disabled={step >= 5}
                 type="primary"
                 key="PWM_2">
-                <RightCircleOutlined />
-                <span>下一步</span>
+                {step < 3 ? <RightCircleOutlined /> : <CheckCircleOutlined />}
+                {step < 3 ? <span>下一步</span> : <span>生成</span>}
             </Button>,
         ]}
         open={open}
@@ -104,7 +112,7 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
         centered={true}
         maskClosable={false}
         destroyOnClose={true}
-        width={1140}
+        width={1220}
         title="生成鉴定报告"
         getContainer="#app"
         className="zero-padding-body">
@@ -123,7 +131,9 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
                 <StepForm
                     step={step}
                     oneFormRef={oneFormRef}
-                    twoFormRef={twoFormRef} />
+                    twoFormRef={twoFormRef}
+                    threeFormRef={threeFormRef}
+                    fourFormRef={fourFormRef} />
             </div>
         </PaperworkModalBox>
     </Modal>
