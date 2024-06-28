@@ -1,14 +1,12 @@
 import { groupBy } from 'lodash';
 import { EffectsCommandMap } from 'dva';
 import { AnyAction } from 'redux';
-// import FileTextOutlined from '@ant-design/icons/FileTextOutlined';
-import { AntTreeNodeProps } from 'antd/lib/tree';
+import { TreeNodeProps } from 'antd';
 import DeviceType from '@/schema/device-type';
 import { TableName } from '@/schema/table-name';
 import CaseInfo from '@/schema/case-info';
 import { getDb } from '@/utils/db';
 import logger from '@/utils/log';
-import { TreeNodeProps } from 'antd';
 import { helper } from '@/utils/helper';
 
 export default {
@@ -50,7 +48,7 @@ export default {
                             disabled: false,
                             isLeaf: true,
                             checkable: true,
-                            selectable: true,
+                            selectable: false,
                             _id: j._id,
                             mobileHolder: j.mobileHolder,
                             mobileName: j.mobileName,

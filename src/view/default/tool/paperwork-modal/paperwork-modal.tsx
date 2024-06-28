@@ -1,3 +1,4 @@
+import { join } from 'path';
 import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import RightCircleOutlined from '@ant-design/icons/RightCircleOutlined';
 import LeftCircleOutlined from '@ant-design/icons/LeftCircleOutlined';
@@ -7,13 +8,19 @@ import { Button, Form, Modal } from 'antd';
 import { useDispatch, useSelector } from 'dva';
 import { StateTree } from '@/type/model';
 import { PaperworkModalState } from '@/model/default/paperwork-modal';
+import { helper } from '@/utils/helper';
 import { CaseTree } from './case-tree';
 import { StepForm } from './step-form';
-import { StepOneFormValue, StepTwoFormValue, StepThreeFormValue, StepFourFormValue } from './step-form/prop';
+import {
+    StepOneFormValue,
+    StepTwoFormValue,
+    StepThreeFormValue,
+    StepFourFormValue
+} from './step-form/prop';
 import { PaperworkModalBox } from './styled/box';
 import { PaperworkModalProp } from './prop';
 
-const { Item, useForm } = Form;
+const { useForm } = Form;
 
 /**
  * 文书生成框
@@ -22,16 +29,20 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
 
     const dispatch = useDispatch();
     const [, contextHolder] = Modal.useModal();
-    const oneFormValue = useRef<StepOneFormValue>();
+    const oneFormValue = useRef<StepOneFormValue>(); //第1步表单值
     const [oneFormRef] = useForm<StepOneFormValue>();
     const [twoFormRef] = useForm<StepTwoFormValue>();
     const [threeFormRef] = useForm<StepThreeFormValue>();
     const [fourFormRef] = useForm<StepFourFormValue>();
     const {
         caseTree,
-        expandedKeys
+        loading,
+        expandedKeys,
+        twoFormValue, //第2步表单值
+        threeFormValue, //第3步表单值
+        fourFormValue //第4步表单值
     } = useSelector<StateTree, PaperworkModalState>((state) => state.paperworkModal);
-    const [step, setStep] = useState(3);
+    const [step, setStep] = useState(0);
 
     useEffect(() => {
         if (open) {
@@ -41,7 +52,6 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
 
     /**
      * 上一步Click
-     * @param event 
      */
     const onPrevClick = (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
@@ -56,8 +66,8 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
         try {
             switch (step) {
                 case 0:
-                    const values = await oneFormRef.validateFields();
-                    oneFormValue.current = values;
+                    const one = await oneFormRef.validateFields();
+                    oneFormValue.current = one;
                     setStep(1);
                     break;
                 case 1:
@@ -65,6 +75,21 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
                     break;
                 case 2:
                     setStep(3);
+                    break;
+                case 3:
+                    console.clear();
+                    console.log({
+                        ...oneFormValue.current,
+                        ...twoFormValue,
+                        ...fourFormValue,
+                        devices: threeFormValue
+                    });
+                    await helper.writeJSONfile(join(helper.APP_CWD, 'report-doc.json'), {
+                        ...oneFormValue.current,
+                        ...twoFormValue,
+                        ...fourFormValue,
+                        devices: threeFormValue
+                    });
                     break;
             }
         } catch (error) {
@@ -79,7 +104,8 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
      */
     const onCancelClick = (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        dispatch({ type: 'paperworkModal/clearCheckedDevices' });
+        dispatch({ type: 'paperworkModal/resetValue' });
+        setStep(0);
         onCancel();
     };
 
@@ -108,7 +134,7 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
             </Button>,
         ]}
         open={open}
-        onCancel={onCancel}
+        onCancel={onCancelClick}
         centered={true}
         maskClosable={false}
         destroyOnClose={true}
@@ -121,8 +147,10 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
             <div className="tree-box">
                 <div className="full-box">
                     <CaseTree
+                        loading={loading}
                         data={caseTree}
                         expandedKeys={expandedKeys}
+                        disabled={step !== 0}
                         onExpand={(keys) => dispatch({ type: 'paperworkModal/setExpandedKeys', payload: keys })}
                     />
                 </div>

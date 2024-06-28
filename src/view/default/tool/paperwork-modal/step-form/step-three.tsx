@@ -174,7 +174,7 @@ const StepThree: FC<StepProp> = ({ visible, formRef }) => {
                             size="small"
                             type="primary">
                             <UploadOutlined />
-                            <span>上传</span>
+                            <span>正面</span>
                         </Button>
                     </div>
                     <div>
@@ -190,7 +190,7 @@ const StepThree: FC<StepProp> = ({ visible, formRef }) => {
                             size="small"
                             type="primary">
                             <UploadOutlined />
-                            <span>上传</span>
+                            <span>背面</span>
                         </Button>
                     </div>
                 </div>

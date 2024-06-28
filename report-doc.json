@@ -1,0 +1,35 @@
+{
+	"caseName": "案件名称",
+	"caseNo": "案件编号",
+	"reportName": "报告名称",
+	"reportNo": "报告编号",
+	"mobileHolder": "王志安",
+	"savePath": "C:\\Users\\Yuet\\保存路径",
+	"delegation": "委托信息",
+	"checkFrom": "2024-06-27 10:31:11 检查时间起",
+	"checkTo": "2024-06-28 10:31:11 检查时间止",
+	"checker": "检查人",
+	"condition": "检查对象封存固定情况",
+	"purpose": "检查目的",
+	"standard": [
+		"GB/T 29360-2023《法庭科学电子物证数据恢复检验规程》",
+		"GB/T 29362-2023《法庭科学电子物证数据搜索检验规程》"
+	],
+	"equipment": "检查设备",
+	"checkStep": "检查步骤",
+	"summary": "本次电子证据检查过程制作、生产的文件存放在附卷的光盘中。 \r\n至此检查过程结束。",
+	"attachments": ["C:\\Users\\Yuet\\Documents\\附件路径.zip"],
+	"reportCapture": "C:\\Users\\Yuet\\Pictures\\报告图片.jpg",
+	"devices": [
+		{
+			"_id": "85f548f0d6881f17",
+			"mobileHolder": "持有人",
+			"mobileNumber": "手机号",
+			"model": "MIX 2",
+			"mobileName": "MIX 2",
+			"imei": "imei",
+			"frontPath": "C:\\Users\\Yuet\\Pictures\\前面照片.jpg",
+			"backPath": "C:\\Users\\Yuet\\Pictures\\背面照片.jpg"
+		}
+	]
+}

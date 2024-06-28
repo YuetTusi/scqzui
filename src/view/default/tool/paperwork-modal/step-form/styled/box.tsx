@@ -92,6 +92,18 @@ export const StepFormBox = styled.div`
     }
 `;
 
+export const FormOneBox = styled.div`
+
+    display: block;
+    padding:8px 16px;
+`;
+
+export const FormTwoBox = styled.div`
+
+    display: block;
+    padding:8px 16px;
+`;
+
 
 export const FormThreeBox = styled.div`
 

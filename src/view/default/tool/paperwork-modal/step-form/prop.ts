@@ -88,11 +88,11 @@ export interface StepTwoFormValue {
     /**
      * 检查依据方法
      */
-    standard: string,
+    standard: string[],
     /**
      * 检查设备
      */
-    equipment: string
+    equipment: string,
 }
 
 export interface StepThreeFormValue {

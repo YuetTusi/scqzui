@@ -5,6 +5,7 @@ import effects from './effects';
 import reducers from './reducers';
 import DeviceType from '@/schema/device-type';
 import {
+    StepTwoFormValue,
     StepThreeFormValue,
     StepFourFormValue
 } from '@/view/default/tool/paperwork-modal/step-form/prop';
@@ -23,11 +24,15 @@ interface PaperworkModalState {
      */
     checkedDevices: DeviceType[],
     /**
-     * 第3步表单设备值
+     * 第2步表单值
+     */
+    twoFormValue: StepTwoFormValue,
+    /**
+     * 第3步表单值
      */
     threeFormValue: StepThreeFormValue[],
     /**
-     * 第4步表单设备值
+     * 第4步表单值
      */
     fourFormValue: StepFourFormValue,
     /**
@@ -43,6 +48,7 @@ const model: Model = {
         caseTree: [],
         expandedKeys: [],
         checkedDevices: [],
+        twoFormValue: {},
         threeFormValue: [],
         fourFormValue: {},
         loading: false

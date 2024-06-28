@@ -2,10 +2,11 @@ import { debounce } from 'lodash';
 import { OpenDialogReturnValue, ipcRenderer } from 'electron';
 import React, { FC, useEffect } from 'react';
 import { useSelector } from 'dva';
-import { Input, Form, Select } from 'antd';
+import { Input, Empty, Form, Select } from 'antd';
 import { StateTree } from '@/type/model';
 import { PaperworkModalState } from '@/model/default/paperwork-modal';
 import { helper } from '@/utils/helper';
+import { FormOneBox } from './styled/box';
 import { StepProp } from './prop';
 
 const { Item } = Form;
@@ -66,7 +67,7 @@ const StepOne: FC<StepProp> = ({ visible, formRef }) => {
         { leading: true, trailing: false }
     );
 
-    return <div style={{ display: visible ? 'block' : 'none' }}>
+    return <FormOneBox style={{ display: visible ? 'block' : 'none' }}>
         <Form form={formRef} layout="vertical">
             <Item
                 rules={[
@@ -98,8 +99,14 @@ const StepOne: FC<StepProp> = ({ visible, formRef }) => {
                     { required: true, message: '请选择持有人' }
                 ]}
                 name="mobileHolder"
-                label="持有人">
-                <Select>
+                label="持有人"
+                tooltip="请勾选左侧设备">
+                <Select
+                    notFoundContent={
+                        <Empty
+                            description="暂无持有人"
+                            image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    }>
                     {bindOptions()}
                 </Select>
             </Item>
@@ -112,7 +119,7 @@ const StepOne: FC<StepProp> = ({ visible, formRef }) => {
                 <Input onClick={selectDirHandle} readOnly={true} addonAfter="..." />
             </Item>
         </Form>
-    </div>;
+    </FormOneBox>;
 };
 
 export { StepOne };

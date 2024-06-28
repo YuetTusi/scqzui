@@ -6,7 +6,12 @@ import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined';
 import { Col, Row, Button, Card, Form, Input, DatePicker } from 'antd';
 import { StandardModal } from '../../standard-modal';
+import { FormTwoBox } from './styled/box';
 import { StepProp } from './prop';
+import { useDispatch, useSelector } from 'dva';
+import { StateTree } from '@/type/model';
+import { PaperworkModalState } from '@/model/default/paperwork-modal';
+import { throttle } from 'lodash';
 
 const Datepicker = DatePicker as any;
 const { Item } = Form;
@@ -17,27 +22,53 @@ const { TextArea } = Input;
  */
 const StepTwo: FC<StepProp> = ({ visible, formRef }) => {
 
+    const dispatch = useDispatch();
     const [standardModalOpen, setStandardModalOpen] = useState(false);
-    const [standard, setStandard] = useState<string[]>([]);
+    const {
+        twoFormValue
+    } = useSelector<StateTree, PaperworkModalState>(state => state.paperworkModal);
 
     useEffect(() => {
         formRef.setFieldsValue({
             checkFrom: dayjs().add(-1, 'day'),
             checkTo: dayjs()
         });
+        dispatch({
+            type: 'paperworkModal/setTwoFormValue', payload: {
+                delegation: '',
+                checkFrom: dayjs().add(-1, 'day').format('YYYY-MM-DD HH:mm:ss'),
+                checkTo: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+                checker: '',
+                condition: '',
+                purpose: '',
+                standard: [],
+                equipment: '',
+            }
+        });
     }, []);
 
     const onStandardSelect = (values: string[]) => {
-        setStandard(values);
+        dispatch({
+            type: 'paperworkModal/setTwoFormValue', payload: {
+                ...twoFormValue,
+                standard: values
+            }
+        });
         setStandardModalOpen(false);
     };
 
     const onDrop = (value: string) => {
-        setStandard(prev => prev.filter(i => i !== value));
+        const next = twoFormValue.standard.filter(i => i !== value);
+        dispatch({
+            type: 'paperworkModal/setTwoFormValue', payload: {
+                ...twoFormValue,
+                standard: next
+            }
+        });
     };
 
     const renderStandard = () => {
-        return standard.map((item, index) => <p
+        return (twoFormValue?.standard ?? []).map((item, index) => <p
             key={`SS_${index}`}>
             <Button
                 onClick={() => onDrop(item)}
@@ -51,9 +82,22 @@ const StepTwo: FC<StepProp> = ({ visible, formRef }) => {
         </p>);
     };
 
-    return <div
+    /**
+     * 表单项Change后更新对应值到store中
+     */
+    const onFormValueChange = throttle((changedValues: Record<string, any>) => {
+        const next = { ...twoFormValue, ...changedValues };
+        dispatch({
+            type: 'paperworkModal/setTwoFormValue', payload: next
+        });
+    }, 200, { leading: false, trailing: true });
+
+    return <FormTwoBox
         style={{ display: visible ? 'block' : 'none' }}>
-        <Form layout="vertical" form={formRef}>
+        <Form
+            onValuesChange={onFormValueChange}
+            layout="vertical"
+            form={formRef}>
             <Item
                 name="delegation"
                 label="委托信息">
@@ -93,7 +137,6 @@ const StepTwo: FC<StepProp> = ({ visible, formRef }) => {
                 <TextArea />
             </Item>
             <Item
-                name="standard"
                 label={
                     <>
                         <span>检查依据方法</span>
@@ -122,9 +165,9 @@ const StepTwo: FC<StepProp> = ({ visible, formRef }) => {
         <StandardModal
             open={standardModalOpen}
             onOk={onStandardSelect}
-            defaultValue={standard}
+            defaultValue={twoFormValue.standard}
             onCancel={() => setStandardModalOpen(false)} />
-    </div>;
+    </FormTwoBox>;
 };
 
 export { StepTwo };

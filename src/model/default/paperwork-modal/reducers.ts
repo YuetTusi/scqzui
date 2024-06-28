@@ -18,6 +18,10 @@ export default {
         state.checkedDevices = payload;
         return state;
     },
+    setTwoFormValue(state: PaperworkModalState, { payload }: AnyAction) {
+        state.twoFormValue = payload;
+        return state;
+    },
     setThreeFormValue(state: PaperworkModalState, { payload }: AnyAction) {
         state.threeFormValue = payload;
         return state;
@@ -37,6 +41,15 @@ export default {
     setLoading(state: PaperworkModalState, { payload }: AnyAction) {
 
         state.loading = payload;
+        return state;
+    },
+    resetValue(state: PaperworkModalState, { payload }: AnyAction) {
+        state.expandedKeys = [];
+        state.checkedDevices = [];
+        state.twoFormValue = {} as any;
+        state.threeFormValue = [];
+        state.fourFormValue = {} as any;
+        state.loading = false;
         return state;
     }
 };
