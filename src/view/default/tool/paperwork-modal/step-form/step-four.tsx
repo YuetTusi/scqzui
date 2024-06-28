@@ -1,16 +1,17 @@
 import noneImage from './styled/image/bsdMkMger8.png';
 import { basename } from 'path';
-import { debounce, throttle } from 'lodash';
+import { debounce, throttle, uniqBy } from 'lodash';
 import { OpenDialogReturnValue, ipcRenderer } from 'electron';
-import React, { FC, useEffect, useRef, useState, memo } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import UploadOutlined from '@ant-design/icons/UploadOutlined';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
-import { Col, Row, Card, Empty, Input, Image, Button, Form } from 'antd';
+import { Col, Row, Empty, Input, Image, Button, Form, Tag, Tooltip } from 'antd';
 import { StateTree } from '@/type/model';
 import { PaperworkModalState } from '@/model/default/paperwork-modal';
-import { StepProp } from './prop';
-import { EmptyBox, FormFourBox } from './styled/box';
+import { AttachListBox, EmptyBox, FormFourBox } from './styled/box';
+import { Attachment, StepProp } from './prop';
+import { helper } from '@/utils/helper';
 
 const { Item } = Form;
 const { TextArea } = Input;
@@ -54,8 +55,9 @@ const StepFour: FC<StepProp> = ({ formRef, visible }) => {
     /**
      * 选择图片/压缩包
      */
-    const selectFileHandle = debounce((type: 'image' | 'file') => {
-        ipcRenderer
+    const selectFileHandle = debounce(async (type: 'image' | 'file') => {
+
+        const { filePaths }: OpenDialogReturnValue = await ipcRenderer
             .invoke('open-dialog', {
                 title: '请选择照片',
                 properties: type === 'image' ? ['openFile'] : ['multiSelections', 'openFile'],
@@ -65,37 +67,47 @@ const StepFour: FC<StepProp> = ({ formRef, visible }) => {
                 }],
                 defaultPath: type === 'image' ? picturesPath.current : documentsPath.current
             })
-            .then(({ filePaths }: OpenDialogReturnValue) => {
-                if (filePaths && filePaths.length > 0) {
-                    switch (type) {
-                        case 'file':
-                            let prev = fourFormValue?.attachments ?? [];
-                            let next = new Set([...prev, ...filePaths]);
-                            dispatch({
-                                type: 'paperworkModal/setFourFormValue', payload: {
-                                    ...fourFormValue,
-                                    attachments: Array.from(next)
-                                }
-                            });
-                            break;
-                        case 'image':
-                            dispatch({
-                                type: 'paperworkModal/setFourFormValue', payload: {
-                                    ...fourFormValue,
-                                    reportCapture: filePaths[0]
-                                }
-                            });
-                            break;
+
+        if (filePaths && filePaths.length > 0) {
+            switch (type) {
+                case 'file':
+                    let prev = fourFormValue?.attachments ?? [];
+                    let next: Attachment[] = [];
+
+                    for (let i = 0; i < filePaths.length; i++) {
+                        const [md5, sha1, sha256] = await Promise.all([
+                            helper.hashFile(filePaths[i], 'md5'),
+                            helper.hashFile(filePaths[i], 'sha1'),
+                            helper.hashFile(filePaths[i], 'sha256')
+                        ]);
+                        next.push({
+                            path: filePaths[i],
+                            md5, sha1, sha256
+                        });
                     }
-                }
-            }).catch((error) => {
-                console.error(error);
-            });
+
+                    dispatch({
+                        type: 'paperworkModal/setFourFormValue', payload: {
+                            ...fourFormValue,
+                            attachments: uniqBy([...prev, ...next], 'path')
+                        }
+                    });
+                    break;
+                case 'image':
+                    dispatch({
+                        type: 'paperworkModal/setFourFormValue', payload: {
+                            ...fourFormValue,
+                            reportCapture: filePaths[0]
+                        }
+                    });
+                    break;
+            }
+        }
     }, 600, { leading: true, trailing: false });
 
-    const onDrop = (path: string) => {
+    const onDrop = (attach: Attachment) => {
         const prev = fourFormValue?.attachments ?? [];
-        const next = prev.filter(i => i !== path);
+        const next = prev.filter(i => i.path !== attach.path);
         dispatch({
             type: 'paperworkModal/setFourFormValue', payload: {
                 ...fourFormValue,
@@ -109,7 +121,7 @@ const StepFour: FC<StepProp> = ({ formRef, visible }) => {
      */
     const renderAttach = () => {
         const attaches = fourFormValue?.attachments ?? [];
-        return attaches.map((item, index) => <p
+        return attaches.map((item, index) => <li
             key={`Attach_${index}`}>
             <Button
                 onClick={() => onDrop(item)}
@@ -121,8 +133,15 @@ const StepFour: FC<StepProp> = ({ formRef, visible }) => {
                 style={{ marginTop: '5px' }}>
                 <DeleteOutlined />
             </Button>
-            <span className="file-name">{basename(item)}</span>
-        </p>);
+            <div className="file-info">
+                <span className="file-name">{basename(item.path)}</span>
+                <span>
+                    <Tooltip title={'MD5：' + item.md5}><Tag>MD5</Tag></Tooltip>
+                    <Tooltip title={'SHA1：' + item.sha1}><Tag>SHA1</Tag></Tooltip>
+                    <Tooltip title={'SHA256：' + item.sha256}><Tag>SHA256</Tag></Tooltip>
+                </span>
+            </div>
+        </li>);
     };
 
     /**
@@ -165,13 +184,11 @@ const StepFour: FC<StepProp> = ({ formRef, visible }) => {
                                         image={Empty.PRESENTED_IMAGE_SIMPLE}
                                         description="暂无附件" />
                                 </EmptyBox>
-                                : <Card
-                                    bordered={true}
-                                    size="small"
-                                    className="attach-card"
-                                    style={{ width: '100%' }}>
-                                    {renderAttach()}
-                                </Card>
+                                : <AttachListBox>
+                                    <ul>
+                                        {renderAttach()}
+                                    </ul>
+                                </AttachListBox>
                         }
                         <Button
                             onClick={() => selectFileHandle('file')}
@@ -183,7 +200,7 @@ const StepFour: FC<StepProp> = ({ formRef, visible }) => {
                     </div>
                 </fieldset>
             </Col>
-            <Col flex={1}>
+            <Col flex="none">
                 <fieldset className="sample-img">
                     <legend>
                         取证报告截图

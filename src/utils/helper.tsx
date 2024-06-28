@@ -5,6 +5,7 @@ import { dirname, extname, join } from 'path';
 import {
   access,
   accessSync,
+  createReadStream,
   mkdir,
   readFileSync,
   readFile,
@@ -959,6 +960,21 @@ const helper = {
       level++;
     }
     return level;
+  },
+  /**
+   * 计算文件哈希
+   * @param filePath 文件路径 
+   * @param algorithm 算法
+   */
+  hashFile(filePath: string, algorithm: 'md5' | 'sha1' | 'sha256'): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const hash = crypto.createHash(algorithm);
+      const stream = createReadStream(filePath);
+
+      stream.on('data', (data) => hash.update(data));
+      stream.on('end', () => resolve(hash.digest('hex')));
+      stream.on('error', (err) => reject(err));
+    });
   }
 };
 

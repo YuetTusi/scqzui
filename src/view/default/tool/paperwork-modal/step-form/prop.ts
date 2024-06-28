@@ -130,6 +130,25 @@ export interface StepThreeFormValue {
     [others: string]: any
 }
 
+export interface Attachment {
+    /**
+     * 路径
+     */
+    path: string,
+    /**
+     * MD5
+     */
+    md5: string,
+    /**
+     * Sha1
+     */
+    sha1: string,
+    /**
+     * Sha256
+     */
+    sha256: string,
+}
+
 export interface StepFourFormValue {
     /**
      * 检查步骤
@@ -142,7 +161,7 @@ export interface StepFourFormValue {
     /**
      * 附件路径列表
      */
-    attachments: string[],
+    attachments: Attachment[],
     /**
      * 截图路径
      */

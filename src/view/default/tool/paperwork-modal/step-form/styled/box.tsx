@@ -170,6 +170,46 @@ export const DeviceListBox = styled.div`
     }
 `;
 
+export const AttachListBox = styled.div`
+
+    overflow: auto;
+    border:1px solid #303030;
+    border-radius: 2px;
+    width: 100%;
+    height: 200px;
+
+    ul{
+        margin:0;
+        padding:0;
+    }
+    li{
+        margin:0;
+        padding:2px 0 2px 8px;
+        list-style-type: none;
+        
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        .file-info{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .file-name{
+                display: inline-block;
+                max-width:380px;
+                margin-left: 8px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+`;
+
+
 export const EmptyBox = styled.div`
     display: flex;
     flex-direction: column;

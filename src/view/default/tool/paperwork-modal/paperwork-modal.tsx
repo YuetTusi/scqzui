@@ -1,10 +1,11 @@
 import { join } from 'path';
+import { mapValues } from 'lodash';
 import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import RightCircleOutlined from '@ant-design/icons/RightCircleOutlined';
 import LeftCircleOutlined from '@ant-design/icons/LeftCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
-import { Button, Form, Modal } from 'antd';
+import { Button, Form, Modal, message } from 'antd';
 import { useDispatch, useSelector } from 'dva';
 import { StateTree } from '@/type/model';
 import { PaperworkModalState } from '@/model/default/paperwork-modal';
@@ -63,37 +64,44 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
      */
     const onNextClick = async (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        try {
-            switch (step) {
-                case 0:
+
+        switch (step) {
+            case 0:
+                try {
                     const one = await oneFormRef.validateFields();
                     oneFormValue.current = one;
                     setStep(1);
-                    break;
-                case 1:
-                    setStep(2);
-                    break;
-                case 2:
-                    setStep(3);
-                    break;
-                case 3:
-                    console.clear();
-                    console.log({
+                } catch (error) {
+                    console.warn(error);
+                }
+                break;
+            case 1:
+                setStep(2);
+                break;
+            case 2:
+                setStep(3);
+                break;
+            case 3:
+                message.destroy();
+                try {
+                    await helper.writeJSONfile(join(helper.APP_CWD, 'report-doc.json'), mapValues({
                         ...oneFormValue.current,
                         ...twoFormValue,
                         ...fourFormValue,
-                        devices: threeFormValue
-                    });
-                    await helper.writeJSONfile(join(helper.APP_CWD, 'report-doc.json'), {
-                        ...oneFormValue.current,
-                        ...twoFormValue,
-                        ...fourFormValue,
-                        devices: threeFormValue
-                    });
-                    break;
-            }
-        } catch (error) {
-            console.error(error);
+                        devices: threeFormValue.map(i =>
+                            mapValues(i, (value) => value === undefined ? '' : value))
+                    }, (value) => value === undefined ? '' : value));
+                    await helper.runTask(
+                        join(helper.APP_CWD, 'AppraisalReport.exe'),
+                        [join(helper.APP_CWD, 'report-doc.json')]
+                    );
+                    message.success('生成成功');
+                    onCancelClick(event);
+                } catch (error) {
+                    message.error(`生成失败 ${error.message}`);
+                }
+
+                break;
         }
         onOk();
     };
@@ -105,6 +113,10 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
     const onCancelClick = (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
         dispatch({ type: 'paperworkModal/resetValue' });
+        oneFormRef.resetFields();
+        twoFormRef.resetFields();
+        threeFormRef.resetFields();
+        fourFormRef.resetFields();
         setStep(0);
         onCancel();
     };
