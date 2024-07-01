@@ -20,6 +20,14 @@ interface PaperworkModalState {
      */
     expandedKeys: Key[],
     /**
+     * 选中的案件数量
+     */
+    selectedCaseCount: number,
+    /**
+     * 选中的案件名称
+     */
+    selectedCaseName: string,
+    /**
      * 勾选的设备
      */
     checkedDevices: DeviceType[],
@@ -47,6 +55,7 @@ const model: Model = {
     state: {
         caseTree: [],
         expandedKeys: [],
+        selectedCaseCount: 0,
         checkedDevices: [],
         twoFormValue: {},
         threeFormValue: [],

@@ -29,7 +29,6 @@ const { useForm } = Form;
 const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
 
     const dispatch = useDispatch();
-    const [, contextHolder] = Modal.useModal();
     const oneFormValue = useRef<StepOneFormValue>(); //第1步表单值
     const [oneFormRef] = useForm<StepOneFormValue>();
     const [twoFormRef] = useForm<StepTwoFormValue>();
@@ -38,6 +37,8 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
     const {
         caseTree,
         loading,
+        selectedCaseCount,
+        selectedCaseName,
         expandedKeys,
         twoFormValue, //第2步表单值
         threeFormValue, //第3步表单值
@@ -50,6 +51,12 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
             dispatch({ type: 'paperworkModal/queryCaseTree' });
         }
     }, [open]);
+
+    useEffect(() => {
+        if (selectedCaseName) {
+            oneFormRef.setFieldsValue({ caseName: selectedCaseName });
+        }
+    }, [selectedCaseName]);
 
     /**
      * 上一步Click
@@ -64,7 +71,15 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
      */
     const onNextClick = async (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
-
+        if (selectedCaseCount > 1) {
+            Modal.info({
+                title: '提示',
+                content: '只可选择一个案件数据',
+                centered: true,
+                okText: '确定'
+            });
+            return;
+        }
         switch (step) {
             case 0:
                 try {
@@ -154,7 +169,6 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
         title="生成鉴定报告"
         getContainer="#app"
         className="zero-padding-body">
-        {contextHolder}
         <PaperworkModalBox>
             <div className="tree-box">
                 <div className="full-box">
@@ -163,7 +177,9 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
                         data={caseTree}
                         expandedKeys={expandedKeys}
                         disabled={step !== 0}
-                        onExpand={(keys) => dispatch({ type: 'paperworkModal/setExpandedKeys', payload: keys })}
+                        onExpand={(keys) => {
+                            dispatch({ type: 'paperworkModal/setExpandedKeys', payload: keys })
+                        }}
                     />
                 </div>
             </div>
