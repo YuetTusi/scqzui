@@ -49,7 +49,11 @@ enum LocalStoreKey {
     /**
      * 登录超时时间
      */
-    LoginOverTime = 'LoginOverTime'
+    LoginOverTime = 'LoginOverTime',
+    /**
+     * 系统目录
+     */
+    SysPath = 'SysPath'
 }
 
 /**

@@ -1,14 +1,14 @@
 import noneImage from './styled/image/bsdMkMger8.png';
 import { debounce, throttle } from 'lodash';
 import { OpenDialogReturnValue, ipcRenderer } from 'electron';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import UploadOutlined from '@ant-design/icons/UploadOutlined';
 import { Col, Row, Button, Form, Input, Image } from 'antd';
-import { helper } from '@/utils/helper';
 import DeviceType from '@/schema/device-type';
 import { StateTree } from '@/type/model';
 import { PaperworkModalState } from '@/model/default/paperwork-modal';
+import localStore, { LocalStoreKey } from '@/utils/local-store';
 import { DeviceList } from './device-list';
 import { FormThreeBox } from './styled/box';
 import { StepProp } from './prop';
@@ -27,12 +27,6 @@ const StepThree: FC<StepProp> = ({ visible, formRef }) => {
         threeFormValue
     } = useSelector<StateTree, PaperworkModalState>((state) => state.paperworkModal);
 
-    useEffect(() => {
-        ipcRenderer
-            .invoke('get-path', 'pictures')
-            .then(value => picturesPath.current = value);
-    }, []);
-
     /**
      * 选择图片
      */
@@ -43,7 +37,7 @@ const StepThree: FC<StepProp> = ({ visible, formRef }) => {
                 title: '请选择照片',
                 properties: ['openFile'],
                 filters: [{ name: '图片文件', extensions: ['jpg', 'jpeg', 'png'] }],
-                defaultPath: picturesPath.current
+                defaultPath: localStore.get(LocalStoreKey.SysPath).pictures
             })
             .then(({ filePaths }: OpenDialogReturnValue) => {
                 if (filePaths && filePaths.length > 0) {

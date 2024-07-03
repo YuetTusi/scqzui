@@ -696,3 +696,13 @@ ipcMain.handle('get-path', (_, type: "home" | "appData" | "userData" |
     "downloads" | "music" | "pictures" | "videos" | "recent" | "logs" | "crashDumps") =>
     app.getPath(type)
 );
+
+ipcMain.handle('get-sys-path', (_) => ({
+    "home": app.getPath("home"),
+    "temp": app.getPath("temp"),
+    "documents": app.getPath("documents"),
+    "downloads": app.getPath("downloads"),
+    "music": app.getPath("music"),
+    "pictures": app.getPath("pictures"),
+    "videos": app.getPath("videos"),
+}));

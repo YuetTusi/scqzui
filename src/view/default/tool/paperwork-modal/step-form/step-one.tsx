@@ -8,6 +8,7 @@ import { PaperworkModalState } from '@/model/default/paperwork-modal';
 import { helper } from '@/utils/helper';
 import { FormOneBox } from './styled/box';
 import { StepProp } from './prop';
+import localStore, { LocalStoreKey } from '@/utils/local-store';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -19,11 +20,8 @@ const StepOne: FC<StepProp> = ({ visible, formRef }) => {
     } = useSelector<StateTree, PaperworkModalState>((state) => state.paperworkModal);
 
     useEffect(() => {
-        ipcRenderer
-            .invoke('get-path', 'documents')
-            .then(value => {
-                formRef.setFieldsValue({ 'savePath': value });
-            });
+        const { documents } = localStore.get(LocalStoreKey.SysPath);
+        formRef.setFieldsValue({ 'savePath': documents });
     }, []);
 
     useEffect(() => {

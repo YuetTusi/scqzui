@@ -241,4 +241,11 @@ export default {
     dispatch({ type: 'setReading', payload: true });
     setTimeout(() => dispatch({ type: 'setReading', payload: false }), 1000);
   },
+  /**
+   * 设置系统目录（文档，图片，临时等）
+   */
+  async setSysPath({ }: SubscriptionAPI) {
+    const sysPath = await ipcRenderer.invoke('get-sys-path');
+    localStorage.setItem('SysPath', JSON.stringify(sysPath));
+  }
 };

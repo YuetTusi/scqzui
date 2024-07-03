@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'dva';
 import { StateTree } from '@/type/model';
 import { PaperworkModalState } from '@/model/default/paperwork-modal';
 import { helper } from '@/utils/helper';
+import localStore, { LocalStoreKey } from '@/utils/local-store';
 import { CaseTree } from './case-tree';
 import { StepForm } from './step-form';
 import {
@@ -99,7 +100,9 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
             case 3:
                 message.destroy();
                 try {
-                    await helper.writeJSONfile(join(helper.APP_CWD, 'report-doc.json'), mapValues({
+                    const { temp } = localStore.get(LocalStoreKey.SysPath);
+                    const jsonAt = join(temp, 'report-doc.json');
+                    await helper.writeJSONfile(jsonAt, mapValues({
                         ...oneFormValue.current,
                         ...twoFormValue,
                         ...fourFormValue,
@@ -107,8 +110,8 @@ const PaperworkModal: FC<PaperworkModalProp> = ({ open, onCancel, onOk }) => {
                             mapValues(i, (value) => value === undefined ? '' : value))
                     }, (value) => value === undefined ? '' : value));
                     await helper.runTask(
-                        join(helper.APP_CWD, 'AppraisalReport.exe'),
-                        [join(helper.APP_CWD, 'report-doc.json')]
+                        join(helper.APP_CWD, '../tools/AppraisalReport/AppraisalReport.exe'),
+                        [jsonAt]
                     );
                     message.success('生成成功');
                     onCancelClick(event);
