@@ -31,6 +31,7 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
     const batchExportReportModal = useSelector<StateTree, BatchExportReportModalState>(state =>
         state.batchExportReportModal
     );
+    const [isZip, setIsZip] = useState(false); //是否带附件
     const [isAttach, setIsAttach] = useState(true); //是否带附件
     const [isEmpty, setIsEmpty] = useState(true); //是否为空
 
@@ -57,7 +58,6 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
         async (devices: ITreeNode[]) => {
 
             let exportTasks: ReportExportTask[] = [];
-
             const selectVal: OpenDialogReturnValue = await ipcRenderer.invoke('open-dialog', {
                 title: '请选择保存目录',
                 properties: ['openDirectory', 'createDirectory']
@@ -116,7 +116,7 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
                     type: 'operateDoing/setExportingDeviceId',
                     payload: exportTasks.map((i) => i.deviceId)
                 });
-                ipcRenderer.send('report-batch-export', exportTasks, isAttach, false, msg.id);
+                ipcRenderer.send('report-batch-export', exportTasks, isAttach, isZip, msg.id);
                 ipcRenderer.send('show-progress', true);
             }
         },
@@ -158,6 +158,19 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
     return <Modal
         footer={[
             <ControlBoxes key="BER_0">
+                <Checkbox
+                    checked={isZip}
+                    disabled={isEmpty}
+                    onChange={() => setIsZip((prev) => !prev)}
+                />
+                <span
+                    onClick={() => {
+                        if (!isEmpty) {
+                            setIsZip((prev) => !prev);
+                        }
+                    }}>
+                    压缩
+                </span>
                 <Checkbox
                     checked={isAttach}
                     disabled={isEmpty}

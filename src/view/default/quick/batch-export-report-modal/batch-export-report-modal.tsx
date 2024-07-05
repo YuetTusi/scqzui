@@ -31,6 +31,7 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
     const batchExportReportModal = useSelector<StateTree, BatchExportReportModalState>(state =>
         state.batchExportReportModal
     );
+    const [isZip, setIsZip] = useState(false); //是压缩
     const [isAttach, setIsAttach] = useState(true); //是否带附件
     const [isEmpty, setIsEmpty] = useState(true); //是否为空
 
@@ -118,7 +119,7 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
                     type: 'operateDoing/setExportingDeviceId',
                     payload: exportTasks.map((i) => i.deviceId)
                 });
-                ipcRenderer.send('report-batch-export', exportTasks, isAttach, false, msg.id);
+                ipcRenderer.send('report-batch-export', exportTasks, isAttach, isZip, msg.id);
                 ipcRenderer.send('show-progress', true);
             }
         },
@@ -161,6 +162,19 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
         footer={[
             <ControlBoxes key="BER_0">
                 <Checkbox
+                    checked={isZip}
+                    disabled={isEmpty}
+                    onChange={() => setIsZip((prev) => !prev)}
+                />
+                <span
+                    onClick={() => {
+                        if (!isEmpty) {
+                            setIsZip((prev) => !prev);
+                        }
+                    }}>
+                    压缩
+                </span>
+                <Checkbox
                     checked={isAttach}
                     disabled={isEmpty}
                     onChange={() => setIsAttach((prev) => !prev)}
@@ -187,6 +201,7 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
         ]}
         onCancel={() => {
             setIsAttach(true);
+            setIsZip(false);
             cancelHandle();
         }}
         visible={visible}

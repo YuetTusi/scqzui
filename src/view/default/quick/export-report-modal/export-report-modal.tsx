@@ -147,7 +147,7 @@ const ExportReportModal: FC<ExportReportModalProp> = ({ visible, data, closeHand
     };
 
     return <Modal
-        visible={visible}
+        open={visible}
         footer={[
             <ControlBoxes key="ER_0">
                 <label htmlFor="reportName">重命名：</label>
@@ -158,6 +158,10 @@ const ExportReportModal: FC<ExportReportModalProp> = ({ visible, data, closeHand
                     size="small"
                     maxLength={100}
                 />
+                <div className="control-checkbox">
+                    <Checkbox checked={isZip} onChange={() => setIsZip((prev) => !prev)} />
+                    <span onClick={() => setIsZip((prev) => !prev)}>压缩</span>
+                </div>
                 <div className="control-checkbox">
                     <Checkbox checked={isAttach} onChange={() => setIsAttach((prev) => !prev)} />
                     <span onClick={() => setIsAttach((prev) => !prev)}>附件</span>

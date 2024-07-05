@@ -1,4 +1,6 @@
+
 import { createWriteStream } from 'fs';
+import { writeFile } from 'fs/promises';
 import { stat } from 'fs/promises';
 import { basename, join } from 'path';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
@@ -6,6 +8,7 @@ import { mapLimit } from 'async';
 import groupBy from 'lodash/groupBy';
 import archiver from 'archiver';
 import log from '@/utils/log';
+import { helper } from '@/utils/helper';
 import {
     BatchExportTask,
     CopyParam,
@@ -35,6 +38,7 @@ ipcRenderer.on('report-export', async (
     try {
         if (isZip) {
             await compressReport(exportCondition, treeParams);
+            await calcHash(exportCondition);
         } else {
             await copyReport(exportCondition, treeParams);
         }
@@ -65,11 +69,20 @@ ipcRenderer.on('report-batch-export', async (
                 id: msgId,
                 msg: `正在导出(${i + 1}/${l})「${reportName}」`
             });
-            await copyReport(
-                { reportRoot, saveTarget, reportName, isAttach, isZip: false },
-                { tree, files, attaches }
-            );
+            if (isZip) {
+                await compressReport(
+                    { reportRoot, saveTarget, reportName, isAttach, isZip },
+                    { tree, files, attaches }
+                );
+                await calcHash({ reportRoot, saveTarget, reportName, isAttach, isZip });
+            } else {
+                await copyReport(
+                    { reportRoot, saveTarget, reportName, isAttach, isZip },
+                    { tree, files, attaches }
+                );
+            }
         }
+
         ipcRenderer.send('report-export-finish', true, batchExportTasks, true, msgId);
     } catch (error) {
         log.error(`批量导出报告错误: ${error.message}`);
@@ -296,5 +309,26 @@ async function getAttachZipPath(source: string, attachFiles: string[]) {
             `读取附件清单失败 @view/record/Parse/ExportReportModal/getAttachZipPath: ${error.message}`
         );
         return [];
+    }
+}
+
+/**
+ * 计算报告压缩包哈希并写入文件
+ */
+async function calcHash({ saveTarget, reportName }: ExportCondition) {
+    const reportFile = join(saveTarget, `${reportName}.zip`);
+    const hashFile = join(saveTarget, `${reportName}.txt`);
+
+    try {
+        const [md5, sha1, sha256] = await Promise.all([
+            helper.hashFile(reportFile, 'md5'),
+            helper.hashFile(reportFile, 'sha1'),
+            helper.hashFile(reportFile, 'sha256')
+        ]);
+
+        await writeFile(hashFile, `报告文件：${reportName}.zip\r\n─────────────────────────────────────────────────────────────────────────────────\r\nMD5:\t${md5}\r\nSHA1:\t${sha1}\r\nSHA256:\t${sha256}`);
+
+    } catch (error) {
+        log.error(`计算文件哈希值失败: ${error.message}`);
     }
 }

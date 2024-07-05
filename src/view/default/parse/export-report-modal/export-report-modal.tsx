@@ -11,9 +11,9 @@ import Input from 'antd/lib/input';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import Auth from '@/component/auth';
-import { helper } from '@/utils/helper';
-import log from '@/utils/log';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
+import log from '@/utils/log';
+import { helper } from '@/utils/helper';
 import { expandNodes, filterTree, mapTree, readTxtFile } from './tree-util';
 import { ExportReportModalBox, ControlBoxes } from './styled/style';
 import { ExportReportModalProp } from './prop';
@@ -147,7 +147,7 @@ const ExportReportModal: FC<ExportReportModalProp> = ({ visible, data, closeHand
     };
 
     return <Modal
-        visible={visible}
+        open={visible}
         footer={[
             <ControlBoxes key="ER_0">
                 <label htmlFor="reportName">重命名：</label>
@@ -158,6 +158,10 @@ const ExportReportModal: FC<ExportReportModalProp> = ({ visible, data, closeHand
                     size="small"
                     maxLength={100}
                 />
+                <div className="control-checkbox">
+                    <Checkbox checked={isZip} onChange={() => setIsZip((prev) => !prev)} />
+                    <span onClick={() => setIsZip((prev) => !prev)}>压缩</span>
+                </div>
                 <div className="control-checkbox">
                     <Checkbox checked={isAttach} onChange={() => setIsAttach((prev) => !prev)} />
                     <span onClick={() => setIsAttach((prev) => !prev)}>附件</span>
