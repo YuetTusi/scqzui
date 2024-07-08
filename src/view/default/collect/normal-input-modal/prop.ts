@@ -49,7 +49,7 @@ export interface FormValue {
      */
     note: string;
     /**
-     * 是否Root
+     * 提取方式
      */
-    isRoot: boolean;
+    extraction: string;
 }

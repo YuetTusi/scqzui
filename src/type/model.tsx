@@ -36,6 +36,7 @@ import { ApkModalState } from '@/model/default/apk-modal';
 import { LoginState } from '@/model/default/login';
 import { AndroidSetModalState } from '@/model/default/android-set-modal';
 import { PaperworkModalState } from '@/model/default/paperwork-modal';
+import { ExtractionState } from '@/model/default/extraction';
 
 declare global {
 	interface Window {
@@ -88,6 +89,7 @@ interface StateTree {
 	login: LoginState,
 	androidSetModal: AndroidSetModalState,
 	paperworkModal: PaperworkModalState,
+	extraction: ExtractionState,
 	[modelName: string]: any
 }
 

@@ -30,9 +30,10 @@ import { DataMode } from '@/schema/data-mode';
 import { ParseApp } from '@/schema/parse-app';
 import { StateTree } from '@/type/model';
 import { CaseDataState } from '@/model/default/case-data';
+import { ExtractionState } from '@/model/default/extraction';
 import parseApp from '@/config/parse-app.yaml';
 import { Instruction } from '../instruction';
-import { NormalInputModalBox, TipBox } from './styled/style';
+import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
 
 const { caseText, devText, fetchText, parseText } = helper.readConf()!;
@@ -61,11 +62,11 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
     const dispatch = useDispatch();
     const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
+    const { types } = useSelector<StateTree, ExtractionState>((state) => state.extraction);
     const [formRef] = useForm<FormValue>();
     const currentCase = useRef<CaseInfo>(); //当前案件数据
     const [appSelectModalVisible, setAppSelectModalVisible] = useState(false);
     const [selectedApps, setSelectedApps] = useState<ParseApp[]>([]);
-    const [isRoot, setIsRoot] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const historyDeviceName = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENAME));
     const historyDeviceHolder = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER));
@@ -116,6 +117,18 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     };
 
     /**
+     * 绑定提取方式下拉
+     */
+    const bindExtractionSelect = () =>
+        types.map((t) =>
+            <Option
+                value={t.value}
+                key={t.value}>
+                {t.name}
+            </Option>
+        );
+
+    /**
      * 案件下拉Change
      */
     const caseChange = (value: string, _: JSX.Element | JSX.Element[]) => {
@@ -135,7 +148,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
     const resetValue = () => {
         currentCase.current = undefined;
-        setIsRoot(false);
         formRef.resetFields();
     };
 
@@ -165,7 +177,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.mobileHolder = values.user;
             entity.handleOfficerNo = values.handleOfficerNo;
             entity.note = values.note ?? '';
-            entity.isRoot = isRoot;
+            entity.extraction = values.extraction;
             entity.credential = '';
             entity.serial = device?.serial ?? '';
             entity.mode = DataMode.Self; //标准模式（用户手输取证数据）
@@ -228,7 +240,9 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                 required: true,
                                 message: `请选择${caseText ?? '案件'}`
                             }
-                        ]} name="case" label={`${caseText ?? '案件'}名称`}>
+                        ]}
+                            name="case"
+                            label={`${caseText ?? '案件'}名称`}>
                             <Select
                                 onChange={caseChange}
                                 showSearch={true}
@@ -377,19 +391,16 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                     </Col>
                     <Col span={12}>
                         <Item
+                            rules={[
+                                { required: true, message: '请选择提取方式' }
+                            ]}
                             labelCol={{ span: 6 }}
-                            wrapperCol={{ span: 4 }}
-                            name="isRoot"
-                            label="尝试Root备份"
-                            valuePropName="checked">
-                            <Tooltip
-                                title={
-                                    <TipBox>
-                                        勾选后将尝试执行Root备份，<em>只支持部分低版本安卓手机或已Root的安卓手机</em>
-                                    </TipBox>
-                                }>
-                                <Checkbox checked={isRoot} onChange={(e) => setIsRoot(e.target.checked)} />
-                            </Tooltip>
+                            wrapperCol={{ span: 14 }}
+                            name="extraction"
+                            label="提取方式">
+                            <Select style={{ width: '100%' }}>
+                                {bindExtractionSelect()}
+                            </Select>
                         </Item>
                     </Col>
                 </Row>
@@ -399,7 +410,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
     return <>
         <Modal
-            visible={visible}
+            open={visible}
             onCancel={() => {
                 resetValue();
                 setSelectedApps([]);

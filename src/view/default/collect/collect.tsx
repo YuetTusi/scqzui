@@ -13,7 +13,7 @@ import message from 'antd/lib/message';
 import Button from 'antd/lib/button';
 import { useDstUnit, useUnit } from '@/hook/unit';
 import { TipType } from '@/schema/tip-type';
-import { FetchState, ParseState } from '@/schema/device-state';
+import { FetchState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchData } from '@/schema/fetch-data';
 import { DeviceType } from '@/schema/device-type';
@@ -201,6 +201,11 @@ const Collect: FC<CollectProp> = ({ }) => {
         if (!validateBeforeFetch()) {
             return;
         }
+        send(SocketType.Fetch, {
+            type: SocketType.Fetch,
+            cmd: CommandType.Extraction,
+            msg: { usb }
+        });
         switch (dataMode) {
             case DataMode.Self:
                 //# 标准版本

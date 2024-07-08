@@ -63,6 +63,10 @@ enum CommandType {
      */
     DevCast = 'dev_cast',
     /**
+     * 提取方式
+     */
+    Extraction = 'extraction',
+    /**
      * 消息回馈联通验证码结果（Fetch）
      */
     UMagicCodeReply = 'umagic_code_reply',
