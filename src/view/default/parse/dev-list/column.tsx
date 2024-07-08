@@ -152,7 +152,7 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
     } catch (error) {
         logger.error(`解析失败 @view/default/parse/dev-list/column.tsx:${error.message}`);
     }
-}, 2000, { leading: true, trailing: false });
+}, 500, { leading: true, trailing: false });
 
 /**
  * 调用exe创建报告
