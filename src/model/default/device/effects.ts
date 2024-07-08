@@ -512,7 +512,18 @@ export default {
                 });
 
                 yield put({
-                    type: 'parsingList/setInfo',
+                    type: 'parsingList/appendInfo',
+                    payload: {
+                        caseId: current.caseId,
+                        deviceId: current._id,
+                        curinfo: '开始解析数据',
+                        curprogress: 0,
+                        category: ParseCategory.Normal
+                    }
+                })
+
+                yield put({
+                    type: 'parsingList/appendInfo',
                     payload: [{
                         caseId: current.caseId,
                         deviceId: current._id,
