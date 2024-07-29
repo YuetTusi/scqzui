@@ -164,7 +164,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
                     <HorBox>
                         <div className="desc">
                             <div>使用手机浏览器<strong>扫描右侧二维码</strong>，下载APP安装后打开「<strong>采集助手</strong>」</div>
-                            <div style={{ marginTop: '20px' }}><strong>提示：如果无法完成扫码，请安装QQ浏览器重新扫描</strong></div>
+                            <div style={{ marginTop: '20px' }}><strong>提示：如果无法完成扫码，请安装花瓣览器重新扫描</strong></div>
                         </div>
                         <Spin
                             spinning={scanned}
