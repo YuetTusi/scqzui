@@ -17,6 +17,18 @@ class Manufaturer {
      */
     public telephone?: string;
     /**
+     * 邮箱
+     */
+    public email?: string;
+    /**
+     * 论坛
+     */
+    public forum?: string;
+    /**
+     * 地址
+     */
+    public address?: string;
+    /**
      * 厂商组织机构代码
      */
     public security_software_orgcode?: string;

@@ -29,7 +29,6 @@ const filterString = (src: string) => src.replace(/-/g, '.');
  * 版本信息
  */
 const Version: FC<{}> = () => {
-    // const dispatch = useDispatch();
     let [publishModalVisible, setPublishModalVisible] = useState<boolean>(false);
     let [disabled, setDisabled] = useState<boolean>(false);
     let [manu, setManu] = useState<Manufaturer | null>(null);
@@ -99,6 +98,9 @@ const Version: FC<{}> = () => {
                 <ListOption label="开发方">{data?.manufacturer}</ListOption>
                 <ListOption label="客服电话">{data?.hotline}</ListOption>
                 <ListOption label="联系电话">{data?.telephone}</ListOption>
+                <ListOption label="邮箱">{data?.email}</ListOption>
+                <ListOption label="论坛">{data?.forum}</ListOption>
+                <ListOption label="地址">{data?.address}</ListOption>
                 <div style={{ padding: 0 }}>
                     <label>序列号</label>
                     <span className="text">
@@ -115,7 +117,7 @@ const Version: FC<{}> = () => {
                     }
                 </ListOption>
                 <ListOption label="到期时间">
-                    
+
                 </ListOption>
                 <div style={{ padding: 0 }}>
                     <label>发行日志</label>

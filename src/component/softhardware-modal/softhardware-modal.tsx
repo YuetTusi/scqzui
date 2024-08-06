@@ -3,6 +3,8 @@ import React, { FC, useEffect, useState } from 'react';
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
+import Col from 'antd/lib/col';
+import Row from 'antd/lib/row';
 import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
@@ -16,8 +18,8 @@ const isDev = process.env['NODE_ENV'] === 'development';
 const cwd = process.cwd();
 const { Item, useForm } = Form;
 const formItemLayout = {
-    labelCol: { span: 7 },
-    wrapperCol: { span: 16 }
+    labelCol: { span: 5 },
+    wrapperCol: { span: 18 }
 };
 
 /**
@@ -110,7 +112,7 @@ const SofthardwareModal: FC<SofthardwareModalProp> = ({ visible, closeHandle }) 
         }}
         visible={visible}
         title="软硬件信息配置"
-        width={650}
+        width={850}
         centered={true}
         forceRender={true}
         maskClosable={false}
@@ -119,27 +121,92 @@ const SofthardwareModal: FC<SofthardwareModalProp> = ({ visible, closeHandle }) 
             <Item label="开发方（制造商名称）" name="manufacturer">
                 <Input maxLength={128} />
             </Item>
-            <Item label="客服电话" name="hotline">
-                <Input maxLength={100} />
-            </Item>
-            <Item label="联系电话" name="telephone">
-                <Input maxLength={100} />
+            <Row>
+                <Col span={12}>
+                    <Item
+                        labelCol={{ span: 10 }}
+                        wrapperCol={{ span: 14 }}
+                        label="客服电话"
+                        name="hotline">
+                        <Input maxLength={100} />
+                    </Item>
+                </Col>
+                <Col span={12}>
+                    <Item
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                        label="联系电话"
+                        name="telephone">
+                        <Input maxLength={100} />
+                    </Item>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={12}>
+                    <Item
+                        labelCol={{ span: 10 }}
+                        wrapperCol={{ span: 14 }}
+                        label="邮箱"
+                        name="email">
+                        <Input />
+                    </Item>
+                </Col>
+                <Col span={12}>
+                    <Item
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                        label="论坛"
+                        name="forum">
+                        <Input />
+                    </Item>
+                </Col>
+            </Row>
+            <Item
+                label="地址"
+                name="address">
+                <Input />
             </Item>
             <Item label="厂商组织机构代码" name="security_software_orgcode">
                 <Input maxLength={9} />
             </Item>
-            <Item label="产品名称" name="materials_name">
-                <Input maxLength={128} />
-            </Item>
-            <Item label="产品型号" name="materials_model">
-                <Input maxLength={64} />
-            </Item>
-            <Item label="设备硬件版本号" name="materials_hardware_version">
-                <Input maxLength={64} />
-            </Item>
-            <Item label="设备软件版本号" name="materials_software_version">
-                <Input maxLength={128} />
-            </Item>
+            <Row>
+                <Col span={12}>
+                    <Item
+                        labelCol={{ span: 10 }}
+                        wrapperCol={{ span: 14 }}
+                        label="产品名称" name="materials_name">
+                        <Input maxLength={128} />
+                    </Item>
+                </Col>
+                <Col span={12}>
+                    <Item
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                        label="产品型号" name="materials_model">
+                        <Input maxLength={64} />
+                    </Item>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={12}>
+                    <Item
+                        labelCol={{ span: 10 }}
+                        wrapperCol={{ span: 14 }}
+                        label="设备硬件版本号"
+                        name="materials_hardware_version">
+                        <Input maxLength={64} />
+                    </Item>
+                </Col>
+                <Col span={12}>
+                    <Item
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                        label="设备软件版本号"
+                        name="materials_software_version">
+                        <Input maxLength={128} />
+                    </Item>
+                </Col>
+            </Row>
             <Item label="设备序列号" name="materials_serial">
                 <Input maxLength={64} />
             </Item>
@@ -149,7 +216,7 @@ const SofthardwareModal: FC<SofthardwareModalProp> = ({ visible, closeHandle }) 
                 <Input maxLength={10} />
             </Item>
         </Form>
-    </Modal>
+    </Modal >
 };
 
 export default SofthardwareModal;

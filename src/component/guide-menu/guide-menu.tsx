@@ -133,6 +133,30 @@ const renderColorButtons = (manu: Manufaturer | null, serial: string) => {
                                             <span>{manu?.telephone ?? ''}</span>
                                         </p>
                                 }
+                                {
+                                    helper.isNullOrUndefinedOrEmptyString(manu?.email)
+                                        ? null
+                                        : <p>
+                                            <label>邮箱</label>
+                                            <span>{manu?.email ?? ''}</span>
+                                        </p>
+                                }
+                                {
+                                    helper.isNullOrUndefinedOrEmptyString(manu?.forum)
+                                        ? null
+                                        : <p>
+                                            <label>论坛</label>
+                                            <span>{manu?.forum ?? ''}</span>
+                                        </p>
+                                }
+                                {
+                                    helper.isNullOrUndefinedOrEmptyString(manu?.address)
+                                        ? null
+                                        : <p>
+                                            <label>地址</label>
+                                            <span>{manu?.address ?? ''}</span>
+                                        </p>
+                                }
                                 <p>
                                     <label>序列号</label>
                                     <span>{serial}</span>
