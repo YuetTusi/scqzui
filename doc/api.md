@@ -206,6 +206,27 @@ Fetch 命令: `sms_send`
 
 > 枚举说明： 4-发送； 5-取消；6-重新发送验证码
 
+#### 查询提取方式
+
+Fetch 命令：`extraction`
+
+参数：
+
+| 参数名 | 类型   | 说明 |
+| ------ | ------ | ---- |
+| usb    | number | 序号 |
+
+#### 向 UI 发送提取方式
+
+Fetch 命令：`extraction`
+
+参数：
+
+| 参数名  | 类型                         | 说明         |
+| ------- | ---------------------------- | ------------ |
+| usb     | number                       | 序号         |
+| methods | {name:string,value:number}[] | 提取方式列表 |
+
 #### 接收云取图形验证码数据（滑块、文字点选）
 
 Fetch 命令：`human_verify`
@@ -284,6 +305,7 @@ UI 命令：`start_fetch`，参数：
 | analysisApp   | boolean     | 是否获取应用数据                              |
 | sdCard        | boolean     | 是否拉取 SD 卡数据                            |
 | cloudTimeout  | number      | 云取超时时间（云取）                          |
+| extraction    | number      | 提取方式                                      |
 | cloudTimespan | number      | 云取查询间隔（云取）                          |
 | isAlive       | boolean     | 是否保活                                      |
 

@@ -11,7 +11,6 @@ import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Button from 'antd/lib/button';
-import Checkbox from 'antd/lib/checkbox';
 import AutoComplete from 'antd/lib/auto-complete';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
@@ -75,6 +74,8 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     useEffect(() => {
         if (visible) {
             dispatch({ type: 'caseData/queryAllCaseData' });
+        } else {
+            dispatch({ type: 'extraction/setTypes', payload: [] });
         }
     }, [visible]);
 
@@ -88,8 +89,14 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
         if (visible) {
             formRef.setFieldsValue({ phoneName: device?.model ?? '' });
         }
-
     }, [device, visible]);
+
+    useEffect(() => {
+        const [first] = types;
+        if (first) {
+            formRef.setFieldValue('extraction', first.value);
+        }
+    }, [types]);
 
     /**
      * 跳转到新增案件页
@@ -102,19 +109,17 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     /**
      * 绑定案件下拉数据
      */
-    const bindCaseSelect = () => {
-        return allCaseData.map((opt: CaseInfo) => {
-            let pos = opt.m_strCaseName.lastIndexOf('\\');
-            let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
-            return <Option
-                value={JSON.stringify(opt)}
-                key={opt._id}>
-                {`${name}（${helper
-                    .parseDate(tick, 'YYYYMMDDHHmmss')
-                    .format('YYYY-M-D H:mm:ss')}）`}
-            </Option>;
-        });
-    };
+    const bindCaseSelect = () => allCaseData.map((opt: CaseInfo) => {
+        let pos = opt.m_strCaseName.lastIndexOf('\\');
+        let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
+        return <Option
+            value={JSON.stringify(opt)}
+            key={opt._id}>
+            {`${name}（${helper
+                .parseDate(tick, 'YYYYMMDDHHmmss')
+                .format('YYYY-M-D H:mm:ss')}）`}
+        </Option>;
+    });
 
     /**
      * 绑定提取方式下拉
