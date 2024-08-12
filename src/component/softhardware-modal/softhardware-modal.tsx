@@ -9,13 +9,11 @@ import Button from 'antd/lib/button';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
-import { Manufaturer } from '@/schema/manufaturer';
-import { SofthardwareModalProp } from './prop';
 import { No } from '@/utils/regex';
 import { helper } from '@/utils/helper';
+import { Manufaturer } from '@/schema/manufaturer';
+import { SofthardwareModalProp } from './prop';
 
-const isDev = process.env['NODE_ENV'] === 'development';
-const cwd = process.cwd();
 const { Item, useForm } = Form;
 const formItemLayout = {
     labelCol: { span: 5 },
@@ -54,9 +52,9 @@ const SofthardwareModal: FC<SofthardwareModalProp> = ({ visible, closeHandle }) 
      */
     const save = async () => {
         const { validateFields } = formRef;
-        const saveTo = isDev
-            ? join(cwd, './data/manufaturer.json')
-            : join(cwd, './resources/config/manufaturer.json');
+        const saveTo = helper.IS_DEV
+            ? join(helper.APP_CWD, './data/manufaturer.json')
+            : join(helper.APP_CWD, './resources/config/manufaturer.json');
         setLoading(true);
         try {
             const values = await validateFields();
