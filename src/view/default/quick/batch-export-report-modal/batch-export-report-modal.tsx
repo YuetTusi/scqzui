@@ -187,12 +187,12 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
                     }}>
                     附件
                 </span>
-                <Auth deny={!useFakeButton}>
+                {/* <Auth deny={!useFakeButton}>
                     <Button disabled={isEmpty} onClick={validCheck} type="primary">
                         <FilePdfOutlined />
                         <span>导出PDF</span>
                     </Button>
-                </Auth>
+                </Auth> */}
                 <Button disabled={isEmpty} onClick={validCheck} type="primary">
                     <ExportOutlined />
                     <span>导出报告</span>

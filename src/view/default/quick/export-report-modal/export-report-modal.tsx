@@ -166,12 +166,12 @@ const ExportReportModal: FC<ExportReportModalProp> = ({ visible, data, closeHand
                     <Checkbox checked={isAttach} onChange={() => setIsAttach((prev) => !prev)} />
                     <span onClick={() => setIsAttach((prev) => !prev)}>附件</span>
                 </div>
-                <Auth deny={!useFakeButton}>
+                {/* <Auth deny={!useFakeButton}>
                     <Button type="primary" onClick={exportHandle}>
                         <FilePdfOutlined />
                         <span>导出PDF</span>
                     </Button>
-                </Auth>
+                </Auth> */}
                 <Button type="primary" onClick={exportHandle}>
                     <ExportOutlined />
                     <span>导出报告</span>
