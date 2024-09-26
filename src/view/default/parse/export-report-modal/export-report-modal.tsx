@@ -4,13 +4,11 @@ import React, { FC, memo, useEffect, useRef, useState, MouseEvent } from 'react'
 import { useDispatch } from 'dva';
 import debounce from 'lodash/debounce';
 import ExportOutlined from '@ant-design/icons/ExportOutlined';
-import FilePdfOutlined from '@ant-design/icons/FilePdfOutlined';
 import Button from 'antd/lib/button';
 import Checkbox from 'antd/lib/checkbox';
 import Input from 'antd/lib/input';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
-import Auth from '@/component/auth';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
 import log from '@/utils/log';
 import { helper } from '@/utils/helper';
@@ -18,7 +16,6 @@ import { expandNodes, filterTree, mapTree, readTxtFile } from './tree-util';
 import { ExportReportModalBox, ControlBoxes } from './styled/style';
 import { ExportReportModalProp } from './prop';
 
-const { useFakeButton } = helper.readConf()!;
 let ztree: any = null;
 
 /**

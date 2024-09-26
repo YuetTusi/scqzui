@@ -24,7 +24,6 @@ import FetchData from './src/schema/fetch-data';
 
 const { env, platform, resourcesPath } = process;
 const isDev = env['NODE_ENV'] === 'development';
-const cwd = process.cwd();
 const appPath = app.getAppPath();
 const server = express();
 const appName = helper.readAppName();

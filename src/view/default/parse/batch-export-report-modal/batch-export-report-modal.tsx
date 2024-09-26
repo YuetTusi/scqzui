@@ -4,7 +4,6 @@ import React, { FC, useEffect, useState, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import debounce from 'lodash/debounce';
 import ExportOutlined from '@ant-design/icons/ExportOutlined';
-import FilePdfOutlined from '@ant-design/icons/FilePdfOutlined';
 import Button from 'antd/lib/button';
 import Checkbox from 'antd/lib/checkbox';
 import Empty from 'antd/lib/empty';
@@ -13,14 +12,12 @@ import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { ITreeNode } from '@/type/ztree';
 import { helper } from '@/utils/helper';
-import Auth from '@/component/auth';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
 import { BatchExportReportModalState } from '@/model/default/batch-export-report-modal';
 import { toTreeData, filterTree, setDefaultChecked } from './helper';
 import { BatchExportReportModalBox, ControlBoxes } from './styled/style';
 import { BatchExportReportModalProp, ReportExportTask } from './prop';
 
-const { useFakeButton } = helper.readConf()!;
 let ztree: any = null;
 
 /**
