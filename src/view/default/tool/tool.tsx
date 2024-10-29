@@ -1,6 +1,7 @@
 import debounce from 'lodash/debounce';
 import { shell } from 'electron';
 import { join, resolve } from 'path';
+import { execFile } from 'child_process';
 import React, { FC, useCallback, useRef, useReducer, MouseEvent } from 'react';
 import { useDispatch } from 'dva';
 import FundViewOutlined from '@ant-design/icons/FundViewOutlined';
@@ -66,6 +67,8 @@ const cwd = process.cwd();
 const {
     useFakeButton, useCloudSearch, useWebAction
 } = helper.readConf()!;
+const exePath = join(helper.APP_CWD, '../tools/jsyh');
+const exeName = join(exePath, 'jsyh.exe');
 
 /**
  * 工具箱
@@ -652,7 +655,13 @@ const Tool: FC<ToolProp> = () => {
                             安卓解锁
                         </div>
                     </div>
-                    <div onClick={() => dispatchModal({ type: 'qrcodeCloudModalVisible', payload: true })} className="t-button">
+                    <div onClick={() => {
+                        const child = execFile(exeName, { cwd: exePath });
+                        child.on('error', (e: Error) => {
+                            console.log(e);
+                        });
+                        dispatchModal({ type: 'qrcodeCloudModalVisible', payload: true });
+                    }} className="t-button">
                         <div className="ico">
                             <img src={ccbSvg} height={50} />
                         </div>

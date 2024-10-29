@@ -1,5 +1,4 @@
 import { join } from 'path';
-import { execFile } from 'child_process';
 import { shell } from 'electron';
 import React, { FC, useEffect, useState, MouseEvent } from 'react';
 import { Button, Empty, Modal, message } from 'antd';
@@ -12,8 +11,6 @@ import { request } from '@/utils/request';
 import { QRCodeBox, TipBox } from './styled/box';
 import { Tip } from './tip';
 
-const exePath = join(helper.APP_CWD, '../tools/jsyh');
-const exeName = join(exePath, 'jsyh.exe');
 let timer: any = null;
 
 /**
@@ -46,31 +43,33 @@ const QrcodeCloudModal: FC<QrcodeCloudModalProp> = ({
         }
     }, []);
 
-    const onFetchQrcode = () => {
+    const onFetchQrcode = async () => {
         setQrcodeBase64('');
         setFetching(true);
-        const child = execFile(exeName, { cwd: exePath });
+        // try {
+        //     await request('http://127.0.0.1:9000/api/v1/Exit', 'POST');
+        // } catch (error) {
+        //     console.log(error.message);
+        // }
 
-        request('http://127.0.0.1:9000/api/v1/GetQRCode', 'POST')
-            .then(res => {
-                if (res.code === 0) {
-                    console.clear();
-                    console.log(res.data);
-                    setQrcodeBase64('data:image/jpg;base64,' + res.data.QRcode);
-                } else {
-                    message.destroy();
-                    message.warn('获取二维码失败');
-                }
-                setFetching(false);
-            })
-            .catch(err => {
-                console.log(err);
-                setFetching(false);
-            });
-
-        child.on('error', (e: Error) => {
-            console.log(e);
-        });
+        setTimeout(() => {
+            request('http://127.0.0.1:9000/api/v1/GetQRCode', 'POST')
+                .then(res => {
+                    if (res.code === 0) {
+                        console.clear();
+                        console.log(res.data);
+                        setQrcodeBase64('data:image/jpg;base64,' + res.data.QRcode);
+                    } else {
+                        message.destroy();
+                        message.warn('获取二维码失败');
+                    }
+                    setFetching(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                    setFetching(false);
+                });
+        }, 5000);
     };
 
     const onOkClick = async (_: MouseEvent<HTMLElement>) => {
@@ -83,28 +82,31 @@ const QrcodeCloudModal: FC<QrcodeCloudModalProp> = ({
 
         setDownloading(true);
 
-        timer = setInterval(async () => {
-            try {
-                const res = await request('http://127.0.0.1:9000/api/v1/ObtainBilling', 'POST');
-                setReason(res?.data?.reason ?? '');
-                console.log(res);
-                if (res?.data?.result) {
-                    setDownloading(false);
-                    message.destroy();
-                    message.success('下载成功');
-                    clearInterval(timer);
-                    timer = null;
-                    shell.openPath(res?.data?.out_path);
-                }
-            } catch (error) {
-                console.log(error);
+        try {
+            const res = await request('http://127.0.0.1:9000/api/v1/ObtainBilling', 'POST');
+            setReason(res?.data?.reason ?? '');
+            console.log(res);
+            if (res?.data?.result) {
+                setDownloading(false);
+                message.destroy();
+                message.success('下载成功');
                 clearInterval(timer);
                 timer = null;
+                shell.openPath(res?.data?.out_path);
             }
-        }, 3000);
+        } catch (error) {
+            console.log(error);
+            clearInterval(timer);
+            timer = null;
+        }
     };
 
-    const onCancelClick = (_: MouseEvent<HTMLElement>) => {
+    const onCancelClick = async (_: MouseEvent<HTMLElement>) => {
+        try {
+            await request('http://127.0.0.1:9000/api/v1/Exit', 'POST');
+        } catch (error) {
+            console.log(error.message);
+        }
         setQrcodeBase64('');
         setFetching(false);
         setDownloading(false);
