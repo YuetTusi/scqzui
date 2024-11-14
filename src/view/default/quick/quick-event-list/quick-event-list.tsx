@@ -74,6 +74,7 @@ const QuickEventList: FC<EventListProp> = ({ detailHandle, batchExportReportHand
                     current: pageIndex,
                     pageSize,
                     total,
+                    showSizeChanger: false
                 }
             }
             columns={getColumns(dispatch, detailHandle, batchExportReportHandle)}

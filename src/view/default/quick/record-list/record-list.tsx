@@ -148,7 +148,8 @@ const RecordList: FC<RecordListProp> = () => {
                 current: pageIndex,
                 pageSize,
                 total,
-                onChange: onPageChange
+                onChange: onPageChange,
+                showSizeChanger: false
             }}
             expandable={{
                 expandedRowRender: (record) => <RecordInfo

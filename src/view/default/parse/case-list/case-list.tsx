@@ -125,7 +125,8 @@ const CaseList: FC<CaseListProp> = () => {
                 current: pageIndex,
                 pageSize,
                 total,
-                onChange: onPageChange
+                onChange: onPageChange,
+                showSizeChanger: false
             }}
             rowSelection={{
                 type: 'radio',
