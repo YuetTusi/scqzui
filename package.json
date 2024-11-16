@@ -16,7 +16,7 @@
 		"start": "cross-env NODE_ENV=development concurrently \"yarn run build\" \"yarn run serve\" \"yarn run go\"",
 		"prepack": "yarn run build:prod",
 		"pack": "electron-builder --dir",
-		"predist": "rimraf dist/**/* && tsc && yarn run build:prod",
+		"predist": "rimraf dist/**/* && yarn run build:prod",
 		"dist": "electron-builder"
 	},
 	"build": {
@@ -53,31 +53,13 @@
 				]
 			}
 		],
-		"win": {
-			"target": [
-				"nsis",
-				"zip"
-			],
-			"icon": "icon.png",
-			"publisherName": "yuet",
-			"artifactName": "${productName}.${ext}",
-			"requestedExecutionLevel": "requireAdministrator"
-		},
-		"nsis": {
-			"oneClick": false,
-			"allowToChangeInstallationDirectory": true,
-			"installerIcon": "installer.ico",
-			"perMachine": true
-		},
 		"linux": {
+			"executableName": "qzui",
+			"artifactName": "${productName}-${version}.${ext}",
 			"target": [
 				{
 					"target": "AppImage",
-					"arch": "x64"
-				},
-				{
-					"target": "deb",
-					"arch": "x64"
+					"arch": "arm64"
 				}
 			]
 		}
