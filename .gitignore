@@ -110,3 +110,4 @@ dist
 /src/config/conf
 /debug
 /linux
+.DS_Store
