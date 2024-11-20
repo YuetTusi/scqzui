@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { createLogger, transports, format } from 'winston';
 
-const { env } = process;
+const { env, platform } = process;
 const cwd = process.cwd();
 const { combine, timestamp, printf } = format;
 
@@ -14,9 +14,12 @@ const formatLog = printf(({ level, message, timestamp }) => {
 if (env.NODE_ENV === 'development') {
     //NOTE: 开发
     loggerPath = resolve('.', './logs/log.txt');
-} else {
+} else if (platform === 'win32') {
     //NOTE: 生产
     loggerPath = resolve(cwd, './logs/log.txt');
+} else {
+    //NOTE: 生产
+    loggerPath = resolve(cwd, '../logs/log.txt');
 }
 
 const logger = createLogger({
