@@ -49,6 +49,7 @@ import { SpecialCharactor, Letter, OnlyNumber } from './regex';
 import { User } from '@/schema/user';
 
 const cwd = process.cwd(); //应用的根目录
+const { platform } = process;
 const isDev = process.env['NODE_ENV'] === 'development';
 const KEY = 'az'; //密钥
 const { Option } = Select;
@@ -309,11 +310,17 @@ const helper = {
       let chunk = readFileSync(confPath, 'utf8');
       return yaml.load(chunk) as Conf;
     } else {
-      let confPath = join(cwd, 'resources/config/conf');
+      let confPath = '';
+      if (platform === 'win32') {
+        confPath = join(cwd, 'resources/config/conf');
+      } else {
+        confPath = join(cwd, '../resources/config/conf');
+      }
       try {
         accessSync(confPath);
         let chunk = readFileSync(confPath, 'utf8');
-        const decipher = crypto.createDecipher(algo, KEY);
+        // const iv = crypto.randomBytes(16);
+        const decipher = crypto.createCipher(algo, KEY);
         let conf = decipher.update(chunk, 'hex', 'utf8');
         conf += decipher.final('utf8');
         return yaml.load(conf) as Conf;
