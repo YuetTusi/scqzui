@@ -305,6 +305,9 @@ const helper = {
    * @param algo 解密算法（默认rc4）
    */
   readConf: memoize((algo: string = 'rc4'): Conf | null => {
+    console.clear();
+    console.log(cwd);
+    console.log(platform);
     if (isDev) {
       let confPath = join(cwd, './src/config/ui.yaml');
       let chunk = readFileSync(confPath, 'utf8');
