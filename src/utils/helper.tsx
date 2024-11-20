@@ -319,7 +319,7 @@ const helper = {
       try {
         accessSync(confPath);
         let chunk = readFileSync(confPath, 'utf8');
-        // const iv = crypto.randomBytes(16);
+        // @ts-ignore
         const decipher = crypto.createCipher(algo, KEY);
         let conf = decipher.update(chunk, 'hex', 'utf8');
         conf += decipher.final('utf8');
