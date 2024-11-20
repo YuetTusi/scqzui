@@ -305,6 +305,7 @@ const helper = {
    * @param algo 解密算法（默认rc4）
    */
   readConf: memoize((algo: string = 'rc4'): Conf | null => {
+    console.clear();
     if (isDev) {
       let confPath = join(cwd, './src/config/ui.yaml');
       let chunk = readFileSync(confPath, 'utf8');
@@ -325,6 +326,8 @@ const helper = {
         conf += decipher.final('utf8');
         return yaml.load(conf) as Conf;
       } catch (error: any) {
+        console.log(error.message);
+        console.log(error.stack);
         log.error(
           `读取配置文件失败 @utils/helper/readConf() : ${error.message}\r\n
           配置文件路径: ${confPath}`
@@ -429,9 +432,17 @@ const helper = {
    * 读取设备软硬件信息
    */
   readManufaturer(): Promise<Manufaturer> {
-    const jsonPath = isDev
-      ? join(cwd, './data/manufaturer.json')
-      : join(cwd, './resources/config/manufaturer.json');
+    let jsonPath = '';
+
+    if (isDev) {
+      jsonPath = join(cwd, './data/manufaturer.json');
+    } else if (platform === 'win32') {
+      jsonPath = join(cwd, './resources/config/manufaturer.json');
+    } else {
+      jsonPath = join(cwd, '../resources/config/manufaturer.json');
+    }
+
+    console.log('jsonPath')
 
     return new Promise((resolve, reject) => {
       readFile(jsonPath, { encoding: 'utf8' }, (err, chunk) => {
@@ -441,6 +452,7 @@ const helper = {
           try {
             resolve(JSON.parse(chunk));
           } catch (error) {
+            console.log(error.message);
             reject(error);
           }
         }
