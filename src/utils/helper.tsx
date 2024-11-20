@@ -326,8 +326,10 @@ const helper = {
         return yaml.load(conf) as Conf;
       } catch (error: any) {
         log.error(
-          `读取配置文件失败 @utils/helper/readConf() : ${error.message}`
+          `读取配置文件失败 @utils/helper/readConf() : ${error.message}\r\n
+          配置文件路径: ${confPath}`
         );
+
         return null;
       }
     }
