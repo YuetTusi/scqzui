@@ -105,7 +105,7 @@ const ImportDataModal: FC<ImportModalProp> = ({ }) => {
         onCancel={(e: MouseEvent<HTMLElement>) => onCancelClick(e)}
         title={title}
         width={820}
-        visible={visible}
+        open={visible}
         centered={true}
         destroyOnClose={true}
         forceRender={true}

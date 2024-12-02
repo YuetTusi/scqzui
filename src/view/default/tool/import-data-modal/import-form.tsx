@@ -60,6 +60,9 @@ const ImportForm: FC<ImportFormProp> = ({
             case ImportTypes.Samsung_Smartswitch:
                 filter = [{ name: 'XML文件', extensions: ['xml'] }];
                 break;
+            case ImportTypes.Harmony:
+                filter = [{ name: '.info.json文件', extensions: ['json'] }];
+                break;
             default:
                 filter = undefined;
                 break;
@@ -78,6 +81,7 @@ const ImportForm: FC<ImportFormProp> = ({
             case ImportTypes.Samsung_Smartswitch:
             case ImportTypes.AndroidMirror:
             case ImportTypes.TFCardMirror:
+            case ImportTypes.Harmony:
                 properties = ['openFile'];
                 break;
             default:

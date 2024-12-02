@@ -57,5 +57,9 @@ export enum ImportTypes {
     /**
      * 三星换机导入
      */
-    Samsung_Smartswitch = 'samsung_smartswitch'
+    Samsung_Smartswitch = 'samsung_smartswitch',
+    /**
+     * 鸿蒙备份
+     */
+    Harmony = 'Harmony'
 }

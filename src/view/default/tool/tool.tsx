@@ -59,6 +59,7 @@ import chinaMobileSvg from './styled/images/chinamobile.svg';
 import androidAuthSvg from './styled/images/android_auth.svg';
 import cloudSearchSvg from './styled/images/cloud-search.svg';
 import tfCardSvg from './styled/images/tf-card.svg';
+import harmonyOsSvg from './styled/images/harmony_os.svg';
 import webActionPng from './styled/images/web-action.png';
 import { CrackTypes } from './crack-modal/prop';
 import { ExeType, Action, ModalOpenState, ToolProp } from './prop';
@@ -170,6 +171,14 @@ const Tool: FC<ToolProp> = () => {
                         </a>,
                         <span>导入<strong>包含「backupHistoryInfo.xml」文件</strong>的目录</span>,
                         <span>目前仅支持<strong>Android12及以上</strong></span>
+                    ]
+                });
+                break;
+            case ImportTypes.Harmony:
+                dispatch({
+                    type: 'importDataModal/setTips',
+                    payload: [
+                        <span>选择数据目录中的<strong>「.info.json」</strong>文件进行导入</span>
                     ]
                 });
                 break;
@@ -322,6 +331,14 @@ const Tool: FC<ToolProp> = () => {
                         </div>
                         <div className="name">
                             华为克隆备份
+                        </div>
+                    </div>
+                    <div onClick={() => onImportClick(ImportTypes.Harmony, '导入数据（鸿蒙备份）')} className="t-button">
+                        <div className="ico">
+                            <img src={harmonyOsSvg} width="50" height="50" />
+                        </div>
+                        <div className="name">
+                            鸿蒙备份
                         </div>
                     </div>
                     <div onClick={() => onImportClick(ImportTypes.Hisuite, '导入数据（荣耀备份）')} className="t-button">
