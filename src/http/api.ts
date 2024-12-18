@@ -64,9 +64,10 @@ function api(webContents: WebContents) {
         const deviceDb = getDb<DeviceType>(TableName.Devices);
         try {
             let [caseList, deviceList]: [CaseInfo[], DeviceType[]] = await Promise.all([
-                caseDb.find(null, 'createdAt', -1),
+                caseDb.find({ enable: { $ne: 0 } }, 'createdAt', -1),
                 deviceDb.find({
-                    $or: [{ parseState: ParseState.Finished }, { parseState: ParseState.Error }]
+                    $or: [{ parseState: ParseState.Finished }, { parseState: ParseState.Error }],
+                    $and: [{ enable: { $ne: 0 } }]
                 })
             ]);
             let nextDevices = deviceList.map((device) => ({
@@ -106,9 +107,12 @@ function api(webContents: WebContents) {
         const recDb = getDb<QuickRecord>(TableName.QuickRecord);
         try {
             let [eventList, recList]: [QuickEvent[], QuickRecord[]] = await Promise.all([
-                eventDb.all(),
+                eventDb.find({ enable: { $ne: 0 } }),
                 recDb.find({
-                    $or: [{ parseState: ParseState.Finished }, { parseState: ParseState.Error }]
+                    $and: [
+                        { enable: { $ne: 0 } },
+                        { $or: [{ parseState: ParseState.Finished }, { parseState: ParseState.Error }] },
+                    ]
                 })
             ]);
             let nextDevices = recList.map(({

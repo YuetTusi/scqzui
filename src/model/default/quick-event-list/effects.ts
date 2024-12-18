@@ -27,8 +27,8 @@ export default {
         yield put({ type: 'setLoading', payload: true });
         try {
             const [data, total]: [QuickEvent[], number] = yield all([
-                call([db, 'findByPage'], {}, pageIndex, pageSize, 'createdAt', -1),
-                call([db, 'count'], {})
+                call([db, 'findByPage'], { enable: { $ne: 0 } }, pageIndex, pageSize, 'createdAt', -1),
+                call([db, 'count'], { enable: { $ne: 0 } })
             ]);
             yield put({ type: 'setData', payload: data });
             yield put({

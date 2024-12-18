@@ -96,7 +96,7 @@ const helper = {
   /**
    * 快速点验二维码IP名单
    */
-  QUICK_QR_IP: ['192.168.137.1', '192.168.50.99', '192.168.191.1', '172.28.1.1'],
+  QUICK_QR_IP: ['192.168.137.1', '192.168.50.99', '192.168.191.1', '172.28.1.1', '10.42.0.1'],
   /**
    * 当前操作系统
    */
@@ -694,7 +694,12 @@ const helper = {
     const db = getDb<QuickEvent>(TableName.QuickEvent);
     try {
       let list = await db.find({
-        eventName: { $regex: new RegExp(`^${eventName}(?=_)`) },
+        $and: [
+          {
+            eventName: { $regex: new RegExp(`^${eventName}(?=_)`) },
+            enable: { $ne: 0 }
+          }
+        ]
       });
       return list;
     } catch (error) {

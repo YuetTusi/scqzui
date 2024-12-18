@@ -19,8 +19,8 @@ export default {
         yield put({ type: 'setLoading', payload: true });
         try {
             const [result, total]: [CaseInfo[], number] = yield all([
-                call([db, 'findByPage'], null, current, pageSize, 'createdAt', -1),
-                call([db, 'count'], null)
+                call([db, 'findByPage'], { enable: { $ne: 0 } }, current, pageSize, 'createdAt', -1),
+                call([db, 'count'], { enable: { $ne: 0 } })
             ]);
             yield put({ type: 'setCaseData', payload: result });
             yield put({ type: 'setPage', payload: { current, pageSize, total } });
@@ -36,7 +36,7 @@ export default {
     *queryAllCaseData({ }: AnyAction, { call, put }: EffectsCommandMap) {
         const db = getDb<CaseInfo>(TableName.Cases);
         try {
-            const next: CaseInfo[] = yield call([db, 'find'], null, 'createdAt', -1);
+            const next: CaseInfo[] = yield call([db, 'find'], { enable: { $ne: 0 } }, 'createdAt', -1);
             yield put({ type: 'setAllCaseData', payload: next });
         } catch (error) {
             console.log(`@model/default/case-data/*queryAllCaseData: ${error.message}`);

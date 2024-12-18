@@ -33,13 +33,13 @@ export default {
                     $condition.fetchTime.$gte = condition.start.toDate();
                 }
                 if (!helper.isNullOrUndefined(condition.end)) {
-                    $condition.fetchTime.$lte = condition.end.toDate()
+                    $condition.fetchTime.$lte = condition.end.toDate();
                 }
             }
 
             const [next, total]: [CloudLog, number] = yield all([
-                call([db, 'findByPage'], $condition, current, pageSize),
-                call([db, 'count'], $condition)
+                call([db, 'findByPage'], { ...$condition, enable: { $ne: 0 } }, current, pageSize),
+                call([db, 'count'], { ...$condition, enable: { $ne: 0 } })
             ]);
             yield put({ type: 'setData', payload: next });
             yield put({
@@ -97,7 +97,7 @@ export default {
         const db = getDb<CloudLog>(TableName.CloudLog);
         yield put({ type: 'setLoading', payload: true });
         try {
-            yield call([db, 'remove'], {}, true);
+            yield call([db, 'remove'], { enable: { $ne: 0 } }, true);
             yield put({ type: 'query', payload: { condition: {}, current: 1, pageSize: helper.PAGE_SIZE } });
             message.success('日志清除成功');
         } catch (error) {

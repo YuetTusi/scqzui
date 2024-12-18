@@ -46,8 +46,14 @@ export default {
         yield put({ type: 'setLoading', payload: true });
         try {
             let [data, total]: [ParseLog[], number] = yield all([
-                call([db, 'findByPage'], q, current, pageSize, 'endTime', -1),
-                call([db, 'count'], q)
+                call([db, 'findByPage'], {
+                    ...q,
+                    enable: { $ne: 0 }
+                }, current, pageSize, 'endTime', -1),
+                call([db, 'count'], {
+                    ...q,
+                    enable: { $ne: 0 }
+                })
             ]);
             yield put({ type: 'setData', payload: data });
             yield put({
@@ -125,7 +131,7 @@ export default {
     *dropAllLog(_: AnyAction, { call, put }: EffectsCommandMap) {
         const db = getDb<ParseLog>(TableName.ParseLog);
         try {
-            yield call([db, 'remove'], {}, true);
+            yield call([db, 'remove'], { enable: { $ne: 0 } }, true);
             message.success('日志清除成功');
             yield put({
                 type: 'queryParseLog', payload: {

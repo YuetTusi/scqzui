@@ -45,8 +45,8 @@ export default {
         yield put({ type: 'setLoading', payload: true });
         try {
             let [data, total]: [FetchLog[], number] = yield all([
-                call([db, 'findByPage'], $condition, current, pageSize, 'fetchTime', -1),
-                call([db, 'count'], $condition)
+                call([db, 'findByPage'], { ...$condition, enable: { $ne: 0 } }, current, pageSize, 'fetchTime', -1),
+                call([db, 'count'], { ...$condition, enable: { $ne: 0 } })
             ]);
             yield put({ type: 'setData', payload: data });
             yield put({
@@ -105,7 +105,7 @@ export default {
         const db = getDb<FetchLog>(TableName.FetchLog);
         yield put({ type: 'setLoading', payload: true });
         try {
-            yield call([db, 'remove'], {}, true);
+            yield call([db, 'remove'], { enable: { $ne: 0 } }, true);
             yield put({ type: 'queryAllFetchLog', payload: { condition: {}, current: 1, pageSize: helper.PAGE_SIZE } });
             message.success('日志清除成功');
         } catch (error) {
