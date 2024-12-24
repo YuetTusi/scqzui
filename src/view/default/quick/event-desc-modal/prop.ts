@@ -17,3 +17,22 @@ export interface EventDescModalProp {
      */
     cancelHandle: () => void
 };
+
+/**
+ * 下载浏览器框
+ */
+export interface DownloadBrowserProp {
+
+    /**
+     * 显示
+     */
+    open: boolean,
+    /**
+     * IP地址
+     */
+    ip: string,
+    /**
+     * 取消handle
+     */
+    cancelHandle: () => void
+};

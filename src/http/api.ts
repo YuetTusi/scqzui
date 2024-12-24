@@ -185,6 +185,30 @@ function api(webContents: WebContents) {
         });
     });
 
+    //下载花瓣浏览器
+    router.get('/download-browser', async (_, res) => {
+        const target = isDev
+            ? join(cwd, 'data/hicloud_browser.apk')
+            : join(cwd, '../n_fetch/config/android/hicloud_browser.apk'); //hicloud_browser.apk
+
+        try {
+            const { size } = await stat(target);
+            webContents.send('quick-scanned', true);
+            res.setHeader('Content-Length', size);
+            log.info(`下载花瓣浏览器(${target}), apk大小:${size}`);
+        } catch (error) {
+            log.error(`HTTP读取花瓣浏览器APK失败 @http/api(/browser): ${error.message}`);
+        } finally {
+            res.setHeader('Content-type', 'application/octet-stream');
+        }
+
+        res.download(target, '花瓣浏览器.apk', (err) => {
+            if (err) {
+                res.end(err.message);
+            }
+        });
+    });
+
     router.get('/keyword', async (_, res) => {
 
         const tempPath = join(cwd, './resources/army'); //默认模板位置

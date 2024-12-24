@@ -322,20 +322,21 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
 
     helper.runFetch(
         fetchProcess,
-        config?.fetchExe ?? 'n_fetch.exe',
+        join(appRootPath, config?.fetchPath ?? './n_fetch', config?.fetchExe ?? 'n_fetch.exe'),
         join(appRootPath, config?.fetchPath ?? './n_fetch'),
         mainWindow!
     );
 
     helper.runProc(
         parseProcess,
-        config!.parseExe ?? 'parse.exe',
+        join(appRootPath, config?.parsePath ?? './parse', config!.parseExe ?? 'parse.exe'),
+        // config!.parseExe ?? 'parse.exe',
         join(appRootPath, config?.parsePath ?? './parse')
     );
 
     helper.runProcContinue(
         imageOcrProcess,
-        'ImageOcr.exe',
+        join(appRootPath, './tools/ImageOcr/ImageOcr.exe'),
         join(appRootPath, './tools/ImageOcr'),
         ['--listen_port', ocrPort.toString()]
     );

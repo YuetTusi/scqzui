@@ -81,6 +81,16 @@ export const HelpBox = styled.div`
                 font-style: normal;
                 text-decoration: none;
                 color:${props => props.theme['primary-color']};
+                &.warn{
+                    color:${props => props.theme['warn-color']};
+                }
+            }
+            em{
+                cursor: pointer;
+                font-weight: normal;
+                font-style: normal;
+                text-decoration: none;
+                color:${props => props.theme['warn-color']};
             }
         }
     }

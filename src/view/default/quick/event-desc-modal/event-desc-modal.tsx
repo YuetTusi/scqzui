@@ -19,6 +19,7 @@ import { helper } from '@/utils/helper';
 import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
 import { WiFiTips } from './wifi-tips';
+import { DownloadBrowser } from './download-browser';
 import { EventDescBox, HelpBox, HorBox } from './styled/style';
 import { EventDescModalProp } from './prop';
 
@@ -36,6 +37,7 @@ const EventDescModal: FC<EventDescModalProp> = ({
 
     const [data, setData] = useState<QuickEvent | null>(null);
     const [scanned, setScanned] = useState<boolean>(false);
+    const [downloadBrowserOpen, setDownloadBrowserOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (visible) {
@@ -128,85 +130,98 @@ const EventDescModal: FC<EventDescModalProp> = ({
         </Descriptions>
     };
 
+    /**
+     * 下载花瓣浏览器Click
+     */
+    const downloadHiCloudBrowserClick = (event: MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        setDownloadBrowserOpen(true);
+    };
 
-
-    return <Modal
-        footer={[
-            <Button
-                onClick={cancelHandle}
-                type="default"
-                key="EDM_0">
-                <CloseCircleOutlined />
-                <span>取消</span>
-            </Button>
-        ]}
-        onCancel={cancelHandle}
-        visible={visible}
-        centered={true}
-        forceRender={true}
-        maskClosable={false}
-        destroyOnClose={false}
-        width={1120}
-        title={`快速${fetchText ?? '点验'}`}
-    >
-        <EventDescBox>
-            <HelpBox>
-                <div className="step">
-                    <label className="step-label">步骤1</label>
-                    <div className="desc">
-                        请使用手机连接到
-                        <div><WiFiTips ip={ip} /></div>
-                    </div>
-                </div>
-                <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
-                <div className="step">
-                    <label className="step-label">步骤2</label>
-                    <HorBox>
+    return <>
+        <Modal
+            footer={[
+                <Button
+                    onClick={cancelHandle}
+                    type="default"
+                    key="EDM_0">
+                    <CloseCircleOutlined />
+                    <span>取消</span>
+                </Button>
+            ]}
+            onCancel={cancelHandle}
+            visible={visible}
+            zIndex={1000}
+            centered={true}
+            forceRender={true}
+            maskClosable={false}
+            destroyOnClose={false}
+            width={1120}
+            title={`快速${fetchText ?? '点验'}`}>
+            <EventDescBox>
+                <HelpBox>
+                    <div className="step">
+                        <label className="step-label">步骤1</label>
                         <div className="desc">
-                            <div>使用手机浏览器<strong>扫描右侧二维码</strong>，下载APP安装后打开「<strong>采集助手</strong>」</div>
-                            <div style={{ marginTop: '20px' }}><strong>提示：如果无法完成扫码，请安装花瓣览器重新扫描</strong></div>
+                            请使用手机连接到
+                            <div><WiFiTips ip={ip} /></div>
                         </div>
-                        <Spin
-                            spinning={scanned}
-                            indicator={<CheckCircleFilled style={{ color: '#52c41a' }} />}
-                            tip={<span style={{ color: '#52c41a' }}>扫码成功</span>}
-                        >
-                            <canvas width="280" height="280" id="qrcode" />
-                        </Spin>
-                    </HorBox>
-                </div>
-                <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
-                <div className="step">
-                    <label className="step-label">步骤3</label>
-                    <div className="desc">
-                        <div>
-                            选择<strong>{caseText ?? '案件'}</strong>，输入<strong>编号</strong>及<strong>名称</strong>后确认，等待{fetchText ?? '取证'}完成
+                    </div>
+                    <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
+                    <div className="step">
+                        <label className="step-label">步骤2</label>
+                        <HorBox>
+                            <div className="desc">
+                                <div>使用手机浏览器<strong>扫描右侧二维码</strong>，下载APP安装后打开「<strong>采集助手</strong>」</div>
+                                <div style={{ marginTop: '20px' }}><strong>提示：如果无法完成扫码，请安装花瓣浏览器重新扫描</strong></div>
+                                <div style={{ marginTop: '20px' }}><em onClick={downloadHiCloudBrowserClick}>点击扫码下载「花瓣浏览器」</em></div>
+                            </div>
+                            <Spin
+                                spinning={scanned}
+                                indicator={<CheckCircleFilled style={{ color: '#52c41a' }} />}
+                                tip={<span style={{ color: '#52c41a' }}>扫码成功</span>}
+                            >
+                                <canvas width="280" height="280" id="qrcode" />
+                            </Spin>
+                        </HorBox>
+                    </div>
+                    <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
+                    <div className="step">
+                        <label className="step-label">步骤3</label>
+                        <div className="desc">
+                            <div>
+                                选择<strong>{caseText ?? '案件'}</strong>，输入<strong>编号</strong>及<strong>名称</strong>后确认，等待{fetchText ?? '取证'}完成
+                            </div>
+                            <div style={{ marginTop: '20px' }}>
+                                <strong>提示：采集助手会提示开启相关权限，请一律允许</strong>
+                            </div>
                         </div>
-                        <div style={{ marginTop: '20px' }}>
-                            <strong>提示：采集助手会提示开启相关权限，请一律允许</strong>
+                    </div>
+                    <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
+                    <div className="step">
+                        <label className="step-label">步骤4</label>
+                        <div className="desc">完成后将自动{parseText ?? '解析'}数据，可以卸载「<strong>采集助手</strong>」</div>
+                    </div>
+                </HelpBox>
+                <div className="ibox">
+                    <div className="content">
+                        <div className="event-info">
+                            <div className="caption">
+                                {`${caseText ?? '案件'}信息`}
+                            </div>
+                            <div className="cinfo">
+                                {renderEvent(data)}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <FontAwesomeIcon icon={faArrowRight} style={{ margin: '5px' }} />
-                <div className="step">
-                    <label className="step-label">步骤4</label>
-                    <div className="desc">完成后将自动{parseText ?? '解析'}数据，可以卸载「<strong>采集助手</strong>」</div>
-                </div>
-            </HelpBox>
-            <div className="ibox">
-                <div className="content">
-                    <div className="event-info">
-                        <div className="caption">
-                            {`${caseText ?? '案件'}信息`}
-                        </div>
-                        <div className="cinfo">
-                            {renderEvent(data)}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </EventDescBox>
-    </Modal>
+            </EventDescBox>
+        </Modal>
+        <DownloadBrowser
+            open={downloadBrowserOpen}
+            ip={ip}
+            cancelHandle={() => setDownloadBrowserOpen(false)} />
+    </>
 };
 
 export default EventDescModal;
