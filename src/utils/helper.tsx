@@ -23,6 +23,7 @@ import yaml from 'js-yaml';
 import glob from 'glob';
 import memoize from 'lodash/memoize';
 import dayjs, { Dayjs } from 'dayjs';
+import portScanner from 'portscanner';
 import 'dayjs/locale/zh-cn';
 import diskSpace, { DiskSpace } from 'check-disk-space';
 import {
@@ -305,9 +306,6 @@ const helper = {
    * @param algo 解密算法（默认rc4）
    */
   readConf: memoize((algo: string = 'rc4'): Conf | null => {
-    console.clear();
-    console.log(cwd);
-    console.log(platform);
     if (isDev) {
       let confPath = join(cwd, './src/config/ui.yaml');
       let chunk = readFileSync(confPath, 'utf8');
@@ -443,8 +441,6 @@ const helper = {
     } else {
       jsonPath = join(cwd, '../resources/config/manufaturer.json');
     }
-
-    console.log('jsonPath')
 
     return new Promise((resolve, reject) => {
       readFile(jsonPath, { encoding: 'utf8' }, (err, chunk) => {
@@ -1003,6 +999,16 @@ const helper = {
       stream.on('end', () => resolve(hash.digest('hex')));
       stream.on('error', (err) => reject(err));
     });
+  },
+  async portInUse(port: number) {
+    let use: boolean = false;
+    try {
+      const status = await portScanner.checkPortStatus(port);
+      use = status === 'open';
+    } catch (error) {
+      throw error;
+    }
+    return use;
   }
 };
 

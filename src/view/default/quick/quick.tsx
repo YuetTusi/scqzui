@@ -18,8 +18,8 @@ import EventDescModal from './event-desc-modal';
 import CheckingList from './checking-list';
 import RecordList from './record-list';
 import { getEventByName, importRec, readCaseJson, readDirOnly } from './util';
-import { QuickProp } from './prop';
 import BatchExportReportModal from './batch-export-report-modal';
+import { QuickProp } from './prop';
 
 const { fetchText, caseText, devText } = helper.readConf()!;
 
@@ -37,22 +37,13 @@ const Quick: FC<QuickProp> = () => {
     const [batchExportReportModalVisible, setBatchExportReportModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
-        let nextHttp = 9900;
-        let nextService = 57999;
         (async () => {
+
             try {
-                [nextHttp, nextService] = await Promise.all([
-                    helper.portStat(9900),
-                    helper.portStat(57999)
-                ]);
-                if (nextHttp !== 9900 || nextService !== 57999) {
-                    portOccupy.current = true;
-                } else {
-                    portOccupy.current = false;
-                }
-            } catch (err) {
-                console.warn(err);
-                portOccupy.current = true;
+                const use57999 = await helper.portInUse(57999);
+                portOccupy.current = use57999;
+            } catch (error) {
+                console.error(error);
             }
         })();
     }, []);

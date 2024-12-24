@@ -27,6 +27,7 @@ const isDev = env['NODE_ENV'] === 'development';
 const appPath = app.getAppPath();
 const server = express();
 const appName = helper.readAppName();
+const appRootPath = join(__dirname, '../../../../'); //应用所在目录
 let httpPort = 9900;
 let config: Conf | null = null;
 let existManuJson = false;
@@ -312,7 +313,7 @@ if (!app.requestSingleInstanceLock()) {
 ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) => {
 
     const quickFetchDir = join(
-        appPath, '../../../', config?.quickFetchPath ?? './QuickFetch');
+        appRootPath, config?.quickFetchPath ?? './QuickFetch');
     // helper.runProc(
     //     fetchProcess,
     //     config?.fetchExe ?? 'n_fetch.exe',
@@ -322,20 +323,20 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
     helper.runFetch(
         fetchProcess,
         config?.fetchExe ?? 'n_fetch.exe',
-        join(appPath, '../../../', config?.fetchPath ?? './n_fetch'),
+        join(appRootPath, config?.fetchPath ?? './n_fetch'),
         mainWindow!
     );
 
     helper.runProc(
         parseProcess,
         config!.parseExe ?? 'parse.exe',
-        join(appPath, '../../../', config?.parsePath ?? './parse')
+        join(appRootPath, config?.parsePath ?? './parse')
     );
 
     helper.runProcContinue(
         imageOcrProcess,
         'ImageOcr.exe',
-        join(appPath, '../../../', './tools/ImageOcr'),
+        join(appRootPath, './tools/ImageOcr'),
         ['--listen_port', ocrPort.toString()]
     );
 
@@ -343,7 +344,7 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
         //有快速点验功能，调起服务
         helper.runProc(
             quickFetchProcess,
-            config?.quickFetchExe ?? 'QuickFetchServer.exe',
+            join(quickFetchDir, config?.quickFetchExe ?? 'QuickFetchServer.exe'),
             quickFetchDir,
             [],
             {
@@ -356,8 +357,8 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
         //有云取功能，调起云RPC服务
         helper.runProc(
             yunProcess,
-            config!.yqExe ?? 'yqRPC.exe',
-            join(appPath, '../../../', config?.yqPath ?? './yq'),
+            join(appRootPath, config?.yqPath ?? './yq', config!.yqExe ?? 'yqRPC.exe'),
+            join(appRootPath, config?.yqPath ?? './yq'),
             ['-config', './agent.json', '-log_dir', './log']
         );
     }
@@ -365,8 +366,8 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
         //有应用痕迹查询，调起服务
         helper.runProc(
             appQueryProcess,
-            config?.appQueryExe ?? 'AppQuery.exe',
-            join(appPath, '../../../', config?.appQueryPath ?? './AppQuery')
+            join(appRootPath, config?.appQueryPath ?? './AppQuery', config?.appQueryExe ?? 'AppQuery.exe'),
+            join(appRootPath, config?.appQueryPath ?? './AppQuery')
         );
     }
 });
