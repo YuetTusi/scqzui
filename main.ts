@@ -322,21 +322,20 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
 
     helper.runFetch(
         fetchProcess,
-        join(appRootPath, config?.fetchPath ?? './n_fetch', config?.fetchExe ?? 'n_fetch.exe'),
-        join(appRootPath, config?.fetchPath ?? './n_fetch'),
+        join(appRootPath, platform === 'linux' ? './n_fetch/n_fetch' : './n_fetch/n_fetch.exe'),
+        join(appRootPath, './n_fetch'),
         mainWindow!
     );
 
     helper.runProc(
         parseProcess,
-        join(appRootPath, config?.parsePath ?? './parse', config!.parseExe ?? 'parse.exe'),
-        // config!.parseExe ?? 'parse.exe',
-        join(appRootPath, config?.parsePath ?? './parse')
+        join(appRootPath, platform === 'linux' ? './parse/parse' : './parse/parse.exe'),
+        join(appRootPath, './parse')
     );
 
     helper.runProcContinue(
         imageOcrProcess,
-        join(appRootPath, './tools/ImageOcr/ImageOcr.exe'),
+        join(appRootPath, platform === 'linux' ? './tools/ImageOcr/ImageOcr' : './tools/ImageOcr/ImageOcr.exe'),
         join(appRootPath, './tools/ImageOcr'),
         ['--listen_port', ocrPort.toString()]
     );
@@ -345,7 +344,7 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
         //有快速点验功能，调起服务
         helper.runProc(
             quickFetchProcess,
-            join(quickFetchDir, config?.quickFetchExe ?? 'QuickFetchServer.exe'),
+            join(quickFetchDir, platform === 'linux' ? 'QuickFetchServer' : 'QuickFetchServer.exe'),
             quickFetchDir,
             [],
             {
@@ -358,8 +357,8 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
         //有云取功能，调起云RPC服务
         helper.runProc(
             yunProcess,
-            join(appRootPath, config?.yqPath ?? './yq', config!.yqExe ?? 'yqRPC.exe'),
-            join(appRootPath, config?.yqPath ?? './yq'),
+            join(appRootPath, platform === 'linux' ? './yq/yqRPC' : './yq/yqRPC.exe'),
+            join(appRootPath, './yq'),
             ['-config', './agent.json', '-log_dir', './log']
         );
     }
@@ -367,7 +366,7 @@ ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) =>
         //有应用痕迹查询，调起服务
         helper.runProc(
             appQueryProcess,
-            join(appRootPath, config?.appQueryPath ?? './AppQuery', config?.appQueryExe ?? 'AppQuery.exe'),
+            join(appRootPath, platform === 'linux' ? './AppQuery/AppQuery' : './AppQuery/AppQuery.exe'),
             join(appRootPath, config?.appQueryPath ?? './AppQuery')
         );
     }

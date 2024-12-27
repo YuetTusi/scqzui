@@ -360,7 +360,8 @@ export function getDevColumns(
                     <Button
                         onClick={(event: MouseEvent<HTMLButtonElement>) => {
                             event.stopPropagation();
-                            const exe = join(cwd, '../tools/CreateReport/create_report.exe');
+                            const exeName = helper.os() === 'linux' ? 'create_report' : 'create_report.exe';
+                            const exe = join(cwd, `../tools/CreateReport/${exeName}`);
                             Modal.confirm({
                                 title: '生成报告',
                                 content: '可能所需时间较长，确定重新生成报告吗？',

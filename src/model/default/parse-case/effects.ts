@@ -42,7 +42,8 @@ export default {
     *createReport({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
         const { _id, m_strCasePath, m_strCaseName } = payload as CaseInfo;
         const db = getDb<DeviceType>(TableName.Devices);
-        const exe = join(helper.APP_CWD, '../tools/CreateReport/create_report.exe');
+        const exeName = helper.os() === 'linux' ? 'create_report' : 'create_report.exe';
+        const exe = join(helper.APP_CWD, `../tools/CreateReport/${exeName}`);
         message.destroy();
         ipcRenderer.send('show-progress', true);
         const msg = new AlartMessageInfo({
