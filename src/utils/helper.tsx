@@ -307,16 +307,11 @@ const helper = {
    */
   readConf: memoize((algo: string = 'rc4'): Conf | null => {
     if (isDev) {
-      let confPath = join(cwd, './src/config/ui.yaml');
+      const confPath = join(cwd, './src/config/ui.yaml');
       let chunk = readFileSync(confPath, 'utf8');
       return yaml.load(chunk) as Conf;
     } else {
-      let confPath = '';
-      if (platform === 'win32') {
-        confPath = join(cwd, 'resources/config/conf');
-      } else {
-        confPath = join(cwd, '../resources/config/conf');
-      }
+      const confPath = join(cwd, 'resources/config/conf');
       try {
         accessSync(confPath);
         let chunk = readFileSync(confPath, 'utf8');
@@ -436,10 +431,8 @@ const helper = {
 
     if (isDev) {
       jsonPath = join(cwd, './data/manufaturer.json');
-    } else if (platform === 'win32') {
-      jsonPath = join(cwd, './resources/config/manufaturer.json');
     } else {
-      jsonPath = join(cwd, '../resources/config/manufaturer.json');
+      jsonPath = join(cwd, './resources/config/manufaturer.json')
     }
 
     return new Promise((resolve, reject) => {
