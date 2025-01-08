@@ -94,7 +94,13 @@ helper.writeReportJson(config!); //写report.json
  */
 function destroyAllWindow() {
     if (quickFetchProcess !== null) {
-        quickFetchProcess.kill();	//杀掉快速点验进程
+        quickFetchProcess.kill('SIGKILL');	//杀掉快速点验进程
+    }
+    if (fetchProcess !== null) {
+        fetchProcess.kill('SIGKILL');
+    }
+    if (parseProcess !== null) {
+        parseProcess.kill('SIGKILL');
     }
     if (imageOcrProcess !== null) {
         imageOcrProcess.kill();

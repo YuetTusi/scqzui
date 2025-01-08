@@ -25,8 +25,8 @@ export default {
         yield put({ type: 'setLoading', payload: true });
         try {
             const [next, total]: [CaseInfo[], number] = yield all([
-                call([db, 'findByPage'], condition, pageIndex, pageSize, 'createdAt', -1),
-                call([db, 'count'], condition)
+                call([db, 'findByPage'], { ...condition, enable: { $ne: 0 } }, pageIndex, pageSize, 'createdAt', -1),
+                call([db, 'count'], { ...condition, enable: { $ne: 0 } })
             ]);
             yield put({ type: 'setPage', payload: { pageIndex, pageSize, total } });
             yield put({ type: 'setData', payload: next });
