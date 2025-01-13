@@ -485,15 +485,6 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
             mode: next.mode ?? DataMode.Self
         });
 
-        dispatch({
-            type: 'quickRecordList/saveToEvent', payload: {
-                id: next.caseId,
-                data: next
-            }
-        });
-        dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [next.caseId] });//选中案件
-        dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [next._id] });//展开点验设备
-
         //# 通知parse开始解析
         send(SocketType.Parse, {
             type: SocketType.Parse,
@@ -522,15 +513,35 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
                 tokenAppList: []
             }
         });
+
         dispatch({
-            type: 'checkingList/setInfo',
-            payload: [{
+            type: 'quickRecordList/saveToEvent', payload: {
+                id: next.caseId,
+                data: next
+            }
+        });
+        dispatch({
+            type: 'checkingList/appendInfo',
+            payload: {
                 caseId: next.caseId,
                 deviceId: next._id,
                 curinfo: '开始解析数据',
                 curprogress: 0,
                 category: ParseCategory.Quick
-            }]
+            }
         });
+        dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [next.caseId] });//选中案件
+        dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [next._id] });//展开点验设备
+
+        // dispatch({
+        //     type: 'checkingList/setInfo',
+        //     payload: [{
+        //         caseId: next.caseId,
+        //         deviceId: next._id,
+        //         curinfo: '开始解析数据',
+        //         curprogress: 0,
+        //         category: ParseCategory.Quick
+        //     }]
+        // });
     });
 }

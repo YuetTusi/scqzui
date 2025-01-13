@@ -517,8 +517,9 @@ const helper = {
    * @param filePath 路径
    */
   delDiskFile(filePath: string): Promise<boolean> {
+    const exeName = platform === 'linux' ? 'Del' : 'Del.exe';
     return new Promise((resolve) => {
-      const delExe = join(cwd, '../tools/Del/Del.exe');
+      const delExe = join(cwd, `../tools/Del/${exeName}`);
       const process = execFile(delExe, [filePath], {
         windowsHide: true,
       });
