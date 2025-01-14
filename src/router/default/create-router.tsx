@@ -1,6 +1,6 @@
 import React, { FC, lazy, Suspense } from 'react';
 import { RouterAPI } from 'dva';
-import { Router, Route, Switch } from 'dva/router';
+import { Router, Switch, Route } from 'dva/router';
 import Empty from 'antd/lib/empty';
 import zhCN from 'antd/es/locale/zh_CN';
 import ConfigProvider from 'antd/lib/config-provider';
