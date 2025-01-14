@@ -5,20 +5,28 @@ import message from 'antd/lib/message';
 import { helper } from '@/utils/helper';
 import { Db, getDb } from '@/utils/db';
 import logger from '@/utils/log';
-import FetchLog from '@/schema/fetch-log';
 import { TableName } from '@/schema/table-name';
 import { DelLogType } from '@/schema/del-log-type';
+import { QuickLog } from '@/schema/quick-log';
 
 export default {
 
+    *save({ payload }: AnyAction, { fork }: EffectsCommandMap) {
+        const db = getDb<QuickLog>(TableName.QuickLog);
+        try {
+            yield fork([db, 'insert'], payload);
+        } catch (error) {
+            logger.error(`增加快采日志失败 @modal/default/quick-log-table/*save: ${error.message}`);
+        }
+    },
     /**
     * 查询采集日志数据
     * @param {any} payload.condition 条件
     * @param {number} payload.current 当前页
     * @param {number} payload.pageSize 页尺寸 
     */
-    *queryAllFetchLog({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
-        const db = getDb<FetchLog>(TableName.FetchLog);
+    *query({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
+        const db = getDb<QuickLog>(TableName.QuickLog);
         const { condition, current, pageSize } = payload;
         let $condition: any = null;
         if (Db.isEmptyCondition(condition)) {
@@ -44,7 +52,7 @@ export default {
         }
         yield put({ type: 'setLoading', payload: true });
         try {
-            let [data, total]: [FetchLog[], number] = yield all([
+            let [data, total]: [QuickLog[], number] = yield all([
                 call([db, 'findByPage'], { ...$condition, enable: { $ne: 0 } }, current, pageSize, 'fetchTime', -1),
                 call([db, 'count'], { ...$condition, enable: { $ne: 0 } })
             ]);
@@ -65,8 +73,8 @@ export default {
     /**
      * 根据时间删除日志
      */
-    *deleteFetchLogByTime({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = getDb<FetchLog>(TableName.FetchLog);
+    *deleteByTime({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+        const db = getDb<QuickLog>(TableName.QuickLog);
         yield put({ type: 'setLoading', payload: true });
         let time: Date | undefined;
         switch (payload) {
@@ -83,52 +91,39 @@ export default {
         try {
             if (time !== undefined) {
                 yield call([db, 'remove'], {
-                    fetchTime: {
-                        $lt: time
-                    }
+                    $and: [
+                        {
+                            fetchTime: { $lt: time }
+                        }, {
+                            enable: { $ne: 0 }
+                        }
+                    ]
+
                 }, true);
                 message.success('日志清理成功');
             } else {
                 message.error('日志清理失败');
             }
-            yield put({ type: 'queryAllFetchLog', payload: { condition: {}, current: 1, pageSize: helper.PAGE_SIZE } });
+            yield put({ type: 'query', payload: { condition: {}, current: 1, pageSize: helper.PAGE_SIZE } });
         } catch (error) {
             message.error('日志清理失败');
             yield put({ type: 'setLoading', payload: false });
-            logger.error(`日志删除失败 @modal/default/fetch-log-table/*deleteFetchLogByTime: ${error.message}`);
+            logger.error(`日志删除失败 @modal/default/quick-log-table/*deleteByTime: ${error.message}`);
         }
     },
     /**
      * 清除所有日志数据
      */
-    *dropAllData({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = getDb<FetchLog>(TableName.FetchLog);
+    *dropAllLog({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+        const db = getDb<QuickLog>(TableName.QuickLog);
         yield put({ type: 'setLoading', payload: true });
         try {
             yield call([db, 'remove'], { enable: { $ne: 0 } }, true);
-            yield put({ type: 'queryAllFetchLog', payload: { condition: { enable: { $ne: 0 } }, current: 1, pageSize: helper.PAGE_SIZE } });
+            yield put({ type: 'query', payload: { condition: { enable: { $ne: 0 } }, current: 1, pageSize: helper.PAGE_SIZE } });
             message.success('日志清除成功');
         } catch (error) {
             message.error('日志清除失败');
-            logger.error(`日志清除失败 @modal/default/fetch-log-table/*dropAllData: ${error.message}`);
-        } finally {
-            yield put({ type: 'setLoading', payload: false });
-        }
-    },
-    /**
-     * 按id删除日志
-     * @param {string} payload 记录id
-     */
-    *dropById({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = getDb<FetchLog>(TableName.FetchLog);
-        yield put({ type: 'setLoading', payload: true });
-        try {
-            yield call([db, 'remove'], { _id: payload }, true);
-            yield put({ type: 'queryAllFetchLog', payload: { condition: {}, current: 1, pageSize: helper.PAGE_SIZE } });
-            message.success('删除成功');
-        } catch (error) {
-            message.error('删除失败');
-            logger.error(`删除失败 @modal/default/fetch-log-table/*dropById: ${error.message}`);
+            logger.error(`日志清除失败 @modal/default/quick-log-table/*dropAllData: ${error.message}`);
         } finally {
             yield put({ type: 'setLoading', payload: false });
         }

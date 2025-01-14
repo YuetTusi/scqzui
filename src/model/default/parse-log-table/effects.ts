@@ -105,27 +105,6 @@ export default {
         }
     },
     /**
-     * 删除一条日志记录(管理员)
-     * @param {string} payload id
-     */
-    *dropById({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
-        const db = getDb<ParseLog>(TableName.ParseLog);
-        try {
-            yield call([db, 'remove'], { _id: payload });
-            message.success('删除成功');
-            yield put({
-                type: 'queryParseLog', payload: {
-                    condition: null,
-                    current: 1,
-                    pageSize: helper.PAGE_SIZE
-                }
-            });
-        } catch (error) {
-            message.error(`删除失败, ${error.message}`);
-            logger.error(`解析日志删除失败 @modal/default/parse-log-table/*dropLogById: ${error.message}`);
-        }
-    },
-    /**
      * 清空所有日志记录(管理员)
      */
     *dropAllLog(_: AnyAction, { call, put }: EffectsCommandMap) {
@@ -135,7 +114,7 @@ export default {
             message.success('日志清除成功');
             yield put({
                 type: 'queryParseLog', payload: {
-                    condition: null,
+                    condition: { enable: { $ne: 0 } },
                     current: 1,
                     pageSize: helper.PAGE_SIZE
                 }

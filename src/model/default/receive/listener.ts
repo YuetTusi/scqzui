@@ -30,6 +30,7 @@ import { QuickEvent } from '@/schema/quick-event';
 import { QuickRecord } from '@/schema/quick-record';
 import { DeviceSystem } from '@/schema/device-system';
 import { LoginState } from '../trace-login';
+import { QuickLog } from '@/schema/quick-log';
 
 const { fetchText, parseText } = helper.readConf()!;
 const appPath = process.cwd();
@@ -514,6 +515,17 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
             }
         });
 
+        const quickLog = new QuickLog();
+        quickLog.caseId = next.caseId;
+        quickLog.caseName = eventData.eventName;
+        quickLog.deviceId = next._id;
+        quickLog.mobileName = next.mobileName;
+        quickLog.mobileHolder = next.mobileHolder;
+        quickLog.mobileNo = next.mobileNo;
+        quickLog.phonePath = next.phonePath;
+        quickLog.fetchTime = next.fetchTime;
+
+        dispatch({ type: 'quickLogTable/save', payload: quickLog });
         dispatch({
             type: 'quickRecordList/saveToEvent', payload: {
                 id: next.caseId,

@@ -15,6 +15,10 @@ enum TableName {
      */
     CloudLog = 'cloud-log',
     /**
+     * 快采日志表
+     */
+    QuickLog = 'quick-log',
+    /**
      * 案件表
      */
     Cases = 'cases',

@@ -14,6 +14,10 @@ abstract class BaseEntity {
      * 更新时间
      */
     public updatedAt?: Date;
+    /**
+     * 启用
+     */
+    public enable?: 0 | 1;
 }
 
 export { BaseEntity };

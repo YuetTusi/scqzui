@@ -1,0 +1,38 @@
+import { FormInstance } from "antd";
+import { Dayjs } from "dayjs";
+
+export interface QuickLogProp {
+
+}
+
+
+export interface SearchFormProp {
+
+    /**
+     * 表单引用
+     */
+    formRef: FormInstance<FormValue>,
+    /**
+     * 查询handle
+     */
+    onSearchHandle: (values: FormValue) => void,
+    /**
+     * 删除handle
+     */
+    onDelHandle: () => void,
+    /**
+     * 清除handle
+     */
+    onClearHandle: () => void
+}
+
+export interface FormValue {
+    /**
+     * 起始时间
+     */
+    start: Dayjs,
+    /**
+     * 终止时间
+     */
+    end: Dayjs
+}
