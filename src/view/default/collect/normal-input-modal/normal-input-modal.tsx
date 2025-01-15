@@ -394,7 +394,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                             <Input maxLength={100} />
                         </Item>
                     </Col>
-                    <Col span={12}>
+                    {/* <Col span={12}>
                         <Item
                             rules={[
                                 { required: true, message: '请选择提取方式' }
@@ -407,7 +407,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                 {bindExtractionSelect()}
                             </Select>
                         </Item>
-                    </Col>
+                    </Col> */}
                 </Row>
             </Form>
         </div>;
