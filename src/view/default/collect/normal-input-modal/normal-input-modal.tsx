@@ -70,6 +70,14 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     const historyDeviceName = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENAME));
     const historyDeviceHolder = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER));
     const historyDeviceNumber = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER));
+    const [isExtraction, setIsExtraction] = useState<boolean>(false); //是否启用“提取方式” 目前用于方便调试
+
+    useEffect(() => {
+        (async () => {
+            const extraction = await helper.isExtraction();
+            setIsExtraction(extraction);
+        })();
+    }, []);
 
     useEffect(() => {
         if (visible) {
@@ -394,20 +402,26 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                             <Input maxLength={100} />
                         </Item>
                     </Col>
-                    {/* <Col span={12}>
-                        <Item
-                            rules={[
-                                { required: true, message: '请选择提取方式' }
-                            ]}
-                            labelCol={{ span: 6 }}
-                            wrapperCol={{ span: 14 }}
-                            name="extraction"
-                            label="提取方式">
-                            <Select style={{ width: '100%' }}>
-                                {bindExtractionSelect()}
-                            </Select>
-                        </Item>
-                    </Col> */}
+                    {
+                        isExtraction
+                            ?
+                            <Col span={12}>
+                                <Item
+                                    rules={[
+                                        { required: true, message: '请选择提取方式' }
+                                    ]}
+                                    labelCol={{ span: 6 }}
+                                    wrapperCol={{ span: 14 }}
+                                    name="extraction"
+                                    label="提取方式">
+                                    <Select style={{ width: '100%' }}>
+                                        {bindExtractionSelect()}
+                                    </Select>
+                                </Item>
+                            </Col>
+                            :
+                            null
+                    }
                 </Row>
             </Form>
         </div>;

@@ -915,6 +915,17 @@ const helper = {
     }
   },
   /**
+   * 是否使用提取方式
+   */
+  async isExtraction(): Promise<boolean> {
+    try {
+      const exist = await this.existFile(join(cwd, './extraction'));
+      return exist;
+    } catch (error) {
+      return false;
+    }
+  },
+  /**
    * 以模版为准合并AI配置
    * 当模版中存在某配置项而案件下的配置不存在时，设为true；反之忽略
    * @param temp 模版predict.json
