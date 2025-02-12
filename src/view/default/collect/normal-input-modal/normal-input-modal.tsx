@@ -198,7 +198,9 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.cloudAppList = [];
 
             try {
-                let disk = currentCase.current!.m_strCasePath.substring(0, 2);
+                const disk = helper.os() === 'linux'
+                    ? currentCase.current!.m_strCasePath
+                    : currentCase.current!.m_strCasePath.substring(0, 2);
                 const { free } = await helper.getDiskSpace(disk, true);
                 if (free < 100) {
                     Modal.confirm({

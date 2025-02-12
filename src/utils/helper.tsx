@@ -427,13 +427,9 @@ const helper = {
    * 读取设备软硬件信息
    */
   readManufaturer(): Promise<Manufaturer> {
-    let jsonPath = '';
-
-    if (isDev) {
-      jsonPath = join(cwd, './data/manufaturer.json');
-    } else {
-      jsonPath = join(cwd, './resources/config/manufaturer.json')
-    }
+    const jsonPath = isDev
+      ? join(cwd, './data/manufaturer.json')
+      : join(cwd, './resources/config/manufaturer.json');
 
     return new Promise((resolve, reject) => {
       readFile(jsonPath, { encoding: 'utf8' }, (err, chunk) => {

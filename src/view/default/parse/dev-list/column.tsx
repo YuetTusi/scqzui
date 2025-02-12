@@ -102,6 +102,7 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
         if (exist) {
             aiConfig = await helper.readJSONFile(predictAt);
         }
+
         send(SocketType.Parse, {
             type: SocketType.Parse,
             cmd: CommandType.StartParse,
