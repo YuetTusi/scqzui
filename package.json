@@ -61,7 +61,6 @@
 				"zip"
 			],
 			"icon": "icon.png",
-			"publisherName": "yuet",
 			"artifactName": "${productName}.${ext}",
 			"requestedExecutionLevel": "requireAdministrator"
 		},

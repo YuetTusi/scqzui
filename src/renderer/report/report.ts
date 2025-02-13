@@ -222,7 +222,7 @@ function compressReport(
  * @param concurrent 并发数
  */
 function copyTask(distination: string, folderName: string, copyList: CopyParam[], concurrent = 16) {
-    return new Promise<string[]>((resolve, reject) => {
+    return new Promise<string[]>((resolve) => {
         mapLimit(copyList, concurrent,
             async ({ from, to, rename }: CopyParam) => {
                 log.info(`Copy -> ${rename}`);
@@ -233,7 +233,8 @@ function copyTask(distination: string, folderName: string, copyList: CopyParam[]
             },
             (error, results) => {
                 if (error) {
-                    reject(error);
+                    log.error(`拷贝附件失败: ${error.stack}`);
+                    // reject(error);
                 } else {
                     resolve(results as string[]);
                 }
