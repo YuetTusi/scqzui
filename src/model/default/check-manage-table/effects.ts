@@ -23,8 +23,8 @@ export default {
 
         try {
             let [data, total]: [FetchData[], number] = yield all([
-                call([db, 'findByPage'], { ...condition }, current, pageSize, 'createdAt', -1),
-                call([db, 'count'], { ...condition })
+                call([db, 'findByPage'], { ...condition, enable: { $ne: 0 } }, current, pageSize, 'createdAt', -1),
+                call([db, 'count'], { ...condition, enable: { $ne: 0 } })
             ]);
             yield put({
                 type: 'setPage', payload: {

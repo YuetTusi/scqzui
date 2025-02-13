@@ -114,7 +114,7 @@ const CheckManage: FC<CheckManageProp> = () => {
             cancelText: '否',
             centered: true,
             onOk() {
-                dispatch({ type: 'checkManageTable/delData', payload: {} });
+                dispatch({ type: 'checkManageTable/delData', payload: { enable: { $ne: 0 } } });
             }
         });
     };
