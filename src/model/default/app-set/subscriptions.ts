@@ -1,10 +1,8 @@
-import round from 'lodash/round';
-import { join, parse, sep } from 'path';
+import { join } from 'path';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { SubscriptionAPI } from 'dva';
 import { routerRedux } from 'dva/router';
 import message from 'antd/lib/message';
-import Modal from 'antd/lib/modal';
 import notification from 'antd/lib/notification';
 import logger from '@/utils/log';
 import { helper } from '@/utils/helper';
@@ -153,31 +151,31 @@ export default {
   /**
    * 应用所在盘容量过底警告
    */
-  async appSpaceWarning() {
-    const { root } = parse(cwd);
-    const [drv] = root.split(sep);
-    let cap = process.platform === 'linux' ? '/' : drv;
+  // async appSpaceWarning() {
+  //   const { root } = parse(cwd);
+  //   const [drv] = root.split(sep);
+  //   let cap = process.platform === 'linux' ? '/' : drv;
 
-    try {
-      const { free } = await helper.getDiskSpace(cap, true);
-      if (free <= 5) {
-        logger.warn(
-          `取证程序所在磁盘空间不足，${cap}剩余${round(free, 2)}GB，强制退出`
-        );
-        Modal.warn({
-          title: '磁盘空间不足',
-          content: `软件所在磁盘（${cap}）空间不足，请清理数据`,
-          okText: '退出',
-          centered: true,
-          onOk() {
-            ipcRenderer.send('do-close');
-          },
-        });
-      }
-    } catch (error) {
-      logger.error(`查询磁盘容量失败,目录:${cap},错误消息：${error.message}`);
-    }
-  },
+  //   try {
+  //     const { free } = await helper.getDiskSpace(cap, true);
+  //     if (free <= 5) {
+  //       logger.warn(
+  //         `取证程序所在磁盘空间不足，${cap}剩余${round(free, 2)}GB，强制退出`
+  //       );
+  //       Modal.warn({
+  //         title: '磁盘空间不足',
+  //         content: `软件所在磁盘（${cap}）空间不足，请清理数据`,
+  //         okText: '退出',
+  //         centered: true,
+  //         onOk() {
+  //           ipcRenderer.send('do-close');
+  //         },
+  //       });
+  //     }
+  //   } catch (error) {
+  //     logger.error(`查询磁盘容量失败,目录:${cap},错误消息：${error.message}`);
+  //   }
+  // },
   /**
    * 调用接口查询云取App
    */
