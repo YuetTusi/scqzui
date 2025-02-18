@@ -172,25 +172,21 @@ const helper = {
    */
   runExe(filePath: string, args: any[] = [], cwd?: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      if (extname(filePath) !== '.exe') {
-        reject('非exe可执行文件');
-      } else {
-        execFile(
-          filePath,
-          args,
-          {
-            cwd,
-            windowsHide: false,
-          },
-          (err: Error | null) => {
-            if (err) {
-              reject(err.message);
-            } else {
-              resolve('success');
-            }
+      execFile(
+        filePath,
+        args,
+        {
+          cwd,
+          windowsHide: false,
+        },
+        (err: Error | null) => {
+          if (err) {
+            reject(err.message);
+          } else {
+            resolve('success');
           }
-        );
-      }
+        }
+      );
     });
   },
   /**

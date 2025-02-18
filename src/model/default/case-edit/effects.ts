@@ -76,7 +76,7 @@ export default {
                 //案件路径不存在，创建之
                 mkdirSync(casePath);
             }
-            yield fork([helper, 'writeCaseJson'], casePath, payload);
+            yield fork([helper, 'writeCaseJson'], casePath, { ...payload, m_strCaseName: prev.m_strCaseName });
             yield fork(
                 [helper, 'writeJSONfile'],
                 join(casePath, 'predict.json'),

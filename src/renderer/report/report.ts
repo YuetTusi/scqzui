@@ -235,6 +235,7 @@ function copyTask(distination: string, folderName: string, copyList: CopyParam[]
                 if (error) {
                     log.error(`拷贝附件失败: ${error.stack}`);
                     // reject(error);
+                    resolve([]);
                 } else {
                     resolve(results as string[]);
                 }

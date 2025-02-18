@@ -124,15 +124,15 @@ const HitChartModal: FC<HitChartModalProp> = ({
         switch (exportFile) {
             case ExtraAction.Excel:
                 exeDir = join(exeDir, 'create_excel_report');
-                exeName = 'create_excel_report.exe';
+                exeName = helper.os() === 'linux' ? 'create_excel_report' : 'create_excel_report.exe';
                 break;
             case ExtraAction.Pdf:
                 exeDir = join(exeDir, 'create_excel_report');
-                exeName = 'create_pdf_report.exe';
+                exeName = helper.os() === 'linux' ? 'create_pdf_report' : 'create_pdf_report.exe';
                 break;
             case ExtraAction.Word:
                 exeDir = join(exeDir, 'create_excel_report');
-                exeName = 'create_word_report.exe';
+                exeName = helper.os() === 'linux' ? 'create_word_report' : 'create_word_report.exe';
                 break;
             default:
                 console.clear();

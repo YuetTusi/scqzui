@@ -64,17 +64,17 @@ const onExport = async (data: QuickEvent, exportType: ExportFile) => {
         switch (exportType) {
             case ExportFile.Excel:
                 exeDir = join(exeDir, 'create_excel_report');
-                exeName = 'create_excel_report.exe';
+                exeName = helper.os() === 'linux' ? 'create_excel_report' : 'create_excel_report.exe';
                 fileName = '违规检测结果报告.xlsx';
                 break;
             case ExportFile.Pdf:
                 exeDir = join(exeDir, 'create_excel_report');
-                exeName = 'create_pdf_report.exe';
+                exeName = helper.os() === 'linux' ? 'create_pdf_report' : 'create_pdf_report.exe';
                 fileName = '违规检测结果报告.pdf';
                 break;
             case ExportFile.Word:
                 exeDir = join(exeDir, 'create_excel_report');
-                exeName = 'create_word_report.exe';
+                exeName = helper.os() === 'linux' ? 'create_word_report' : 'create_word_report.exe';
                 fileName = '违规检测结果报告.docx';
                 break;
         }

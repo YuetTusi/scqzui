@@ -296,10 +296,12 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                 setExportFullReportModalVisible(false);
                 const hide = message.loading('正在导出报告...', 0);
                 try {
-                    console.log(join(helper.APP_CWD, '../tools/full_report/full_report.exe'));
                     console.log([phonePath!, values.saveAt, values.suffix]);
+                    const exeAt = helper.os() === 'linux'
+                        ? '../tools/full_report/full_report'
+                        : '../tools/full_report/full_report.exe';
                     await helper.runExe(
-                        join(helper.APP_CWD, '../tools/full_report/full_report.exe'),
+                        join(helper.APP_CWD, exeAt),
                         [phonePath!, values.saveAt, values.suffix],
                         join(helper.APP_CWD, '../tools/full_report')
                     );
