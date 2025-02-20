@@ -23,7 +23,7 @@ const LiveModal: FC<LiveModalProp> = ({ title, device, visible, cancelHandle }) 
     /**
      * 接收主进程传来的采集进度数据
      */
-    const receiveFetchProgress = (event: IpcRendererEvent, arg: FetchRecord[]) => {
+    const receiveFetchProgress = (_: IpcRendererEvent, arg: FetchRecord[]) => {
         setData(arg);
         if (scrollBox.current) {
             const h = scrollBox.current.scrollHeight;

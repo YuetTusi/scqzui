@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { FetchLog } from '@/schema/fetch-log';
 import { FetchRecord } from '@/schema/fetch-record';
@@ -14,7 +15,13 @@ const dataMap = new Map<number, FetchRecord[]>();
  */
 const progressHandle = (_: IpcRendererEvent, { usb, fetchRecord }: { usb: number, fetchRecord: FetchRecord }) => {
     if (dataMap.has(usb)) {
-        dataMap.get(usb)!.push(fetchRecord);
+        const target = dataMap.get(usb)!;
+        const last = target[target.length - 1]; //上一条进度
+        if (last.info === fetchRecord.info) {
+            target[target.length - 1] = fetchRecord;
+        } else {
+            dataMap.get(usb)!.push(fetchRecord);
+        }
     } else {
         dataMap.set(usb, [fetchRecord]);
     }
