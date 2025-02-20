@@ -31,10 +31,6 @@ enum LocalStoreKey {
      */
     SocketWarning = 'SocketWarning',
     /**
-     * 是否备份旧版本数据
-     */
-    BakPrevNedb = 'BakPrevNedb',
-    /**
      * 已登录标记
      */
     Login = 'Login',

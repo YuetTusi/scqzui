@@ -1,5 +1,7 @@
 import { join } from 'path';
+import { readdir, mkdir } from 'fs/promises';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
+import cpy from 'cpy';
 import { SubscriptionAPI } from 'dva';
 import { routerRedux } from 'dva/router';
 import message from 'antd/lib/message';
@@ -11,9 +13,7 @@ import { request } from '@/utils/request';
 import { ParseState } from '@/schema/device-state';
 import { DataMode } from '@/schema/data-mode';
 import { AppCategory } from '@/schema/app-config';
-import { importPrevNedb } from '@/component/nedb-import-modal';
 
-const cwd = process.cwd();
 const { useLogin, useServerCloud, cloudAppMd5, cloudAppUrl } =
   helper.readConf()!;
 
@@ -69,26 +69,52 @@ export default {
       dispatch({ type: 'setDataMode', payload: DataMode.Self });
     }
   },
+  async copyInitNedb() {
+
+    const target = join(helper.APP_CWD, './qzdb');
+    let nedbDir: string[] = [];
+    let existNedbFolder: boolean = false;
+
+    try {
+      existNedbFolder = await helper.existFile(target);
+      if (existNedbFolder) {
+        nedbDir = await readdir(target);
+      } else {
+        await mkdir(target);
+      }
+    } catch (error) {
+      logger.error(`@copyInitNedb(): ${error.message}`);
+    }
+
+    if (!existNedbFolder || nedbDir.length === 0) {
+      //# 如果启动后无nedb目录或目录是空，则拷贝默认库到目录下
+      cpy(['*.nedb'], target,
+        {
+          parents: false,
+          cwd: join(helper.APP_CWD, './data/initdb')
+        })
+    }
+  },
   /**
    * 备份旧版本数据表
    */
-  async backupPrevNedb(_: SubscriptionAPI) {
-    const hasBackup = localStorage.getItem(LocalStoreKey.BakPrevNedb) === '1'; //是否已备份过旧表数据
-    if (!hasBackup) {
-      try {
-        const [caseCount, eventCount, deviceCount, recordCount] =
-          await importPrevNedb(join(cwd, './nedb'));
-        localStorage.setItem(LocalStoreKey.BakPrevNedb, '1');
-        logger.info(
-          `已成功备份旧库数据 caseCount:${caseCount}, eventCount:${eventCount}, deviceCount:${deviceCount}, recordCount:${recordCount}`
-        );
-      } catch (error) {
-        logger.error(
-          `备份旧库数据失败 @model/default/app-set/subscriptions/backupPrevNedb: ${error.message}`
-        );
-      }
-    }
-  },
+  // async backupPrevNedb(_: SubscriptionAPI) {
+  //   const hasBackup = localStorage.getItem(LocalStoreKey.BakPrevNedb) === '1'; //是否已备份过旧表数据
+  //   if (!hasBackup) {
+  //     try {
+  //       const [caseCount, eventCount, deviceCount, recordCount] =
+  //         await importPrevNedb(join(cwd, './nedb'));
+  //       localStorage.setItem(LocalStoreKey.BakPrevNedb, '1');
+  //       logger.info(
+  //         `已成功备份旧库数据 caseCount:${caseCount}, eventCount:${eventCount}, deviceCount:${deviceCount}, recordCount:${recordCount}`
+  //       );
+  //     } catch (error) {
+  //       logger.error(
+  //         `备份旧库数据失败 @model/default/app-set/subscriptions/backupPrevNedb: ${error.message}`
+  //       );
+  //     }
+  //   }
+  // },
   /**
    * 导出报告消息
    */
