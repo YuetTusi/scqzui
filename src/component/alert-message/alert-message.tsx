@@ -1,8 +1,8 @@
 import { ipcRenderer } from 'electron';
 import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'dva';
-import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined'
-import SoundOutlined from '@ant-design/icons/SoundOutlined'
+import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
+import SoundOutlined from '@ant-design/icons/SoundOutlined';
 import { StateTree } from '@/type/model';
 import { AlartMessageState } from '@/model/default/alart-message';
 import { AlartMessageBox } from './styled/style';

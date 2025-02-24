@@ -31,8 +31,11 @@ interface DeviceFrameProp {
     /**
      * 设备投屏handle
      */
-    castScreenHandle: (arg0: DeviceType) => void
-
+    castScreenHandle: (arg0: DeviceType) => void,
+    /**
+     * 帮助handle
+     */
+    helpHandle: (arg0: DeviceType) => void
 };
 
 interface FetchButtonProp {

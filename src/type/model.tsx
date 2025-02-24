@@ -38,6 +38,7 @@ import { AndroidSetModalState } from '@/model/default/android-set-modal';
 import { PaperworkModalState } from '@/model/default/paperwork-modal';
 import { ExtractionState } from '@/model/default/extraction';
 import { QuickLogTableState } from '@/model/default/quick-log-table';
+import { HelpModalState } from '@/model/default/help-modal';
 
 declare global {
 	interface Window {
@@ -92,6 +93,7 @@ interface StateTree {
 	paperworkModal: PaperworkModalState,
 	extraction: ExtractionState,
 	quickLogTable: QuickLogTableState,
+	helpModal: HelpModalState,
 	[modelName: string]: any
 }
 

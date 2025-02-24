@@ -12,6 +12,7 @@ import { DeviceStoreState } from '@/model/default/device';
 import { FetchButton } from './fetch-button';
 import { MobileInfo } from './mobile-info';
 import { MobileIco } from './mobile-ico';
+import { HelpButton } from './help-button';
 import { ScreenCastButton } from './screen-cast-button';
 import { DeivceBox, Nothing } from './styled/device-box';
 import { DeviceFrameProp } from './prop';
@@ -83,7 +84,8 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
     onRecordHandle,
     onStopHandle,
     onTipHandle,
-    castScreenHandle
+    castScreenHandle,
+    helpHandle
 }) => {
 
     const { deviceList } = useSelector<StateTree, DeviceStoreState>(state => state.device);
@@ -135,6 +137,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
                                 <DeivceBox
                                     className={getClassNameByState(item)}>
                                     <ScreenCastButton data={item} clickHandle={castScreenHandle} />
+                                    <HelpButton data={item} clickHandle={helpHandle} />
                                     <div className="ico">
                                         <MobileIco device={item} />
                                     </div>

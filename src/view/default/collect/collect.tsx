@@ -13,7 +13,7 @@ import message from 'antd/lib/message';
 import Button from 'antd/lib/button';
 import { useDstUnit, useUnit } from '@/hook/unit';
 import { TipType } from '@/schema/tip-type';
-import { FetchState } from '@/schema/device-state';
+import { FetchState, ParseState } from '@/schema/device-state';
 import { DeviceSystem } from '@/schema/device-system';
 import { FetchData } from '@/schema/fetch-data';
 import { DeviceType } from '@/schema/device-type';
@@ -52,8 +52,6 @@ const Collect: FC<CollectProp> = ({ }) => {
     const dispatch = useDispatch();
     const [wired, setWired] = useState<boolean>(false);
     const [appCreditModalVisible, setAppCreditModalVisible] = useState<boolean>(false);
-    // const [usbDebugModalVisible, setUsbDebugModalVisible] = useState<boolean>(false);
-    const [helpModalVisible, setHelpModalVisible] = useState<boolean>(false);
     const [normalInputModal, setNormalInputModal] = useState<boolean>(false);
     const [serverCloudModalVisible, setServerCloudModalVisible] = useState<boolean>(false);
     const [liveModalVisible, setLiveModalVisible] = useState<boolean>(false);
@@ -75,7 +73,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     //         devices.push({
     //             ...{
     //                 "fetchState": FetchState.Connected,
-    //                 "manufacturer": "采集完成",
+    //                 "manufacturer": "Mi",
     //                 "model": "TAS-AL00",
     //                 "phoneInfo": [{
     //                     "name": "厂商", "value": "HUAWEI"
@@ -392,6 +390,14 @@ const Collect: FC<CollectProp> = ({ }) => {
     };
 
     /**
+     * 帮助handle
+     */
+    const helpHandle = (data: DeviceType) => {
+        dispatch({ type: 'helpModal/setManufacturer', payload: data.manufacturer });
+        dispatch({ type: 'helpModal/setOpen', payload: true });
+    };
+
+    /**
      * 用户未知密码放弃（type=2）
      * @param {number} usb USB序号
      */
@@ -511,7 +517,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                         <AppleOutlined />
                         <span>Apple授权</span>
                     </Button>
-                    <Button onClick={() => setHelpModalVisible(true)} type="primary">
+                    <Button onClick={() => dispatch({ type: 'helpModal/setOpen', payload: true })} type="primary">
                         <QuestionOutlined />
                         <span>操作帮助</span>
                     </Button>
@@ -543,6 +549,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                     onStopHandle={stopHandle}
                     onTipHandle={tipHandle}
                     castScreenHandle={castScreenHandle}
+                    helpHandle={helpHandle}
                 />
                 <div
                     onClick={() => onScrollButtonClick('left')}
@@ -558,16 +565,12 @@ const Collect: FC<CollectProp> = ({ }) => {
                 </div>
             </DevicePanel>
         </ContentBox>
-        {/* <UsbDebugModal
-            visible={usbDebugModalVisible}
-            okHandle={() => setUsbDebugModalVisible(false)} /> */}
         <AppleCreditModal
             visible={appCreditModalVisible}
             okHandle={() => setAppCreditModalVisible(false)} />
         <HelpModal
-            visible={helpModalVisible}
-            okHandle={() => setHelpModalVisible(false)}
-            cancelHandle={() => setHelpModalVisible(false)}
+            okHandle={() => dispatch({ type: 'helpModal/setOpen', payload: false })}
+            cancelHandle={() => dispatch({ type: 'helpModal/setOpen', payload: false })}
         />
         <NormalInputModal
             device={currentDevice.current}
