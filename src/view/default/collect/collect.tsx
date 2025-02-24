@@ -32,6 +32,7 @@ import {
     AppleCreditModal, HelpModal, ApplePasswordModal,
     UMagicCodeModal, GuideModal, CloudCodeModal, CloudHistoryModal
 } from '@/component/dialog';
+import Auth from '@/component/auth';
 import NormalInputModal from './normal-input-modal';
 import CheckInputModal from './check-input-modal';
 import ServerCloudModal from './server-cloud-modal';
@@ -49,6 +50,7 @@ const { useBcp, devText, fetchText, parseText } = helper.readConf()!;
 const Collect: FC<CollectProp> = ({ }) => {
 
     const dispatch = useDispatch();
+    const [wired, setWired] = useState<boolean>(false);
     const [appCreditModalVisible, setAppCreditModalVisible] = useState<boolean>(false);
     // const [usbDebugModalVisible, setUsbDebugModalVisible] = useState<boolean>(false);
     const [helpModalVisible, setHelpModalVisible] = useState<boolean>(false);
@@ -106,6 +108,17 @@ const Collect: FC<CollectProp> = ({ }) => {
         return () => {
             current!.removeEventListener('wheel', onDevicePanelWheel);
         };
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const isWired = await helper.isWired();
+                setWired(isWired);
+            } catch (error) {
+                setWired(false);
+            }
+        })();
     }, []);
 
     /**
@@ -503,12 +516,22 @@ const Collect: FC<CollectProp> = ({ }) => {
                         <span>操作帮助</span>
                     </Button>
                 </Group>
-                <Button onClick={() => dispatch(routerRedux.push('/parse'))} type="primary">
-                    <FontAwesomeIcon
-                        icon={faFileWaveform}
-                        style={{ marginRight: '10px' }} />
-                    <span>{`数据${parseText ?? '解析'}`}</span>
-                </Button>
+                <Group>
+                    <Auth deny={!wired}>
+                        <Button onClick={() => dispatch(routerRedux.push('/quick'))} type="primary">
+                            <FontAwesomeIcon
+                                icon={faFileWaveform}
+                                style={{ marginRight: '10px' }} />
+                            <span>{`快采数据${parseText ?? '解析'}`}</span>
+                        </Button>
+                    </Auth>
+                    <Button onClick={() => dispatch(routerRedux.push('/parse'))} type="primary">
+                        <FontAwesomeIcon
+                            icon={faFileWaveform}
+                            style={{ marginRight: '10px' }} />
+                        <span>{`数据${parseText ?? '解析'}`}</span>
+                    </Button>
+                </Group>
             </div>
             <Split />
             <DevicePanel ref={devicePanelRef}>

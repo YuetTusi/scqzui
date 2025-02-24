@@ -11,6 +11,7 @@ import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Button from 'antd/lib/button';
+import Checkbox from 'antd/lib/checkbox';
 import AutoComplete from 'antd/lib/auto-complete';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
@@ -23,6 +24,7 @@ import { helper } from '@/utils/helper';
 import { Backslashe, UnderLine } from '@/utils/regex';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { AppSelectModal } from '@/component/dialog';
+import Auth from '@/component/auth';
 import { CaseInfo } from '@/schema/case-info';
 import FetchData from '@/schema/fetch-data';
 import { DataMode } from '@/schema/data-mode';
@@ -71,13 +73,51 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     const historyDeviceHolder = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER));
     const historyDeviceNumber = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER));
     const [isExtraction, setIsExtraction] = useState<boolean>(false); //是否启用“提取方式” 目前用于方便调试
+    const [isWired, setIsWired] = useState<boolean>(false); //是否启用“有线方式” 目前用于方便调试
 
     useEffect(() => {
         (async () => {
-            const extraction = await helper.isExtraction();
-            setIsExtraction(extraction);
+            if (visible) {
+                const wired = await helper.isWired();
+                setIsWired(wired);
+            }
         })();
-    }, []);
+    }, [visible]);
+
+    useEffect(() => {
+        (async () => {
+            if (visible) {
+                const extraction = await helper.isExtraction();
+                setIsExtraction(extraction);
+
+                if (extraction) {
+                    formRef.setFieldsValue({
+                        case: allCaseData.length > 0 ? JSON.stringify(allCaseData[0]) : '',
+                        user: historyDeviceHolder.current.length > 0 ? historyDeviceHolder.current[0] : '',
+                        extraction: types.length > 0 ? types[0].value : ''
+                    });
+                    currentCase.current = allCaseData[0];
+
+                    setSelectedApps([
+                        {
+                            m_strID: "1030036",
+                            m_strPktlist: [
+                                'com.tencent.mm',
+                                'com.excelliance.dualaid',
+                                'com.huihu.multplugin01',
+                                'com.huihu.multplugin02',
+                                'com.huihu.multplugin03',
+                                'com.huihu.multplugin04',
+                                'com.huihu.multplugin05',
+                                'com.tencent.mm_cm',
+                                'com.lbe.parallel'
+                            ]
+                        }
+                    ]);
+                }
+            }
+        })();
+    }, [visible, types]);
 
     useEffect(() => {
         if (visible) {
@@ -191,6 +231,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.handleOfficerNo = values.handleOfficerNo;
             entity.note = values.note ?? '';
             entity.extraction = values.extraction;
+            entity.wired = values.wired ?? false;
             entity.credential = '';
             entity.serial = device?.serial ?? '';
             entity.mode = DataMode.Self; //标准模式（用户手输取证数据）
@@ -404,27 +445,37 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                             <Input maxLength={100} />
                         </Item>
                     </Col>
-                    {
-                        isExtraction
-                            ?
-                            <Col span={12}>
-                                <Item
-                                    rules={[
-                                        { required: true, message: '请选择提取方式' }
-                                    ]}
-                                    labelCol={{ span: 6 }}
-                                    wrapperCol={{ span: 14 }}
-                                    name="extraction"
-                                    label="提取方式">
-                                    <Select style={{ width: '100%' }}>
-                                        {bindExtractionSelect()}
-                                    </Select>
-                                </Item>
-                            </Col>
-                            :
-                            null
-                    }
+                    <Auth deny={!isExtraction}>
+                        <Col span={12}>
+                            <Item
+                                rules={[{ required: true, message: '请选择提取方式' }]}
+                                labelCol={{ span: 6 }}
+                                wrapperCol={{ span: 14 }}
+                                name="extraction"
+                                label="提取方式">
+                                <Select style={{ width: '100%' }}>
+                                    {bindExtractionSelect()}
+                                </Select>
+                            </Item>
+                        </Col>
+                    </Auth>
                 </Row>
+                <Auth deny={!isWired}>
+                    <Row>
+                        <Col span={12}>
+                            <Item
+                                name="wired"
+                                label="有线快速采集"
+                                valuePropName="checked"
+                                initialValue={true}
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}>
+                                <Checkbox />
+                            </Item>
+                        </Col>
+                        <Col span={12} />
+                    </Row>
+                </Auth>
             </Form>
         </div>;
     };

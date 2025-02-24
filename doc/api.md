@@ -306,6 +306,7 @@ UI 命令：`start_fetch`，参数：
 | sdCard        | boolean     | 是否拉取 SD 卡数据                            |
 | cloudTimeout  | number      | 云取超时时间（云取）                          |
 | extraction    | number      | 提取方式                                      |
+| wired         | boolean     | 有线采集                                      |
 | cloudTimespan | number      | 云取查询间隔（云取）                          |
 | isAlive       | boolean     | 是否保活                                      |
 

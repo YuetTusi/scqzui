@@ -52,4 +52,8 @@ export interface FormValue {
      * 提取方式
      */
     extraction: string;
+    /**
+     * 有线采集
+     */
+    wired: boolean;
 }

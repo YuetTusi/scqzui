@@ -399,6 +399,7 @@ export default {
                 isAuto: fetchData.isAuto,
                 serial: fetchData.serial,
                 extraction: fetchData.extraction ?? '',
+                wired: fetchData.wired ?? false,
                 cloudTimeout: fetchData.cloudTimeout ?? helper.CLOUD_TIMEOUT,
                 cloudTimespan: fetchData.cloudTimespan ?? helper.CLOUD_TIMESPAN,
                 isAlive: fetchData.isAlive ?? helper.IS_ALIVE
@@ -425,6 +426,7 @@ export default {
             isAuto: fetchData.isAuto,
             serial: fetchData.serial,
             extraction: fetchData.extraction ?? '',
+            wired: fetchData.wired ?? false,
             cloudTimeout: fetchData.cloudTimeout ?? helper.CLOUD_TIMEOUT,
             cloudTimespan: fetchData.cloudTimespan ?? helper.CLOUD_TIMESPAN,
             isAlive: fetchData.isAlive ?? helper.IS_ALIVE

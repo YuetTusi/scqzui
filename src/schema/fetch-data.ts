@@ -101,7 +101,11 @@ class FetchData {
     /**
      * 提取方式
      */
-    extraction?: string
+    extraction?: string;
+    /**
+     * 有线方式
+     */
+    wired?: boolean;
 }
 
 export { FetchData };
