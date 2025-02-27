@@ -6,7 +6,7 @@ enum GuideImage {
     /**
      * 小米自备份
      */
-    MiBackup = 'mi_backup',
+    MiBackup = 'xiaomi_backup',
     /**
      * 华为自备份
      */
