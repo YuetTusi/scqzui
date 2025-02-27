@@ -25,7 +25,7 @@ const DragBar: FC<{}> = memo(({ children }) => {
 
     return <DragBarBox>
         <div className="app-name">
-            <span>{children}</span>
+            <span>{children ?? ''}</span>
         </div>
         <div className="app-buttons">
             <a onClick={() => ipcRenderer.send('minimize')}>

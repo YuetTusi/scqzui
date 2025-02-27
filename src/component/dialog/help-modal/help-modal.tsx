@@ -8,19 +8,7 @@ import { GuideImage } from '@/schema/guide-image';
 import { StateTree } from '@/type/model';
 import { HelpModalState } from '@/model/default/help-modal';
 import { HelpModalBox } from './styled/style';
-import huaweiBackup from '../images/fetch/huawei_backup.jpg';
-import meizuBackup from '../images/fetch/meizu_backup.jpg';
-import oppoBackup from '../images/fetch/oppo_backup.jpg';
-import oppoWiFi from '../images/fetch/oppo_wifi.jpg';
-import vivoBackup from '../images/fetch/vivo_backup.jpg';
-import vivoDev from '../images/fetch/vivo_dev.jpg';
-import miBackup from '../images/fetch/mi_backup.jpg';
-import oneplusBackup from '../images/fetch/oneplus_backup.jpg';
-import oneplusWiFi from '../images/fetch/oneplus_wifi.jpg';
-import blacksharkBackup from '../images/fetch/blackshark_backup.jpg';
-import { Prop } from './prop';
-
-const { TabPane } = Tabs;
+import { Prop, tabItems } from './prop';
 
 /**
  * 帮助提示框
@@ -33,13 +21,46 @@ const HelpModal: FC<Prop> = ({ okHandle }) => {
 		manufacturer
 	} = useSelector<StateTree, HelpModalState>(state => state.helpModal);
 
+	/**
+	 * 设备厂商返回对应的图片Key
+	 */
+	const manuToImage = (manu: string): string => {
+		let img = '';
+		const m = manu.toLocaleLowerCase();
+
+		switch (m) {
+			case 'oppo':
+				img = GuideImage.OppoWifi;
+				break;
+			case 'oneplus':
+				img = GuideImage.OneplusWifi;
+				break;
+			default:
+				for (let i of Object.values(GuideImage)) {
+					if (i.includes(manu.toLocaleLowerCase())) {
+						img = i;
+						break;
+					}
+				}
+				break;
+		}
+		return img;
+	};
+
+	/**
+	 * 选项卡Change
+	 */
+	const onTabChange = (activeKey: string) =>
+		dispatch({ type: 'helpModal/setManufacturer', payload: activeKey });
+
 	return <Modal
-		visible={open}
+		open={open}
 		footer={[
 			<Button
-				key="B_0"
+				key="HPM_0"
 				type="primary"
 				onClick={() => {
+					dispatch({ type: 'helpModal/setManufacturer', payload: '' });
 					okHandle!();
 				}}>
 				<CheckCircleOutlined />
@@ -55,65 +76,14 @@ const HelpModal: FC<Prop> = ({ okHandle }) => {
 		className="zero-padding-body">
 		<HelpModalBox>
 			<Tabs
-				onChange={(activeKey) => {
-					dispatch({ type: 'helpModal/setManufacturer', payload: activeKey });
-				}}
-				accessKey={manufacturer}
+				onChange={onTabChange}
+				activeKey={manuToImage(manufacturer)}
+				items={tabItems}
 				defaultActiveKey="mi"
 				tabPosition="left">
-				<TabPane tab="小米" key={GuideImage.MiBackup}>
-					<div className="flow">
-						<img src={miBackup} />
-					</div>
-				</TabPane>
-				<TabPane tab="华为" key={GuideImage.HuaweiBackup}>
-					<div className="flow">
-						<img src={huaweiBackup} />
-					</div>
-				</TabPane>
-				<TabPane tab="OPPO" key={GuideImage.OppoBackup}>
-					<div className="flow">
-						<img src={oppoBackup} />
-					</div>
-				</TabPane>
-				<TabPane tab="OPPO WiFi" key={GuideImage.OppoWifi}>
-					<div className="flow">
-						<img src={oppoWiFi} />
-					</div>
-				</TabPane>
-				<TabPane tab="VIVO" key={GuideImage.VivoBackup}>
-					<div className="flow">
-						<img src={vivoBackup} />
-					</div>
-				</TabPane>
-				<TabPane tab="VIVO开发者模式" key={GuideImage.VivoDev}>
-					<div className="flow">
-						<img src={vivoDev} />
-					</div>
-				</TabPane>
-				<TabPane tab="一加" key={GuideImage.OneplusBackup}>
-					<div className="flow">
-						<img src={oneplusBackup} />
-					</div>
-				</TabPane>
-				<TabPane tab="一加 WiFi" key={GuideImage.OneplusWifi}>
-					<div className="flow">
-						<img src={oneplusWiFi} />
-					</div>
-				</TabPane>
-				<TabPane tab="魅族" key={GuideImage.MeizuBackup}>
-					<div className="flow">
-						<img src={meizuBackup} />
-					</div>
-				</TabPane>
-				<TabPane tab="黑鲨" key={GuideImage.BlacksharkBackup}>
-					<div className="flow">
-						<img src={blacksharkBackup} />
-					</div>
-				</TabPane>
 			</Tabs>
 		</HelpModalBox>
-	</Modal >;
+	</Modal>;
 };
 
 HelpModal.defaultProps = {

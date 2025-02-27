@@ -14,7 +14,7 @@ const LayoutPanel: FC<{}> = ({ children }) => {
         (async () => {
             try {
                 const { materials_name, materials_software_version } = await helper.readManufaturer();
-                setTitle(`${materials_name} ${materials_software_version}`);
+                setTitle(`${materials_name ?? '测试'} ${materials_software_version ?? 'v0.0.1'}`);
             } catch (error) {
                 console.warn(error);
                 setTitle('');

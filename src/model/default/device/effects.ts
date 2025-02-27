@@ -342,12 +342,15 @@ export default {
             logger.error(`Bcp.json写入失败 @model/default/device/*startFetch: ${error.message}`);
         }
 
-        yield put({
-            type: 'saveDeviceToCase', payload: {
-                id: fetchData.caseId,
-                data: rec
-            }
-        });
+        if (!fetchData.wired) {
+            //如果是有线快采，设备记录不写入devices表，走快采流程
+            yield put({
+                type: 'saveDeviceToCase', payload: {
+                    id: fetchData.caseId,
+                    data: rec
+                }
+            });
+        }
 
         //采集时把必要的数据更新到deviceList中
         yield put({
