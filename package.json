@@ -36,7 +36,9 @@
 			"dist/renderer/default.js",
 			"dist/renderer/default.html",
 			"dist/renderer/protocol.js",
-			"dist/renderer/protocol.html"
+			"dist/renderer/protocol.html",
+			"dist/renderer/startup.js",
+			"dist/renderer/startup.html"
 		],
 		"files": [
 			"dist/**/*",

@@ -16,7 +16,7 @@ import {
   readFile as readFilePromise,
   writeFile as writeFilePromise,
 } from 'fs/promises';
-import { BrowserWindow } from 'electron';
+import { ipcRenderer } from 'electron';
 import cpy from 'cpy';
 import { v4 } from 'uuid';
 import yaml from 'js-yaml';
@@ -195,8 +195,7 @@ const helper = {
   runFetch(
     handle: ChildProcessWithoutNullStreams | null,
     exeName: string,
-    exePath: string,
-    win: BrowserWindow
+    exePath: string
   ) {
     handle = spawn(exeName, [], {
       cwd: exePath
@@ -212,7 +211,8 @@ const helper = {
 
     handle.once('close', (_: number) => {
       if (!isDev) {
-        win.webContents.send('dog-warn');
+        // win.webContents.send('dog-warn');
+        ipcRenderer.send('dog-warn');
       }
     });
   },

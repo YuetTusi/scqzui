@@ -4,7 +4,6 @@
  * @date 2022-08-16
  */
 import { join } from 'path';
-import { ChildProcessWithoutNullStreams } from 'child_process';
 import {
     app, BrowserWindow, dialog, ipcMain, IpcMainEvent, globalShortcut, shell
 } from 'electron';
@@ -27,8 +26,7 @@ const isDev = env['NODE_ENV'] === 'development';
 const appPath = app.getAppPath();
 const server = express();
 const appName = helper.readAppName();
-const appRootPath = join(__dirname, '../../../../'); //应用所在目录
-let httpPort = 9900;
+
 let config: Conf | null = null;
 let existManuJson = false;
 let mainWindow: BrowserWindow | null = null;
@@ -37,14 +35,8 @@ let sqliteWindow: BrowserWindow | null = null; //SQLite查询
 let fetchRecordWindow: BrowserWindow | null = null; //采集记录
 let reportWindow: BrowserWindow | null = null; //报告
 let protocolWindow: BrowserWindow | null = null; //协议阅读
+let startupWindow: BrowserWindow | null = null; //服务启动
 let imageVerifyWindow: BrowserWindow | null = null; //选图验证
-let fetchProcess: ChildProcessWithoutNullStreams | null = null; //采集进程
-let parseProcess: ChildProcessWithoutNullStreams | null = null; //解析进程
-let yunProcess: ChildProcessWithoutNullStreams | null = null; //云取服务进程
-let appQueryProcess: ChildProcessWithoutNullStreams | null = null; //应用痕迹进程
-let quickFetchProcess: ChildProcessWithoutNullStreams | null = null; //快速点验进程
-let imageOcrProcess: ChildProcessWithoutNullStreams | null = null; //OCR进程
-let httpServerIsRunning = false; //是否已启动HttpServer
 
 const notifier = new WindowsBalloon({
     withFallback: false,
@@ -77,12 +69,12 @@ if (helper.useGPURender()) {
     log.info('启用GPU渲染');
 } else {
     app.commandLine.appendSwitch('no-sandbox');
+    app.commandLine.appendSwitch('--no-sandbox');
     app.commandLine.appendSwitch('disable-gpu');
     app.commandLine.appendSwitch('disable-gpu-compositing');
     app.commandLine.appendSwitch('disable-gpu-rasterization');
     app.commandLine.appendSwitch('disable-gpu-sandbox');
     app.commandLine.appendSwitch('disable-software-rasterizer');
-    app.commandLine.appendSwitch('--no-sandbox');
     app.disableHardwareAcceleration();
     log.info('禁用GPU渲染');
 }
@@ -93,18 +85,6 @@ helper.writeReportJson(config!); //写report.json
  * 销毁所有窗口
  */
 function destroyAllWindow() {
-    if (quickFetchProcess !== null) {
-        quickFetchProcess.kill('SIGKILL');	//杀掉快速点验进程
-    }
-    if (fetchProcess !== null) {
-        fetchProcess.kill('SIGKILL');
-    }
-    if (parseProcess !== null) {
-        parseProcess.kill('SIGKILL');
-    }
-    if (imageOcrProcess !== null) {
-        imageOcrProcess.kill();
-    }
     if (sqliteWindow !== null) {
         sqliteWindow.destroy();
         sqliteWindow = null;
@@ -124,6 +104,10 @@ function destroyAllWindow() {
     if (fetchRecordWindow !== null) {
         fetchRecordWindow.destroy();
         fetchRecordWindow = null;
+    }
+    if (startupWindow !== null) {
+        startupWindow.destroy();
+        startupWindow = null;
     }
     if (mainWindow !== null) {
         mainWindow.destroy();
@@ -188,9 +172,7 @@ app.on('window-all-closed', () => {
 });
 
 app.whenReady()
-    .then(() => {
-        return helper.isDebug();
-    })
+    .then(() => helper.isDebug())
     .then(isDebug => {
         // #生产模式屏蔽快捷键（发布把注释放开）
         if (!isDebug) {
@@ -222,6 +204,18 @@ if (!app.requestSingleInstanceLock()) {
     });
 
     app.on('ready', () => {
+
+        startupWindow = new BrowserWindow({
+            title: '服务启动',
+            width: 800,
+            height: 400,
+            show: false,
+            webPreferences: {
+                contextIsolation: false,
+                nodeIntegration: true,
+                javascript: true
+            }
+        });
 
         timerWindow = new BrowserWindow({
             title: '计时服务',
@@ -274,13 +268,19 @@ if (!app.requestSingleInstanceLock()) {
             mainWindow.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/default.html'));
         }
 
+        startupWindow.webContents.on('did-finish-load', () => {
+            startupWindow!.webContents.send('startup', config);
+        });
+
         mainWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
 
         mainWindow.webContents.on('did-finish-load', () => {
             mainWindow!.show();
+            startupWindow!.loadFile(join(__dirname, './renderer/startup.html'));
             timerWindow!.loadFile(join(__dirname, './renderer/timer.html'));
             fetchRecordWindow!.loadFile(join(__dirname, './renderer/fetch-record.html'));
             if (isDev) {
+                startupWindow!.webContents.openDevTools();
                 timerWindow!.webContents.openDevTools();
                 fetchRecordWindow!.webContents.openDevTools();
             }
@@ -297,13 +297,12 @@ if (!app.requestSingleInstanceLock()) {
         });
 
         (async () => {
-            if (!httpServerIsRunning && mainWindow !== null) {
+            if (mainWindow !== null) {
                 try {
-                    httpPort = await helper.portStat(config!.httpPort ?? 9900);
+                    const httpPort = await helper.portStat(config!.httpPort ?? 9900);
                     //启动HTTP服务
                     server.use(api(mainWindow.webContents));
                     server.listen(httpPort, () => {
-                        httpServerIsRunning = true;
                         console.log(`HTTP服务启动在端口${httpPort}`);
                         log.info(`HTTP服务启动在端口${httpPort}`);
                     });
@@ -315,75 +314,16 @@ if (!app.requestSingleInstanceLock()) {
     });
 }
 
-//启动后台服务（采集，解析，云取证等）
-ipcMain.on('run-service', (_: IpcMainEvent, tcpPort: number, ocrPort: number) => {
-
-    const quickFetchDir = join(
-        appRootPath, config?.quickFetchPath ?? './QuickFetch');
-    // helper.runProc(
-    //     fetchProcess,
-    //     config?.fetchExe ?? 'n_fetch.exe',
-    //     join(appPath, '../../../', config?.fetchPath ?? './n_fetch')
-    // );
-
-    helper.runFetch(
-        fetchProcess,
-        join(appRootPath, platform === 'linux' ? './n_fetch/n_fetch' : './n_fetch/n_fetch.exe'),
-        join(appRootPath, './n_fetch'),
-        mainWindow!
-    );
-
-    helper.runProc(
-        parseProcess,
-        join(appRootPath, platform === 'linux' ? './parse/parse' : './parse/parse.exe'),
-        join(appRootPath, './parse')
-    );
-
-    helper.runProcContinue(
-        imageOcrProcess,
-        join(appRootPath, platform === 'linux' ? './tools/ImageOcr/ImageOcr' : './tools/ImageOcr/ImageOcr.exe'),
-        join(appRootPath, './tools/ImageOcr'),
-        ['--listen_port', ocrPort.toString()]
-    );
-
-    if (config!.useQuickFetch) {
-        //有快速点验功能，调起服务
-        helper.runProc(
-            quickFetchProcess,
-            join(quickFetchDir, platform === 'linux' ? 'QuickFetchServer' : 'QuickFetchServer.exe'),
-            quickFetchDir,
-            [],
-            {
-                cwd: quickFetchDir,
-                stdio: 'ignore'
-            }
-        );
-    }
-    if (config!.useServerCloud) {
-        //有云取功能，调起云RPC服务
-        helper.runProc(
-            yunProcess,
-            join(appRootPath, platform === 'linux' ? './yq/yqRPC' : './yq/yqRPC.exe'),
-            join(appRootPath, './yq'),
-            ['-config', './agent.json', '-log_dir', './log']
-        );
-    }
-    if (config!.useTraceLogin) {
-        //有应用痕迹查询，调起服务
-        helper.runProc(
-            appQueryProcess,
-            join(appRootPath, platform === 'linux' ? './AppQuery/AppQuery' : './AppQuery/AppQuery.exe'),
-            join(appRootPath, config?.appQueryPath ?? './AppQuery')
-        );
-    }
-});
-
-
 //退出应用
-ipcMain.on('do-close', (_: IpcMainEvent) =>
+ipcMain.on('do-close', (_: IpcMainEvent) => {
     //mainWindow通知退出程序
-    exitApp(platform)
-);
+
+    if (startupWindow) {
+        startupWindow.webContents.send('closure');
+    }
+
+    exitApp(platform);
+});
 
 /**
  * 重启应用
@@ -406,6 +346,13 @@ ipcMain.on('maximize', (_: IpcMainEvent) => {
         mainWindow.isMaximized()
             ? mainWindow.unmaximize()
             : mainWindow.maximize();
+    }
+});
+
+//加密狗提示
+ipcMain.on('dog-warn', (_: IpcMainEvent) => {
+    if (mainWindow) {
+        mainWindow.webContents.send('dog-warn');
     }
 });
 
@@ -537,9 +484,9 @@ ipcMain.on('progress-clear', (_: IpcMainEvent, usb: number) =>
     fetchRecordWindow!.webContents.send('progress-clear', usb)
 );
 //获取当前USB序号的采集进度数据
-ipcMain.on('get-fetch-progress', (_: IpcMainEvent, usb: number) => {
-    fetchRecordWindow!.webContents.send('get-fetch-progress', usb);
-});
+ipcMain.on('get-fetch-progress', (_: IpcMainEvent, usb: number) =>
+    fetchRecordWindow!.webContents.send('get-fetch-progress', usb)
+);
 //获取当前USB序号最新一条进度消息
 ipcMain.on('get-last-progress', (_: IpcMainEvent, usb: number) =>
     fetchRecordWindow!.webContents.send('get-last-progress', usb)

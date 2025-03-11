@@ -7,12 +7,12 @@ import 'dayjs/locale/zh-cn';
 import { createHashHistory as createHistory } from 'history';
 import dva from 'dva';
 import immer from 'dva-immer';
+import server from '@/utils/tcp-server';
 // import reduxLogger from 'redux-logger';
 import messageBox from 'antd/lib/message';
 import notification from 'antd/lib/notification';
 import log from '@/utils/log';
 import { helper } from '@/utils/helper';
-import server from '@/utils/tcp-server';
 import { createRouter } from '@/router/default/create-router';
 import appSetModel from '@/model/default/app-set';
 import alartMessageModel from '@/model/default/alart-message';
@@ -73,31 +73,6 @@ const app = dva({
     namespacePrefixWarning: isDev
 });
 
-(async () => {
-    let nextTcpPort = tcpPort;
-    let nextOcrPort = ocrPort;
-    try {
-        [nextTcpPort, nextOcrPort] = await Promise.all([
-            helper.portStat(tcpPort),
-            helper.portStat(ocrPort ?? 65116)
-        ]);
-    } catch (error) {
-        console.warn(error);
-        nextTcpPort = tcpPort;
-        nextOcrPort = ocrPort ?? 65116;
-    } finally {
-        server.listen(nextTcpPort, () => {
-            console.log(`TCP服务已启动在端口${nextTcpPort}`);
-            ipcRenderer.send('run-service', nextTcpPort, nextOcrPort);
-            helper.writeNetJson(helper.APP_CWD, {
-                apiPort: httpPort,
-                servicePort: nextTcpPort,
-                ocrPort: nextOcrPort
-            });
-        });
-    }
-})();
-
 ipcRenderer.on('show-notification', (_: IpcRendererEvent,
     info: { message: string, description: string, type: string }) => {
     //显示notification消息
@@ -122,6 +97,31 @@ ipcRenderer.on('show-notification', (_: IpcRendererEvent,
             break;
     }
 });
+
+(async () => {
+    let nextTcpPort = tcpPort;
+    let nextOcrPort = ocrPort;
+    try {
+        [nextTcpPort, nextOcrPort] = await Promise.all([
+            helper.portStat(tcpPort),
+            helper.portStat(ocrPort ?? 65116)
+        ]);
+    } catch (error) {
+        console.warn(error);
+        nextTcpPort = tcpPort;
+        nextOcrPort = ocrPort ?? 65116;
+    } finally {
+        server.listen(nextTcpPort, () => {
+            console.log(`TCP服务已启动在端口${nextTcpPort}`);
+            ipcRenderer.send('run-service', nextTcpPort, nextOcrPort);
+            helper.writeNetJson(helper.APP_CWD, {
+                apiPort: httpPort,
+                servicePort: nextTcpPort,
+                ocrPort: nextOcrPort
+            });
+        });
+    }
+})();
 
 app.use(immer());
 app.use({

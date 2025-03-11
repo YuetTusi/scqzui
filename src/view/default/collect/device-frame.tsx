@@ -99,7 +99,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
                     </div>
                 }
                 image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        </Nothing>
+        </Nothing>;
     } else {
         return <>{
             deviceList.map((item, index) => {
