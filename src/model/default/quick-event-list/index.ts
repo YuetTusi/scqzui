@@ -26,6 +26,10 @@ interface QuickEventListState {
      */
     loading: boolean,
     /**
+     * 全部数据
+     */
+    allEventData: QuickEvent[],
+    /**
      * 选中的行key
      */
     selectedRowKeys: Array<string | number>
@@ -39,6 +43,7 @@ let model: Model = {
     namespace: 'quickEventList',
     state: {
         data: [],
+        allEventData: [],
         pageIndex: 1,
         pageSize: helper.PAGE_SIZE,
         total: 0,

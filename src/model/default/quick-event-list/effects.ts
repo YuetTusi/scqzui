@@ -45,6 +45,16 @@ export default {
             yield put({ type: 'setLoading', payload: false });
         }
     },
+    *all({ }: AnyAction, { call, put }: EffectsCommandMap) {
+        const db = getDb<QuickEvent>(TableName.QuickEvent);
+        try {
+            const data: QuickEvent[] = yield call([db, 'all'], { enable: { $ne: 0 } });
+            yield put({ type: 'setAllData', payload: data });
+        } catch (error) {
+            console.warn(error);
+            log.error(`查询快速点验记录失败 @model/default/quick-event-list/*query:${error.message}`);
+        }
+    },
     /**
      * 删除快速点验案件
      */

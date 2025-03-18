@@ -106,6 +106,18 @@ class FetchData {
      * 有线方式
      */
     wired?: boolean;
+    /**
+     * 是否开启AI图片识别
+     */
+    isAi?: boolean;
+    /**
+     * 规则时段起
+     */
+    ruleFrom?: number;
+    /**
+     * 规则时段止
+     */
+    ruleTo?: number;
 }
 
 export { FetchData };

@@ -36,6 +36,8 @@ import parseApp from '@/config/parse-app.yaml';
 import { Instruction } from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
+import { QuickEvent } from '@/schema/quick-event';
+import { QuickEventListState } from '@/model/default/quick-event-list';
 
 const { caseText, devText, fetchText, parseText } = helper.readConf()!;
 const { Option } = Select;
@@ -63,6 +65,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
     const dispatch = useDispatch();
     const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
+    const { allEventData } = useSelector<StateTree, QuickEventListState>((state) => state.quickEventList);
     const { types } = useSelector<StateTree, ExtractionState>((state) => state.extraction);
     const [formRef] = useForm<FormValue>();
     const currentCase = useRef<CaseInfo>(); //当前案件数据
@@ -122,6 +125,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     useEffect(() => {
         if (visible) {
             dispatch({ type: 'caseData/queryAllCaseData' });
+            dispatch({ type: 'quickEventList/all' });
         } else {
             dispatch({ type: 'extraction/setTypes', payload: [] });
         }
@@ -155,19 +159,62 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     };
 
     /**
+     * 快采案件转为深度案件
+     */
+    const eventToCase = (data: QuickEvent[]): CaseInfo[] => {
+        return data.map(item => {
+            return {
+                "m_strCaseName": item.eventName,
+                "spareName": "",
+                "m_strCasePath": item.eventPath,
+                "analysisApp": true,
+                "sdCard": true,
+                "hasReport": true,
+                "m_bIsAutoParse": true,
+                "useAiOcr": true,
+                "generateBcp": false,
+                "attachment": 0,
+                "isDel": false,
+                "m_Applist": [],
+                "tokenAppList": [],
+                "m_strCheckUnitName": "",
+                "officerName": "",
+                "securityCaseType": "",
+                "isAi": item.isAi,
+                "isPhotoAnalysis": false,
+                "ruleFrom": item.ruleFrom,
+                "ruleTo": item.ruleTo,
+                "_id": item._id,
+                "createdAt": item.createdAt,
+                "updatedAt": item.updatedAt,
+                "officerNo": "",
+                "securityCaseNo": "",
+                "securityCaseName": '',
+                "handleCaseNo": "",
+                "handleCaseType": "",
+                "handleCaseName": ''
+            } as CaseInfo
+        });
+    };
+
+    /**
      * 绑定案件下拉数据
      */
-    const bindCaseSelect = () => allCaseData.map((opt: CaseInfo) => {
-        let pos = opt.m_strCaseName.lastIndexOf('\\');
-        let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
-        return <Option
-            value={JSON.stringify(opt)}
-            key={opt._id}>
-            {`${name}（${helper
-                .parseDate(tick, 'YYYYMMDDHHmmss')
-                .format('YYYY-M-D H:mm:ss')}）`}
-        </Option>;
-    });
+    const bindCaseSelect = () => {
+
+        const all = eventToCase(allEventData).concat(allCaseData);
+        return all.map((opt: any) => {
+            let pos = opt.m_strCaseName.lastIndexOf('\\');
+            let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
+            return <Option
+                value={JSON.stringify(opt)}
+                key={opt._id}>
+                {`${name}（${helper
+                    .parseDate(tick, 'YYYYMMDDHHmmss')
+                    .format('YYYY-M-D H:mm:ss')}）`}
+            </Option>;
+        })
+    };
 
     /**
      * 绑定提取方式下拉
@@ -185,7 +232,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
      * 案件下拉Change
      */
     const caseChange = (value: string, _: JSX.Element | JSX.Element[]) => {
-
         currentCase.current = JSON.parse(value) as CaseInfo;
     };
 
@@ -225,6 +271,9 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.hasReport = currentCase.current?.hasReport ?? false;
             entity.isAuto = currentCase.current?.m_bIsAutoParse;
             entity.unitName = currentCase.current?.m_strCheckUnitName;
+            entity.isAi = currentCase.current?.isAi ?? false;
+            entity.ruleFrom = currentCase.current?.ruleFrom ?? 0;
+            entity.ruleTo = currentCase.current?.ruleTo ?? 8;
             entity.mobileName = `${values.phoneName}_${helper.timestamp(device?.usb)}`;
             entity.mobileNo = values.deviceNumber ?? '';
             entity.mobileHolder = values.user;

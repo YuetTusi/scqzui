@@ -407,7 +407,10 @@ export default {
                 wired: fetchData.wired ?? false,
                 cloudTimeout: fetchData.cloudTimeout ?? helper.CLOUD_TIMEOUT,
                 cloudTimespan: fetchData.cloudTimespan ?? helper.CLOUD_TIMESPAN,
-                isAlive: fetchData.isAlive ?? helper.IS_ALIVE
+                isAlive: fetchData.isAlive ?? helper.IS_ALIVE,
+                isAi: fetchData.isAi,
+                ruleFrom: fetchData.ruleFrom,
+                ruleTo: fetchData.ruleTo
             }
         });
 
