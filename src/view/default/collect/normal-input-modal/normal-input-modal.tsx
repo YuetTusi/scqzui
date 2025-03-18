@@ -460,7 +460,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                         </Col>
                     </Auth>
                 </Row>
-                <Auth deny={!isWired}>
+                {/* <Auth deny={!isWired}>
                     <Row>
                         <Col span={12}>
                             <Item
@@ -475,7 +475,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                         </Col>
                         <Col span={12} />
                     </Row>
-                </Auth>
+                </Auth> */}
             </Form>
         </div>;
     };

@@ -385,6 +385,8 @@ export default {
             msg: {
                 usb: deviceData.usb,
                 mode: fetchData.mode,
+                caseId: deviceData.caseId ?? '',
+                deviceId: deviceData._id ?? '',
                 caseName: fetchData.caseName,
                 casePath: fetchData.casePath,
                 appList: fetchData.appList,
@@ -412,6 +414,8 @@ export default {
         logger.info(`开始采集(StartFetch)：${JSON.stringify({
             usb: deviceData.usb,
             mode: fetchData.mode,
+            caseId: deviceData.caseId ?? '',
+            deviceId: deviceData._id ?? '',
             caseName: fetchData.caseName,
             casePath: fetchData.casePath,
             appList: fetchData.appList,
