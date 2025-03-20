@@ -385,8 +385,7 @@ export default {
             msg: {
                 usb: deviceData.usb,
                 mode: fetchData.mode,
-                caseId: deviceData.caseId ?? '',
-                deviceId: deviceData._id ?? '',
+                caseId: fetchData.caseId ?? '',
                 caseName: fetchData.caseName,
                 casePath: fetchData.casePath,
                 appList: fetchData.appList,
@@ -417,7 +416,7 @@ export default {
         logger.info(`开始采集(StartFetch)：${JSON.stringify({
             usb: deviceData.usb,
             mode: fetchData.mode,
-            caseId: deviceData.caseId ?? '',
+            caseId: fetchData.caseId ?? '',
             deviceId: deviceData._id ?? '',
             caseName: fetchData.caseName,
             casePath: fetchData.casePath,
@@ -439,7 +438,10 @@ export default {
             wired: fetchData.wired ?? false,
             cloudTimeout: fetchData.cloudTimeout ?? helper.CLOUD_TIMEOUT,
             cloudTimespan: fetchData.cloudTimespan ?? helper.CLOUD_TIMESPAN,
-            isAlive: fetchData.isAlive ?? helper.IS_ALIVE
+            isAlive: fetchData.isAlive ?? helper.IS_ALIVE,
+            isAi: fetchData.isAi,
+            ruleFrom: fetchData.ruleFrom,
+            ruleTo: fetchData.ruleTo
         })}`);
     },
     /**
@@ -448,7 +450,8 @@ export default {
      */
     *startParse({ payload }: AnyAction, { all, select, call, fork, put }: EffectsCommandMap) {
 
-        const db = getDb<CaseInfo>(TableName.Cases);
+        const caseDb = getDb<CaseInfo>(TableName.Cases);
+        const quickEventDb = getDb<CaseInfo>(TableName.QuickEvent);
         const device: DeviceStoreState = yield select((state: StateTree) => state.device);
         const current = device.deviceList.find((item) => item?.usb == payload);
 
@@ -457,7 +460,7 @@ export default {
                 ? join(cwd, './data/predict.json')
                 : join(cwd, './resources/config/predict.json'); //AI配置模版所在路径
             const [caseData, appConfig, aiTemp]: [CaseInfo, AppJson, PredictJson] = yield all([
-                call([db, 'findOne'], { _id: current?.caseId }),
+                call([caseDb, 'findOne'], { _id: current?.caseId }),
                 call([helper, 'readAppJson']),
                 call([helper, 'readJSONFile'], aiTempAt)
             ]);

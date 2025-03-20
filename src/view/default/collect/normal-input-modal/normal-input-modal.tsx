@@ -11,7 +11,6 @@ import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Button from 'antd/lib/button';
-import Checkbox from 'antd/lib/checkbox';
 import AutoComplete from 'antd/lib/auto-complete';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
@@ -100,23 +99,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                         extraction: types.length > 0 ? types[0].value : ''
                     });
                     currentCase.current = allCaseData[0];
-
-                    setSelectedApps([
-                        {
-                            m_strID: "1030036",
-                            m_strPktlist: [
-                                'com.tencent.mm',
-                                'com.excelliance.dualaid',
-                                'com.huihu.multplugin01',
-                                'com.huihu.multplugin02',
-                                'com.huihu.multplugin03',
-                                'com.huihu.multplugin04',
-                                'com.huihu.multplugin05',
-                                'com.tencent.mm_cm',
-                                'com.lbe.parallel'
-                            ]
-                        }
-                    ]);
                 }
             }
         })();
