@@ -56,7 +56,6 @@ export default {
             }
             yield fork([helper, 'writeCaseJson'], casePath, entity);
             yield fork([helper, 'writeJSONfile'], join(casePath, 'predict.json'), {
-                config: aiSwitch.data,
                 similarity: aiSwitch.similarity,
                 ocr: aiSwitch.ocr
             }); //写ai配置JSON

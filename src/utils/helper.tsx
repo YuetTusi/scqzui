@@ -929,34 +929,6 @@ const helper = {
     }
   },
   /**
-   * 以模版为准合并AI配置
-   * 当模版中存在某配置项而案件下的配置不存在时，设为true；反之忽略
-   * @param temp 模版predict.json
-   * @param caseAi 案件AI配置
-   */
-  combinePredict(temp: PredictJson, caseAi: PredictJson): PredictJson {
-    return {
-      ocr: caseAi.ocr ?? false,
-      similarity: caseAi.similarity ?? 0,
-      config: temp.config.reduce((total: Predict[], current: Predict) => {
-        const has = (caseAi.config ?? []).find((i) => i.type === current.type);
-        if (has) {
-          //案件下存在配置项，以案件为谁
-          total.push({
-            ...current,
-            use: has.use,
-          });
-        } else {
-          total.push({
-            ...current,
-            use: true,
-          });
-        }
-        return total;
-      }, []),
-    };
-  },
-  /**
    * 写report.json文件
   //  * @param reportType 值
   //  * @param hideCad 隐藏CAD节点

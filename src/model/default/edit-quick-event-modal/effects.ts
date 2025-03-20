@@ -60,7 +60,6 @@ export default {
             const temp: PredictJson = yield call([helper, 'readJSONFile'], tempAt);
             yield fork([helper, 'writeJSONfile'], join(targetPath, 'predict.json'), {
                 ...temp,
-                config: aiSwitch.data,
                 similarity: aiSwitch.similarity,
                 ocr: aiSwitch.ocr
             }); //写ai配置JSON

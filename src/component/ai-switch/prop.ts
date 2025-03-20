@@ -30,11 +30,7 @@ export interface AiSwitchProp {
     /**
      * 案件路径
      */
-    casePath?: string,
-    /**
-     * 列数
-     */
-    columnCount: number
+    casePath?: string
 }
 
 export interface PredictJson {

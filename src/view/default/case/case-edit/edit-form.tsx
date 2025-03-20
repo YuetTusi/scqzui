@@ -402,8 +402,7 @@ const EditForm: FC<FormProp> = ({
                 <Row>
                     <Col span={2} />
                     <Col span={20}>
-                        <AiSwitch
-                            columnCount={6} />
+                        <AiSwitch />
                     </Col>
                     <Col span={2} />
                 </Row>

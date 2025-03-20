@@ -96,11 +96,11 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
             await helper.writeCaseJson(caseJsonPath, caseData);
         }
 
-        let aiConfig: PredictJson = { similarity: 0, ocr: false, config: [] };
+        let aiTypes: PredictJson = aiTemp;
         const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
         const exist = await helper.existFile(predictAt);
         if (exist) {
-            aiConfig = await helper.readJSONFile(predictAt);
+            aiTypes = await helper.readJSONFile(predictAt);
         }
 
         send(SocketType.Parse, {
@@ -119,7 +119,7 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
                 hasReport: caseData?.hasReport ?? false,
                 isDel: caseData?.isDel ?? false,
                 isAi: caseData?.isAi ?? false,
-                aiTypes: helper.combinePredict(aiTemp, aiConfig),
+                aiTypes,
                 useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                 useKeyword: appConfig?.useKeyword ?? false,
                 useDocVerify: [

@@ -1,14 +1,9 @@
 import { Model } from 'dva';
-import { Predict } from '@/component/ai-switch';
 import reducers from './reducers';
 import effects from './effects';
 
 
 interface AiSwitchState {
-    /**
-     * AI配置
-     */
-    data: Predict[],
     /**
      * 相似度值(0~100)
      */
@@ -32,7 +27,6 @@ let model: Model = {
 
     namespace: 'aiSwitch',
     state: {
-        data: [],
         similarity: 0,
         ocr: false,
         disableOcr: false
