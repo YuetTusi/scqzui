@@ -11,6 +11,7 @@ import DoubleLeftOutlined from '@ant-design/icons/DoubleLeftOutlined';
 import DoubleRightOutlined from '@ant-design/icons/DoubleRightOutlined';
 import message from 'antd/lib/message';
 import Button from 'antd/lib/button';
+import Modal from 'antd/lib/modal';
 import { useDstUnit, useUnit } from '@/hook/unit';
 import { TipType } from '@/schema/tip-type';
 import { FetchState, ParseState } from '@/schema/device-state';
@@ -72,7 +73,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     //     for (let i = 0; i < 10; i++) {
     //         devices.push({
     //             ...{
-    //                 "fetchState": FetchState.Connected,
+    //                 "fetchState": FetchState.Fetching,
     //                 "manufacturer": "Mi",
     //                 "model": "TAS-AL00",
     //                 "phoneInfo": [{
@@ -366,6 +367,22 @@ const Collect: FC<CollectProp> = ({ }) => {
                 case TipType.UMagicCode:
                     //联通验证码弹框
                     setUMagicCodeModalVisible(true);
+                    break;
+                case TipType.Lead:
+                    Modal.confirm({
+                        onOk() {
+                            send(SocketType.Fetch, {
+                                type: SocketType.Fetch,
+                                cmd: CommandType.LeadReply,
+                                msg: {}
+                            });
+                        },
+                        okText: '确定',
+                        cancelText: '取消',
+                        title: data.tipTitle ?? '提示',
+                        content: data.tipContent ?? '',
+                        centered: true
+                    });
                     break;
                 default:
                     console.warn('未知TipType', data.tipType);

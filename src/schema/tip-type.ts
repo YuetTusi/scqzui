@@ -27,7 +27,11 @@ enum TipType {
     /**
      * 联通验证码
      */
-    UMagicCode = 'umagic_code'
+    UMagicCode = 'umagic_code',
+    /**
+     * 文字引导
+     */
+    Lead = 'lead'
 }
 
 /**

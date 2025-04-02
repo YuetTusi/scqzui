@@ -33,6 +33,7 @@ const getClassNameByState = (device: DeviceType) => {
         case TipType.CloudCode:
         case TipType.UMagicCode:
         case TipType.ApplePassword:
+        case TipType.Lead:
             name += ' flash';
             break;
     }
@@ -53,6 +54,7 @@ const getTipTxt = (device: DeviceType) => {
             txt = `操作确认 终端${usb ?? ''}`;
             break;
         case TipType.Normal:
+        case TipType.Lead:
             txt = `操作提示 终端${usb ?? ''}`;
             break;
         case TipType.ApplePassword:

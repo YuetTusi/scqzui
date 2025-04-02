@@ -71,6 +71,10 @@ enum CommandType {
      */
     UMagicCodeReply = 'umagic_code_reply',
     /**
+     * 反馈文字引导结果（Fetch）
+     */
+    LeadReply = 'lead_reply',
+    /**
      * 清除消息（Fetch）
      */
     TipClear = 'tip_clear',

@@ -107,8 +107,11 @@ export function deviceChange({ msg }: Command<{
         ipcRenderer.send('show-notice', {
             message: `终端 #${usb}「${manufacturer}」${fetchText ?? '取证'}结束`
         });
-        //#开始解析
-        dispatch({ type: 'device/startParse', payload: usb });
+
+        if (fetchState === FetchState.Finished) {
+            //#开始解析
+            dispatch({ type: 'device/startParse', payload: usb });
+        }
     }
     dispatch({
         type: 'device/updateProp', payload: {
@@ -316,6 +319,7 @@ export async function parseEnd({ msg }: Command<ParseEnd>, dispatch: Dispatch<an
                 Modal.error({
                     title: `${parseText ?? '解析'}失败`,
                     content: errmsg,
+
                     okText: '确定'
                 });
             }
