@@ -143,6 +143,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
                 entity._id = id;
                 entity.m_strCaseName = values.m_strCaseName;
                 entity.spareName = values.spareName;
+                entity.wired = values.wired;
                 entity.m_strCasePath = values.m_strCasePath;
                 entity.m_strCheckUnitName = values.m_strCheckUnitName;
                 entity.analysisApp = analysisApp[0];

@@ -7,10 +7,6 @@ export default {
         state.data = payload;
         return state;
     },
-    setAllData(state: QuickEventListState, { payload }: AnyAction) {
-        state.allEventData = payload;
-        return state;
-    },
     setPage(state: QuickEventListState, { payload }: AnyAction) {
         state.pageIndex = payload.pageIndex;
         state.pageSize = payload.pageSize

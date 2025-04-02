@@ -10,6 +10,7 @@ import CloudSyncOutlined from '@ant-design/icons/CloudSyncOutlined'
 import SelectOutlined from '@ant-design/icons/SelectOutlined'
 import Button from 'antd/lib/button';
 import Checkbox from 'antd/lib/checkbox';
+import Switch from 'antd/lib/switch';
 import Form, { RuleObject } from 'antd/lib/form';
 import Empty from 'antd/lib/empty';
 import Input, { InputRef } from 'antd/lib/input';
@@ -224,8 +225,10 @@ const AddForm: FC<FormProp> = ({
                 </Col>
             </Row>
             <Row>
-                <Col span={24}>
-                    <Item label="选择App">
+                <Col span={12}>
+                    <Item
+                        label="选择App"
+                        labelCol={{ span: 8 }}>
                         <Group>
                             <Button
                                 onClick={() => setParseAppSelectModalVisible(true)}
@@ -240,6 +243,14 @@ const AddForm: FC<FormProp> = ({
                                 <span>{`Token云${fetchText ?? '取证'}App（${tokenAppList.length}）`}</span>
                             </Button>
                         </Group>
+                    </Item>
+                </Col>
+                <Col span={12}>
+                    <Item
+                        name="wired"
+                        label="有线快采"
+                        labelCol={{ span: 6 }}>
+                        <Switch size="small" />
                     </Item>
                 </Col>
             </Row>

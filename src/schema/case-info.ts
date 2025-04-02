@@ -21,6 +21,10 @@ class CaseInfo extends BaseEntity {
      */
     public m_strCasePath: string;
     /**
+     * 是否为有线快采案件
+     */
+    public wired: boolean;
+    /**
      * 是否解析应用
      */
     public analysisApp: boolean;
@@ -119,6 +123,7 @@ class CaseInfo extends BaseEntity {
         this.m_strCaseName = props.m_strCaseName ?? '';
         this.spareName = props.spareName ?? '';
         this.m_strCasePath = props.m_strCasePath ?? '';
+        this.wired = props.wired ?? false;
         this.analysisApp = props.analysisApp ?? true;
         this.sdCard = props.sdCard ?? false;
         this.hasReport = props.hasReport ?? false;

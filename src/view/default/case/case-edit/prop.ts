@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction } from "react";
 import { FormInstance } from "antd/lib/form";
 import { BaseApp } from "@/schema/base-app";
 import CaseInfo from "@/schema/case-info";
-import { AttachmentType } from "@/schema/bcp-entity";
 
 interface CaseEditProp { }
 

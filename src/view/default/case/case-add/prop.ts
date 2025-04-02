@@ -65,6 +65,10 @@ export interface FormValue {
      */
     m_strCasePath: string;
     /**
+     * 有线快采
+     */
+    wired: boolean;
+    /**
      * BCP附件
      */
     attachment: AttachmentType;

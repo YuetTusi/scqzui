@@ -44,6 +44,15 @@ export function getCaseColumns(dispatch: Dispatch, actionHandle: (type: ColumnAc
             key: 'spareName'
         },
         {
+            title: '有线快采',
+            dataIndex: 'wired',
+            key: 'wired',
+            width: '70px',
+            align: 'center',
+            render: (val: boolean) =>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
+        },
+        {
             title: '解析应用',
             dataIndex: 'analysisApp',
             key: 'analysisApp',

@@ -105,6 +105,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
                     ''
                 )}_${helper.timestamp()}`;
                 entity.m_strCasePath = values.m_strCasePath;
+                entity.wired = values.wired;
                 entity.spareName = '';
                 entity.m_strCheckUnitName = values.checkUnitName;
                 entity.analysisApp = analysisApp[0];

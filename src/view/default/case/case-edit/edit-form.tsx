@@ -12,6 +12,7 @@ import Button from 'antd/lib/button';
 import Form, { RuleObject } from 'antd/lib/form';
 import Radio from 'antd/lib/radio';
 import Select from 'antd/lib/select';
+import Switch from 'antd/lib/switch';
 import Input from 'antd/lib/input';
 import InputNumber from 'antd/lib/input-number';
 import Checkbox from 'antd/lib/checkbox';
@@ -192,8 +193,10 @@ const EditForm: FC<FormProp> = ({
                 </Col>
             </Row>
             <Row>
-                <Col span={24}>
-                    <Item label="选择App">
+                <Col span={12}>
+                    <Item
+                        label="选择App"
+                        labelCol={{ span: 8 }}>
                         <Group>
                             <Button
                                 style={{ width: 200 }}
@@ -210,6 +213,15 @@ const EditForm: FC<FormProp> = ({
                                 <span>{`Token云取证App（${tokenAppList.length}）`}</span>
                             </Button>
                         </Group>
+                    </Item>
+                </Col>
+                <Col span={12}>
+                    <Item
+                        name="wired"
+                        label="有线快采"
+                        valuePropName="checked"
+                        labelCol={{ span: 6 }}>
+                        <Switch size="small" />
                     </Item>
                 </Col>
             </Row>

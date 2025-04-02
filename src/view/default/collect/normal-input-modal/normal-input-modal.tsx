@@ -1,4 +1,5 @@
 import round from 'lodash/round';
+import { faBolt } from '@fortawesome/free-solid-svg-icons';
 import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -35,8 +36,7 @@ import parseApp from '@/config/parse-app.yaml';
 import { Instruction } from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
-import { QuickEvent } from '@/schema/quick-event';
-import { QuickEventListState } from '@/model/default/quick-event-list';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const { caseText, devText, fetchText, parseText } = helper.readConf()!;
 const { Option } = Select;
@@ -64,7 +64,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
     const dispatch = useDispatch();
     const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
-    const { allEventData } = useSelector<StateTree, QuickEventListState>((state) => state.quickEventList);
     const { types } = useSelector<StateTree, ExtractionState>((state) => state.extraction);
     const [formRef] = useForm<FormValue>();
     const currentCase = useRef<CaseInfo>(); //当前案件数据
@@ -107,7 +106,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     useEffect(() => {
         if (visible) {
             dispatch({ type: 'caseData/queryAllCaseData' });
-            dispatch({ type: 'quickEventList/all' });
         } else {
             dispatch({ type: 'extraction/setTypes', payload: [] });
         }
@@ -141,62 +139,21 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     };
 
     /**
-     * 快采案件转为深度案件
-     */
-    const eventToCase = (data: QuickEvent[]): CaseInfo[] => {
-        return data.map(item => {
-            return {
-                "m_strCaseName": item.eventName,
-                "spareName": "",
-                "m_strCasePath": item.eventPath,
-                "analysisApp": true,
-                "sdCard": true,
-                "hasReport": true,
-                "m_bIsAutoParse": true,
-                "useAiOcr": true,
-                "generateBcp": false,
-                "attachment": 0,
-                "isDel": false,
-                "m_Applist": [],
-                "tokenAppList": [],
-                "m_strCheckUnitName": "",
-                "officerName": "",
-                "securityCaseType": "",
-                "isAi": item.isAi,
-                "isPhotoAnalysis": false,
-                "ruleFrom": item.ruleFrom,
-                "ruleTo": item.ruleTo,
-                "_id": item._id,
-                "createdAt": item.createdAt,
-                "updatedAt": item.updatedAt,
-                "officerNo": "",
-                "securityCaseNo": "",
-                "securityCaseName": '',
-                "handleCaseNo": "",
-                "handleCaseType": "",
-                "handleCaseName": ''
-            } as CaseInfo
-        });
-    };
-
-    /**
      * 绑定案件下拉数据
      */
-    const bindCaseSelect = () => {
-
-        const all = eventToCase(allEventData).concat(allCaseData);
-        return all.map((opt: any) => {
-            let pos = opt.m_strCaseName.lastIndexOf('\\');
-            let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
-            return <Option
-                value={JSON.stringify(opt)}
-                key={opt._id}>
-                {`${name}（${helper
-                    .parseDate(tick, 'YYYYMMDDHHmmss')
-                    .format('YYYY-M-D H:mm:ss')}）`}
-            </Option>;
-        })
-    };
+    const bindCaseSelect = () => allCaseData.map((opt: any) => {
+        let pos = opt.m_strCaseName.lastIndexOf('\\');
+        let [name, tick] = opt.m_strCaseName.substring(pos + 1).split('_');
+        return <Option
+            value={JSON.stringify(opt)}
+            key={opt._id}
+            style={{ color: opt.wired ? '#f9ca24' : '#ffffffd9' }}>
+            {opt.wired ? <FontAwesomeIcon icon={faBolt} style={{ marginRight: '4px' }} /> : null}
+            {`${name}（${helper
+                .parseDate(tick, 'YYYYMMDDHHmmss')
+                .format('YYYY-M-D H:mm:ss')}）`}
+        </Option>;
+    });
 
     /**
      * 绑定提取方式下拉
@@ -215,6 +172,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
      */
     const caseChange = (value: string, _: JSX.Element | JSX.Element[]) => {
         currentCase.current = JSON.parse(value) as CaseInfo;
+        formRef.validateFields(['extraction']);
     };
 
     /**
@@ -479,7 +437,23 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                     <Auth deny={!isExtraction}>
                         <Col span={12}>
                             <Item
-                                rules={[{ required: true, message: '请选择提取方式' }]}
+                                rules={[{
+                                    required: true,
+                                    message: '请选择提取方式'
+                                }, ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        try {
+                                            const caseData: CaseInfo = JSON.parse(getFieldValue('case'));
+                                            if (value === 'Apk快速采集' && caseData.wired === undefined || caseData.wired === false) {
+                                                return Promise.reject('请选择有线快采案件');
+                                            } else {
+                                                return Promise.resolve();
+                                            }
+                                        } catch (error) {
+                                            return Promise.reject(error);
+                                        }
+                                    },
+                                })]}
                                 labelCol={{ span: 6 }}
                                 wrapperCol={{ span: 14 }}
                                 name="extraction"
@@ -508,7 +482,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                     </Row>
                 </Auth> */}
             </Form>
-        </div>;
+        </div >;
     };
 
     return <>
