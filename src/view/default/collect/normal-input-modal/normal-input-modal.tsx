@@ -91,14 +91,14 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                 const extraction = await helper.isExtraction();
                 setIsExtraction(extraction);
 
-                if (extraction) {
-                    formRef.setFieldsValue({
-                        case: allCaseData.length > 0 ? JSON.stringify(allCaseData[0]) : '',
-                        user: historyDeviceHolder.current.length > 0 ? historyDeviceHolder.current[0] : '',
-                        extraction: types.length > 0 ? types[0].value : ''
-                    });
-                    currentCase.current = allCaseData[0];
-                }
+                // if (extraction) {
+                //     formRef.setFieldsValue({
+                //         case: allCaseData.length > 0 ? JSON.stringify(allCaseData[0]) : '',
+                //         user: historyDeviceHolder.current.length > 0 ? historyDeviceHolder.current[0] : '',
+                //         extraction: types.length > 0 ? types[0].value : ''
+                //     });
+                //     currentCase.current = allCaseData[0];
+                // }
             }
         })();
     }, [visible, types]);
@@ -106,6 +106,15 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     useEffect(() => {
         if (visible) {
             dispatch({ type: 'caseData/queryAllCaseData' });
+            //? mock
+            // dispatch({
+            //     type: 'extraction/setTypes', payload: [
+            //         { name: 'Apk快速采集', value: 'Apk快速采集' },
+            //         {
+            //             name: 'Note', value: 'Note'
+            //         },
+            //     ]
+            // });
         } else {
             dispatch({ type: 'extraction/setTypes', payload: [] });
         }
@@ -442,15 +451,20 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                     message: '请选择提取方式'
                                 }, ({ getFieldValue }) => ({
                                     validator(_, value) {
-                                        try {
-                                            const caseData: CaseInfo = JSON.parse(getFieldValue('case'));
-                                            if (value === 'Apk快速采集' && caseData.wired === undefined || caseData.wired === false) {
-                                                return Promise.reject('请选择有线快采案件');
-                                            } else {
-                                                return Promise.resolve();
+                                        const caseValue = getFieldValue('case');
+                                        if (helper.isNullOrUndefinedOrEmptyString(caseValue)) {
+                                            return Promise.reject('请选择案件');
+                                        } else {
+                                            try {
+                                                const caseData: CaseInfo = JSON.parse(caseValue);
+                                                if (value === 'Apk快速采集' && (caseData.wired === undefined || caseData.wired === false)) {
+                                                    return Promise.reject('请选择有线快采案件');
+                                                } else {
+                                                    return Promise.resolve();
+                                                }
+                                            } catch (error) {
+                                                return Promise.reject('提取方式数据有误');
                                             }
-                                        } catch (error) {
-                                            return Promise.reject(error);
                                         }
                                     },
                                 })]}
