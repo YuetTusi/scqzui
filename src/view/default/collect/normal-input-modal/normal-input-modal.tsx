@@ -109,7 +109,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             //? mock
             // dispatch({
             //     type: 'extraction/setTypes', payload: [
-            //         { name: 'Apk快速采集', value: 'Apk快速采集' },
+            //         { name: 'Apk快速采集', value: 0 },
             //         {
             //             name: 'Note', value: 'Note'
             //         },
@@ -451,13 +451,14 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                     message: '请选择提取方式'
                                 }, ({ getFieldValue }) => ({
                                     validator(_, value) {
+                                        const ext = types.find(i => i.value === value);
                                         const caseValue = getFieldValue('case');
                                         if (helper.isNullOrUndefinedOrEmptyString(caseValue)) {
                                             return Promise.reject('请选择案件');
                                         } else {
                                             try {
                                                 const caseData: CaseInfo = JSON.parse(caseValue);
-                                                if (value === 'Apk快速采集' && (caseData.wired === undefined || caseData.wired === false)) {
+                                                if (ext?.name === 'Apk快速采集' && (caseData.wired === undefined || caseData.wired === false)) {
                                                     return Promise.reject('请选择有线快采案件');
                                                 } else {
                                                     return Promise.resolve();
@@ -472,7 +473,8 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                 wrapperCol={{ span: 14 }}
                                 name="extraction"
                                 label="提取方式">
-                                <Select style={{ width: '100%' }}>
+                                <Select
+                                    style={{ width: '100%' }}>
                                     {bindExtractionSelect()}
                                 </Select>
                             </Item>

@@ -277,10 +277,18 @@ function api(webContents: WebContents) {
 
     //返回案件下predict.json配置
     router.get<{ id: string }>('/predict/:id', async (req, res) => {
+        const caseDb = getDb<CaseInfo>(TableName.Cases);
         const eventDb = getDb<QuickEvent>(TableName.QuickEvent);
         try {
-            const data = await eventDb.findOne({ _id: req.params.id });
-            const predictAt = join(data.eventPath, data.eventName, 'predict.json');
+            const [caseData, eventData] = await Promise.all([
+                caseDb.findOne({ _id: req.params.id }),
+                eventDb.findOne({ _id: req.params.id })
+            ]);
+
+            const predictAt = caseData === null
+                ? join(eventData.eventPath, eventData.eventName, 'predict.json')
+                : join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json')
+
             const exist = await helper.existFile(predictAt);
             if (exist) {
                 const ai = await helper.readJSONFile(predictAt);
