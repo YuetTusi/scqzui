@@ -101,7 +101,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                 // }
             }
         })();
-    }, [visible, types]);
+    }, [visible]);
 
     useEffect(() => {
         if (visible) {
@@ -181,7 +181,13 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
      */
     const caseChange = (value: string, _: JSX.Element | JSX.Element[]) => {
         currentCase.current = JSON.parse(value) as CaseInfo;
-        formRef.validateFields(['extraction']);
+    };
+
+    /**
+     * 提取方式下拉Change
+     */
+    const extractionChange = (value: string, _: JSX.Element | JSX.Element[]) => {
+        formRef.validateFields(['case']);
     };
 
     /**
@@ -293,7 +299,27 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                             {
                                 required: true,
                                 message: `请选择${caseText ?? '案件'}`
-                            }
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!isExtraction) {
+                                        return Promise.resolve();
+                                    }
+                                    if (value === undefined) {
+                                        return Promise.resolve();
+                                    }
+                                    const currentCase: CaseInfo = JSON.parse(value);
+                                    const extractionValue = getFieldValue('extraction');
+                                    const extraction = types.find(i => i.value == extractionValue);
+                                    if (currentCase.wired) {
+                                        return extraction?.name === 'Apk快速采集'
+                                            ? Promise.resolve()
+                                            : Promise.reject(new Error(`有线快采${caseText ?? '案件'}请选择「Apk快速采集」`));
+                                    } else {
+                                        return Promise.resolve();
+                                    }
+                                },
+                            })
                         ]}
                             name="case"
                             label={`${caseText ?? '案件'}名称`}>
@@ -449,31 +475,13 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                                 rules={[{
                                     required: true,
                                     message: '请选择提取方式'
-                                }, ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        const ext = types.find(i => i.value === value);
-                                        const caseValue = getFieldValue('case');
-                                        if (helper.isNullOrUndefinedOrEmptyString(caseValue)) {
-                                            return Promise.reject('请选择案件');
-                                        } else {
-                                            try {
-                                                const caseData: CaseInfo = JSON.parse(caseValue);
-                                                if (ext?.name === 'Apk快速采集' && (caseData.wired === undefined || caseData.wired === false)) {
-                                                    return Promise.reject('请选择有线快采案件');
-                                                } else {
-                                                    return Promise.resolve();
-                                                }
-                                            } catch (error) {
-                                                return Promise.reject('提取方式数据有误');
-                                            }
-                                        }
-                                    },
-                                })]}
+                                }]}
                                 labelCol={{ span: 6 }}
                                 wrapperCol={{ span: 14 }}
                                 name="extraction"
                                 label="提取方式">
                                 <Select
+                                    onChange={extractionChange}
                                     style={{ width: '100%' }}>
                                     {bindExtractionSelect()}
                                 </Select>
