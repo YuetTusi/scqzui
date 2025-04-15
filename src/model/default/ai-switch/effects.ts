@@ -2,7 +2,7 @@ import { join } from 'path';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import {
-    Predict, PredictComp, PredictJson
+    Predict, PredictJson
 } from '@/component/ai-switch/prop';
 import { helper } from '@/utils/helper';
 
@@ -41,10 +41,10 @@ export default {
                     yield put({ type: 'setOcr', payload: next.ocr });
                 } else {
                     //不存在，读取模版
-                    const next: PredictComp = yield call([helper, 'readJSONFile'], tempAt);
-                    yield put({ type: 'setData', payload: (next as { config: Predict[] }).config });
-                    yield put({ type: 'setSimilarity', payload: (next as { similarity: number }).similarity });
-                    yield put({ type: 'setOcr', payload: (next as { ocr: boolean }).ocr });
+                    const next: PredictJson = yield call([helper, 'readJSONFile'], tempAt);
+                    yield put({ type: 'setData', payload: next.config });
+                    yield put({ type: 'setSimilarity', payload: next.similarity });
+                    yield put({ type: 'setOcr', payload: next.ocr });
                 }
             }
         } catch (error) {
