@@ -11,7 +11,12 @@ import { helper } from "@/utils/helper";
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { TableName } from '@/schema/table-name';
 import { CaseInfo } from '@/schema/case-info';
+import { PredictJson } from '@/component/ai-switch';
 import { AiSwitchState } from '../ai-switch';
+
+const predictTempAt = helper.IS_DEV
+    ? join(helper.APP_CWD, './data/predict.json')
+    : join(helper.APP_CWD, './resources/config/predict.json'); //模版路径
 
 export default {
 
@@ -54,8 +59,10 @@ export default {
                 //案件路径不存在，创建之
                 mkdirSync(casePath);
             }
+            const predictTemp: PredictJson = yield call([helper, 'readJSONFile'], predictTempAt);
             yield fork([helper, 'writeCaseJson'], casePath, entity);
             yield fork([helper, 'writeJSONfile'], join(casePath, 'predict.json'), {
+                ...predictTemp,
                 similarity: aiSwitch.similarity,
                 ocr: aiSwitch.ocr
             }); //写ai配置JSON

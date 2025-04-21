@@ -1,11 +1,8 @@
 import { join } from 'path';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
-import {
-    Predict, PredictJson
-} from '@/component/ai-switch/prop';
 import { helper } from '@/utils/helper';
-
+import { PredictJson } from '@/component/ai-switch';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
@@ -26,9 +23,9 @@ export default {
 
             if (casePath === undefined) {
                 //无案件目录，是新增，读模版
-                yield put({ type: 'setData', payload: (temp as { config: Predict[] }).config });
-                yield put({ type: 'setSimilarity', payload: (temp as { similarity: number }).similarity });
-                yield put({ type: 'setOcr', payload: (temp as { ocr: boolean }).ocr });
+                yield put({ type: 'setData', payload: temp.config });
+                yield put({ type: 'setSimilarity', payload: temp.similarity });
+                yield put({ type: 'setOcr', payload: temp.ocr });
             } else {
                 const aiConfigAt = join(casePath, './predict.json'); //当前案件AI路径
                 const exist: boolean = yield call([helper, 'existFile'], aiConfigAt);

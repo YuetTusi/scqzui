@@ -10,7 +10,7 @@ import { useDestroy } from '@/hook';
 import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
 import { AiSwitchState } from '@/model/default/ai-switch';
-import { Predict, AiSwitchProp, PredictComp } from './prop';
+import { Predict, AiSwitchProp, PredictJson } from './prop';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
@@ -41,33 +41,33 @@ const AiSwitch: FC<AiSwitchProp> = ({
             try {
                 if (casePath === undefined) {
                     //无案件目录，是新增，读模版
-                    const next: PredictComp = await helper.readJSONFile(tempAt);
-                    dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number, ocr: boolean }).similarity });
-                    dispatch({ type: 'aiSwitch/setOcr', payload: (next as { config: Predict[], similarity: number, ocr: boolean }).ocr });
+                    const next: PredictJson = await helper.readJSONFile(tempAt);
+                    dispatch({ type: 'aiSwitch/setSimilarity', payload: next.similarity });
+                    dispatch({ type: 'aiSwitch/setOcr', payload: next.ocr });
                 } else {
                     const aiConfigAt = join(casePath, './predict.json'); //当前案件AI路径
                     const exist = await helper.existFile(aiConfigAt);
                     if (exist) {
                         //案件下存在，读取案件下的predict.json
-                        const next: PredictComp = await helper.readJSONFile(aiConfigAt);
+                        const next: PredictJson = await helper.readJSONFile(aiConfigAt);
                         dispatch({
                             type: 'aiSwitch/setSimilarity',
-                            payload: (next as { config: Predict[], similarity: number, ocr: boolean }).similarity
+                            payload: next.similarity
                         });
                         dispatch({
                             type: 'aiSwitch/setOcr',
-                            payload: (next as { config: Predict[], similarity: number, ocr: boolean }).ocr
+                            payload: next.ocr
                         });
                     } else {
                         //不存在，读取模版
-                        const next: PredictComp = await helper.readJSONFile(tempAt);
+                        const next: PredictJson = await helper.readJSONFile(tempAt);
                         dispatch({
                             type: 'aiSwitch/setSimilarity',
-                            payload: (next as { config: Predict[], similarity: number, ocr: boolean }).similarity
+                            payload: next.similarity
                         });
                         dispatch({
                             type: 'aiSwitch/setOcr',
-                            payload: (next as { config: Predict[], similarity: number, ocr: boolean }).ocr
+                            payload: next.ocr
                         });
                     }
                 }

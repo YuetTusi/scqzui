@@ -1,5 +1,5 @@
 import DefaultComponent from './ai-switch';
-import { Predict } from './prop';
+import { Predict, PredictJson, AiSwitchProp } from './prop';
 
-export { Predict };
+export { Predict, PredictJson, AiSwitchProp };
 export default DefaultComponent;
