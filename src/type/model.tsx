@@ -39,6 +39,7 @@ import { PaperworkModalState } from '@/model/default/paperwork-modal';
 import { ExtractionState } from '@/model/default/extraction';
 import { QuickLogTableState } from '@/model/default/quick-log-table';
 import { HelpModalState } from '@/model/default/help-modal';
+import { FetchStateModalState } from '@/model/default/fetch-state-modal';
 
 declare global {
 	interface Window {
@@ -94,6 +95,7 @@ interface StateTree {
 	extraction: ExtractionState,
 	quickLogTable: QuickLogTableState,
 	helpModal: HelpModalState,
+	fetchStateModal: FetchStateModalState,
 	[modelName: string]: any
 }
 

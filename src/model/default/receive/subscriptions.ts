@@ -12,7 +12,8 @@ import { CommandType, SocketType, Command } from '@/schema/command';
 import {
     deviceIn, deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg,
     smsMsg, parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
-    appRecFinish, fetchPercent, importErr, backDatapass, checkFinishToParse
+    appRecFinish, fetchPercent, importErr, backDatapass, checkFinishToParse,
+    fetchState
 } from './listener';
 
 const { Fetch, Parse, Trace, Error } = SocketType;
@@ -55,6 +56,9 @@ export default {
                 case CommandType.FetchPercent:
                     console.log(`采集进度值：${JSON.stringify(command.msg)}`);
                     fetchPercent(command, dispatch);
+                    break;
+                case CommandType.FetchState:
+                    fetchState(command, dispatch);
                     break;
                 case CommandType.DeviceOut:
                     logger.info(`设备移除(DeviceOut)：${JSON.stringify(command.msg)}`);

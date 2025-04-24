@@ -342,6 +342,16 @@ Fetch 命令：`fetch_percent`，参数：
 | usb    | number | 序号         |
 | value  | number | 进度百分比值 |
 
+#### 采集状态
+
+Fetch 命令：`fetch_state`，参数：
+
+| 参数名  | 类型                         | 说明   |
+| ------- | ---------------------------- | ------ |
+| usb     | number                       | 序号   |
+| summary | {name:string,value:string}   | 汇总   |
+| items   | {name:string,value:string}[] | 状态项 |
+
 #### 发送多用户/隐私空间消息
 
 Fetch 命令：`extra_msg`，参数：

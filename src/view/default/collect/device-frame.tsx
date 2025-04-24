@@ -146,8 +146,7 @@ const DeviceFrame: FC<DeviceFrameProp> = ({
                                     <div className="fns">
                                         <MobileInfo
                                             device={item}
-                                            recordHandle={() => onRecordHandle(item)}
-                                        />
+                                            recordHandle={() => onRecordHandle(item)} />
                                         <div className="buttons">
                                             <FetchButton
                                                 device={item}

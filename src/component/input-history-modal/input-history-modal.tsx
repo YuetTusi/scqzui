@@ -6,12 +6,12 @@ import Button from 'antd/lib/button';
 import Card from 'antd/lib/card';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
+import { helper } from '@/utils/helper';
+import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { HistoryList } from './history-list';
 import { InputHistoryModalProp } from './prop';
-import UserHistory, { HistoryKeys } from '@/utils/user-history';
-import { helper } from '@/utils/helper';
 
-const { caseText, devText } = helper.readConf()!;
+const { devText } = helper.readConf()!;
 
 /**
  * 用户输入项管理框

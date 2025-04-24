@@ -52,7 +52,7 @@ const DeivceBox = styled.div`
         justify-content:space-around;
         align-items:center;
         width: 100%;
-        padding: 10px 0;
+        padding:0 0 10px 0;
         .help{
             &>div{
                 padding:2px 0;

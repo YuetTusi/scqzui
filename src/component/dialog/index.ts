@@ -7,6 +7,8 @@ import ApplePasswordModal from './apple-password-modal';
 import UMagicCodeModal from './umagic-code-modal';
 import CloudCodeModal from './cloud-code-modal';
 import CloudHistoryModal from './cloud-history-modal';
+import { FetchStateModal } from './fetch-state-modal';
+import { LiveModal } from './fetch-record-modal';
 
 export {
     UsbDebugModal,
@@ -17,5 +19,7 @@ export {
     ApplePasswordModal,
     UMagicCodeModal,
     CloudCodeModal,
-    CloudHistoryModal
+    CloudHistoryModal,
+    FetchStateModal,
+    LiveModal
 };

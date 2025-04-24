@@ -28,7 +28,7 @@ import { StateTree } from '@/type/model';
 import { AppSetStore } from '@/model/default/app-set';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
-import { LiveModal } from '@/component/dialog/fetch-record-modal';
+import { LiveModal, FetchStateModal } from '@/component/dialog';
 import {
     AppleCreditModal, HelpModal, ApplePasswordModal,
     UMagicCodeModal, GuideModal, CloudCodeModal, CloudHistoryModal
@@ -73,7 +73,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     //     for (let i = 0; i < 10; i++) {
     //         devices.push({
     //             ...{
-    //                 "fetchState": FetchState.Connected,
+    //                 "fetchState": FetchState.Finished,
     //                 "manufacturer": "Mi",
     //                 "model": "TAS-AL00",
     //                 "phoneInfo": [{
@@ -288,6 +288,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                 }
             });
         }
+        dispatch({ type: 'fetchStateModal/clearData', payload: currentDevice.current!.usb });
         dispatch({
             type: 'device/startFetch',
             payload: {

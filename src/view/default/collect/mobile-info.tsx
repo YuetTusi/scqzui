@@ -4,6 +4,7 @@ import { helper } from '@/utils/helper';
 import { FetchState } from '@/schema/device-state';
 import { FetchInfo } from './fetch-info';
 import { CaseInfo } from './case-info';
+import { Summary } from './summary';
 import { MobileInfoProp } from './prop';
 
 const { fetchText, devText } = helper.readConf()!;
@@ -71,10 +72,12 @@ const MobileInfo: FC<MobileInfoProp> = ({
             return <>
                 <div className="help">
                     {extra === undefined ? null : <p className="extra">{extra}</p>}
+                    <Summary device={device} />
                 </div>
                 <CaseInfo usb={usb!} />
                 <div className="rec-link">
-                    <a onClick={onRecordClick}>{`${fetchText ?? '取证'}记录`}</a>
+                    <a
+                        onClick={onRecordClick}>{`${fetchText ?? '取证'}记录`}</a>
                 </div>
             </>;
         case FetchState.Fetching:
@@ -84,6 +87,7 @@ const MobileInfo: FC<MobileInfoProp> = ({
                     <div className="clock">
                         <Clock usb={Number(usb!) - 1} />
                     </div>
+                    <Summary device={device} />
                     <FetchInfo device={device} recordHandle={recordHandle} />
                 </div>
                 <CaseInfo usb={usb!} />

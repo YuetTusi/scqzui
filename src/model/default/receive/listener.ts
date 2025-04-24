@@ -140,6 +140,7 @@ export function deviceOut({ msg }: Command<DeviceType>, dispatch: Dispatch<any>)
     dispatch({ type: 'device/checkWhenDeviceIn', payload: { usb } });
     dispatch({ type: 'device/removeDevice', payload: usb });
     dispatch({ type: 'cloudCodeModal/clearApps', payload: usb });
+    dispatch({ type: 'fetchStateModal/clearData', payload: usb });
 }
 
 /**
@@ -169,6 +170,10 @@ export function fetchPercent({ msg }: Command<{ usb: number, value: number }>, d
             value
         }
     });
+}
+
+export function fetchState({ msg }: Command<{ usb: number, items: any[] }>, dispatch: Dispatch<any>) {
+    dispatch({ type: 'fetchStateModal/setData', payload: msg });
 }
 
 /**
