@@ -14,7 +14,7 @@ const LayoutPanel: FC<{}> = ({ children }) => {
         (async () => {
             try {
                 const { materials_name, materials_software_version } = await helper.readManufaturer();
-                setTitle(`${materials_name ?? '测试'} ${materials_software_version ?? 'v0.0.1'}`);
+                setTitle(`${materials_name ?? '测试'} ${(materials_software_version ?? 'v0.0.1').replace(/\-/g, '.')}`);
             } catch (error) {
                 console.warn(error);
                 setTitle('');
@@ -24,7 +24,7 @@ const LayoutPanel: FC<{}> = ({ children }) => {
 
     return <>
         <DragBar>
-            {(title ?? '').replace(/\-/g, '.')}
+            {(title ?? '')}
         </DragBar>
         <Center>
             {children}
