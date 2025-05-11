@@ -4,8 +4,6 @@ import path from 'path';
 import { Dispatch } from 'redux';
 import React, { MouseEvent } from 'react';
 import { routerRedux } from 'dva/router';
-import AndroidFilled from '@ant-design/icons/AndroidFilled';
-import AppleFilled from '@ant-design/icons/AppleFilled';
 import CloudFilled from '@ant-design/icons/CloudFilled';
 import CheckOutlined from '@ant-design/icons/CheckOutlined';
 import CloseOutlined from '@ant-design/icons/CloseOutlined';
@@ -13,12 +11,12 @@ import Modal from 'antd/lib/modal';
 import { ColumnsType, ColumnType } from 'antd/lib/table';
 import { CaseInfo } from '@/schema/case-info';
 import DeviceType from '@/schema/device-type';
-import DeviceSystem from '@/schema/device-system';
 import { DataMode } from '@/schema/data-mode';
 import { TableName } from '@/schema/table-name';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { ColumnAction } from './prop';
+import { OsIcon } from '@/component/os-icon';
 
 type SetDataHandle = (data: DeviceType[]) => void;
 type SetLoadingHandle = (loading: boolean) => void;
@@ -251,11 +249,7 @@ export function getDeviceColumns(
 
                 return <span>
                     <span>
-                        {
-                            system === DeviceSystem.IOS
-                                ? <AppleFilled title="苹果设备" />
-                                : <AndroidFilled style={{ color: '#76c058' }} title="安卓设备" />
-                        }
+                        <OsIcon system={system} />
                         {
                             mode === DataMode.ServerCloud
                                 ? <CloudFilled style={{ marginLeft: '5px' }} title={`云${fetchText ?? '取证'}`} className="cloud-color" />

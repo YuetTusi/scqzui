@@ -73,7 +73,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     //     for (let i = 0; i < 10; i++) {
     //         devices.push({
     //             ...{
-    //                 "fetchState": FetchState.Finished,
+    //                 "fetchState": FetchState.Connected,
     //                 "manufacturer": "Mi",
     //                 "model": "TAS-AL00",
     //                 "phoneInfo": [{
@@ -84,7 +84,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     //                     "name": "IMEI", "value": "867099041036009"
     //                 }],
     //                 "serial": "JTK0219826000164",
-    //                 "system": "android",
+    //                 "system": DeviceSystem.HarmonyOS,
     //                 "usb": i + 1,
     //                 "fetchPercent": 10 + i
     //             },

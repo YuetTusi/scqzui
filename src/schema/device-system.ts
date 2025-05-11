@@ -13,7 +13,7 @@ enum DeviceSystem {
     /**
      * 鸿蒙OS
      */
-    HarmonyOS = 'harmony_os',
+    HarmonyOS = 'harmony',
     /**
      * Windows10Mobile
      */

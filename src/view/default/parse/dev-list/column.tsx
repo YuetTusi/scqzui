@@ -5,8 +5,6 @@ import classnames from 'classnames';
 import debounce from 'lodash/debounce';
 import { execFile } from 'child_process';
 import { ipcRenderer, shell } from 'electron';
-import AndroidFilled from '@ant-design/icons/AndroidFilled';
-import AppleFilled from '@ant-design/icons/AppleFilled';
 import CloudFilled from '@ant-design/icons/CloudFilled';
 import React, { MouseEvent } from 'react';
 import { Dispatch } from "dva";
@@ -16,12 +14,12 @@ import Tag from 'antd/lib/tag';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import notification from 'antd/lib/notification';
+import { OsIcon } from '@/component/os-icon';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
 import { PredictJson } from '@/component/ai-switch/prop';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { CaseInfo } from '@/schema/case-info';
 import { DeviceType } from "@/schema/device-type";
-import { DeviceSystem } from '@/schema/device-system';
 import { ParseState } from "@/schema/device-state";
 import { DataMode } from '@/schema/data-mode';
 import { TableName } from '@/schema/table-name';
@@ -296,11 +294,7 @@ export function getDevColumns(
             render: (value: string, { system, mode, phonePath }: DeviceType) => {
                 return <div>
                     <span>
-                        {
-                            system === DeviceSystem.IOS
-                                ? <AppleFilled title="苹果设备" />
-                                : <AndroidFilled style={{ color: '#76c058' }} title="安卓设备" />
-                        }
+                        <OsIcon system={system} />
                         {
                             mode === DataMode.ServerCloud
                                 ? <CloudFilled style={{ marginLeft: '5px' }} title="云取证" className="cloud-color" />

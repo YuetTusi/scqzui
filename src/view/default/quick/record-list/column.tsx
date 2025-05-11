@@ -5,8 +5,6 @@ import dayjs from 'dayjs';
 import { execFile } from 'child_process';
 import { ipcRenderer, shell } from 'electron';
 import classnames from 'classnames';
-import AndroidFilled from '@ant-design/icons/AndroidFilled';
-import AppleFilled from '@ant-design/icons/AppleFilled';
 import CloudFilled from '@ant-design/icons/CloudFilled';
 import React, { MouseEvent } from 'react';
 import { Dispatch } from "dva";
@@ -20,7 +18,6 @@ import { AlartMessageInfo } from '@/component/alert-message/prop';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { QuickRecord } from "@/schema/quick-record";
 import { ParseState } from "@/schema/device-state";
-import DeviceSystem from '@/schema/device-system';
 import { DataMode } from '@/schema/data-mode';
 import { TableName } from '@/schema/table-name';
 import { QuickEvent } from '@/schema/quick-event';
@@ -31,6 +28,7 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import logger from '@/utils/log';
+import { OsIcon } from '@/component/os-icon';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
@@ -283,11 +281,7 @@ export function getColumns(
             render: (value: string, { system, mode, phonePath }: QuickRecord) => {
                 return <div>
                     <span>
-                        {
-                            system === DeviceSystem.IOS
-                                ? <AppleFilled title="苹果设备" />
-                                : <AndroidFilled style={{ color: '#76c058' }} title="安卓设备" />
-                        }
+                        <OsIcon system={system} />
                         {
                             mode === DataMode.ServerCloud
                                 ? <CloudFilled style={{ marginLeft: '5px' }} title="云取证" className="cloud-color" />

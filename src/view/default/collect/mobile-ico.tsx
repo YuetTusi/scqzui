@@ -9,6 +9,7 @@ import { faAndroid, faApple } from '@fortawesome/free-brands-svg-icons';
 import { FetchState } from "@/schema/device-state";
 import { helper } from "@/utils/helper";
 import { PhoneInfoBox } from "./styled/device-box";
+import iconHarmonyOs from './styled/font/icon_harmonyos.svg';
 
 const InfoList: FC<{
     phoneInfo: {
@@ -72,12 +73,15 @@ const MobileIco: FC<{ device: DeviceType }> = ({ device }) => {
                     strokeColor="#ff4d4f" />
             </Tooltip>;
         default:
-            if (system === DeviceSystem.IOS) {
-                return <FontAwesomeIcon icon={faApple} />;
-            } else if (system === DeviceSystem.Android) {
-                return <FontAwesomeIcon icon={faAndroid} />;
-            } else {
-                return <FontAwesomeIcon icon={faQuestionCircle} />;
+            switch (system) {
+                case DeviceSystem.Android:
+                    return <FontAwesomeIcon icon={faAndroid} />;
+                case DeviceSystem.IOS:
+                    return <FontAwesomeIcon icon={faApple} />;
+                case DeviceSystem.HarmonyOS:
+                    return <img src={iconHarmonyOs} alt={iconHarmonyOs} />;
+                default:
+                    return <FontAwesomeIcon icon={faQuestionCircle} />;
             }
     }
 };
