@@ -262,6 +262,8 @@ export default {
         UserHistory.set(HistoryKeys.HISTORY_DEVICENUMBER, fetchData.mobileNo!);
         UserHistory.set(HistoryKeys.HISTORY_MOBILENUMBER, fetchData.mobileNumber!);
 
+        const caseData: CaseInfo = yield call([db, 'findOne'], { _id: fetchData.caseId });
+
         if (!helper.isNullOrUndefined(fetchData.mobileNo)) {
             //# 如果输入了手机编号，拼到手机名称之前
             fetchData.mobileName = fetchData.mobileNo! + fetchData.mobileName;
@@ -302,7 +304,6 @@ export default {
         });
 
         try {
-            const caseData: CaseInfo = yield call([db, 'findOne'], { _id: fetchData.caseId });
             const bcp = new BcpEntity();
             const {
                 collectUnitCode, collectUnitName, dstUnitCode, dstUnitName
@@ -409,7 +410,8 @@ export default {
                 isAlive: fetchData.isAlive ?? helper.IS_ALIVE,
                 isAi: fetchData.isAi,
                 ruleFrom: fetchData.ruleFrom,
-                ruleTo: fetchData.ruleTo
+                ruleTo: fetchData.ruleTo,
+                isPhotoAnalysis: caseData.isPhotoAnalysis ?? false
             }
         });
 
@@ -441,7 +443,8 @@ export default {
             isAlive: fetchData.isAlive ?? helper.IS_ALIVE,
             isAi: fetchData.isAi,
             ruleFrom: fetchData.ruleFrom,
-            ruleTo: fetchData.ruleTo
+            ruleTo: fetchData.ruleTo,
+            isPhotoAnalysis: caseData.isPhotoAnalysis ?? false
         })}`);
     },
     /**

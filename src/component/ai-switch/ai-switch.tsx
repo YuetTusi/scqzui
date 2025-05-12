@@ -23,7 +23,11 @@ const AiSwitch: FC<AiSwitchProp> = ({
 }) => {
 
     const dispatch = useDispatch();
-    const { similarity, disableOcr, ocr } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
+    const {
+        similarity,
+        disableOcr,
+        // ocr
+    } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
 
     useEffect(() => {
         if (disableOcr) {
@@ -88,8 +92,8 @@ const AiSwitch: FC<AiSwitchProp> = ({
      * OCR识别Change
      * @param value 值
      */
-    const onOcrChange = (event: CheckboxChangeEvent) =>
-        dispatch({ type: 'aiSwitch/setOcr', payload: event.target.checked });
+    // const onOcrChange = (event: CheckboxChangeEvent) =>
+    //     dispatch({ type: 'aiSwitch/setOcr', payload: event.target.checked });
 
     const onSimilarBlur = ({ target }: FocusEvent<HTMLInputElement>) => {
         if (target.value.trim() === '') {
@@ -111,7 +115,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                 max={100}
                 addonAfter="%" />
         </Col>
-        <Col>
+        {/* <Col>
             <label style={{ marginLeft: '5rem' }}>AI图片识别违规分析：</label>
         </Col>
         <Col>
@@ -121,7 +125,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                     checked={ocr}
                     disabled={disableOcr} />
             </Tooltip>
-        </Col>
+        </Col> */}
     </Row>
 };
 

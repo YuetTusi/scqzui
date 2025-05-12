@@ -281,7 +281,7 @@ const EditForm: FC<FormProp> = ({
                     </Col>
                 </Auth>
                 <Col span={4}>
-                    <span>图片违规分析：</span>
+                    <span>图片OCR违规分析：</span>
                     <Tooltip title="此功能为全局分析，速度较慢">
                         <Checkbox onChange={(event) => {
                             setIsPhotoAnalysis(event.target.checked);
