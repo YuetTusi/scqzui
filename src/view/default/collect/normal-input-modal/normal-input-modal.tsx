@@ -109,9 +109,9 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             //? mock
             // dispatch({
             //     type: 'extraction/setTypes', payload: [
-            //         { name: 'Apk快速采集', value: 0 },
+            //         { name: 'Apk快速采集', value: 0, enable: true },
             //         {
-            //             name: 'Note', value: 'Note'
+            //             name: 'Note', value: 'Note', enable: true
             //         },
             //     ]
             // });
@@ -131,13 +131,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             formRef.setFieldsValue({ phoneName: device?.model ?? '' });
         }
     }, [device, visible]);
-
-    useEffect(() => {
-        const [first] = types;
-        if (first) {
-            formRef.setFieldValue('extraction', first.value);
-        }
-    }, [types]);
 
     /**
      * 跳转到新增案件页
@@ -168,19 +161,27 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
      * 绑定提取方式下拉
      */
     const bindExtractionSelect = () =>
-        types.map((t) =>
-            <Option
+        types
+            .filter(i => i.enable)
+            .map((t) => <Option
                 value={t.value}
                 key={t.value}>
                 {t.name}
-            </Option>
-        );
+            </Option>);
 
     /**
      * 案件下拉Change
      */
     const caseChange = (value: string, _: JSX.Element | JSX.Element[]) => {
+        formRef.resetFields(['extraction']);
         currentCase.current = JSON.parse(value) as CaseInfo;
+        //用案件类型过虑提取方式
+        const next = types.map(i => ({
+            ...i,
+            enable: currentCase.current?.wired ? i.name === 'Apk快速采集' : i.name !== 'Apk快速采集'
+        }));;
+        //有线快采只保留`Apk快速采集`一种提取方式
+        dispatch({ type: 'extraction/setTypes', payload: next });
     };
 
     /**

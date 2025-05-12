@@ -5,7 +5,7 @@ import reducers from './reducers';
  * 设备提取方式
  */
 interface ExtractionState {
-    types: { name: string, value: string }[]
+    types: { name: string, value: string, enable: boolean }[]
 }
 
 let model: Model = {

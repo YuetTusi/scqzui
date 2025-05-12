@@ -133,7 +133,11 @@ export default {
                 case CommandType.Extraction:
                     //# 接收提取方式列表
                     console.log(`接收提取方式列表: ${command.msg}`);
-                    dispatch({ type: 'extraction/setTypes', payload: command.msg.methods });
+                    const next = (command.msg.methods as any[]).map(i => {
+                        i.enable = true;
+                        return i;
+                    });
+                    dispatch({ type: 'extraction/setTypes', payload: next });
                     break;
                 default:
                     console.log('未知命令:', command.cmd);
