@@ -20,6 +20,7 @@ yarn install
 | `yarn run build`      | 开发编译                            |
 | `yarn run build:prod` | 生产编译                            |
 | `yarn run dist`       | 发布项目（发布最终安装包和 zip 包） |
+| `yarn run dist:linux` | 发布项目（linux arm 平台）          |
 
 ### 发布
 
