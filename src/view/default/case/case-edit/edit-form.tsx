@@ -49,6 +49,7 @@ const EditForm: FC<FormProp> = ({
 
     const dispatch = useDispatch();
     const unitNameHistory = useRef<string[]>([]);
+    const [wired, setWired] = useState<boolean>(false);
     const [parseAppSelectModalVisible, setParseAppSelectModalVisible] =
         useState<boolean>(false); //解析App选择框
     const [tokenAppSelectModalVisible, setTokenAppSelectModalVisible] =
@@ -67,6 +68,17 @@ const EditForm: FC<FormProp> = ({
 
     useEffect(() => {
         unitNameHistory.current = UserHistory.get(HistoryKeys.HISTORY_UNITNAME);
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const isWired = await helper.isWired();
+                setWired(isWired);
+            } catch (error) {
+                setWired(false);
+            }
+        })();
     }, []);
 
     useEffect(() => {
@@ -216,13 +228,15 @@ const EditForm: FC<FormProp> = ({
                     </Item>
                 </Col>
                 <Col span={12}>
-                    <Item
-                        name="wired"
-                        label="有线快采"
-                        valuePropName="checked"
-                        labelCol={{ span: 6 }}>
-                        <Switch size="small" />
-                    </Item>
+                    <Auth deny={!wired}>
+                        <Item
+                            name="wired"
+                            label="有线快采"
+                            valuePropName="checked"
+                            labelCol={{ span: 6 }}>
+                            <Switch size="small" />
+                        </Item>
+                    </Auth>
                 </Col>
             </Row>
             <Split />
@@ -414,7 +428,8 @@ const EditForm: FC<FormProp> = ({
                 <Row>
                     <Col span={2} />
                     <Col span={20}>
-                        <AiSwitch />
+                        <AiSwitch
+                            columnCount={6} />
                     </Col>
                     <Col span={2} />
                 </Row>

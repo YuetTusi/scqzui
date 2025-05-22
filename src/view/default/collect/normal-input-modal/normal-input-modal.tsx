@@ -74,16 +74,16 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     const historyDeviceHolder = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER));
     const historyDeviceNumber = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER));
     const [isExtraction, setIsExtraction] = useState<boolean>(false); //是否启用“提取方式” 目前用于方便调试
-    // const [isWired, setIsWired] = useState<boolean>(false); //是否启用“有线方式” 目前用于方便调试
+    const [isWired, setIsWired] = useState<boolean>(false); //是否启用“有线方式” 目前用于方便调试
 
-    // useEffect(() => {
-    //     (async () => {
-    //         if (visible) {
-    //             const wired = await helper.isWired();
-    //             setIsWired(wired);
-    //         }
-    //     })();
-    // }, [visible]);
+    useEffect(() => {
+        (async () => {
+            if (visible) {
+                const wired = await helper.isWired();
+                setIsWired(wired);
+            }
+        })();
+    }, [visible]);
 
     useEffect(() => {
         (async () => {

@@ -59,10 +59,10 @@ export default {
                 //案件路径不存在，创建之
                 mkdirSync(casePath);
             }
-            const predictTemp: PredictJson = yield call([helper, 'readJSONFile'], predictTempAt);
+            // const predictTemp: PredictJson = yield call([helper, 'readJSONFile'], predictTempAt);
             yield fork([helper, 'writeCaseJson'], casePath, entity);
             yield fork([helper, 'writeJSONfile'], join(casePath, 'predict.json'), {
-                ...predictTemp,
+                config: aiSwitch.data,
                 similarity: aiSwitch.similarity,
                 ocr: aiSwitch.ocr
             }); //写ai配置JSON

@@ -81,6 +81,7 @@ export default {
                 [helper, 'writeJSONfile'],
                 join(casePath, 'predict.json'),
                 merge(predict, {
+                    config: aiSwitch.data,
                     similarity: aiSwitch.similarity,
                     ocr: aiSwitch.ocr
                 })

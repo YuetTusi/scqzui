@@ -55,6 +55,7 @@ const AddForm: FC<FormProp> = ({
     isAiState, isPhotoAnalysisState, parseAppListState, tokenAppListState
 }) => {
     const dispatch = useDispatch();
+    const [wired, setWired] = useState<boolean>(false);
     const [isCheck, setIsCheck] = useState(false);
     const [parseAppSelectModalVisible, setParseAppSelectModalVisible] =
         useState<boolean>(false); //解析App选择框
@@ -78,6 +79,17 @@ const AddForm: FC<FormProp> = ({
         if (caseNameRef.current) {
             caseNameRef.current.focus();
         }
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const isWired = await helper.isWired();
+                setWired(isWired);
+            } catch (error) {
+                setWired(false);
+            }
+        })();
     }, []);
 
     /**
@@ -246,12 +258,14 @@ const AddForm: FC<FormProp> = ({
                     </Item>
                 </Col>
                 <Col span={12}>
-                    <Item
-                        name="wired"
-                        label="有线快采"
-                        labelCol={{ span: 6 }}>
-                        <Switch size="small" />
-                    </Item>
+                    <Auth deny={!wired}>
+                        <Item
+                            name="wired"
+                            label="有线快采"
+                            labelCol={{ span: 6 }}>
+                            <Switch size="small" />
+                        </Item>
+                    </Auth>
                 </Col>
             </Row>
             <Split />
@@ -446,7 +460,7 @@ const AddForm: FC<FormProp> = ({
                 <Row>
                     <Col span={2} />
                     <Col span={20}>
-                        <AiSwitch />
+                        <AiSwitch columnCount={6} />
                     </Col>
                     <Col span={2} />
                 </Row>
