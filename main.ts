@@ -267,6 +267,12 @@ if (!app.requestSingleInstanceLock()) {
         } else {
             mainWindow.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/default.html'));
         }
+        if (isDev) {
+            startupWindow!.loadFile(join(__dirname, './renderer/startup.html'));
+            startupWindow!.webContents.openDevTools();
+        } else {
+            startupWindow!.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/startup.html'));
+        }
 
         startupWindow.webContents.on('did-finish-load', () => {
             startupWindow!.webContents.send('startup', config);
@@ -276,11 +282,9 @@ if (!app.requestSingleInstanceLock()) {
 
         mainWindow.webContents.on('did-finish-load', () => {
             mainWindow!.show();
-            startupWindow!.loadFile(join(__dirname, './renderer/startup.html'));
             timerWindow!.loadFile(join(__dirname, './renderer/timer.html'));
             fetchRecordWindow!.loadFile(join(__dirname, './renderer/fetch-record.html'));
             if (isDev) {
-                startupWindow!.webContents.openDevTools();
                 timerWindow!.webContents.openDevTools();
                 fetchRecordWindow!.webContents.openDevTools();
             }

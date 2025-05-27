@@ -12,8 +12,8 @@ import { useDestroy } from '@/hook';
 import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
 import { AiSwitchState } from '@/model/default/ai-switch';
-import { Predict, AiSwitchProp, PredictJson } from './prop';
 import Auth from '../auth';
+import { Predict, AiSwitchProp, PredictJson } from './prop';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
@@ -150,7 +150,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                             </Col>
                             : <Col span={j === row.length - 1 ? last : Math.ceil(24 / columnCount)} key={`AICOL_${j}`}>
                                 <Tooltip title={col.tips}>
-                                    <label>{col.title}：</label>
+                                    <label>{col.title}：</label>+
                                     <Switch
                                         onChange={(checked: boolean) => onSwitchChange(checked, col.type)}
                                         checked={col.use}

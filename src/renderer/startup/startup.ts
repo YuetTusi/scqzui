@@ -1,6 +1,7 @@
 import { join } from 'path';
 import { ChildProcessWithoutNullStreams } from 'child_process';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
+// import log from '@/utils/log';
 import { Conf } from '@/type/model';
 import { helper } from '@/utils/helper';
 
@@ -39,22 +40,18 @@ ipcRenderer.on('startup', async (_: IpcRendererEvent, args: Conf) => {
     );
 
 
-    // console.log(join(cwd, platform === 'linux' ? '../tools/ImageOcr/ImageOcr' : '../tools/ImageOcr/ImageOcr.exe'));
-    // console.log(join(cwd, '../tools/ImageOcr'));
-    // console.log(['--listen_port', nextOcrPort.toString()]);
-
     helper.runProcContinue(
         imageOcrProcess,
         platform === 'linux' ? 'ImageOcr' : 'ImageOcr.exe',
         join(cwd, '../tools/ImageOcr'),
-        ['--listen_port', ocrPort.toString()]
+        ['--listen_port', ocrPort?.toString() ?? '65116']
     );
 
     if (useQuickFetch) {
         //有快速点验功能，调起服务
         helper.runProc(
             quickFetchProcess,
-            platform === 'linux' ? 'QuickFetchServer' : 'QuickFetchServer.exe',
+            join(cwd, platform === 'linux' ? '../QuickFetch/QuickFetchServer' : '../QuickFetch/QuickFetchServer.exe'),
             quickFetchDir,
             [],
             {
