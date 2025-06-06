@@ -411,7 +411,10 @@ export default {
                 isAi: fetchData.isAi,
                 ruleFrom: fetchData.ruleFrom,
                 ruleTo: fetchData.ruleTo,
-                isPhotoAnalysis: caseData.isPhotoAnalysis ?? false
+                isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
+                imei1: fetchData.imei1 ?? '',
+                imei2: fetchData.imei2 ?? '',
+                meid: fetchData.meid ?? ''
             }
         });
 
@@ -444,7 +447,10 @@ export default {
             isAi: fetchData.isAi,
             ruleFrom: fetchData.ruleFrom,
             ruleTo: fetchData.ruleTo,
-            isPhotoAnalysis: caseData.isPhotoAnalysis ?? false
+            isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
+            imei1: fetchData.imei1 ?? '',
+            imei2: fetchData.imei2 ?? '',
+            meid: fetchData.meid ?? ''
         })}`);
     },
     /**

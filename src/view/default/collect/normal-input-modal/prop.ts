@@ -45,6 +45,18 @@ export interface FormValue {
      */
     handleOfficerNo: string;
     /**
+     * IMEI1
+     */
+    imei1: string;
+    /**
+     * IMEI2
+     */
+    imei2: string;
+    /**
+     * MEID
+     */
+    meid: string;
+    /**
      * 备注
      */
     note: string;

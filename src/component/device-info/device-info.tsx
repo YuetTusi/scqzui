@@ -5,13 +5,13 @@ import AppleFilled from '@ant-design/icons/AppleFilled';
 import Badge from 'antd/lib/badge';
 import Empty from 'antd/lib/empty';
 import { useCase, useDevice } from '@/hook';
+import { helper } from '@/utils/helper';
 import { ParseState } from '@/schema/device-state';
 import DeviceSystem from '@/schema/device-system';
+import DeviceType from '@/schema/device-type';
+import CaseInfo from '@/schema/case-info';
 import { DeviceBox } from './styled/style';
 import { DeviceInfoProp } from './prop';
-import DeviceType from '@/schema/device-type';
-import { helper } from '@/utils/helper';
-import CaseInfo from '@/schema/case-info';
 
 const { caseText, devText, fetchText } = helper.readConf()!;
 

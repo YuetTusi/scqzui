@@ -1,4 +1,6 @@
+import dayjs from 'dayjs';
 import round from 'lodash/round';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt } from '@fortawesome/free-solid-svg-icons';
 import React, { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
@@ -9,6 +11,7 @@ import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined';
 import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
+import SearchOutlined from '@ant-design/icons/SearchOutlined';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Button from 'antd/lib/button';
@@ -21,12 +24,15 @@ import Tooltip from 'antd/lib/tooltip';
 import { ITreeNode } from '@/type/ztree';
 import log from '@/utils/log';
 import { helper } from '@/utils/helper';
-import { Backslashe, UnderLine } from '@/utils/regex';
+import { send } from '@/utils/tcp-server';
+import { Backslashe, IMEI, UnderLine } from '@/utils/regex';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
-import { AppSelectModal } from '@/component/dialog';
+import { AppSelectModal, IMEIModal } from '@/component/dialog';
 import Auth from '@/component/auth';
+import { SocketType, CommandType } from '@/schema/command';
+import { DeviceStoreState } from '@/model/default/device';
 import { CaseInfo } from '@/schema/case-info';
-import FetchData from '@/schema/fetch-data';
+import { FetchData } from '@/schema/fetch-data';
 import { DataMode } from '@/schema/data-mode';
 import { ParseApp } from '@/schema/parse-app';
 import { StateTree } from '@/type/model';
@@ -36,9 +42,12 @@ import parseApp from '@/config/parse-app.yaml';
 import { Instruction } from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DeviceSystem from '@/schema/device-system';
+import { useSubscribe } from '@/hook';
+import { setIMEIOrIMID } from '@/model/default/receive/listener';
+import { IMEIModalState } from '@/model/default/imei-modal';
 
-const { caseText, devText, fetchText, parseText } = helper.readConf()!;
+const { caseText, devText, fetchText, parseText, useBcp } = helper.readConf()!;
 const { Option } = Select;
 const { Item, useForm } = Form;
 
@@ -64,7 +73,9 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
     const dispatch = useDispatch();
     const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
+    const { deviceList } = useSelector<StateTree, DeviceStoreState>((state) => state.device);
     const { types } = useSelector<StateTree, ExtractionState>((state) => state.extraction);
+    const { open } = useSelector<StateTree, IMEIModalState>((state) => state.imeiModal);
     const [formRef] = useForm<FormValue>();
     const currentCase = useRef<CaseInfo>(); //当前案件数据
     const [appSelectModalVisible, setAppSelectModalVisible] = useState(false);
@@ -127,10 +138,52 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     }, [visible]);
 
     useEffect(() => {
-        if (visible) {
-            formRef.setFieldsValue({ phoneName: device?.model ?? '' });
+
+        if (visible && useBcp) {
+            const phoneInfo = deviceList[device?.usb! - 1]?.phoneInfo ?? [];
+            let values: Record<string, any> = {
+                phoneName: device?.model ?? ''
+            };
+
+            phoneInfo.forEach((i) => {
+                switch (i.name.toLocaleLowerCase()) {
+                    case 'imei1':
+                        values.imei1 = i.value;
+                        break;
+                    case 'imei2':
+                        values.imei2 = i.value;
+                        break;
+                    case 'meid':
+                        values.meid = i.value;
+                        break;
+                }
+            });
+            formRef.setFieldsValue(values);
         }
-    }, [device, visible]);
+    }, [deviceList, useBcp, visible]);
+
+    // useSubscribe('clock-1', () => {
+    //     console.log(fetching);
+    //     if (startLoadingTime === 0) {
+    //         return;
+    //     }
+    //     const prevReading = dayjs(startLoadingTime);
+    //     const now = dayjs(new Date().getTime());
+    //     const s = now.diff(prevReading, 'second');
+    //     if (s >= 120) {
+    //         //超过2分钟，关闭reading显示
+    //         dispatch({ type: 'appSet/setReading', payload: { reading: false } });
+    //         startLoadingTime = 0;
+    //     } else {
+    //         dispatch({
+    //             type: 'appSet/setReading',
+    //             payload: {
+    //                 reading: true,
+    //                 readingMessage: `获取中...${120 - s}s`
+    //             }
+    //         });
+    //     }
+    // });
 
     /**
      * 跳转到新增案件页
@@ -192,6 +245,26 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     };
 
     /**
+     * 查询手机IMEI/IMID值
+     */
+    const onIMEIOrIMIDSearch = (event: MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        dispatch({
+            type: 'appSet/setReading',
+            payload: {
+                reading: true,
+                readingMessage: '获取中'
+            }
+        });
+        //使用倒计时
+        dispatch({ type: 'appSet/setCountDown', payload: true });
+        send(SocketType.Fetch, {
+            cmd: CommandType.IMEI,
+            msg: { usb: device?.usb ?? 0 }
+        });
+    }
+
+    /**
      * App选择Handle
      * @param nodes 勾选的zTree结点
      */
@@ -242,6 +315,21 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.mode = DataMode.Self; //标准模式（用户手输取证数据）
             entity.appList = selectedApps.length === 0 ? currentCase.current?.m_Applist : selectedApps; //若未选择解析应用，以案件配置的应用为准
             entity.cloudAppList = [];
+            entity.imei1 = values.imei1 ?? '';
+            entity.imei2 = values.imei2 ?? '';
+            entity.meid = values.meid ?? '';
+
+            if (useBcp && entity.imei1 === '' && entity.imei2 === '' && entity.meid === '') {
+                //如果有BCP功能，IMEI/IMID必须填写一项
+                Modal.warn({
+                    title: '提示',
+                    content: 'IMEI1 IMEI2 IMID 请填写其中一个',
+                    okText: '确定',
+                    centered: true
+                });
+                setLoading(false);
+                return;
+            }
 
             try {
                 const disk = helper.os() === 'linux'
@@ -460,6 +548,63 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                         </Item>
                     </Col>
                 </Row>
+                <Auth deny={!useBcp}>
+                    <Row>
+                        <Col span={12}>
+                            <Item
+                                name="imei1"
+                                label="IMEI1"
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}>
+                                <Input
+                                    placeholder="15位数字"
+                                    maxLength={15} />
+                            </Item>
+                        </Col>
+                        <Col span={12}>
+                            <Item
+                                name="imei2"
+                                label="IMEI2"
+                                labelCol={{ span: 6 }}
+                                wrapperCol={{ span: 14 }}>
+                                <Input
+                                    placeholder="15位数字"
+                                    maxLength={15} />
+                            </Item>
+                        </Col>
+                    </Row>
+                </Auth>
+                <Row>
+                    <Auth deny={!useBcp}>
+                        <Col span={12}>
+                            <Item
+                                name="meid"
+                                label="MEID"
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}>
+                                <Input
+                                    placeholder="15位数字"
+                                    maxLength={15} />
+                            </Item>
+                        </Col>
+                    </Auth>
+                    <Auth deny={!useBcp}>
+                        <Col span={12}>
+                            <Button
+                                onClick={onIMEIOrIMIDSearch}
+                                size="small"
+                                type="primary"
+                                style={{
+                                    display: device?.system === DeviceSystem.IOS ? 'none' : 'block',
+                                    position: 'relative',
+                                    top: '4px'
+                                }}>
+                                <SearchOutlined />
+                                <span>尝试获取IMEI/MEID</span>
+                            </Button>
+                        </Col>
+                    </Auth>
+                </Row>
                 <Row>
                     <Col span={12}>
                         <Item
@@ -556,6 +701,9 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             okHandle={appSelectHandle}
             closeHandle={() => setAppSelectModalVisible(false)}
         />
+        <IMEIModal
+            open={open}
+            onCancel={() => dispatch({ type: 'imeiModal/setOpen', payload: false })} />
     </>;
 };
 NormalInputModal.defaultProps = {

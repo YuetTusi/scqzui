@@ -143,7 +143,7 @@ const Trail: FC<{}> = () => {
                 .format('YYYY-MM-DD HH:mm:ss');
             Modal.confirm({
                 onOk() {
-                    dispatch({ type: 'appSet/setReading', payload: true });
+                    dispatch({ type: 'appSet/setReading', payload: { reading: true } });
                     send(Trace, {
                         type: Trace,
                         cmd: CommandType.AppRec,
@@ -156,7 +156,7 @@ const Trail: FC<{}> = () => {
                         }
                     });
                     setTimeout(
-                        () => dispatch({ type: 'appSet/setReading', payload: false }),
+                        () => dispatch({ type: 'appSet/setReading', payload: { reading: false } }),
                         queryTimeout * 1000
                     );
                 },
@@ -190,7 +190,7 @@ const Trail: FC<{}> = () => {
         } else {
             Modal.confirm({
                 onOk() {
-                    dispatch({ type: 'appSet/setReading', payload: true });
+                    dispatch({ type: 'appSet/setReading', payload: { reading: true } });
                     send(Trace, {
                         type: Trace,
                         cmd: CommandType.AppRec,
@@ -203,7 +203,7 @@ const Trail: FC<{}> = () => {
                         }
                     });
                     setTimeout(
-                        () => dispatch({ type: 'appSet/setReading', payload: false }),
+                        () => dispatch({ type: 'appSet/setReading', payload: { reading: false } }),
                         queryTimeout * 1000
                     );
                 },

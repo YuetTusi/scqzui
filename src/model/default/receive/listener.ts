@@ -443,7 +443,7 @@ export function appRecFinish({ msg }: Command<{
     message.destroy();
     message.info(msg.info ?? '');
     dispatch({ type: 'trail/readAppQueryJson', payload: { value: msg.value } });
-    dispatch({ type: 'appSet/setReading', payload: false })
+    dispatch({ type: 'appSet/setReading', payload: { reading: false } })
 }
 
 /**
@@ -565,4 +565,46 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
         //     }]
         // });
     });
+}
+
+/**
+ * 更新手机IMEI/IMID值
+ */
+export function setIMEIOrIMID({ msg }: Command<{
+    usb: number,
+    phoneInfo: { name: string, value: string }[]
+}>, dispatch: Dispatch<any>) {
+    const { usb, phoneInfo } = msg;
+    let emptyCount = 0;
+    for (let i = 0; i < phoneInfo.length; i++) {
+        switch (phoneInfo[i].name.toLocaleLowerCase()) {
+            case 'imei1':
+                if (helper.isNullOrUndefinedOrEmptyString(phoneInfo[i].value)) {
+                    emptyCount++;
+                }
+                break;
+            case 'imei2':
+                if (helper.isNullOrUndefinedOrEmptyString(phoneInfo[i].value)) {
+                    emptyCount++;
+                }
+                break;
+            case 'meid':
+                if (helper.isNullOrUndefinedOrEmptyString(phoneInfo[i].value)) {
+                    emptyCount++;
+                }
+                break;
+        }
+    }
+    dispatch({ type: 'appSet/setCountDown', payload: false });
+    dispatch({ type: 'appSet/setReading', payload: { reading: false } });
+    dispatch({
+        type: 'device/updateProp', payload: {
+            usb,
+            name: 'phoneInfo',
+            value: phoneInfo
+        }
+    });
+    if (emptyCount >= 3) {
+        dispatch({ type: 'imeiModal/setOpen', payload: true });
+    }
 }

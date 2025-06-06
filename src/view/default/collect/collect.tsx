@@ -28,7 +28,7 @@ import { StateTree } from '@/type/model';
 import { AppSetStore } from '@/model/default/app-set';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
-import { LiveModal, FetchStateModal } from '@/component/dialog';
+import { LiveModal } from '@/component/dialog';
 import {
     AppleCreditModal, HelpModal, ApplePasswordModal,
     UMagicCodeModal, GuideModal, CloudCodeModal, CloudHistoryModal
@@ -81,7 +81,9 @@ const Collect: FC<CollectProp> = ({ }) => {
     //                 }, { "name": "型号", "value": "TAS-AL00" }, {
     //                     "name": "系统版本", "value": "10"
     //                 }, {
-    //                     "name": "IMEI", "value": "867099041036009"
+    //                     "name": "IMEI2", "value": "867099041036009"
+    //                 }, {
+    //                     "name": "IMID", "value": "867099041000000"
     //                 }],
     //                 "serial": "JTK0219826000164",
     //                 "system": DeviceSystem.HarmonyOS,

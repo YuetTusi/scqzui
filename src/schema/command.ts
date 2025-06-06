@@ -71,6 +71,10 @@ enum CommandType {
      */
     Extraction = 'extraction',
     /**
+     * 查询IMEI
+     */
+    IMEI = 'imei',
+    /**
      * 消息回馈联通验证码结果（Fetch）
      */
     UMagicCodeReply = 'umagic_code_reply',

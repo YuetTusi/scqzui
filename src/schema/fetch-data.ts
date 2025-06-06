@@ -118,6 +118,18 @@ class FetchData {
      * 规则时段止
      */
     ruleTo?: number;
+    /**
+     * IMEI1
+     */
+    imei1?: string;
+    /**
+     * IMEI2
+     */
+    imei2?: string;
+    /**
+     * MEID
+     */
+    meid?: string;
 }
 
 export { FetchData };

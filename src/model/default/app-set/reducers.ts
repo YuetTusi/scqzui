@@ -6,7 +6,15 @@ export default {
      * 设置全局读取状态
      */
     setReading(state: AppSetStore, { payload }: AnyAction) {
-        state.reading = payload;
+        state.reading = payload.reading;
+        state.readingMessage = payload.readingMessage ?? '加载中';
+        return state;
+    },
+    /**
+     * 设置倒计时模式
+     */
+    setCountDown(state: AppSetStore, { payload }: AnyAction) {
+        state.countDown = payload;
         return state;
     },
     /**

@@ -467,6 +467,16 @@ ipcMain.on('receive-time', (_: IpcMainEvent, usb: number, timeString: string) =>
         mainWindow.webContents.send('receive-time', usb, timeString);
     }
 });
+ipcMain.on('clock-1', (_: IpcMainEvent) => {
+    if (mainWindow && mainWindow.webContents !== null) {
+        mainWindow.webContents.send('clock-1');
+    }
+});
+ipcMain.on('clock-60', (_: IpcMainEvent) => {
+    if (mainWindow && mainWindow.webContents !== null) {
+        mainWindow.webContents.send('clock-60');
+    }
+});
 //向主窗口发送采集结束以停止计时
 ipcMain.on('fetch-over', (_: IpcMainEvent, usb: number) => {
     if (mainWindow && mainWindow.webContents !== null) {

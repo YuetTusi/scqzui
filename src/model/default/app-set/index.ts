@@ -13,6 +13,14 @@ interface AppSetStore {
      */
     reading: boolean,
     /**
+     * 读取中提示消息
+     */
+    readingMessage: string,
+    /**
+     * 是否倒计时
+     */
+    countDown: boolean,
+    /**
      * 模式（标准，云取证，点验，警综）
      */
     dataMode: DataMode,
@@ -34,6 +42,7 @@ let model: Model = {
     namespace: 'appSet',
     state: {
         reading: false,
+        countDown: false,
         dataMode: DataMode.Self,
         alertMessage: [],
         cloudAppData: []

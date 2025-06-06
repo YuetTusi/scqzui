@@ -6,6 +6,9 @@ import { helper } from '@/utils/helper';
 
 dayjs.extend(customParseFormat);
 
+let timerHandle: any = null;
+let second = 0;
+
 const { max } = helper.readConf()!;
 const list: string[] = [];
 const timerMap = new Map();
@@ -13,6 +16,14 @@ const timerMap = new Map();
 for (let i = 0; i < max; i++) {
     list.push('00:00:00');
 }
+
+timerHandle = setInterval(() => {
+    if (second >= Number.MAX_VALUE) {
+        second = 0;
+    }
+    ipcRenderer.send('clock-1');
+    second++;
+}, 1000);
 
 ipcRenderer.on('time', (_: IpcRendererEvent, usb: number, isStart: boolean) => {
     if (isStart) {
