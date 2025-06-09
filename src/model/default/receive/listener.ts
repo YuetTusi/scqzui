@@ -598,9 +598,8 @@ export function setIMEIOrIMID({ msg }: Command<{
     dispatch({ type: 'appSet/setCountDown', payload: false });
     dispatch({ type: 'appSet/setReading', payload: { reading: false } });
     dispatch({
-        type: 'device/updateProp', payload: {
+        type: 'device/mergePhoneInfo', payload: {
             usb,
-            name: 'phoneInfo',
             value: phoneInfo
         }
     });

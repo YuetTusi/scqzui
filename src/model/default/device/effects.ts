@@ -565,5 +565,32 @@ export default {
         } catch (error) {
             logger.error(`开始解析失败 @model/default/device/*startParse: ${error.message}`);
         }
+    },
+    /**
+     * 合并设备的phoneInfo
+     */
+    *mergePhoneInfo({ payload }: AnyAction, { select, put }: EffectsCommandMap) {
+
+        const { usb, value } = payload as { usb: number, value: { name: string, value: string }[] };
+        const state: DeviceStoreState = yield select((state: StateTree) => state.device);
+        const dev = state.deviceList[usb - 1];
+
+        const next = (dev.phoneInfo ?? []).reduce((acc, current) => {
+            const has = value.find(i => i.name.toLowerCase() === current.name.toLowerCase());
+            if (has === undefined) {
+                acc.push(current);
+            } else {
+                acc.push(has);
+            }
+            return acc;
+        }, [] as { name: string, value: string }[]);
+
+        yield put({
+            type: 'updateProp', payload: {
+                usb,
+                name: 'phoneInfo',
+                value: next
+            }
+        });
     }
 };
