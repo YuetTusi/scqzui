@@ -319,7 +319,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             entity.imei2 = values.imei2 ?? '';
             entity.meid = values.meid ?? '';
 
-            if (useBcp && entity.imei1 === '' && entity.imei2 === '' && entity.meid === '') {
+            if (useBcp && device!.system === DeviceSystem.Android && entity.imei1 === '' && entity.imei2 === '' && entity.meid === '') {
                 //如果有BCP功能，IMEI/IMID必须填写一项
                 Modal.warn({
                     title: '提示',
