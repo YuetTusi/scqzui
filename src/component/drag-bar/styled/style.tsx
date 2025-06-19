@@ -38,9 +38,17 @@ export const DragBarBox = styled.div`
                 border-left: 1px solid ${props => props.theme['panel-color']};
                 border-bottom: 1px solid ${props => props.theme['panel-color']};
                 border-bottom-right-radius: 0;
-                background-color: ${props => darken(0.2, props.theme['panel-color'])};
+                background-color: ${props =>
+        props.theme['mode'] === 'dark'
+            ? lighten(0.2, props.theme['panel-color'])
+            : darken(0.2, props.theme['panel-color'])
+    };
                 &:hover{
-                    background-color: ${props => darken(0.4, props.theme['panel-color'])};
+                    background-color: ${props =>
+        props.theme['mode'] === 'dark'
+            ? lighten(0.4, props.theme['panel-color'])
+            : darken(0.4, props.theme['panel-color'])
+    };
                 }
             }
             &:nth-child(2){
@@ -50,9 +58,17 @@ export const DragBarBox = styled.div`
                 border-left: 1px solid ${props => props.theme['panel-color']};
                 border-bottom: 1px solid ${props => props.theme['panel-color']};
                 margin-right: 10px;
-                background-color: ${props => darken(0.2, props.theme['panel-color'])};
+                background-color: ${props =>
+        props.theme['mode'] === 'dark'
+            ? lighten(0.2, props.theme['panel-color'])
+            : darken(0.2, props.theme['panel-color'])
+    };
                 &:hover{
-                    background-color: ${props => darken(0.4, props.theme['panel-color'])};
+                    background-color: ${props =>
+        props.theme['mode'] === 'dark'
+            ? lighten(0.4, props.theme['panel-color'])
+            : darken(0.4, props.theme['panel-color'])
+    };
                 }
             }
             &:nth-child(3){

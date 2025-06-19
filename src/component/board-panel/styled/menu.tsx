@@ -10,7 +10,7 @@ const MenuBox = styled.ul`
         margin:0;
         padding: 10px 20px;
         list-style-type: none;
-        border-bottom: 1px solid #303030;
+        border-bottom: 1px solid ${props => props.theme['background-color']};
         &>span{
             margin-left: 10px;
         }

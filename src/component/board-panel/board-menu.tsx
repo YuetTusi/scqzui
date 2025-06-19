@@ -136,7 +136,8 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
 const BoardMenu: FC<MenuProp> = ({ onItemClick, children }) => <Popover
     content={<MenuItems onItemClick={onItemClick} />}
     trigger="click"
-    placement="bottomLeft">
+    placement="bottomLeft"
+    arrowPointAtCenter={true}>
     {children}
 </Popover>;
 

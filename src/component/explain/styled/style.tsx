@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ExplainBox = styled.fieldset`
     font-size: 1.2rem;
-    border:1px solid #303030;
+    border:1px solid ${props => props.theme['mode'] === 'dark' ? '#303030' : props.theme['background-color']};
     border-radius: ${(props) => props.theme['border-radius-base']};
 
     &>.inner-field{

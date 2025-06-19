@@ -37,7 +37,6 @@ const Header = styled.div`
     .header-buttons{
         .anticon{
             cursor: pointer;
-            padding-left:14px;
         }
     }
 `;
