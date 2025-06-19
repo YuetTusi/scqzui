@@ -225,6 +225,10 @@ interface Conf {
 	 * OCR端口
 	 */
 	ocrPort: number,
+
+	ocrTimeout: number,
+
+	asrTimeout: number,
 	/**
 	 * 采集程序路径
 	 */

@@ -3,7 +3,7 @@ const { ProvidePlugin } = require('webpack');
 const AntdDayjsPlugin = require('antd-dayjs-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { getRenderer, getEntry, getHtmlPlugins } = require('./webpack.tool');
-const theme = require('./theme/cyan.json');
+const theme = require('./src/theme/cyan.dark.json');
 
 const dir = getRenderer();
 

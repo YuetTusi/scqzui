@@ -5,12 +5,12 @@ import Empty from 'antd/lib/empty';
 import zhCN from 'antd/es/locale/zh_CN';
 import ConfigProvider from 'antd/lib/config-provider';
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyle } from '@/styled/global-style';
+import { GlobalLightStyle } from '@/styled/global-light';
 import Crash from '@/component/crash';
 import NotFound from '@/component/not-found';
 import { LoadView } from '@/component/loading';
 import LayoutPanel from '@/component/layout-panel/layout-panel';
-import theme from '../../../theme/cyan.json';
+import theme from '../../theme/cyan.light.json';
 
 /**
  * 路由配置
@@ -44,7 +44,7 @@ const createRouter = (api?: RouterAPI) =>
                 </Router>
             </Crash>
         </ThemeProvider>
-        <GlobalStyle />
+        <GlobalLightStyle />
     </ConfigProvider>;
 
 export { createRouter };
