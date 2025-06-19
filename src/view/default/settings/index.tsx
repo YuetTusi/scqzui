@@ -104,7 +104,7 @@ const Index: FC<{}> = () => <SettingLayout>
                     <NavLink to="/settings/ftp" replace={true} className="hvr-sweep-to-right">
                         <div>
                             <span className="ico"><FontAwesomeIcon icon={faFileArrowUp} /></span>
-                            <span className="name">BCP文件上传配置</span>
+                            <span className="name">BCP上传配置</span>
                         </div>
                     </NavLink>
                 </li>
@@ -160,7 +160,7 @@ const Index: FC<{}> = () => <SettingLayout>
         component={() => <ContentBox title="云点验登录"><TraceLogin /></ContentBox>} />
     <Route
         path="/settings/ftp"
-        component={() => <ContentBox title="BCP文件上传配置"><Ftp /></ContentBox>} />
+        component={() => <ContentBox title="BCP上传配置"><Ftp /></ContentBox>} />
     <Route
         path="/settings/login-config"
         component={() => <ContentBox title="登录验证配置"><LoginConfig /></ContentBox>} />

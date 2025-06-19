@@ -11,7 +11,7 @@ const Split = styled.hr`
 
 const SortPanel = styled.div`
 
-    border: 1px solid #303030;
+    border: 1px solid ${props => props.theme['primary-color']};
     border-radius: ${props => props.theme['border-radius-base']};
 
     &>.caption{
@@ -23,7 +23,7 @@ const SortPanel = styled.div`
         background-color: ${props => props.theme['primary-color']};
     }
     &>.content{
-        color:#ffffffd9;
+        color:#222;
         border-bottom-left-radius: ${props => props.theme['border-radius-base']};
         border-bottom-right-radius: ${props => props.theme['border-radius-base']};
     }

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import color2 from 'tinycolor2';
+import { lighten } from 'polished';
 
 const DeivceBox = styled.div`
 
@@ -16,8 +16,11 @@ const DeivceBox = styled.div`
     background-color:#056099;
 
     &.not-connected{
-        background-color:rgba(34,126,165,0.2);
-    }
+        background-color:${(props =>
+        props.theme['mode'] === 'dark'
+            ? 'rgba(34,126,165,0.2)'
+            : '#8b94a9')
+    };}
     &.connected{
         background-color:#056099;
     }
@@ -29,6 +32,9 @@ const DeivceBox = styled.div`
     }
     &.has-error{
         background-color:#056099;
+        .ant-progress-text{
+            color:#ff4d4f !important;
+        }
     }
 
     .ico{
@@ -40,9 +46,10 @@ const DeivceBox = styled.div`
         justify-content:center;
         align-items:center;
         font-size: 10rem;
+        color:#e9e9e9;
 
         .ant-progress-text{
-            color:${(props => props.theme['text-color'])};
+            color:#fff;
         }
     }
     .fns{
@@ -73,7 +80,7 @@ const DeivceBox = styled.div`
                 font-size: 1.2rem;
             }
             p{
-                color:${(props) => color2(props.theme['link-color']).brighten(20).toString()};
+                color:${(props) => lighten(0.1, props.theme['link-color'])};
                 font-weight: bold;
                 font-style: normal;
                 text-align: center;
@@ -93,12 +100,13 @@ const DeivceBox = styled.div`
                     label{
                         display: inline-block;
                         width:70px;
+                        color:#fff;
                         &:after{
                             content:"："
                         }
                     }
                     span{
-                        color:${(props) => color2(props.theme['link-color']).brighten(20).toString()};
+                        color:${(props) => lighten(0.1, props.theme['link-color'])};
                         font-family:"Arial";
                     }
                 }

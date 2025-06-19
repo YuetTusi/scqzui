@@ -10,7 +10,7 @@ export const BcpBox = styled.div`
     border-radius: ${props => props.theme['border-radius-base']};
     display: flex;
     flex-direction: column;
-    background-color: #202940;
+    background-color: ${props => props.theme['panel-color']};
 
     &>.scroll-panel{
         position: absolute;

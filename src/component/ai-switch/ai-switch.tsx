@@ -150,7 +150,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                             </Col>
                             : <Col span={j === row.length - 1 ? last : Math.ceil(24 / columnCount)} key={`AICOL_${j}`}>
                                 <Tooltip title={col.tips}>
-                                    <label>{col.title}：</label>+
+                                    <label>{col.title}：</label>
                                     <Switch
                                         onChange={(checked: boolean) => onSwitchChange(checked, col.type)}
                                         checked={col.use}

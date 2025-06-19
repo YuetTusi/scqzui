@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-// import color2 from 'tinycolor2';
 
 const MenuPanel = styled.menu`
     margin:0;
     padding:0 15px;
     width:220px;
     height:100%;
-    background-color: #202940;
+    background-color: ${props => props.theme['panel-color']};
 
     .sub-title{
         display: flex;
@@ -14,7 +13,7 @@ const MenuPanel = styled.menu`
         justify-content: center;
         align-items: center;
         height:55px;
-        color:#a9afbbd1;
+        color:${props => props.theme['text-color']};
         font-size: 1.6rem;
         text-align: center;
         border-bottom: 1px solid #a9afbbd1;
@@ -31,7 +30,7 @@ const MenuPanel = styled.menu`
                 border-radius: ${props => props.theme['border-radius-base']};
                 padding: 12px 15px;
                 display:block;
-                color:#a9afbbd1;
+                color:${props => props.theme['text-color']};
                 &.active{
                     background-color: ${props => props.theme['primary-color']};
                     color:#fff;

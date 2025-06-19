@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const ListBox = styled.div`
     position: relative;
     border-radius: ${props => props.theme['border-radius-base']};
-    border:1px solid #303030;
+    border:1px solid ${props => props.theme['primary-color']};
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -28,6 +28,7 @@ export const ListBox = styled.div`
         padding-top: 10px;
         padding-bottom: 10px;
         scroll-behavior: smooth;
+        background-color: ${props => props.theme['background-color']};
 
         .d-empty{
             display: flex;
@@ -91,6 +92,7 @@ export const ListBox = styled.div`
                     label{
                         display: inline-block;
                         width: 70px;
+                        color:#fff;
                     }
                     span{
                         display: inline-block;
@@ -99,6 +101,7 @@ export const ListBox = styled.div`
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
+                        color:${props => props.theme['primary-color']};
                     }
                 }
             }

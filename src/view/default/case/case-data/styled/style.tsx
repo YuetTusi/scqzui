@@ -7,7 +7,7 @@ export const CaseDataBox = styled.div`
 
 	.case-content {
 		padding: 10px;
-		background-color:#202940;
+		background-color:${props => props.theme['panel-color']};
 		position: absolute;
 		top: 0;
 		left: 10px;

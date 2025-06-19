@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { execFile } from 'child_process';
 import { shell, ipcRenderer, OpenDialogReturnValue } from 'electron';
-import React, { FC, MouseEvent, useEffect } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import * as echars from 'echarts/core';
 import { PieChart } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers';
@@ -20,6 +20,7 @@ import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import { useCase, useQuickHit } from '@/hook';
 import { helper } from '@/utils/helper';
+import { AppTheme } from '@/schema/theme';
 import { EmptyBox } from './styled/style';
 import { ExtraAction } from '../prop';
 import { HitChartModalProp } from './prop';
@@ -49,6 +50,7 @@ const HitChartModal: FC<HitChartModalProp> = ({
     visible, record, exportHandle, closeHandle
 }) => {
 
+    const theme = useRef(Number.parseInt(localStorage.getItem('theme') ?? '0') as AppTheme);
     const caseData = useCase(record?.caseId);
     const data = useQuickHit(record);
 
@@ -65,13 +67,15 @@ const HitChartModal: FC<HitChartModalProp> = ({
         const $target = document.getElementById('hit-dom');
         if ($target !== null) {
             if (charts === null) {
-                charts = echars.init($target, 'dark');
+                charts = theme.current === AppTheme.CyanDark
+                    ? echars.init($target, 'dark')
+                    : echars.init($target);
             }
             charts.setOption({
                 tooltip: {
                     trigger: 'item'
                 },
-                backgroundColor: '#1f1f1f',
+                backgroundColor: theme.current === AppTheme.CyanDark ? '#1f1f1f' : '#fff',
                 legend: {
                     type: 'scroll',
                     orient: 'vertical',
@@ -79,7 +83,7 @@ const HitChartModal: FC<HitChartModalProp> = ({
                     top: 0,
                     bottom: 0,
                     pageTextStyle: {
-                        color: '#ffffff'
+                        color: theme.current === AppTheme.CyanDark ? '#fff' : '#222',
                     },
                     formatter: (name: string) => {
                         const next = (data?.items ?? []).find((item: any) => item.name === name);

@@ -58,8 +58,7 @@ const LogListBox = styled.div`
 		padding: 5px 12px;
 		margin: 0 10px;
 		border-radius: ${props => props.theme['border-radius-base']};
-		text-shadow: 1px 1px 1px #222;
-		color: ${(props => props.theme['text-color'])};
+		color: #fff;
 		background-color: ${(props) => props.theme['primary-color']};
 		& > span {
 			margin-left: 1rem;
@@ -87,13 +86,16 @@ const LogListBox = styled.div`
 		margin: 5px 12px;
 		padding: 0;
 		border-radius: ${(props) => props.theme['border-radius-base']};
-		border: 1px solid #2a2a2a;
+		border: 1px solid ${(props => props.theme['panel-color'])};
 	}
 	li {
 		list-style-type: none;
 		padding: 5px;
 		color: ${(props => props.theme['text-color'])};
-        border-bottom: 1px solid #2a2a2a;
+        border-bottom: 1px solid ${(props => props.theme['panel-color'])};
+		&:last-child{
+			border-bottom: none;
+		}
 		/* &:nth-child(2n + 1) {
 			background-color: #181d30;
 		} */

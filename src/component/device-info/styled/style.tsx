@@ -4,9 +4,8 @@ export const DeviceBox = styled.div`
 
     position:relative;
     padding: 10px;
-    margin: 5px;
     border-radius: ${props => props.theme['border-radius-base']};
-    background-color: #202940;
+    background-color: ${props => props.theme['background-color']};
 
     &>.loading-mask{
         position:absolute;

@@ -1,4 +1,5 @@
 import debounce from 'lodash/debounce';
+import classnames from 'classnames';
 import { shell } from 'electron';
 import { join, resolve } from 'path';
 import { execFile } from 'child_process';
@@ -37,6 +38,7 @@ import AndroidSetModal, { SetType } from './android-set-modal';
 import { SnapshotModal } from './snapshot-modal';
 import { PaperworkModal } from './paperwork-modal';
 import { SortBox, ToolBox } from './styled/style';
+import { AppTheme } from '@/schema/theme';
 import { ImportTypes } from '@/schema/import-type';
 import huaweiSvg from './styled/images/huawei.svg';
 import honorSvg from './styled/images/honor.svg';
@@ -50,7 +52,7 @@ import windowsmobileSvg from './styled/images/windowsmobile.svg';
 import windowsphoneSvg from './styled/images/windowsphone.svg';
 import badaSvg from './styled/images/bada.svg';
 import featurephoneSvg from './styled/images/featurephone.svg';
-import meegoSvg from './styled/images/meego.svg';
+import meegoPng from './styled/images/meego.png';
 import hwcopyPng from './styled/images/hwcopy.png';
 import samsungSmartswitch from './styled/images/samsung_smartswitch.png';
 import apkSvg from './styled/images/apk.svg';
@@ -79,6 +81,7 @@ const Tool: FC<ToolProp> = () => {
     const dispatch = useDispatch();
     const currentCrackType = useRef(CrackTypes.VivoAppLock);
     const currentSetType = useRef(SetType.PickAuth);
+    const currentTheme = useRef(Number.parseInt(localStorage.getItem('theme') ?? '0') as AppTheme)
     const [modalState, dispatchModal] = useReducer(
         (state: ModalOpenState, { type, payload }: Action) => ({
             ...state, [type]: payload
@@ -341,7 +344,12 @@ const Tool: FC<ToolProp> = () => {
                             鸿蒙备份
                         </div>
                     </div>
-                    <div onClick={() => onImportClick(ImportTypes.Hisuite, '导入数据（荣耀备份）')} className="t-button">
+                    <div
+                        onClick={() => onImportClick(ImportTypes.Hisuite, '导入数据（荣耀备份）')}
+                        className={classnames({
+                            't-button': true,
+                            'reverse': currentTheme.current === AppTheme.CyanLight
+                        })}>
                         <div className="ico">
                             <img src={honorSvg} width="60" height="50" />
                         </div>
@@ -489,7 +497,12 @@ const Tool: FC<ToolProp> = () => {
                                 黑莓
                             </div>
                         </div>
-                        <div onClick={() => fakeFeaturePhoneModal('塞班')} className="t-button">
+                        <div
+                            onClick={() => fakeFeaturePhoneModal('塞班')}
+                            className={classnames({
+                                't-button': true,
+                                'reverse': currentTheme.current === AppTheme.CyanLight
+                            })}>
                             <div className="ico">
                                 <img src={symbianSvg} width="80" height="50" />
                             </div>
@@ -513,9 +526,11 @@ const Tool: FC<ToolProp> = () => {
                                 WindowsPhone
                             </div>
                         </div>
-                        <div onClick={() => fakeFeaturePhoneModal('MeeGo')} className="t-button">
-                            <div className="ico">
-                                <img src={meegoSvg} width="60" height="50" />
+                        <div
+                            onClick={() => fakeFeaturePhoneModal('MeeGo')}
+                            className="t-button">
+                            <div className="ico" style={{ height: '50px' }}>
+                                <img src={meegoPng} width="60" />
                             </div>
                             <div className="name">
                                 MeeGo

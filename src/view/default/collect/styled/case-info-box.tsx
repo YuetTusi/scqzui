@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import color2 from 'tinycolor2';
+import { lighten } from 'polished';
 
 const CaseInfoBox = styled.div`
     & > div{
@@ -9,7 +9,7 @@ const CaseInfoBox = styled.div`
         align-items: center;
         & > .txt{
             display: inline-block;
-            color:${(props => props.theme['text-color'])};
+            color:#fff;
             width: 90px;
             &:after{
                 content:"："
@@ -21,7 +21,7 @@ const CaseInfoBox = styled.div`
             max-width: 180px;
             overflow: hidden;
             text-overflow: ellipsis;
-            color:${(props) => color2(props.theme['link-color']).brighten(20).toString()};
+            color:${(props) => lighten(0.1, props.theme['link-color'])};
         }
     }
 `;

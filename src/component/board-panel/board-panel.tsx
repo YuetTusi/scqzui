@@ -8,7 +8,11 @@ import CheckCircleOutlined from '@ant-design/icons/CheckCircleOutlined';
 import WarningOutlined from '@ant-design/icons/WarningOutlined';
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import LogoutOutlined from '@ant-design/icons/LogoutOutlined';
+import SkinOutlined from '@ant-design/icons/SkinOutlined';
+import SunOutlined from '@ant-design/icons/SunOutlined';
+import MoonOutlined from '@ant-design/icons/MoonOutlined';
 import MenuOutlined from '@ant-design/icons/MenuOutlined';
+import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import { helper } from '@/utils/helper';
@@ -23,6 +27,7 @@ import SofthardwareModal from '../softhardware-modal';
 import InputHistoryModal from '../input-history-modal';
 import NedbImportModal, { importPrevNedb } from '../nedb-import-modal';
 import { UnorderList } from '../style-tool/list';
+import { AppTheme } from '@/schema/theme';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
@@ -67,6 +72,7 @@ const BoardPanel: FC<{}> = ({ children }) => {
     const [version, setVersion] = useState<string>('');
     const [manu, setManu] = useState<string>('');
     const [isDebug, setIsDebug] = useState<boolean>(false);
+    const [theme, setTheme] = useState<AppTheme>(Number.parseInt(localStorage.getItem('theme') ?? '0'));
     const [softhardwareModalVisible, setSofthardwareModalVisible] = useState<boolean>(false);
     const [inputHistoryModalVisbile, setInputHistoryModalVisible] = useState<boolean>(false);
     const [nedbImportModalVisbile, setNedbImportModalVisbile] = useState<boolean>(false);
@@ -200,6 +206,19 @@ const BoardPanel: FC<{}> = ({ children }) => {
         }
     };
 
+    /**
+     * 切换主题
+     */
+    const onSkinClick = debounce((event: MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        const theme = localStorage.getItem('theme') ?? '0';
+        const nextSkin = Number.parseInt(theme) === AppTheme.CyanDark
+            ? AppTheme.CyanLight
+            : AppTheme.CyanDark;
+        setTheme(nextSkin);
+        ipcRenderer.send('theme', nextSkin);
+    }, 3000, { leading: true, trailing: false });
+
     return <>
         <BackgroundBox>
             <DragBar />
@@ -214,12 +233,32 @@ const BoardPanel: FC<{}> = ({ children }) => {
                     </em>
                 </div>
                 <div className="header-buttons">
+                    <Button
+                        onClick={onSkinClick}
+                        icon={theme === AppTheme.CyanDark ? <SunOutlined /> : <MoonOutlined />}
+                        type="link"
+                        size="large" />
                     <Auth deny={!useLogin}>
-                        <LogoutOutlined onClick={logoutClick} title="用户登出" />
+                        <Button
+                            onClick={logoutClick}
+                            icon={<LogoutOutlined />}
+                            type="link"
+                            size="large"
+                            title="用户登出" />
                     </Auth>
-                    <QuestionCircleOutlined onClick={openHelpDocClick} title="帮助文档" />
+                    <Button
+                        onClick={openHelpDocClick}
+                        icon={<QuestionCircleOutlined />}
+                        type="link"
+                        title="帮助文档"
+                        size="large"
+                    />
+
                     <BoardMenu onItemClick={onItemClick}>
-                        <MenuOutlined />
+                        <Button
+                            type="link"
+                            icon={<MenuOutlined />}
+                            size="large" />
                     </BoardMenu>
                 </div>
             </Header>

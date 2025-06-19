@@ -4,6 +4,7 @@ import React, { FC } from 'react';
 import { DeviceSystem } from '@/schema/device-system';
 import harmonyOsSvg from './styled/font/harmonyos.svg';
 import { OsIconProp } from './prop';
+import { AndroidIconBox, AppleIconBox } from './styled/box';
 
 /**
  * 系统图标
@@ -12,9 +13,13 @@ const OsIcon: FC<OsIconProp> = ({ system }) => {
 
     switch (system) {
         case DeviceSystem.Android:
-            return <AndroidFilled style={{ color: '#76c058' }} title="安卓设备" />;
+            return <AndroidIconBox>
+                <AndroidFilled title="安卓设备" />
+            </AndroidIconBox>;
         case DeviceSystem.IOS:
-            return <AppleFilled title="苹果设备" />;
+            return <AppleIconBox>
+                <AppleFilled title="苹果设备" />
+            </AppleIconBox>;
         case DeviceSystem.HarmonyOS:
             return <img
                 style={{

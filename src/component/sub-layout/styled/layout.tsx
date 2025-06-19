@@ -40,7 +40,7 @@ const MainBox = styled.div`
     right: 0;
     bottom: 10px;
     left: 0;
-    background-color: #202940;
+    background-color: ${props => props.theme['panel-color']};
     border-radius: ${props => props.theme['border-radius-base']};
     margin:0 10px;
     padding: 10px;

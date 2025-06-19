@@ -10,7 +10,7 @@ export const BarBox = styled.div`
 
 export const FormBox = styled.div`
     padding: 20px 10px;
-    background-color: #141414;
+    background-color: ${props => props.theme['background-color']};
     border-radius: ${props => props.theme['border-radius-base']};
 
     .note{

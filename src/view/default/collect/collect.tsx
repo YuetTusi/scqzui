@@ -73,7 +73,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     //     for (let i = 0; i < 10; i++) {
     //         devices.push({
     //             ...{
-    //                 "fetchState": FetchState.Connected,
+    //                 "fetchState": FetchState.NotConnected,
     //                 "manufacturer": "Mi",
     //                 "model": "TAS-AL00",
     //                 "phoneInfo": [{

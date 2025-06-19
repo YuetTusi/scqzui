@@ -5,8 +5,9 @@ import CloseCircleOutlined from '@ant-design/icons/CloseCircleOutlined';
 import Button from 'antd/lib/button';
 import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
-import { helper } from '@/utils/helper';
 import { useSubscribe } from '@/hook';
+import { helper } from '@/utils/helper';
+import { AppTheme } from '@/schema/theme';
 import FetchRecord, { ProgressType } from '@/schema/fetch-record';
 import { FetchRecordBox } from './styled/style';
 import { LiveModalProp } from './prop';
@@ -19,6 +20,7 @@ const { fetchText } = helper.readConf()!;
 const LiveModal: FC<LiveModalProp> = ({ title, device, visible, cancelHandle }) => {
     const [data, setData] = useState<FetchRecord[]>([]);
     const scrollBox = useRef<HTMLDivElement>(null);
+    const theme = useRef(Number.parseInt(localStorage.getItem('theme') ?? '0') as AppTheme);
 
     /**
      * 接收主进程传来的采集进度数据
@@ -69,7 +71,14 @@ const LiveModal: FC<LiveModalProp> = ({ title, device, visible, cancelHandle }) 
                         case ProgressType.Normal:
                             return <li key={`L_${i}`}>
                                 <label>【{renderTime(item.time)}】</label>
-                                <span style={{ color: '#fff' }}>{item.info}</span>
+                                <span
+                                    style={{
+                                        color: theme.current === AppTheme.CyanDark
+                                            ? '#fff'
+                                            : '#222'
+                                    }}>
+                                    {item.info}
+                                </span>
                             </li>;
                         case ProgressType.Warning:
                             return <li key={`L_${i}`}>
@@ -79,12 +88,19 @@ const LiveModal: FC<LiveModalProp> = ({ title, device, visible, cancelHandle }) 
                         case ProgressType.Message:
                             return <li key={`L_${i}`}>
                                 <label>【{renderTime(item.time)}】</label>
-                                <span style={{ color: '#f9ca24' }}>{item.info}</span>
+                                <span style={{ color: '#e4b302' }}>{item.info}</span>
                             </li>;
                         default:
                             return <li key={`L_${i}`}>
                                 <label>【{renderTime(item.time)}】</label>
-                                <span style={{ color: '#fff' }}>{item.info}</span>
+                                <span
+                                    style={{
+                                        color: theme.current === AppTheme.CyanDark
+                                            ? '#fff'
+                                            : '#222'
+                                    }}>
+                                    {item.info}
+                                </span>
                             </li>;
                     }
                 })}

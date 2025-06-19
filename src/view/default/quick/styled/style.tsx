@@ -11,7 +11,7 @@ export const QuickBox = styled.div`
     border-radius: ${props => props.theme['border-radius-base']};
     display: flex;
     flex-direction: column;
-    background-color: #202940;
+    background-color: ${props => props.theme['panel-color']};;
 
 	.search-bar {
 		display: flex;
@@ -42,14 +42,14 @@ export const TableBox = styled.div`
     }
     &>.case-list{
         height: 100%;
-        background-color: #141414;
+        background-color: ${props => props.theme['background-color']};
         flex:none;
         border-radius: ${props => props.theme['border-radius-base']};
     }
     &>.dev-list{
         flex:1;
         height: 100%;
-        background-color: #141414;
+        background-color: ${props => props.theme['background-color']};
         margin-left: 10px;
         border-radius: ${props => props.theme['border-radius-base']};
     }

@@ -1,30 +1,61 @@
-import React, { FC, lazy, Suspense } from 'react';
-import { RouterAPI } from 'dva';
+import React, { FC, lazy, Suspense, useEffect, useState } from 'react';
+import { RouterAPI, useDispatch } from 'dva';
 import { Router, Switch, Route } from 'dva/router';
 import Empty from 'antd/lib/empty';
 import zhCN from 'antd/es/locale/zh_CN';
 import ConfigProvider from 'antd/lib/config-provider';
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyle } from '@/styled/global-style';
+import { GlobalLightStyle, GlobalDarkStyle } from '@/styled';
+import { useSubscribe } from '@/hook';
+import { AppTheme } from '@/schema/theme';
+import { helper } from '@/utils/helper';
 import Crash from '@/component/crash';
 import NotFound from '@/component/not-found';
 import { LoadView } from '@/component/loading';
 import BoardPanel, { LoginPanel } from '@/component/board-panel';
 import LayoutPanel from '@/component/layout-panel/layout-panel';
-import theme from '../../../theme/cyan.json';
+import cyanDark from '../../theme/cyan.dark.json';
+import cyanLight from '../../theme/cyan.light.json';
+
+let $skin = document.querySelector<HTMLLinkElement>('#skin');
 
 /**
  * 路由配置
  * @param api 路由参数
  * @returns 路由
  */
-const createRouter = (api?: RouterAPI) =>
-	<ConfigProvider
+const createRouter = (api?: RouterAPI) => {
+
+	// const dispatch = useDispatch();
+	const [theme, setTheme] = useState<AppTheme>(AppTheme.CyanDark);
+
+	useEffect(() => {
+		if ($skin === null) {
+			$skin = document.createElement('link');
+			$skin.id = 'skin';
+			$skin.rel = 'stylesheet';
+			document.head.appendChild($skin);
+		}
+		const currentSkin = Number.parseInt(localStorage.getItem('theme') ?? '0') as AppTheme;
+		setTheme(currentSkin);
+		$skin.href = currentSkin === AppTheme.CyanDark ? './style/antd.dark.css' : './style/antd.css';
+	}, []);
+
+	useSubscribe('theme', (_, nextSkin: AppTheme) => {
+		if ($skin === null) {
+			return;
+		}
+		setTheme(nextSkin);
+		$skin.href = nextSkin === AppTheme.CyanDark ? './style/antd.dark.css' : './style/antd.css';
+		localStorage.setItem('theme', nextSkin.toString());
+	});
+
+	return <ConfigProvider
 		locale={zhCN}
 		autoInsertSpaceInButton={false}
 		renderEmpty={() => <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="暂无数据" />}
 		componentSize="middle">
-		<ThemeProvider theme={theme}>
+		<ThemeProvider theme={theme === AppTheme.CyanDark ? cyanDark : cyanLight}>
 			<Crash>
 				<Router history={api!.history}>
 					<Switch>
@@ -222,7 +253,8 @@ const createRouter = (api?: RouterAPI) =>
 				</Router>
 			</Crash>
 		</ThemeProvider>
-		<GlobalStyle />
-	</ConfigProvider>;
+		{theme === AppTheme.CyanDark ? <GlobalDarkStyle /> : <GlobalLightStyle />}
+	</ConfigProvider>
+};
 
 export { createRouter };

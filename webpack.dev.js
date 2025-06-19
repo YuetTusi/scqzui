@@ -1,6 +1,7 @@
 const { join, resolve } = require('path');
 const { ProvidePlugin } = require('webpack');
 const AntdDayjsPlugin = require('antd-dayjs-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { getRenderer, getEntry, getHtmlPlugins } = require('./webpack.tool');
 const theme = require('./theme/cyan.json');
 
@@ -73,7 +74,8 @@ let config = {
 	},
 	devServer: {
 		static: {
-			directory: join(__dirname, './dist')
+			directory: join(__dirname, './dist'),
+			publicPath: '/'
 		},
 		client: {
 			overlay: { errors: true }
@@ -91,6 +93,18 @@ let config = {
 		}),
 		new AntdDayjsPlugin({
 			// plugins: ['localeData']
+		}),
+		new CopyWebpackPlugin({
+			patterns: [
+				{
+					from: join(__dirname, './src/theme/antd.css'),
+					to: join(__dirname, './dist/renderer/style')
+				},
+				{
+					from: join(__dirname, './src/theme/antd.dark.css'),
+					to: join(__dirname, './dist/renderer/style')
+				}
+			]
 		}),
 		...getHtmlPlugins(dir)
 	]

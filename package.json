@@ -31,6 +31,7 @@
 		"asar": true,
 		"asarUnpack": [
 			"dist/main.js",
+			"dist/renderer/style/*.css",
 			"dist/renderer/fonts/**/*",
 			"dist/renderer/images/**/*",
 			"dist/renderer/default.js",
@@ -112,6 +113,7 @@
 		"antd-dayjs-webpack-plugin": "^1.0.6",
 		"classnames": "^2.3.1",
 		"concurrently": "^7.0.0",
+		"copy-webpack-plugin": "^13.0.0",
 		"cross-env": "^7.0.3",
 		"css-loader": "^6.6.0",
 		"dva": "^2.6.0-beta.22",
@@ -125,6 +127,7 @@
 		"jquery": "^3.6.0",
 		"less": "^4.1.2",
 		"less-loader": "^10.2.0",
+		"polished": "^4.3.1",
 		"qrcode": "^1.5.0",
 		"redux-logger": "^3.0.6",
 		"rimraf": "^3.0.2",
@@ -157,7 +160,6 @@
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"sqlite3": "5.1.6",
-		"tinycolor2": "^1.4.2",
 		"uuid": "^8.3.2",
 		"winston": "^3.6.0"
 	}

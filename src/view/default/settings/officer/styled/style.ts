@@ -1,5 +1,5 @@
-import color2 from 'tinycolor2';
 import styled from 'styled-components';
+import { darken } from 'polished';
 
 export const OfficerBox = styled.div`
     &>.button-bar{
@@ -38,8 +38,7 @@ export const OfficerBox = styled.div`
 			cursor: pointer;
 			border-radius: ${props => props.theme['border-radius-base']};
 			background-color: ${props => props.theme['primary-color']};
-			border-left: 1px solid ${props => color2(props.theme['primary-color']).darken(10).toString()};
-			border-top: 1px solid ${props => color2(props.theme['primary-color']).darken(10).toString()};
+			border: 1px solid ${props => darken(0.1, props.theme['primary-color'])};
 			padding: 24px 20px;
 			display: flex;
 			flex-direction: column;
@@ -115,7 +114,7 @@ export const EditBox = styled.div`
 		left:10px;
 		bottom:10px;
 		right: 10px;
-		background-color: #141414;
+		background-color: ${props => props.theme['panel-color']};
 		border-radius: ${props => props.theme['border-radius-base']};
 
 		display: flex;

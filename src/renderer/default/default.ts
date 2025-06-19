@@ -60,7 +60,7 @@ import imeiModal from '@/model/default/imei-modal';
 import 'jquery';
 import '@ztree/ztree_v3/js/jquery.ztree.all.min';
 import '@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css';
-import 'antd/dist/antd.dark.less';
+
 dayjs.locale('zh-cn');
 dayjs.extend(customParseFormat);
 dayjs.extend(localeData);

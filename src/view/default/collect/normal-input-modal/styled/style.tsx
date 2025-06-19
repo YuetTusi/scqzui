@@ -7,7 +7,7 @@ const NormalInputModalBox = styled.div`
         line-height: 4rem;
         text-indent: 3rem;
         font-size: 1.4rem;
-        color: ${(props => props.theme['text-color'])};
+        color: ${(props => props.theme['primary-color'])};
         .anticon{
             vertical-align: middle;
         }

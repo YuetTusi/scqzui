@@ -19,7 +19,7 @@ const ContentBox = styled.div`
         right: 10px;
         bottom: 10px;
         height: 10px;
-        background-color: #202940;
+        background-color: ${props => props.theme['panel-color']};
     }
 
     & > .button-bar{
@@ -42,7 +42,7 @@ const DevicePanel = styled.div`
     align-items: center;
     flex-wrap: nowrap;
     padding:20px;
-    background-color:#202940;
+    background-color:${props => props.theme['panel-color']};;
     border-radius: ${props => props.theme['border-radius-base']};
 
     .scroll-button{

@@ -30,6 +30,7 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import logger from '@/utils/log';
+import DeviceSystem from '@/schema/device-system';
 
 const { devText, fetchText, parseText } = helper.readConf()!;
 const cwd = process.cwd();
@@ -293,14 +294,12 @@ export function getDevColumns(
             key: 'mobileName',
             render: (value: string, { system, mode, phonePath }: DeviceType) => {
                 return <div>
-                    <span>
-                        <OsIcon system={system} />
-                        {
-                            mode === DataMode.ServerCloud
-                                ? <CloudFilled style={{ marginLeft: '5px' }} title="云取证" className="cloud-color" />
-                                : null
-                        }
-                    </span>
+                    <OsIcon system={system} />
+                    {
+                        mode === DataMode.ServerCloud
+                            ? <CloudFilled style={{ marginLeft: '5px' }} title="云取证" className="cloud-color" />
+                            : null
+                    }
                     <a
                         onClick={(event: MouseEvent<HTMLAnchorElement>) => {
                             event.stopPropagation();

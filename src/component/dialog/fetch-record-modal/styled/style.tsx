@@ -38,11 +38,11 @@ const FetchRecordBox = styled.div`
         margin         : 0;
         padding        : 6px 10px;
         list-style-type: none;
-        border-bottom: 1px solid #303030;
+        border-bottom: 1px solid ${props => props.theme['mode'] === 'dark' ? '#303030' : '#f0f0f0'};
 
         label {
             flex      : none;
-            color: #ffffffd9;
+            color: ${props => props.theme['text-color']};
             align-self: center;
         }
 

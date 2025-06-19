@@ -23,7 +23,7 @@ export const FormBox = styled.div`
 export const ExcelList = styled.div`
 
     position: relative;
-    background-color: #141414;
+    background-color: ${props => props.theme['panel-color']};
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -47,7 +47,8 @@ export const ExcelList = styled.div`
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #303030;
+            background-color: ${props => props.theme['background-color']};
+            border-bottom: 1px solid ${props => props.theme['panel-color']};
             &>a{
                 span{
                     margin-left: 5px;

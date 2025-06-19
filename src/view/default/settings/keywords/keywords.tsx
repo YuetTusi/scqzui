@@ -378,8 +378,7 @@ const Keywords: FC<KeywordsProp> = () => {
             top: '62px',
             left: '9px',
             right: '9px',
-            bottom: '9px',
-            backgroundColor: '#141414'
+            bottom: '9px'
         }}>
             <div className="caption">
                 关键词文档列表

@@ -353,6 +353,12 @@ ipcMain.on('maximize', (_: IpcMainEvent) => {
     }
 });
 
+ipcMain.on('theme', (_: IpcMainEvent, nextSkin) => {
+    if (mainWindow) {
+        mainWindow.webContents.send('theme', nextSkin);
+    }
+});
+
 //加密狗提示
 ipcMain.on('dog-warn', (_: IpcMainEvent) => {
     if (mainWindow) {

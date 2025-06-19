@@ -1,0 +1,12 @@
+{
+	"mode": "light",
+	"primary-color": "#109f98",
+	"link-color": "#109f98",
+	"border-radius-base": "2px",
+	"border-color-base": "#303030",
+	"text-color": "#222",
+	"warn-color": "#f9ca24",
+	"error-color": "#ff3333",
+	"background-color": "#edf3ff",
+	"panel-color": "#b2c0df"
+}

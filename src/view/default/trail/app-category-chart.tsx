@@ -7,6 +7,7 @@ import { PieChart } from 'echarts/charts';
 import { LabelLayout } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import Empty from 'antd/lib/empty';
+import { AppTheme } from '@/schema/theme';
 import { helper } from '@/utils/helper';
 import { InstallApp } from '@/schema/install-app';
 import { TrailChartBox } from './styled/style';

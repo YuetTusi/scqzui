@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import color2 from 'tinycolor2';
+import { darken } from 'polished';
 
 /**
  * 纯色按钮
@@ -23,7 +23,7 @@ const Color = styled.div<{ color: string }>`
     transition: .2s;
 
     &:hover{
-        background-color: ${props => color2(props.color).darken(7).toString()};
+        background-color: ${props => darken(0.1, props.color)};
     }
 
     &>a{

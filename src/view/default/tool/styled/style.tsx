@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { darken, lighten } from 'polished';
 
 export const ToolBox = styled.div`
     position: absolute;
@@ -9,7 +10,7 @@ export const ToolBox = styled.div`
     padding:10px;
     overflow-y: auto;
     border-radius: ${props => props.theme['border-radius-base']};
-    background-color: #202940;
+    background-color: ${props => props.theme['panel-color']};
 `;
 
 export const SortBox = styled.div`
@@ -17,7 +18,7 @@ export const SortBox = styled.div`
     padding: 10px 10px 0 10px;
     margin-bottom: 10px;
     border-radius: ${props => props.theme['border-radius-base']};
-    background-color: #141414;
+    background-color: ${props => props.theme['background-color']};
 
     &:last-child{
         margin-bottom: 0;
@@ -44,15 +45,24 @@ export const SortBox = styled.div`
         padding: 10px 10px;
         margin-right: 10px;
         margin-bottom: 10px;
-        background-color: #202940;
-        border:1px solid #a9afbbd1;
+        background-color: ${props => props.theme['background-color']};
+        border:1px solid ${props => props.theme['mode'] === 'dark'
+        ? lighten(0.1, props.theme['panel-color'])
+        : darken(0.1, props.theme['panel-color'])
+    };
         border-radius: ${props => props.theme['border-radius-base']};
+        &.reverse{
+            //反转颜色
+            &>.ico{
+                filter: invert(1);
+            }
+        }
         &:hover{
             transition: .2s;
             transform: scale(1.05);
             box-shadow:0px 0px 9px 1px ${props => props.theme['primary-color']};
             border:1px solid ${props => props.theme['primary-color']};
-            background-color: #141414;
+            background-color: ${props => lighten(0.1, props.theme['panel-color'])};
             &>.name{
                 transition: .2s;
                 color:${props => props.theme['primary-color']};

@@ -6,7 +6,7 @@ export const CaseBox = styled.div`
     right: 0;
     bottom: 10px;
     left: 0;
-    background-color: #202940;
+    background-color: ${props => props.theme['panel-color']};
     border-radius: ${props => props.theme['border-radius-base']};
     margin:0 10px;
     padding: 10px;
@@ -25,7 +25,7 @@ export const FormBox = styled.div`
     right: 10px;
     bottom: 10px;
     left: 10px;
-    background-color: #141414;
+    background-color: ${props => props.theme['background-color']};
     border-radius: ${props => props.theme['border-radius-base']};
     overflow: auto;
     padding-top: 30px;
