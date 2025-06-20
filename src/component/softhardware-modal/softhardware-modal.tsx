@@ -108,7 +108,7 @@ const SofthardwareModal: FC<SofthardwareModalProp> = ({ visible, closeHandle }) 
             formRef.resetFields();
             closeHandle();
         }}
-        visible={visible}
+        open={visible}
         title="软硬件信息配置"
         width={850}
         centered={true}

@@ -17,7 +17,7 @@ interface Prop {
  */
 const AppleCreditModal: FC<Prop> = ({ visible, okHandle }) => {
 	return <Modal
-		visible={visible}
+		open={visible}
 		footer={[
 			<Button
 				key="ACB_0"

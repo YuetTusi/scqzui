@@ -73,7 +73,7 @@ const FakeImportModal: FC<{
             formRef.resetFields();
             onCloseClick(false);
         }}
-        visible={visible}
+        open={visible}
         centered={true}
         maskClosable={false}
         destroyOnClose={true}

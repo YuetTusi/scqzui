@@ -197,7 +197,7 @@ const BatchExportReportModal: FC<BatchExportReportModalProp> = ({ visible, cance
             setIsAttach(true);
             cancelHandle();
         }}
-        visible={visible}
+        open={visible}
         title="导出报告"
         width={650}
         centered={true}

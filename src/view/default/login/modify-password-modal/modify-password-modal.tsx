@@ -88,7 +88,7 @@ const ModifyPasswordModal: FC<ModifyPasswordModalProp> = ({
             </Button>
         ]}
         onCancel={onCancelClick}
-        visible={visible}
+        open={visible}
         centered={true}
         maskClosable={false}
         destroyOnClose={true}

@@ -140,7 +140,7 @@ const AndroidSetModal: FC<AndroidSetModalProp> = ({
             </>
         }
         onCancel={closeHandle}
-        visible={visible}
+        open={visible}
         width={650}
         centered={true}
         destroyOnClose={true}

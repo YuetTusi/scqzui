@@ -49,7 +49,7 @@ const AlipayOrderModal: FC<AlipayOrderModalProp> = memo(({
             </Button>
         ]}
         onCancel={cancelHandle}
-        visible={visible}
+        open={visible}
         title="支付宝帐单云取"
         width={600}
         centered={true}

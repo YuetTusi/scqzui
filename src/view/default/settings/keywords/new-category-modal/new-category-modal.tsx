@@ -65,7 +65,7 @@ const NewCategoryModal: FC<NewCategoryModalProp> = ({
                 <span>确定</span>
             </Button>
         ]}
-        visible={visible}
+        open={visible}
         onCancel={onCancelClick}
         title="新建关键词分类"
         centered={true}

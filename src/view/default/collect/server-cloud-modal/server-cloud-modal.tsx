@@ -552,7 +552,7 @@ const ServerCloudModal: FC<Prop> = ({
 
     return <>
         <Modal
-            visible={visible}
+            open={visible}
             onCancel={() => {
                 resetValue();
                 setActivePanelKey('0');

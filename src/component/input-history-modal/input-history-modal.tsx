@@ -75,7 +75,7 @@ const InputHistoryModal: FC<InputHistoryModalProp> = ({
                 <span>取消</span>
             </Button>
         ]}
-        visible={visible}
+        open={visible}
         title="用户输入历史记录"
         onCancel={closeHandle}
         destroyOnClose={true}

@@ -5,7 +5,7 @@ export const InfoBox = styled.div`
     padding: 10px;
     margin: 5px;
     border-radius: ${props => props.theme['border-radius-base']};
-    background-color: #202940;
+    background-color: ${props => props.theme['background-color']};
 
     &>.btn-bar{
         display: flex;

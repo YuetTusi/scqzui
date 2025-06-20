@@ -72,7 +72,7 @@ const MiChangeModal: FC<MiChangeModalProp> = ({ visible, onOk, onCancel }) => {
             </Button>
         ]}
         onCancel={onCancel}
-        visible={visible}
+        open={visible}
         title="小米换机采集"
         centered={true}
         forceRender={true}

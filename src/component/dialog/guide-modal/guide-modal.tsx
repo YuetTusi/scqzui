@@ -50,7 +50,7 @@ const GuideModal: FC<GuideModalProp> = (props) => {
 	};
 
 	return <Modal
-		visible={visible}
+		open={visible}
 		title={device?.tipTitle}
 		onCancel={cancelHandle}
 		footer={<FooterButtons {...props} yesHandle={yesHandle} noHandle={noHandle} />}

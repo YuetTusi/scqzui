@@ -129,7 +129,7 @@ const CloudAppSelectModal: FC<CloudAppSelectModalProp> = ({
     };
 
     return <Modal
-        visible={visible}
+        open={visible}
         footer={[
             <Button
                 onClick={() => {

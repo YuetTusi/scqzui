@@ -178,7 +178,7 @@ const OptionsModal: FC<OptionsModalProp> = ({
             </FooterButtonBox>
         ]}
         onCancel={onModalCancel}
-        visible={visible}
+        open={visible}
         title={`${app.name ?? ''} 提取项`}
         width={600}
         maskClosable={false}

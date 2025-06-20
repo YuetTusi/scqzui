@@ -184,7 +184,7 @@ const CloudHistoryModal: FC<CloudHistoryModalProp> = ({
             </Button>
         ]}
         onCancel={cancelHandle}
-        visible={visible}
+        open={visible}
         className="zero-padding-body"
         destroyOnClose={true}
         forceRender={true}

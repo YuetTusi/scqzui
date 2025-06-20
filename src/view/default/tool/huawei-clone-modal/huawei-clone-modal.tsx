@@ -71,7 +71,7 @@ const HuaweiCloneModal: FC<HuaweiCloneModalProp> = ({ visible, onOk, onCancel })
             </Button>
         ]}
         onCancel={onCancel}
-        visible={visible}
+        open={visible}
         title="华为手机克隆"
         centered={true}
         forceRender={true}

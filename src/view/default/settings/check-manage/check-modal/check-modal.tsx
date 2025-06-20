@@ -94,7 +94,7 @@ const CheckModal: FC<CheckModalProp> = ({
             </Button>
         ]}
         onCancel={cancelHandle}
-        visible={visible}
+        open={visible}
         width={600}
         title="点验模式配置"
         centered={true}

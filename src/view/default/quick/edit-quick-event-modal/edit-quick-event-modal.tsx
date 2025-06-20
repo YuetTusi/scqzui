@@ -188,7 +188,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
             </Button>
         ]}
         onCancel={onCancel}
-        visible={visible}
+        open={visible}
         title={helper.isNullOrUndefined(data?._id) ? `添加${fetchText ?? '点验'}${caseText ?? '案件'}` : `编辑${fetchText ?? '点验'}${caseText ?? '案件'}`}
         width={860}
         centered={true}

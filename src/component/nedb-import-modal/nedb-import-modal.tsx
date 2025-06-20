@@ -169,7 +169,7 @@ const NedbImportModal: FC<NedbImportModalProp> = ({
             </Button>
         ]}
         onCancel={cancelHandle}
-        visible={visible}
+        open={visible}
         title="旧版本数据导入"
         destroyOnClose={true}
         maskClosable={false}

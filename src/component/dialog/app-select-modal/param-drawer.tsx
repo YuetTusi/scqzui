@@ -97,7 +97,7 @@ const ParamDrawer: FC<{
     };
 
     return <Drawer
-        visible={visible}
+        open={visible}
         title={`${name}参数设置`}
         onClose={() => {
             setCurrentApp(void 0);

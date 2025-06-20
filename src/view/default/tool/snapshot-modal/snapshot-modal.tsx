@@ -141,7 +141,7 @@ const SnapshotModal: FC<SnapshotModalProp> = ({
                 <span>截屏获取</span>
             </Button>
         ]}
-        visible={visible}
+        open={visible}
         width={850}
         centered={true}
         title="截屏获取"

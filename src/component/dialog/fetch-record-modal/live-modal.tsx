@@ -109,7 +109,7 @@ const LiveModal: FC<LiveModalProp> = ({ title, device, visible, cancelHandle }) 
     };
 
     return <Modal
-        visible={visible}
+        open={visible}
         footer={[
             <Button type="default" onClick={cancelHandle} key="REC_B0">
                 <CloseCircleOutlined />

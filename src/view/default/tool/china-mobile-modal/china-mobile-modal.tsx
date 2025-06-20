@@ -183,7 +183,7 @@ const ChinaMobileModal: FC<ChinaMobileModalProp> = ({
                 </Button>
             ]}
             onCancel={onCancelClick}
-            visible={visible}
+            open={visible}
             centered={true}
             maskClosable={false}
             destroyOnClose={true}
@@ -258,7 +258,7 @@ const ChinaMobileModal: FC<ChinaMobileModalProp> = ({
                 setDownloading(false);
             }}
             title="下载"
-            visible={downloading}
+            open={downloading}
             confirmLoading={downloading}
             okButtonProps={{ disabled: downloading }}
             closable={false}

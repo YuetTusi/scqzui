@@ -139,7 +139,7 @@ const CrackModal: FC<CrackModalProp> = ({
                 <span>开始恢复</span>
             </Button>
         ]}
-        visible={visible}
+        open={visible}
         width={850}
         centered={true}
         title={getTitle(type)}

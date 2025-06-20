@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { darken, lighten, saturate } from 'polished';
+import { darken } from 'polished';
 
 export const InfoBox = styled.div`
 
     padding: 10px;
     margin: 5px;
     border-radius: ${props => props.theme['border-radius-base']};
-    background-color: ${props => props.theme['panel-color']};
+    background-color: ${props => props.theme['background-color']};
 
     &>.btn-bar{
         display: flex;

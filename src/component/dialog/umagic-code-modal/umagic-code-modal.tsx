@@ -13,7 +13,7 @@ const UMagicCodeModal: FC<UMagicCodeModalProp> = ({ visible, device, closeHandle
     const [code, setCode] = useState<string>('');
 
     return <Modal
-        visible={visible}
+        open={visible}
         footer={[
             <Button
                 key="UCM_0"

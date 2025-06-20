@@ -180,7 +180,7 @@ const ApkModal: FC<ApkModalProp> = ({
                 <span>提取选择apk</span>
             </Button>
         ]}
-        visible={visible}
+        open={visible}
         width={800}
         centered={true}
         title="安卓apk提取"

@@ -21,7 +21,7 @@ interface UsbDebugModalProp {
  */
 const UsbDebugModal: FC<UsbDebugModalProp> = ({ visible, okHandle }) => (
     <Modal
-        visible={visible}
+        open={visible}
         centered={true}
         footer={[
             <Button key="UDB_0" type="primary" onClick={() => okHandle()}>

@@ -282,7 +282,7 @@ const CheckInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }
     };
 
     return <Modal
-        visible={visible}
+        open={visible}
         onCancel={() => {
             resetValue();
             cancelHandle();

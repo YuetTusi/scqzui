@@ -69,7 +69,7 @@ const CloudCodeModal: FC<Prop> = ({ cancelHandle }) => {
 					<span>取消</span>
 				</Button>
 			]}
-			visible={visible}
+			open={visible}
 			onCancel={cancelHandle}
 			width={800}
 			title={`${mobileHolder}（${mobileNumber}）`}

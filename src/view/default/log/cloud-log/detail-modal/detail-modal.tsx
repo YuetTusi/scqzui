@@ -178,7 +178,7 @@ const CloudAppDetailModal: FC<DetailModalProps> = ({
     };
 
     return <Modal
-        visible={visible}
+        open={visible}
         footer={[
             <Button
                 onClick={cancelHandle}

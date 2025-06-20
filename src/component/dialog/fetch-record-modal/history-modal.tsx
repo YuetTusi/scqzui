@@ -65,7 +65,7 @@ const HistoryModal: FC<HistoryModalProp> = ({ title, visible, data, cancelHandle
     };
 
     return <Modal
-        visible={visible}
+        open={visible}
         footer={[
             <Button type="default" onClick={cancelHandle} key="FH_0">
                 <CloseCircleOutlined />

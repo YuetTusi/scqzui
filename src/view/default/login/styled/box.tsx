@@ -7,7 +7,6 @@ export const LoginBox = styled.div`
     right:0;
     top:0;
     bottom:0;
-    background: radial-gradient(#1285b4, #0f224d 60%);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -21,7 +20,7 @@ export const LoginBox = styled.div`
         width: 100%;
         height: 100%;
         border-radius: 3px;
-        background-color: rgb(15,34,77,0.2);
+        background-color: ${props => props.theme['panel-color']};
         .cap{
             font-size: 1.8rem;
             color:${props => props.theme['link-color']};
@@ -36,9 +35,9 @@ export const LoginBox = styled.div`
             width: 600px;
             height: 400px;
             padding: 20px;
-            border:1px solid #222;
-            box-shadow: 0px 0px 40px 10px #1285b4;
-            background-color: rgba(15,34,77,0.2);
+            border:1px solid ${props => props.theme['panel-color']};;
+            box-shadow: 0px 0px 10px 1px ${props => props.theme['background-color']};
+            background-color: ${props => props.theme['background-color']};
             /* background: radial-gradient(#1285b4, #0f224d 60%); */
         }
     }

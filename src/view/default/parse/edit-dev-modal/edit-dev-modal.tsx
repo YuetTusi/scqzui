@@ -77,7 +77,7 @@ const EditDevModal: FC<EditDevModalProp> = ({
             </Button>
         ]}
         onCancel={() => onCancelHandle()}
-        visible={visible}
+        open={visible}
         centered={true}
         maskClosable={false}
         destroyOnClose={true}

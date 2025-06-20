@@ -54,7 +54,7 @@ const AppSelectModal: FC<AppSelectModalProp> = ({
     }, [visible]);
 
     return <Modal
-        visible={visible}
+        open={visible}
         footer={[
             <Button onClick={closeHandle} type="default" key="AS_1">
                 <CloseCircleOutlined />

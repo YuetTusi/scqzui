@@ -96,7 +96,7 @@ const ExportFullReportModal: FC<ExportFullReportModalProp> = ({
                 <span>确定</span>
             </Button>
         ]}
-        visible={visible}
+        open={visible}
         onCancel={onCancelClick}
         title="导出全量报告"
         centered={true}

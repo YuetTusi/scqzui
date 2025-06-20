@@ -20,7 +20,7 @@ const ApplePasswordModal: FC<ApplePasswordModalProp> = ({
 	const [password, setPassword] = useState<string>('');
 
 	return <Modal
-		visible={visible}
+		open={visible}
 		footer={[
 			<Button
 				type="default"

@@ -114,7 +114,7 @@ const HumanVerifyModal: FC<Prop> = ({
 	};
 
 	return <Modal
-		visible={visible}
+		open={visible}
 		width={humanVerifyData?.back_img.width! + 48}
 		footer={[
 			<Button onClick={() => closeHandle()} type="default" key="HV_0">
