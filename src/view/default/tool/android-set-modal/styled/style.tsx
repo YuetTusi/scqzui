@@ -16,7 +16,7 @@ export const AndroidSetModalBox = styled.div`
 	}
 	.tip-msg {
 		display: block;
-		border: 1px solid #303030;
+		border: 1px solid ${props => props.theme['panel-color']};
 		border-radius: 2px;
 		&.full {
 			//撑满空间

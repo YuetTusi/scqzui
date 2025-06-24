@@ -194,7 +194,3 @@ const CrackModal: FC<CrackModalProp> = ({
 };
 
 export default CrackModal;
-
-function getFieldDecorator(arg0: string, arg1: { initialValue: any; rules: { required: boolean; message: string; }[]; }) {
-    throw new Error('Function not implemented.');
-}

@@ -24,7 +24,7 @@ export const ApkModalBox = styled.div`
 	.tip-msg {
         width: 100%;
 		display: block;
-		border: 1px solid #303030;
+		border: 1px solid ${props => props.theme['panel-color']};;
 		border-radius: 2px;
 		&.full {
 			//撑满空间
@@ -107,7 +107,7 @@ export const ApkModalBox = styled.div`
 		}
 	}
 	.table-box{
-		border:1px solid #3a3a3a;
+		border:1px solid ${props => props.theme['panel-color']};
 	}
 	.apk-msg {
 		margin-top: 10px;

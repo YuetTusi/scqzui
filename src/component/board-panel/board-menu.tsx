@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faEraser, faBuilding, faBuildingColumns, faPenRuler, faWrench,
     faBell, faBellSlash, faMobileScreenButton, faArrowsRotate,
-    faCloud, faRecycle
+    faCloud, faRecycle, faBolt
 } from '@fortawesome/free-solid-svg-icons';
 import Popover from 'antd/lib/popover';
 import { helper } from '@/utils/helper';
@@ -56,7 +56,11 @@ enum BoardMenuAction {
     /**
      * 目的单位设置
      */
-    DstUnitClear
+    DstUnitClear,
+    /**
+     * 快采日志
+     */
+    QuickLog
 }
 
 const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
@@ -108,6 +112,10 @@ const MenuItems: FC<MenuProp> = ({ onItemClick }) => {
             <li onClick={() => onItemClick(BoardMenuAction.CloudLog)}>
                 <FontAwesomeIcon icon={faCloud} />
                 <span>云取日志管理</span>
+            </li>
+            <li onClick={() => onItemClick(BoardMenuAction.QuickLog)}>
+                <FontAwesomeIcon icon={faBolt} />
+                <span>快采日志管理</span>
             </li>
             <li
                 onClick={() => onItemClick(BoardMenuAction.Manufaturer)}>

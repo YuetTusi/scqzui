@@ -187,6 +187,9 @@ const BoardPanel: FC<{}> = ({ children }) => {
             case BoardMenuAction.CloudLog:
                 dispatch(routerRedux.push('/log/cloud-log?admin=1'));
                 break;
+            case BoardMenuAction.QuickLog:
+                dispatch(routerRedux.push('/log/quick-log?admin=1'));
+                break;
             case BoardMenuAction.NedbImport:
                 setNedbImportModalVisbile(true);
                 break;
