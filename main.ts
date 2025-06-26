@@ -211,9 +211,38 @@ if (!app.requestSingleInstanceLock()) {
             height: 400,
             show: false,
             webPreferences: {
+                webSecurity: false,
+                allowRunningInsecureContent: true,
                 contextIsolation: false,
                 nodeIntegration: true,
                 javascript: true
+            }
+        });
+        if (isDev) {
+            startupWindow!.loadFile(join(__dirname, './renderer/startup.html'));
+            startupWindow!.webContents.openDevTools();
+        } else {
+            startupWindow!.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/startup.html'));
+        }
+
+        startupWindow.webContents.on('did-finish-load', async () => {
+
+            let nextOcrPort = config!.ocrPort;
+            try {
+                nextOcrPort = await helper.portStat(config!.ocrPort ?? 65116);
+            } catch (error) {
+                console.warn(error);
+                nextOcrPort = config!.ocrPort ?? 65116;
+            } finally {
+                startupWindow!.webContents.send('startup', {
+                    ...config,
+                    ocrPort: nextOcrPort
+                });
+                helper.writeNetJson(helper.APP_CWD, {
+                    apiPort: config!.httpPort,
+                    servicePort: config!.tcpPort,
+                    ocrPort: nextOcrPort
+                });
             }
         });
 
@@ -267,16 +296,6 @@ if (!app.requestSingleInstanceLock()) {
         } else {
             mainWindow.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/default.html'));
         }
-        if (isDev) {
-            startupWindow!.loadFile(join(__dirname, './renderer/startup.html'));
-            startupWindow!.webContents.openDevTools();
-        } else {
-            startupWindow!.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/startup.html'));
-        }
-
-        startupWindow.webContents.on('did-finish-load', () => {
-            startupWindow!.webContents.send('startup', config);
-        });
 
         mainWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
 
@@ -317,6 +336,12 @@ if (!app.requestSingleInstanceLock()) {
         })();
     });
 }
+
+// ipcMain.on('startup', (_: IpcMainEvent, conf: Conf) => {
+//     if (startupWindow) {
+//         startupWindow.webContents.send('startup', conf);
+//     }
+// })
 
 //退出应用
 ipcMain.on('do-close', (_: IpcMainEvent) => {

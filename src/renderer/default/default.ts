@@ -67,12 +67,10 @@ dayjs.extend(localeData);
 dayjs.extend(weekday);
 dayjs.localeData();
 
-const { httpPort, tcpPort, ocrPort } = helper.readConf()!;
-const isDev = process.env['NODE_ENV'] === 'development';
-
+const { tcpPort } = helper.readConf()!;
 const app = dva({
     history: createHistory(),
-    namespacePrefixWarning: isDev
+    namespacePrefixWarning: helper.IS_DEV
 });
 
 ipcRenderer.on('show-notification', (_: IpcRendererEvent,
@@ -100,30 +98,9 @@ ipcRenderer.on('show-notification', (_: IpcRendererEvent,
     }
 });
 
-(async () => {
-    let nextTcpPort = tcpPort;
-    let nextOcrPort = ocrPort;
-    try {
-        [nextTcpPort, nextOcrPort] = await Promise.all([
-            helper.portStat(tcpPort),
-            helper.portStat(ocrPort ?? 65116)
-        ]);
-    } catch (error) {
-        console.warn(error);
-        nextTcpPort = tcpPort;
-        nextOcrPort = ocrPort ?? 65116;
-    } finally {
-        server.listen(nextTcpPort, () => {
-            console.log(`TCP服务已启动在端口${nextTcpPort}`);
-            ipcRenderer.send('run-service', nextTcpPort, nextOcrPort);
-            helper.writeNetJson(helper.APP_CWD, {
-                apiPort: httpPort,
-                servicePort: nextTcpPort,
-                ocrPort: nextOcrPort
-            });
-        });
-    }
-})();
+server.listen(tcpPort, () => {
+    console.log(`TCP服务已启动在端口${tcpPort}`);
+});
 
 app.use(immer());
 app.use({

@@ -1,7 +1,6 @@
 import { join } from 'path';
 import { ChildProcessWithoutNullStreams } from 'child_process';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-// import log from '@/utils/log';
 import { Conf } from '@/type/model';
 import { helper } from '@/utils/helper';
 
@@ -15,7 +14,7 @@ let appQueryProcess: ChildProcessWithoutNullStreams | null = null; //应用痕�
 let quickFetchProcess: ChildProcessWithoutNullStreams | null = null; //快速点验进程
 let imageOcrProcess: ChildProcessWithoutNullStreams | null = null; //OCR进程
 
-ipcRenderer.on('startup', async (_: IpcRendererEvent, args: Conf) => {
+ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
 
     const {
         ocrPort,
@@ -39,12 +38,11 @@ ipcRenderer.on('startup', async (_: IpcRendererEvent, args: Conf) => {
         join(cwd, '../parse')
     );
 
-
     helper.runProcContinue(
         imageOcrProcess,
         platform === 'linux' ? 'ImageOcr' : 'ImageOcr.exe',
         join(cwd, '../tools/ImageOcr'),
-        ['--listen_port', ocrPort?.toString() ?? '65116']
+        ['--listen_port', ocrPort.toString()]
     );
 
     if (useQuickFetch) {
