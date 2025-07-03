@@ -116,8 +116,8 @@ export const ListBox = styled.div`
         align-items: center;
         padding: 0.4rem;
         border-radius: 50%;
-        border:1px solid #fff;
-        background-color: #202940;
+        border:1px solid ${props => props.theme['background-color']};
+        background-color: ${props => props.theme['panel-color']};
         opacity: 0.33;
         &.left{
             left:5px;

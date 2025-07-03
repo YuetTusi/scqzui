@@ -8131,7 +8131,7 @@ _:-ms-fullscreen .ant-picker-range-wrapper .ant-picker-year-panel .ant-picker-ce
   /* To support leave along ErrorList. We add additional className to handle explain style */
 }
 .ant-form-item-explain-error {
-  color: #a61d24;
+  color: #ff3333;
 }
 .ant-form-item-explain-warning {
   color: #d89614;

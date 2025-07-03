@@ -13,7 +13,7 @@ export const PaperworkModalBox = styled.div`
         flex:none;
         width:300px;
         overflow: auto;
-        border-right: 1px solid #303030;
+        border-right: 1px solid ${props => props.theme['mode'] === 'dark' ? '#303030' : props.theme['background-color']};
 
         .full-box{
             position: absolute;
