@@ -1,5 +1,5 @@
 import groupBy from 'lodash/groupBy';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts/core';
 import { BarChart } from 'echarts/charts';
 import { LabelLayout } from 'echarts/features';
@@ -8,6 +8,7 @@ import { TooltipComponent, GridComponent, DataZoomComponent } from 'echarts/comp
 import Empty from 'antd/lib/empty';
 import Tag from 'antd/lib/tag';
 import { helper } from '@/utils/helper';
+import { AppTheme } from '@/schema/theme';
 import { InstallApp } from '@/schema/install-app';
 import { TrailChartBox } from './styled/style';
 
@@ -75,6 +76,7 @@ const total = (
  * 应用安装/卸载统计图
  */
 const AppStatusChart: FC<AppStatusChartProp> = ({ data }) => {
+    const theme = useRef(Number.parseInt(localStorage.getItem('theme') ?? '0') as AppTheme);
     const [appTime, setAppTime] = useState<string>(''); //当前分类
     const [detailList, setDetailList] = useState<
         {
@@ -89,7 +91,9 @@ const AppStatusChart: FC<AppStatusChartProp> = ({ data }) => {
         if ($target !== null && !helper.isNullOrUndefined(data)) {
             const arr = combine(data);
             const [x, y] = total(arr);
-            chart = echarts.init($target, 'dark');
+            chart = theme.current === AppTheme.CyanDark
+                ? echarts.init($target, 'dark')
+                : echarts.init($target);
             chart.on('click', (event) => {
                 const { name } = event;
                 setAppTime(name);

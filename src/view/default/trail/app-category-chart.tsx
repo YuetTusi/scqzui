@@ -1,6 +1,6 @@
 import countBy from 'lodash/countBy';
 import debounce from 'lodash/debounce';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts/core';
 import { TitleComponent, TooltipComponent, LegendComponent } from 'echarts/components';
 import { PieChart } from 'echarts/charts';
@@ -86,6 +86,8 @@ const combine = (data: InstallApp | null) => {
  * 应用分类统计图
  */
 const AppCategoryChart: FC<{ data: InstallApp | null }> = ({ data }) => {
+
+    const theme = useRef(Number.parseInt(localStorage.getItem('theme') ?? '0') as AppTheme);
     const [category, setCategory] = useState<string>(); //当前分类
     const [detailList, setDetailList] = useState<{ pkg: string; name: string; category: string }[]>(
         []
@@ -94,7 +96,10 @@ const AppCategoryChart: FC<{ data: InstallApp | null }> = ({ data }) => {
     useEffect(() => {
         if (!helper.isNullOrUndefined(data)) {
             const $chartRoot = document.getElementById('app-category-chart');
-            chart = echarts.init($chartRoot!, 'dark');
+            chart = theme.current === AppTheme.CyanDark
+                ? echarts.init($chartRoot, 'dark')
+                : echarts.init($chartRoot);
+
             chart.on('click', (event) => {
                 const { name } = event.data as any;
                 onPieClick(name);
