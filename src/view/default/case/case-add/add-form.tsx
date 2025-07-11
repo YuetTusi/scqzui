@@ -191,9 +191,7 @@ const AddForm: FC<FormProp> = ({
                                     ) => {
                                         if (
                                             index < 10 &&
-                                            !helper.isNullOrUndefinedOrEmptyString(
-                                                current
-                                            )
+                                            !helper.isNullOrUndefinedOrEmptyString(current)
                                         ) {
                                             total.push({ value: current });
                                         }

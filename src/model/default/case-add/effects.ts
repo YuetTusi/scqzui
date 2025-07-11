@@ -11,7 +11,6 @@ import { helper } from "@/utils/helper";
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { TableName } from '@/schema/table-name';
 import { CaseInfo } from '@/schema/case-info';
-import { PredictJson } from '@/component/ai-switch';
 import { AiSwitchState } from '../ai-switch';
 
 const predictTempAt = helper.IS_DEV
