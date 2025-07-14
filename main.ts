@@ -218,12 +218,6 @@ if (!app.requestSingleInstanceLock()) {
                 javascript: true
             }
         });
-        if (isDev) {
-            startupWindow!.loadFile(join(__dirname, './renderer/startup.html'));
-            startupWindow!.webContents.openDevTools();
-        } else {
-            startupWindow!.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/startup.html'));
-        }
 
         startupWindow.webContents.on('did-finish-load', async () => {
 
@@ -304,8 +298,12 @@ if (!app.requestSingleInstanceLock()) {
             timerWindow!.loadFile(join(__dirname, './renderer/timer.html'));
             fetchRecordWindow!.loadFile(join(__dirname, './renderer/fetch-record.html'));
             if (isDev) {
+                startupWindow!.loadFile(join(__dirname, './renderer/startup.html'));
                 timerWindow!.webContents.openDevTools();
                 fetchRecordWindow!.webContents.openDevTools();
+                startupWindow!.webContents.openDevTools();
+            } else {
+                startupWindow!.loadFile(join(resourcesPath, 'app.asar.unpacked/dist/renderer/startup.html'));
             }
         });
 

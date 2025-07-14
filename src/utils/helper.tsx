@@ -262,7 +262,7 @@ const helper = {
       return;
     }
 
-    handle = spawn(exeName, exeParams, {
+    handle = spawn(join(exePath, exeName), exeParams, {
       cwd: exePath,
       ...options,
     });
