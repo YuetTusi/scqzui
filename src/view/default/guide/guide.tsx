@@ -43,7 +43,6 @@ const Guide: FC<GuideProp> = () => {
                     scrollDom.scrollLeft -= 200;
                     break;
                 default:
-                    console.clear();
                     console.warn(`未知KeyCode:${code}`);
                     break;
             }
