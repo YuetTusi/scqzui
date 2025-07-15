@@ -178,7 +178,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                     max={100}
                     addonAfter="%" />
             </Col>
-            <Auth deny={wired}>
+            <Auth deny={helper.os() === 'linux'}>
                 <Col flex="none">
                     <label style={{ marginLeft: '5rem' }}>AI图片识别违规分析：</label>
                 </Col>
