@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import round from 'lodash/round';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt } from '@fortawesome/free-solid-svg-icons';
@@ -43,8 +42,6 @@ import { Instruction } from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
 import DeviceSystem from '@/schema/device-system';
-import { useSubscribe } from '@/hook';
-import { setIMEIOrIMID } from '@/model/default/receive/listener';
 import { IMEIModalState } from '@/model/default/imei-modal';
 
 const { caseText, devText, fetchText, parseText, useBcp } = helper.readConf()!;
@@ -117,6 +114,11 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     useEffect(() => {
         if (visible) {
             dispatch({ type: 'caseData/queryAllCaseData' });
+            send(SocketType.Fetch, {
+                type: SocketType.Fetch,
+                cmd: CommandType.Extraction,
+                msg: { usb: device?.usb }
+            });
             //? mock
             // dispatch({
             //     type: 'extraction/setTypes', payload: [
