@@ -211,12 +211,19 @@ function api(webContents: WebContents) {
 
     router.get('/keyword', async (_, res) => {
 
-        const tempPath = join(cwd, './resources/army'); //默认模板位置
-        const userPath = join(cwd, './resources/keywords');//用户模板位置
+        const tempPath = helper.IS_DEV
+            ? join(cwd, 'data/army')
+            : join(cwd, './resources/army'); //默认模板位置
+        const userPath = helper.IS_DEV
+            ? join(cwd, 'data/keywords')
+            : join(cwd, './resources/keywords');//用户模板位置
+        const appJson = helper.IS_DEV
+            ? join(cwd, 'data/app.json')
+            : join(cwd, 'resources/config/app.json');
         let data: Record<string, string[]> = {};
 
         try {
-            const exist = await helper.existFile(join(cwd, 'resources/config/app.json'));
+            const exist = await helper.existFile(appJson);
 
             if (exist) {
                 const [cfg, tempFiles, userFiles] = await Promise.all([
@@ -224,14 +231,15 @@ function api(webContents: WebContents) {
                     readdir(tempPath),
                     readdir(userPath)
                 ]);
+
                 const { useDefaultTemp, useDocVerify } = cfg!;
                 let all: string[] = [];
+                if (useDefaultTemp) {
+                    all = all.concat(tempFiles
+                        .filter(item => item !== 'template.xlsx')
+                        .map(item => join(tempPath, item)));
+                }
                 if (useDocVerify) {
-                    if (useDefaultTemp) {
-                        all = all.concat(tempFiles
-                            .filter(item => item !== 'template.xlsx')
-                            .map(item => join(tempPath, item)));
-                    }
                     all = all.concat(userFiles
                         .filter((item) => item !== 'template.xlsx' && !item.startsWith('~'))
                         .map(item => join(userPath, item)));

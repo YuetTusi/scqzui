@@ -215,11 +215,11 @@ const Collect: FC<CollectProp> = ({ }) => {
         if (!validateBeforeFetch()) {
             return;
         }
-        send(SocketType.Fetch, {
-            type: SocketType.Fetch,
-            cmd: CommandType.Extraction,
-            msg: { usb }
-        });
+        // send(SocketType.Fetch, {
+        //     type: SocketType.Fetch,
+        //     cmd: CommandType.Extraction,
+        //     msg: { usb }
+        // });
         switch (dataMode) {
             case DataMode.Self:
                 //# 标准版本
