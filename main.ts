@@ -222,20 +222,28 @@ if (!app.requestSingleInstanceLock()) {
         startupWindow.webContents.on('did-finish-load', async () => {
 
             let nextOcrPort = config!.ocrPort;
+            let nextReaderPort = config!.readerPort;
             try {
-                nextOcrPort = await helper.portStat(config!.ocrPort ?? 65116);
+                [nextOcrPort, nextReaderPort] = await Promise.all([
+                    helper.portStat(config!.ocrPort ?? 65116),
+                    helper.portStat(config!.readerPort ?? 65336)
+                ]);
+                // nextOcrPort = await helper.portStat(config!.ocrPort ?? 65116);
             } catch (error) {
                 console.warn(error);
                 nextOcrPort = config!.ocrPort ?? 65116;
+                nextReaderPort = config!.readerPort ?? 65336;
             } finally {
                 startupWindow!.webContents.send('startup', {
                     ...config,
-                    ocrPort: nextOcrPort
+                    ocrPort: nextOcrPort,
+                    readerPort: nextReaderPort
                 });
                 helper.writeNetJson(helper.APP_CWD, {
                     apiPort: config!.httpPort,
                     servicePort: config!.tcpPort,
-                    ocrPort: nextOcrPort
+                    ocrPort: nextOcrPort,
+                    readerPort: nextReaderPort
                 });
             }
         });

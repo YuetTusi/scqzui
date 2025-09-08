@@ -225,6 +225,10 @@ interface Conf {
 	 * OCR端口
 	 */
 	ocrPort: number,
+	/**
+	 * reader程序端口
+	 */
+	readerPort: number,
 
 	ocrTimeout: number,
 

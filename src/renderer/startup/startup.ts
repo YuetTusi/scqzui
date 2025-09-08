@@ -13,6 +13,7 @@ let yunProcess: ChildProcessWithoutNullStreams | null = null; //云取服务进�
 let appQueryProcess: ChildProcessWithoutNullStreams | null = null; //应用痕迹进程
 let quickFetchProcess: ChildProcessWithoutNullStreams | null = null; //快速点验进程
 let imageOcrProcess: ChildProcessWithoutNullStreams | null = null; //OCR进程
+let readerProcess: ChildProcessWithoutNullStreams | null = null; //reader进程
 
 ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
 
@@ -43,6 +44,12 @@ ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
         platform === 'linux' ? 'ImageOcr' : 'ImageOcr.exe',
         join(cwd, '../tools/ImageOcr'),
         ['--listen_port', ocrPort.toString()]
+    );
+
+    helper.runProcContinue(
+        readerProcess,
+        platform === 'linux' ? 'reader' : 'reader.exe',
+        join(cwd, '../tools/reader')
     );
 
     if (useQuickFetch) {
@@ -97,6 +104,10 @@ ipcRenderer.on('closure', () => {
     }
     if (imageOcrProcess !== null) {
         (imageOcrProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');
+        imageOcrProcess = null;
+    }
+    if (readerProcess !== null) {
+        (readerProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');
         imageOcrProcess = null;
     }
 });

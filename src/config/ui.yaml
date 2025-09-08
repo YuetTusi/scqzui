@@ -28,6 +28,7 @@ center: true
 tcpPort: 65222
 httpPort: 9900
 ocrPort: 65116
+readerPort: 65336
 ocrTimeout: 60
 asrTimeout: 120
 fetchPath: ./n_fetch
