@@ -229,6 +229,10 @@ interface Conf {
 	 * reader程序端口
 	 */
 	readerPort: number,
+	/**
+	 * aimanager.exe程序端口
+	 */
+	aiPort: number,
 
 	ocrTimeout: number,
 

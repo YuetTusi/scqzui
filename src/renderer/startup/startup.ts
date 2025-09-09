@@ -14,6 +14,7 @@ let appQueryProcess: ChildProcessWithoutNullStreams | null = null; //应用痕�
 let quickFetchProcess: ChildProcessWithoutNullStreams | null = null; //快速点验进程
 let imageOcrProcess: ChildProcessWithoutNullStreams | null = null; //OCR进程
 let readerProcess: ChildProcessWithoutNullStreams | null = null; //reader进程
+let aiManagerProcess: ChildProcessWithoutNullStreams | null = null;//aiManager进程
 
 ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
 
@@ -50,6 +51,11 @@ ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
         readerProcess,
         platform === 'linux' ? 'reader' : 'reader.exe',
         join(cwd, '../tools/reader')
+    );
+
+    helper.runProcContinue(aiManagerProcess,
+        platform === 'linux' ? 'aimanager' : 'aimanager.exe',
+        join(cwd, '../tools/ai')
     );
 
     if (useQuickFetch) {
