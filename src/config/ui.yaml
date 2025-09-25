@@ -25,11 +25,11 @@ windowWidth: 1460
 minHeight: 800
 minWidth: 1280
 center: true
-tcpPort: 65222
+tcpPort: 35222
 httpPort: 9900
-ocrPort: 65116
-readerPort: 65336
-aiPort: 65226
+ocrPort: 35116
+readerPort: 35336
+aiPort: 35226
 ocrTimeout: 60
 asrTimeout: 120
 fetchPath: ./n_fetch
