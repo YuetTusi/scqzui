@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import net from 'net';
 import crypto from 'crypto';
-import { dirname, extname, join } from 'path';
+import { dirname, join } from 'path';
 import {
   access,
   accessSync,
@@ -706,7 +706,7 @@ const helper = {
       });
       server.on('error', (err: any) => {
         server.close();
-        if (err.code === 'EADDRINUSE') {
+        if (err.code === 'EADDRINUSE' || err.code === 'EACCES') {
           console.log(`端口${port}已占用`);
           return resolve(this.portStat(++port));
         } else {
