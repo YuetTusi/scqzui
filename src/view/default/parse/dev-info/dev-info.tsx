@@ -219,6 +219,11 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                             WPS云盘
                         </Button>
                     </Auth>
+                    <Button
+                        onClick={() => onButtonClick(data, ClickType.CleanViolation)}
+                        type="primary">
+                        清除违规数据
+                    </Button>
                 </Group>
             </div>
             <div>

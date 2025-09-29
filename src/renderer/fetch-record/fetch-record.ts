@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import { FetchLog } from '@/schema/fetch-log';
 import { FetchRecord } from '@/schema/fetch-record';

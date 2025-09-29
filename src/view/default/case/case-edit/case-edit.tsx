@@ -131,43 +131,34 @@ const CaseEdit: FC<CaseEditProp> = () => {
         const { validateFields } = formRef;
         try {
             const values = await validateFields();
-            if (!analysisApp[0] && !sdCard[0]) {
-                Modal.warn({
-                    title: '提示',
-                    content: '「获取应用数据」和「获取SD卡数据」必须勾选其中一项',
-                    okText: '确定',
-                    centered: true
-                });
-            } else {
-                let entity = new CaseInfo();
-                entity._id = id;
-                entity.m_strCaseName = values.m_strCaseName;
-                entity.spareName = values.spareName;
-                entity.wired = values.wired;
-                entity.m_strCasePath = values.m_strCasePath;
-                entity.m_strCheckUnitName = values.m_strCheckUnitName;
-                entity.analysisApp = analysisApp[0];
-                entity.sdCard = sdCard[0];
-                entity.hasReport = hasReport[0];
-                entity.m_bIsAutoParse = autoParse[0];
-                entity.generateBcp = generateBcp[0];
-                entity.attachment = values.attachment;
-                entity.isDel = isDel[0];
-                entity.ruleFrom = values.ruleFrom;
-                entity.ruleTo = values.ruleTo;
-                entity.m_Applist = parseAppList[0] as ParseApp[];
-                entity.tokenAppList = tokenAppList[0] as TokenApp[];
-                entity.officerNo = values.officerNo;
-                entity.securityCaseNo = values.securityCaseNo;
-                entity.securityCaseType = values.securityCaseType;
-                entity.securityCaseName = values.securityCaseName;
-                entity.handleCaseNo = values.handleCaseNo;
-                entity.handleCaseType = values.handleCaseType;
-                entity.handleCaseName = values.handleCaseName;
-                entity.isAi = isAi[0];
-                entity.isPhotoAnalysis = isPhotoAnalysis[0];
-                saveCase(entity);
-            }
+            let entity = new CaseInfo();
+            entity._id = id;
+            entity.m_strCaseName = values.m_strCaseName;
+            entity.spareName = values.spareName;
+            entity.wired = values.wired;
+            entity.m_strCasePath = values.m_strCasePath;
+            entity.m_strCheckUnitName = values.m_strCheckUnitName;
+            entity.analysisApp = analysisApp[0];
+            entity.sdCard = sdCard[0];
+            entity.hasReport = hasReport[0];
+            entity.m_bIsAutoParse = autoParse[0];
+            entity.generateBcp = generateBcp[0];
+            entity.attachment = values.attachment;
+            entity.isDel = isDel[0];
+            entity.ruleFrom = values.ruleFrom;
+            entity.ruleTo = values.ruleTo;
+            entity.m_Applist = parseAppList[0] as ParseApp[];
+            entity.tokenAppList = tokenAppList[0] as TokenApp[];
+            entity.officerNo = values.officerNo;
+            entity.securityCaseNo = values.securityCaseNo;
+            entity.securityCaseType = values.securityCaseType;
+            entity.securityCaseName = values.securityCaseName;
+            entity.handleCaseNo = values.handleCaseNo;
+            entity.handleCaseType = values.handleCaseType;
+            entity.handleCaseName = values.handleCaseName;
+            entity.isAi = isAi[0];
+            entity.isPhotoAnalysis = isPhotoAnalysis[0];
+            saveCase(entity);
         } catch (error) {
             console.clear();
             console.warn(error);

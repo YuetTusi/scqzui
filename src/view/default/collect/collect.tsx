@@ -41,7 +41,6 @@ import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
 import { CollectProp } from './prop';
 
-
 const { Group } = Button;
 const { useBcp, devText, fetchText, parseText } = helper.readConf()!;
 
@@ -70,7 +69,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     // useEffect(() => {
 
     //     let devices: DeviceType[] = [];
-    //     for (let i = 0; i < 10; i++) {
+    //     for (let i = 0; i < 3; i++) {
     //         devices.push({
     //             ...{
     //                 "fetchState": FetchState.NotConnected,
@@ -149,7 +148,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                     current.scrollLeft += 200;
                     break;
                 default:
-                    console.warn(`Unknow ${to}`);
+                    console.warn(`Unknown ${to}`);
                     break;
             }
         }

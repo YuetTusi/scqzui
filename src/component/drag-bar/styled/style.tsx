@@ -74,7 +74,8 @@ export const DragBarBox = styled.div`
             &:nth-child(3){
                 border-bottom-left-radius: ${props => props.theme['border-radius-base']};
                 border-bottom-right-radius: 0;
-                padding:0 24px;
+                padding:0 25px;
+                height: 23px;
                 margin-right: 0;
                 background-color: #a61d24;
                 &:hover{

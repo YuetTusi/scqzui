@@ -6,7 +6,9 @@ import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import { useDestroy } from '@/hook';
 import { StateTree } from '@/type/model';
+import { send } from '@/utils/tcp-server';
 import { DeviceType } from '@/schema/device-type';
+import { CommandType, SocketType } from '@/schema/command';
 import { ParseDevState } from '@/model/default/parse-dev';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { helper } from '@/utils/helper';
@@ -16,6 +18,7 @@ import EditDevModal from '../edit-dev-modal';
 import ExportReportModal from '../export-report-modal';
 import ExportBcpModal from '../export-bcp-modal';
 import HitChartModal from '../hit-chart-modal';
+import { CleanViolationModal } from '../clean-violation-modal';
 import { getDevColumns } from './column';
 import { DevListProp } from './prop';
 
@@ -161,6 +164,10 @@ const DevList: FC<DevListProp> = ({ }) => {
             case ClickType.WPSDisk:
                 runDiskExe(data, '1280028');
                 break;
+            case ClickType.CleanViolation:
+                dispatch({ type: 'cleanViolationModal/setOpen', payload: true });
+                dispatch({ type: 'cleanViolationModal/setDevice', payload: data });
+                break;
             default:
                 console.warn(`未知Click类型:${fn}`);
                 break;
@@ -216,6 +223,29 @@ const DevList: FC<DevListProp> = ({ }) => {
         }
     };
 
+    /**
+     * 清除违规数据
+     * @param data 
+     */
+    const onViolationClear = (data: DeviceType) => {
+        Modal.confirm({
+            onOk() {
+                send(SocketType.Fetch, {
+                    cmd: CommandType.ViolationClear,
+                    msg: { phonePath: data.phonePath ?? '' }
+                });
+                dispatch({ type: 'cleanViolationModal/setLoading', payload: true });
+            },
+            title: '清除',
+            content: `确认清除 ${data?.mobileName === undefined
+                ? ''
+                : helper.getNameWithoutTime(data.mobileName)} 违规数据？`,
+            centered: true,
+            okText: '是',
+            cancelText: '否'
+        });
+    };
+
     return <>
         <Table<DeviceType>
             columns={getDevColumns(dispatch, operateDoing, exportReportClick)}
@@ -259,6 +289,13 @@ const DevList: FC<DevListProp> = ({ }) => {
             record={currentDev.current!}
             exportHandle={() => setHitChartModalVisible(false)}
             closeHandle={() => setHitChartModalVisible(false)}
+        />
+        <CleanViolationModal
+            onClear={onViolationClear}
+            onCancel={() => {
+                dispatch({ type: 'cleanViolationModal/clearMessage' });
+                dispatch({ type: 'cleanViolationModal/setOpen', payload: false });
+            }}
         />
     </>;
 };

@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 
 const FetchInfoBox = styled.div`
+    margin-top:2px;
     cursor: pointer;
     font-size: 1.2rem;
     width: 280px;
+    height: 22px;
     text-align: center;
     overflow: hidden;
     white-space: nowrap;

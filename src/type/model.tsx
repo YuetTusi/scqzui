@@ -41,6 +41,7 @@ import { QuickLogTableState } from '@/model/default/quick-log-table';
 import { HelpModalState } from '@/model/default/help-modal';
 import { FetchStateModalState } from '@/model/default/fetch-state-modal';
 import { IMEIModalState } from '@/model/default/imei-modal';
+import { CleanViolationModalState } from '@/model/default/clean-violation-modal';
 
 declare global {
 	interface Window {
@@ -98,6 +99,7 @@ interface StateTree {
 	helpModal: HelpModalState,
 	fetchStateModal: FetchStateModalState,
 	imeiModal: IMEIModalState,
+	cleanViolationModal: CleanViolationModalState,
 	[modelName: string]: any
 }
 

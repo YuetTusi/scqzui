@@ -229,7 +229,15 @@ enum CommandType {
     /**
      * 查询App安装记录结果（Trace）
      */
-    AppRecResult = 'app-rec-result'
+    AppRecResult = 'app-rec-result',
+    /**
+     * 清除违规数据（Fetch）
+     */
+    ViolationClear = 'violation_clear',
+    /**
+     * 接收清除违规数据消息（Fetch）
+     */
+    ViolationMsg = 'violation_msg',
 }
 
 /**

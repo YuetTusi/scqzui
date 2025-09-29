@@ -24,7 +24,7 @@ import { ITreeNode } from '@/type/ztree';
 import log from '@/utils/log';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
-import { Backslashe, IMEI, UnderLine } from '@/utils/regex';
+import { Backslashe, UnderLine } from '@/utils/regex';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { AppSelectModal, IMEIModal } from '@/component/dialog';
 import Auth from '@/component/auth';
@@ -122,7 +122,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             //? mock
             // dispatch({
             //     type: 'extraction/setTypes', payload: [
-            //         { name: 'Apk快速采集', value: 0, enable: true },
+            //         { name: 'Apk快速采集', value: 0, enable: true, tip: '提示内容测试' },
             //         {
             //             name: 'Note', value: 'Note', enable: true
             //         },
@@ -142,9 +142,11 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
     useEffect(() => {
 
         if (visible && useBcp) {
+
             const phoneInfo = deviceList[device?.usb! - 1]?.phoneInfo ?? [];
             let values: Record<string, any> = {
-                phoneName: device?.model ?? ''
+                phoneName: device?.model ?? '',
+                extraction: types.length === 0 ? undefined : types[0].value
             };
 
             phoneInfo.forEach((i) => {
@@ -162,7 +164,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             });
             formRef.setFieldsValue(values);
         }
-    }, [deviceList, useBcp, visible]);
+    }, [deviceList, useBcp, visible, types]);
 
     // useSubscribe('clock-1', () => {
     //     console.log(fetching);
@@ -219,6 +221,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
         types
             .filter(i => i.enable)
             .map((t) => <Option
+                title={t.tip ?? t.name}
                 value={t.value}
                 key={t.value}>
                 {t.name}

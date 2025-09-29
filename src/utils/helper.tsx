@@ -130,6 +130,9 @@ const helper = {
    * @returns 返回无时间戳的字串
    */
   getNameWithoutTime(name: string = '') {
+    if (name === undefined) {
+      return '';
+    }
     if (name.includes('_')) {
       return name.split('_')[0];
     } else {

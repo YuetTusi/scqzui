@@ -282,6 +282,7 @@ export default {
         rec.handleOfficerNo = fetchData.handleOfficerNo;
         rec.note = fetchData.note;
         rec.mode = fetchData.mode;
+        rec.serial = fetchData.serial;
         rec.fetchTime = new Date(dayjs().add(deviceData.usb!, 's').valueOf());
         rec.phonePath = phonePath;
         rec._id = helper.newId();

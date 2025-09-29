@@ -474,6 +474,23 @@ Fetch 命令：`dev_snapshot`，参数：
 
 Fetch 命令：`close_crack`，无参数
 
+#### 清除设备违规数据
+
+Fetch 命令： `violation_clear`，参数：
+
+| 参数名    | 类型   | 说明             |
+| --------- | ------ | ---------------- |
+| phonePath | string | 设备数据所在路径 |
+
+#### 接收清除设备违规消息
+
+Fetch 命令： `violation_msg`，参数：
+
+| 参数名  | 类型   | 说明                     |
+| ------- | ------ | ------------------------ |
+| code    | number | 0:完成 1:失败 2:正在清除 |
+| message | string | 消息                     |
+
 #### 解析程序连入
 
 Parse 命令：`connect`，无参数。

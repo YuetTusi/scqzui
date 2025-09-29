@@ -13,7 +13,7 @@ import {
     deviceIn, deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg,
     smsMsg, parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
     appRecFinish, fetchPercent, importErr, backDatapass, checkFinishToParse,
-    fetchState, setIMEIOrIMID
+    fetchState, setIMEIOrIMID, violationMsg
 } from './listener';
 
 const { Fetch, Parse, Trace, Error } = SocketType;
@@ -143,6 +143,10 @@ export default {
                     //# 接收IMEI/IMID
                     console.log(`接收IMEI/IMID:${JSON.stringify(command.msg)}`);
                     setIMEIOrIMID(command, dispatch);
+                    break;
+                case CommandType.ViolationMsg:
+                    console.log(`接收清除违规消息:${JSON.stringify(command.msg)}`);
+                    violationMsg(command, dispatch);
                     break;
                 default:
                     console.log('未知命令:', command.cmd);

@@ -1,11 +1,12 @@
 import { Model } from 'dva';
 import reducers from './reducers';
+import { ExtractionItem } from '@/schema/extraction-item';
 
 /**
  * 设备提取方式
  */
 interface ExtractionState {
-    types: { name: string, value: string, enable: boolean }[]
+    types: ExtractionItem[]
 }
 
 let model: Model = {

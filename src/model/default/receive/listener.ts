@@ -607,3 +607,21 @@ export function setIMEIOrIMID({ msg }: Command<{
         dispatch({ type: 'imeiModal/setOpen', payload: true });
     }
 }
+
+/**
+ * 接收清除违规消息
+ * @param msg.code 0:结束 1:失败 2:正在清除
+ * @param msg.message 当前消息
+ */
+export function violationMsg({ msg }: Command<{
+    code: number,
+    message: string
+}>, dispatch: Dispatch<any>) {
+
+    const { code, message } = msg;
+
+    if (code === 0 || code === 1) {
+        dispatch({ type: 'cleanViolationModal/setLoading', payload: false });
+    }
+    dispatch({ type: 'cleanViolationModal/setMessage', payload: message });
+}

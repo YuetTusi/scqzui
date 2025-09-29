@@ -74,7 +74,7 @@ export default {
             let exist: boolean = yield helper.existFile(casePath);
             if (!exist) {
                 //案件路径不存在，创建之
-                mkdirSync(casePath);
+                mkdirSync(casePath, { recursive: true });
             }
             yield fork([helper, 'writeCaseJson'], casePath, { ...payload, m_strCaseName: prev.m_strCaseName });
             yield fork(

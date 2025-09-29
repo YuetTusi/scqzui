@@ -49,7 +49,11 @@ enum ClickType {
     /**
      * WPS云盘
      */
-    WPSDisk
+    WPSDisk,
+    /**
+     * 清除设备违规数据
+     */
+    CleanViolation,
 }
 
 export { DevInfoProp, ClickType };
