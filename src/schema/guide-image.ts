@@ -24,6 +24,10 @@ enum GuideImage {
      */
     OppoWifi = 'oppo_wifi',
     /**
+     * OPPO直传
+     */
+    OppoTrans = 'oppo_trans',
+    /**
      * VIVO自备份
      */
     VivoBackup = 'vivo_backup',

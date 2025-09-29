@@ -5,6 +5,7 @@ import huaweiBackup from '../images/fetch/huawei_backup.jpg';
 import meizuBackup from '../images/fetch/meizu_backup.jpg';
 import oppoBackup from '../images/fetch/oppo_backup.jpg';
 import oppoWiFi from '../images/fetch/oppo_wifi.jpg';
+import oppoTrans from '../images/fetch/oppo_trans.jpg';
 import vivoBackup from '../images/fetch/vivo_backup.jpg';
 import miBackup from '../images/fetch/mi_backup.jpg';
 import installEasyshare from '../images/apk/easy_share.jpg';
@@ -31,6 +32,8 @@ export function getImages(type: GuideImage): string | null {
 			return oppoWiFi;
 		case GuideImage.OppoBackup:
 			return oppoBackup;
+		case GuideImage.OppoTrans:
+			return oppoTrans;
 		case GuideImage.VivoBackup:
 			return vivoBackup;
 		case GuideImage.MiBackup:

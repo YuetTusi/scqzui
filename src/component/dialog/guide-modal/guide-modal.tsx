@@ -7,8 +7,6 @@ import FooterButtons from './footer-buttons';
 import { GuideModalBox } from './styled/style';
 import { GuideModalProp } from './prop';
 
-const { max } = helper.readConf()!;
-
 /**
  * 提示消息引导图示框
  * @param props
@@ -43,7 +41,7 @@ const GuideModal: FC<GuideModalProp> = (props) => {
 	 */
 	const getWidth = () => {
 		if (helper.isNullOrUndefinedOrEmptyString(device?.tipContent)) {
-			return max <= 2 ? 1020 : 1220;
+			return 1220;
 		} else {
 			return 400;
 		}

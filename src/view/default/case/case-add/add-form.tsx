@@ -270,11 +270,15 @@ const AddForm: FC<FormProp> = ({
             <Row style={{ paddingTop: '30px' }}>
                 <Col span={4} offset={3}>
                     <span>获取应用数据：</span>
-                    <Checkbox onChange={(event) => setAnalysisApp(event.target.checked)} checked={analysisApp} />
+                    <Tooltip title="安装apk获取基本数据">
+                        <Checkbox onChange={(event) => setAnalysisApp(event.target.checked)} checked={analysisApp} />
+                    </Tooltip>
                 </Col>
                 <Col span={4}>
                     <span>获取SD卡数据：</span>
-                    <Checkbox onChange={(event) => setSdCard(event.target.checked)} checked={sdCard} />
+                    <Tooltip title="获取手机存储数据">
+                        <Checkbox onChange={(event) => setSdCard(event.target.checked)} checked={sdCard} />
+                    </Tooltip>
                 </Col>
                 <Col span={4}>
                     <span>生成报告：</span>

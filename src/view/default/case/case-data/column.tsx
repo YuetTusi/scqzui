@@ -42,7 +42,7 @@ export function getCaseColumns(dispatch: Dispatch, actionHandle: (type: ColumnAc
             key: 'spareName'
         },
         {
-            title: '有线快采',
+            title: <span dangerouslySetInnerHTML={{ __html: '有线<br/>快采' }} />,
             dataIndex: 'wired',
             key: 'wired',
             width: '70px',
@@ -51,7 +51,7 @@ export function getCaseColumns(dispatch: Dispatch, actionHandle: (type: ColumnAc
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
-            title: '解析应用',
+            title: <span dangerouslySetInnerHTML={{ __html: '解析<br/>应用' }} />,
             dataIndex: 'analysisApp',
             key: 'analysisApp',
             width: '70px',
@@ -60,7 +60,7 @@ export function getCaseColumns(dispatch: Dispatch, actionHandle: (type: ColumnAc
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
-            title: '拉取SD卡',
+            title: <span dangerouslySetInnerHTML={{ __html: '拉取<br/>SD卡' }} />,
             dataIndex: 'sdCard',
             key: 'sdCard',
             width: '70px',
@@ -69,7 +69,7 @@ export function getCaseColumns(dispatch: Dispatch, actionHandle: (type: ColumnAc
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
-            title: '生成报告',
+            title: <span dangerouslySetInnerHTML={{ __html: '生成<br/>报告' }} />,
             dataIndex: 'hasReport',
             key: 'hasReport',
             width: '70px',
@@ -78,7 +78,7 @@ export function getCaseColumns(dispatch: Dispatch, actionHandle: (type: ColumnAc
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
         {
-            title: `自动${parseText ?? '解析'}`,
+            title: <span dangerouslySetInnerHTML={{ __html: `自动<br/>${parseText ?? '解析'}` }} />,
             dataIndex: 'm_bIsAutoParse',
             key: 'm_bIsAutoParse',
             width: '70px',
