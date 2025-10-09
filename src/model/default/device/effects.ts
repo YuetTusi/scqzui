@@ -2,6 +2,7 @@ import { mkdirSync } from 'fs';
 import { join } from 'path';
 import { ipcRenderer } from "electron";
 import dayjs from 'dayjs';
+import unionBy from 'lodash/unionBy';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from "dva";
 import { StateTree } from '@/type/model';
@@ -574,18 +575,8 @@ export default {
 
         const { usb, value } = payload as { usb: number, value: { name: string, value: string }[] };
         const state: DeviceStoreState = yield select((state: StateTree) => state.device);
-        const dev = state.deviceList[usb - 1];
-
-        const next = (dev.phoneInfo ?? []).reduce((acc, current) => {
-            const has = value.find(i => i.name.toLowerCase() === current.name.toLowerCase());
-            if (has === undefined) {
-                acc.push(current);
-            } else {
-                acc.push(has);
-            }
-            return acc;
-        }, [] as { name: string, value: string }[]);
-
+        const phoneInfo = state.deviceList[usb - 1].phoneInfo ?? [];
+        const next = unionBy(value, phoneInfo, 'name');
         yield put({
             type: 'updateProp', payload: {
                 usb,
