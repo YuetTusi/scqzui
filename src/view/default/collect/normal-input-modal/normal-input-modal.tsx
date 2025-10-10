@@ -34,15 +34,17 @@ import { CaseInfo } from '@/schema/case-info';
 import { FetchData } from '@/schema/fetch-data';
 import { DataMode } from '@/schema/data-mode';
 import { ParseApp } from '@/schema/parse-app';
+import { DeviceSystem } from '@/schema/device-system';
+import { BeforeFetchStatus } from '@/schema/before-fetch-status';
 import { StateTree } from '@/type/model';
 import { CaseDataState } from '@/model/default/case-data';
 import { ExtractionState } from '@/model/default/extraction';
+import { IMEIModalState } from '@/model/default/imei-modal';
+import { NormalInputModalState } from '@/model/default/normal-input-modal';
 import parseApp from '@/config/parse-app.yaml';
 import { Instruction } from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
-import DeviceSystem from '@/schema/device-system';
-import { IMEIModalState } from '@/model/default/imei-modal';
 
 const { caseText, devText, fetchText, parseText, useBcp } = helper.readConf()!;
 const { Option } = Select;
@@ -66,18 +68,19 @@ function filterToParseApp(treeNodes: ITreeNode[]) {
 /**
  * 采集录入框（标准流程）
  */
-const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle }) => {
+const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
 
     const dispatch = useDispatch();
     const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
     const { deviceList } = useSelector<StateTree, DeviceStoreState>((state) => state.device);
     const { types } = useSelector<StateTree, ExtractionState>((state) => state.extraction);
-    const { open } = useSelector<StateTree, IMEIModalState>((state) => state.imeiModal);
+    const { open: imeiOpen } = useSelector<StateTree, IMEIModalState>((state) => state.imeiModal);
+    const { open, fetchAllow, device } = useSelector<StateTree, NormalInputModalState>((state) => state.normalInputModal);
     const [formRef] = useForm<FormValue>();
     const currentCase = useRef<CaseInfo>(); //当前案件数据
     const [appSelectModalVisible, setAppSelectModalVisible] = useState(false);
     const [selectedApps, setSelectedApps] = useState<ParseApp[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+
     const historyDeviceName = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENAME));
     const historyDeviceHolder = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER));
     const historyDeviceNumber = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER));
@@ -86,16 +89,16 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
     useEffect(() => {
         (async () => {
-            if (visible) {
+            if (open) {
                 const wired = await helper.isWired();
                 setIsWired(wired);
             }
         })();
-    }, [visible]);
+    }, [open]);
 
     useEffect(() => {
         (async () => {
-            if (visible) {
+            if (open) {
                 const extraction = await helper.isExtraction();
                 setIsExtraction(extraction);
 
@@ -109,10 +112,10 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                 // }
             }
         })();
-    }, [visible]);
+    }, [open]);
 
     useEffect(() => {
-        if (visible) {
+        if (open) {
             dispatch({ type: 'caseData/queryAllCaseData' });
             send(SocketType.Fetch, {
                 type: SocketType.Fetch,
@@ -131,17 +134,17 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
         } else {
             dispatch({ type: 'extraction/setTypes', payload: [] });
         }
-    }, [visible]);
+    }, [open, device]);
 
     useEffect(() => {
         historyDeviceName.current = UserHistory.get(HistoryKeys.HISTORY_DEVICENAME);
         historyDeviceHolder.current = UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER);
         historyDeviceNumber.current = UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER);
-    }, [visible]);
+    }, [open]);
 
     useEffect(() => {
 
-        if (visible && useBcp) {
+        if (open && useBcp) {
 
             const phoneInfo = deviceList[device?.usb! - 1]?.phoneInfo ?? [];
             let values: Record<string, any> = {
@@ -164,7 +167,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             });
             formRef.setFieldsValue(values);
         }
-    }, [deviceList, useBcp, visible, types]);
+    }, [deviceList, useBcp, open, types]);
 
     // useSubscribe('clock-1', () => {
     //     console.log(fetching);
@@ -294,7 +297,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
         try {
             const values = await validateFields();
-            setLoading(true);
             let entity = new FetchData(); //采集数据
             entity.caseName = currentCase.current?.m_strCaseName;
             entity.spareName = currentCase.current?.spareName;
@@ -332,7 +334,6 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                     okText: '确定',
                     centered: true
                 });
-                setLoading(false);
                 return;
             }
 
@@ -362,16 +363,14 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                     });
                 } else {
                     setSelectedApps([]);
-                    resetValue();
+                    // resetValue();
                     saveHandle!(entity);
                 }
             } catch (error) {
                 setSelectedApps([]);
-                resetValue();
+                // resetValue();
                 saveHandle!(entity);
                 log.error(`读取磁盘信息失败:${error.message}`);
-            } finally {
-                setLoading(false);
             }
 
         } catch (error) {
@@ -662,10 +661,11 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
 
     return <>
         <Modal
-            open={visible}
+            open={open}
             onCancel={() => {
                 resetValue();
                 setSelectedApps([]);
+                dispatch({ type: 'normalInputModal/setFetchAllow', payload: BeforeFetchStatus.Unverified });
                 cancelHandle!();
             }}
             footer={[
@@ -675,6 +675,7 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                     onClick={() => {
                         setSelectedApps([]);
                         resetValue();
+                        dispatch({ type: 'normalInputModal/setFetchAllow', payload: BeforeFetchStatus.Unverified });
                         cancelHandle!();
                     }}>
                     <CloseCircleOutlined />
@@ -683,9 +684,10 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
                 <Tooltip title={`确定后开始${fetchText ?? '取证'}数据`} key="B_1">
                     <Button
                         onClick={formSubmit}
-                        disabled={loading}
-                        type="primary">
-                        {loading ? <LoadingOutlined /> : <CheckCircleOutlined />}
+                        disabled={fetchAllow === BeforeFetchStatus.Verifying}
+                        type="primary"
+                        style={{ marginLeft: '8px' }}>
+                        {fetchAllow === BeforeFetchStatus.Verifying ? <LoadingOutlined /> : <CheckCircleOutlined />}
                         <span>确定</span>
                     </Button>
                 </Tooltip>
@@ -707,13 +709,11 @@ const NormalInputModal: FC<Prop> = ({ device, visible, saveHandle, cancelHandle 
             closeHandle={() => setAppSelectModalVisible(false)}
         />
         <IMEIModal
-            open={open}
+            open={imeiOpen}
             onCancel={() => dispatch({ type: 'imeiModal/setOpen', payload: false })} />
     </>;
 };
 NormalInputModal.defaultProps = {
-    visible: false,
-    device: null,
     saveHandle: () => { },
     cancelHandle: () => { }
 };

@@ -31,6 +31,8 @@ import { QuickRecord } from '@/schema/quick-record';
 import { DeviceSystem } from '@/schema/device-system';
 import { LoginState } from '../trace-login';
 import { QuickLog } from '@/schema/quick-log';
+import { FetchData } from '@/schema/fetch-data';
+import { BeforeFetchStatus } from '@/schema/before-fetch-status';
 
 const { fetchText, parseText } = helper.readConf()!;
 const appPath = process.cwd();
@@ -144,12 +146,63 @@ export function deviceOut({ msg }: Command<DeviceType>, dispatch: Dispatch<any>)
 }
 
 /**
+ * 采集前验证，后台允许后继续采集流程
+ */
+export function fetchVerify({ msg }: Command<{
+    deviceData: DeviceType,
+    fetchData: FetchData,
+    allow: boolean,
+    info: string,
+}>, dispatch: Dispatch<any>) {
+
+    const { allow, info, fetchData, deviceData } = msg;
+
+    if (allow) {
+        //允许，关闭窗口开始采集
+        dispatch({ type: 'normalInputModal/setOpen', payload: false });
+        dispatch({
+            type: 'device/startFetch',
+            payload: { deviceData, fetchData }
+        });
+    } else {
+        Modal.confirm({
+            onOk() {
+                dispatch({ type: 'normalInputModal/setOpen', payload: false });
+                dispatch({
+                    type: 'device/startFetch',
+                    payload: { deviceData, fetchData }
+                });
+            },
+            title: '提示',
+            content: info ?? '',
+            centered: true,
+            okText: '是',
+            cancelText: '否'
+        });
+    }
+    dispatch({ type: 'normalInputModal/setFetchAllow', payload: BeforeFetchStatus.Unverified });
+
+    // if (msg.allow) {
+
+    // } else {
+    //     //不允许，显示错误消息
+    //     Modal.warn({
+    //         title: '提示',
+    //         content: msg.info ?? '',
+    //         centered: true,
+    //         okText: '确定',
+    //     });
+    // }
+
+}
+
+/**
  * 接收采集进度消息
  * @param msg.usb USB序号
  * @param msg.type 为分类，非0的数据入库
  * @param msg.info 消息内容
  */
-export function fetchProgress({ msg }: Command<FetchProgress>, dispatch: Dispatch<any>) {
+export function fetchProgress({ msg }: Command<FetchProgress>, _: Dispatch<any>) {
     ipcRenderer.send('fetch-progress', {
         usb: msg.usb,
         fetchRecord: { type: msg.type, info: msg.info, time: new Date() }
@@ -372,7 +425,7 @@ export function importErr({ msg }: Command<{
     deviceId: string,
     mobileName: string,
     msg: string
-}>, dispatch: Dispatch) {
+}>, _: Dispatch) {
 
     const db = getDb<DeviceType>(TableName.Devices);
 

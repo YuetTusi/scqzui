@@ -42,6 +42,7 @@ import { HelpModalState } from '@/model/default/help-modal';
 import { FetchStateModalState } from '@/model/default/fetch-state-modal';
 import { IMEIModalState } from '@/model/default/imei-modal';
 import { CleanViolationModalState } from '@/model/default/clean-violation-modal';
+import { NormalInputModalState } from '@/model/default/normal-input-modal';
 
 declare global {
 	interface Window {
@@ -100,6 +101,7 @@ interface StateTree {
 	fetchStateModal: FetchStateModalState,
 	imeiModal: IMEIModalState,
 	cleanViolationModal: CleanViolationModalState,
+	normalInputModal: NormalInputModalState,
 	[modelName: string]: any
 }
 

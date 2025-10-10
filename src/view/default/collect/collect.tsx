@@ -40,6 +40,7 @@ import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
 import { CollectProp } from './prop';
+import { BeforeFetchStatus } from '@/schema/before-fetch-status';
 
 const { Group } = Button;
 const { useBcp, devText, fetchText, parseText } = helper.readConf()!;
@@ -52,7 +53,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     const dispatch = useDispatch();
     const [wired, setWired] = useState<boolean>(false);
     const [appCreditModalVisible, setAppCreditModalVisible] = useState<boolean>(false);
-    const [normalInputModal, setNormalInputModal] = useState<boolean>(false);
+    // const [normalInputModal, setNormalInputModal] = useState<boolean>(false);
     const [serverCloudModalVisible, setServerCloudModalVisible] = useState<boolean>(false);
     const [liveModalVisible, setLiveModalVisible] = useState<boolean>(false);
     const [applePasswordVisible, setApplePasswordVisible] = useState<boolean>(false);
@@ -72,7 +73,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     //     for (let i = 0; i < 3; i++) {
     //         devices.push({
     //             ...{
-    //                 "fetchState": FetchState.NotConnected,
+    //                 "fetchState": FetchState.Connected,
     //                 "manufacturer": "Mi",
     //                 "model": "TAS-AL00",
     //                 "phoneInfo": [{
@@ -210,24 +211,21 @@ const Collect: FC<CollectProp> = ({ }) => {
      * 用户通过弹框手输数据
      * @param {DeviceType} data 采集数据
      */
-    const getCaseDataFromUser = async ({ usb, serial }: DeviceType) => {
+    const getCaseDataFromUser = async (device: DeviceType) => {
         if (!validateBeforeFetch()) {
             return;
         }
-        // send(SocketType.Fetch, {
-        //     type: SocketType.Fetch,
-        //     cmd: CommandType.Extraction,
-        //     msg: { usb }
-        // });
+
         switch (dataMode) {
             case DataMode.Self:
                 //# 标准版本
-                setNormalInputModal(true);
+                dispatch({ type: 'normalInputModal/setDevice', payload: device });
+                dispatch({ type: 'normalInputModal/setOpen', payload: true });
                 break;
             case DataMode.Check:
                 //# 点验版本
                 const fetchData = await getDb<FetchData>(TableName.CheckData)
-                    .findOne({ serial });
+                    .findOne({ serial: device.serial });
                 if (fetchData === null) {
                     //TODO:完成点验功能后打开：
                     setCheckInputModalVisible(true);
@@ -235,13 +233,13 @@ const Collect: FC<CollectProp> = ({ }) => {
                     //note:如果数据库中存在此设备，直接走采集流程
                     const [name] = fetchData.mobileName!.split('_');
                     //*重新生成时间戳并加入偏移量，否则手速太快会造成时间一样覆盖目录
-                    fetchData.mobileName = `${name}_${helper.timestamp(usb)}`;
+                    fetchData.mobileName = `${name}_${helper.timestamp(device.usb)}`;
                     startFetchHandle(fetchData);
                 }
                 break;
             default:
                 //# 标准版本
-                setNormalInputModal(true);
+                dispatch({ type: 'normalInputModal/setOpen', payload: true });
                 break;
         }
     };
@@ -271,32 +269,66 @@ const Collect: FC<CollectProp> = ({ }) => {
      * @param {FetchData} fetchData 采集数据
      */
     const startFetchHandle = (fetchData: FetchData) => {
-        setNormalInputModal(false);
-        setCheckInputModalVisible(false);
-        setServerCloudModalVisible(false);
-        //TODO: 关闭另两个输入框
 
-        if (fetchData.mode === DataMode.ServerCloud) {
-            //#云取证把应用数据赋值给cloudCodeModal模型，以接收验证码详情
-            const { usb } = currentDevice.current!;
-            dispatch({
-                type: 'cloudCodeModal/setApps',
-                payload: {
-                    usb,
-                    mobileHolder: fetchData.mobileHolder,
-                    mobileNumber: fetchData.mobileNumber,
-                    apps: fetchData.cloudAppList
-                }
-            });
+        switch (fetchData.mode) {
+            case DataMode.Self:
+                //发送校验命令，后台允许走采集流程
+                send(SocketType.Fetch, {
+                    cmd: CommandType.FetchVerify,
+                    msg: {
+                        deviceData: currentDevice.current,
+                        fetchData
+                    }
+                });
+                dispatch({ type: 'normalInputModal/setFetchAllow', payload: BeforeFetchStatus.Verifying });
+
+                // setTimeout(() => {
+                //     fetchVerify({
+                //         type: 'fetch',
+                //         cmd: CommandType.FetchVerify,
+                //         msg: {
+                //             deviceData: currentDevice.current,
+                //             fetchData,
+                //             allow: false,
+                //             info: '不允许'
+                //         }
+                //     } as any, dispatch);
+                // }, 3000);
+                break;
+            case DataMode.ServerCloud:
+                setServerCloudModalVisible(false);
+                //#云取证把应用数据赋值给cloudCodeModal模型，以接收验证码详情
+                const { usb } = currentDevice.current!;
+                dispatch({
+                    type: 'cloudCodeModal/setApps',
+                    payload: {
+                        usb,
+                        mobileHolder: fetchData.mobileHolder,
+                        mobileNumber: fetchData.mobileNumber,
+                        apps: fetchData.cloudAppList
+                    }
+                });
+                dispatch({
+                    type: 'device/startFetch',
+                    payload: {
+                        deviceData: currentDevice.current,
+                        fetchData
+                    }
+                });
+                break;
+            case DataMode.Check:
+                setCheckInputModalVisible(false);
+                dispatch({
+                    type: 'device/startFetch',
+                    payload: {
+                        deviceData: currentDevice.current,
+                        fetchData
+                    }
+                });
+                break;
         }
+
         dispatch({ type: 'fetchStateModal/clearData', payload: currentDevice.current!.usb });
-        dispatch({
-            type: 'device/startFetch',
-            payload: {
-                deviceData: currentDevice.current,
-                fetchData
-            }
-        });
     };
 
     /**
@@ -592,10 +624,8 @@ const Collect: FC<CollectProp> = ({ }) => {
             cancelHandle={() => dispatch({ type: 'helpModal/setOpen', payload: false })}
         />
         <NormalInputModal
-            device={currentDevice.current}
-            visible={normalInputModal}
             saveHandle={startFetchHandle}
-            cancelHandle={() => setNormalInputModal(false)}
+            cancelHandle={() => dispatch({ type: 'normalInputModal/setOpen', payload: false })}
         />
         <ServerCloudModal
             visible={serverCloudModalVisible}

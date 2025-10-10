@@ -13,7 +13,7 @@ import {
     deviceIn, deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg,
     smsMsg, parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
     appRecFinish, fetchPercent, importErr, backDatapass, checkFinishToParse,
-    fetchState, setIMEIOrIMID, violationMsg
+    fetchState, setIMEIOrIMID, violationMsg, fetchVerify
 } from './listener';
 
 const { Fetch, Parse, Trace, Error } = SocketType;
@@ -47,6 +47,9 @@ export default {
                     console.log(`设备状态更新:${JSON.stringify(command.msg)}`);
                     logger.info(`设备状态更新(DeviceChange)：${JSON.stringify(command.msg)}`);
                     deviceChange(command, dispatch);
+                    break;
+                case CommandType.FetchVerify:
+                    fetchVerify(command, dispatch);
                     break;
                 case CommandType.FetchProgress:
                     console.log(`采集进度消息：${JSON.stringify(command.msg)}`);

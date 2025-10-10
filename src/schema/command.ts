@@ -55,6 +55,10 @@ enum CommandType {
      */
     FetchState = 'fetch_state',
     /**
+     * 采集前校验
+     */
+    FetchVerify = 'fetch_verify',
+    /**
      * 用户消息提示（Fetch）
      */
     TipMsg = 'tip_msg',

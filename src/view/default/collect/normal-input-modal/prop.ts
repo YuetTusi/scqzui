@@ -3,14 +3,6 @@ import DeviceType from '@/schema/device-type';
 
 export interface Prop {
     /**
-     * 是否显示
-     */
-    visible: boolean;
-    /**
-     * 当前手机设备数据
-     */
-    device: DeviceType | null;
-    /**
      * 保存回调
      */
     saveHandle?: (arg0: FetchData) => void;
