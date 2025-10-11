@@ -156,6 +156,10 @@ interface Conf {
 	 */
 	useWebAction: boolean,
 	/**
+	 * 是否使用清除违规数据
+	 */
+	useClearIllegal: boolean,
+	/**
 	 * 是否隐藏报告CAD节点
 	 */
 	hideCad: boolean,

@@ -19,6 +19,7 @@ import ExportReportModal from '../export-report-modal';
 import ExportBcpModal from '../export-bcp-modal';
 import HitChartModal from '../hit-chart-modal';
 import { CleanViolationModal } from '../clean-violation-modal';
+import { WarnTextBox } from './styled/style';
 import { getDevColumns } from './column';
 import { DevListProp } from './prop';
 
@@ -237,9 +238,18 @@ const DevList: FC<DevListProp> = ({ }) => {
                 dispatch({ type: 'cleanViolationModal/setLoading', payload: true });
             },
             title: '清除',
-            content: `确认清除 ${data?.mobileName === undefined
-                ? ''
-                : helper.getNameWithoutTime(data.mobileName)} 违规数据？`,
+            content: <div>
+                <div>
+                    {
+                        `确认清除 ${data?.mobileName === undefined
+                            ? ''
+                            : helper.getNameWithoutTime(data.mobileName)} 违规数据？`
+                    }
+                </div>
+                <WarnTextBox>
+                    注意，清除的数据不可恢复
+                </WarnTextBox>
+            </div>,
             centered: true,
             okText: '是',
             cancelText: '否'

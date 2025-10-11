@@ -10,6 +10,7 @@ useTraceLogin: true
 useLogin: false
 useCloudSearch: true
 useWebAction: true
+useClearIllegal: true
 hideCad: true
 caseText: 案件
 fetchText: 取证
