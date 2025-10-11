@@ -38,13 +38,13 @@ import { DeviceSystem } from '@/schema/device-system';
 import { BeforeFetchStatus } from '@/schema/before-fetch-status';
 import { StateTree } from '@/type/model';
 import { CaseDataState } from '@/model/default/case-data';
-import { ExtractionState } from '@/model/default/extraction';
 import { IMEIModalState } from '@/model/default/imei-modal';
 import { NormalInputModalState } from '@/model/default/normal-input-modal';
 import parseApp from '@/config/parse-app.yaml';
 import { Instruction } from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
+import { setIMEIOrIMID } from '@/model/default/receive/listener';
 
 const { caseText, devText, fetchText, parseText, useBcp } = helper.readConf()!;
 const { Option } = Select;
@@ -73,68 +73,32 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
     const dispatch = useDispatch();
     const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
     const { deviceList } = useSelector<StateTree, DeviceStoreState>((state) => state.device);
-    const { types } = useSelector<StateTree, ExtractionState>((state) => state.extraction);
+    // const { types } = useSelector<StateTree, ExtractionState>((state) => state.extraction);
     const { open: imeiOpen } = useSelector<StateTree, IMEIModalState>((state) => state.imeiModal);
     const { open, fetchAllow, device } = useSelector<StateTree, NormalInputModalState>((state) => state.normalInputModal);
     const [formRef] = useForm<FormValue>();
     const currentCase = useRef<CaseInfo>(); //当前案件数据
     const [appSelectModalVisible, setAppSelectModalVisible] = useState(false);
     const [selectedApps, setSelectedApps] = useState<ParseApp[]>([]);
-
+    const methodValue = useRef<string | undefined>(''); //记住用户选择的提取方式
     const historyDeviceName = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENAME));
     const historyDeviceHolder = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICEHOLDER));
     const historyDeviceNumber = useRef(UserHistory.get(HistoryKeys.HISTORY_DEVICENUMBER));
     const [isExtraction, setIsExtraction] = useState<boolean>(false); //是否启用“提取方式” 目前用于方便调试
-    const [isWired, setIsWired] = useState<boolean>(false); //是否启用“有线方式” 目前用于方便调试
+    // const [isWired, setIsWired] = useState<boolean>(false); //是否启用“有线方式” 目前用于方便调试
+
+    useEffect(() => {
+        dispatch({ type: 'caseData/queryAllCaseData' });
+    }, []);
 
     useEffect(() => {
         (async () => {
             if (open) {
-                const wired = await helper.isWired();
-                setIsWired(wired);
-            }
-        })();
-    }, [open]);
-
-    useEffect(() => {
-        (async () => {
-            if (open) {
-                const extraction = await helper.isExtraction();
+                const extraction = await helper.isExtraction()
                 setIsExtraction(extraction);
-
-                // if (extraction) {
-                //     formRef.setFieldsValue({
-                //         case: allCaseData.length > 0 ? JSON.stringify(allCaseData[0]) : '',
-                //         user: historyDeviceHolder.current.length > 0 ? historyDeviceHolder.current[0] : '',
-                //         extraction: types.length > 0 ? types[0].value : ''
-                //     });
-                //     currentCase.current = allCaseData[0];
-                // }
             }
         })();
     }, [open]);
-
-    useEffect(() => {
-        if (open) {
-            dispatch({ type: 'caseData/queryAllCaseData' });
-            send(SocketType.Fetch, {
-                type: SocketType.Fetch,
-                cmd: CommandType.Extraction,
-                msg: { usb: device?.usb }
-            });
-            //? mock
-            // dispatch({
-            //     type: 'extraction/setTypes', payload: [
-            //         { name: 'Apk快速采集', value: 0, enable: true, tip: '提示内容测试' },
-            //         {
-            //             name: 'Note', value: 'Note', enable: true
-            //         },
-            //     ]
-            // });
-        } else {
-            dispatch({ type: 'extraction/setTypes', payload: [] });
-        }
-    }, [open, device]);
 
     useEffect(() => {
         historyDeviceName.current = UserHistory.get(HistoryKeys.HISTORY_DEVICENAME);
@@ -143,13 +107,20 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
     }, [open]);
 
     useEffect(() => {
+        if (open) {
+            const methods = device?.methods ?? [];
+            formRef.setFieldsValue({
+                extraction: methods.length === 0 ? undefined : methods[0].value
+            });
+        }
+    }, [open, device?.methods]);
+
+    useEffect(() => {
 
         if (open && useBcp) {
-
             const phoneInfo = deviceList[device?.usb! - 1]?.phoneInfo ?? [];
             let values: Record<string, any> = {
-                phoneName: device?.model ?? '',
-                extraction: types.length === 0 ? undefined : types[0].value
+                phoneName: device?.model ?? ''
             };
 
             phoneInfo.forEach((i) => {
@@ -167,30 +138,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
             });
             formRef.setFieldsValue(values);
         }
-    }, [deviceList, useBcp, open, types]);
-
-    // useSubscribe('clock-1', () => {
-    //     console.log(fetching);
-    //     if (startLoadingTime === 0) {
-    //         return;
-    //     }
-    //     const prevReading = dayjs(startLoadingTime);
-    //     const now = dayjs(new Date().getTime());
-    //     const s = now.diff(prevReading, 'second');
-    //     if (s >= 120) {
-    //         //超过2分钟，关闭reading显示
-    //         dispatch({ type: 'appSet/setReading', payload: { reading: false } });
-    //         startLoadingTime = 0;
-    //     } else {
-    //         dispatch({
-    //             type: 'appSet/setReading',
-    //             payload: {
-    //                 reading: true,
-    //                 readingMessage: `获取中...${120 - s}s`
-    //             }
-    //         });
-    //     }
-    // });
+    }, [deviceList, useBcp, open]);
 
     /**
      * 跳转到新增案件页
@@ -220,36 +168,42 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
     /**
      * 绑定提取方式下拉
      */
-    const bindExtractionSelect = () =>
-        types
-            .filter(i => i.enable)
-            .map((t) => <Option
-                title={t.tip ?? t.name}
-                value={t.value}
-                key={t.value}>
-                {t.name}
-            </Option>);
+    const bindExtractionSelect = () => {
+        if (helper.isNullOrUndefined(device)) {
+            return null;
+        } else {
+            return (device.methods ?? [])
+                .filter(i => i.enable)
+                .map((t) => <Option
+                    title={t.tip ?? t.name}
+                    value={t.value}
+                    key={t.value}>
+                    {t.name}
+                </Option>);
+        }
+    };
 
     /**
      * 案件下拉Change
      */
     const caseChange = (value: string, _: JSX.Element | JSX.Element[]) => {
-        formRef.resetFields(['extraction']);
+        const methods = device?.methods ?? [];
         currentCase.current = JSON.parse(value) as CaseInfo;
-        //用案件类型过虑提取方式
-        const next = types.map(i => ({
-            ...i,
-            enable: currentCase.current?.wired ? i.name === 'Apk快速采集' : i.name !== 'Apk快速采集'
-        }));;
-        //有线快采只保留`Apk快速采集`一种提取方式
-        dispatch({ type: 'extraction/setTypes', payload: next });
+        if (currentCase.current.wired) {
+            //是有线快采案件，则自动选择`Apk快速采集`提取方式
+            const apk = methods.find(item => item.name === 'Apk快速采集');
+            if (apk) {
+                formRef.setFieldsValue({ extraction: apk.value });
+            }
+        }
     };
 
     /**
      * 提取方式下拉Change
      */
-    const extractionChange = (value: string, _: JSX.Element | JSX.Element[]) => {
+    const extractionChange = (value: string) => {
         formRef.validateFields(['case']);
+        methodValue.current = value;
     };
 
     /**
@@ -257,19 +211,34 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
      */
     const onIMEIOrIMIDSearch = (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        dispatch({
-            type: 'appSet/setReading',
-            payload: {
-                reading: true,
-                readingMessage: '获取中'
-            }
-        });
-        //使用倒计时
-        dispatch({ type: 'appSet/setCountDown', payload: true });
-        send(SocketType.Fetch, {
+        // dispatch({
+        //     type: 'appSet/setReading',
+        //     payload: {
+        //         reading: true,
+        //         readingMessage: '获取中'
+        //     }
+        // });
+        // //使用倒计时
+        // dispatch({ type: 'appSet/setCountDown', payload: true });
+        // send(SocketType.Fetch, {
+        //     cmd: CommandType.IMEI,
+        //     msg: { usb: device?.usb ?? 0 }
+        // });
+
+        setIMEIOrIMID({
+            type: "fetch",
             cmd: CommandType.IMEI,
-            msg: { usb: device?.usb ?? 0 }
-        });
+            msg: {
+                usb: 1,
+                phoneInfo: [
+                    {
+                        "name": "IMEI2", "value": "7777777777777"
+                    }, {
+                        "name": "MEID", "value": "999999999999"
+                    }
+                ]
+            }
+        } as any, dispatch);
     }
 
     /**
@@ -403,7 +372,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                                     }
                                     const currentCase: CaseInfo = JSON.parse(value);
                                     const extractionValue = getFieldValue('extraction');
-                                    const extraction = types.find(i => i.value == extractionValue);
+                                    const extraction = (device.methods ?? []).find(i => i.value == extractionValue);
                                     if (currentCase.wired) {
                                         return extraction?.name === 'Apk快速采集'
                                             ? Promise.resolve()

@@ -21,6 +21,7 @@ import { DeviceType } from '@/schema/device-type';
 import { TableName } from '@/schema/table-name';
 import { DataMode } from '@/schema/data-mode';
 import { CommandType, SocketType } from '@/schema/command';
+import { BeforeFetchStatus } from '@/schema/before-fetch-status';
 import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
@@ -40,7 +41,6 @@ import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
 import { CollectProp } from './prop';
-import { BeforeFetchStatus } from '@/schema/before-fetch-status';
 
 const { Group } = Button;
 const { useBcp, devText, fetchText, parseText } = helper.readConf()!;
@@ -83,8 +83,13 @@ const Collect: FC<CollectProp> = ({ }) => {
     //                 }, {
     //                     "name": "IMEI2", "value": "867099041036009"
     //                 }, {
-    //                     "name": "IMID", "value": "867099041000000"
+    //                     "name": "MEID", "value": "867099041000000"
     //                 }],
+    //                 "methods": [
+    //                     { "name": "Apk快速采集", "value": "0", "enable": true, "tip": "提示内容测试" },
+    //                     { "name": "华为Hisuite", "value": "1", "enable": true, "tip": "华为Hisuite" },
+    //                     { "name": `测试${i}`, "value": "2", "enable": true, "tip": "测试" }
+    //                 ],
     //                 "serial": "JTK0219826000164",
     //                 "system": DeviceSystem.HarmonyOS,
     //                 "usb": i + 1,

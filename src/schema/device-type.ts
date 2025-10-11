@@ -5,6 +5,7 @@ import GuideImage from './guide-image';
 import { DataMode } from './data-mode';
 import { DeviceSystem } from './device-system';
 import { CloudApp } from './cloud-app';
+import { ExtractionItem } from './extraction-item';
 
 /**
  * 手机设备类型
@@ -146,6 +147,10 @@ class DeviceType extends BaseEntity {
      * 短信云取证应用列表
      */
     cloudAppList?: CloudApp[];
+    /**
+     * 提取方式
+     */
+    methods?: ExtractionItem[] = [];
 }
 
 export { DeviceType };

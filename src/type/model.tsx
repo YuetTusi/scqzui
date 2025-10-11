@@ -36,7 +36,6 @@ import { ApkModalState } from '@/model/default/apk-modal';
 import { LoginState } from '@/model/default/login';
 import { AndroidSetModalState } from '@/model/default/android-set-modal';
 import { PaperworkModalState } from '@/model/default/paperwork-modal';
-import { ExtractionState } from '@/model/default/extraction';
 import { QuickLogTableState } from '@/model/default/quick-log-table';
 import { HelpModalState } from '@/model/default/help-modal';
 import { FetchStateModalState } from '@/model/default/fetch-state-modal';
@@ -95,7 +94,6 @@ interface StateTree {
 	login: LoginState,
 	androidSetModal: AndroidSetModalState,
 	paperworkModal: PaperworkModalState,
-	extraction: ExtractionState,
 	quickLogTable: QuickLogTableState,
 	helpModal: HelpModalState,
 	fetchStateModal: FetchStateModalState,

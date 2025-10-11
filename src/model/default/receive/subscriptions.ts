@@ -133,15 +133,6 @@ export default {
                     console.log(`接收到破解消息: ${command.msg}`);
                     dispatch({ type: 'androidSetModal/setMessage', payload: command.msg });
                     break;
-                case CommandType.Extraction:
-                    //# 接收提取方式列表
-                    console.log(`接收提取方式列表: ${command.msg}`);
-                    const next = (command.msg.methods as any[]).map(i => {
-                        i.enable = true;
-                        return i;
-                    });
-                    dispatch({ type: 'extraction/setTypes', payload: next });
-                    break;
                 case CommandType.IMEI:
                     //# 接收IMEI/IMID
                     console.log(`接收IMEI/IMID:${JSON.stringify(command.msg)}`);

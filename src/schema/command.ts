@@ -71,10 +71,6 @@ enum CommandType {
      */
     DevCast = 'dev_cast',
     /**
-     * 提取方式
-     */
-    Extraction = 'extraction',
-    /**
      * 查询IMEI
      */
     IMEI = 'imei',
