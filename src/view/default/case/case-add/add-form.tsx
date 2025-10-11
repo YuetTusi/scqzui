@@ -269,13 +269,13 @@ const AddForm: FC<FormProp> = ({
             <Split />
             <Row style={{ paddingTop: '30px' }}>
                 <Col span={4} offset={3}>
-                    <span>获取应用数据：</span>
-                    <Tooltip title="安装apk获取基本数据">
+                    <span>安装应用获取基本信息：</span>
+                    <Tooltip title="基本信息包括（联系人，通话记录，短信等）">
                         <Checkbox onChange={(event) => setAnalysisApp(event.target.checked)} checked={analysisApp} />
                     </Tooltip>
                 </Col>
                 <Col span={4}>
-                    <span>获取SD卡数据：</span>
+                    <span>获取手机存储数据：</span>
                     <Tooltip title="获取手机存储数据">
                         <Checkbox onChange={(event) => setSdCard(event.target.checked)} checked={sdCard} />
                     </Tooltip>
