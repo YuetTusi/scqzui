@@ -210,34 +210,34 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
      */
     const onIMEIOrIMIDSearch = (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        // dispatch({
-        //     type: 'appSet/setReading',
-        //     payload: {
-        //         reading: true,
-        //         readingMessage: '获取中'
-        //     }
-        // });
-        // //使用倒计时
-        // dispatch({ type: 'appSet/setCountDown', payload: true });
-        // send(SocketType.Fetch, {
-        //     cmd: CommandType.IMEI,
-        //     msg: { usb: device?.usb ?? 0 }
-        // });
-
-        setIMEIOrIMID({
-            type: "fetch",
-            cmd: CommandType.IMEI,
-            msg: {
-                usb: 1,
-                phoneInfo: [
-                    {
-                        "name": "IMEI2", "value": "7777777777777"
-                    }, {
-                        "name": "MEID", "value": "999999999999"
-                    }
-                ]
+        dispatch({
+            type: 'appSet/setReading',
+            payload: {
+                reading: true,
+                readingMessage: '获取中'
             }
-        } as any, dispatch);
+        });
+        //使用倒计时
+        dispatch({ type: 'appSet/setCountDown', payload: true });
+        send(SocketType.Fetch, {
+            cmd: CommandType.IMEI,
+            msg: { usb: device?.usb ?? 0 }
+        });
+
+        // setIMEIOrIMID({
+        //     type: "fetch",
+        //     cmd: CommandType.IMEI,
+        //     msg: {
+        //         usb: 1,
+        //         phoneInfo: [
+        //             {
+        //                 "name": "IMEI2", "value": "7777777777777"
+        //             }, {
+        //                 "name": "MEID", "value": "999999999999"
+        //             }
+        //         ]
+        //     }
+        // } as any, dispatch);
     }
 
     /**
