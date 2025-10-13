@@ -173,11 +173,10 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
             return null;
         } else {
             return (device.methods ?? [])
-                .filter(i => i.enable)
                 .map((t) => <Option
                     title={t.tip ?? t.name}
                     value={t.value}
-                    key={t.value}>
+                    key={`${t.name}_${t.value}`}>
                     {t.name}
                 </Option>);
         }
@@ -602,6 +601,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                                 <Select
                                     onChange={extractionChange}
                                     style={{ width: '100%' }}>
+                                    {console.log(bindExtractionSelect())}
                                     {bindExtractionSelect()}
                                 </Select>
                             </Item>

@@ -11,10 +11,6 @@ export interface ExtractionItem {
      */
     value: string,
     /**
-     * 是否启用此项
-     */
-    enable: boolean,
-    /**
      * 提示内容
      */
     tip: string
