@@ -351,6 +351,21 @@ Fetch 命令：`extra_msg`，参数：
 | usb     | number | 序号     |
 | content | string | 消息内容 |
 
+#### 查询设备 IMEI/MEID 参数
+
+Fetch 命令：`imei`，参数：
+
+| 参数名 | 类型   | 说明 |
+| ------ | ------ | ---- |
+| usb    | number | 序号 |
+
+Fetch 回复 `imei`，参数：
+
+| 参数名    | 类型                         | 说明      |
+| --------- | ---------------------------- | --------- |
+| usb       | number                       | 序号      |
+| phoneInfo | {name:string,value:string}[] | IMEI/MEID |
+
 #### 查询破解设备列表：
 
 Fetch 命令：`crack_query`，无参数

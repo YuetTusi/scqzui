@@ -44,7 +44,6 @@ import parseApp from '@/config/parse-app.yaml';
 import { Instruction } from '../instruction';
 import { NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
-import { setIMEIOrIMID } from '@/model/default/receive/listener';
 
 const { caseText, devText, fetchText, parseText, useBcp } = helper.readConf()!;
 const { Option } = Select;
