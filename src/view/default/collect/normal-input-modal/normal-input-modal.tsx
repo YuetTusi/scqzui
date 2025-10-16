@@ -205,9 +205,9 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
     };
 
     /**
-     * 查询手机IMEI/IMID值
+     * 查询手机IMEI/MEID值
      */
-    const onIMEIOrIMIDSearch = (event: MouseEvent<HTMLElement>) => {
+    const onIMEIOrMEIDSearch = (event: MouseEvent<HTMLElement>) => {
         event.preventDefault();
         dispatch({
             type: 'appSet/setReading',
@@ -222,21 +222,6 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
             cmd: CommandType.IMEI,
             msg: { usb: device?.usb ?? 0 }
         });
-
-        // setIMEIOrIMID({
-        //     type: "fetch",
-        //     cmd: CommandType.IMEI,
-        //     msg: {
-        //         usb: 1,
-        //         phoneInfo: [
-        //             {
-        //                 "name": "IMEI2", "value": "7777777777777"
-        //             }, {
-        //                 "name": "MEID", "value": "999999999999"
-        //             }
-        //         ]
-        //     }
-        // } as any, dispatch);
     }
 
     /**
@@ -562,7 +547,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                     <Auth deny={!useBcp}>
                         <Col span={12}>
                             <Button
-                                onClick={onIMEIOrIMIDSearch}
+                                onClick={onIMEIOrMEIDSearch}
                                 size="small"
                                 type="primary"
                                 style={{
@@ -600,7 +585,6 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                                 <Select
                                     onChange={extractionChange}
                                     style={{ width: '100%' }}>
-                                    {console.log(bindExtractionSelect())}
                                     {bindExtractionSelect()}
                                 </Select>
                             </Item>

@@ -7,10 +7,8 @@ const GuideModalBox = styled.div`
     }
 
     .flow {
-        display        : flex;
-        justify-content: center;
-        align-items    : center;
-        min-height     : 580px;
+        max-height: 680px;
+        overflow-y: auto;
 
         img {
             display: block;

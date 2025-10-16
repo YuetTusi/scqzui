@@ -13,6 +13,10 @@ enum TipType {
      */
     Flash = 'flash',
     /**
+     * 连接WiFi
+     */
+    WiFi = 'wifi',
+    /**
      * 一般消息
      */
     Normal = 'normal',

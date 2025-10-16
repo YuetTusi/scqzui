@@ -2,12 +2,16 @@ import GuideImage from '@/schema/guide-image';
 import installApk from '../images/apk/apk.jpg';
 import huaweiHisuite from '../images/fetch/huawei_hisuite.jpg';
 import huaweiBackup from '../images/fetch/huawei_backup.jpg';
+import huaweiClone from '../images/fetch/huawei_clone.jpg';
+import honorClone from '../images/fetch/honor_clone.jpg';
 import meizuBackup from '../images/fetch/meizu_backup.jpg';
 import oppoBackup from '../images/fetch/oppo_backup.jpg';
 import oppoWiFi from '../images/fetch/oppo_wifi.jpg';
 import oppoTrans from '../images/fetch/oppo_trans.jpg';
+import oppoReplace from '../images/fetch/oppo_replace.jpg';
 import vivoBackup from '../images/fetch/vivo_backup.jpg';
 import miBackup from '../images/fetch/mi_backup.jpg';
+import miReplace from '../images/fetch/mi_replace.jpg';
 import installEasyshare from '../images/apk/easy_share.jpg';
 import OneplusBackup from '../images/fetch/oneplus_backup.jpg';
 import OneplusWiFi from '../images/fetch/oneplus_wifi.jpg';
@@ -26,6 +30,10 @@ export function getImages(type: GuideImage): string | null {
 			return huaweiBackup;
 		case GuideImage.HuaweiHisuite:
 			return huaweiHisuite;
+		case GuideImage.HuaweiClone:
+			return huaweiClone;
+		case GuideImage.HonorClone:
+			return honorClone;
 		case GuideImage.MeizuBackup:
 			return meizuBackup;
 		case GuideImage.OppoWifi:
@@ -34,10 +42,14 @@ export function getImages(type: GuideImage): string | null {
 			return oppoBackup;
 		case GuideImage.OppoTrans:
 			return oppoTrans;
+		case GuideImage.OppoReplace:
+			return oppoReplace;
 		case GuideImage.VivoBackup:
 			return vivoBackup;
 		case GuideImage.MiBackup:
 			return miBackup;
+		case GuideImage.MiReplace:
+			return miReplace;
 		case GuideImage.InstallEasyshare:
 			return installEasyshare;
 		case GuideImage.OneplusBackup:

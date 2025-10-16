@@ -41,6 +41,7 @@ import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
 import { CollectProp } from './prop';
+import GuideImage from '@/schema/guide-image';
 
 const { Group } = Button;
 const { useBcp, devText, fetchText, parseText } = helper.readConf()!;
@@ -73,7 +74,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     //     for (let i = 0; i < 3; i++) {
     //         devices.push({
     //             ...{
-    //                 "fetchState": FetchState.Connected,
+    //                 "fetchState": FetchState.Fetching,
     //                 "manufacturer": "Mi",
     //                 "model": "TAS-AL00",
     //                 "phoneInfo": [{
@@ -86,10 +87,15 @@ const Collect: FC<CollectProp> = ({ }) => {
     //                     "name": "MEID", "value": "867099041000000"
     //                 }],
     //                 "methods": [
-    //                     { "name": "Apk快速采集", "value": "0", "enable": true, "tip": "提示内容测试" },
-    //                     { "name": "华为Hisuite", "value": "1", "enable": true, "tip": "华为Hisuite" },
-    //                     { "name": `测试${i}`, "value": "2", "enable": true, "tip": "测试" }
+    //                     { "name": "Apk快速采集", "value": "0", "tip": "提示内容测试" },
+    //                     { "name": "华为Hisuite", "value": "1", "tip": "华为Hisuite" },
+    //                     { "name": `测试${i}`, "value": "2", "tip": "测试" }
     //                 ],
+    //                 "tipType": TipType.WiFi,
+    //                 "tipTitle": "测试标题",
+    //                 // "tipContent": "测试内容",
+    //                 "tipImage": GuideImage.MiReplace,
+    //                 "tipYesButton": { "name": "是", "value": "1" },
     //                 "serial": "JTK0219826000164",
     //                 "system": DeviceSystem.HarmonyOS,
     //                 "usb": i + 1,
@@ -391,6 +397,7 @@ const Collect: FC<CollectProp> = ({ }) => {
             currentDevice.current = data;
             switch (data.tipType) {
                 case TipType.Normal:
+                case TipType.WiFi:
                 case TipType.Flash:
                     //后台定制弹框
                     setGuideModalVisible(true);

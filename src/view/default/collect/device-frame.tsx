@@ -30,6 +30,7 @@ const getClassNameByState = (device: DeviceType) => {
 
     switch (device?.tipType) {
         case TipType.Flash:
+        case TipType.WiFi:
         case TipType.CloudCode:
         case TipType.UMagicCode:
         case TipType.ApplePassword:
@@ -52,6 +53,9 @@ const getTipTxt = (device: DeviceType) => {
     switch (tipType) {
         case TipType.Flash:
             txt = `操作确认 终端${usb ?? ''}`;
+            break;
+        case TipType.WiFi:
+            txt = `连接WiFi 终端${usb ?? ''}`;
             break;
         case TipType.Normal:
         case TipType.Lead:

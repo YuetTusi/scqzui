@@ -77,8 +77,8 @@
 			"artifactName": "${productName}-${version}.${ext}",
 			"target": [
 				{
-					"target": "AppImage",
-					"arch": "arm64"
+					"target": "zip",
+					"arch": "x64"
 				}
 			]
 		}

@@ -8,6 +8,10 @@ enum GuideImage {
      */
     MiBackup = 'xiaomi_backup',
     /**
+     * 小米换机
+     */
+    MiReplace = 'xiaomi_replace',
+    /**
      * 华为自备份
      */
     HuaweiBackup = 'huawei_backup',
@@ -15,6 +19,14 @@ enum GuideImage {
      * 华为Hisuite备份
      */
     HuaweiHisuite = 'huawei_hisuite',
+    /**
+     * 华为克隆
+     */
+    HuaweiClone = 'huawei_clone',
+    /**
+     * 荣耀克隆
+     */
+    HonorClone = 'honor_clone',
     /**
      * OPPO自备份
      */
@@ -27,6 +39,10 @@ enum GuideImage {
      * OPPO直传
      */
     OppoTrans = 'oppo_trans',
+    /**
+     * OPPO搬家
+     */
+    OppoReplace = 'oppo_replace',
     /**
      * VIVO自备份
      */

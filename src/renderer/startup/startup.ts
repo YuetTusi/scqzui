@@ -43,7 +43,7 @@ ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
     helper.runProcContinue(
         imageOcrProcess,
         platform === 'linux' ? 'ImageOcr' : 'ImageOcr.exe',
-        join(cwd, '../tools/ImageOcr'),
+        join(cwd, '../tools/ai'),
         ['--listen_port', ocrPort.toString()]
     );
 
