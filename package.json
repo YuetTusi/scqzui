@@ -78,10 +78,13 @@
 			"target": [
 				{
 					"target": "zip",
-					"arch": "x64"
+					"arch": "arm64"
 				}
 			]
 		}
+	},
+	"resolutions": {
+		"minimatch": "9.0.5"
 	},
 	"devDependencies": {
 		"@fortawesome/fontawesome-svg-core": "^6.1.1",
