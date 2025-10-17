@@ -116,7 +116,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
 
     useEffect(() => {
 
-        if (open && useBcp) {
+        if (open) {
             const phoneInfo = deviceList[device?.usb! - 1]?.phoneInfo ?? [];
             let values: Record<string, any> = {
                 phoneName: device?.model ?? ''
@@ -137,7 +137,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
             });
             formRef.setFieldsValue(values);
         }
-    }, [deviceList, useBcp, open]);
+    }, [deviceList, open]);
 
     /**
      * 跳转到新增案件页
@@ -504,62 +504,56 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                         </Item>
                     </Col>
                 </Row>
-                <Auth deny={!useBcp}>
-                    <Row>
-                        <Col span={12}>
-                            <Item
-                                name="imei1"
-                                label="IMEI1"
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}>
-                                <Input
-                                    placeholder="15位数字"
-                                    maxLength={15} />
-                            </Item>
-                        </Col>
-                        <Col span={12}>
-                            <Item
-                                name="imei2"
-                                label="IMEI2"
-                                labelCol={{ span: 6 }}
-                                wrapperCol={{ span: 14 }}>
-                                <Input
-                                    placeholder="15位数字"
-                                    maxLength={15} />
-                            </Item>
-                        </Col>
-                    </Row>
-                </Auth>
                 <Row>
-                    <Auth deny={!useBcp}>
-                        <Col span={12}>
-                            <Item
-                                name="meid"
-                                label="MEID"
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}>
-                                <Input
-                                    placeholder="15位数字"
-                                    maxLength={15} />
-                            </Item>
-                        </Col>
-                    </Auth>
-                    <Auth deny={!useBcp}>
-                        <Col span={12}>
-                            <Button
-                                onClick={onIMEIOrMEIDSearch}
-                                size="small"
-                                type="primary"
-                                style={{
-                                    display: device?.system === DeviceSystem.IOS ? 'none' : 'block',
-                                    position: 'relative',
-                                    top: '4px'
-                                }}>
-                                <SearchOutlined />
-                                <span>尝试获取IMEI/MEID</span>
-                            </Button>
-                        </Col>
-                    </Auth>
+                    <Col span={12}>
+                        <Item
+                            name="imei1"
+                            label="IMEI1"
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}>
+                            <Input
+                                placeholder="15位数字"
+                                maxLength={15} />
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Item
+                            name="imei2"
+                            label="IMEI2"
+                            labelCol={{ span: 6 }}
+                            wrapperCol={{ span: 14 }}>
+                            <Input
+                                placeholder="15位数字"
+                                maxLength={15} />
+                        </Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Item
+                            name="meid"
+                            label="MEID"
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}>
+                            <Input
+                                placeholder="15位数字"
+                                maxLength={15} />
+                        </Item>
+                    </Col>
+                    <Col span={12}>
+                        <Button
+                            onClick={onIMEIOrMEIDSearch}
+                            size="small"
+                            type="primary"
+                            style={{
+                                display: device?.system === DeviceSystem.IOS ? 'none' : 'block',
+                                position: 'relative',
+                                top: '4px'
+                            }}>
+                            <SearchOutlined />
+                            <span>尝试获取IMEI/MEID</span>
+                        </Button>
+                    </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
