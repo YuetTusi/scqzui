@@ -32,4 +32,13 @@ const TipBox = styled.span`
     }
 `;
 
-export { NormalInputModalBox, TipBox };
+const ExtractionWarnBox = styled.em`
+    position:relative;
+    left:120px;
+    color:${props => props.theme['warn-color']};
+    text-decoration: none;
+    font-size:1.2rem;
+    font-style: normal;
+`;
+
+export { NormalInputModalBox, TipBox, ExtractionWarnBox };

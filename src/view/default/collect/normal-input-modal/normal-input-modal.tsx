@@ -17,7 +17,7 @@ import Button from 'antd/lib/button';
 import AutoComplete from 'antd/lib/auto-complete';
 import Input from 'antd/lib/input';
 import Form from 'antd/lib/form';
-import Select from 'antd/lib/select';
+import Select, { OptionProps } from 'antd/lib/select';
 import Modal from 'antd/lib/modal';
 import Tooltip from 'antd/lib/tooltip';
 import { ITreeNode } from '@/type/ztree';
@@ -42,7 +42,7 @@ import { IMEIModalState } from '@/model/default/imei-modal';
 import { NormalInputModalState } from '@/model/default/normal-input-modal';
 import parseApp from '@/config/parse-app.yaml';
 import { Instruction } from '../instruction';
-import { NormalInputModalBox } from './styled/style';
+import { ExtractionWarnBox, NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
 
 const { caseText, devText, fetchText, parseText, useBcp } = helper.readConf()!;
@@ -70,9 +70,9 @@ function filterToParseApp(treeNodes: ITreeNode[]) {
 const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
 
     const dispatch = useDispatch();
+    const [extractionTip, setExtractionTip] = useState<string>('');
     const { allCaseData } = useSelector<StateTree, CaseDataState>((state) => state.caseData);
     const { deviceList } = useSelector<StateTree, DeviceStoreState>((state) => state.device);
-    // const { types } = useSelector<StateTree, ExtractionState>((state) => state.extraction);
     const { open: imeiOpen } = useSelector<StateTree, IMEIModalState>((state) => state.imeiModal);
     const { open, fetchAllow, device } = useSelector<StateTree, NormalInputModalState>((state) => state.normalInputModal);
     const [formRef] = useForm<FormValue>();
@@ -111,6 +111,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
             formRef.setFieldsValue({
                 extraction: methods.length === 0 ? undefined : methods[0].value
             });
+            setExtractionTip(methods.length === 0 ? '' : methods[0].tip)
         }
     }, [open, device?.methods]);
 
@@ -199,9 +200,10 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
     /**
      * 提取方式下拉Change
      */
-    const extractionChange = (value: string) => {
+    const extractionChange = (value: string, option: OptionProps | OptionProps[]) => {
         formRef.validateFields(['case']);
         methodValue.current = value;
+        setExtractionTip((option as OptionProps).title);
     };
 
     /**
@@ -582,6 +584,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                                     {bindExtractionSelect()}
                                 </Select>
                             </Item>
+                            <ExtractionWarnBox>{extractionTip}</ExtractionWarnBox>
                         </Col>
                     </Auth>
                 </Row>

@@ -41,7 +41,6 @@ import ServerCloudModal from './server-cloud-modal';
 import { ContentBox, DevicePanel } from './styled/content-box';
 import { DeviceFrame } from './device-frame';
 import { CollectProp } from './prop';
-import GuideImage from '@/schema/guide-image';
 
 const { Group } = Button;
 const { useBcp, devText, fetchText, parseText } = helper.readConf()!;
@@ -74,7 +73,7 @@ const Collect: FC<CollectProp> = ({ }) => {
     //     for (let i = 0; i < 3; i++) {
     //         devices.push({
     //             ...{
-    //                 "fetchState": FetchState.Fetching,
+    //                 "fetchState": FetchState.Connected,
     //                 "manufacturer": "Mi",
     //                 "model": "TAS-AL00",
     //                 "phoneInfo": [{
@@ -89,9 +88,9 @@ const Collect: FC<CollectProp> = ({ }) => {
     //                 "methods": [
     //                     { "name": "Apk快速采集", "value": "0", "tip": "提示内容测试" },
     //                     { "name": "华为Hisuite", "value": "1", "tip": "华为Hisuite" },
-    //                     { "name": `测试${i}`, "value": "2", "tip": "测试" }
+    //                     { "name": `测试${i}`, "value": "2", "tip": "测试!!!" }
     //                 ],
-    //                 "tipType": TipType.WiFi,
+    //                 "tipType": TipType.Nothing,
     //                 "tipTitle": "测试标题",
     //                 // "tipContent": "测试内容",
     //                 "tipImage": GuideImage.MiReplace,
