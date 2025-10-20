@@ -12,6 +12,9 @@ import { DeviceType } from '@/schema/device-type';
 import { ParseState } from '@/schema/device-state';
 import { AppCategory } from '@/schema/app-config';
 import { QuickRecord } from '@/schema/quick-record';
+import { StateTree } from '@/type/model';
+import { ParsingListState } from '../parsing-list';
+import { CheckingListState } from '../checking-list';
 
 const config = helper.readConf();
 
@@ -19,11 +22,22 @@ export default {
     /**
      * 退出前检测采集&解析状态
      */
-    *fetchingAndParsingState() {
+    *fetchingAndParsingState({ }: AnyAction, { select }: EffectsCommandMap) {
+
+        const parsingList: ParsingListState = yield select((state: StateTree) => state.parsingList);
+        const checkingList: CheckingListState = yield select((state: StateTree) => state.checkingList);
+        const taskCount = parsingList.devices.length + checkingList.records.length;
+
+        let content = '';
+        if (taskCount > 0) {
+            content = `仍有 ${taskCount} 台${config?.devText ?? '设备'}正在${config?.parseText ?? '解析'}，确认退出吗？`;
+        } else {
+            content = '确认退出吗？';
+        }
 
         Modal.confirm({
+            content,
             title: '退出应用',
-            content: '确认退出吗？',
             okText: '是',
             cancelText: '否',
             zIndex: 9000,
