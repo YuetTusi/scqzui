@@ -24,7 +24,7 @@ class QuickEvent extends BaseEntity {
     /**
      * 是否启用AI
      */
-    public isAi: boolean;
+    // public isAi: boolean;
 
     constructor(props: any) {
         super();
@@ -32,7 +32,7 @@ class QuickEvent extends BaseEntity {
         this.eventPath = props.eventPath ?? '';
         this.ruleFrom = props.ruleFrom ?? 0;
         this.ruleTo = props.ruleTo ?? 8;
-        this.isAi = props.isAi ?? false;
+        // this.isAi = props.isAi ?? false;
     }
 }
 

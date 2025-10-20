@@ -13,7 +13,6 @@ import Row from 'antd/lib/row';
 import Button from 'antd/lib/button';
 import Input, { InputRef } from 'antd/lib/input';
 import InputNumber from 'antd/lib/input-number';
-import Switch from 'antd/lib/switch';
 import Form, { RuleObject } from 'antd/lib/form';
 import Modal from 'antd/lib/modal';
 import { StateTree } from '@/type/model';
@@ -21,11 +20,12 @@ import { helper } from '@/utils/helper';
 import { AllowCaseName } from '@/utils/regex';
 import { QuickEvent } from '@/schema/quick-event';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
+import { Auth } from '@/component/auth';
 import AiSwitch from '@/component/ai-switch';
-import { AiLabel, CategoryBox, ItemBox } from './styled/box';
+import { CategoryBox, ItemBox } from './styled/box';
 
 
-const { caseText, fetchText } = helper.readConf()!;
+const { caseText, fetchText, useAi } = helper.readConf()!;
 const { Item, useForm } = Form;
 const fromLayout = {
     labelCol: { span: 5 },
@@ -43,7 +43,6 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         data
     } = useSelector<StateTree, EditQuickEventModalState>(state => state.editQuickEventModal);
     const [isCheck, setIsCheck] = useState(false);
-    const [aiOpen, setAiOpen] = useState<boolean>(false);
     const eventNameRef = useRef<InputRef>(null);
     const [formRef] = useForm<QuickEvent>();
     let nameRules: RuleObject[] = [
@@ -64,7 +63,6 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         if (data) {
             const [eventName] = data.eventName.split('_');
             setFieldsValue({ ...data, eventName });
-            setAiOpen(data.isAi ?? false);
             dispatch({ type: 'aiSwitch/readAiConfig', payload: { casePath: join(data.eventPath, data.eventName) } });
         } else {
             dispatch({ type: 'aiSwitch/readAiConfig', payload: { casePath: undefined } });
@@ -98,14 +96,14 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
                 next = {
                     ...values,
                     _id: data._id,
-                    isAi: aiOpen,
+                    // isAi: aiOpen,
                     eventName: `${values.eventName}_${timestamp}`
                 };
             } else {
                 //添加
                 next = {
                     ...values,
-                    isAi: aiOpen,
+                    // isAi: aiOpen,
                     eventName: `${values.eventName}_${helper.timestamp()}`
                 };
             }
@@ -249,25 +247,14 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
                         </Item>
                     </Col>
                 </Row>
-                <Row style={{ marginBottom: '14px' }}>
-                    <Col offset={3} span={2}>
-                        <AiLabel>AI分析：</AiLabel>
-                    </Col>
-                    <Col span={2}>
-                        <Switch
-                            checked={aiOpen}
-                            onChange={(checked) => setAiOpen(checked)}
-                            size="small" />
-                    </Col>
-                </Row>
             </Form>
         </ItemBox>
-        <div style={{ display: aiOpen ? 'block' : 'none' }}>
+        <Auth deny={!useAi}>
             <CategoryBox>
                 <FontAwesomeIcon icon={faAnglesDown} />
                 <span>AI信息</span>
             </CategoryBox>
-            <ItemBox padding='0 40px 20px 40px'>
+            <ItemBox padding='0 40px 20px 70px'>
                 <Row>
                     <Col span={24}>
                         <AiSwitch
@@ -276,7 +263,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
                     </Col>
                 </Row>
             </ItemBox>
-        </div>
+        </Auth>
     </Modal>
 };
 

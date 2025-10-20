@@ -2,6 +2,7 @@ import { Model } from 'dva';
 import { Predict } from '@/component/ai-switch';
 import reducers from './reducers';
 import effects from './effects';
+import { AiOcrType } from '@/schema/case-info';
 
 
 interface AiSwitchState {
@@ -14,13 +15,9 @@ interface AiSwitchState {
      */
     similarity: number,
     /**
-     * 启用OCR识别
+     * 分析类型
      */
-    ocr: boolean,
-    /**
-     * 禁用OCR识别
-     */
-    disableOcr: boolean
+    aiType: AiOcrType
 }
 
 
@@ -34,6 +31,7 @@ let model: Model = {
     state: {
         data: [],
         similarity: 0,
+        aiType: AiOcrType.Close,
         ocr: false,
         disableOcr: false
     },

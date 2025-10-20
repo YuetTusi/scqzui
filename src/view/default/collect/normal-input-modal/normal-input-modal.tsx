@@ -259,7 +259,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
             entity.hasReport = currentCase.current?.hasReport ?? false;
             entity.isAuto = currentCase.current?.m_bIsAutoParse;
             entity.unitName = currentCase.current?.m_strCheckUnitName;
-            entity.isAi = currentCase.current?.isAi ?? false;
+            // entity.isAi = currentCase.current?.isAi ?? false;
             entity.ruleFrom = currentCase.current?.ruleFrom ?? 0;
             entity.ruleTo = currentCase.current?.ruleTo ?? 8;
             entity.mobileName = `${values.phoneName}_${helper.timestamp(device?.usb)}`;

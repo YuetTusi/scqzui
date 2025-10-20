@@ -1,3 +1,4 @@
+import { AiOcrType } from "@/schema/case-info";
 
 export interface Predict {
     /**
@@ -34,7 +35,7 @@ export interface AiSwitchProp {
     /**
      * 列数
      */
-    columnCount: number
+    columnCount: number,
 }
 
 export interface PredictJson {
@@ -47,9 +48,9 @@ export interface PredictJson {
      */
     similarity: number,
     /**
-     * 开启图像OCR识别
+     * 分析类型
      */
-    ocr: boolean,
+    aiType: AiOcrType,
     /**
      * 显示标签
      */

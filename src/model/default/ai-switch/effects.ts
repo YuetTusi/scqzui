@@ -3,6 +3,7 @@ import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import { helper } from '@/utils/helper';
 import { PredictJson } from '@/component/ai-switch';
+import { AiOcrType } from '@/schema/case-info';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
@@ -25,7 +26,7 @@ export default {
                 //无案件目录，是新增，读模版
                 yield put({ type: 'setData', payload: temp.config });
                 yield put({ type: 'setSimilarity', payload: temp.similarity });
-                yield put({ type: 'setOcr', payload: temp.ocr });
+                yield put({ type: 'setAiType', payload: AiOcrType.Close });
             } else {
                 const aiConfigAt = join(casePath, './predict.json'); //当前案件AI路径
                 const exist: boolean = yield call([helper, 'existFile'], aiConfigAt);
@@ -35,20 +36,20 @@ export default {
                     const next = { ...temp, ...caseAi };
                     yield put({ type: 'setData', payload: next.config });
                     yield put({ type: 'setSimilarity', payload: next.similarity });
-                    yield put({ type: 'setOcr', payload: next.ocr });
+                    yield put({ type: 'setAiType', payload: next.aiType ?? AiOcrType.Close });
                 } else {
                     //不存在，读取模版
                     const next: PredictJson = yield call([helper, 'readJSONFile'], tempAt);
                     yield put({ type: 'setData', payload: next.config });
                     yield put({ type: 'setSimilarity', payload: next.similarity });
-                    yield put({ type: 'setOcr', payload: next.ocr });
+                    yield put({ type: 'setAiType', payload: AiOcrType.Close });
                 }
             }
         } catch (error) {
             console.warn(`读取predict.json失败, @view/default/case/ai-switch:${error.message}`);
             yield put({ type: 'setData', payload: [] });
             yield put({ type: 'setSimilarity', payload: 0 });
-            yield put({ type: 'setOcr', payload: false });
+            yield put({ type: 'setAiType', payload: AiOcrType.Close });
         }
     }
 };

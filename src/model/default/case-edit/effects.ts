@@ -57,7 +57,7 @@ export default {
                 {
                     ...payload,
                     m_strCaseName: prev.m_strCaseName,
-                    useAiOcr: !aiSwitch.disableOcr
+                    aiType: aiSwitch.aiType
                 }
             );
             yield put({
@@ -67,7 +67,7 @@ export default {
                     isAuto: payload.m_bIsAutoParse,
                     hasReport: payload.hasReport,
                     appList: payload.m_Applist,
-                    useAiOcr: !aiSwitch.disableOcr
+                    aiType: aiSwitch.aiType
                 }
             }); //同步更新点验记录
             const casePath = join(payload.m_strCasePath, prev.m_strCaseName);
@@ -83,7 +83,7 @@ export default {
                 merge(predict, {
                     config: aiSwitch.data,
                     similarity: aiSwitch.similarity,
-                    ocr: aiSwitch.ocr
+                    aiType: aiSwitch.aiType
                 })
             ); //写ai配置JSON
             yield put(routerRedux.push('/case-data'));

@@ -9,7 +9,7 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import { DataMode } from '@/schema/data-mode';
-import { CaseInfo } from '@/schema/case-info';
+import { AiOcrType, CaseInfo } from '@/schema/case-info';
 import { TableName } from '@/schema/table-name';
 import { ImportTypes } from '@/schema/import-type';
 import { DeviceSystem } from '@/schema/device-system';
@@ -152,12 +152,12 @@ export default {
                     mobileNo: [rec.mobileNo ?? ''], //此字段意义换为IMEI
                     note: rec.note ?? '',
                     hasReport: caseData?.hasReport ?? false,
-                    useAiOcr: caseData.useAiOcr ?? false,
-                    isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
+                    aiType: caseData.aiType ?? AiOcrType.Close,
                     aiTypes,
                     useDefaultTemp,
                     useKeyword,
-                    useDocVerify: [useDocVerify, usePdfOcr]
+                    useDocVerify: [useDocVerify, usePdfOcr],
+                    ...helper.getAiOcrParams(aiTypes.aiType ?? AiOcrType.Close)
                 }
             });
 
@@ -177,8 +177,6 @@ export default {
                     mobileNo: [rec.mobileNo ?? ''], //此字段意义换为IMEI
                     note: rec.note ?? '',
                     hasReport: caseData?.hasReport ?? false,
-                    useAiOcr: caseData.useAiOcr ?? false,
-                    isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
                     aiTypes,
                     useDefaultTemp,
                     useKeyword,

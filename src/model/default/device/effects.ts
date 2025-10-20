@@ -13,7 +13,7 @@ import { caseStore } from "@/utils/local-store";
 import UserHistory, { HistoryKeys } from "@/utils/user-history";
 import { send } from "@/utils/tcp-server";
 import { TableName } from "@/schema/table-name";
-import { CaseInfo } from "@/schema/case-info";
+import { AiOcrType, CaseInfo } from "@/schema/case-info";
 import DeviceType from "@/schema/device-type";
 import FetchLog from "@/schema/fetch-log";
 import FetchData from "@/schema/fetch-data";
@@ -410,10 +410,10 @@ export default {
                 cloudTimeout: fetchData.cloudTimeout ?? helper.CLOUD_TIMEOUT,
                 cloudTimespan: fetchData.cloudTimespan ?? helper.CLOUD_TIMESPAN,
                 isAlive: fetchData.isAlive ?? helper.IS_ALIVE,
-                isAi: fetchData.isAi,
+                // isAi: fetchData.isAi,
                 ruleFrom: fetchData.ruleFrom,
                 ruleTo: fetchData.ruleTo,
-                isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
+                // isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
                 imei1: fetchData.imei1 ?? '',
                 imei2: fetchData.imei2 ?? '',
                 meid: fetchData.meid ?? ''
@@ -446,10 +446,10 @@ export default {
             cloudTimeout: fetchData.cloudTimeout ?? helper.CLOUD_TIMEOUT,
             cloudTimespan: fetchData.cloudTimespan ?? helper.CLOUD_TIMESPAN,
             isAlive: fetchData.isAlive ?? helper.IS_ALIVE,
-            isAi: fetchData.isAi,
+            // isAi: fetchData.isAi,
             ruleFrom: fetchData.ruleFrom,
             ruleTo: fetchData.ruleTo,
-            isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
+            // isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
             imei1: fetchData.imei1 ?? '',
             imei2: fetchData.imei2 ?? '',
             meid: fetchData.meid ?? ''
@@ -477,7 +477,7 @@ export default {
             ]);
 
             if (current && caseData.m_bIsAutoParse) {
-                let aiConfig: PredictJson = { config: [], similarity: 0, ocr: false, label: {} };
+                let aiConfig: PredictJson = { config: [], similarity: 0, aiType: AiOcrType.Close, label: {} };
                 const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
                 let exist: boolean = yield call([helper, 'existFile'], predictAt);
                 if (exist) {
@@ -495,18 +495,18 @@ export default {
                     ruleFrom: caseData.ruleFrom ?? 0,
                     ruleTo: caseData.ruleTo ?? 8,
                     analysisApp: caseData.analysisApp ?? false,
-                    useAiOcr: caseData.useAiOcr ?? false,
+                    aiType: caseData.aiType ?? AiOcrType.Close,
                     hasReport: caseData.hasReport ?? false,
                     isDel: caseData.isDel ?? false,
-                    isAi: caseData.isAi ?? false,
-                    aiTypes,
                     useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                     useKeyword: appConfig?.useKeyword ?? false,
                     useDocVerify: [
                         appConfig?.useDocVerify ?? false,
                         appConfig?.usePdfOcr ?? false
                     ],
-                    tokenAppList
+                    tokenAppList,
+                    aiTypes,
+                    ...helper.getAiOcrParams(aiTypes.aiType ?? AiOcrType.Close),
                 })}`);
                 //# 通知parse开始解析
                 yield fork(send, SocketType.Parse, {
@@ -521,19 +521,17 @@ export default {
                         ruleFrom: caseData.ruleFrom ?? 0,
                         ruleTo: caseData.ruleTo ?? 8,
                         analysisApp: caseData.analysisApp ?? false,
-                        useAiOcr: caseData.useAiOcr ?? false,
-                        isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
                         hasReport: caseData.hasReport ?? false,
                         isDel: caseData.isDel ?? false,
-                        isAi: caseData.isAi ?? false,
-                        aiTypes,
                         useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                         useKeyword: appConfig?.useKeyword ?? false,
                         useDocVerify: [
                             appConfig?.useDocVerify ?? false,
                             appConfig?.usePdfOcr ?? false
                         ],
-                        tokenAppList
+                        tokenAppList,
+                        aiTypes,
+                        ...helper.getAiOcrParams(aiTypes.aiType ?? AiOcrType.Close),
                     }
                 });
 

@@ -35,8 +35,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
     const autoParse = useState<boolean>(true);
     const generateBcp = useState<boolean>(false);
     const isDel = useState<boolean>(false);
-    const isAi = useState<boolean>(false);
-    const isPhotoAnalysis = useState<boolean>(false);
+    // const isPhotoAnalysis = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
     const tokenAppList = useState<BaseApp[]>([]);
 
@@ -118,8 +117,8 @@ const CaseAdd: FC<CaseAddProp> = () => {
             entity.handleCaseNo = values.handleCaseNo;
             entity.handleCaseType = values.handleCaseType;
             entity.handleCaseName = values.handleCaseName;
-            entity.isAi = isAi[0];
-            entity.isPhotoAnalysis = isPhotoAnalysis[0];
+            // entity.isAi = isAi[0];
+            // entity.isPhotoAnalysis = isPhotoAnalysis[0];
             saveCase(entity);
         } catch (error) {
             console.warn(error);
@@ -147,8 +146,6 @@ const CaseAdd: FC<CaseAddProp> = () => {
                 autoParseState={autoParse}
                 generateBcpState={generateBcp}
                 isDelState={isDel}
-                isAiState={isAi}
-                isPhotoAnalysisState={isPhotoAnalysis}
                 parseAppListState={parseAppList}
                 tokenAppListState={tokenAppList} />
         </CaseBox>

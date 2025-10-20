@@ -40,7 +40,7 @@ import { Predict, PredictJson } from '../component/ai-switch/prop';
 import { BcpEntity } from '../schema/bcp-entity';
 import { AppCategory } from '../schema/app-config';
 import { TableName } from '../schema/table-name';
-import { CaseInfo } from '../schema/case-info';
+import { AiOcrType, CaseInfo } from '../schema/case-info';
 import { Manufaturer } from '../schema/manufaturer';
 import { AppJson } from '../schema/app-json';
 import { CheckJson } from '../schema/check-json';
@@ -939,7 +939,7 @@ const helper = {
    */
   combinePredict(temp: PredictJson, caseAi: PredictJson): PredictJson {
     return {
-      ocr: caseAi.ocr ?? false,
+      aiType: caseAi.aiType ?? AiOcrType.Close,
       similarity: caseAi.similarity ?? 0,
       label: caseAi.label,
       config: temp.config.reduce((total: Predict[], current: Predict) => {
@@ -959,6 +959,24 @@ const helper = {
         return total;
       }, []),
     };
+  },
+  /**
+   * 生成AI&OCR相关参数
+   * @param type 
+   */
+  getAiOcrParams(type: AiOcrType) {
+    switch (type) {
+      case AiOcrType.Close:
+        return { isAi: false, isPhotoAnalysis: false, useAiOcr: false };
+      case AiOcrType.GlobalOcr:
+        return { isAi: false, isPhotoAnalysis: true, useAiOcr: false };
+      case AiOcrType.AiOcr:
+        return { isAi: true, isPhotoAnalysis: false, useAiOcr: false };
+      case AiOcrType.AiResultOcr:
+        return { isAi: true, isPhotoAnalysis: false, useAiOcr: true };
+      default:
+        return { isAi: false, isPhotoAnalysis: false, useAiOcr: false };
+    }
   },
   /**
    * 写report.json文件

@@ -3,6 +3,25 @@ import { TokenApp } from './token-app';
 import { BaseEntity } from './base-entity';
 import { AttachmentType } from './bcp-entity';
 
+enum AiOcrType {
+    /**
+     * 关闭
+     */
+    Close = -1,
+    /**
+     * 全局OCR
+     */
+    GlobalOcr,
+    /**
+     * AI全部图片OCR
+     */
+    AiOcr,
+    /**
+     * AI分析结果OCR
+     */
+    AiResultOcr
+}
+
 /**
  * 案件（维护时）
  */
@@ -41,10 +60,9 @@ class CaseInfo extends BaseEntity {
      */
     public m_bIsAutoParse: boolean;
     /**
-     * 是否使用AI的OCR识别
-     * 若此项为false，则为全局OCR识别
+     * AI分析类型
      */
-    public useAiOcr: boolean;
+    public aiType: AiOcrType;
     /**
      * 是否生成BCP
      */
@@ -102,13 +120,17 @@ class CaseInfo extends BaseEntity {
      */
     public handleCaseName: string;
     /**
+     * AI&OCR类型
+     */
+    public aiOcrType: AiOcrType = AiOcrType.Close;
+    /**
      * 是否开启AI分析
      */
-    public isAi: boolean;
+    // public isAi: boolean;
     /**
      * 是否开启图片违规分析
      */
-    public isPhotoAnalysis: boolean;
+    // public isPhotoAnalysis: boolean;
     /**
      * 违规时段起
      */
@@ -128,7 +150,7 @@ class CaseInfo extends BaseEntity {
         this.sdCard = props.sdCard ?? false;
         this.hasReport = props.hasReport ?? false;
         this.m_bIsAutoParse = props.m_bIsAutoParse ?? false;
-        this.useAiOcr = props.useAiOcr ?? false;
+        this.aiType = props.aiType ?? AiOcrType.Close;
         this.generateBcp = props.generateBcp ?? false;
         this.attachment = props.attachment ?? false;
         this.isDel = props.isDel ?? false;
@@ -143,12 +165,12 @@ class CaseInfo extends BaseEntity {
         this.handleCaseNo = props.handleCaseNo ?? '';
         this.handleCaseType = props.handleCaseType ?? '';
         this.handleCaseName = props.handleCaseName ?? '';
-        this.isAi = props.isAi ?? false;
-        this.isPhotoAnalysis = props.isPhotoAnalysis ?? false;
+        // this.isAi = props.isAi ?? false;
+        // this.isPhotoAnalysis = props.isPhotoAnalysis ?? false;
         this.ruleFrom = props.ruleFrom ?? 0;
         this.ruleTo = props.ruleTo ?? 8;
     }
 }
 
-export { CaseInfo };
+export { AiOcrType, CaseInfo };
 export default CaseInfo;

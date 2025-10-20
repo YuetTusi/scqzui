@@ -109,7 +109,7 @@ class FetchData {
     /**
      * 是否开启AI图片识别
      */
-    isAi?: boolean;
+    // isAi?: boolean;
     /**
      * 规则时段起
      */

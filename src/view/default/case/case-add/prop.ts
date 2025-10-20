@@ -37,14 +37,6 @@ export interface FormProp {
     /**
      * AI设置state
      */
-    isAiState: [boolean, Dispatch<SetStateAction<boolean>>],
-    /**
-    * 图片违规分析state
-    */
-    isPhotoAnalysisState: [boolean, Dispatch<SetStateAction<boolean>>],
-    /**
-     * AI设置state
-     */
     parseAppListState: [BaseApp[], Dispatch<SetStateAction<BaseApp[]>>],
     /**
     * AI设置state

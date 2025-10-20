@@ -18,7 +18,7 @@ import { OsIcon } from '@/component/os-icon';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
 import { PredictJson } from '@/component/ai-switch/prop';
 import { OperateDoingState } from '@/model/default/operate-doing';
-import { CaseInfo } from '@/schema/case-info';
+import { AiOcrType, CaseInfo } from '@/schema/case-info';
 import { DeviceType } from "@/schema/device-type";
 import { ParseState } from "@/schema/device-state";
 import { DataMode } from '@/schema/data-mode';
@@ -95,12 +95,13 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
             await helper.writeCaseJson(caseJsonPath, caseData);
         }
 
-        let aiConfig: PredictJson = { similarity: 0, ocr: false, config: [], label: {} };
+        let aiConfig: PredictJson = { similarity: 0, aiType: AiOcrType.Close, config: [], label: {} };
         const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
         const exist = await helper.existFile(predictAt);
         if (exist) {
             aiConfig = await helper.readJSONFile(predictAt);
         }
+        const predict = helper.combinePredict(aiTemp, aiConfig);
 
         send(SocketType.Parse, {
             type: SocketType.Parse,
@@ -113,12 +114,8 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
                 ruleFrom: caseData.ruleFrom ?? 0,
                 ruleTo: caseData.ruleTo ?? 8,
                 analysisApp: caseData.analysisApp ?? true,
-                useAiOcr: caseData.useAiOcr ?? false,
-                isPhotoAnalysis: caseData.isPhotoAnalysis ?? false,
                 hasReport: caseData?.hasReport ?? false,
                 isDel: caseData?.isDel ?? false,
-                isAi: caseData?.isAi ?? false,
-                aiTypes: helper.combinePredict(aiTemp, aiConfig),
                 useDefaultTemp: appConfig?.useDefaultTemp ?? true,
                 useKeyword: appConfig?.useKeyword ?? false,
                 useDocVerify: [
@@ -128,7 +125,9 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
                 dataMode: data.mode ?? DataMode.Self,
                 tokenAppList: caseData.tokenAppList
                     ? caseData.tokenAppList.map((i) => i.m_strID)
-                    : []
+                    : [],
+                aiTypes: predict,
+                ...helper.getAiOcrParams(predict.aiType ?? AiOcrType.Close),
             }
         });
         dispatch({

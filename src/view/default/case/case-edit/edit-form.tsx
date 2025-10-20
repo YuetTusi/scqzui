@@ -44,7 +44,7 @@ const formItemLayout = {
 
 const EditForm: FC<FormProp> = ({
     formRef, analysisAppState, sdCardState, hasReportState, autoParseState, generateBcpState,
-    isDelState, isAiState, isPhotoAnalysisState, parseAppListState, tokenAppListState
+    isDelState, parseAppListState, tokenAppListState
 }) => {
 
     const dispatch = useDispatch();
@@ -60,8 +60,6 @@ const EditForm: FC<FormProp> = ({
     const [autoParse, setAutoParse] = autoParseState;
     const [generateBcp, setGenerateBcp] = generateBcpState;
     const [isDel, setIsDel] = isDelState;
-    const [isAi, setIsAi] = isAiState;
-    const [isPhotoAnalysis, setIsPhotoAnalysis] = isPhotoAnalysisState;
     const [parseAppList, setParseAppList] = parseAppListState;
     const [tokenAppList, setTokenAppList] = tokenAppListState;
     const officer = useOfficerList();
@@ -80,10 +78,6 @@ const EditForm: FC<FormProp> = ({
             }
         })();
     }, []);
-
-    useEffect(() => {
-        dispatch({ type: 'aiSwitch/setDisableOcr', payload: isPhotoAnalysis });
-    }, [isPhotoAnalysis]);
 
     const ruleToValid = async (_: RuleObject, value: any) => {
         const from = formRef.getFieldValue('ruleFrom');
@@ -290,22 +284,6 @@ const EditForm: FC<FormProp> = ({
                         />
                     </Col>
                 </Auth>
-                <Auth deny={!useAi}>
-                    <Col span={4}>
-                        <span>AI分析：</span>
-                        <Checkbox onChange={(event) => setIsAi(event.target.checked)} checked={isAi} />
-                    </Col>
-                </Auth>
-                <Col span={4}>
-                    <span>图片OCR违规分析：</span>
-                    <Tooltip title="此功能为全局分析，速度较慢">
-                        <Checkbox onChange={(event) => {
-                            setIsPhotoAnalysis(event.target.checked);
-                        }}
-                            checked={isPhotoAnalysis} />
-                    </Tooltip>
-
-                </Col>
             </Row>
             <div
                 className="cate"
@@ -420,22 +398,23 @@ const EditForm: FC<FormProp> = ({
                     </Col>
                 </Row>
             </div>
-            <div
-                className="cate"
-                style={{ display: useAi && isAiState[0] ? 'block' : 'none' }}>
-                <div className="cate-bar">
-                    <FontAwesomeIcon icon={faAnglesDown} />
-                    <span>AI信息</span>
+            <Auth deny={!useAi}>
+                <div
+                    className="cate">
+                    <div className="cate-bar">
+                        <FontAwesomeIcon icon={faAnglesDown} />
+                        <span>AI信息</span>
+                    </div>
+                    <Row>
+                        <Col span={2} />
+                        <Col span={20}>
+                            <AiSwitch
+                                columnCount={6} />
+                        </Col>
+                        <Col span={2} />
+                    </Row>
                 </div>
-                <Row>
-                    <Col span={2} />
-                    <Col span={20}>
-                        <AiSwitch
-                            columnCount={6} />
-                    </Col>
-                    <Col span={2} />
-                </Row>
-            </div>
+            </Auth>
         </Form>
 
         {/* 解析App选择框 */}

@@ -6,12 +6,14 @@ import Col from 'antd/lib/col';
 import Row from 'antd/lib/row';
 import Checkbox, { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import InputNumber from 'antd/lib/input-number';
+import Select from 'antd/lib/select';
 import Switch from 'antd/lib/switch';
 import Tooltip from 'antd/lib/tooltip';
 import { useDestroy } from '@/hook';
 import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
 import { AiSwitchState } from '@/model/default/ai-switch';
+import { AiOcrType } from '@/schema/case-info';
 import Auth from '../auth';
 import { Predict, AiSwitchProp, PredictJson } from './prop';
 
@@ -27,13 +29,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
 
     const dispatch = useDispatch();
     const [wired, setWired] = useState<boolean>(false);
-    const { data, similarity, disableOcr, ocr } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
-
-    useEffect(() => {
-        if (disableOcr) {
-            dispatch({ type: 'aiSwitch/setOcr', payload: false });
-        }
-    }, [disableOcr]);
+    const { data, similarity, aiType } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
 
     useEffect(() => {
         (async () => {
@@ -58,8 +54,8 @@ const AiSwitch: FC<AiSwitchProp> = ({
                     //无案件目录，是新增，读模版
                     const next: PredictJson = await helper.readJSONFile(tempAt);
                     dispatch({ type: 'aiSwitch/setData', payload: (next as { config: Predict[], similarity: number }).config });
-                    dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number, ocr: boolean }).similarity });
-                    dispatch({ type: 'aiSwitch/setOcr', payload: (next as { config: Predict[], similarity: number, ocr: boolean }).ocr });
+                    dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number }).similarity });
+                    dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
                 } else {
                     const aiConfigAt = join(casePath, './predict.json'); //当前案件AI路径
                     const exist = await helper.existFile(aiConfigAt);
@@ -70,18 +66,18 @@ const AiSwitch: FC<AiSwitchProp> = ({
                             //旧版predict.json
                             dispatch({ type: 'aiSwitch/setData', payload: next });
                             dispatch({ type: 'aiSwitch/setSimilarity', payload: 0 });
-                            dispatch({ type: 'aiSwitch/setOcr', payload: false });
+                            dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
                         } else {
-                            dispatch({ type: 'aiSwitch/setData', payload: (next as { config: Predict[], similarity: number, ocr: boolean }).config });
-                            dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number, ocr: boolean }).similarity });
-                            dispatch({ type: 'aiSwitch/setOcr', payload: (next as { config: Predict[], similarity: number, ocr: boolean }).ocr });
+                            dispatch({ type: 'aiSwitch/setData', payload: (next as { config: Predict[], similarity: number }).config });
+                            dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number }).similarity });
+                            dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
                         }
                     } else {
                         //不存在，读取模版
                         const next: PredictJson = await helper.readJSONFile(tempAt);
-                        dispatch({ type: 'aiSwitch/setData', payload: (next as { config: Predict[], similarity: number, ocr: boolean }).config });
-                        dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number, ocr: boolean }).similarity });
-                        dispatch({ type: 'aiSwitch/setOcr', payload: (next as { config: Predict[], similarity: number, ocr: boolean }).ocr });
+                        dispatch({ type: 'aiSwitch/setData', payload: (next as { config: Predict[], similarity: number }).config });
+                        dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number }).similarity });
+                        dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
                     }
                 }
             } catch (error) {
@@ -90,6 +86,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
             }
         })();
     }, [casePath]);
+
 
     /**
      * AI开关Change
@@ -114,12 +111,8 @@ const AiSwitch: FC<AiSwitchProp> = ({
     const onSimilarChange = (value: number | null) =>
         dispatch({ type: 'aiSwitch/setSimilarity', payload: value });
 
-    /**
-     * OCR识别Change
-     * @param value 值
-     */
-    const onOcrChange = (event: CheckboxChangeEvent) =>
-        dispatch({ type: 'aiSwitch/setOcr', payload: event.target.checked });
+    const onAiOcrTypeChange = (value: AiOcrType) =>
+        dispatch({ type: 'aiSwitch/setAiType', payload: value });
 
     const onSimilarBlur = ({ target }: FocusEvent<HTMLInputElement>) => {
         if (target.value.trim() === '') {
@@ -166,31 +159,35 @@ const AiSwitch: FC<AiSwitchProp> = ({
     return <>
         <Row align="middle" style={{ margin: '2rem 0' }}>
             <Col flex="none">
-                <label>设定阈值：</label>
+                <label style={{ marginLeft: '5rem' }}>AI类型：</label>
             </Col>
             <Col flex="none">
+                <Select
+                    value={aiType}
+                    onChange={onAiOcrTypeChange}
+                    options={[
+                        { value: AiOcrType.Close, label: '关闭' },
+                        { value: AiOcrType.GlobalOcr, label: '全局OCR识别' },
+                        { value: AiOcrType.AiOcr, label: 'AI全部图片OCR识别' },
+                        { value: AiOcrType.AiResultOcr, label: 'AI分析结果OCR识别' }
+                    ]}
+                    style={{ width: '180px' }} />
+            </Col>
+            <Col flex="none" style={{ marginLeft: '40px' }}>
+                <label>设定阈值：</label>
+            </Col>
+            <Col flex="auto">
                 <InputNumber
                     onChange={onSimilarChange}
                     onBlur={onSimilarBlur}
                     value={similarity}
+                    disabled={aiType === AiOcrType.Close}
                     defaultValue={0}
                     min={0}
                     max={100}
-                    addonAfter="%" />
+                    addonAfter="%"
+                    style={{ width: '150px' }} />
             </Col>
-            <Auth deny={helper.os() === 'linux'}>
-                <Col flex="none">
-                    <label style={{ marginLeft: '5rem' }}>AI图片识别违规分析：</label>
-                </Col>
-                <Col flex="auto">
-                    <Tooltip title={disableOcr ? '使用此功能请关闭「图片违规分析」' : '开启将识别图片中文字违规信息'}>
-                        <Checkbox
-                            onChange={onOcrChange}
-                            checked={ocr}
-                            disabled={disableOcr} />
-                    </Tooltip>
-                </Col>
-            </Auth>
         </Row>
         <Auth deny={wired}>
             {renderSwitch()}

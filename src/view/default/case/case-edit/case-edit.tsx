@@ -53,8 +53,6 @@ const CaseEdit: FC<CaseEditProp> = () => {
     const autoParse = useState<boolean>(true);
     const generateBcp = useState<boolean>(false);
     const isDel = useState<boolean>(false);
-    const isAi = useState<boolean>(false);
-    const isPhotoAnalysis = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
     const tokenAppList = useState<BaseApp[]>([]);
 
@@ -94,8 +92,8 @@ const CaseEdit: FC<CaseEditProp> = () => {
             autoParse[1](data?.m_bIsAutoParse ?? true);
             generateBcp[1](data?.generateBcp ?? false);
             isDel[1](data?.isDel ?? false);
-            isAi[1](data?.isAi ?? false);
-            isPhotoAnalysis[1](data?.isPhotoAnalysis ?? false);
+            // isAi[1](data?.isAi ?? false);
+            // isPhotoAnalysis[1](data?.isPhotoAnalysis ?? false);
             dispatch({
                 type: 'aiSwitch/readAiConfig',
                 payload: { casePath: join(data.m_strCasePath, data.m_strCaseName) }
@@ -156,8 +154,6 @@ const CaseEdit: FC<CaseEditProp> = () => {
             entity.handleCaseNo = values.handleCaseNo;
             entity.handleCaseType = values.handleCaseType;
             entity.handleCaseName = values.handleCaseName;
-            entity.isAi = isAi[0];
-            entity.isPhotoAnalysis = isPhotoAnalysis[0];
             saveCase(entity);
         } catch (error) {
             console.clear();
@@ -186,8 +182,6 @@ const CaseEdit: FC<CaseEditProp> = () => {
                 autoParseState={autoParse}
                 generateBcpState={generateBcp}
                 isDelState={isDel}
-                isAiState={isAi}
-                isPhotoAnalysisState={isPhotoAnalysis}
                 parseAppListState={parseAppList}
                 tokenAppListState={tokenAppList} />
         </CaseBox>

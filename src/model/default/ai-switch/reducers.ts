@@ -17,17 +17,10 @@ export default {
         return state;
     },
     /**
-     * 设置OCR
+     * 设置分析类型
      */
-    setOcr(state: AiSwitchState, { payload }: AnyAction) {
-        state.ocr = payload ?? false;
-        return state;
-    },
-    /**
-     * 设置禁用OCR
-     */
-    setDisableOcr(state: AiSwitchState, { payload }: AnyAction) {
-        state.disableOcr = payload ?? false;
+    setAiType(state: AiSwitchState, { payload }: AnyAction) {
+        state.aiType = payload;
         return state;
     }
 }

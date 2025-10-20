@@ -23,7 +23,7 @@ export default {
             ? join(cwd, './data/predict.json')
             : join(cwd, './resources/config/predict.json'); //模版路径
         const db = getDb<QuickEvent>(TableName.QuickEvent);
-        const { _id, eventName, eventPath, isAi } = payload as QuickEvent;
+        const { _id, eventName, eventPath } = payload as QuickEvent;
         const targetPath = join(eventPath, eventName);
         try {
             const aiSwitch: AiSwitchState = yield select((state: StateTree) => state.aiSwitch);
@@ -51,7 +51,7 @@ export default {
                 "m_strCheckUnitName": "",
                 "officerName": "",
                 "securityCaseType": "",
-                "isAi": isAi,
+                // "isAi": isAi,
                 "ruleFrom": payload.ruleFrom,
                 "ruleTo": payload.ruleTo,
                 "caseName": payload.eventName,
@@ -62,7 +62,7 @@ export default {
                 ...temp,
                 config: aiSwitch.data,
                 similarity: aiSwitch.similarity,
-                ocr: aiSwitch.ocr
+                aiType: aiSwitch.aiType
             }); //写ai配置JSON
             yield put({ type: 'setData', payload: undefined });
             yield put({
@@ -73,6 +73,7 @@ export default {
             });
         } catch (error) {
             console.warn(error);
+            message.destroy();
             message.warn('保存失败');
         } finally {
             yield put({ type: 'setVisible', payload: false });

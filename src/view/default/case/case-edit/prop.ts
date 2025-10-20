@@ -31,21 +31,9 @@ interface FormProp {
      */
     generateBcpState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
-    * BCP附件 废弃
-    */
-    // attachment: boolean | AttachmentType,
-    /**
      * 是否删除state
      */
     isDelState: [boolean, Dispatch<SetStateAction<boolean>>],
-    /**
-     * AI设置state
-     */
-    isAiState: [boolean, Dispatch<SetStateAction<boolean>>],
-    /**
-     * 图片违规分析state
-     */
-    isPhotoAnalysisState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
      * AI设置state
      */
