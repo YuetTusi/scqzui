@@ -167,11 +167,11 @@ const AiSwitch: FC<AiSwitchProp> = ({
                     onChange={onAiOcrTypeChange}
                     options={[
                         { value: AiOcrType.Close, label: '关闭' },
-                        { value: AiOcrType.GlobalOcr, label: '全局OCR识别' },
-                        { value: AiOcrType.AiOcr, label: 'AI全部图片OCR识别' },
-                        { value: AiOcrType.AiResultOcr, label: 'AI分析结果OCR识别' }
+                        { value: AiOcrType.GlobalOcr, label: 'OCR文字识别' },
+                        { value: AiOcrType.AiOcr, label: 'AI图片识别' },
+                        { value: AiOcrType.AiResultOcr, label: 'AI图片识别并对结果OCR文字识别' }
                     ]}
-                    style={{ width: '180px' }} />
+                    style={{ width: '260px' }} />
             </Col>
             <Col flex="none" style={{ marginLeft: '40px' }}>
                 <label>设定阈值：</label>
@@ -181,7 +181,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                     onChange={onSimilarChange}
                     onBlur={onSimilarBlur}
                     value={similarity}
-                    disabled={aiType === AiOcrType.Close}
+                    disabled={aiType === AiOcrType.Close || aiType === AiOcrType.GlobalOcr}
                     defaultValue={0}
                     min={0}
                     max={100}
