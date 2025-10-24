@@ -221,30 +221,34 @@ if (!app.requestSingleInstanceLock()) {
 
         startupWindow.webContents.on('did-finish-load', async () => {
 
+            let nextServicePort = config!.tcpPort;
             let nextOcrPort = config!.ocrPort;
             let nextReaderPort = config!.readerPort;
             let nextAiPort = config!.aiPort;
             try {
-                [nextOcrPort, nextReaderPort, nextAiPort] = await Promise.all([
+                [nextServicePort, nextOcrPort, nextReaderPort, nextAiPort] = await Promise.all([
+                    helper.portStat(config!.tcpPort ?? 35222),
                     helper.portStat(config!.ocrPort ?? 35116),
                     helper.portStat(config!.readerPort ?? 35336),
                     helper.portStat(config!.aiPort ?? 35226)
                 ]);
             } catch (error) {
                 console.warn(error);
+                nextServicePort = config!.tcpPort ?? 35222;
                 nextOcrPort = config!.ocrPort ?? 35116;
                 nextReaderPort = config!.readerPort ?? 35336;
                 nextAiPort = config!.aiPort ?? 35226;
             } finally {
                 startupWindow!.webContents.send('startup', {
                     ...config,
+                    servicePort: nextServicePort,
                     ocrPort: nextOcrPort,
                     readerPort: nextReaderPort,
                     aiPort: nextAiPort
                 });
                 helper.writeNetJson(helper.APP_CWD, {
                     apiPort: config!.httpPort,
-                    servicePort: config!.tcpPort ?? 35222,
+                    servicePort: nextServicePort ?? 35222,
                     ocrPort: nextOcrPort ?? 35116,
                     readerPort: nextReaderPort ?? 35336,
                     aiPort: nextAiPort ?? 35226
