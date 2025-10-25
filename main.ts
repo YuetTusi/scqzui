@@ -226,11 +226,11 @@ if (!app.requestSingleInstanceLock()) {
             let nextReaderPort = config!.readerPort;
             let nextAiPort = config!.aiPort;
             try {
-                [nextServicePort, nextOcrPort, nextReaderPort, nextAiPort] = await Promise.all([
-                    helper.portStat(config!.tcpPort ?? 35222),
-                    helper.portStat(config!.ocrPort ?? 35116),
-                    helper.portStat(config!.readerPort ?? 35336),
-                    helper.portStat(config!.aiPort ?? 35226)
+                [nextServicePort, nextOcrPort, nextReaderPort, nextAiPort] = await helper.portUseable([
+                    config?.tcpPort ?? 35222,
+                    config!.ocrPort ?? 35116,
+                    config!.readerPort ?? 35336,
+                    config!.aiPort ?? 35226,
                 ]);
             } catch (error) {
                 console.warn(error);
@@ -253,6 +253,7 @@ if (!app.requestSingleInstanceLock()) {
                     readerPort: nextReaderPort ?? 35336,
                     aiPort: nextAiPort ?? 35226
                 });
+                mainWindow?.webContents.send('start-tcp-service', nextServicePort);
             }
         });
 
@@ -336,7 +337,7 @@ if (!app.requestSingleInstanceLock()) {
         (async () => {
             if (mainWindow !== null) {
                 try {
-                    const httpPort = await helper.portStat(config!.httpPort ?? 9900);
+                    const [httpPort] = await helper.portUseable([config!.httpPort ?? 9900]);
                     //启动HTTP服务
                     server.use(api(mainWindow.webContents));
                     server.listen(httpPort, () => {

@@ -36,17 +36,6 @@ const Quick: FC<QuickProp> = () => {
     const [eventDescVisible, setEventDescVisible] = useState<boolean>(false);
     const [batchExportReportModalVisible, setBatchExportReportModalVisible] = useState<boolean>(false);
 
-    // useEffect(() => {
-    //     (async () => {
-    //         try {
-    //             const use57999 = await helper.portInUse(57999);
-    //             portOccupy.current = use57999;
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     })();
-    // }, []);
-
     /**
      * 详情handle
      */

@@ -69,6 +69,7 @@ dayjs.extend(weekday);
 dayjs.localeData();
 
 const { tcpPort } = helper.readConf()!;
+
 const app = dva({
     history: createHistory(),
     namespacePrefixWarning: helper.IS_DEV
@@ -99,8 +100,10 @@ ipcRenderer.on('show-notification', (_: IpcRendererEvent,
     }
 });
 
-server.listen(tcpPort, () => {
-    console.log(`TCP服务已启动在端口${tcpPort}`);
+ipcRenderer.on('start-tcp-service', (_: IpcRendererEvent, port: number) => {
+    server.listen(port, () => {
+        console.log(`TCP服务已启动在端口${port}`);
+    });
 });
 
 app.use(immer());

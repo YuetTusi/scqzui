@@ -23,7 +23,7 @@ import yaml from 'js-yaml';
 import glob from 'glob';
 import memoize from 'lodash/memoize';
 import dayjs, { Dayjs } from 'dayjs';
-import portScanner from 'portscanner';
+import detectPort from 'detect-port';
 import 'dayjs/locale/zh-cn';
 import diskSpace, { DiskSpace } from 'check-disk-space';
 import {
@@ -693,30 +693,55 @@ const helper = {
   },
   /**
    * 检测端口号
+   * @deprecated
    * @param port 端口号
+   * @param inUseList 现有端口
    * @returns 返回可用端口号
    */
-  portStat(port: number): Promise<number> {
-    const server = net.createServer();
-    return new Promise((resolve, reject) => {
-      if (typeof port !== 'number') {
-        reject(new TypeError('Port is not a number'));
+  async portStat(port: number, inUseList: number[] = []): Promise<number> {
+    const has = inUseList.some(p => p === port);
+    try {
+      const useablePort = await detectPort(has ? port++ : port);
+      return useablePort;
+    } catch (error) {
+      throw error;
+    }
+  },
+  /**
+   * 给一串端口列表，基于此返回可用的端口列表（若占用则递增）
+   * @param ports 端口列表
+   */
+  async portUseable(ports: number[]): Promise<number[]> {
+    console.clear();
+
+    function getNextPort(port: number, temp: number[]) {
+      const set = new Set(temp); // 使用 Set 提高查找效率 O(1)
+      let value = port;
+      while (set.has(value)) {
+        value++;
       }
-      server.listen(port, '0.0.0.0');
-      server.on('listening', () => {
-        server.close();
-        resolve(port);
-      });
-      server.on('error', (err: any) => {
-        server.close();
-        if (err.code === 'EADDRINUSE' || err.code === 'EACCES') {
-          console.log(`端口${port}已占用`);
-          return resolve(this.portStat(++port));
+      return value;
+    }
+
+    let canUsePorts: number[] = [];
+    for (let i = 0; i < ports.length; i++) {
+      let realPort: number = 0;
+      try {
+        // console.log(`[${canUsePorts.join(',')}]`);
+        const has = canUsePorts.some(item => item === ports[i]);
+        // console.log('当前检测端口：', ports[i]);
+        if (has) {
+          realPort = await detectPort(getNextPort(ports[i], canUsePorts));
         } else {
-          reject(err);
+          realPort = await detectPort(ports[i]);
         }
-      });
-    });
+        // console.log('输出端口：', realPort);
+        canUsePorts.push(realPort);
+      } catch (error) {
+        throw error;
+      }
+    }
+    return canUsePorts;
   },
   /**
    * 字符串转Base64
@@ -1029,16 +1054,6 @@ const helper = {
       stream.on('end', () => resolve(hash.digest('hex')));
       stream.on('error', (err) => reject(err));
     });
-  },
-  async portInUse(port: number) {
-    let use: boolean = false;
-    try {
-      const status = await portScanner.checkPortStatus(port);
-      use = status === 'open';
-    } catch (error) {
-      throw error;
-    }
-    return use;
   }
 };
 
