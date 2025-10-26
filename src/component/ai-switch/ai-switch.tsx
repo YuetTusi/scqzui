@@ -15,16 +15,37 @@ import { StateTree } from '@/type/model';
 import { AiSwitchState } from '@/model/default/ai-switch';
 import { AiOcrType } from '@/schema/case-info';
 import Auth from '../auth';
-import { Predict, AiSwitchProp, PredictJson } from './prop';
+import { Predict, AiSwitchProp, PredictJson, CaseType } from './prop';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
 
 /**
+ * AI&OCR下拉选项
+ */
+const getOptions = (type: CaseType) => {
+
+    if (type === CaseType.Normal) {
+        return [
+            { value: AiOcrType.Close, label: '关闭' },
+            { value: AiOcrType.GlobalOcr, label: 'OCR文字识别' },
+            { value: AiOcrType.AiOcr, label: 'AI图片识别' },
+            { value: AiOcrType.AiResultOcr, label: 'AI图片识别并对结果OCR文字识别' },
+            { value: AiOcrType.GlobalAiOcr, label: 'AI图片识别全部图片OCR' }
+        ];
+    } else {
+        return [
+            { value: AiOcrType.Close, label: '关闭' },
+            { value: AiOcrType.AiOcr, label: 'AI图片识别' }
+        ];
+    }
+};
+
+/**
  * AI分析开关组件
  */
 const AiSwitch: FC<AiSwitchProp> = ({
-    casePath, columnCount
+    casePath, caseType, columnCount
 }) => {
 
     const dispatch = useDispatch();
@@ -165,12 +186,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                 <Select
                     value={aiType}
                     onChange={onAiOcrTypeChange}
-                    options={[
-                        { value: AiOcrType.Close, label: '关闭' },
-                        { value: AiOcrType.GlobalOcr, label: 'OCR文字识别' },
-                        { value: AiOcrType.AiOcr, label: 'AI图片识别' },
-                        { value: AiOcrType.AiResultOcr, label: 'AI图片识别并对结果OCR文字识别' }
-                    ]}
+                    options={getOptions(caseType)}
                     style={{ width: '260px' }} />
             </Col>
             <Col flex="none" style={{ marginLeft: '40px' }}>

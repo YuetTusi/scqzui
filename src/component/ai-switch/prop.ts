@@ -1,5 +1,16 @@
 import { AiOcrType } from "@/schema/case-info";
 
+export enum CaseType {
+    /**
+     * 深度采集
+     */
+    Normal,
+    /**
+     * 快速采集
+     */
+    Quick
+}
+
 export interface Predict {
     /**
      * AI分类名称
@@ -32,6 +43,10 @@ export interface AiSwitchProp {
      * 案件路径
      */
     casePath?: string,
+    /**
+     * 类型
+     */
+    caseType: CaseType,
     /**
      * 列数
      */
