@@ -19,6 +19,8 @@ import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import { AllowCaseName } from '@/utils/regex';
 import { QuickEvent } from '@/schema/quick-event';
+import { AiOcrType } from '@/schema/case-info';
+import { AiSwitchState } from '@/model/default/ai-switch';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
 import { Auth } from '@/component/auth';
 import AiSwitch, { CaseType } from '@/component/ai-switch';
@@ -42,6 +44,9 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         visible,
         data
     } = useSelector<StateTree, EditQuickEventModalState>(state => state.editQuickEventModal);
+    const {
+        aiType
+    } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
     const [isCheck, setIsCheck] = useState(false);
     const eventNameRef = useRef<InputRef>(null);
     const [formRef] = useForm<QuickEvent>();
@@ -49,6 +54,10 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
         { required: true, message: `请填写${caseText ?? '案件'}名称` },
         { pattern: AllowCaseName, message: '不允许输入非法字符' }
     ];
+
+    useEffect(() => {
+        console.log(aiType);
+    }, [aiType]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -96,14 +105,14 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
                 next = {
                     ...values,
                     _id: data._id,
-                    // isAi: aiOpen,
+                    isAi: aiType !== AiOcrType.Close,
                     eventName: `${values.eventName}_${timestamp}`
                 };
             } else {
                 //添加
                 next = {
                     ...values,
-                    // isAi: aiOpen,
+                    isAi: aiType !== AiOcrType.Close,
                     eventName: `${values.eventName}_${helper.timestamp()}`
                 };
             }

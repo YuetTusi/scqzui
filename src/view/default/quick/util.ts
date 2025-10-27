@@ -95,7 +95,7 @@ async function getEventByName(caseJson: Record<string, any>, casePath: string) {
                 eventPath: casePath,
                 ruleFrom: caseJson.ruleFrom ?? 0,
                 ruleTo: caseJson.ruleTo ?? 8,
-                // isAi: caseJson.isAi ?? false
+                isAi: caseJson.isAi ?? false
             };
             await db.insert(next);
             return next;
