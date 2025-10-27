@@ -18,6 +18,10 @@ abstract class BaseEntity {
      * 启用
      */
     public enable?: 0 | 1;
+    /**
+     * 是否删除（目前用于记录删除过状态）
+     */
+    public del?: 0 | 1;
 }
 
 export { BaseEntity };

@@ -121,6 +121,7 @@ const RecordInfo: FC<RecordInfoProp> = ({ data, onButtonClick }) => {
                     <Button
                         onClick={() => onButtonClick(data, ClickType.Delete)}
                         disabled={delButtonDisable(parseState)}
+                        danger={data.del === 1}
                         type="primary">
                         删除
                     </Button>

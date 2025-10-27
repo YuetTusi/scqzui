@@ -128,10 +128,11 @@ export default {
      * 删除设备
      * @param {DeviceType} payload
      */
-    *delDev({ payload }: AnyAction, { all, call, put }: EffectsCommandMap) {
+    *delDev({ payload }: AnyAction, { all, call, put, select }: EffectsCommandMap) {
         const { _id, phonePath } = payload as DeviceType;
         const deviceDb = getDb<DeviceType>(TableName.Devices);
         const bcpHistoryDb = getDb<BcpEntity>(TableName.CreateBcpHistory);
+        const { pageIndex, pageSize } = select((state: StateTree) => state.parseDev);
         const handle = Modal.info({
             title: '正在删除',
             content: '正在删除数据，请不要关闭应用',
@@ -166,6 +167,17 @@ export default {
                     title: '删除失败',
                     content: '可能文件仍被占用，请稍后再试',
                     okButtonProps: { disabled: false }
+                });
+                yield all([
+                    call([deviceDb, 'update'], { _id }, { ...payload, del: 1 }, false),
+                    call([bcpHistoryDb, 'remove'], { deviceId: _id }, true)
+                ]);
+                yield put({
+                    type: 'queryDev', payload: {
+                        condition: {},
+                        pageIndex,
+                        pageSize
+                    }
                 });
             }
             setTimeout(() => {

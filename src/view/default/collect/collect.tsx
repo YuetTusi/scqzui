@@ -1,3 +1,4 @@
+import debounce from 'lodash/debounce';
 import { join } from 'path';
 import { ipcRenderer, shell } from 'electron';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -278,7 +279,7 @@ const Collect: FC<CollectProp> = ({ }) => {
      * 开始采集（3种取证入口共用此回调）
      * @param {FetchData} fetchData 采集数据
      */
-    const startFetchHandle = (fetchData: FetchData) => {
+    const startFetchHandle = debounce((fetchData: FetchData) => {
 
         switch (fetchData.mode) {
             case DataMode.Self:
@@ -292,18 +293,6 @@ const Collect: FC<CollectProp> = ({ }) => {
                 });
                 dispatch({ type: 'normalInputModal/setFetchAllow', payload: BeforeFetchStatus.Verifying });
 
-                // setTimeout(() => {
-                //     fetchVerify({
-                //         type: 'fetch',
-                //         cmd: CommandType.FetchVerify,
-                //         msg: {
-                //             deviceData: currentDevice.current,
-                //             fetchData,
-                //             allow: false,
-                //             info: '不允许'
-                //         }
-                //     } as any, dispatch);
-                // }, 3000);
                 break;
             case DataMode.ServerCloud:
                 setServerCloudModalVisible(false);
@@ -339,7 +328,7 @@ const Collect: FC<CollectProp> = ({ }) => {
         }
 
         dispatch({ type: 'fetchStateModal/clearData', payload: currentDevice.current!.usb });
-    };
+    }, 500, { leading: true, trailing: false });
 
     /**
      * 采集记录回调

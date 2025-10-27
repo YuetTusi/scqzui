@@ -63,7 +63,7 @@ export default {
                 const code: number | null = yield call(
                     [helper, 'runTask'],
                     exe,
-                    [m_strCasePath, devices.map(i => i.phonePath).join('|')]
+                    [join(m_strCasePath, m_strCaseName), devices.map(i => i.phonePath).join('|')]
                 );
                 if (code === 0) {
                     notification.success({
@@ -72,7 +72,7 @@ export default {
                         description: `「${m_strCaseName}」报告生成成功`,
                         duration: 0
                     });
-                    shell.openPath(join(m_strCasePath, 'report'));
+                    shell.openPath(join(m_strCasePath, m_strCaseName, 'report'));
                 } else {
                     notification.error({
                         type: 'error',

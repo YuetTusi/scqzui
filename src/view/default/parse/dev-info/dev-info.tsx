@@ -238,7 +238,8 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                     <Button
                         onClick={() => onButtonClick(data, ClickType.Delete)}
                         disabled={delButtonDisable(parseState)}
-                        type="primary">
+                        type="primary"
+                        danger={data.del === 1}>
                         删除
                     </Button>
                 </Group>
@@ -264,6 +265,7 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                         <label htmlFor="span">{`${devText ?? '设备'}名称`}</label>
                         <span>{data.mobileName === undefined ? '' : data.mobileName?.split('_')[0]}</span>
                         <StateDot state={data.parseState} />
+
                     </li>
                     <li>
                         <label htmlFor="span">持有人</label>

@@ -101,7 +101,7 @@ export default {
      * 删除设备
      * @param {DeviceType} payload
      */
-    *delRec({ payload }: AnyAction, { call, put }: EffectsCommandMap) {
+    *delRec({ payload }: AnyAction, { call, put, select }: EffectsCommandMap) {
         const { _id, phonePath } = payload as QuickRecord;
         const db = getDb<QuickRecord>(TableName.QuickRecord);
         const handle = Modal.info({
@@ -113,6 +113,9 @@ export default {
                 disabled: true
             }
         });
+
+        const { pageIndex, pageSize } = yield select((state: StateTree) => state.quickRecordList);
+
         try {
             let success: boolean = yield helper.delDiskFile(phonePath!);
             if (success) {
@@ -135,6 +138,13 @@ export default {
                     title: '删除失败',
                     content: '可能文件仍被占用，请稍后再试',
                     okButtonProps: { disabled: false }
+                });
+                yield call([db, 'update'], { _id }, { ...payload, del: 1 }, false)
+                yield put({
+                    type: 'query', payload: {
+                        pageIndex,
+                        pageSize
+                    }
                 });
             }
             setTimeout(() => {
