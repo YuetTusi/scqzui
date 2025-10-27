@@ -344,9 +344,12 @@ export function getColumns(
                             event.stopPropagation();
                             const exeName = helper.os() === 'linux' ? 'create_report' : 'create_report.exe';
                             const exe = join(cwd, `../tools/CreateReport/${exeName}`);
+                            const content = record.del === 1
+                                ? '部分数据已删除，确定生成报告吗？'
+                                : '可能所需时间较长，确定重新生成报告吗？';
                             Modal.confirm({
                                 title: '生成报告',
-                                content: '可能所需时间较长，确定重新生成报告吗？',
+                                content,
                                 okText: '是',
                                 cancelText: '否',
                                 centered: true,
@@ -399,9 +402,13 @@ export function getColumns(
                             if (record.parseState === ParseState.NotParse) {
                                 doParse(dispatch, record);
                             } else {
+                                const content =
+                                    record.del === 1
+                                        ? `部分数据已删除，确定${parseText ?? '解析'}吗？`
+                                        : `可能所需时间较长，确定重新${parseText ?? '解析'}吗？`;
                                 Modal.confirm({
                                     title: `重新${parseText ?? '解析'}`,
-                                    content: `可能所需时间较长，确定重新${parseText ?? '解析'}吗？`,
+                                    content,
                                     okText: '是',
                                     cancelText: '否',
                                     centered: true,
