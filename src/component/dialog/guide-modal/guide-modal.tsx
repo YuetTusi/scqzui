@@ -56,7 +56,8 @@ const GuideModal: FC<GuideModalProp> = (props) => {
 		centered={true}
 		destroyOnClose={true}
 		maskClosable={false}
-		closable={true}>
+		closable={true}
+		className="zero-padding-body">
 		<GuideModalBox>
 			{renderContent()}
 		</GuideModalBox>

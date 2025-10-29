@@ -2,9 +2,6 @@ import styled from 'styled-components';
 
 
 const GuideModalBox = styled.div`
-    .ant-modal-body {
-        padding: 0 !important;
-    }
 
     .flow {
         max-height: 680px;
@@ -13,6 +10,7 @@ const GuideModalBox = styled.div`
         img {
             display: block;
             width  : 100%;
+            padding: 5px;
         }
     }
 
