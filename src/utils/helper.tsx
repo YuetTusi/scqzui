@@ -525,6 +525,12 @@ const helper = {
           resolve(false);
         }
       });
+      process.once('error', (err) => {
+        resolve(false);
+      });
+      process.once('exit', (code) => {
+        resolve(false);
+      })
     });
   },
   /**

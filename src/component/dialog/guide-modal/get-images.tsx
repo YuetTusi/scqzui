@@ -9,6 +9,7 @@ import oppoBackup from '../images/fetch/oppo_backup.jpg';
 import oppoWiFi from '../images/fetch/oppo_wifi.jpg';
 import oppoTrans from '../images/fetch/oppo_trans.jpg';
 import oppoReplace from '../images/fetch/oppo_replace.jpg';
+import samsungTrans from '../images/fetch/samsung_trans.jpg';
 import vivoBackup from '../images/fetch/vivo_backup.jpg';
 import miBackup from '../images/fetch/mi_backup.jpg';
 import miReplace from '../images/fetch/mi_replace.jpg';
@@ -44,6 +45,8 @@ export function getImages(type: GuideImage): string | null {
 			return oppoTrans;
 		case GuideImage.OppoReplace:
 			return oppoReplace;
+		case GuideImage.SamsungTrans:
+			return samsungTrans;
 		case GuideImage.VivoBackup:
 			return vivoBackup;
 		case GuideImage.MiBackup:
