@@ -517,6 +517,7 @@ const helper = {
       const delExe = join(cwd, `../tools/Del/${exeName}`);
       const process = execFile(delExe, [filePath], {
         windowsHide: true,
+        cwd: join(cwd, '../tools/Del')
       });
       process.once('close', (code) => {
         if (code == 1) {
@@ -526,11 +527,9 @@ const helper = {
         }
       });
       process.once('error', (err) => {
+        log.error(`删除磁盘文件失败(${filePath}): ${err.message}`);
         resolve(false);
       });
-      process.once('exit', (code) => {
-        resolve(false);
-      })
     });
   },
   /**
