@@ -42,9 +42,9 @@ export const EventDescBox = styled.div`
                 background-color: ${props => props.theme['primary-color']};
             }
             &>.cinfo{
-                border-left:1px solid #303030;
-                border-right:1px solid #303030;
-                border-bottom:1px solid #303030;
+                border-left:1px solid ${props => props.theme['panel-color']};
+                border-right:1px solid ${props => props.theme['panel-color']};
+                border-bottom:1px solid ${props => props.theme['panel-color']};
                 border-bottom-left-radius: ${props => props.theme['border-radius-base']};
                 border-bottom-right-radius: ${props => props.theme['border-radius-base']};
                 padding: 20px;
@@ -69,8 +69,8 @@ export const HelpBox = styled.div`
     .step{
         align-self: stretch;
         padding:10px;
-        border:1px solid #303030;
-        background-color: #202940;
+        border:1px solid ${props => props.theme['panel-color']};
+        background-color: ${props => props.theme['background-color']};
         border-radius:${props => props.theme['border-radius-base']};
 
         .desc{
