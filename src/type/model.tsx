@@ -239,6 +239,10 @@ interface Conf {
 	 * aimanager.exe程序端口
 	 */
 	aiPort: number,
+	/**
+	 * TransferFile.exe应用端口
+	 */
+	transferFilePort: number,
 
 	ocrTimeout: number,
 

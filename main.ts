@@ -225,12 +225,20 @@ if (!app.requestSingleInstanceLock()) {
             let nextOcrPort = config!.ocrPort;
             let nextReaderPort = config!.readerPort;
             let nextAiPort = config!.aiPort;
+            let nextTransferFilePort = config!.transferFilePort;
             try {
-                [nextServicePort, nextOcrPort, nextReaderPort, nextAiPort] = await helper.portUseable([
+                [
+                    nextServicePort,
+                    nextOcrPort,
+                    nextReaderPort,
+                    nextAiPort,
+                    nextTransferFilePort
+                ] = await helper.portUseable([
                     config?.tcpPort ?? 35222,
                     config!.ocrPort ?? 35116,
                     config!.readerPort ?? 35336,
                     config!.aiPort ?? 35226,
+                    config!.transferFilePort ?? 9950
                 ]);
             } catch (error) {
                 console.warn(error);
@@ -238,20 +246,23 @@ if (!app.requestSingleInstanceLock()) {
                 nextOcrPort = config!.ocrPort ?? 35116;
                 nextReaderPort = config!.readerPort ?? 35336;
                 nextAiPort = config!.aiPort ?? 35226;
+                nextTransferFilePort = config!.transferFilePort ?? 9950;
             } finally {
                 startupWindow!.webContents.send('startup', {
                     ...config,
                     servicePort: nextServicePort,
                     ocrPort: nextOcrPort,
                     readerPort: nextReaderPort,
-                    aiPort: nextAiPort
+                    aiPort: nextAiPort,
+                    transferFilePort: nextTransferFilePort
                 });
                 helper.writeNetJson(helper.APP_CWD, {
                     apiPort: config!.httpPort,
                     servicePort: nextServicePort ?? 35222,
                     ocrPort: nextOcrPort ?? 35116,
                     readerPort: nextReaderPort ?? 35336,
-                    aiPort: nextAiPort ?? 35226
+                    aiPort: nextAiPort ?? 35226,
+                    transferFilePort: nextTransferFilePort ?? 9950
                 });
                 mainWindow?.webContents.send('start-tcp-service', nextServicePort);
             }

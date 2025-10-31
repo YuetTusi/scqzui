@@ -15,6 +15,7 @@ let quickFetchProcess: ChildProcessWithoutNullStreams | null = null; //快速点
 let imageOcrProcess: ChildProcessWithoutNullStreams | null = null; //OCR进程
 let readerProcess: ChildProcessWithoutNullStreams | null = null; //reader进程
 let aiManagerProcess: ChildProcessWithoutNullStreams | null = null;//aiManager进程
+let transferFileProcess: ChildProcessWithoutNullStreams | null = null;//aiManager进程
 
 ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
 
@@ -23,7 +24,8 @@ ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
         appQueryPath,
         useQuickFetch,
         useServerCloud,
-        useTraceLogin
+        useTraceLogin,
+        transferFilePort
     } = args;
 
     const quickFetchDir = join(cwd, '../QuickFetch');
@@ -56,6 +58,12 @@ ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
     helper.runProcContinue(aiManagerProcess,
         platform === 'linux' ? 'aimanager' : 'aimanager.exe',
         join(cwd, '../tools/ai')
+    );
+
+    helper.runProcContinue(transferFileProcess,
+        platform === 'linux' ? 'TransferFile' : 'TransferFile.exe',
+        join(cwd, '../tools/TransferFile'),
+        [transferFilePort.toString()]
     );
 
     if (useQuickFetch) {

@@ -1,4 +1,4 @@
-import { stat, readdir } from 'fs/promises';
+import { stat, readdir, readFile } from 'fs/promises';
 import { basename, join } from 'path';
 import xlsx from 'node-xlsx';
 import { Router } from 'express';
@@ -54,6 +54,10 @@ function api(webContents: WebContents) {
                 path: '/ai-model',
                 method: 'GET',
                 desc: '下载AI模型文件'
+            }, {
+                path: '/net-port',
+                method: 'GET',
+                desc: 'TransferFile应用端口'
             }]
         })
     );
@@ -149,6 +153,19 @@ function api(webContents: WebContents) {
         } catch (error) {
             log.error(`HTTP查询案件数据失败 @http/api(/wifi-case): ${error.message}`);
             res.json([]);
+        }
+    });
+
+    router.get('/net-port', async (_, res) => {
+        const netJsonPath = isDev
+            ? join(cwd, './data/net.json')
+            : join(cwd, './resources/config/net.json');
+        try {
+            const data = await readFile(netJsonPath, { encoding: 'utf8' });
+            res.json(JSON.parse(data));
+        } catch (error) {
+            console.log(error.message);
+            res.json(null);
         }
     });
 
