@@ -1,8 +1,7 @@
-import { Database as DataBase } from "sqlite3";
+import { join } from 'path';
+import * as Sqlite from 'sqlite3';
 
-const { join } = require('path');
-const { Database } = require('sqlite3').verbose();
-
+const { Database } = Sqlite.verbose();
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'];
 
@@ -16,7 +15,7 @@ if (isDev === 'development') {
 class Helper {
 	private _path: string | null = null;
 
-	constructor(dbPath: string) {
+	constructor(dbPath: string | null) {
 		this._path = dbPath || defaultDatabasePath;
 	}
 	/**
@@ -26,9 +25,9 @@ class Helper {
 	 * @returns {Promise<string>}
 	 */
 	execute(sql: string, params: string[] = []) {
-		let db: DataBase | null = null;
+		let db: Sqlite.Database | null = null;
 		return new Promise((resolve, reject) => {
-			db = new Database(this._path, (err: Error) => {
+			db = new Database(this._path!, (err: Error | null) => {
 				if (err) {
 					console.log(`打开数据库失败: ${err.message}`);
 					db = null;
@@ -53,15 +52,15 @@ class Helper {
 	 * @returns {Promise<any[]>} 结果集
 	 */
 	query(sql: string, params: string[] = []) {
-		let db: DataBase | null = null;
-		return new Promise((resolve, reject) => {
-			db = new Database(this._path, (err: Error) => {
+		let db: Sqlite.Database | null = null;
+		return new Promise<Array<Record<string, any>>>((resolve, reject) => {
+			db = new Database(this._path!, (err: Error | null) => {
 				if (err) {
 					console.log(`打开数据库失败: ${err.message}`);
 					db = null;
 					reject(err);
 				} else {
-					db!.all(sql, params, (err, rows) => {
+					db!.all(sql, params, (err, rows: Record<string, any>[]) => {
 						if (err) {
 							reject(err);
 						} else {
@@ -80,15 +79,15 @@ class Helper {
 	 * @returns {Promise<any>}
 	 */
 	scalar(sql: string, params: string[] = []) {
-		let db: DataBase | null = null;
-		return new Promise((resolve, reject) => {
-			db = new Database(this._path, (err: Error) => {
+		let db: Sqlite.Database | null = null;
+		return new Promise<Record<string, any>>((resolve, reject) => {
+			db = new Database(this._path!, (err: Error | null) => {
 				if (err) {
 					console.log(`打开数据库失败: ${err.message}`);
 					db = null;
 					reject(err);
 				} else {
-					db!.get(sql, params, (err, row) => {
+					db!.get(sql, params, (err, row: Record<string, any>) => {
 						if (err) {
 							reject(err);
 						} else {
@@ -102,4 +101,4 @@ class Helper {
 	}
 }
 
-module.exports = Helper;
+export default Helper;

@@ -1,9 +1,7 @@
-import { IpcRendererEvent } from "electron";
+import { ipcRenderer, IpcRendererEvent } from "electron";
+import Helper from './helper';
 
-const { ipcRenderer } = require('electron');
-const Helper = require('./helper');
-
-let helper = new Helper();
+let helper = new Helper(null);
 
 /**
  * 接收主进程参数
@@ -41,8 +39,8 @@ ipcRenderer.on('query-db', async (_: IpcRendererEvent, args: [any, number, numbe
 function queryUnit(keyword: string, current = 1, pageSize = 10) {
 	let pageSql = 'select [PcsID],[PcsName],[PcsCode] from [OrganizationCode]';
 	let totalSql = 'select count(*) as total from [OrganizationCode]';
-	let pageSqlParams = [];
-	let totalSqlParams = [];
+	let pageSqlParams: string[] = [];
+	let totalSqlParams: string[] = [];
 
 	if (keyword) {
 		pageSql += ' where [PcsName] like ? ';
@@ -54,8 +52,8 @@ function queryUnit(keyword: string, current = 1, pageSize = 10) {
 	pageSql += ' order by [PcsID] asc';
 
 	pageSql += ' limit ? offset ? ';
-	pageSqlParams.push(pageSize);
-	pageSqlParams.push((current - 1) * pageSize);
+	pageSqlParams.push(pageSize.toString());
+	pageSqlParams.push(((current - 1) * pageSize).toString());
 
 	return Promise.all([
 		helper.query(pageSql, pageSqlParams),

@@ -6,7 +6,7 @@ import { helper } from '@/utils/helper';
 
 dayjs.extend(customParseFormat);
 
-let timerHandle: any = null;
+let timerHandle: NodeJS.Timeout | null = null;
 let second = 0;
 
 const { max } = helper.readConf()!;
