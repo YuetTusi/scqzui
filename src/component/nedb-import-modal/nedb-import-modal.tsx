@@ -66,7 +66,7 @@ const importPrevNedb = async (dir: string) => {
                     eventPath: current.m_strCasePath,
                     ruleFrom: (current as any)?.ruleFrom,
                     ruleTo: (current as any)?.ruleTo,
-                    isAi: current.isAi
+                    aiType: current.aiType
                 });
                 acc.quickRecord = acc.quickRecord.concat(
                     prevDevice

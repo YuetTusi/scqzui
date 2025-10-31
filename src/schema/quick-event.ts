@@ -1,4 +1,5 @@
 import { BaseEntity } from './base-entity';
+import { AiOcrType } from './case-info';
 
 /**
  * 快速点验事件
@@ -22,9 +23,9 @@ class QuickEvent extends BaseEntity {
      */
     public ruleTo: number;
     /**
-     * 是否启用AI
+     * AI类型
      */
-    public isAi: boolean;
+    public aiType: AiOcrType;
 
     constructor(props: any) {
         super();
@@ -32,7 +33,7 @@ class QuickEvent extends BaseEntity {
         this.eventPath = props.eventPath ?? '';
         this.ruleFrom = props.ruleFrom ?? 0;
         this.ruleTo = props.ruleTo ?? 8;
-        this.isAi = props.isAi ?? false;
+        this.aiType = props.aiType ?? AiOcrType.Close;
     }
 }
 

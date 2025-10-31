@@ -136,14 +136,14 @@ function api(webContents: WebContents) {
                         devices: nextDevices.filter(i => i.caseId === current._id)
                     }
                 ]), [])
-                .map(({ _id, eventName, eventPath, devices, ruleFrom, ruleTo, isAi }) => ({
+                .map(({ _id, eventName, eventPath, devices, ruleFrom, ruleTo, aiType }) => ({
                     _id,
                     m_strCaseName: eventName,
                     m_strCasePath: eventPath,
                     ruleFrom,
                     ruleTo,
-                    isAi,
-                    devices
+                    devices,
+                    ...helper.getAiOcrParams(aiType)
                 }));
             res.json(next)
         } catch (error) {

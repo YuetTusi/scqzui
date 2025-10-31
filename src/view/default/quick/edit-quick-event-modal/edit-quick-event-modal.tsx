@@ -105,14 +105,14 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
                 next = {
                     ...values,
                     _id: data._id,
-                    isAi: aiType !== AiOcrType.Close,
+                    aiType,
                     eventName: `${values.eventName}_${timestamp}`
                 };
             } else {
                 //添加
                 next = {
                     ...values,
-                    isAi: aiType !== AiOcrType.Close,
+                    aiType,
                     eventName: `${values.eventName}_${helper.timestamp()}`
                 };
             }

@@ -51,7 +51,7 @@ export default {
                 "m_strCheckUnitName": "",
                 "officerName": "",
                 "securityCaseType": "",
-                // "isAi": isAi,
+                "aiType": aiSwitch.aiType,
                 "ruleFrom": payload.ruleFrom,
                 "ruleTo": payload.ruleTo,
                 "caseName": payload.eventName,

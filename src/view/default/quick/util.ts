@@ -8,6 +8,7 @@ import { FetchState, ParseState } from '@/schema/device-state';
 import { CaseJson, DeviceJson } from '../case/case-data/prop';
 import { QuickRecord } from '@/schema/quick-record';
 import { QuickEvent } from '@/schema/quick-event';
+import { AiOcrType } from '@/schema/case-info';
 
 const { caseText, devText } = helper.readConf()!;
 
@@ -95,7 +96,7 @@ async function getEventByName(caseJson: Record<string, any>, casePath: string) {
                 eventPath: casePath,
                 ruleFrom: caseJson.ruleFrom ?? 0,
                 ruleTo: caseJson.ruleTo ?? 8,
-                isAi: caseJson.isAi ?? false
+                aiType: caseJson.aiType ?? AiOcrType.Close
             };
             await db.insert(next);
             return next;
