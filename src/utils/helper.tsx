@@ -1002,8 +1002,6 @@ const helper = {
         return { isAi: false, isPhotoAnalysis: true, useAiOcr: false };
       case AiOcrType.AiOcr:
         return { isAi: true, isPhotoAnalysis: false, useAiOcr: false };
-      case AiOcrType.AiResultOcr:
-        return { isAi: true, isPhotoAnalysis: false, useAiOcr: true };
       case AiOcrType.GlobalAiOcr:
         return { isAi: true, isPhotoAnalysis: true, useAiOcr: false };
       default:

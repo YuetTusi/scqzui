@@ -23,7 +23,7 @@ import { AiOcrType } from '@/schema/case-info';
 import { AiSwitchState } from '@/model/default/ai-switch';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
 import { Auth } from '@/component/auth';
-import AiSwitch, { CaseType } from '@/component/ai-switch';
+import AiSwitch from '@/component/ai-switch';
 import { CategoryBox, ItemBox } from './styled/box';
 
 
@@ -268,7 +268,6 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
                     <Col span={24}>
                         <AiSwitch
                             casePath={data?.eventPath}
-                            caseType={CaseType.Quick}
                             columnCount={5} />
                     </Col>
                 </Row>

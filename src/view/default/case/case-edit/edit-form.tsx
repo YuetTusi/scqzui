@@ -26,7 +26,7 @@ import { AttachmentType } from '@/schema/bcp-entity';
 import Auth from '@/component/auth';
 import { Split } from '@/component/style-tool';
 import { AppSelectModal } from '@/component/dialog';
-import AiSwitch, { CaseType } from '@/component/ai-switch';
+import AiSwitch from '@/component/ai-switch';
 import parseApp from '@/config/parse-app.yaml';
 import tokenApp from '@/config/token-app.yaml';
 import { filterToParseApp } from '../helper';
@@ -409,7 +409,6 @@ const EditForm: FC<FormProp> = ({
                         <Col span={2} />
                         <Col span={20}>
                             <AiSwitch
-                                caseType={CaseType.Normal}
                                 columnCount={6} />
                         </Col>
                         <Col span={2} />

@@ -17,10 +17,6 @@ enum AiOcrType {
      */
     AiOcr,
     /**
-     * AI分析结果OCR
-     */
-    AiResultOcr,
-    /**
      * 全局OCR且AI图片分析
      */
     GlobalAiOcr
