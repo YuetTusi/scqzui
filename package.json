@@ -55,6 +55,10 @@
 				"filter": [
 					"**/*"
 				]
+			},
+			{
+				"from": "./data/predict.json",
+				"to": "config/predict.json"
 			}
 		],
 		"win": {
