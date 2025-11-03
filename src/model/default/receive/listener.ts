@@ -13,6 +13,7 @@ import { send } from '@/utils/tcp-server';
 import { caseStore } from "@/utils/local-store";
 import inputPassword from '@/component/dialog/input-password';
 import { DatapassParam } from '@/component/dialog/input-password/prop';
+import { PredictJson } from '@/component/ai-switch';
 import Command, { CommandType, SocketType } from "@/schema/command";
 import DeviceType from "@/schema/device-type";
 import { FetchState, ParseState } from "@/schema/device-state";
@@ -29,10 +30,10 @@ import { CaptchaMsg, CloudAppMessages } from '@/schema/cloud-app-messages';
 import { QuickEvent } from '@/schema/quick-event';
 import { QuickRecord } from '@/schema/quick-record';
 import { DeviceSystem } from '@/schema/device-system';
-import { LoginState } from '../trace-login';
 import { QuickLog } from '@/schema/quick-log';
 import { FetchData } from '@/schema/fetch-data';
 import { BeforeFetchStatus } from '@/schema/before-fetch-status';
+import { LoginState } from '../trace-login';
 
 const { fetchText, parseText } = helper.readConf()!;
 const appPath = process.cwd();
@@ -515,7 +516,8 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
             db.findOne({ _id: args.caseId })
         ]);
 
-        const aiConfig = await helper.readJSONFile(join(eventData.eventPath, eventData.eventName, 'predict.json'));
+        const aiConfig: PredictJson = await helper.readJSONFile(
+            join(eventData.eventPath, eventData.eventName, 'predict.json'));
 
         //NOTE:将设备数据入库
         let next = new QuickRecord();
@@ -561,11 +563,8 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
                 ruleFrom: eventData?.ruleFrom ?? 0,
                 ruleTo: eventData?.ruleTo ?? 8,
                 analysisApp: true,
-                useAiOcr: false,
-                isPhotoAnalysis: false,
                 hasReport: true,
                 isDel: false,
-                isAi: false,
                 aiTypes: aiConfig,
                 useDefaultTemp: appJson?.useDefaultTemp ?? true,
                 useKeyword: appJson?.useKeyword ?? false,
@@ -573,7 +572,8 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
                     appJson?.useDocVerify ?? false,
                     appJson?.usePdfOcr ?? false
                 ],
-                tokenAppList: []
+                tokenAppList: [],
+                ...helper.getAiOcrParams(aiConfig.aiType),
             }
         });
 
@@ -600,23 +600,12 @@ export function checkFinishToParse(dispatch: Dispatch<any>) {
                 caseId: next.caseId,
                 deviceId: next._id,
                 curinfo: '开始解析数据',
-                curprogress: 0,
+                curprogress: 1,
                 category: ParseCategory.Quick
             }
         });
         dispatch({ type: 'quickEventList/setSelectedRowKeys', payload: [next.caseId] });//选中案件
         dispatch({ type: 'quickRecordList/setExpandedRowKeys', payload: [next._id] });//展开点验设备
-
-        // dispatch({
-        //     type: 'checkingList/setInfo',
-        //     payload: [{
-        //         caseId: next.caseId,
-        //         deviceId: next._id,
-        //         curinfo: '开始解析数据',
-        //         curprogress: 0,
-        //         category: ParseCategory.Quick
-        //     }]
-        // });
     });
 }
 

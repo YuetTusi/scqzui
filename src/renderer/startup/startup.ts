@@ -124,4 +124,8 @@ ipcRenderer.on('closure', () => {
         (readerProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');
         imageOcrProcess = null;
     }
+    if (transferFileProcess !== null) {
+        (transferFileProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');
+        transferFileProcess = null;
+    }
 });
