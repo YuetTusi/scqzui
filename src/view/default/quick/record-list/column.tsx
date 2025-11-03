@@ -77,24 +77,29 @@ const openOnSystemWindow = debounce(
 const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
 
     const db = getDb<QuickEvent>(TableName.QuickEvent);
+    let casePath = join(data.phonePath!, '../../'); //案件目录
     try {
         let eventData: QuickEvent = await db.findOne({
             _id: data.caseId
         });
-        let caseJsonPath = join(data.phonePath!, '../../');
-        const [caseJsonExist, appJson, aiConfig] = await Promise.all([
-            helper.existFile(join(caseJsonPath, 'Case.json')),
+        const [caseJsonExist, predictJsonExist, appJson, tempAi] = await Promise.all([
+            helper.existFile(join(casePath, 'Case.json')),
+            helper.existFile(join(casePath, 'predict.json')),
             helper.readAppJson(),
             helper.readJSONFile(isDev
                 ? join(cwd, './data/predict.json')
                 : join(cwd, './resources/config/predict.json')) as Promise<PredictJson>
         ]);
+        let aiConfig = tempAi;
 
         if (!caseJsonExist) {
             const caseData = new CaseInfo();
             caseData.m_strCaseName = eventData.eventName;
             caseData.m_strCasePath = eventData.eventPath;
-            await helper.writeCaseJson(caseJsonPath, caseData);
+            await helper.writeCaseJson(casePath, caseData);
+        }
+        if (predictJsonExist) {
+            aiConfig = await helper.readJSONFile(join(casePath, 'predict.json'));
         }
         send(Parse, {
             type: Parse,
