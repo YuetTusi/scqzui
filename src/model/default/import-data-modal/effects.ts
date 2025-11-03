@@ -105,7 +105,7 @@ export default {
         if (hasPredict) {
             //案件下存在predict.json
             const next: PredictJson = yield call([helper, 'readJSONFile'], join(caseData.m_strCasePath, './predict.json'));
-            aiTypes = helper.combinePredict(temp, next);
+            aiTypes = next;
         } else {
             aiTypes = temp;
         }

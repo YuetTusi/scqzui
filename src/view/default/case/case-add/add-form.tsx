@@ -2,7 +2,6 @@ import throttle from 'lodash/throttle';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch } from 'dva';
 import React, { FC, MouseEvent, useEffect, useRef, useState, useCallback } from 'react';
 import AutoComplete from 'antd/lib/auto-complete';
 import FileSyncOutlined from '@ant-design/icons/FileSyncOutlined'
@@ -55,7 +54,6 @@ const AddForm: FC<FormProp> = ({
     autoParseState, generateBcpState, isDelState,
     parseAppListState, tokenAppListState
 }) => {
-    const dispatch = useDispatch();
     const [wired, setWired] = useState<boolean>(false);
     const [isCheck, setIsCheck] = useState(false);
     const [parseAppSelectModalVisible, setParseAppSelectModalVisible] =

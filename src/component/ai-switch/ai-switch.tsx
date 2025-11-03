@@ -1,10 +1,9 @@
 import chunk from 'lodash/chunk';
 import { join } from 'path';
-import React, { FC, useEffect, FocusEvent, useState } from 'react';
+import React, { FC, useEffect, FocusEvent } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Col from 'antd/lib/col';
 import Row from 'antd/lib/row';
-import Checkbox, { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import InputNumber from 'antd/lib/input-number';
 import Select from 'antd/lib/select';
 import Switch from 'antd/lib/switch';
@@ -14,7 +13,6 @@ import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
 import { AiSwitchState } from '@/model/default/ai-switch';
 import { AiOcrType } from '@/schema/case-info';
-import Auth from '../auth';
 import { Predict, AiSwitchProp, PredictJson } from './prop';
 
 const cwd = process.cwd();
@@ -38,19 +36,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
 }) => {
 
     const dispatch = useDispatch();
-    const [wired, setWired] = useState<boolean>(false);
     const { data, similarity, aiType } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const isWired = await helper.isWired();
-                setWired(isWired);
-            } catch (error) {
-                setWired(false);
-            }
-        })();
-    }, []);
 
     useDestroy(() => dispatch({ type: 'aiSwitch/setData', payload: [] }));
 
@@ -72,16 +58,9 @@ const AiSwitch: FC<AiSwitchProp> = ({
                     if (exist) {
                         //案件下存在，读取案件下的predict.json
                         const next: PredictJson = await helper.readJSONFile(aiConfigAt);
-                        if (Array.isArray(next)) {
-                            //旧版predict.json
-                            dispatch({ type: 'aiSwitch/setData', payload: next });
-                            dispatch({ type: 'aiSwitch/setSimilarity', payload: 0 });
-                            dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
-                        } else {
-                            dispatch({ type: 'aiSwitch/setData', payload: (next as { config: Predict[], similarity: number }).config });
-                            dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number }).similarity });
-                            dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
-                        }
+                        dispatch({ type: 'aiSwitch/setData', payload: (next as { config: Predict[], similarity: number }).config });
+                        dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number }).similarity });
+                        dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
                     } else {
                         //不存在，读取模版
                         const next: PredictJson = await helper.readJSONFile(tempAt);
@@ -101,11 +80,11 @@ const AiSwitch: FC<AiSwitchProp> = ({
     /**
      * AI开关Change
      * @param checked 选中
-     * @param type AI类型
+     * @param type AI标题
      */
-    const onSwitchChange = (checked: boolean, type: string) => {
+    const onSwitchChange = (checked: boolean, title: string) => {
         const next = data.map((item) => {
-            if (item.type === type) {
+            if (item.title === title) {
                 return { ...item, use: checked };
             } else {
                 return item;
@@ -147,16 +126,18 @@ const AiSwitch: FC<AiSwitchProp> = ({
                             ? <Col span={j === row.length - 1 ? last : Math.ceil(24 / columnCount)} key={`AICOL_${j}`}>
                                 <label>{col.title}：</label>
                                 <Switch
-                                    onChange={(checked: boolean) => onSwitchChange(checked, col.type)}
+                                    onChange={(checked: boolean) => onSwitchChange(checked, col.title)}
                                     checked={col.use}
+                                    disabled={aiType === AiOcrType.Close || aiType === AiOcrType.GlobalOcr}
                                     size="small" />
                             </Col>
                             : <Col span={j === row.length - 1 ? last : Math.ceil(24 / columnCount)} key={`AICOL_${j}`}>
                                 <Tooltip title={col.tips}>
                                     <label>{col.title}：</label>
                                     <Switch
-                                        onChange={(checked: boolean) => onSwitchChange(checked, col.type)}
+                                        onChange={(checked: boolean) => onSwitchChange(checked, col.title)}
                                         checked={col.use}
+                                        disabled={aiType === AiOcrType.Close || aiType === AiOcrType.GlobalOcr}
                                         size="small" />
                                 </Tooltip>
                             </Col>;
@@ -176,7 +157,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                     value={aiType}
                     onChange={onAiOcrTypeChange}
                     options={getOptions()}
-                    style={{ width: '260px' }} />
+                    style={{ width: '280px' }} />
             </Col>
             <Col flex="none" style={{ marginLeft: '40px' }}>
                 <label>设定阈值：</label>
@@ -194,9 +175,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                     style={{ width: '150px' }} />
             </Col>
         </Row>
-        <Auth deny={wired}>
-            {renderSwitch()}
-        </Auth>
+        {renderSwitch()}
     </>
 };
 

@@ -34,6 +34,9 @@ import { DeviceStoreState } from './index';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
+const aiTempAt = isDev
+    ? join(cwd, './data/predict.json')
+    : join(cwd, './resources/config/predict.json'); //AI配置模版所在路径
 
 /**
  * 副作用
@@ -462,14 +465,10 @@ export default {
     *startParse({ payload }: AnyAction, { all, select, call, fork, put }: EffectsCommandMap) {
 
         const caseDb = getDb<CaseInfo>(TableName.Cases);
-        const quickEventDb = getDb<CaseInfo>(TableName.QuickEvent);
         const device: DeviceStoreState = yield select((state: StateTree) => state.device);
         const current = device.deviceList.find((item) => item?.usb == payload);
 
         try {
-            const aiTempAt = isDev
-                ? join(cwd, './data/predict.json')
-                : join(cwd, './resources/config/predict.json'); //AI配置模版所在路径
             const [caseData, appConfig, aiTemp]: [CaseInfo, AppJson, PredictJson] = yield all([
                 call([caseDb, 'findOne'], { _id: current?.caseId }),
                 call([helper, 'readAppJson']),
@@ -477,7 +476,7 @@ export default {
             ]);
 
             if (current && caseData.m_bIsAutoParse) {
-                let aiConfig: PredictJson = { config: [], similarity: 0, aiType: AiOcrType.Close, label: {} };
+                let aiConfig = aiTemp;
                 const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
                 let exist: boolean = yield call([helper, 'existFile'], predictAt);
                 if (exist) {
@@ -485,7 +484,6 @@ export default {
                     aiConfig = yield call([helper, 'readJSONFile'], predictAt);
                 }
                 const tokenAppList: string[] = caseData.tokenAppList ? caseData.tokenAppList.map(i => i.m_strID) : [];
-                const aiTypes = helper.combinePredict(aiTemp, aiConfig);
                 logger.info(`开始解析(StartParse):${JSON.stringify({
                     caseId: caseData._id,
                     deviceId: current._id,
@@ -505,8 +503,8 @@ export default {
                         appConfig?.usePdfOcr ?? false
                     ],
                     tokenAppList,
-                    aiTypes,
-                    ...helper.getAiOcrParams(aiTypes.aiType ?? AiOcrType.Close),
+                    aiTypes: aiConfig,
+                    ...helper.getAiOcrParams(aiConfig.aiType ?? AiOcrType.Close),
                 })}`);
                 //# 通知parse开始解析
                 yield fork(send, SocketType.Parse, {
@@ -530,8 +528,8 @@ export default {
                             appConfig?.usePdfOcr ?? false
                         ],
                         tokenAppList,
-                        aiTypes,
-                        ...helper.getAiOcrParams(aiTypes.aiType ?? AiOcrType.Close),
+                        aiTypes: aiConfig,
+                        ...helper.getAiOcrParams(aiConfig.aiType ?? AiOcrType.Close),
                     }
                 });
 

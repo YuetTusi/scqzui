@@ -35,6 +35,9 @@ const { devText, fetchText, parseText } = helper.readConf()!;
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
 const { Group } = Button;
+const aiTempAt = isDev
+    ? join(cwd, './data/predict.json')
+    : join(cwd, './resources/config/predict.json'); //AI配置模版所在路径
 
 /**
  * 解析是否为禁用状态
@@ -77,9 +80,6 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
 
     const db = getDb<CaseInfo>(TableName.Cases);
     const caseJsonPath = join(data.phonePath!, '../../');
-    const aiTempAt = isDev
-        ? join(cwd, './data/predict.json')
-        : join(cwd, './resources/config/predict.json'); //AI配置模版所在路径
 
     try {
         const [caseData, caseJsonExist, appConfig, aiTemp]: [CaseInfo, boolean, AppJson | null, PredictJson]
@@ -99,8 +99,9 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
         const exist = await helper.existFile(predictAt);
         if (exist) {
             aiConfig = await helper.readJSONFile(predictAt);
+        } else {
+            aiConfig = aiTemp;
         }
-        const predict = helper.combinePredict(aiTemp, aiConfig);
 
         send(SocketType.Parse, {
             type: SocketType.Parse,
@@ -125,8 +126,8 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
                 tokenAppList: caseData.tokenAppList
                     ? caseData.tokenAppList.map((i) => i.m_strID)
                     : [],
-                aiTypes: predict,
-                ...helper.getAiOcrParams(predict.aiType ?? AiOcrType.Close),
+                aiTypes: aiConfig,
+                ...helper.getAiOcrParams(aiConfig.aiType ?? AiOcrType.Close),
             }
         });
         dispatch({
