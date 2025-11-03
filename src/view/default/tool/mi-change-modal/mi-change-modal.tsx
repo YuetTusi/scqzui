@@ -84,7 +84,8 @@ const MiChangeModal: FC<MiChangeModalProp> = ({ visible, onOk, onCancel }) => {
             <ul>
                 <li>选择数据保存目录</li>
                 <li>
-                    请使用小米手机连接热点，热点名称为<strong>数字</strong>+<strong>co_ap5G_MI</strong>，
+                    请使用小米手机连接热点，热点名称为<strong>co_ap5G_MI</strong>或
+                    <strong>数字</strong>+<strong>co_ap5G_MI</strong>，
                     举例如：<strong>1co_ap5G_MI</strong>，<strong>999co_ap5G_MI</strong>等。
                     密码：<strong>GMffKRcfB8</strong>
                 </li>

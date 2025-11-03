@@ -44,6 +44,10 @@ ipcRenderer.on('time', (_: IpcRendererEvent, usb: number, isStart: boolean) => {
         //发送消息还原Clock时间
         ipcRenderer.send('receive-time', usb, '00:00:00');
     }
-
-    console.log(list);
 });
+
+window.onunload = () => {
+    if (timerHandle !== null) {
+        clearInterval(timerHandle);
+    }
+};

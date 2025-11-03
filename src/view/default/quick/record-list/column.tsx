@@ -14,6 +14,8 @@ import Tag from 'antd/lib/tag';
 import Modal from 'antd/lib/modal';
 import message from 'antd/lib/message';
 import notification from 'antd/lib/notification';
+import { OsIcon } from '@/component/os-icon';
+import { PredictJson } from '@/component/ai-switch';
 import { AlartMessageInfo } from '@/component/alert-message/prop';
 import { OperateDoingState } from '@/model/default/operate-doing';
 import { QuickRecord } from "@/schema/quick-record";
@@ -28,7 +30,6 @@ import { getDb } from '@/utils/db';
 import { helper } from '@/utils/helper';
 import { send } from '@/utils/tcp-server';
 import logger from '@/utils/log';
-import { OsIcon } from '@/component/os-icon';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
@@ -84,7 +85,9 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
         const [caseJsonExist, appJson, aiConfig] = await Promise.all([
             helper.existFile(join(caseJsonPath, 'Case.json')),
             helper.readAppJson(),
-            helper.readJSONFile(isDev ? join(cwd, './data/predict.json') : join(cwd, './resources/config/predict.json'))
+            helper.readJSONFile(isDev
+                ? join(cwd, './data/predict.json')
+                : join(cwd, './resources/config/predict.json')) as Promise<PredictJson>
         ]);
 
         if (!caseJsonExist) {
@@ -106,15 +109,13 @@ const doParse = async (dispatch: Dispatch, data: QuickRecord) => {
                 analysisApp: true,
                 hasReport: true,
                 isDel: false,
-                isAi: false,
-                useAiOcr: false,
-                isPhotoAnalysis: false,
                 aiTypes: aiConfig,
                 useDefaultTemp: appJson?.useDefaultTemp ?? true,
                 useKeyword: appJson?.useKeyword ?? false,
                 useDocVerify: [false, false],
                 dataMode: DataMode.Check,
-                tokenAppList: []
+                tokenAppList: [],
+                ...helper.getAiOcrParams(aiConfig.aiType)
             }
         });
         dispatch({
