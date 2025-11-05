@@ -1,6 +1,6 @@
 import chunk from 'lodash/chunk';
 import { join } from 'path';
-import React, { FC, useEffect, FocusEvent } from 'react';
+import React, { FC, useEffect, FocusEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Col from 'antd/lib/col';
 import Row from 'antd/lib/row';
@@ -19,6 +19,20 @@ const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
 
 /**
+ * 禁用相似度
+ * @param wired 有线快采
+ * @param isAi 是否使用AI
+ * @param aiType AI&OCR类型
+ */
+const disabledSimilar = (wired: boolean, isAi: boolean, aiType: AiOcrType) => {
+    if (wired) {
+        return !isAi;
+    } else {
+        return aiType === AiOcrType.Close || aiType === AiOcrType.GlobalOcr;
+    }
+};
+
+/**
  * AI&OCR下拉选项
  */
 const getOptions = () => [
@@ -32,11 +46,11 @@ const getOptions = () => [
  * AI分析开关组件
  */
 const AiSwitch: FC<AiSwitchProp> = ({
-    casePath, columnCount
+    casePath, wired, columnCount
 }) => {
 
     const dispatch = useDispatch();
-    const { data, similarity, aiType } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
+    const { data, similarity, aiType, isAi } = useSelector<StateTree, AiSwitchState>(state => state.aiSwitch);
 
     useDestroy(() => dispatch({ type: 'aiSwitch/setData', payload: [] }));
 
@@ -49,24 +63,27 @@ const AiSwitch: FC<AiSwitchProp> = ({
                 if (casePath === undefined) {
                     //无案件目录，是新增，读模版
                     const next: PredictJson = await helper.readJSONFile(tempAt);
-                    dispatch({ type: 'aiSwitch/setData', payload: (next as { config: Predict[], similarity: number }).config });
-                    dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number }).similarity });
+                    dispatch({ type: 'aiSwitch/setData', payload: next.config });
+                    dispatch({ type: 'aiSwitch/setSimilarity', payload: next.similarity });
                     dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
+                    dispatch({ type: 'aiSwitch/setIsAi', payload: false });
                 } else {
                     const aiConfigAt = join(casePath, './predict.json'); //当前案件AI路径
                     const exist = await helper.existFile(aiConfigAt);
                     if (exist) {
                         //案件下存在，读取案件下的predict.json
                         const next: PredictJson = await helper.readJSONFile(aiConfigAt);
-                        dispatch({ type: 'aiSwitch/setData', payload: (next as { config: Predict[], similarity: number }).config });
-                        dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number }).similarity });
+                        dispatch({ type: 'aiSwitch/setData', payload: next.config });
+                        dispatch({ type: 'aiSwitch/setSimilarity', payload: next.similarity });
                         dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
+                        dispatch({ type: 'aiSwitch/setIsAi', payload: next.isAi ?? false });
                     } else {
                         //不存在，读取模版
                         const next: PredictJson = await helper.readJSONFile(tempAt);
-                        dispatch({ type: 'aiSwitch/setData', payload: (next as { config: Predict[], similarity: number }).config });
-                        dispatch({ type: 'aiSwitch/setSimilarity', payload: (next as { config: Predict[], similarity: number }).similarity });
+                        dispatch({ type: 'aiSwitch/setData', payload: next.config });
+                        dispatch({ type: 'aiSwitch/setSimilarity', payload: next.similarity });
                         dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
+                        dispatch({ type: 'aiSwitch/setIsAi', payload: false });
                     }
                 }
             } catch (error) {
@@ -103,6 +120,9 @@ const AiSwitch: FC<AiSwitchProp> = ({
     const onAiOcrTypeChange = (value: AiOcrType) =>
         dispatch({ type: 'aiSwitch/setAiType', payload: value });
 
+    const onIsAiChange = (value: boolean) =>
+        dispatch({ type: 'aiSwitch/setIsAi', payload: value });
+
     const onSimilarBlur = ({ target }: FocusEvent<HTMLInputElement>) => {
         if (target.value.trim() === '') {
             dispatch({ type: 'aiSwitch/setSimilarity', payload: 0 });
@@ -111,7 +131,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
 
     const renderSwitch = () => {
 
-        if (data.length === 0) {
+        if (data.length === 0 || wired) {
             return null;
         }
         const last = 24 % columnCount === 0
@@ -149,15 +169,25 @@ const AiSwitch: FC<AiSwitchProp> = ({
 
     return <>
         <Row align="middle" style={{ margin: '2rem 0' }}>
-            <Col flex="none">
+            <Col flex="none" style={{ display: wired ? 'none' : 'block' }}>
                 <label style={{ marginLeft: '5rem' }}>AI类型：</label>
             </Col>
-            <Col flex="none">
+            <Col flex="none" style={{ display: wired ? 'none' : 'block' }}>
                 <Select
                     value={aiType}
                     onChange={onAiOcrTypeChange}
                     options={getOptions()}
                     style={{ width: '280px' }} />
+            </Col>
+            <Col flex="none" style={{ display: !wired ? 'none' : 'block' }}>
+                <label style={{ marginLeft: '5rem' }}>AI分析：</label>
+            </Col>
+            <Col flex="none" style={{ display: !wired ? 'none' : 'block' }}>
+                <Switch
+                    checked={isAi}
+                    onChange={onIsAiChange}
+                    size="small"
+                />
             </Col>
             <Col flex="none" style={{ marginLeft: '40px' }}>
                 <label>设定阈值：</label>
@@ -167,7 +197,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                     onChange={onSimilarChange}
                     onBlur={onSimilarBlur}
                     value={similarity}
-                    disabled={aiType === AiOcrType.Close || aiType === AiOcrType.GlobalOcr}
+                    disabled={disabledSimilar(wired, isAi, aiType)}
                     defaultValue={0}
                     min={0}
                     max={100}

@@ -83,7 +83,8 @@ export default {
                 merge(predict, {
                     config: aiSwitch.data,
                     similarity: aiSwitch.similarity,
-                    aiType: aiSwitch.aiType
+                    aiType: aiSwitch.aiType,
+                    isAi: aiSwitch.isAi
                 })
             ); //写ai配置JSON
             yield put(routerRedux.push('/case-data'));

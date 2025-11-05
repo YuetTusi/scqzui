@@ -31,6 +31,10 @@ interface FormProp {
      */
     generateBcpState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
+     * 是否是有线快采state
+     */
+    wiredState: [boolean, Dispatch<SetStateAction<boolean>>],
+    /**
      * 是否删除state
      */
     isDelState: [boolean, Dispatch<SetStateAction<boolean>>],

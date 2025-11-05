@@ -94,7 +94,13 @@ const doParse = debounce(async (dispatch: Dispatch, data: DeviceType) => {
             await helper.writeCaseJson(caseJsonPath, caseData);
         }
 
-        let aiConfig: PredictJson = { similarity: 0, aiType: AiOcrType.Close, config: [], label: {} };
+        let aiConfig: PredictJson = {
+            similarity: 0,
+            isAi: false,
+            aiType: AiOcrType.Close,
+            config: [],
+            label: {}
+        };
         const predictAt = join(caseData.m_strCasePath, caseData.m_strCaseName, 'predict.json');
         const exist = await helper.existFile(predictAt);
         if (exist) {

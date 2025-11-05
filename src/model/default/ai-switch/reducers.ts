@@ -22,5 +22,12 @@ export default {
     setAiType(state: AiSwitchState, { payload }: AnyAction) {
         state.aiType = payload;
         return state;
+    },
+    /**
+     * 设置启用AI
+     */
+    setIsAi(state: AiSwitchState, { payload }: AnyAction) {
+        state.isAi = payload;
+        return state;
     }
 }

@@ -268,6 +268,7 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
                     <Col span={24}>
                         <AiSwitch
                             casePath={data?.eventPath}
+                            wired={false}
                             columnCount={5} />
                     </Col>
                 </Row>

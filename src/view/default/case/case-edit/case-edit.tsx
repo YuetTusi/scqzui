@@ -52,6 +52,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
     const hasReport = useState<boolean>(true);
     const autoParse = useState<boolean>(true);
     const generateBcp = useState<boolean>(false);
+    const wired = useState<boolean>(false);
     const isDel = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
     const tokenAppList = useState<BaseApp[]>([]);
@@ -91,9 +92,8 @@ const CaseEdit: FC<CaseEditProp> = () => {
             hasReport[1](data?.hasReport ?? true);
             autoParse[1](data?.m_bIsAutoParse ?? true);
             generateBcp[1](data?.generateBcp ?? false);
+            wired[1](data?.wired ?? false);
             isDel[1](data?.isDel ?? false);
-            // isAi[1](data?.isAi ?? false);
-            // isPhotoAnalysis[1](data?.isPhotoAnalysis ?? false);
             dispatch({
                 type: 'aiSwitch/readAiConfig',
                 payload: { casePath: join(data.m_strCasePath, data.m_strCaseName) }
@@ -141,6 +141,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
             entity.hasReport = hasReport[0];
             entity.m_bIsAutoParse = autoParse[0];
             entity.generateBcp = generateBcp[0];
+            entity.wired = wired[0];
             entity.attachment = values.attachment;
             entity.isDel = isDel[0];
             entity.ruleFrom = values.ruleFrom;
@@ -181,6 +182,7 @@ const CaseEdit: FC<CaseEditProp> = () => {
                 hasReportState={hasReport}
                 autoParseState={autoParse}
                 generateBcpState={generateBcp}
+                wiredState={wired}
                 isDelState={isDel}
                 parseAppListState={parseAppList}
                 tokenAppListState={tokenAppList} />

@@ -31,15 +31,19 @@ export interface FormProp {
      */
     generateBcpState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
+     * 是否是有线采集
+     */
+    wiredState: [boolean, Dispatch<SetStateAction<boolean>>],
+    /**
      * 是否删除state
      */
     isDelState: [boolean, Dispatch<SetStateAction<boolean>>],
     /**
-     * AI设置state
+     * 
      */
     parseAppListState: [BaseApp[], Dispatch<SetStateAction<BaseApp[]>>],
     /**
-    * AI设置state
+    * 
     */
     tokenAppListState: [BaseApp[], Dispatch<SetStateAction<BaseApp[]>>]
 }

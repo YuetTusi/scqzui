@@ -17,7 +17,12 @@ interface AiSwitchState {
     /**
      * 分析类型
      */
-    aiType: AiOcrType
+    aiType: AiOcrType,
+    /**
+     * 是否启用AI分析
+     * （706专用，当案件是`有线快采`则使用此参数）
+     */
+    isAi: boolean,
 }
 
 
@@ -32,8 +37,7 @@ let model: Model = {
         data: [],
         similarity: 0,
         aiType: AiOcrType.Close,
-        ocr: false,
-        disableOcr: false
+        isAi: false
     },
     reducers,
     effects

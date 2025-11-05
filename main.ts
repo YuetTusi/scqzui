@@ -234,7 +234,7 @@ if (!app.requestSingleInstanceLock()) {
                     nextAiPort,
                     nextTransferFilePort
                 ] = await helper.portUseable([
-                    config?.tcpPort ?? 35222,
+                    config!.tcpPort ?? 35222,
                     config!.ocrPort ?? 35116,
                     config!.readerPort ?? 35336,
                     config!.aiPort ?? 35226,

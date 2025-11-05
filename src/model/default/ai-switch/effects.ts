@@ -27,6 +27,7 @@ export default {
                 yield put({ type: 'setData', payload: temp.config });
                 yield put({ type: 'setSimilarity', payload: temp.similarity });
                 yield put({ type: 'setAiType', payload: AiOcrType.Close });
+                yield put({ type: 'setIsAi', payload: false });
             } else {
                 const aiConfigAt = join(casePath, './predict.json'); //当前案件AI路径
                 const exist: boolean = yield call([helper, 'existFile'], aiConfigAt);
@@ -37,12 +38,14 @@ export default {
                     yield put({ type: 'setData', payload: next.config });
                     yield put({ type: 'setSimilarity', payload: next.similarity });
                     yield put({ type: 'setAiType', payload: next.aiType ?? AiOcrType.Close });
+                    yield put({ type: 'setIsAi', payload: next.isAi ?? false });
                 } else {
                     //不存在，读取模版
                     const next: PredictJson = yield call([helper, 'readJSONFile'], tempAt);
                     yield put({ type: 'setData', payload: next.config });
                     yield put({ type: 'setSimilarity', payload: next.similarity });
                     yield put({ type: 'setAiType', payload: AiOcrType.Close });
+                    yield put({ type: 'setIsAi', payload: false });
                 }
             }
         } catch (error) {
@@ -50,6 +53,7 @@ export default {
             yield put({ type: 'setData', payload: [] });
             yield put({ type: 'setSimilarity', payload: 0 });
             yield put({ type: 'setAiType', payload: AiOcrType.Close });
+            yield put({ type: 'setIsAi', payload: false });
         }
     }
 };

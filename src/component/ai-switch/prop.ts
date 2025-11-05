@@ -33,6 +33,10 @@ export interface AiSwitchProp {
      */
     casePath?: string,
     /**
+     * 是否是有线快采
+     */
+    wired: boolean,
+    /**
      * 列数
      */
     columnCount: number,
@@ -51,6 +55,10 @@ export interface PredictJson {
      * 分析类型
      */
     aiType: AiOcrType,
+    /**
+     * 706专用参数，当是`有线快采`案件，此参数让用户配置
+     */
+    isAi: boolean,
     /**
      * 显示标签
      */

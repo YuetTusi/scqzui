@@ -34,8 +34,8 @@ const CaseAdd: FC<CaseAddProp> = () => {
     const hasReport = useState<boolean>(true);
     const autoParse = useState<boolean>(true);
     const generateBcp = useState<boolean>(false);
+    const caseIsWired = useState<boolean>(false);
     const isDel = useState<boolean>(false);
-    // const isPhotoAnalysis = useState<boolean>(false);
     const parseAppList = useState<BaseApp[]>([]);
     const tokenAppList = useState<BaseApp[]>([]);
 
@@ -145,6 +145,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
                 hasReportState={hasReport}
                 autoParseState={autoParse}
                 generateBcpState={generateBcp}
+                wiredState={caseIsWired}
                 isDelState={isDel}
                 parseAppListState={parseAppList}
                 tokenAppListState={tokenAppList} />

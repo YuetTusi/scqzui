@@ -22,6 +22,7 @@ import { helper } from '@/utils/helper';
 import { AllowCaseName } from '@/utils/regex';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { caseType } from '@/schema/case-type';
+import { AiOcrType } from '@/schema/case-info';
 import { AttachmentType } from '@/schema/bcp-entity';
 import Auth from '@/component/auth';
 import { Split } from '@/component/style-tool';
@@ -44,7 +45,7 @@ const formItemLayout = {
 
 const EditForm: FC<FormProp> = ({
     formRef, analysisAppState, sdCardState, hasReportState, autoParseState, generateBcpState,
-    isDelState, parseAppListState, tokenAppListState
+    wiredState, isDelState, parseAppListState, tokenAppListState
 }) => {
 
     const dispatch = useDispatch();
@@ -59,6 +60,7 @@ const EditForm: FC<FormProp> = ({
     const [hasReport, setHasReport] = hasReportState;
     const [autoParse, setAutoParse] = autoParseState;
     const [generateBcp, setGenerateBcp] = generateBcpState;
+    const [caseIsWired, setCaseIsWired] = wiredState;
     const [isDel, setIsDel] = isDelState;
     const [parseAppList, setParseAppList] = parseAppListState;
     const [tokenAppList, setTokenAppList] = tokenAppListState;
@@ -226,7 +228,17 @@ const EditForm: FC<FormProp> = ({
                             label="有线快采"
                             valuePropName="checked"
                             labelCol={{ span: 6 }}>
-                            <Switch size="small" />
+                            <Switch
+                                checked={caseIsWired}
+                                onChange={(checked) => {
+                                    if (!checked) {
+                                        dispatch({ type: 'aiSwitch/setIsAi', payload: false });
+                                    } else {
+                                        dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
+                                    }
+                                    setCaseIsWired(checked);
+                                }}
+                                size="small" />
                         </Item>
                     </Auth>
                 </Col>
@@ -409,6 +421,7 @@ const EditForm: FC<FormProp> = ({
                         <Col span={2} />
                         <Col span={20}>
                             <AiSwitch
+                                wired={caseIsWired}
                                 columnCount={6} />
                         </Col>
                         <Col span={2} />

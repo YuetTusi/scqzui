@@ -1,4 +1,5 @@
 import throttle from 'lodash/throttle';
+import { useDispatch } from 'dva';
 import { ipcRenderer, OpenDialogReturnValue } from 'electron';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesDown } from '@fortawesome/free-solid-svg-icons';
@@ -24,6 +25,7 @@ import { helper } from '@/utils/helper';
 import { AllowCaseName } from '@/utils/regex';
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { caseType } from '@/schema/case-type';
+import { AiOcrType } from '@/schema/case-info';
 import { AttachmentType } from '@/schema/bcp-entity';
 import parseAppData from '@/config/parse-app.yaml';
 import tokenAppData from '@/config/token-app.yaml';
@@ -34,7 +36,6 @@ import AiSwitch from '@/component/ai-switch';
 import { filterToParseApp } from '../helper';
 import { FormBox } from './styled/styled';
 import { FormProp } from './prop';
-
 
 const { Group } = Button;
 const { Search } = Input;
@@ -51,9 +52,11 @@ const { useBcp, useAi, caseText, fetchText, parseText } = helper.readConf()!;
  */
 const AddForm: FC<FormProp> = ({
     formRef, analysisAppState, sdCardState, hasReportState,
-    autoParseState, generateBcpState, isDelState,
+    autoParseState, generateBcpState, isDelState, wiredState,
     parseAppListState, tokenAppListState
 }) => {
+
+    const dispatch = useDispatch();
     const [wired, setWired] = useState<boolean>(false);
     const [isCheck, setIsCheck] = useState(false);
     const [parseAppSelectModalVisible, setParseAppSelectModalVisible] =
@@ -66,6 +69,7 @@ const AddForm: FC<FormProp> = ({
     const [hasReport, setHasReport] = hasReportState;
     const [autoParse, setAutoParse] = autoParseState;
     const [generateBcp, setGenerateBcp] = generateBcpState;
+    const [caseIsWired, setCaseIsWired] = wiredState;
     const [isDel, setIsDel] = isDelState;
     const [parseAppList, setParseAppList] = parseAppListState;
     const [tokenAppList, setTokenAppList] = tokenAppListState;
@@ -258,7 +262,17 @@ const AddForm: FC<FormProp> = ({
                             name="wired"
                             label="有线快采"
                             labelCol={{ span: 6 }}>
-                            <Switch size="small" />
+                            <Switch
+                                checked={caseIsWired}
+                                onChange={(checked) => {
+                                    if (!checked) {
+                                        dispatch({ type: 'aiSwitch/setIsAi', payload: false });
+                                    } else {
+                                        dispatch({ type: 'aiSwitch/setAiType', payload: AiOcrType.Close });
+                                    }
+                                    setCaseIsWired(checked);
+                                }}
+                                size="small" />
                         </Item>
                     </Auth>
                 </Col>
@@ -440,6 +454,7 @@ const AddForm: FC<FormProp> = ({
                         <Col span={2} />
                         <Col span={20}>
                             <AiSwitch
+                                wired={caseIsWired}
                                 columnCount={6} />
                         </Col>
                         <Col span={2} />
