@@ -124,9 +124,9 @@ class CaseInfo extends BaseEntity {
      */
     public aiOcrType: AiOcrType = AiOcrType.Close;
     /**
-     * 是否开启AI分析
+     * 是否开启了AI&OCR分析
      */
-    public isAi: boolean;
+    public isAiOcr: boolean;
     /**
      * 是否开启图片违规分析
      */
@@ -165,7 +165,7 @@ class CaseInfo extends BaseEntity {
         this.handleCaseNo = props.handleCaseNo ?? '';
         this.handleCaseType = props.handleCaseType ?? '';
         this.handleCaseName = props.handleCaseName ?? '';
-        this.isAi = props.isAi ?? false;
+        this.isAiOcr = props.isAi ?? false;
         // this.isPhotoAnalysis = props.isPhotoAnalysis ?? false;
         this.ruleFrom = props.ruleFrom ?? 0;
         this.ruleTo = props.ruleTo ?? 8;

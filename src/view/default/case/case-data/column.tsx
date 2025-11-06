@@ -113,15 +113,15 @@ export function getCaseColumns(dispatch: Dispatch, actionHandle: (type: ColumnAc
             render: (val: boolean) =>
                 val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
         },
-        // {
-        //     title: 'AI分析',
-        //     dataIndex: 'isAi',
-        //     key: 'isAi',
-        //     width: '70px',
-        //     align: 'center',
-        //     render: (val: boolean) =>
-        //         val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
-        // },
+        {
+            title: 'AI分析',
+            dataIndex: 'isAiOcr',
+            key: 'isAi',
+            width: '70px',
+            align: 'center',
+            render: (val: boolean) =>
+                val ? <CheckOutlined className="yes" /> : <CloseOutlined className="no" />
+        },
         // {
         //     title: '图片违规分析',
         //     dataIndex: 'isPhotoAnalysis',

@@ -103,6 +103,7 @@ const CaseAdd: FC<CaseAddProp> = () => {
             entity.sdCard = sdCard[0];
             entity.hasReport = hasReport[0];
             entity.m_bIsAutoParse = autoParse[0];
+            entity.wired = caseIsWired[0];
             entity.ruleFrom = values.ruleFrom;
             entity.ruleTo = values.ruleTo;
             entity.m_Applist = parseAppList[0] as ParseApp[];

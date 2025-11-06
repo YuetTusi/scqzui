@@ -11,7 +11,7 @@ import { helper } from "@/utils/helper";
 import UserHistory, { HistoryKeys } from '@/utils/user-history';
 import { PredictJson } from '@/component/ai-switch';
 import { TableName } from '@/schema/table-name';
-import { CaseInfo } from '@/schema/case-info';
+import { CaseInfo, AiOcrType } from '@/schema/case-info';
 import { AiSwitchState } from '../ai-switch';
 
 const predictTempAt = helper.IS_DEV
@@ -59,7 +59,10 @@ export default {
                 mkdirSync(casePath);
             }
             const predictTemp: PredictJson = yield call([helper, 'readJSONFile'], predictTempAt);
-            yield fork([helper, 'writeCaseJson'], casePath, entity);
+            yield fork([helper, 'writeCaseJson'], casePath, {
+                ...entity,
+                isAiOcr: entity.wired ? aiSwitch.isAi : aiSwitch.aiType !== AiOcrType.Close
+            });
             yield fork([helper, 'writeJSONfile'], join(casePath, 'predict.json'), {
                 ...predictTemp,
                 config: aiSwitch.data,

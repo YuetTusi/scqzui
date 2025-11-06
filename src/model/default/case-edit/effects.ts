@@ -7,7 +7,7 @@ import message from 'antd/lib/message';
 import { StateTree } from '@/type/model';
 import { TableName } from '@/schema/table-name';
 import { FetchData } from '@/schema/fetch-data';
-import { CaseInfo } from '@/schema/case-info';
+import { AiOcrType, CaseInfo } from '@/schema/case-info';
 import { getDb } from '@/utils/db';
 import logger from '@/utils/log';
 import { helper } from '@/utils/helper';
@@ -57,7 +57,8 @@ export default {
                 {
                     ...payload,
                     m_strCaseName: prev.m_strCaseName,
-                    aiType: aiSwitch.aiType
+                    aiType: aiSwitch.aiType,
+                    isAiOcr: payload.wired ? aiSwitch.isAi : aiSwitch.aiType !== AiOcrType.Close
                 }
             );
             yield put({
