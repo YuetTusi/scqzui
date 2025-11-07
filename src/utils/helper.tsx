@@ -201,8 +201,9 @@ const helper = {
     exePath: string
   ) {
     handle = spawn(exeName, [], {
-      cwd: exePath
+      cwd: exePath,
     });
+    handle.unref();
 
     handle.once('error', (error) => {
       console.log(`${exeName}启动失败, ${error.message}`);
@@ -236,6 +237,7 @@ const helper = {
       cwd: exePath,
       ...options,
     });
+    handle.unref();
 
     handle.once('error', (error) => {
       console.log('error', error);
@@ -269,6 +271,7 @@ const helper = {
       cwd: exePath,
       ...options,
     });
+    handle.unref();
 
     handle.once('exit', () => {
       handle = null;

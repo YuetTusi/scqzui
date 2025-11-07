@@ -103,7 +103,7 @@ ipcRenderer.on('closure', () => {
 
     if (fetchProcess !== null) {
         treeKill(fetchProcess.pid!, 'SIGKILL');
-        fetchProcess.kill(-fetchProcess.pid!);
+        // fetchProcess.kill(-fetchProcess.pid!);
         fetchProcess = null;
     }
     if (quickFetchProcess !== null) {
