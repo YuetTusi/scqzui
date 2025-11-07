@@ -280,8 +280,8 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
             entity.imei2 = values.imei2 ?? '';
             entity.meid = values.meid ?? '';
 
-            if (useBcp && device!.system === DeviceSystem.Android && entity.imei1 === '' && entity.imei2 === '' && entity.meid === '') {
-                //如果有BCP功能，IMEI/IMID必须填写一项
+            if (device!.system === DeviceSystem.Android && entity.imei1 === '' && entity.imei2 === '' && entity.meid === '') {
+                // 安卓系统 IMEI/IMID必须填写一项
                 Modal.warn({
                     title: '提示',
                     content: 'IMEI1 IMEI2 IMID 请填写其中一个',
@@ -317,12 +317,10 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                     });
                 } else {
                     setSelectedApps([]);
-                    // resetValue();
                     saveHandle!(entity);
                 }
             } catch (error) {
                 setSelectedApps([]);
-                // resetValue();
                 saveHandle!(entity);
                 log.error(`读取磁盘信息失败:${error.message}`);
             }
