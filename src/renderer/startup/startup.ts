@@ -1,6 +1,7 @@
 import { join } from 'path';
 import { ChildProcessWithoutNullStreams } from 'child_process';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
+import treeKill from 'tree-kill';
 import { Conf } from '@/type/model';
 import { helper } from '@/utils/helper';
 
@@ -101,31 +102,33 @@ ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
 ipcRenderer.on('closure', () => {
 
     if (fetchProcess !== null) {
-        (fetchProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');
+        treeKill(fetchProcess.pid!, 'SIGKILL');
+        fetchProcess.kill(-fetchProcess.pid!);
         fetchProcess = null;
     }
     if (quickFetchProcess !== null) {
-        (quickFetchProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');	//杀掉快速点验进程
+        treeKill(quickFetchProcess.pid!, 'SIGKILL');
+        // quickFetchProcess.kill(-quickFetchProcess.pid!);	//杀掉快速点验进程
         quickFetchProcess = null;
     }
-    if (fetchProcess !== null) {
-        (fetchProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');
-        fetchProcess = null;
-    }
     if (parseProcess !== null) {
-        (parseProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');
+        treeKill(parseProcess.pid!, 'SIGKILL');
+        // parseProcess.kill(-parseProcess.pid!);
         parseProcess = null;
     }
     if (imageOcrProcess !== null) {
-        (imageOcrProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');
+        treeKill(imageOcrProcess.pid!, 'SIGKILL');
+        // imageOcrProcess.kill(-imageOcrProcess.pid!);
         imageOcrProcess = null;
     }
     if (readerProcess !== null) {
-        (readerProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');
-        imageOcrProcess = null;
+        treeKill(readerProcess.pid!, 'SIGKILL');
+        // readerProcess.kill(-readerProcess.pid!);
+        readerProcess = null;
     }
     if (transferFileProcess !== null) {
-        (transferFileProcess as ChildProcessWithoutNullStreams).kill('SIGKILL');
+        treeKill(transferFileProcess.pid!, 'SIGKILL');
+        // transferFileProcess.kill(-transferFileProcess.pid!);
         transferFileProcess = null;
     }
 });
