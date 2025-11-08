@@ -14,10 +14,10 @@ let parseProcess: ChildProcessWithoutNullStreams | null = null; //解析进程
 let yunProcess: ChildProcessWithoutNullStreams | null = null; //云取服务进程
 let appQueryProcess: ChildProcessWithoutNullStreams | null = null; //应用痕迹进程
 let quickFetchProcess: ChildProcessWithoutNullStreams | null = null; //快速点验进程
-let imageOcrProcess: ChildProcessWithoutNullStreams | undefined = undefined; //OCR进程
-let readerProcess: ChildProcessWithoutNullStreams | undefined = undefined; //reader进程
-let aiManagerProcess: ChildProcessWithoutNullStreams | undefined = undefined;//aiManager进程
-let transferFileProcess: ChildProcessWithoutNullStreams | undefined = undefined;
+let imageOcrProcess: any = null; //OCR进程
+let readerProcess: any = null; //reader进程
+let aiManagerProcess: any = null;//aiManager进程
+let transferFileProcess: any = null;
 
 ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
 
@@ -119,25 +119,25 @@ ipcRenderer.on('closure', () => {
             log.info(`解析进程结束失败,${error.message}`);
         }
     }
-    if (imageOcrProcess !== undefined) {
-        treeKill(imageOcrProcess.pid!, 'SIGKILL');
+    if (imageOcrProcess !== null) {
+        (imageOcrProcess as any).stop();
         log.info(`ImageOcr进程结束  pid:${imageOcrProcess.pid}`);
-        imageOcrProcess = undefined;
+        imageOcrProcess = null;
     }
-    if (aiManagerProcess !== undefined) {
-        treeKill(aiManagerProcess.pid!, 'SIGKILL');
+    if (aiManagerProcess !== null) {
+        (aiManagerProcess as any).stop();
         log.info(`aimanager进程结束  pid:${aiManagerProcess.pid}`);
-        aiManagerProcess = undefined;
+        aiManagerProcess = null;
     }
-    if (readerProcess !== undefined) {
-        treeKill(readerProcess.pid!, 'SIGKILL');
+    if (readerProcess !== null) {
+        (readerProcess as any).stop();
         log.info(`reader进程结束 pid:${readerProcess.pid}`);
-        readerProcess = undefined;
+        readerProcess = null;
     }
-    if (transferFileProcess !== undefined) {
-        treeKill(transferFileProcess.pid!, 'SIGKILL');
+    if (transferFileProcess !== null) {
+        (transferFileProcess as any).stop();
         log.info(`TransferFile进程结束 pid:${transferFileProcess.pid}`);
-        transferFileProcess = undefined;
+        transferFileProcess = null;
     }
     if (yunProcess !== null) {
         treeKill(yunProcess.pid!, 'SIGKILL');

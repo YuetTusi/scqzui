@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import crypto from 'crypto';
-import { dirname, basename, join } from 'path';
+import { dirname, join } from 'path';
 import {
   access,
   accessSync,
@@ -257,32 +257,64 @@ const helper = {
     exeParams: any[] = [],
     options: any = {}
   ) {
-
     try {
       accessSync(join(exePath, exeName));
-    } catch (error) {
-      console.log(error.message);
-      return;
+    } catch (err) {
+      console.log(err.message);
+      return null;
     }
 
-    let handle = spawn(join(exePath, exeName), exeParams, {
-      cwd: exePath,
-      ...options,
-    });
-    handle.unref();
+    // 外部对象，用来统一管理当前活跃 handle
+    const controller: {
+      _currentHandle: ChildProcessWithoutNullStreams | null,
+      _manualStop: boolean,
+      stop: () => void
+    } = {
+      _currentHandle: null,
+      _manualStop: false,
+      stop() {
+        this._manualStop = true;
+        if (this._currentHandle) {
+          try {
+            this._currentHandle.kill('SIGKILL');
+          } catch (e) {
+            console.log('停止失败:', e);
+          }
+        }
+      },
+    };
 
-    handle.once('exit', () => {
-      this.runProcContinue(exeName, exePath, exeParams, options);
-    });
-    handle.once('error', (error) => {
-      console.log(error);
-      console.log(`${exeName}启动失败`);
-      if (!isDev) {
-        log.error(`${exeName}启动失败,exePath:${exePath}`);
-      }
-      handle = this.runProcContinue(exeName, exePath, exeParams, options)!;
-    });
-    return handle;
+    function startProcess() {
+      if (controller._manualStop) return null;
+
+      const handle = spawn(join(exePath, exeName), exeParams, {
+        cwd: exePath,
+        ...options,
+      });
+
+      handle.unref();
+      controller._currentHandle = handle;
+
+      handle.once('exit', (code, signal) => {
+        if (controller._manualStop) {
+          console.log(`${exeName} 手动停止，不再重启`);
+          return;
+        }
+        console.log(`${exeName} 异常退出，code=${code}, signal=${signal}，准备重启`);
+        startProcess(); // 重启
+      });
+
+      handle.once('error', (err) => {
+        console.log(`${exeName} 启动失败:`, err);
+        startProcess(); // 出错也尝试重启
+      });
+
+      return handle;
+    }
+
+    startProcess();
+
+    return controller; // 外部只持有 controller
   },
   async runTask(exePath: string, params: any[] = []): Promise<number | null> {
     const cwd = dirname(exePath);
