@@ -1,7 +1,6 @@
 import { execSync } from 'child_process';
-import net from 'net';
 import crypto from 'crypto';
-import { dirname, join } from 'path';
+import { dirname, basename, join } from 'path';
 import {
   access,
   accessSync,
@@ -11,12 +10,12 @@ import {
   readFile,
   readdir,
   writeFile,
+  existsSync,
 } from 'fs';
 import {
   readFile as readFilePromise,
   writeFile as writeFilePromise,
 } from 'fs/promises';
-import { ipcRenderer } from 'electron';
 import cpy from 'cpy';
 import { v4 } from 'uuid';
 import yaml from 'js-yaml';
@@ -31,12 +30,13 @@ import {
   execFile,
   spawn,
   ChildProcessWithoutNullStreams,
+  ChildProcess
 } from 'child_process';
+import treeKill from 'tree-kill';
 import React from 'react';
 import Select from 'antd/lib/select';
 import log from './log';
 import { Conf } from '../type/model';
-import { Predict, PredictJson } from '../component/ai-switch/prop';
 import { BcpEntity } from '../schema/bcp-entity';
 import { AppCategory } from '../schema/app-config';
 import { TableName } from '../schema/table-name';
@@ -192,33 +192,32 @@ const helper = {
       );
     });
   },
-  /**
-   * 启动采集进程
-   */
-  runFetch(
-    handle: ChildProcessWithoutNullStreams | null,
-    exeName: string,
-    exePath: string
-  ) {
-    handle = spawn(exeName, [], {
-      cwd: exePath,
-    });
-    handle.unref();
+  runService(serviceName: string, servicePath: string, params: any[] = [], options: Record<string, any> = {}) {
 
+    const exist = existsSync(serviceName);
+
+    if (!exist) {
+      return null;
+    }
+
+    const handle = spawn(serviceName, params, {
+      cwd: servicePath,
+      ...options,
+    });
+    // handle.unref();
     handle.once('error', (error) => {
-      console.log(`${exeName}启动失败, ${error.message}`);
+      console.log('error', error);
+      console.log(`${serviceName}启动失败`);
       if (!isDev) {
-        log.error(`${exeName}启动失败,exePath:${exePath}`);
+        log.error(`${serviceName}启动失败,服务路径:${servicePath}`);
       }
-      handle = null;
     });
 
-    handle.once('close', (_: number) => {
-      if (!isDev) {
-        // win.webContents.send('dog-warn');
-        ipcRenderer.send('dog-warn');
-      }
+    handle.once('close', (code: number) => {
+      log.info(`服务${serviceName}关闭(退出码:${code})`);
     });
+
+    return handle;
   },
   /**
    * 启动进程
@@ -253,7 +252,6 @@ const helper = {
     });
   },
   runProcContinue(
-    handle: ChildProcessWithoutNullStreams | null,
     exeName: string,
     exePath: string,
     exeParams: any[] = [],
@@ -267,15 +265,14 @@ const helper = {
       return;
     }
 
-    handle = spawn(join(exePath, exeName), exeParams, {
+    let handle = spawn(join(exePath, exeName), exeParams, {
       cwd: exePath,
       ...options,
     });
     handle.unref();
 
     handle.once('exit', () => {
-      handle = null;
-      this.runProcContinue(handle, exeName, exePath, exeParams, options);
+      this.runProcContinue(exeName, exePath, exeParams, options);
     });
     handle.once('error', (error) => {
       console.log(error);
@@ -283,9 +280,9 @@ const helper = {
       if (!isDev) {
         log.error(`${exeName}启动失败,exePath:${exePath}`);
       }
-      handle = null;
-      this.runProcContinue(handle, exeName, exePath, exeParams, options);
+      handle = this.runProcContinue(exeName, exePath, exeParams, options)!;
     });
+    return handle;
   },
   async runTask(exePath: string, params: any[] = []): Promise<number | null> {
     const cwd = dirname(exePath);

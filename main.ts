@@ -363,21 +363,16 @@ if (!app.requestSingleInstanceLock()) {
     });
 }
 
-// ipcMain.on('startup', (_: IpcMainEvent, conf: Conf) => {
-//     if (startupWindow) {
-//         startupWindow.webContents.send('startup', conf);
-//     }
-// })
+ipcMain.on('closed', () => {
+    exitApp(platform);
+});
 
 //退出应用
 ipcMain.on('do-close', (_: IpcMainEvent) => {
-    //mainWindow通知退出程序
-
+    //通知startup去结束进程
     if (startupWindow) {
         startupWindow.webContents.send('closure');
     }
-
-    exitApp(platform);
 });
 
 /**
