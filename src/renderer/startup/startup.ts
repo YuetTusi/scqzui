@@ -97,7 +97,7 @@ ipcRenderer.on('closure', () => {
             log.info(`采集进程结束(pid:${fetchProcess.pid})`);
             fetchProcess = null;
         } catch (error) {
-            log.info(`采集进程结束失败,${error.message}`);
+            log.error(`采集进程结束失败,${error.message}`);
         }
     }
     if (quickFetchProcess !== null) {
@@ -106,7 +106,7 @@ ipcRenderer.on('closure', () => {
             log.info(`快速点验进程结束(pid:${quickFetchProcess.pid})`);
             quickFetchProcess = null;
         } catch (error) {
-            log.info(`快速点验进程结束失败,${error.message}`);
+            log.error(`快速点验进程结束失败,${error.message}`);
         }
     }
 
@@ -116,38 +116,62 @@ ipcRenderer.on('closure', () => {
             log.info(`解析进程结束(pid:${parseProcess.pid})`);
             parseProcess = null;
         } catch (error) {
-            log.info(`解析进程结束失败,${error.message}`);
+            log.error(`解析进程结束失败,${error.message}`);
         }
     }
     if (imageOcrProcess !== null) {
-        (imageOcrProcess as any).stop();
-        log.info(`ImageOcr进程结束  pid:${imageOcrProcess.pid}`);
-        imageOcrProcess = null;
+        try {
+            (imageOcrProcess as any).stop();
+            log.info(`ImageOcr进程结束  pid:${imageOcrProcess.pid}`);
+            imageOcrProcess = null;
+        } catch (error) {
+            log.error(`ImageOcr结束失败,${error.message}`);
+        }
     }
     if (aiManagerProcess !== null) {
-        (aiManagerProcess as any).stop();
-        log.info(`aimanager进程结束  pid:${aiManagerProcess.pid}`);
-        aiManagerProcess = null;
+        try {
+            (aiManagerProcess as any).stop();
+            log.info(`aimanager进程结束  pid:${aiManagerProcess.pid}`);
+            aiManagerProcess = null;
+        } catch (error) {
+            log.error(`aimanager结束失败,${error.message}`);
+        }
     }
     if (readerProcess !== null) {
-        (readerProcess as any).stop();
-        log.info(`reader进程结束 pid:${readerProcess.pid}`);
-        readerProcess = null;
+        try {
+            (readerProcess as any).stop();
+            log.info(`reader进程结束 pid:${readerProcess.pid}`);
+            readerProcess = null;
+        } catch (error) {
+            log.error(`reader结束失败,${error.message}`);
+        }
     }
     if (transferFileProcess !== null) {
-        (transferFileProcess as any).stop();
-        log.info(`TransferFile进程结束 pid:${transferFileProcess.pid}`);
-        transferFileProcess = null;
+        try {
+            (transferFileProcess as any).stop();
+            log.info(`TransferFile进程结束 pid:${transferFileProcess.pid}`);
+            transferFileProcess = null;
+        } catch (error) {
+            log.error(`TransferFile结束失败,${error.message}`);
+        }
     }
     if (yunProcess !== null) {
-        treeKill(yunProcess.pid!, 'SIGKILL');
-        log.info(`云取进程KILL(pid:${yunProcess.pid})`);
-        yunProcess = null;
+        try {
+            treeKill(yunProcess.pid!, 'SIGKILL');
+            log.info(`云取进程结束(pid:${yunProcess.pid})`);
+            yunProcess = null;
+        } catch (error) {
+            log.error(`云取进程结束失败,${error.message}`);
+        }
     }
     if (appQueryProcess !== null) {
-        treeKill(appQueryProcess.pid!, 'SIGKILL');
-        log.info(`痕迹查询进程KILL(pid:${appQueryProcess.pid})`);
-        appQueryProcess = null;
+        try {
+            treeKill(appQueryProcess.pid!, 'SIGKILL');
+            log.info(`痕迹查询进程结束(pid:${appQueryProcess.pid})`);
+            appQueryProcess = null;
+        } catch (error) {
+            log.error(`痕迹查询结束失败,${error.message}`);
+        }
     }
 
     ipcRenderer.send('closed');
