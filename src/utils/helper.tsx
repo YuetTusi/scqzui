@@ -276,7 +276,8 @@ const helper = {
         this._manualStop = true;
         if (this._currentHandle) {
           try {
-            this._currentHandle.kill('SIGKILL');
+            treeKill(this._currentHandle.pid!);
+            // this._currentHandle.kill('SIGKILL');
           } catch (e) {
             console.log('停止失败:', e);
           }
