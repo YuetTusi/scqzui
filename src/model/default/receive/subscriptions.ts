@@ -13,7 +13,7 @@ import {
     deviceIn, deviceChange, deviceOut, fetchProgress, tipMsg, extraMsg,
     smsMsg, parseCurinfo, parseEnd, humanVerify, traceLogin, limitResult,
     appRecFinish, fetchPercent, importErr, backDatapass, checkFinishToParse,
-    fetchState, setIMEIOrIMID, violationMsg, fetchVerify
+    fetchState, setIMEIOrIMID, violationMsg, fetchVerify, interrupt
 } from './listener';
 
 const { Fetch, Parse, Trace, Error } = SocketType;
@@ -141,6 +141,9 @@ export default {
                 case CommandType.ViolationMsg:
                     console.log(`接收清除违规消息:${JSON.stringify(command.msg)}`);
                     violationMsg(command, dispatch);
+                    break;
+                case CommandType.Interrupt:
+                    interrupt(command, dispatch);
                     break;
                 default:
                     console.log('未知命令:', command.cmd);

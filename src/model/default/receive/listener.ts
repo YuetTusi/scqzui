@@ -667,3 +667,26 @@ export function violationMsg({ msg }: Command<{
     }
     dispatch({ type: 'cleanViolationModal/setMessage', payload: message });
 }
+
+/**
+ * 中断提示
+ */
+export function interrupt({ msg }: Command<{
+    title: string,
+    content: string
+}>, _: Dispatch<any>) {
+
+    const { title, content } = msg;
+
+    Modal.destroyAll();
+    Modal.warn({
+        onOk() {
+            ipcRenderer.send('do-close');
+        },
+        content,
+        title: title ?? '提示',
+        closable: false,
+        centered: true,
+        okText: '退出'
+    });
+}

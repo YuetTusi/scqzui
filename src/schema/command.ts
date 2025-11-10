@@ -238,6 +238,10 @@ enum CommandType {
      * 接收清除违规数据消息（Fetch）
      */
     ViolationMsg = 'violation_msg',
+    /**
+     * 中断
+     */
+    Interrupt = 'interrupt'
 }
 
 /**
