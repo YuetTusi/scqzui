@@ -11,6 +11,7 @@ useLogin: false
 useCloudSearch: true
 useWebAction: true
 useClearIllegal: true
+useIMEI: false
 hideCad: true
 caseText: 案件
 fetchText: 取证

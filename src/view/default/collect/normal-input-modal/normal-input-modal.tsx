@@ -45,7 +45,7 @@ import { Instruction } from '../instruction';
 import { ExtractionWarnBox, NormalInputModalBox } from './styled/style';
 import { Prop, FormValue } from './prop';
 
-const { caseText, devText, fetchText, parseText, useBcp } = helper.readConf()!;
+const { caseText, devText, fetchText, parseText, useIMEI } = helper.readConf()!;
 const { Option } = Select;
 const { Item, useForm } = Form;
 
@@ -280,7 +280,13 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
             entity.imei2 = values.imei2 ?? '';
             entity.meid = values.meid ?? '';
 
-            if (device!.system === DeviceSystem.Android && entity.imei1 === '' && entity.imei2 === '' && entity.meid === '') {
+            if (
+                useIMEI
+                && device!.system === DeviceSystem.Android
+                && entity.imei1 === ''
+                && entity.imei2 === ''
+                && entity.meid === ''
+            ) {
                 // 安卓系统 IMEI/IMID必须填写一项
                 Modal.warn({
                     title: '提示',
@@ -504,57 +510,61 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                         </Item>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span={12}>
-                        <Item
-                            name="imei1"
-                            label="IMEI1"
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}>
-                            <Input
-                                placeholder="15位数字"
-                                maxLength={15} />
-                        </Item>
-                    </Col>
-                    <Col span={12}>
-                        <Item
-                            name="imei2"
-                            label="IMEI2"
-                            labelCol={{ span: 6 }}
-                            wrapperCol={{ span: 14 }}>
-                            <Input
-                                placeholder="15位数字"
-                                maxLength={15} />
-                        </Item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
-                        <Item
-                            name="meid"
-                            label="MEID"
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}>
-                            <Input
-                                placeholder="15位数字"
-                                maxLength={15} />
-                        </Item>
-                    </Col>
-                    <Col span={12}>
-                        <Button
-                            onClick={onIMEIOrMEIDSearch}
-                            size="small"
-                            type="primary"
-                            style={{
-                                display: device?.system === DeviceSystem.IOS ? 'none' : 'block',
-                                position: 'relative',
-                                top: '4px'
-                            }}>
-                            <SearchOutlined />
-                            <span>尝试获取IMEI/MEID</span>
-                        </Button>
-                    </Col>
-                </Row>
+                <Auth deny={!useIMEI}>
+                    <Row>
+                        <Col span={12}>
+                            <Item
+                                name="imei1"
+                                label="IMEI1"
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}>
+                                <Input
+                                    placeholder="15位数字"
+                                    maxLength={15} />
+                            </Item>
+                        </Col>
+                        <Col span={12}>
+                            <Item
+                                name="imei2"
+                                label="IMEI2"
+                                labelCol={{ span: 6 }}
+                                wrapperCol={{ span: 14 }}>
+                                <Input
+                                    placeholder="15位数字"
+                                    maxLength={15} />
+                            </Item>
+                        </Col>
+                    </Row>
+                </Auth>
+                <Auth deny={!useIMEI}>
+                    <Row>
+                        <Col span={12}>
+                            <Item
+                                name="meid"
+                                label="MEID"
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}>
+                                <Input
+                                    placeholder="15位数字"
+                                    maxLength={15} />
+                            </Item>
+                        </Col>
+                        <Col span={12}>
+                            <Button
+                                onClick={onIMEIOrMEIDSearch}
+                                size="small"
+                                type="primary"
+                                style={{
+                                    display: device?.system === DeviceSystem.IOS ? 'none' : 'block',
+                                    position: 'relative',
+                                    top: '4px'
+                                }}>
+                                <SearchOutlined />
+                                <span>尝试获取IMEI/MEID</span>
+                            </Button>
+                        </Col>
+                    </Row>
+                </Auth>
                 <Row>
                     <Col span={12}>
                         <Item
@@ -586,22 +596,6 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                         </Col>
                     </Auth>
                 </Row>
-                {/* <Auth deny={!isWired}>
-                    <Row>
-                        <Col span={12}>
-                            <Item
-                                name="wired"
-                                label="有线快速采集"
-                                valuePropName="checked"
-                                initialValue={true}
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}>
-                                <Checkbox />
-                            </Item>
-                        </Col>
-                        <Col span={12} />
-                    </Row>
-                </Auth> */}
             </Form>
         </div >;
     };

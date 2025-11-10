@@ -160,6 +160,10 @@ interface Conf {
 	 */
 	useClearIllegal: boolean,
 	/**
+	 * 是否使用IMEI/MEID
+	 */
+	useIMEI: boolean,
+	/**
 	 * 是否隐藏报告CAD节点
 	 */
 	hideCad: boolean,
