@@ -239,6 +239,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
     const resetValue = () => {
         currentCase.current = undefined;
         formRef.resetFields();
+        setSelectedApps([]);
     };
 
     /**
@@ -307,6 +308,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                         onOk() {
                             log.warn(`磁盘空间不足, ${disk}剩余: ${round(free, 2)}GB`);
                             saveHandle!(entity);
+                            resetValue();
                         },
                         title: '磁盘空间不足',
                         content: <Instruction>
@@ -324,6 +326,7 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                 } else {
                     setSelectedApps([]);
                     saveHandle!(entity);
+                    resetValue();
                 }
             } catch (error) {
                 setSelectedApps([]);
@@ -605,7 +608,6 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
             open={open}
             onCancel={() => {
                 resetValue();
-                setSelectedApps([]);
                 dispatch({ type: 'normalInputModal/setFetchAllow', payload: BeforeFetchStatus.Unverified });
                 cancelHandle!();
             }}
@@ -614,7 +616,6 @@ const NormalInputModal: FC<Prop> = ({ saveHandle, cancelHandle }) => {
                     type="default"
                     key="B_0"
                     onClick={() => {
-                        setSelectedApps([]);
                         resetValue();
                         dispatch({ type: 'normalInputModal/setFetchAllow', payload: BeforeFetchStatus.Unverified });
                         cancelHandle!();
