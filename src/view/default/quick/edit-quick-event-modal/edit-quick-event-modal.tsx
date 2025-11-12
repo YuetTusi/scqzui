@@ -19,13 +19,11 @@ import { StateTree } from '@/type/model';
 import { helper } from '@/utils/helper';
 import { AllowCaseName } from '@/utils/regex';
 import { QuickEvent } from '@/schema/quick-event';
-import { AiOcrType } from '@/schema/case-info';
 import { AiSwitchState } from '@/model/default/ai-switch';
 import { EditQuickEventModalState } from '@/model/default/edit-quick-event-modal';
 import { Auth } from '@/component/auth';
 import AiSwitch from '@/component/ai-switch';
 import { CategoryBox, ItemBox } from './styled/box';
-
 
 const { caseText, fetchText, useAi } = helper.readConf()!;
 const { Item, useForm } = Form;
@@ -58,14 +56,6 @@ const EditQuickEventModal: FC<EditModalProp> = () => {
     useEffect(() => {
         console.log(aiType);
     }, [aiType]);
-
-    useEffect(() => {
-        setTimeout(() => {
-            if (eventNameRef.current) {
-                eventNameRef.current.focus();
-            }
-        }, 0);
-    }, [eventNameRef.current]);
 
     useEffect(() => {
         const { setFieldsValue } = formRef;
