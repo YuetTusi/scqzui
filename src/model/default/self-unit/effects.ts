@@ -52,6 +52,7 @@ export default {
         message.destroy();
         try {
             yield call([db, 'insert'], payload);
+            log.info(`自定义单位保存成功(self-unit表):`, JSON.stringify(payload));
             message.success('保存成功');
             yield put({ type: 'query', payload: { pageIndex: 1, pageSize: helper.PAGE_SIZE, condition: {} } });
         } catch (error) {

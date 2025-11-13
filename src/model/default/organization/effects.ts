@@ -38,6 +38,7 @@ export default {
                         dstUnitCode: undefined
                     }
                 });
+                log.info(`查询单位设置信息为空 ${TableName.Organization}表记录为0`);
             } else {
                 yield put({
                     type: 'setUnit', payload: {
@@ -55,6 +56,7 @@ export default {
                         dstUnitCode: next[0].dstUnitCode
                     }
                 });
+                log.info(`查询单位设置信息 ${TableName.Organization}表: ${JSON.stringify(next)}`);
             }
         } catch (error) {
             log.error(`@model/default/organization/*query: ${error.message}`);
