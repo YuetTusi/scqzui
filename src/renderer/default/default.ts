@@ -108,8 +108,6 @@ app.use(immer());
 app.use({
     // onAction: reduxLogger, //若想查看仓库日志，打开此注释
     onError({ message, stack }: Error) {
-        messageBox.destroy();
-        messageBox.error(message);
         log.error({ message: `全局异常 @src/index.tsx ${stack}` });
         console.log(`全局异常 @src/index.tsx:${message}`);
     }
