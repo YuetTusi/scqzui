@@ -29,7 +29,7 @@ import { AiOcrType } from '@/schema/case-info';
 import { AttachmentType } from '@/schema/bcp-entity';
 import parseAppData from '@/config/parse-app.yaml';
 import tokenAppData from '@/config/token-app.yaml';
-import Auth from '@/component/auth';
+import { Auth } from '@/component/auth';
 import { Split } from '@/component/style-tool';
 import { AppSelectModal } from '@/component/dialog';
 import AiSwitch from '@/component/ai-switch';
@@ -44,7 +44,7 @@ const formItemLayout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 18 }
 };
-const { useBcp, useAi, caseText, fetchText, parseText } = helper.readConf()!;
+const { useBcp, caseText, fetchText, parseText } = helper.readConf()!;
 
 
 /**
@@ -444,23 +444,21 @@ const AddForm: FC<FormProp> = ({
                     </Col>
                 </Row>
             </div>
-            <Auth deny={!useAi}>
-                <div className="cate">
-                    <div className="cate-bar">
-                        <FontAwesomeIcon icon={faAnglesDown} />
-                        <span>AI信息</span>
-                    </div>
-                    <Row>
-                        <Col span={2} />
-                        <Col span={20}>
-                            <AiSwitch
-                                wired={caseIsWired}
-                                columnCount={6} />
-                        </Col>
-                        <Col span={2} />
-                    </Row>
+            <div className="cate">
+                <div className="cate-bar">
+                    <FontAwesomeIcon icon={faAnglesDown} />
+                    <span>AI & OCR 信息</span>
                 </div>
-            </Auth>
+                <Row>
+                    <Col span={2} />
+                    <Col span={20}>
+                        <AiSwitch
+                            wired={caseIsWired}
+                            columnCount={6} />
+                    </Col>
+                    <Col span={2} />
+                </Row>
+            </div>
         </Form>
         {/* 解析App选择框 */}
         <AppSelectModal

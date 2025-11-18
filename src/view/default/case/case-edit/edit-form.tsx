@@ -410,24 +410,22 @@ const EditForm: FC<FormProp> = ({
                     </Col>
                 </Row>
             </div>
-            <Auth deny={!useAi}>
-                <div
-                    className="cate">
-                    <div className="cate-bar">
-                        <FontAwesomeIcon icon={faAnglesDown} />
-                        <span>AI信息</span>
-                    </div>
-                    <Row>
-                        <Col span={2} />
-                        <Col span={20}>
-                            <AiSwitch
-                                wired={caseIsWired}
-                                columnCount={6} />
-                        </Col>
-                        <Col span={2} />
-                    </Row>
+            <div
+                className="cate">
+                <div className="cate-bar">
+                    <FontAwesomeIcon icon={faAnglesDown} />
+                    <span>AI & OCR 信息</span>
                 </div>
-            </Auth>
+                <Row>
+                    <Col span={2} />
+                    <Col span={20}>
+                        <AiSwitch
+                            wired={caseIsWired}
+                            columnCount={6} />
+                    </Col>
+                    <Col span={2} />
+                </Row>
+            </div>
         </Form>
 
         {/* 解析App选择框 */}

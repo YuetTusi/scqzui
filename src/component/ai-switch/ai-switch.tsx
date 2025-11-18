@@ -1,6 +1,6 @@
 import chunk from 'lodash/chunk';
 import { join } from 'path';
-import React, { FC, useEffect, FocusEvent, useState } from 'react';
+import React, { FC, useEffect, FocusEvent } from 'react';
 import { useDispatch, useSelector } from 'dva';
 import Col from 'antd/lib/col';
 import Row from 'antd/lib/row';
@@ -9,6 +9,7 @@ import Select from 'antd/lib/select';
 import Switch from 'antd/lib/switch';
 import Tooltip from 'antd/lib/tooltip';
 import { useDestroy } from '@/hook';
+import { Auth } from '@/component/auth';
 import { helper } from '@/utils/helper';
 import { StateTree } from '@/type/model';
 import { AiSwitchState } from '@/model/default/ai-switch';
@@ -17,6 +18,7 @@ import { Predict, AiSwitchProp, PredictJson } from './prop';
 
 const cwd = process.cwd();
 const isDev = process.env['NODE_ENV'] === 'development';
+const { useAi } = helper.readConf()!;
 
 /**
  * 禁用相似度
@@ -35,12 +37,16 @@ const disabledSimilar = (wired: boolean, isAi: boolean, aiType: AiOcrType) => {
 /**
  * AI&OCR下拉选项
  */
-const getOptions = () => [
-    { value: AiOcrType.Close, label: '关闭' },
-    { value: AiOcrType.GlobalOcr, label: 'OCR图片关键字识别' },
-    { value: AiOcrType.AiOcr, label: 'AI图片分类' },
-    { value: AiOcrType.GlobalAiOcr, label: 'AI图片分类和OCR图片关键字识别' }
-];
+const getOptions = (useAi: boolean) =>
+    useAi ? [
+        { value: AiOcrType.Close, label: '关闭' },
+        { value: AiOcrType.GlobalOcr, label: 'OCR图片关键字识别' },
+        { value: AiOcrType.AiOcr, label: 'AI图片分类' },
+        { value: AiOcrType.GlobalAiOcr, label: 'AI图片分类和OCR图片关键字识别' }
+    ] : [
+        { value: AiOcrType.Close, label: '关闭' },
+        { value: AiOcrType.GlobalOcr, label: 'OCR图片关键字识别' }
+    ];
 
 /**
  * AI分析开关组件
@@ -131,6 +137,10 @@ const AiSwitch: FC<AiSwitchProp> = ({
 
     const renderSwitch = () => {
 
+        if (!useAi) {
+            return null;
+        }
+
         if (data.length === 0 || wired) {
             return null;
         }
@@ -176,7 +186,7 @@ const AiSwitch: FC<AiSwitchProp> = ({
                 <Select
                     value={aiType}
                     onChange={onAiOcrTypeChange}
-                    options={getOptions()}
+                    options={getOptions(useAi)}
                     style={{ width: '280px' }} />
             </Col>
             <Col flex="none" style={{ display: !wired ? 'none' : 'block' }}>
@@ -189,21 +199,23 @@ const AiSwitch: FC<AiSwitchProp> = ({
                     size="small"
                 />
             </Col>
-            <Col flex="none" style={{ marginLeft: '40px' }}>
-                <label>设定阈值：</label>
-            </Col>
-            <Col flex="auto">
-                <InputNumber
-                    onChange={onSimilarChange}
-                    onBlur={onSimilarBlur}
-                    value={similarity}
-                    disabled={disabledSimilar(wired, isAi, aiType)}
-                    defaultValue={0}
-                    min={0}
-                    max={100}
-                    addonAfter="%"
-                    style={{ width: '150px' }} />
-            </Col>
+            <Auth deny={!useAi}>
+                <Col flex="none" style={{ marginLeft: '40px' }}>
+                    <label>设定阈值：</label>
+                </Col>
+                <Col flex="auto">
+                    <InputNumber
+                        onChange={onSimilarChange}
+                        onBlur={onSimilarBlur}
+                        value={similarity}
+                        disabled={disabledSimilar(wired, isAi, aiType)}
+                        defaultValue={0}
+                        min={0}
+                        max={100}
+                        addonAfter="%"
+                        style={{ width: '150px' }} />
+                </Col>
+            </Auth>
         </Row>
         {renderSwitch()}
     </>
