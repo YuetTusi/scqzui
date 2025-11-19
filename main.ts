@@ -370,6 +370,9 @@ ipcMain.on('closed', () => {
 //退出应用
 ipcMain.on('do-close', (_: IpcMainEvent) => {
     //通知startup去结束进程
+    if (mainWindow) {
+        mainWindow.hide();
+    }
     if (startupWindow) {
         startupWindow.webContents.send('closure');
     }

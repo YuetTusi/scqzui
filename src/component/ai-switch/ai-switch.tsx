@@ -37,13 +37,14 @@ const disabledSimilar = (wired: boolean, isAi: boolean, aiType: AiOcrType) => {
 /**
  * AI&OCR下拉选项
  */
-const getOptions = (useAi: boolean) =>
-    useAi ? [
+const getOptions = (useAi: boolean) => useAi
+    ? [
         { value: AiOcrType.Close, label: '关闭' },
         { value: AiOcrType.GlobalOcr, label: 'OCR图片关键字识别' },
         { value: AiOcrType.AiOcr, label: 'AI图片分类' },
         { value: AiOcrType.GlobalAiOcr, label: 'AI图片分类和OCR图片关键字识别' }
-    ] : [
+    ]
+    : [
         { value: AiOcrType.Close, label: '关闭' },
         { value: AiOcrType.GlobalOcr, label: 'OCR图片关键字识别' }
     ];

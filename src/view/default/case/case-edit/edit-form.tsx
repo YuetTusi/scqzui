@@ -34,7 +34,7 @@ import { filterToParseApp } from '../helper';
 import { FormBox } from './styled/styled';
 import { FormProp } from './prop';
 
-const { useBcp, useAi, caseText, parseText, fetchText } = helper.readConf()!;
+const { useBcp, caseText, parseText, fetchText } = helper.readConf()!;
 
 const { Group } = Button;
 const { Item } = Form;
@@ -268,7 +268,6 @@ const EditForm: FC<FormProp> = ({
                             const { checked } = event.target;
                             if (!checked) {
                                 setGenerateBcp(false);
-                                // setAttachment(false);
                             }
                             setAutoParse(checked);
                         }}

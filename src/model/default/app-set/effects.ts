@@ -42,6 +42,7 @@ export default {
             cancelText: '否',
             zIndex: 9000,
             centered: true,
+            okButtonProps: {},
             onOk() {
                 ipcRenderer.send('do-close', true);
                 localStorage.removeItem(LocalStoreKey.CaseData);

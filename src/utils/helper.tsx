@@ -30,9 +30,7 @@ import {
   execFile,
   spawn,
   ChildProcessWithoutNullStreams,
-  ChildProcess
 } from 'child_process';
-import treeKill from 'tree-kill';
 import React from 'react';
 import Select from 'antd/lib/select';
 import log from './log';
@@ -169,6 +167,25 @@ const helper = {
     }
   },
   /**
+   * 杀掉进程
+   * @param pid 进程号
+   */
+  kill(pid: number) {
+    const cmd = platform === "win32"
+      ? `taskkill /PID ${pid} /T /F`
+      : `kill -9 ${pid}`;
+
+    return new Promise<void>((resolve, reject) => {
+      exec(cmd, (err) => {
+        if (err === null) {
+          resolve()
+        } else {
+          reject(err)
+        }
+      });
+    });
+  },
+  /**
    * 运行exe文件
    * @param filePath 文件路径
    * @param args 命令参数
@@ -204,7 +221,7 @@ const helper = {
       cwd: servicePath,
       ...options,
     });
-    // handle.unref();
+    handle.unref();
     handle.once('error', (error) => {
       console.log('error', error);
       console.log(`${serviceName}启动失败`);
@@ -272,12 +289,11 @@ const helper = {
     } = {
       _currentHandle: null,
       _manualStop: false,
-      stop() {
+      async stop() {
         this._manualStop = true;
         if (this._currentHandle) {
           try {
-            treeKill(this._currentHandle.pid!);
-            // this._currentHandle.kill('SIGKILL');
+            await helper.kill(this._currentHandle.pid!);
           } catch (e) {
             console.log('停止失败:', e);
           }

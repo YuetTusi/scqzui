@@ -1,7 +1,6 @@
 import { join } from 'path';
 import { ChildProcessWithoutNullStreams } from 'child_process';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
-import treeKill from 'tree-kill';
 import { Conf } from '@/type/model';
 import { helper } from '@/utils/helper';
 import log from '@/utils/log';
@@ -89,11 +88,11 @@ ipcRenderer.once('startup', async (_: IpcRendererEvent, args: Conf) => {
     }
 });
 
-ipcRenderer.on('closure', () => {
+ipcRenderer.on('closure', async () => {
 
     if (fetchProcess !== null) {
         try {
-            treeKill(fetchProcess.pid!, 'SIGKILL');
+            await helper.kill(fetchProcess.pid!);
             log.info(`采集进程结束(pid:${fetchProcess.pid})`);
             fetchProcess = null;
         } catch (error) {
@@ -102,7 +101,7 @@ ipcRenderer.on('closure', () => {
     }
     if (quickFetchProcess !== null) {
         try {
-            treeKill(quickFetchProcess.pid!, 'SIGKILL');
+            await helper.kill(quickFetchProcess.pid!);
             log.info(`快速点验进程结束(pid:${quickFetchProcess.pid})`);
             quickFetchProcess = null;
         } catch (error) {
@@ -112,7 +111,7 @@ ipcRenderer.on('closure', () => {
 
     if (parseProcess !== null) {
         try {
-            treeKill(parseProcess.pid!, 'SIGKILL');
+            await helper.kill(parseProcess.pid!);
             log.info(`解析进程结束(pid:${parseProcess.pid})`);
             parseProcess = null;
         } catch (error) {
@@ -157,7 +156,7 @@ ipcRenderer.on('closure', () => {
     }
     if (yunProcess !== null) {
         try {
-            treeKill(yunProcess.pid!, 'SIGKILL');
+            await helper.kill(yunProcess.pid!);
             log.info(`云取进程结束(pid:${yunProcess.pid})`);
             yunProcess = null;
         } catch (error) {
@@ -166,7 +165,7 @@ ipcRenderer.on('closure', () => {
     }
     if (appQueryProcess !== null) {
         try {
-            treeKill(appQueryProcess.pid!, 'SIGKILL');
+            await helper.kill(appQueryProcess.pid!);
             log.info(`痕迹查询进程结束(pid:${appQueryProcess.pid})`);
             appQueryProcess = null;
         } catch (error) {

@@ -2,14 +2,12 @@ import React, { FC, useEffect, useState } from 'react';
 import { helper } from '@/utils/helper';
 import DragBar from '../drag-bar';
 import { Center } from './styled/center';
-import { useDispatch } from 'dva';
 
 /**
  * @description 布局页
  */
 const LayoutPanel: FC<{}> = ({ children }) => {
 
-    const dispatch = useDispatch();
     const [title, setTitle] = useState<string>('');
 
     useEffect(() => {
