@@ -73,13 +73,18 @@ export default {
         try {
             const next: Organization[] = yield call([db, 'all']);
             if (next.length === 0) {
-                yield call([db, 'insert'], payload);
+                yield call([db, 'insert'], {
+                    collectUnitName: unitName,
+                    collectUnitCode: unitCode,
+                    enable: 1
+                });
                 yield put({ type: 'writeJson', payload });
             } else {
                 yield call([db, 'update'], { _id: next[0]._id }, {
                     ...next[0],
                     collectUnitName: unitName,
-                    collectUnitCode: unitCode
+                    collectUnitCode: unitCode,
+                    enable: 1
                 });
                 yield put({
                     type: 'writeJson', payload: {

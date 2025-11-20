@@ -54,6 +54,7 @@ const SelfUnit: FC<SelfUnitProp> = () => {
     }, [search]);
 
     useEffect(() => {
+        dispatch({ type: 'organization/query' });
         query({}, 1);
     }, []);
 
