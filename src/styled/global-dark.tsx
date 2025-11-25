@@ -2495,6 +2495,12 @@ span.tmpzTreeMove_arrow {
 				&.app_4289f57d_ico_close {
 					background-image: url(${require('./images/ztree/app/4289f57d.png')}) !important;
 				}
+				//WPS
+				&.app_no_d222c68d_ico_docu,
+				&.app_no_d222c68d_ico_open,
+				&.app_no_d222c68d_ico_close {
+					background-image: url(${require('./images/ztree/app/no_d222c68d.png')}) !important;
+				}				
 			}
 		}
 	}

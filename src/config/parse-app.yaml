@@ -976,6 +976,11 @@ fetch:
                 - com.youdao.note
             app_id: '1280030'
             desc: 有道云笔记
+          - name: wps
+            packages:
+                - cn.wps.moffice_eng
+            app_id: 'no_d222c68d'
+            desc: WPS
     - class: APP
       name: KeyboardInput
       desc: 输入法

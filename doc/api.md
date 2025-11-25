@@ -499,6 +499,13 @@ Fetch 命令： `violation_msg`，参数：
 | code    | number | 0:完成 1:失败 2:正在清除 |
 | message | string | 消息                     |
 
+Fetch 命令：`interrupt`，参数：
+
+| 参数名  | 类型   | 说明 |
+| ------- | ------ | ---- |
+| title   | string | 标题 |
+| content | string | 内容 |
+
 #### 解析程序连入
 
 Parse 命令：`connect`，无参数。
