@@ -2,6 +2,7 @@ import { join } from 'path';
 import { mkdirSync } from 'fs';
 import { execFile } from 'child_process';
 import groupBy from 'lodash/groupBy';
+import React from 'react';
 import { Dispatch } from "dva";
 import { ipcRenderer, IpcRendererEvent } from "electron";
 import Modal from 'antd/lib/modal';
@@ -14,6 +15,7 @@ import { caseStore } from "@/utils/local-store";
 import inputPassword from '@/component/dialog/input-password';
 import { DatapassParam } from '@/component/dialog/input-password/prop';
 import { PredictJson } from '@/component/ai-switch';
+import { CopyableText } from '@/component/copyable-text';
 import Command, { CommandType, SocketType } from "@/schema/command";
 import DeviceType from "@/schema/device-type";
 import { FetchState, ParseState } from "@/schema/device-state";
@@ -683,7 +685,7 @@ export function interrupt({ msg }: Command<{
         onOk() {
             ipcRenderer.send('do-close');
         },
-        content,
+        content: <CopyableText text={content} />,
         title: title ?? '提示',
         closable: false,
         centered: true,
