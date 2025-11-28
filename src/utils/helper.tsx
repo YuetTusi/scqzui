@@ -616,40 +616,6 @@ const helper = {
     return v4().replace(/-/g, '').substring(len);
   },
   /**
-   * @deprecated 使用getDiskSpace()代替
-   * @param {string} diskName 盘符（如：`C:`）
-   * @param {boolean} convert2GB 是否转为GB单位
-   */
-  getDiskInfo(
-    diskName: string,
-    convert2GB: boolean = false
-  ): Promise<Record<string, number>> {
-    const command = `wmic logicalDisk where "Caption='${diskName}'" get FreeSpace,Size /value`;
-
-    return new Promise((resolve, reject) => {
-      exec(command, (err: Error | null, stdout: string) => {
-        if (err) {
-          reject(err);
-        } else {
-          let cmdResults = stdout.trim().split('\r\r\n');
-          let result = cmdResults.reduce<Record<string, number>>(
-            (total, current) => {
-              const [k, v] = current.split('=');
-              if (convert2GB) {
-                total[k] = Number.parseInt(v) / Math.pow(1024, 3);
-              } else {
-                total[k] = Number.parseInt(v);
-              }
-              return total;
-            },
-            {}
-          );
-          resolve(result);
-        }
-      });
-    });
-  },
-  /**
    * 检查磁盘容量
    * @param dir 目录
    */
@@ -658,23 +624,14 @@ const helper = {
     convert2GB: boolean = false
   ): Promise<DiskSpace> {
     try {
-      if (this.os() === 'linux') {
-        const { diskPath, size, free } = await diskSpace(dir);
-        return convert2GB
-          ? {
-            diskPath,
-            free: free / Math.pow(1024, 3),
-            size: size / Math.pow(1024, 3),
-          }
-          : { diskPath, size, free };
-      } else {
-        const { FreeSpace, Size } = await this.getDiskInfo(dir, convert2GB);
-        return {
-          diskPath: dir,
-          free: FreeSpace,
-          size: Size
+      const { diskPath, size, free } = await diskSpace(dir);
+      return convert2GB
+        ? {
+          diskPath,
+          free: free / Math.pow(1024, 3),
+          size: size / Math.pow(1024, 3),
         }
-      }
+        : { diskPath, size, free };
     } catch (error) {
       throw error;
     }

@@ -238,8 +238,6 @@ const ServerCloudModal: FC<Prop> = ({
                 entity.cloudTimespan = values.cloudTimespan ?? getTimeFromStorage(LocalStoreKey.CloudTimespan);
                 entity.isAlive = values.isAlive ?? false;
 
-                // const disk = currentCase.current!.m_strCasePath.substring(0, 2);
-                // const { free } = await helper.getDiskSpace(disk, true);
                 ipcRenderer.send('show-protocol', entity);
                 setLoading(false);
             }
