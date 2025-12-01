@@ -59,6 +59,10 @@
 			{
 				"from": "./data/predict.json",
 				"to": "config/predict.json"
+			},
+			{
+				"from": "./data/army",
+				"to": "army"
 			}
 		],
 		"win": {

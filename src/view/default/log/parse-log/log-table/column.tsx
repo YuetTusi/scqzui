@@ -12,7 +12,7 @@ const { caseText, devText, parseText } = helper.readConf()!;
 /**
  * 表头定义
  */
-function getColumns(dispatch: Dispatch): ColumnProps<ParseLog>[] {
+function getColumns(_: Dispatch): ColumnProps<ParseLog>[] {
     let cols: ColumnProps<ParseLog>[] = [
         {
             title: `${devText ?? '设备'}名称`,
