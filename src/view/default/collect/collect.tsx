@@ -10,6 +10,7 @@ import AppleOutlined from '@ant-design/icons/AppleOutlined';
 import QuestionOutlined from '@ant-design/icons/QuestionOutlined';
 import DoubleLeftOutlined from '@ant-design/icons/DoubleLeftOutlined';
 import DoubleRightOutlined from '@ant-design/icons/DoubleRightOutlined';
+import WifiOutlined from '@ant-design/icons/WifiOutlined';
 import message from 'antd/lib/message';
 import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
@@ -30,9 +31,8 @@ import { StateTree } from '@/type/model';
 import { AppSetStore } from '@/model/default/app-set';
 import SubLayout from '@/component/sub-layout';
 import { Split } from '@/component/style-tool';
-import { LiveModal } from '@/component/dialog';
 import {
-    AppleCreditModal, HelpModal, ApplePasswordModal,
+    AppleCreditModal, HelpModal, ApplePasswordModal, LiveModal,
     UMagicCodeModal, GuideModal, CloudCodeModal, CloudHistoryModal
 } from '@/component/dialog';
 import Auth from '@/component/auth';
@@ -568,6 +568,12 @@ const Collect: FC<CollectProp> = ({ }) => {
                         <AppleOutlined />
                         <span>Apple授权</span>
                     </Button>
+                    <Auth deny={!wired}>
+                        <Button onClick={() => dispatch({ type: 'wifiBoxModal/setOpen', payload: true })} type="primary">
+                            <WifiOutlined />
+                            <span>配置采集盒子</span>
+                        </Button>
+                    </Auth>
                     <Button onClick={() => dispatch({ type: 'helpModal/setOpen', payload: true })} type="primary">
                         <QuestionOutlined />
                         <span>操作帮助</span>

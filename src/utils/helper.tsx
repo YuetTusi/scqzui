@@ -22,6 +22,7 @@ import yaml from 'js-yaml';
 import glob from 'glob';
 import memoize from 'lodash/memoize';
 import dayjs, { Dayjs } from 'dayjs';
+import ping from 'ping';
 import detectPort from 'detect-port';
 import 'dayjs/locale/zh-cn';
 import diskSpace, { DiskSpace } from 'check-disk-space';
@@ -927,12 +928,24 @@ const helper = {
    * 判断有无IP地址存在
    */
   hasIP(ip: string): boolean {
+
     const command = this.os() === 'linux' ? 'ifconfig' : 'ipconfig';
     const result = execSync(command, {
       windowsHide: true,
       encoding: 'utf-8',
     });
     return result.includes(ip);
+  },
+  /**
+   * 检测某IP地址是否为可用
+   */
+  async ping(ip: string) {
+    try {
+      const res = await ping.promise.probe(ip, { timeout: 3 });
+      return res.alive;
+    } catch (error) {
+      throw error;
+    }
   },
   /**
    * 是否处于调试模式

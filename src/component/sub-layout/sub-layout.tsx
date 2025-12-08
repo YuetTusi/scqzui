@@ -5,7 +5,7 @@ import Button from 'antd/lib/button';
 import { Layout, ScrollBox } from './styled/layout';
 import Reading from '../loading/reading';
 import AlartMessage from '../alert-message';
-
+import { WifiBoxModal } from '../dialog';
 
 /**
  * 布局页
@@ -17,6 +17,8 @@ const SubLayout: FC<{ title?: string }> = ({ title, children }) => {
     return <Layout>
         <Reading />
         <AlartMessage />
+        <WifiBoxModal
+            onCancel={() => dispatch({ type: 'wifiBoxModal/setOpen', payload: false })} />
         <div className="sub-container">
             <div className="sub-header">
                 <div>{title ?? ''}</div>

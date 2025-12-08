@@ -10,6 +10,7 @@ import CloudHistoryModal from './cloud-history-modal';
 import { FetchStateModal } from './fetch-state-modal';
 import { LiveModal } from './fetch-record-modal';
 import { IMEIModal } from './imei-modal';
+import { WifiBoxModal } from './wifi-box-modal';
 
 export {
     UsbDebugModal,
@@ -23,5 +24,6 @@ export {
     CloudHistoryModal,
     FetchStateModal,
     LiveModal,
-    IMEIModal
+    IMEIModal,
+    WifiBoxModal
 };

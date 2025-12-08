@@ -70,5 +70,12 @@ export default {
             return category;
         });
         return state;
+    },
+    /**
+     * 设置WiFi采集盒子连接状态
+     */
+    setWifiBoxAlive(state: AppSetStore, { payload }: AnyAction) {
+        state.wifiBoxAlive = payload;
+        return state;
     }
 };

@@ -1,6 +1,8 @@
 import { ipcRenderer } from 'electron';
 import { AnyAction } from 'redux';
 import { EffectsCommandMap } from 'dva';
+import { PingResponse } from 'ping/types/parser/base';
+import psList, { ProcessDescriptor } from 'ps-list';
 import Modal from 'antd/lib/modal';
 import { LocalStoreKey } from '@/utils/local-store';
 import { helper } from '@/utils/helper';
@@ -119,6 +121,24 @@ export default {
             }
         } catch (error) {
             logger.error(`查询云取应用接口失败 @modal/default/app-set/*fetchCloudAppData: ${error.message}`);
+        }
+    },
+    /**
+     * 检测WiFi采集盒子是否可以连通
+     */
+    *checkWifiBoxAlive({ }: AnyAction, { all, call, put }: EffectsCommandMap) {
+
+        try {
+            const [res, proc]: [PingResponse, ProcessDescriptor[]] = yield all([
+                call([helper, 'ping'], '192.168.50.1'),
+                call(psList)
+            ]);
+            const has = proc.some(item => item.name.toLowerCase().includes('opendhcpserver'));
+            //DHCP进程运行且IP是通的，说明采集盒子连接正常
+            yield put({ type: 'setWifiBoxAlive', payload: has && res.alive });
+            yield put({ type: 'wifiBoxModal/setOpen', payload: !(has && res.alive) });
+        } catch (error) {
+            logger.error(`检测WiFi盒子连通失败 @modal/default/app-set/*checkWifiBoxAlive: ${error.message}`);
         }
     }
 };

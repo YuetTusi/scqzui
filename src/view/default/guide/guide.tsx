@@ -1,8 +1,10 @@
 import throttle from 'lodash/throttle';
 import React, { FC, useEffect, useRef } from 'react';
+import { useDispatch } from 'dva';
 import { faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useKeyboardEvent } from '@/hook';
+import { WifiBoxModal } from '@/component/dialog';
 import Reading from '@/component/loading/reading';
 import BoardMenu from '@/component/guide-menu';
 import { ExtendPanel } from './styled/extend-panel';
@@ -14,6 +16,7 @@ import { GuideProp } from './prop';
  */
 const Guide: FC<GuideProp> = () => {
 
+    const dispatch = useDispatch();
     const scrollRef = useRef<HTMLDivElement>(null); //滚动div
 
     /**
@@ -97,6 +100,8 @@ const Guide: FC<GuideProp> = () => {
             </div>
         </div>
         <Reading />
+        <WifiBoxModal
+            onCancel={() => dispatch({ type: 'wifiBoxModal/setOpen', payload: false })} />
     </GuideBox>;
 };
 

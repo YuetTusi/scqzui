@@ -96,26 +96,6 @@ export default {
     }
   },
   /**
-   * 备份旧版本数据表
-   */
-  // async backupPrevNedb(_: SubscriptionAPI) {
-  //   const hasBackup = localStorage.getItem(LocalStoreKey.BakPrevNedb) === '1'; //是否已备份过旧表数据
-  //   if (!hasBackup) {
-  //     try {
-  //       const [caseCount, eventCount, deviceCount, recordCount] =
-  //         await importPrevNedb(join(cwd, './nedb'));
-  //       localStorage.setItem(LocalStoreKey.BakPrevNedb, '1');
-  //       logger.info(
-  //         `已成功备份旧库数据 caseCount:${caseCount}, eventCount:${eventCount}, deviceCount:${deviceCount}, recordCount:${recordCount}`
-  //       );
-  //     } catch (error) {
-  //       logger.error(
-  //         `备份旧库数据失败 @model/default/app-set/subscriptions/backupPrevNedb: ${error.message}`
-  //       );
-  //     }
-  //   }
-  // },
-  /**
    * 导出报告消息
    */
   reportExportMessage({ dispatch }: SubscriptionAPI) {
@@ -237,6 +217,15 @@ export default {
         hide();
         message.error('云取证应用数据获取失败');
       }
+    }
+  },
+  async checkWifiBox({ dispatch }: SubscriptionAPI) {
+
+    const wired = await helper.isWired();
+
+    if (wired) {
+      //如果开启`有线快采`功能，检测采集盒子是否连通
+      dispatch({ type: 'checkWifiBoxAlive' });
     }
   },
   /**

@@ -31,7 +31,11 @@ interface AppSetStore {
     /**
      * 云取应用数据
      */
-    cloudAppData: AppCategory[]
+    cloudAppData: AppCategory[],
+    /**
+     * WiFi采集盒子是否可以连接
+     */
+    wifiBoxAlive: boolean,
 }
 
 
@@ -45,7 +49,8 @@ let model: Model = {
         countDown: false,
         dataMode: DataMode.Self,
         alertMessage: [],
-        cloudAppData: []
+        cloudAppData: [],
+        wifiBoxAlive: true
     },
     reducers,
     effects,

@@ -1,0 +1,1 @@
+export { WifiBoxModal } from './wifi-box-modal';
