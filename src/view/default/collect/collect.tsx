@@ -571,7 +571,7 @@ const Collect: FC<CollectProp> = ({ }) => {
                     <Auth deny={!wired}>
                         <Button onClick={() => dispatch({ type: 'wifiBoxModal/setOpen', payload: true })} type="primary">
                             <WifiOutlined />
-                            <span>配置采集盒子</span>
+                            <span>配置采集WiFi</span>
                         </Button>
                     </Auth>
                     <Button onClick={() => dispatch({ type: 'helpModal/setOpen', payload: true })} type="primary">

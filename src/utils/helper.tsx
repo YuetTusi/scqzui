@@ -44,9 +44,9 @@ import { Manufaturer } from '../schema/manufaturer';
 import { AppJson } from '../schema/app-json';
 import { CheckJson } from '../schema/check-json';
 import { QuickEvent } from '../schema/quick-event';
+import { User } from '@/schema/user';
 import { getDb } from './db';
 import { SpecialCharactor, Letter, OnlyNumber } from './regex';
-import { User } from '@/schema/user';
 
 const cwd = process.cwd(); //应用的根目录
 const { platform } = process;

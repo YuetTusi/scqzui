@@ -57,7 +57,7 @@ const WifiBoxModal: FC<WifiBoxModalProp> = ({ onCancel }) => {
         destroyOnClose={true}
         maskClosable={false}
         width={1440}
-        title="配置采集盒子"
+        title="配置采集WiFi"
         getContainer="#root"
         className="zero-padding-body">
         <StepsBox>

@@ -1,7 +1,8 @@
 import { join } from 'path';
-import { readdir, mkdir } from 'fs/promises';
+import { readdir, mkdir, writeFile } from 'fs/promises';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import cpy from 'cpy';
+import psList from 'ps-list';
 import { SubscriptionAPI } from 'dva';
 import { routerRedux } from 'dva/router';
 import message from 'antd/lib/message';
@@ -248,17 +249,21 @@ export default {
     });
   },
   /**
-   * 设置加载状态
-   */
-  setLoading({ dispatch }: SubscriptionAPI) {
-    dispatch({ type: 'setReading', payload: true });
-    setTimeout(() => dispatch({ type: 'setReading', payload: false }), 1000);
-  },
-  /**
    * 设置系统目录（文档，图片，临时等）
    */
   async setSysPath({ }: SubscriptionAPI) {
     const sysPath = await ipcRenderer.invoke('get-sys-path');
     localStorage.setItem('SysPath', JSON.stringify(sysPath));
+  },
+  /**
+   * 将当前进程写入文本（用于测试）
+   */
+  async writePsList() {
+    try {
+      const list = await psList();
+      await writeFile(join(helper.APP_CWD, './ps-list.txt'), JSON.stringify(list));
+    } catch (error) {
+      console.warn(error);
+    }
   }
 };
