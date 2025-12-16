@@ -2,7 +2,7 @@ import React, { FC, memo } from 'react';
 import Empty from 'antd/lib/empty';
 import Modal from 'antd/lib/modal';
 import { helper } from '@/utils/helper';
-import { getImages } from './get-images';
+import { imageMap } from './get-images';
 import FooterButtons from './footer-buttons';
 import { GuideModalBox } from './styled/style';
 import { GuideModalProp } from './prop';
@@ -20,8 +20,8 @@ const GuideModal: FC<GuideModalProp> = (props) => {
 	const renderContent = (): JSX.Element | string => {
 		if (helper.isNullOrUndefinedOrEmptyString(device?.tipContent)) {
 			//图示消息
-			let imgPath = getImages(device?.tipImage!);
-			if (imgPath === null) {
+			let imgPath = imageMap[device?.tipImage ?? ''];
+			if (imgPath === undefined) {
 				return <div className="flow">
 					<Empty description="暂无图示" />
 				</div>;

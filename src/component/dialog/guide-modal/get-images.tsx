@@ -9,61 +9,36 @@ import oppoBackup from '../images/fetch/oppo_backup.jpg';
 import oppoWiFi from '../images/fetch/oppo_wifi.jpg';
 import oppoTrans from '../images/fetch/oppo_trans.jpg';
 import oppoReplace from '../images/fetch/oppo_replace.jpg';
+import nubiaWiFi from '../images/fetch/nubia_wifi.jpg';
 import samsungTrans from '../images/fetch/samsung_trans.jpg';
 import vivoBackup from '../images/fetch/vivo_backup.jpg';
 import miBackup from '../images/fetch/mi_backup.jpg';
 import miReplace from '../images/fetch/mi_replace.jpg';
 import installEasyshare from '../images/apk/easy_share.jpg';
-import OneplusBackup from '../images/fetch/oneplus_backup.jpg';
-import OneplusWiFi from '../images/fetch/oneplus_wifi.jpg';
+import oneplusBackup from '../images/fetch/oneplus_backup.jpg';
+import oneplusWiFi from '../images/fetch/oneplus_wifi.jpg';
 import easymover2 from '../images/apk/easymover2.jpg';
 import blacksharkBackup from '../images/fetch/blackshark_backup.jpg';
 
-/**
- * 根据分类得到图片路径
- * @param type GuideImage类型
- */
-export function getImages(type: GuideImage): string | null {
-	switch (type) {
-		case GuideImage.InstallApk:
-			return installApk;
-		case GuideImage.HuaweiBackup:
-			return huaweiBackup;
-		case GuideImage.HuaweiHisuite:
-			return huaweiHisuite;
-		case GuideImage.HuaweiClone:
-			return huaweiClone;
-		case GuideImage.HonorClone:
-			return honorClone;
-		case GuideImage.MeizuBackup:
-			return meizuBackup;
-		case GuideImage.OppoWifi:
-			return oppoWiFi;
-		case GuideImage.OppoBackup:
-			return oppoBackup;
-		case GuideImage.OppoTrans:
-			return oppoTrans;
-		case GuideImage.OppoReplace:
-			return oppoReplace;
-		case GuideImage.SamsungTrans:
-			return samsungTrans;
-		case GuideImage.VivoBackup:
-			return vivoBackup;
-		case GuideImage.MiBackup:
-			return miBackup;
-		case GuideImage.MiReplace:
-			return miReplace;
-		case GuideImage.InstallEasyshare:
-			return installEasyshare;
-		case GuideImage.OneplusBackup:
-			return OneplusBackup;
-		case GuideImage.OneplusWifi:
-			return OneplusWiFi;
-		case GuideImage.InstallEasymover2:
-			return easymover2;
-		case GuideImage.BlacksharkBackup:
-			return blacksharkBackup;
-		default:
-			return null;
-	}
-}
+export const imageMap: Record<string, string> = {
+	[GuideImage.InstallApk]: installApk,
+	[GuideImage.HuaweiBackup]: huaweiBackup,
+	[GuideImage.HuaweiHisuite]: huaweiHisuite,
+	[GuideImage.HuaweiClone]: huaweiClone,
+	[GuideImage.HonorClone]: honorClone,
+	[GuideImage.MeizuBackup]: meizuBackup,
+	[GuideImage.OppoWifi]: oppoWiFi,
+	[GuideImage.OppoBackup]: oppoBackup,
+	[GuideImage.OppoTrans]: oppoTrans,
+	[GuideImage.OppoReplace]: oppoReplace,
+	[GuideImage.NubiaWifi]: nubiaWiFi,
+	[GuideImage.SamsungTrans]: samsungTrans,
+	[GuideImage.VivoBackup]: vivoBackup,
+	[GuideImage.MiBackup]: miBackup,
+	[GuideImage.MiReplace]: miReplace,
+	[GuideImage.InstallEasyshare]: installEasyshare,
+	[GuideImage.OneplusBackup]: oneplusBackup,
+	[GuideImage.OneplusWifi]: oneplusWiFi,
+	[GuideImage.InstallEasymover2]: easymover2,
+	[GuideImage.BlacksharkBackup]: blacksharkBackup,
+};

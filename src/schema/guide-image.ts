@@ -44,6 +44,10 @@ enum GuideImage {
      */
     OppoReplace = 'oppo_replace',
     /**
+     * 努比亚WiFi采集
+     */
+    NubiaWifi = 'nubia_wifi',
+    /**
      * 三星直传
      */
     SamsungTrans = 'samsung_trans',
