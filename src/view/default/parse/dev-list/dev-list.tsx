@@ -19,6 +19,7 @@ import ExportReportModal from '../export-report-modal';
 import ExportBcpModal from '../export-bcp-modal';
 import HitChartModal from '../hit-chart-modal';
 import { CleanViolationModal } from '../clean-violation-modal';
+import { FetchIssueModal } from '../fetch-issue-modal';
 import { WarnTextBox } from './styled/style';
 import { getDevColumns } from './column';
 import { DevListProp } from './prop';
@@ -72,6 +73,7 @@ const DevList: FC<DevListProp> = ({ }) => {
     const [exportReportModalVisible, setExportReportModalVisible] = useState<boolean>(false);
     const [exportBcpModalVisible, setExportBcpModalVisible] = useState<boolean>(false);
     const [hitChartModalVisible, setHitChartModalVisible] = useState<boolean>(false);
+    const [fetchIssueModalOpen, setFetchIssueModalOpen] = useState<boolean>(false);
 
     useDestroy(() => {
         dispatch({ type: 'parseDev/setCaseId', payload: undefined });
@@ -168,6 +170,10 @@ const DevList: FC<DevListProp> = ({ }) => {
             case ClickType.CleanViolation:
                 dispatch({ type: 'cleanViolationModal/setOpen', payload: true });
                 dispatch({ type: 'cleanViolationModal/setDevice', payload: data });
+                break;
+            case ClickType.FetchIssue:
+                currentDev.current = data;
+                setFetchIssueModalOpen(true);
                 break;
             default:
                 console.warn(`未知Click类型:${fn}`);
@@ -307,6 +313,10 @@ const DevList: FC<DevListProp> = ({ }) => {
                 dispatch({ type: 'cleanViolationModal/setOpen', payload: false });
             }}
         />
+        <FetchIssueModal
+            open={fetchIssueModalOpen}
+            phonePath={currentDev.current?.phonePath}
+            onCancel={() => setFetchIssueModalOpen(false)} />
     </>;
 };
 

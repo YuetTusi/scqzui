@@ -226,6 +226,12 @@ const DevInfo: FC<DevInfoProp> = ({ data, onButtonClick }) => {
                             清除违规数据
                         </Button>
                     </Auth>
+                    <Button
+                        onClick={() => onButtonClick(data, ClickType.FetchIssue)}
+                        disabled={data.parseState === ParseState.Fetching}
+                        type="primary">
+                        {`${fetchText ?? '采集'}异常记录`}
+                    </Button>
                 </Group>
             </div>
             <div>

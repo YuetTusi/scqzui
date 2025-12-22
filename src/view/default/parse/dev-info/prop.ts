@@ -54,6 +54,10 @@ enum ClickType {
      * 清除设备违规数据
      */
     CleanViolation,
+    /**
+     * 采集异常
+     */
+    FetchIssue
 }
 
 export { DevInfoProp, ClickType };
